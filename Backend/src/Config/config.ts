@@ -15,4 +15,5 @@ export const MONGO_DB = {
     name: process.env.MONGO_DB_NAME ?? 'test',
     user: process.env.MONGO_DB_USER ?? '',
     password: process.env.MONGO_DB_PASSWORD ?? '',
+    URI: process.env.MONGO_DB_URI ?? '',
 };
