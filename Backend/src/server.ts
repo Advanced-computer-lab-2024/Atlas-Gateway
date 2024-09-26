@@ -9,11 +9,7 @@ const app = express();
 
 async function startServer() {
 
-    app.get('/', async (req, res) => {
-
-        return res.send('Hello World');         
-    } );
-
+    app.use(express.json());
     app.listen(SERVER.port, () => {
         console.log(`Server is running on http://${SERVER.host}:${SERVER.port}`);
     });
