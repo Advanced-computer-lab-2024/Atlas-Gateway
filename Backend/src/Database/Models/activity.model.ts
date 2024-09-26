@@ -5,7 +5,7 @@ export interface IActivity extends Document {
   description: string;
   category: string;
   createdBy: Types.ObjectId;
-  status: 'active' | 'inactive' | 'deleted';
+  // status: 'active' | 'inactive' | 'deleted';
   createdAt: Date;
   updatedAt: Date;
 }
@@ -15,7 +15,7 @@ const activitySchema = new Schema<IActivity>({
   description: { type: String, required: true },
   category: { type: String, required: true },
   createdBy: { type: Schema.Types.ObjectId, ref: 'User'},
-  status: { type: String, required: true, enum: ['active', 'inactive', 'deleted'] },
+  // status: { type: String, required: true, enum: ['active', 'inactive', 'deleted'] },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now }
 });

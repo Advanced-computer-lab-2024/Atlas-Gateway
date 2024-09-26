@@ -1,7 +1,6 @@
 import { Schema, model, Document } from 'mongoose';
 
-interface IUser extends Document {
-  role: 'Admin' | 'Tourist' | 'Seller' | 'Tour Guide' | 'Advertiser' | 'Tourism Governor';
+interface ITourist extends Document {
   name: string;
   email: string;
   passwordHash: string;
@@ -15,8 +14,7 @@ interface IUser extends Document {
   updatedAt: Date;
 }
 
-const userSchema = new Schema<IUser>({
-  role: { type: String, required: true, enum: ['Admin', 'Tourist', 'Seller', 'Tour Guide', 'Advertiser', 'Tourism Governor'] },
+const touristSchema = new Schema<ITourist>({
   name: { type: String, required: true },
   email: { type: String, required: true },
   passwordHash: { type: String, required: true },
@@ -30,4 +28,4 @@ const userSchema = new Schema<IUser>({
   updatedAt: { type: Date, default: Date.now }
 });
 
-export const User = model<IUser>('User', userSchema);
+export const Tourist = model<ITourist>('User', touristSchema);
