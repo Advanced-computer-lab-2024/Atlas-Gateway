@@ -4,5 +4,5 @@ export enum EAccountType {
 	Seller = 'seller',
 	Advertiser = 'advertiser',
 	Admin = 'admin',
-	TourismGoverner = 'tourism_governer',
+	TourismGovernor = 'tourism_governor',
 }

@@ -75,5 +75,5 @@ export const accountRoutes: Record<EAccountType, NavbarRoute[]> = {
 	[EAccountType.Admin]: adminRoutes,
 	[EAccountType.Guide]: tourGuideRoutes,
 	[EAccountType.Advertiser]: advertiserRoutes,
-	[EAccountType.TourismGoverner]: tourismGovernerRoutes,
+	[EAccountType.TourismGovernor]: tourismGovernerRoutes,
 };
