@@ -1,4 +1,5 @@
 import { Schema, model, Document, Types } from "mongoose";
+import { schemaConfig } from "./schemaConfig";
 
 interface IProduct extends Document {
   sellerId: Types.ObjectId;
@@ -7,8 +8,6 @@ interface IProduct extends Document {
   price: number;
   availability: number;
   rating: number;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 const productSchema = new Schema<IProduct>(
@@ -19,12 +18,8 @@ const productSchema = new Schema<IProduct>(
     price: { type: Number, required: true },
     availability: { type: Number, required: true, min: 0 },
     rating: { type: Number, default: 0 },
-    createdAt: { type: Date, default: Date.now },
-    updatedAt: { type: Date, default: Date.now },
   },
-  {
-    versionKey: false,
-  } // This will remove the __v field
+  schemaConfig
 );
 
 export const Product = model<IProduct>("Product", productSchema);

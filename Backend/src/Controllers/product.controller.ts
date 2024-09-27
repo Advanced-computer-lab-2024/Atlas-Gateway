@@ -120,6 +120,12 @@ export const updateProduct = async (req: Request, res: Response) => {
       new: true,
     });
 
+    if (!product) {
+      return res.status(500).json({
+        message: "The product you are trying to update doesn't exist",
+      });
+    }
+
     res.status(200).send(product);
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });
