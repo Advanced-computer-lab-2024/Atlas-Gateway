@@ -16,7 +16,7 @@ import {
 import { cn } from '@/lib/utils';
 import { CalendarIcon } from 'lucide-react';
 import { useFormContext } from 'react-hook-form';
-import { TFormValues } from '../types';
+import { TRegisterForm } from '../types';
 import { format } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
 import { Button } from '@/components/ui/button';
@@ -27,7 +27,7 @@ import {
 } from '@/components/ui/popover';
 
 export default function TouristInfo() {
-	const form = useFormContext<TFormValues>();
+	const form = useFormContext<TRegisterForm>();
 
 	return (
 		<>

@@ -7,10 +7,10 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useFormContext } from 'react-hook-form';
-import { TFormValues } from '../types';
+import { TRegisterForm } from '../types';
 
 export default function AccountInfo() {
-	const form = useFormContext<TFormValues>();
+	const form = useFormContext<TRegisterForm>();
 	return (
 		<>
 			<FormField

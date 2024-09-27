@@ -1,6 +1,6 @@
-import { EAccountType } from "@/types/enums";
+import { EAccountType } from '@/types/enums';
 
-export type TFormValues = {
+export type TRegisterForm = {
 	email: string;
 	password: string;
 	confirmPassword: string;

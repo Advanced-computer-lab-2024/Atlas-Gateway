@@ -3,7 +3,7 @@ import Label from '@/components/ui/Label';
 import { EAccountType } from '@/types/enums';
 import { Binoculars, HandCoins, Map, Megaphone } from 'lucide-react';
 import { useFormContext } from 'react-hook-form';
-import { TFormValues } from '../types';
+import { TRegisterForm } from '../types';
 import { cn } from '@/lib/utils';
 
 const accountTypes = [
@@ -14,7 +14,7 @@ const accountTypes = [
 ];
 
 export default function AccountType() {
-	const form = useFormContext<TFormValues>();
+	const form = useFormContext<TRegisterForm>();
 
 	return (
 		<>
