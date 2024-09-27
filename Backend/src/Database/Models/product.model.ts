@@ -5,7 +5,8 @@ interface IProduct extends Document {
   name: string;
   description: string;
   price: number;
-  availability: 'in stock' | 'out of stock';
+  availability: number;
+  rating: number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -15,7 +16,8 @@ const productSchema = new Schema<IProduct>({
   name: { type: String, required: true },
   description: { type: String, required: true },
   price: { type: Number, required: true },
-  availability: { type: String, required: true, enum: ['in stock', 'out of stock'] },
+  availability: { type: Number, required: true, min: 0},
+  rating: { type: Number, default: 0},
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now }
 });
