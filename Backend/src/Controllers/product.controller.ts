@@ -1,15 +1,15 @@
 import { Request, Response } from "express";
 import { Product } from "../Database/Models/product.model";
-import { start } from "repl";
+import mongoose from "mongoose";
 
 //Create a new product entry
 export const createProduct = async (req: Request, res: Response) => {
   try {
-    console.log(req.body);
-    const { name, description, price, availability } = req.body;
+    //console.log(req.body);
+    const { sellerId, name, description, price, availability } = req.body;
 
     const product = new Product({
-      //sellerId,
+      sellerId,
       name,
       description,
       price,
@@ -18,7 +18,7 @@ export const createProduct = async (req: Request, res: Response) => {
     await product.save();
     res.status(200).send(product);
   } catch (error) {
-    res.status(400).send();
+    res.status(500).json({ message: "Something went wrong" });
     console.log(error);
   }
 };
@@ -27,8 +27,21 @@ export const createProduct = async (req: Request, res: Response) => {
 export const getProduct = async (req: Request, res: Response) => {
   try {
     //TODO: Remember to fetch by ID
+    const id = req.params.id;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: "Invalid product ID" });
+    }
+
+    const product = await Product.findById(id);
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    res.status(200).send(product);
   } catch (error) {
-    res.status(400).send();
+    res.status(500).json({ message: "Something went wrong" });
     console.log(error);
   }
 };
@@ -37,6 +50,10 @@ export const getProduct = async (req: Request, res: Response) => {
 export const getProducts = async (req: Request, res: Response) => {
   try {
     const querySet: any = {};
+
+    if (req.body.sellerId) {
+      querySet.sellerId = req.body.sellerId;
+    }
 
     if (req.body.name) {
       querySet.name = req.body.name;
@@ -53,15 +70,59 @@ export const getProducts = async (req: Request, res: Response) => {
       }
     }
 
-    console.log(querySet);
+    //console.log(querySet);
 
-    const dataSet = await Product.find();
+    const dataSet = await Product.find(querySet);
 
-    console.log(dataSet);
+    if (dataSet.length == 0) {
+      return res.status(404).json({ message: "No matching Products Found" });
+    }
+
+    //console.log(dataSet);
 
     res.status(200).send(dataSet);
   } catch (error) {
-    res.status(400).send();
+    res.status(500).json({ message: "Something went wrong" });
+    console.log(error);
+  }
+};
+
+//takes an ID and update the entry
+export const updateProduct = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid product ID" });
+    }
+
+    const updateSet: any = {};
+
+    if (req.body.name) {
+      updateSet.name = req.body.name;
+    }
+
+    if (req.body.description) {
+      updateSet.description = req.body.description;
+    }
+
+    if (req.body.price) {
+      updateSet.price = req.body.price;
+    }
+
+    if (req.body.availability) {
+      updateSet.availability = req.body.availability;
+    }
+
+    updateSet.updatedAt = Date.now();
+
+    const product = await Product.findByIdAndUpdate(id, updateSet, {
+      new: true,
+    });
+
+    res.status(200).send(product);
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong" });
     console.log(error);
   }
 };
