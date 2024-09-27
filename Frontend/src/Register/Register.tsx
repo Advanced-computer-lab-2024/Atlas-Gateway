@@ -15,6 +15,8 @@ import AccountInfo from './components/AccountInfo';
 import Label from '@/components/ui/Label';
 import { Button } from '@/components/ui/button';
 import { Flex } from '@/components/ui/flex';
+import { useRegister } from '@/api/data';
+import { TRegisterForm } from './types';
 
 const schemaMap = {
 	1: accountTypeSchema,
@@ -37,7 +39,9 @@ const stageTitleMap = {
 export default function Register() {
 	const [stage, setStage] = useState<1 | 2 | 3>(1);
 
-	const form = useForm({
+	const { doRegister } = useRegister();
+
+	const form = useForm<TRegisterForm>({
 		shouldUnregister: false,
 		resolver: zodResolver(schemaMap[stage]),
 		mode: 'onChange',
@@ -47,7 +51,7 @@ export default function Register() {
 
 	const selectedType = watch('type');
 
-	const onSubmit = async () => {
+	const onSubmit = async (data: TRegisterForm) => {
 		switch (stage) {
 			case 1:
 				if (selectedType !== EAccountType.Tourist) {
@@ -60,7 +64,7 @@ export default function Register() {
 				setStage(3);
 				return;
 			case 3:
-				console.log('submit');
+				doRegister(data);
 				return;
 		}
 	};
@@ -98,7 +102,7 @@ export default function Register() {
 										onClick={onBackButtonClick}
 										variant="outline"
 										size="lg"
-										type='button'
+										type="button"
 									>
 										Back
 									</Button>
