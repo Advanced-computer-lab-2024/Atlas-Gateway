@@ -1,1 +1,1 @@
-export * from './schemaConfig';
+export * from './config';

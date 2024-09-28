@@ -1,26 +1,30 @@
 {
-  "compilerOptions": {
-    "target": "es2017",                                  // Target ECMAScript version
-    "module": "Node16",                                // Module system
-    "esModuleInterop": true,                             // Enable interoperability between ES modules and CommonJS modules
-    "forceConsistentCasingInFileNames": true,            // Require consistent casing in file names
-    "strict": true,                                      // Enable strict type checking
-    "skipLibCheck": true,                               // Skip type checking for library declarations
-    "moduleResolution": "Node16",                         // Module resolution strategy
-    "outDir": "./build",                                   // Output directory for compiled files
+	"compilerOptions": {
+		"target": "es2017", // Target ECMAScript version
+		"module": "Node16", // Module system
+		"esModuleInterop": true, // Enable interoperability between ES modules and CommonJS modules
+		"forceConsistentCasingInFileNames": true, // Require consistent casing in file names
+		"strict": true, // Enable strict type checking
+		"skipLibCheck": true, // Skip type checking for library declarations
+		"moduleResolution": "Node16", // Module resolution strategy
+		"rootDir": "src",
+		"outDir": "./build", // Output directory for compiled files
 
-    // Inversify-specific options
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "lib": ["es6"],
+		// Inversify-specific options
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+		"lib": ["es6"],
 
-    // Additional options (optional)
-    "sourceMap": true,                                 // Generate source maps for debugging
-    "baseUrl": ".",                                    // Base directory for imports
-    "paths": {                                        // Path aliases for modules
-      "@types": ["node_modules/@types"],
-    }
-  },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules/"]
+		// Additional options (optional)
+		"sourceMap": true, // Generate source maps for debugging
+		"baseUrl": ".", // Base directory for imports
+		"paths": {
+			// Path aliases for modules
+			"@types": ["node_modules/@types"],
+			"@/*": ["./src/*"],
+			"#utils": ["./src/utils/index.js"]
+		}
+	},
+	"include": ["src/**/*.ts"],
+	"exclude": ["node_modules/"]
 }
