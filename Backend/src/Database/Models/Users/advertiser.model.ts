@@ -1,5 +1,5 @@
-import { Document, Types, Schema, model } from 'mongoose';
-import { schemaConfig } from '#utils';
+import { schemaConfig } from "#utils";
+import { Document, Schema, Types, model } from "mongoose";
 
 export interface IAdvertiser extends Document {
 	id: Types.ObjectId;
@@ -31,9 +31,9 @@ const advertiserSchema = new Schema<IAdvertiser>(
 			logo: { type: String },
 			description: { type: String },
 		},
-		activities: [{ type: Schema.Types.ObjectId, ref: 'Activity' }],
+		activities: [{ type: Schema.Types.ObjectId, ref: "Activity" }],
 	},
-	schemaConfig
+	schemaConfig,
 );
 
-export const Advertiser = model<IAdvertiser>('Advertiser', advertiserSchema);
+export const Advertiser = model<IAdvertiser>("Advertiser", advertiserSchema);

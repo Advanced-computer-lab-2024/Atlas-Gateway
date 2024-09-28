@@ -1,14 +1,16 @@
-import { TRegisterForm } from '@/Register/types';
-import ENDPOINTS from './ENDPOINTS';
-import axios from 'axios';
-import { TRegisterationResponse } from './types';
+import axios from "axios";
+
+import { TRegisterForm } from "@/Register/types";
+
+import ENDPOINTS from "./ENDPOINTS";
+import { TRegisterationResponse } from "./types";
 
 export default function apiRegister(payload: TRegisterForm) {
 	return axios<TRegisterationResponse>({
-		method: 'POST',
+		method: "POST",
 		url: ENDPOINTS.register,
 		headers: {
-			'Content-Type': 'application/json',
+			"Content-Type": "application/json",
 		},
 		data: payload,
 	});

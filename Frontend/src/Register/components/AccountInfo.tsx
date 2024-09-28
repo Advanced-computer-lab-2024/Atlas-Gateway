@@ -1,13 +1,15 @@
+import { useFormContext } from "react-hook-form";
+
 import {
+	FormControl,
+	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
-	FormControl,
-	FormDescription,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { useFormContext } from 'react-hook-form';
-import { TRegisterForm } from '../types';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+
+import { TRegisterForm } from "../types";
 
 export default function AccountInfo() {
 	const form = useFormContext<TRegisterForm>();
@@ -22,7 +24,9 @@ export default function AccountInfo() {
 						<FormControl>
 							<Input placeholder="Username" {...field} />
 						</FormControl>
-						<FormDescription>This is your public display name</FormDescription>
+						<FormDescription>
+							This is your public display name
+						</FormDescription>
 					</FormItem>
 				)}
 			/>
@@ -48,7 +52,11 @@ export default function AccountInfo() {
 					<FormItem>
 						<FormLabel>Password</FormLabel>
 						<FormControl>
-							<Input placeholder="password" {...field} type="password" />
+							<Input
+								placeholder="password"
+								{...field}
+								type="password"
+							/>
 						</FormControl>
 						<FormDescription>
 							Create a password to secure your account.
@@ -63,9 +71,15 @@ export default function AccountInfo() {
 					<FormItem>
 						<FormLabel>Confirm Password</FormLabel>
 						<FormControl>
-							<Input placeholder="password" {...field} type="password" />
+							<Input
+								placeholder="password"
+								{...field}
+								type="password"
+							/>
 						</FormControl>
-						<FormDescription>Retype your password to confirm.</FormDescription>
+						<FormDescription>
+							Retype your password to confirm.
+						</FormDescription>
 					</FormItem>
 				)}
 			/>

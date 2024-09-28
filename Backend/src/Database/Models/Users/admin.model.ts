@@ -1,5 +1,5 @@
-import { Document, Types, Schema, model } from 'mongoose';
-import { schemaConfig } from '#utils';
+import { schemaConfig } from "#utils";
+import { Document, Schema, Types, model } from "mongoose";
 
 export interface IAdmin extends Document {
 	id: Types.ObjectId;
@@ -17,7 +17,7 @@ const adminSchema = new Schema<IAdmin>(
 		password: { type: String, required: true },
 		isDeleted: { type: Boolean },
 	},
-	schemaConfig
+	schemaConfig,
 );
 
-export const Admin = model<IAdmin>('Admin', adminSchema);
+export const Admin = model<IAdmin>("Admin", adminSchema);

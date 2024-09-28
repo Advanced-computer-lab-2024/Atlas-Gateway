@@ -1,36 +1,39 @@
 import { Request, Response } from "express";
+import { start } from "repl";
+
+import { Product } from "../Database/Models/product.model";
 import { Product } from "../Database/Models/product.model";
 import searchFilterSort from "src/Services/search-filter-sort.service";
 
 //Create a new product entry
 export const createProduct = async (req: Request, res: Response) => {
-  try {
-    console.log(req.body);
-    const { name, description, price, availability } = req.body;
+	try {
+		console.log(req.body);
+		const { name, description, price, availability } = req.body;
 
-    const product = new Product({
-      //sellerId,
-      name,
-      description,
-      price,
-      availability,
-    });
-    await product.save();
-    res.status(200).send(product);
-  } catch (error) {
-    res.status(400).send();
-    console.log(error);
-  }
+		const product = new Product({
+			//sellerId,
+			name,
+			description,
+			price,
+			availability,
+		});
+		await product.save();
+		res.status(200).send(product);
+	} catch (error) {
+		res.status(400).send();
+		console.log(error);
+	}
 };
 
 //takes an ID parameter and returns a single product
 export const getProduct = async (req: Request, res: Response) => {
-  try {
-    //TODO: Remember to fetch by ID
-  } catch (error) {
-    res.status(400).send();
-    console.log(error);
-  }
+	try {
+		//TODO: Remember to fetch by ID
+	} catch (error) {
+		res.status(400).send();
+		console.log(error);
+	}
 };
 
 //takes a query (anded conditions) and returns a data set

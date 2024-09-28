@@ -1,11 +1,13 @@
-import { Flex } from '@/components/ui/flex';
-import Label from '@/components/ui/Label';
-import { UserCircleIcon } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { accountRoutes } from './routes';
+import { UserCircleIcon } from "lucide-react";
+import { Link } from "react-router-dom";
+
+import Label from "@/components/ui/Label";
+import { Flex } from "@/components/ui/flex";
+
+import { accountRoutes } from "./routes";
 
 export default function Navbar() {
-	const routes = accountRoutes['tourist'];
+	const routes = accountRoutes["tourist"];
 
 	const isLoggedIn = true;
 
@@ -26,7 +28,9 @@ export default function Navbar() {
 						key={route.to}
 						className="text-primary hover:no-underline hover:text-primary p-4"
 					>
-						<Label.Mid500 variant="primary">{route.name}</Label.Mid500>
+						<Label.Mid500 variant="primary">
+							{route.name}
+						</Label.Mid500>
 					</Link>
 				))}
 			</Flex>

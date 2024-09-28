@@ -1,5 +1,5 @@
-import { Document, Types, Schema, model } from 'mongoose';
-import { schemaConfig } from '#utils';
+import { schemaConfig } from "#utils";
+import { Document, Schema, Types, model } from "mongoose";
 
 export interface ISeller extends Document {
 	id: Types.ObjectId;
@@ -21,9 +21,9 @@ const sellerSchema = new Schema<ISeller>(
 		picture: { type: String, required: true },
 		description: { type: String },
 		isDeleted: { type: Boolean },
-		products: [{ type: Schema.Types.ObjectId, ref: 'Product' }],
+		products: [{ type: Schema.Types.ObjectId, ref: "Product" }],
 	},
-	schemaConfig
+	schemaConfig,
 );
 
-export const Seller = model<ISeller>('Seller', sellerSchema);
+export const Seller = model<ISeller>("Seller", sellerSchema);

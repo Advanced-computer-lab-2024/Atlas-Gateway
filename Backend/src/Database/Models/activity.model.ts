@@ -1,5 +1,5 @@
-import { Document, Schema, model } from 'mongoose';
-import { schemaConfig } from '#utils';
+import { schemaConfig } from "#utils";
+import { Document, Schema, model } from "mongoose";
 
 export interface IActivity extends Document {
 	description: string;
@@ -31,12 +31,12 @@ const activitySchema = new Schema<IActivity>(
 				validator: function (value) {
 					return value >= this.minPrice;
 				},
-				message: 'max price cant be smaller than min price',
+				message: "max price cant be smaller than min price",
 			},
 		},
 		specialDiscounts: { type: Number, required: true, min: 0, max: 100 },
 		isOpen: { type: Boolean, required: true },
 	},
-	schemaConfig
+	schemaConfig,
 );
-export const Activity = model<IActivity>('Activity', activitySchema);
+export const Activity = model<IActivity>("Activity", activitySchema);

@@ -1,5 +1,5 @@
-import { Document, Types, Schema, model } from 'mongoose';
-import { schemaConfig } from '#utils';
+import { schemaConfig } from "#utils";
+import { Document, Schema, Types, model } from "mongoose";
 
 export interface IGovernor extends Document {
 	id: Types.ObjectId;
@@ -18,10 +18,10 @@ const governorSchema = new Schema<IGovernor>(
 		password: { type: String, required: true },
 		isDeleted: { type: Boolean },
 		historicalLocations: [
-			{ type: Schema.Types.ObjectId, ref: 'HistoricalLocation' },
+			{ type: Schema.Types.ObjectId, ref: "HistoricalLocation" },
 		],
 	},
-	schemaConfig
+	schemaConfig,
 );
 
-export const Governor = model<IGovernor>('Governor', governorSchema);
+export const Governor = model<IGovernor>("Governor", governorSchema);

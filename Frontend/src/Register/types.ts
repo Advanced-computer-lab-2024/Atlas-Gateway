@@ -1,4 +1,4 @@
-import { EAccountType } from '@/types/enums';
+import { EAccountType } from "@/types/enums";
 
 export type TRegisterForm = {
 	email: string;
