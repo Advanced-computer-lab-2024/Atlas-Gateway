@@ -26,10 +26,12 @@ export const getActivities = async (req: Request, res: Response) => {
 export const updateActivityById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const activity = await Activity.findByIdAndUpdate(id, req.body, {
-      new: true,
-      runValidators: true,
-    });
+    const activity = await Activity.findById(id);
+    if (!activity) {
+      return res.status(404).send("Cant find Activity");
+    }
+    activity.set(req.body);
+    await activity.save();
     res.status(200).send(activity);
   } catch (error) {
     console.log(error);
