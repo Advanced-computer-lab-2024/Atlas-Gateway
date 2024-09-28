@@ -1,5 +1,5 @@
-import { schemaConfig } from "@utils";
 import { Document, Schema, model , Types} from "mongoose";
+import { schemaConfig } from "src/utils";
 
 interface IItinerary extends Document {
 

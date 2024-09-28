@@ -1,5 +1,5 @@
-import { schemaConfig } from "@utils";
 import { Document, Schema, Types, model } from "mongoose";
+import { schemaConfig } from "src/utils";
 
 interface IMuseum extends Document {
   governorId: Types.ObjectId;

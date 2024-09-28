@@ -1,5 +1,5 @@
 import { Schema, model, Document, Types } from 'mongoose';
-import { schemaConfig } from '@utils';
+import { schemaConfig } from 'src/utils';
 
 interface IProduct extends Document {
 	id: Types.ObjectId;

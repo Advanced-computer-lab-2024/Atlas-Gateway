@@ -1,5 +1,5 @@
-import { schemaConfig } from "@utils";
 import { Document, Types, Schema, model } from "mongoose";
+import { schemaConfig } from "src/utils";
 
 
 

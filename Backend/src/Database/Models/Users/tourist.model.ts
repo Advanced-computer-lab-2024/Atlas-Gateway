@@ -1,5 +1,5 @@
-import { schemaConfig } from '@utils';
 import { Schema, model, Document, Types } from 'mongoose';
+import { schemaConfig } from 'src/utils';
 
 export interface ITourist extends Document {
   id : Types.ObjectId;
