@@ -1,5 +1,5 @@
-import { Schema, model, Document, Types } from 'mongoose';
-import { schemaConfig } from '#utils';
+import { schemaConfig } from "#utils";
+import { Document, Schema, Types, model } from "mongoose";
 
 export interface ITourist extends Document {
 	id: Types.ObjectId;
@@ -35,7 +35,7 @@ const touristSchema = new Schema<ITourist>(
 			image: { type: String },
 		},
 	},
-	schemaConfig
+	schemaConfig,
 );
 
-export const Tourist = model<ITourist>('User', touristSchema);
+export const Tourist = model<ITourist>("User", touristSchema);

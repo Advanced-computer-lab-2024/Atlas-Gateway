@@ -1,32 +1,32 @@
-import React, { memo } from 'react';
-import { twMerge } from 'tailwind-merge';
-import tw from 'tailwind-styled-components';
+import React, { memo } from "react";
+import { twMerge } from "tailwind-merge";
+import tw from "tailwind-styled-components";
 
 const labelVariants = {
-	primary: 'text-text-primary-default',
-	default: 'text-text-default',
-	subdued: 'text-text-subdued',
-	disabled: 'text-text-disabled',
-	critical: 'text-text-critical',
-	warning: 'text-text-warning',
-	success: 'text-text-success',
-	interactive: 'text-text-interactive',
+	primary: "text-text-primary-default",
+	default: "text-text-default",
+	subdued: "text-text-subdued",
+	disabled: "text-text-disabled",
+	critical: "text-text-critical",
+	warning: "text-text-warning",
+	success: "text-text-success",
+	interactive: "text-text-interactive",
 };
 
 const labelSizes = {
-	100: 'text-[12px]',
-	200: 'text-[14px]',
-	300: 'text-[16px]',
-	400: 'text-[20px]',
-	500: 'text-[24px]',
-	600: 'text-[28px]',
-	700: 'text-[36px]',
+	100: "text-[12px]",
+	200: "text-[14px]",
+	300: "text-[16px]",
+	400: "text-[20px]",
+	500: "text-[24px]",
+	600: "text-[28px]",
+	700: "text-[36px]",
 };
 
 const labelWeights = {
-	Thin: 'font-normal',
-	Mid: 'font-medium',
-	Big: 'font-bold',
+	Thin: "font-normal",
+	Mid: "font-medium",
+	Big: "font-bold",
 };
 
 const labelLetterSpacing = {
@@ -54,16 +54,16 @@ const BaseLabel = memo(
 	tw.div<LabelProps>`
 		${({ size, variant, weight, className }) =>
 			twMerge(
-				labelVariants[variant ?? 'default'],
+				labelVariants[variant ?? "default"],
 				labelSizes[size],
 				labelWeights[weight],
 				labelLetterSpacing[size],
-				'leading-[140%] cursor-inherit',
-				className
-			)}`
+				"leading-[140%] cursor-inherit",
+				className,
+			)}`,
 );
 
-const TypographyWeights = ['Thin', 'Mid', 'Big'];
+const TypographyWeights = ["Thin", "Mid", "Big"];
 
 const TypographyVariants = [100, 200, 300, 400, 500, 600, 700];
 

@@ -1,5 +1,5 @@
-import { Schema, model, Document, Types } from 'mongoose';
-import { schemaConfig } from '#utils';
+import { schemaConfig } from "#utils";
+import { Document, Schema, Types, model } from "mongoose";
 
 interface IProduct extends Document {
 	id: Types.ObjectId;
@@ -18,7 +18,11 @@ interface IProduct extends Document {
 const productSchema = new Schema<IProduct>(
 	{
 		id: { type: Schema.Types.ObjectId, required: true },
-		sellerId: { type: Schema.Types.ObjectId, required: true, ref: 'Seller' },
+		sellerId: {
+			type: Schema.Types.ObjectId,
+			required: true,
+			ref: "Seller",
+		},
 		name: { type: String, required: true },
 		description: { type: String },
 		price: { type: Number, required: true },
@@ -29,7 +33,7 @@ const productSchema = new Schema<IProduct>(
 		rating: { type: Number },
 		review: { type: String },
 	},
-	schemaConfig
+	schemaConfig,
 );
 
-export const Product = model<IProduct>('Product', productSchema);
+export const Product = model<IProduct>("Product", productSchema);

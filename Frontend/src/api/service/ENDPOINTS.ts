@@ -1,6 +1,6 @@
 const ENDPOINTS = {
-	login: '/login',
-	register: '/register',
+	login: "/login",
+	register: "/register",
 };
 
 export default ENDPOINTS;

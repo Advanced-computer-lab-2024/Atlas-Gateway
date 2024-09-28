@@ -1,5 +1,5 @@
-import { Document, Types, Schema, model } from 'mongoose';
-import { schemaConfig } from '#utils';
+import { schemaConfig } from "#utils";
+import { Document, Schema, Types, model } from "mongoose";
 
 export interface ITourGuide extends Document {
 	id: Types.ObjectId;
@@ -37,9 +37,9 @@ const tourGuideSchema = new Schema<ITourGuide>(
 			start: { type: Date },
 			end: { type: Date },
 		},
-		itinerary: [{ type: Schema.Types.ObjectId, ref: 'Itinerary' }],
+		itinerary: [{ type: Schema.Types.ObjectId, ref: "Itinerary" }],
 	},
-	schemaConfig
+	schemaConfig,
 );
 
-export const TourGuide = model<ITourGuide>('TourGuide', tourGuideSchema);
+export const TourGuide = model<ITourGuide>("TourGuide", tourGuideSchema);

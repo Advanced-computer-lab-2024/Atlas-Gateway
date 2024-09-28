@@ -1,5 +1,6 @@
-import { useMutation } from '@tanstack/react-query';
-import apiRegister from '../service/register';
+import { useMutation } from "@tanstack/react-query";
+
+import apiRegister from "../service/register";
 
 export function useRegister() {
 	const mutation = useMutation({

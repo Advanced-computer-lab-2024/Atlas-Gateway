@@ -1,22 +1,24 @@
-import { Form } from '@/components/ui/form';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useCallback, useState } from "react";
+import { useForm } from "react-hook-form";
+
+import { useRegister } from "@/api/data";
+import Label from "@/components/ui/Label";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Flex } from "@/components/ui/flex";
+import { Form } from "@/components/ui/form";
+import { EAccountType } from "@/types/enums";
+
+import AccountInfo from "./components/AccountInfo";
+import AccountType from "./components/AccountType";
+import TouristInfo from "./components/TouristInfo";
 import {
 	accountInfoSchema,
 	accountTypeSchema,
 	touristInfoSchema,
-} from './schema';
-import { useCallback, useState } from 'react';
-import { EAccountType } from '@/types/enums';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import AccountType from './components/AccountType';
-import TouristInfo from './components/TouristInfo';
-import AccountInfo from './components/AccountInfo';
-import Label from '@/components/ui/Label';
-import { Button } from '@/components/ui/button';
-import { Flex } from '@/components/ui/flex';
-import { useRegister } from '@/api/data';
-import { TRegisterForm } from './types';
+} from "./schema";
+import { TRegisterForm } from "./types";
 
 const schemaMap = {
 	1: accountTypeSchema,
@@ -31,9 +33,9 @@ const componentMap = {
 };
 
 const stageTitleMap = {
-	1: 'Register as',
-	2: 'Tourist registration',
-	3: 'Account information',
+	1: "Register as",
+	2: "Tourist registration",
+	3: "Account information",
 };
 
 export default function Register() {
@@ -44,12 +46,12 @@ export default function Register() {
 	const form = useForm<TRegisterForm>({
 		shouldUnregister: false,
 		resolver: zodResolver(schemaMap[stage]),
-		mode: 'onChange',
+		mode: "onChange",
 	});
 
 	const { handleSubmit, watch } = form;
 
-	const selectedType = watch('type');
+	const selectedType = watch("type");
 
 	const onSubmit = async (data: TRegisterForm) => {
 		switch (stage) {
@@ -92,7 +94,10 @@ export default function Register() {
 				</CardHeader>
 				<CardContent>
 					<Form {...form}>
-						<form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+						<form
+							onSubmit={handleSubmit(onSubmit)}
+							className="space-y-8"
+						>
 							<Flex isColumn gap="5" className="h-[500px]">
 								{componentMap[stage]}
 							</Flex>
@@ -108,7 +113,7 @@ export default function Register() {
 									</Button>
 								)}
 								<Button size="lg" type="submit">
-									{stage === 3 ? 'Register' : 'Next'}
+									{stage === 3 ? "Register" : "Next"}
 								</Button>
 							</Flex>
 						</form>

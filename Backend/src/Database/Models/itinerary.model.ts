@@ -1,5 +1,5 @@
-import { Document, Schema, model, Types } from 'mongoose';
-import { schemaConfig } from '#utils';
+import { schemaConfig } from "#utils";
+import { Document, Schema, Types, model } from "mongoose";
 
 interface IItinerary extends Document {
 	id: Types.ObjectId;
@@ -21,11 +21,11 @@ const itinerarySchema = new Schema<IItinerary>(
 		availability: { type: Number, required: true },
 		pickUpLocation: { type: String, required: true },
 		dropOffLocation: { type: String, required: true },
-		activities: [{ type: Schema.Types.ObjectId, ref: 'Activity' }],
+		activities: [{ type: Schema.Types.ObjectId, ref: "Activity" }],
 		tags: [{ type: String }],
-		createdBy: { type: Schema.Types.ObjectId, ref: 'TourGuide' },
+		createdBy: { type: Schema.Types.ObjectId, ref: "TourGuide" },
 	},
-	schemaConfig
+	schemaConfig,
 );
 
-export const Itinerary = model<IItinerary>('Itinerary', itinerarySchema);
+export const Itinerary = model<IItinerary>("Itinerary", itinerarySchema);

@@ -1,15 +1,17 @@
-import express from 'express';
-const router = express.Router();
+import express from "express";
+
 import {
 	createActivities,
+	deleteActivityById,
 	getActivities,
 	updateActivityById,
-	deleteActivityById,
-} from '../Controllers/activity.controller';
+} from "../Controllers/activity.controller";
 
-router.post('/create', createActivities);
-router.get('/list', getActivities);
-router.put('/update/:id', updateActivityById);
-router.delete('/delete/:id', deleteActivityById);
+const router = express.Router();
+
+router.post("/create", createActivities);
+router.get("/list", getActivities);
+router.put("/update/:id", updateActivityById);
+router.delete("/delete/:id", deleteActivityById);
 
 export default router;

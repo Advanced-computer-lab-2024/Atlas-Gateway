@@ -1,16 +1,22 @@
-import { Flex } from '@/components/ui/flex';
-import Label from '@/components/ui/Label';
-import { EAccountType } from '@/types/enums';
-import { Binoculars, HandCoins, Map, Megaphone } from 'lucide-react';
-import { useFormContext } from 'react-hook-form';
-import { TRegisterForm } from '../types';
-import { cn } from '@/lib/utils';
+import { Binoculars, HandCoins, Map, Megaphone } from "lucide-react";
+import { useFormContext } from "react-hook-form";
+
+import Label from "@/components/ui/Label";
+import { Flex } from "@/components/ui/flex";
+import { cn } from "@/lib/utils";
+import { EAccountType } from "@/types/enums";
+
+import { TRegisterForm } from "../types";
 
 const accountTypes = [
-	{ label: 'Tourist', value: EAccountType.Tourist, icon: <Binoculars /> },
-	{ label: 'Guide', value: EAccountType.Guide, icon: <Map /> },
-	{ label: 'Seller', value: EAccountType.Seller, icon: <HandCoins /> },
-	{ label: 'Advertiser', value: EAccountType.Advertiser, icon: <Megaphone /> },
+	{ label: "Tourist", value: EAccountType.Tourist, icon: <Binoculars /> },
+	{ label: "Guide", value: EAccountType.Guide, icon: <Map /> },
+	{ label: "Seller", value: EAccountType.Seller, icon: <HandCoins /> },
+	{
+		label: "Advertiser",
+		value: EAccountType.Advertiser,
+		icon: <Megaphone />,
+	},
 ];
 
 export default function AccountType() {
@@ -22,19 +28,19 @@ export default function AccountType() {
 				<Flex
 					key={type.value}
 					className={cn(
-						'rounded-md w-full h-24 items-center justify-center border bg-card cursor-pointer',
+						"rounded-md w-full h-24 items-center justify-center border bg-card cursor-pointer",
 						{
-							'bg-gray-300': form?.watch('type') === type.value,
-						}
+							"bg-gray-300": form?.watch("type") === type.value,
+						},
 					)}
-					onClick={() => form?.setValue('type', type.value)}
+					onClick={() => form?.setValue("type", type.value)}
 					gap="2"
 				>
 					<Label.Mid500>{type.label}</Label.Mid500>
 					{type.icon}
 				</Flex>
 			))}
-			<p className={'text-[0.8rem] font-medium text-destructive h-5'}>
+			<p className={"text-[0.8rem] font-medium text-destructive h-5"}>
 				{form?.formState.errors.type?.message}
 			</p>
 		</>
