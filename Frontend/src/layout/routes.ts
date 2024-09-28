@@ -1,5 +1,6 @@
 import { EAccountType } from '@/types/enums';
 
+
 export type NavbarRoute = {
 	name: string;
 	to: string;
@@ -57,7 +58,7 @@ const tourGuideRoutes: NavbarRoute[] = [
 	museumsAndHistoricalPlacesRoute,
 ];
 
-const advertiserRoutes: NavbarRoute[] = [
+const advertisorRoutes: NavbarRoute[] = [
 	intinerariesRoute,
 	activitiesRoute,
 	museumsAndHistoricalPlacesRoute,
@@ -74,6 +75,6 @@ export const accountRoutes: Record<EAccountType, NavbarRoute[]> = {
 	[EAccountType.Seller]: sellerRoutes,
 	[EAccountType.Admin]: adminRoutes,
 	[EAccountType.Guide]: tourGuideRoutes,
-	[EAccountType.Advertiser]: advertiserRoutes,
+	[EAccountType.Advertisor]: advertisorRoutes,
 	[EAccountType.TourismGovernor]: tourismGovernerRoutes,
 };

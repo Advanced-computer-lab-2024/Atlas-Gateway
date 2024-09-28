@@ -2,7 +2,7 @@ export enum EAccountType {
 	Tourist = 'tourist',
 	Guide = 'guide',
 	Seller = 'seller',
-	Advertiser = 'advertiser',
+	Advertisor = 'advertisor',
 	Admin = 'admin',
 	TourismGovernor = 'tourism_governor',
 }
