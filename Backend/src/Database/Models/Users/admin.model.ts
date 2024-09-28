@@ -1,3 +1,4 @@
+import { schemaConfig } from "@utils";
 import { Document, Types, Schema, model } from "mongoose";
 
 
@@ -15,6 +16,6 @@ const adminSchema = new Schema<IAdmin>({
     email: { type: String, required: true },
     password: { type: String, required: true },
     isDeleted: { type: Boolean },
-}, { timestamps: true });
+}, schemaConfig);
 
 export const Admin = model<IAdmin>('Admin', adminSchema);

@@ -1,3 +1,4 @@
+import { schemaConfig } from "@utils";
 import { Document, Types, Schema, model } from "mongoose";
 
 
@@ -39,6 +40,6 @@ const tourGuideSchema = new Schema<ITourGuide>({
     },
     itinerary: [{ type: Schema.Types.ObjectId, ref: 'Itinerary' }],
     
-}, { timestamps: true });
+}, schemaConfig);
 
 export const TourGuide = model<ITourGuide>('TourGuide', tourGuideSchema);

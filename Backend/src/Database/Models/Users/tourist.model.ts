@@ -1,3 +1,4 @@
+import { schemaConfig } from '@utils';
 import { Schema, model, Document, Types } from 'mongoose';
 
 export interface ITourist extends Document {
@@ -32,6 +33,6 @@ const touristSchema = new Schema<ITourist>({
     location: { type: String },
     image: { type: String }
   }
-}, { timestamps: true });
+}, schemaConfig);
 
 export const Tourist = model<ITourist>('User', touristSchema);

@@ -1,3 +1,4 @@
+import { schemaConfig } from "@utils";
 import { Document, Schema, Types, model } from "mongoose";
 
 interface IMuseum extends Document {
@@ -16,8 +17,6 @@ const museumSchema = new Schema<IMuseum>({
   location: { type: String, required: true },
   description: { type: String, required: true },
   tags: [{ type: Schema.Types.ObjectId, ref: 'Tag' }],
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now }
-});
+}, schemaConfig);
 
 export const Museum = model<IMuseum>('Museum', museumSchema);
