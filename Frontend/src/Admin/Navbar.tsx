@@ -25,8 +25,7 @@ const Navbar = ({ selectedCategory, onSelect }: Props) => {
 							"Advertisers",
 						].map((item) => (
 							<p
-								key={item}
-								className={`text-black cursor-pointer ${activeItem === item ? "text-[#2b58ed]" : ""}`}
+								className={`cursor-pointer ${activeItem === item ? "text-[#2b58ed]" : ""}`}
 								onClick={() => handleClick(item)}
 							>
 								{item}
@@ -42,7 +41,7 @@ const Navbar = ({ selectedCategory, onSelect }: Props) => {
 								item, // we can add in the array choices we want for products
 							) => (
 								<p
-									className={`text-black cursor-pointer ${activeItem === item ? "text-[#2b58ed]" : ""}`}
+									className={`cursor-pointer ${activeItem === item ? "text-[#2b58ed]" : ""}`}
 									onClick={() => handleClick(item)}
 								>
 									{item}
@@ -58,7 +57,7 @@ const Navbar = ({ selectedCategory, onSelect }: Props) => {
 							// we can add in the array choices we want for Tags
 							(item) => (
 								<p
-									className={`text-black cursor-pointer ${activeItem === item ? "text-[#2b58ed]" : ""}`}
+									className={`cursor-pointer ${activeItem === item ? "text-[#2b58ed]" : ""}`}
 									onClick={() => handleClick(item)}
 								>
 									{item}
@@ -74,7 +73,7 @@ const Navbar = ({ selectedCategory, onSelect }: Props) => {
 							// we can add in the array choices we want for Activities
 							(item) => (
 								<p
-									className={`text-black cursor-pointer ${activeItem === item ? "text-[#2b58ed]" : ""}`}
+									className={`cursor-pointer ${activeItem === item ? "text-[#2b58ed]" : ""}`}
 									onClick={() => handleClick(item)}
 								>
 									{item}
