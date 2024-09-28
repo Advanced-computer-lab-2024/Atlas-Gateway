@@ -1,23 +1,28 @@
 import { Document, Schema, model , Types} from "mongoose";
 
 interface IItinerary extends Document {
-  guideId: Types.ObjectId;
-  touristId: Types.ObjectId;
-  activities: string[];
-  startDate: Date;
-  endDate: Date;
-  createdAt: Date;
-  updatedAt: Date;
+
+  id: Types.ObjectId;
+  language: string;
+  price: number;
+  availability: number;
+  pickUpLocation: string;
+  dropOffLocation: string;
+  activities: Types.ObjectId[];
+  tags: string[];
+  createdBy: Types.ObjectId;
 }
 
 const itinerarySchema = new Schema<IItinerary>({
-  guideId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-  touristId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-  activities: [{ type: Schema.Types.ObjectId, ref: 'Activity', required: true }],
-  startDate: { type: Date, required: true },
-  endDate: { type: Date, required: true },
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now }
-});
+  id: { type: Schema.Types.ObjectId, required: true },
+  language: { type: String, required: true },
+  price: { type: Number, required: true },
+  availability: { type: Number, required: true },
+  pickUpLocation: { type: String, required: true },
+  dropOffLocation: { type: String, required: true },
+  activities: [{ type: Schema.Types.ObjectId, ref: 'Activity' }],
+  tags: [{ type: String }],
+  createdBy: { type: Schema.Types.ObjectId, ref: 'TourGuide' },
+}, { timestamps: true });
 
 export const Itinerary = model<IItinerary>('Itinerary', itinerarySchema);
