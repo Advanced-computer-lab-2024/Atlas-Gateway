@@ -1,3 +1,4 @@
+import { schemaConfig } from "@utils";
 import { Document, Types, Schema, model } from "mongoose";
 
 
@@ -21,6 +22,6 @@ const sellerSchema = new Schema<ISeller>({
     description: { type: String },
     isDeleted: { type: Boolean },
     products: [{ type: Schema.Types.ObjectId, ref: 'Product' }],
-}, { timestamps: true });
+}, schemaConfig);
 
 export const Seller = model<ISeller>('Seller', sellerSchema);

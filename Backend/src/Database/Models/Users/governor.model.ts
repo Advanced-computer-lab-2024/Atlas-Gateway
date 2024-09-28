@@ -1,3 +1,4 @@
+import { schemaConfig } from "@utils";
 import { Document, Types, Schema, model } from "mongoose";
 
 
@@ -17,6 +18,6 @@ const governorSchema = new Schema<IGovernor>({
     password: { type: String, required: true },
     isDeleted: { type: Boolean },
     historicalLocations: [{ type: Schema.Types.ObjectId, ref: 'HistoricalLocation' }],
-}, { timestamps: true });
+}, schemaConfig);
 
 export const Governor = model<IGovernor>('Governor', governorSchema);

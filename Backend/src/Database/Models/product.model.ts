@@ -1,4 +1,5 @@
 import { Schema, model, Document, Types } from 'mongoose';
+import { schemaConfig } from '@utils';
 
 interface IProduct extends Document {
 	id: Types.ObjectId;
@@ -28,7 +29,7 @@ const productSchema = new Schema<IProduct>(
 		rating: { type: Number },
 		review: { type: String },
 	},
-	{ timestamps: true }
+	schemaConfig
 );
 
 export const Product = model<IProduct>('Product', productSchema);

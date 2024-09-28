@@ -1,3 +1,4 @@
+import { schemaConfig } from "@utils";
 import { Document, Types, Schema, model } from "mongoose";
 
 
@@ -33,6 +34,6 @@ const advertiserSchema = new Schema<IAdvertiser>({
         description: { type: String },
     },
     activities: [{ type: Schema.Types.ObjectId, ref: 'Activity' }],
-}, { timestamps: true });
+}, schemaConfig);
 
 export const Advertiser = model<IAdvertiser>('Advertiser', advertiserSchema);

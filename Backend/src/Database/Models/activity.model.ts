@@ -1,3 +1,4 @@
+import { schemaConfig } from "@utils";
 import { Document, Schema, model } from "mongoose";
 
 export interface IActivity extends Document {
@@ -36,8 +37,6 @@ const activitySchema = new Schema<IActivity>(
     specialDiscounts: { type: Number, required: true, min: 0, max: 100 },
     isOpen: { type: Boolean, required: true },
   },
-  {
-    timestamps: true,
-  }
+  schemaConfig
 );
 export const Activity = model<IActivity>("Activity", activitySchema);
