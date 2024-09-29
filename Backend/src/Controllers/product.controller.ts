@@ -1,10 +1,6 @@
 import { Request, Response } from "express";
 import { Product } from "../Database/Models/product.model";
 import mongoose from "mongoose";
-import { start } from "repl";
-
-import { Product } from "../Database/Models/product.model";
-import { Product } from "../Database/Models/product.model";
 import searchFilterSort from "src/Services/search-filter-sort.service";
 
 //Create a new product entry
