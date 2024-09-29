@@ -1,4 +1,4 @@
-import { EAccountType } from '@/types/enums';
+import { EAccountType } from "@/types/enums";
 
 export type NavbarRoute = {
 	name: string;
@@ -6,24 +6,24 @@ export type NavbarRoute = {
 };
 
 const productsRoute: NavbarRoute = {
-	name: 'Products',
-	to: '/products',
+	name: "Products",
+	to: "/products",
 };
 const activitiesRoute: NavbarRoute = {
-	name: 'Activities',
-	to: '/activities',
+	name: "Activities",
+	to: "/activities",
 };
 const exploreRoute: NavbarRoute = {
-	name: 'Explore',
-	to: '/explore',
+	name: "Explore",
+	to: "/explore",
 };
 const museumsAndHistoricalPlacesRoute: NavbarRoute = {
-	name: 'Museums & Historical Places',
-	to: '/museums-and-historical-places',
+	name: "Museums & Historical Places",
+	to: "/museums-and-historical-places",
 };
 const intinerariesRoute: NavbarRoute = {
-	name: 'Intineraries',
-	to: '/intineraries',
+	name: "Intineraries",
+	to: "/intineraries",
 };
 
 const touristRoutes: NavbarRoute[] = [
@@ -38,16 +38,16 @@ const adminRoutes: NavbarRoute[] = [
 	productsRoute,
 	activitiesRoute,
 	{
-		name: 'Dashboard',
-		to: '/admin/dashboard',
+		name: "Dashboard",
+		to: "/admin/dashboard",
 	},
 	{
-		name: 'Users',
-		to: '/admin/users',
+		name: "Users",
+		to: "/admin/users",
 	},
 	{
-		name: 'Settings',
-		to: '/admin/settings',
+		name: "Settings",
+		to: "/admin/settings",
 	},
 ];
 
@@ -75,5 +75,5 @@ export const accountRoutes: Record<EAccountType, NavbarRoute[]> = {
 	[EAccountType.Admin]: adminRoutes,
 	[EAccountType.Guide]: tourGuideRoutes,
 	[EAccountType.Advertiser]: advertiserRoutes,
-	[EAccountType.TourismGoverner]: tourismGovernerRoutes,
+	[EAccountType.TourismGovernor]: tourismGovernerRoutes,
 };

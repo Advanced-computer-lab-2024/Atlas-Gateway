@@ -1,13 +1,19 @@
 import { Request, Response } from "express";
 import { Product } from "../Database/Models/product.model";
 import mongoose from "mongoose";
+import { start } from "repl";
+
+import { Product } from "../Database/Models/product.model";
 
 //Create a new product entry
 export const createProduct = async (req: Request, res: Response) => {
+
   try {
     //console.log(req.body);
     const { sellerId, name, description, price, availability } = req.body;
 
+    //TODO: Check seller ID validity and existance
+    
     const product = new Product({
       sellerId,
       name,
@@ -25,6 +31,7 @@ export const createProduct = async (req: Request, res: Response) => {
 
 //takes an ID parameter and returns a single product
 export const getProduct = async (req: Request, res: Response) => {
+
   try {
     //TODO: Remember to fetch by ID
     const id = req.params.id;
@@ -44,31 +51,28 @@ export const getProduct = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Something went wrong" });
     console.log(error);
   }
+
 };
 
 //takes a query (anded conditions) and returns a data set
 export const getProducts = async (req: Request, res: Response) => {
-  try {
-    const querySet: any = {};
+	try {
+		const querySet: any = {};
 
-    if (req.body.sellerId) {
-      querySet.sellerId = req.body.sellerId;
-    }
+		if (req.body.name) {
+			querySet.name = req.body.name;
+		}
 
-    if (req.body.name) {
-      querySet.name = req.body.name;
-    }
-
-    if (req.body.priceRange) {
-      const { min, max } = req.body.priceRange; // Expecting { "priceRange": { "min": 50, "max": 150 } }
-      if (min !== undefined && max !== undefined) {
-        querySet.price = { $gte: min, $lte: max }; // Query for price range
-      } else if (min !== undefined) {
-        querySet.price = { $gte: min }; // Query for minimum price only
-      } else if (max !== undefined) {
-        querySet.price = { $lte: max }; // Query for maximum price only
-      }
-    }
+		if (req.body.priceRange) {
+			const { min, max } = req.body.priceRange; // Expecting { "priceRange": { "min": 50, "max": 150 } }
+			if (min !== undefined && max !== undefined) {
+				querySet.price = { $gte: min, $lte: max }; // Query for price range
+			} else if (min !== undefined) {
+				querySet.price = { $gte: min }; // Query for minimum price only
+			} else if (max !== undefined) {
+				querySet.price = { $lte: max }; // Query for maximum price only
+			}
+		}
 
     //console.log(querySet);
 
@@ -131,4 +135,5 @@ export const updateProduct = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Something went wrong" });
     console.log(error);
   }
+
 };

@@ -1,29 +1,27 @@
 import { schemaConfig } from "#utils";
 import { Document, Schema, Types, model } from "mongoose";
 
-export interface ISeller extends Document {
+export interface IGovernor extends Document {
 	id: Types.ObjectId;
 	userName: string;
 	email: string; // story 3
 	password: string;
-	picture: string;
-	description: string;
 	isDeleted: boolean;
-	products: [Types.ObjectId];
+	historicalLocations: [Types.ObjectId];
 }
 
-const sellerSchema = new Schema<ISeller>(
+const governorSchema = new Schema<IGovernor>(
 	{
 		id: { type: Schema.Types.ObjectId, required: true },
 		userName: { type: String, required: true },
 		email: { type: String, required: true },
 		password: { type: String, required: true },
-		picture: { type: String, required: true },
-		description: { type: String },
 		isDeleted: { type: Boolean },
-		products: [{ type: Schema.Types.ObjectId, ref: "Product" }],
+		historicalLocations: [
+			{ type: Schema.Types.ObjectId, ref: "HistoricalLocation" },
+		],
 	},
 	schemaConfig,
 );
 
-export const Seller = model<ISeller>("Seller", sellerSchema);
+export const Governor = model<IGovernor>("Governor", governorSchema);
