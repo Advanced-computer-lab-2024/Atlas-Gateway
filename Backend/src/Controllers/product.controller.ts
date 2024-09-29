@@ -1,9 +1,6 @@
 import { Request, Response } from "express";
 import { Product } from "../Database/Models/product.model";
 import mongoose from "mongoose";
-import { start } from "repl";
-
-import { Product } from "../Database/Models/product.model";
 
 //Create a new product entry
 export const createProduct = async (req: Request, res: Response) => {
