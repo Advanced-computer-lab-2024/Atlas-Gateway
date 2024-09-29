@@ -1,6 +1,7 @@
-import background from '../assets/background.png';
-import Navbar from './Navbar';
-import { Outlet } from 'react-router-dom';
+import { Outlet } from "react-router-dom";
+
+import background from "../assets/background.png";
+import Navbar from "./Navbar";
 
 export default function Layout() {
 	return (
@@ -8,8 +9,8 @@ export default function Layout() {
 			className="w-screen h-screen"
 			style={{
 				backgroundImage: `url(${background})`,
-				backgroundSize: 'cover',
-				backgroundPosition: 'center',
+				backgroundSize: "cover",
+				backgroundPosition: "center",
 			}}
 		>
 			<Navbar />

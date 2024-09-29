@@ -1,30 +1,32 @@
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+import { useFormContext } from "react-hook-form";
+
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import {
 	FormControl,
 	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from "@/components/ui/popover";
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from '@/components/ui/select';
-import { cn } from '@/lib/utils';
-import { CalendarIcon } from 'lucide-react';
-import { useFormContext } from 'react-hook-form';
-import { TRegisterForm } from '../types';
-import { format } from 'date-fns';
-import { Calendar } from '@/components/ui/calendar';
-import { Button } from '@/components/ui/button';
-import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from '@/components/ui/popover';
+} from "@/components/ui/select";
+import { cn } from "@/lib/utils";
+
+import { TRegisterForm } from "../types";
 
 export default function TouristInfo() {
 	const form = useFormContext<TRegisterForm>();
@@ -52,36 +54,57 @@ export default function TouristInfo() {
 				render={({ field }) => (
 					<FormItem>
 						<FormLabel>Nationality</FormLabel>
-						<Select onValueChange={field.onChange} defaultValue={field.value}>
+						<Select
+							onValueChange={field.onChange}
+							defaultValue={field.value}
+						>
 							<FormControl>
 								<SelectTrigger>
 									<SelectValue placeholder="Select your nationality" />
 								</SelectTrigger>
 							</FormControl>
 							<SelectContent>
-								<SelectItem value="american">American</SelectItem>
-								<SelectItem value="canadian">Canadian</SelectItem>
+								<SelectItem value="american">
+									American
+								</SelectItem>
+								<SelectItem value="canadian">
+									Canadian
+								</SelectItem>
 								<SelectItem value="british">British</SelectItem>
-								<SelectItem value="australian">Australian</SelectItem>
+								<SelectItem value="australian">
+									Australian
+								</SelectItem>
 								<SelectItem value="german">German</SelectItem>
 								<SelectItem value="french">French</SelectItem>
 								<SelectItem value="italian">Italian</SelectItem>
 								<SelectItem value="spanish">Spanish</SelectItem>
 								<SelectItem value="chinese">Chinese</SelectItem>
-								<SelectItem value="japanese">Japanese</SelectItem>
+								<SelectItem value="japanese">
+									Japanese
+								</SelectItem>
 								<SelectItem value="indian">Indian</SelectItem>
-								<SelectItem value="brazilian">Brazilian</SelectItem>
+								<SelectItem value="brazilian">
+									Brazilian
+								</SelectItem>
 								<SelectItem value="mexican">Mexican</SelectItem>
-								<SelectItem value="south-african">South African</SelectItem>
-								<SelectItem value="nigerian">Nigerian</SelectItem>
+								<SelectItem value="south-african">
+									South African
+								</SelectItem>
+								<SelectItem value="nigerian">
+									Nigerian
+								</SelectItem>
 								<SelectItem value="russian">Russian</SelectItem>
 								<SelectItem value="korean">Korean</SelectItem>
-								<SelectItem value="egyptian">Egyptian</SelectItem>
+								<SelectItem value="egyptian">
+									Egyptian
+								</SelectItem>
 								<SelectItem value="swedish">Swedish</SelectItem>
 								<SelectItem value="dutch">Dutch</SelectItem>
 							</SelectContent>
 						</Select>
-						<FormDescription>Select your nationality.</FormDescription>
+						<FormDescription>
+							Select your nationality.
+						</FormDescription>
 					</FormItem>
 				)}
 			/>
@@ -97,12 +120,13 @@ export default function TouristInfo() {
 									<Button
 										variant="outline"
 										className={cn(
-											'w-full pl-3 text-left font-normal',
-											!field.value && 'text-muted-foreground'
+											"w-full pl-3 text-left font-normal",
+											!field.value &&
+												"text-muted-foreground",
 										)}
 									>
 										{field.value ? (
-											format(field.value, 'PPP')
+											format(field.value, "PPP")
 										) : (
 											<span>Pick a date</span>
 										)}
@@ -110,13 +134,17 @@ export default function TouristInfo() {
 									</Button>
 								</FormControl>
 							</PopoverTrigger>
-							<PopoverContent className="w-auto p-0" align="start">
+							<PopoverContent
+								className="w-auto p-0"
+								align="start"
+							>
 								<Calendar
 									mode="single"
 									selected={field.value}
 									onSelect={field.onChange}
 									disabled={(date) =>
-										date > new Date() || date < new Date('1900-01-01')
+										date > new Date() ||
+										date < new Date("1900-01-01")
 									}
 									captionLayout="dropdown-buttons"
 									fromYear={new Date().getFullYear() - 80}
@@ -137,7 +165,10 @@ export default function TouristInfo() {
 				render={({ field }) => (
 					<FormItem>
 						<FormLabel>Occupation</FormLabel>
-						<Select onValueChange={field.onChange} defaultValue={field.value}>
+						<Select
+							onValueChange={field.onChange}
+							defaultValue={field.value}
+						>
 							<FormControl>
 								<SelectTrigger>
 									<SelectValue placeholder="Select your current occupation" />
@@ -148,35 +179,48 @@ export default function TouristInfo() {
 								<SelectItem value="software-engineer">
 									Software Engineer
 								</SelectItem>
-								<SelectItem value="data-scientist">Data Scientist</SelectItem>
+								<SelectItem value="data-scientist">
+									Data Scientist
+								</SelectItem>
 								<SelectItem value="teacher">Teacher</SelectItem>
 								<SelectItem value="doctor">Doctor</SelectItem>
 								<SelectItem value="nurse">Nurse</SelectItem>
 								<SelectItem value="lawyer">Lawyer</SelectItem>
-								<SelectItem value="accountant">Accountant</SelectItem>
+								<SelectItem value="accountant">
+									Accountant
+								</SelectItem>
 								<SelectItem value="graphic-designer">
 									Graphic Designer
 								</SelectItem>
 								<SelectItem value="marketing-specialist">
 									Marketing Specialist
 								</SelectItem>
-								<SelectItem value="sales-manager">Sales Manager</SelectItem>
-								<SelectItem value="product-manager">Product Manager</SelectItem>
+								<SelectItem value="sales-manager">
+									Sales Manager
+								</SelectItem>
+								<SelectItem value="product-manager">
+									Product Manager
+								</SelectItem>
 								<SelectItem value="business-analyst">
 									Business Analyst
 								</SelectItem>
 								<SelectItem value="financial-analyst">
 									Financial Analyst
 								</SelectItem>
-								<SelectItem value="hr-specialist">HR Specialist</SelectItem>
+								<SelectItem value="hr-specialist">
+									HR Specialist
+								</SelectItem>
 								<SelectItem value="customer-support-representative">
 									Customer Support Representative
 								</SelectItem>
-								<SelectItem value="engineer">Engineer</SelectItem>
+								<SelectItem value="engineer">
+									Engineer
+								</SelectItem>
 							</SelectContent>
 						</Select>
 						<FormDescription>
-							Select Student if you are a student or select your job.
+							Select Student if you are a student or select your
+							job.
 						</FormDescription>
 					</FormItem>
 				)}
