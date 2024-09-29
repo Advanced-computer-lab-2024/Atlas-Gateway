@@ -31,8 +31,8 @@ const PlacesForm: React.FC = () => {
 
         // Check for negative values in number inputs
         if (e.target.type === 'number' && parseFloat(value) < 0) {
-            setError('Value cannot be negative.'); // Set error message
-            return; // Prevent negative values
+            setError('Value cannot be negative.'); 
+            return; 
         }
 
         setError(null); // Clear error message if input is valid
@@ -59,7 +59,6 @@ const PlacesForm: React.FC = () => {
             }
         }
 
-        // Reset form after submission
         setValues({
             name: '',
             description: '',
@@ -81,6 +80,7 @@ const PlacesForm: React.FC = () => {
             ticketsS: '',
             ticketsF: ''
         });
+        
         setFiles(null);
     };
 
