@@ -1,4 +1,4 @@
 export const schemaConfig = {
-  versionKey: false,
-  timestamps: true,
+	versionKey: false,
+	timestamps: true,
 };
