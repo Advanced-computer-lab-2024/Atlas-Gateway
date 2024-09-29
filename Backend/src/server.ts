@@ -1,5 +1,4 @@
 import express, { Request, Response } from "express";
-
 import { SERVER } from "./Config/config";
 import connectDB from "./Database/db";
 import activityRouter from "./Routes/activity.route";
@@ -30,6 +29,5 @@ async function startServer() {
 		}
 	});
 }
-
 connectDB();
 startServer();
