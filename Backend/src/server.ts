@@ -1,7 +1,9 @@
 import express, { Request, Response } from "express";
+
 import { SERVER } from "./Config/config";
 import connectDB from "./Database/db";
 import activityRouter from "./Routes/activity.route";
+import advertiserRouter from "./Routes/advertiser.route";
 import productRouter from "./Routes/product.route";
 
 const app = express();
@@ -11,6 +13,7 @@ async function startServer() {
 
 	app.use("/api/products", productRouter);
 	app.use("/api/activity", activityRouter);
+	app.use("/api/advertiser", advertiserRouter);
 	app.listen(SERVER.port, () => {
 		console.log(
 			`Server is running on http://${SERVER.host}:${SERVER.port}`,
