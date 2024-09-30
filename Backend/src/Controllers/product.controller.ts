@@ -111,11 +111,13 @@ export const updateProduct = async (req: Request, res: Response) => {
 			updateSet.price = req.body.price;
 		}
 
-		if (req.body.availability) {
-			updateSet.availability = req.body.availability;
+		if (req.body.quantity) {
+			updateSet.quantity = req.body.quantity;
 		}
 
-		updateSet.updatedAt = Date.now();
+		if (req.body.picture) {
+			updateSet.picture = req.body.picture;
+		}
 
 		const product = await Product.findByIdAndUpdate(id, updateSet, {
 			new: true,

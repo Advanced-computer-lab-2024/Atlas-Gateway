@@ -2,3 +2,7 @@
 import { Router } from "express";
 
 import * as tagController from "../Controllers/tag.controller";
+
+const tagRouter = Router();
+
+export default tagRouter;
