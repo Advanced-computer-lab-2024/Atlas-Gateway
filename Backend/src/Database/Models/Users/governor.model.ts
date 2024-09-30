@@ -13,9 +13,6 @@ const governorSchema = new Schema<IGovernor>(
 		userName: { type: String, required: true, unique: true },
 		email: { type: String, required: true },
 		password: { type: String, required: true },
-		historicalLocations: [
-			{ type: Schema.Types.ObjectId, ref: "HistoricalLocation" },
-		],
 	},
 	schemaConfig,
 );
