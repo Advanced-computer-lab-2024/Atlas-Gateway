@@ -2,7 +2,6 @@ import { schemaConfig } from "#utils";
 import { Document, Schema, Types, model } from "mongoose";
 
 export interface ISeller extends Document {
-	id: Types.ObjectId;
 	userName: string;
 	email: string; // story 3
 	password: string;
@@ -14,13 +13,12 @@ export interface ISeller extends Document {
 
 const sellerSchema = new Schema<ISeller>(
 	{
-		id: { type: Schema.Types.ObjectId, required: true },
 		userName: { type: String, required: true },
 		email: { type: String, required: true },
 		password: { type: String, required: true },
 		picture: { type: String, required: true },
 		description: { type: String },
-		isDeleted: { type: Boolean },
+		isDeleted: { type: Boolean, default: false },
 		products: [{ type: Schema.Types.ObjectId, ref: "Product" }],
 	},
 	schemaConfig,

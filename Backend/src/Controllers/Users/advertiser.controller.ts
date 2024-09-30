@@ -31,15 +31,16 @@ export const getAdvertiser = async (req: Request, res: Response) => {
 };
 export const updateAdvertiser = async (req: Request, res: Response) => {
 	const id = req.params.id;
-	const companyProfile = req.body;
+	const { userName, email, password, companyProfile, activities } = req.body;
 	try {
 		//maybe we need to add checker here based on the flow of the page
-		const adv = await Advertiser.findByIdAndUpdate(id, companyProfile, {
-			fields: {
-				companyProfile: 1,
+		const adv = await Advertiser.findByIdAndUpdate(
+			id,
+			{ userName, email, password, companyProfile, activities },
+			{
+				new: true,
 			},
-			new: true,
-		});
+		);
 		res.status(200).send(adv);
 	} catch (error) {
 		res.status(500).send("failed");
