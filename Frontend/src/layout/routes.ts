@@ -78,3 +78,4 @@ export const accountRoutes: Record<EAccountType, NavbarRoute[]> = {
 	[EAccountType.Advertisor]: advertisorRoutes,
 	[EAccountType.TourismGovernor]: tourismGovernerRoutes,
 };
+
