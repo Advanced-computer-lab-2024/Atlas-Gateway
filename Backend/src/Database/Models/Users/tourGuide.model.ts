@@ -2,7 +2,6 @@ import { schemaConfig } from "#utils";
 import { Document, Schema, Types, model } from "mongoose";
 
 export interface ITourGuide extends Document {
-	id: Types.ObjectId;
 	userName: string;
 	email: string; // story 3
 	password: string;
@@ -16,18 +15,15 @@ export interface ITourGuide extends Document {
 		start: Date;
 		end: Date;
 	};
-	isDeleted: boolean;
 	itinerary: [Types.ObjectId];
 }
 
 const tourGuideSchema = new Schema<ITourGuide>(
 	{
-		id: { type: Schema.Types.ObjectId, required: true },
 		userName: { type: String, required: true },
 		email: { type: String, required: true },
 		password: { type: String, required: true },
 		description: { type: String },
-		isDeleted: { type: Boolean },
 		picture: { type: String },
 		experience: { type: String },
 		previous: {
