@@ -81,7 +81,7 @@ export const updatePrefTag = async (req: Request, res: Response) => {
 		//making sure I can only update and delete preference tags
 		if (
 			!Types.ObjectId.isValid(id) ||
-			!(await Tag.find({ id, type: "Preference" }))
+			(await Tag.find({ _id: id, type: "Preference" })).length === 0
 		) {
 			return res.status(400).json({ message: "Invalid ID" });
 		}
@@ -92,7 +92,7 @@ export const updatePrefTag = async (req: Request, res: Response) => {
 
 		const updatedTag = await Tag.findByIdAndUpdate(
 			id,
-			{ name, type: "Preference" },
+			{ name },
 			{ new: true },
 		);
 
@@ -108,9 +108,10 @@ export const deletePreTag = async (req: Request, res: Response) => {
 		const id = req.params.id;
 
 		//making sure I can only update and delete preference tags
+
 		if (
 			!Types.ObjectId.isValid(id) ||
-			!(await Tag.find({ id, type: "Preference" }))
+			(await Tag.find({ _id: id, type: "Preference" })).length === 0
 		) {
 			return res.status(400).json({ message: "Invalid ID" });
 		}
@@ -127,7 +128,8 @@ export const deletePreTag = async (req: Request, res: Response) => {
 		//remove referenes first then delete the tag cuz of dependecies (not sure how they work, but just in case it matters, validations were already made)
 
 		res.status(200).json({
-			Deleted: updateSet.modifiedCount,
+			messge: "Tag deleted",
+			activities_affected: updateSet.modifiedCount,
 		});
 
 		console.log("Deleted tag: ", tagDoc);
