@@ -4,9 +4,7 @@ import { Activity } from "../Database/Models/activity.model";
 
 export const createActivities = async (req: Request, res: Response) => {
 	try {
-		const activity = Array.isArray(req.body)
-			? await Activity.insertMany(req.body)
-			: await Activity.create(req.body);
+		const activity = await Activity.create(req.body);
 		res.status(201).send(activity);
 	} catch (error) {
 		console.log(error);
