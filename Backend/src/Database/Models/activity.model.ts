@@ -2,6 +2,7 @@ import { schemaConfig } from "#utils";
 import { Document, Schema, model } from "mongoose";
 
 export interface IActivity extends Document {
+	name: string;
 	description: string;
 	dateTime: Date;
 	location: string;
@@ -15,6 +16,7 @@ export interface IActivity extends Document {
 
 const activitySchema = new Schema<IActivity>(
 	{
+		name: { type: String, required: true },
 		description: { type: String, required: true },
 		dateTime: { type: Date, required: true },
 		location: { type: String, required: true },
