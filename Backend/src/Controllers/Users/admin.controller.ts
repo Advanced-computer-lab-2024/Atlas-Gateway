@@ -25,3 +25,13 @@ export const getAdmins = async (req: Request, res: Response) => {
 		res.status(500).send("Error getting admins");
 	}
 };
+
+export const deleteAdmin = async (req: Request, res: Response) => {
+	try {
+		const { id } = req.params;
+		await Admin.findByIdAndDelete(id);
+		res.status(200).send("Deleted Succefully");
+	} catch (error) {
+		res.status(500).send("Error deleting Admin");
+	}
+};
