@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
+import Admins from "./components/Admins";
 
 const Admin = () => {
 	const [selectedCategory, setSelectedCategory] = useState(""); // manages selection from sidebar
@@ -12,7 +13,11 @@ const Admin = () => {
 			case "Tourists":
 				return <div>Tourists Component</div>; // tourist component here
 			case "Admins":
-				return <div>Admins Component</div>; // admin component here
+				return (
+					<div>
+						<Admins />
+					</div>
+				); // admin component here
 			case "Tour Guides":
 				return <div>Tour Guides Component</div>; // tour guide component here
 			case "Advertisers":
