@@ -56,6 +56,19 @@ const router = createBrowserRouter([
 		path: "/advertisor/profile",
 		element: <AdvertisorProfile />,
 	},
+	{
+		path: "/guide/profile",
+		element: <TourGuideProfile />,
+	},
+	{
+		path: "/seller/profile",
+		element: <SellerProfile />,
+	},
+	{
+		path: "/profile",
+		element: <TouristProfile/>
+	}
+
 ]);
 
 createRoot(document.getElementById("root")!).render(
