@@ -18,11 +18,12 @@ const Navbar = ({ selectedCategory, onSelect }: Props) => {
 				return (
 					<div className="flex gap-11 ml-auto mr-auto">
 						{[
-							// we can add in the array choices we want for Accounts
 							"Admins",
 							"Tourists",
 							"Tour Guides",
 							"Advertisers",
+							"Governors",
+							"Seller",
 						].map((item) => (
 							<p
 								className={`cursor-pointer ${activeItem === item ? "text-[#2b58ed]" : ""}`}
@@ -36,50 +37,40 @@ const Navbar = ({ selectedCategory, onSelect }: Props) => {
 			case "Products":
 				return (
 					<div className="flex gap-11 ml-auto mr-auto">
-						{["Inventory"].map(
-							(
-								item, // we can add in the array choices we want for products
-							) => (
-								<p
-									className={`cursor-pointer ${activeItem === item ? "text-[#2b58ed]" : ""}`}
-									onClick={() => handleClick(item)}
-								>
-									{item}
-								</p>
-							),
-						)}
+						{["Inventory"].map((item) => (
+							<p
+								className={`cursor-pointer ${activeItem === item ? "text-[#2b58ed]" : ""}`}
+								onClick={() => handleClick(item)}
+							>
+								{item}
+							</p>
+						))}
 					</div>
 				);
 			case "Tags":
 				return (
 					<div className="flex gap-11 ml-auto mr-auto">
-						{["Show Tags"].map(
-							// we can add in the array choices we want for Tags
-							(item) => (
-								<p
-									className={`cursor-pointer ${activeItem === item ? "text-[#2b58ed]" : ""}`}
-									onClick={() => handleClick(item)}
-								>
-									{item}
-								</p>
-							),
-						)}
+						{["Show Tags"].map((item) => (
+							<p
+								className={`cursor-pointer ${activeItem === item ? "text-[#2b58ed]" : ""}`}
+								onClick={() => handleClick(item)}
+							>
+								{item}
+							</p>
+						))}
 					</div>
 				);
 			case "Activities":
 				return (
 					<div className="flex gap-11 ml-auto mr-auto">
-						{["Avaliable Activities"].map(
-							// we can add in the array choices we want for Activities
-							(item) => (
-								<p
-									className={`cursor-pointer ${activeItem === item ? "text-[#2b58ed]" : ""}`}
-									onClick={() => handleClick(item)}
-								>
-									{item}
-								</p>
-							),
-						)}
+						{["Avaliable Activities"].map((item) => (
+							<p
+								className={`cursor-pointer ${activeItem === item ? "text-[#2b58ed]" : ""}`}
+								onClick={() => handleClick(item)}
+							>
+								{item}
+							</p>
+						))}
 					</div>
 				);
 			default:
@@ -91,11 +82,7 @@ const Navbar = ({ selectedCategory, onSelect }: Props) => {
 		<div className="bg-[#fefefe] w-full h-[80px] flex items-center">
 			{renderOptions()}
 			<div>
-				<LogOut
-					className="rounded-full text-black mr-5 cursor-pointer"
-					width={30}
-					height={30}
-				/>
+				<LogOut className="cursor-pointer mr-5 hover:text-[#2b58ed]" />
 			</div>
 		</div>
 	);
