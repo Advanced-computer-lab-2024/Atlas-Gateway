@@ -29,3 +29,13 @@ export const getGovernors = async (req: Request, res: Response) => {
 		res.status(500).send("Error getting governors");
 	}
 };
+
+export const deleteGovernor = async (req: Request, res: Response) => {
+	try {
+		const { id } = req.params;
+		await Governor.findByIdAndDelete(id);
+		res.status(200).send("Deleted Succefully");
+	} catch (error) {
+		res.status(500).send("Error deleting Governor");
+	}
+};
