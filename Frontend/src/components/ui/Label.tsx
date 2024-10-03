@@ -48,6 +48,7 @@ interface LabelProps extends React.HTMLAttributes<HTMLLabelElement> {
 	variant?: LabelVariantsEnum;
 	size: LabelTypographyEnum;
 	weight: LabelWeightsEnum;
+	htmlFor?: string;
 }
 
 const BaseLabel = memo(
