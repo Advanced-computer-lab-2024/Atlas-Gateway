@@ -3,15 +3,12 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
-
-
-import Admin from "./Admin/Admin";
+import Admin from "./Admin/Dashboard";
 import Advertisor from "./Advertisor/Advertisor";
 import AdvertisorProfile from "./Advertisor/Profile";
 import Register from "./Register/Register";
 import "./index.css";
 import Layout from "./layout/Layout";
-
 
 const queryClient = new QueryClient();
 
