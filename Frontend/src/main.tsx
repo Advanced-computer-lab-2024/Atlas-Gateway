@@ -11,6 +11,7 @@ import AdvertisorProfile from "./Advertisor/Profile";
 import Register from "./Register/Register";
 import "./index.css";
 import Layout from "./layout/Layout";
+import PlacesForm from "./TourismGovernor/HistoricalPlacesForm";
 
 
 const queryClient = new QueryClient();
@@ -31,6 +32,9 @@ const router = createBrowserRouter([
 			{
 				path: "/advertisor",
 				element: <Advertisor />,
+			},{
+				path: "/places",
+				element: <PlacesForm />,
 			},
 		],
 	},
