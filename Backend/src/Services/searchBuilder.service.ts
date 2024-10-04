@@ -8,13 +8,11 @@ export default function search(
 	const pipeline: PipelineStage[] = [];
 
 	if (keyword) {
-		// Handle keyword search across specified attributes
 		if (Array.isArray(options)) {
 			pipeline.push({
 				$match: {
 					$or: options.map((option) => {
 						let nestedMatch = {};
-						// Handle top-level field
 						nestedMatch = {
 							[option as string]: {
 								$regex: new RegExp(escapeRegex(keyword), "gi"),

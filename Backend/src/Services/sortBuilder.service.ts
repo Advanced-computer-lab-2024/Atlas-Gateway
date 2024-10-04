@@ -1,6 +1,5 @@
 import { PipelineStage } from "mongoose";
 
-// Builds the sort criteria for sorting by multiple fields
 export default function buildSortCriteria(query: any): PipelineStage[] {
 	const pipeline: PipelineStage[] = [];
 

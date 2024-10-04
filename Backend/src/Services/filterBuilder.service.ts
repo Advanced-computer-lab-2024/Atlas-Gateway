@@ -1,7 +1,5 @@
 import { PipelineStage } from "mongoose";
-import { match } from "node:assert";
 
-// Builds the filter query for filtering by different fields
 export default function buildFilterQuery(query: any): PipelineStage[] {
 	const pipeline: PipelineStage[] = [];
 
@@ -14,7 +12,7 @@ export default function buildFilterQuery(query: any): PipelineStage[] {
 		...filterByTags(query),
 	);
 
-	return pipeline; // Return an empty object if no filter criteria apply
+	return pipeline;
 }
 
 // Function to filter by price
@@ -46,11 +44,8 @@ export function filterByPrice(query: any): PipelineStage[] {
 		});
 	}
 
-	return pipeline; // Return an empty object if no filter criteria apply
+	return pipeline;
 }
-
-// Function to filter by date
-// default date is the current date
 
 export function filterByDate(query: any): PipelineStage[] {
 	const pipeline: PipelineStage[] = [];
@@ -76,13 +71,10 @@ export function filterByDate(query: any): PipelineStage[] {
 
 		matchStage.dateTime.$gte = startDate;
 
-		console.log(matchStage);
-
 		pipeline.push({
 			$match: matchStage,
 		});
 	} else {
-		// If no date is provided, return all activities after the current date
 		pipeline.push({
 			$match: {
 				dateTime: {
@@ -92,7 +84,8 @@ export function filterByDate(query: any): PipelineStage[] {
 		});
 	}
 
-	return pipeline; // Return an empty object if no filter criteria apply
+	// If no date is provided, return all activities after the current date
+	return pipeline;
 }
 
 // Function to filter by ratings
@@ -102,7 +95,6 @@ export function filterByRatings(query: any): PipelineStage[] {
 	if (query.ratings) {
 		const [minRatingStr, maxRatingStr] = query.ratings.split(",");
 
-		// Parse minRating and maxRating, handling null values
 		let minRating: number | null = parseFloat(minRatingStr) || 0;
 		let maxRating: number | null = parseFloat(maxRatingStr) || 5;
 
@@ -113,7 +105,7 @@ export function filterByRatings(query: any): PipelineStage[] {
 		});
 	}
 
-	return pipeline; // Return an empty object if no filter criteria apply
+	return pipeline;
 }
 
 // Function to filter by language

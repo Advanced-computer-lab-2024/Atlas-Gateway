@@ -20,7 +20,7 @@ export const getActivities = async (req: Request, res: Response) => {
 			//need to join the tags and category collections to get the name of the tags and category
 			{
 				$lookup: {
-					from: "tags", // Replace with the actual name of Tag collection
+					from: "tags",
 					localField: "tags",
 					foreignField: "_id",
 					as: "tagsData",
@@ -28,7 +28,7 @@ export const getActivities = async (req: Request, res: Response) => {
 			},
 			{
 				$lookup: {
-					from: "categories", // Replace with the actual name of Category collection
+					from: "categories",
 					localField: "category",
 					foreignField: "_id",
 					as: "categoryData",
