@@ -1,27 +1,44 @@
 import { Request, Response } from "express";
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
 
+import { Seller } from "../Database/Models/Users/seller.model";
 import { Product } from "../Database/Models/product.model";
+import searchFilterSort from "../Services/search-filter-sort.service";
 
 //Create a new product entry
 export const createProduct = async (req: Request, res: Response) => {
 	try {
 		//console.log(req.body);
-		const { sellerId, name, description, price, availability } = req.body;
+		const { sellerId, name, description, price, quantity, picture } =
+			req.body;
 
 		//TODO: Check seller ID validity and existance
+		if (
+			!Types.ObjectId.isValid(sellerId) ||
+			!(await Seller.findById(sellerId))
+		) {
+			return res
+				.status(400)
+				.json({ message: "Seller ID is invalid or doesn't exist" });
+		}
+
+		if (!name || !description || !price || !quantity || !picture) {
+			return res.status(400).json({ message: "Misisng Fields" });
+		}
 
 		const product = new Product({
 			sellerId,
 			name,
 			description,
 			price,
-			availability,
+			quantity,
+			picture,
 		});
+
 		await product.save();
 		res.status(200).send(product);
 	} catch (error) {
-		res.status(500).json({ message: "Something went wrong" });
+		res.status(500).json({ message: "Internal Server Error" });
 		console.log(error);
 	}
 };
@@ -44,7 +61,7 @@ export const getProduct = async (req: Request, res: Response) => {
 
 		res.status(200).send(product);
 	} catch (error) {
-		res.status(500).json({ message: "Something went wrong" });
+		res.status(500).json({ message: "Internal Server Error" });
 		console.log(error);
 	}
 };
@@ -83,7 +100,7 @@ export const getProducts = async (req: Request, res: Response) => {
 
 		res.status(200).send(dataSet);
 	} catch (error) {
-		res.status(500).json({ message: "Something went wrong" });
+		res.status(500).json({ message: "Internal Server Error" });
 		console.log(error);
 	}
 };
@@ -124,14 +141,14 @@ export const updateProduct = async (req: Request, res: Response) => {
 		});
 
 		if (!product) {
-			return res.status(500).json({
+			return res.status(404).json({
 				message: "The product you are trying to update doesn't exist",
 			});
 		}
 
 		res.status(200).send(product);
 	} catch (error) {
-		res.status(500).json({ message: "Something went wrong" });
+		res.status(500).json({ message: "Internal Server Error" });
 		console.log(error);
 	}
 };
