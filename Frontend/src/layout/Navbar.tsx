@@ -3,37 +3,37 @@ import { Link } from "react-router-dom";
 
 import Label from "@/components/ui/Label";
 import { Flex } from "@/components/ui/flex";
+import { useLoginStore } from "@/store/loginStore";
+import { EAccountType } from "@/types/enums";
 
 import { accountRoutes } from "./routes";
 
 export default function Navbar() {
+	const { user } = useLoginStore();
 
-	const routes = accountRoutes['advertisor'];
+	const isLoggedIn = user?.id;
+	const routes = accountRoutes[(user?.type ?? "tourist") as EAccountType];
 
+	let profileLink = "/profile"; // Default profile link
 
-	const isLoggedIn = true;
-
-	let profileLink = '/profile'; // Default profile link
-
-	if (routes === accountRoutes['tourist']) {
-		profileLink = '/profile'; // General profile for tourists
-	} else if (routes === accountRoutes['guide']) {
-		profileLink = '/guide/profile';
-	} else if (routes === accountRoutes['seller']) {
-		profileLink = '/seller/profile';
-	} else if (routes === accountRoutes['advertisor']) {
-		profileLink = '/advertisor/profile';
-	} else if (routes === accountRoutes['tourism_governor']) {
-		profileLink = '/tourism-governor/profile';
+	if (routes === accountRoutes["tourist"]) {
+		profileLink = "/profile"; // General profile for tourists
+	} else if (routes === accountRoutes["tour_guide"]) {
+		profileLink = "/guide/profile";
+	} else if (routes === accountRoutes["seller"]) {
+		profileLink = "/seller/profile";
+	} else if (routes === accountRoutes["advertiser"]) {
+		profileLink = "/advertiser/profile";
+	} else if (routes === accountRoutes["governor"]) {
+		profileLink = "/tourism-governor/profile";
 	}
-
 
 	return (
 		<nav className="bg-surface-secondary h-20 flex justify-between items-center px-4 drop-shadow-2xl border-b-2 border-black">
 			<Flex>
 				<Link
 					to="/"
-					className="text-primary hover:no-underline hover:text-primary"
+					className="text-primary hover:no-underline hover:text-primary font-[pacifico]"
 				>
 					<Label.Big700 variant="primary">Atlas Gateway</Label.Big700>
 				</Link>

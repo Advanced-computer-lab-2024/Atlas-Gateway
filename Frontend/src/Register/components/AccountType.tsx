@@ -33,7 +33,9 @@ export default function AccountType() {
 							"bg-gray-300": form?.watch("type") === type.value,
 						},
 					)}
-					onClick={() => form?.setValue("type", type.value)}
+					onClick={() => {
+						form?.setValue("type", type.value);
+					}}
 					gap="2"
 				>
 					<Label.Mid500>{type.label}</Label.Mid500>

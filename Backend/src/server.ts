@@ -7,13 +7,13 @@ import adminRouter from "./Routes/Users/admin.route";
 import governorRouter from "./Routes/Users/governor.route";
 import sellerRouter from "./Routes/Users/seller.route";
 import tourGuideRouter from "./Routes/Users/tourGuide.route";
+import tourist from "./Routes/Users/tourist.route";
 import activityRouter from "./Routes/activity.route";
 import advertiserRouter from "./Routes/advertiser.route";
 import categoryRouter from "./Routes/category.route";
 import productRouter from "./Routes/product.route";
-import tagRouter from "./Routes/tag.route";
 import registerRouter from "./Routes/register.route";
-import tourist from "./Routes/Users/tourist.route";
+import tagRouter from "./Routes/tag.route";
 
 const app = express();
 
@@ -31,7 +31,7 @@ async function startServer() {
 	app.use("/api/tags", tagRouter);
 	app.use("/api/tourist", tourist);
 	app.use("/api/register", registerRouter);
-	
+
 	app.get("/", (req: Request, res: Response) => {
 		try {
 			res.status(200).send("Hello");

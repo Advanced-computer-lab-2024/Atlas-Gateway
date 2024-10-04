@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
 
-import { Category } from "../Database/Models/category.model";
-
 import { Activity } from "../Database/Models/activity.model";
+import { Category } from "../Database/Models/category.model";
 
 export const createCategory = async (req: Request, res: Response) => {
 	try {
@@ -61,9 +60,7 @@ export const deleteCategory = async (req: Request, res: Response) => {
 	try {
 		const { id } = req.params;
 		await Category.findByIdAndDelete(id);
-		await Activity.deleteMany(
-			{"category": id}
-		)
+		await Activity.deleteMany({ category: id });
 		res.status(200).send("Category deleted Succefully");
 	} catch (error) {
 		console.log(error);

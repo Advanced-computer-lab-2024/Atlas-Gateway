@@ -44,16 +44,15 @@ export default function Register() {
 	const { doRegister } = useRegister();
 
 	const form = useForm<TRegisterForm>({
-		shouldUnregister: false,
 		resolver: zodResolver(schemaMap[stage]),
 		mode: "onChange",
 	});
 
-	const { handleSubmit, watch } = form;
+	const { handleSubmit, watch, getValues } = form;
 
 	const selectedType = watch("type");
 
-	const onSubmit = async (data: TRegisterForm) => {
+	const onSubmit = async () => {
 		switch (stage) {
 			case 1:
 				if (selectedType !== EAccountType.Tourist) {
@@ -66,7 +65,7 @@ export default function Register() {
 				setStage(3);
 				return;
 			case 3:
-				doRegister(data);
+				doRegister(getValues());
 				return;
 		}
 	};
