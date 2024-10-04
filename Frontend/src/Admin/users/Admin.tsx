@@ -18,7 +18,7 @@ import SheetDemo from "../components/SheetDemo";
 
 interface Admin {
 	_id: string;
-	userName: string;
+	username: string;
 	email: string;
 	password: string;
 }
@@ -56,7 +56,7 @@ const Admins = () => {
 				<TableCaption>Registered Admins.</TableCaption>
 				<TableHeader className="bg-gray-100">
 					<TableRow>
-						<TableHead>UserName</TableHead>
+						<TableHead>Username</TableHead>
 						<TableHead>Email</TableHead>
 						<TableHead>Password</TableHead>
 						<TableHead className="cursor-pointer hover:text-[#2b58ed] w-1">
@@ -68,7 +68,7 @@ const Admins = () => {
 					{admins.map((admin) => (
 						<TableRow key={admin._id}>
 							<TableCell className="p-3">
-								{admin.userName}
+								{admin.username}
 							</TableCell>
 							<TableCell>{admin.email}</TableCell>
 							<TableCell>{admin.password}</TableCell>

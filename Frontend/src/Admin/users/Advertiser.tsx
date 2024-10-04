@@ -26,7 +26,7 @@ interface CompanyProfile {
 
 interface Advertiser {
 	_id: string;
-	userName: string;
+	username: string;
 	email: string;
 	password: string;
 	companyProfile: CompanyProfile;
@@ -67,7 +67,7 @@ const Advertisers = () => {
 				<TableCaption>Registered Advertisers.</TableCaption>
 				<TableHeader className="bg-gray-100">
 					<TableRow>
-						<TableHead>UserName</TableHead>
+						<TableHead>Username</TableHead>
 						<TableHead>Email</TableHead>
 						<TableHead>Password</TableHead>
 						<TableHead>Hotline</TableHead>
@@ -83,7 +83,7 @@ const Advertisers = () => {
 					{advertisers.map((advertiser) => (
 						<TableRow key={advertiser._id}>
 							<TableCell className="p-3">
-								{advertiser.userName}
+								{advertiser.username}
 							</TableCell>
 							<TableCell>{advertiser.email}</TableCell>
 							<TableCell>{advertiser.password}</TableCell>

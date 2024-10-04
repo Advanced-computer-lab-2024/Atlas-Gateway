@@ -18,7 +18,7 @@ import SheetDemo from "../components/SheetDemo";
 
 interface Seller {
 	_id: string;
-	userName: string;
+	username: string;
 	email: string;
 	password: string;
 	picture: string;
@@ -60,7 +60,7 @@ const Sellers = () => {
 				<TableCaption>Registered Sellers.</TableCaption>
 				<TableHeader className="bg-gray-100">
 					<TableRow>
-						<TableHead>UserName</TableHead>
+						<TableHead>Username</TableHead>
 						<TableHead>Email</TableHead>
 						<TableHead>Password</TableHead>
 						<TableHead>Picture</TableHead>
@@ -75,14 +75,14 @@ const Sellers = () => {
 					{sellers.map((seller) => (
 						<TableRow key={seller._id}>
 							<TableCell className="p-3">
-								{seller.userName}
+								{seller.username}
 							</TableCell>
 							<TableCell>{seller.email}</TableCell>
 							<TableCell>{seller.password}</TableCell>
 							<TableCell>
 								<img
 									src={seller.picture}
-									alt={seller.userName}
+									alt={seller.username}
 									className="w-16 h-16 object-cover rounded"
 								/>
 							</TableCell>

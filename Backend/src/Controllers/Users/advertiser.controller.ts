@@ -5,10 +5,10 @@ import { Advertiser } from "../../Database/Models/Users/advertiser.model";
 export const createAdvertiser = async (req: Request, res: Response) => {
 	try {
 		//maybe we need to add checker here based on the flow of the page
-		const { userName, email, password, companyProfile, activities } =
+		const { username, email, password, companyProfile, activities } =
 			req.body;
 		const user = new Advertiser({
-			userName,
+			username,
 			email,
 			password,
 			companyProfile,
@@ -31,12 +31,12 @@ export const getAdvertiser = async (req: Request, res: Response) => {
 };
 export const updateAdvertiser = async (req: Request, res: Response) => {
 	const id = req.params.id;
-	const { userName, email, password, companyProfile, activities } = req.body;
+	const { username, email, password, companyProfile, activities } = req.body;
 	try {
 		//maybe we need to add checker here based on the flow of the page
 		const adv = await Advertiser.findByIdAndUpdate(
 			id,
-			{ userName, email, password, companyProfile, activities },
+			{ username, email, password, companyProfile, activities },
 			{
 				new: true,
 			},

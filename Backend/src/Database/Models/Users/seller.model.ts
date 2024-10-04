@@ -2,7 +2,7 @@ import { schemaConfig } from "#utils";
 import { Document, Schema, Types, model } from "mongoose";
 
 export interface ISeller extends Document {
-	userName: string;
+	username: string;
 	email: string; // story 3
 	password: string;
 	picture: string;
@@ -13,7 +13,7 @@ export interface ISeller extends Document {
 
 const sellerSchema = new Schema<ISeller>(
 	{
-		userName: { type: String, required: true },
+		username: { type: String, required: true },
 		email: { type: String, required: true },
 		password: { type: String, required: true },
 		picture: { type: String, required: true },
