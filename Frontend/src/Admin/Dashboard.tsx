@@ -5,6 +5,7 @@ import Sidebar from "./Sidebar";
 import Activities from "./resources/Activities";
 import ActivityCategory from "./resources/ActivityCategory";
 import Product from "./resources/Product";
+import Tags from "./resources/Tags";
 import Admins from "./users/Admin";
 import Advertisers from "./users/Advertiser";
 import Governor from "./users/Governor";
@@ -73,6 +74,16 @@ const Admin = () => {
 					return (
 						<div>
 							<ActivityCategory />
+						</div>
+					);
+			}
+		}
+		if (selectedCategory == "Tags") {
+			switch (selectedItem) {
+				case "Preference Tags":
+					return (
+						<div>
+							<Tags />
 						</div>
 					);
 			}
