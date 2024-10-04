@@ -3,6 +3,7 @@ import { useState } from "react";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import Activities from "./resources/Activities";
+import ActivityCategory from "./resources/ActivityCategory";
 import Product from "./resources/Product";
 import Admins from "./users/Admin";
 import Advertisers from "./users/Advertiser";
@@ -66,12 +67,12 @@ const Admin = () => {
 					);
 			}
 		}
-		if (selectedCategory == "Activities") {
+		if (selectedCategory == "Activity Category") {
 			switch (selectedItem) {
-				case "Activities":
+				case "Activity Category":
 					return (
 						<div>
-							<Activities />
+							<ActivityCategory />
 						</div>
 					);
 			}
