@@ -2,6 +2,8 @@ import { useState } from "react";
 
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
+import Activities from "./resources/Activities";
+import Product from "./resources/Product";
 import Admins from "./users/Admin";
 import Advertisers from "./users/Advertiser";
 import Governor from "./users/Governor";
@@ -14,57 +16,65 @@ const Admin = () => {
 	const [selectedItem, setSelectedItem] = useState(""); // manages selection from navbar
 
 	const renderContent = () => {
-		switch (selectedItem) {
-			case "Tourists":
-				if (selectedCategory == "Accounts") {
+		if (selectedCategory == "Accounts") {
+			switch (selectedItem) {
+				case "Tourists":
 					return (
 						<div>
 							<Tourist />
 						</div>
 					);
-				}
-			case "Admins":
-				if (selectedCategory == "Accounts") {
+				case "Admins":
 					return (
 						<div>
 							<Admins />
 						</div>
 					);
-				}
-			case "Tour Guides":
-				if (selectedCategory == "Accounts") {
+				case "Tour Guides":
 					return (
 						<div>
 							<TourGuide />
 						</div>
 					);
-				}
-			case "Advertisers":
-				if (selectedCategory == "Accounts") {
+				case "Advertisers":
 					return (
 						<div>
 							<Advertisers />
 						</div>
 					);
-				}
-			case "Governors":
-				if (selectedCategory == "Accounts") {
+				case "Governors":
 					return (
 						<div>
 							<Governor />
 						</div>
 					);
-				}
-			case "Seller":
-				if (selectedCategory == "Accounts") {
+				case "Seller":
 					return (
 						<div>
 							<Seller />
 						</div>
 					);
-				}
-			default:
-				return <div></div>;
+			}
+		}
+		if (selectedCategory == "Products") {
+			switch (selectedItem) {
+				case "Products":
+					return (
+						<div>
+							<Product />
+						</div>
+					);
+			}
+		}
+		if (selectedCategory == "Activities") {
+			switch (selectedItem) {
+				case "Activities":
+					return (
+						<div>
+							<Activities />
+						</div>
+					);
+			}
 		}
 	};
 	return (
