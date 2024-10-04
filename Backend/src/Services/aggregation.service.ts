@@ -9,7 +9,8 @@ export default function AggregateBuilder(
 	query: any,
 	searchFields: string[], // Fields to search on (e.g., name, category, tag)
 	Limit: number = 10, // Default limit per page
-): any[] {
+): PipelineStage[] {
+	const pipeline: PipelineStage[] = [];
 	const page = Number(query.page?.toString()) || 1;
 	const limit = Number(query.limit?.toString()) || Limit;
 	const skip = (page - 1) * limit;
@@ -26,24 +27,14 @@ export default function AggregateBuilder(
 	// Step 3: Build sort criteria using allowed sort fields
 	const sortCriteria = buildSortCriteria(query);
 
-	// Step 4: Build aggregation pipeline
-	const aggregationPipeline: PipelineStage[] = [
-		...searchQuery,
-		...filters,
-		{
-			$facet: {
-				data: [
-					...(Object.keys(sortCriteria).length > 0
-						? [{ $sort: sortCriteria }]
-						: []), // Only apply sort if sortCriteria has keys
-					{ $skip: skip }, // Apply pagination (skip)
-					{ $limit: limit }, // Apply pagination (limit)
-				],
-				total: [{ $count: "count" }], // Count total documents
-			},
+	// Step 4: Build aggregation pipeline to return paginated results and metadata
+	pipeline.push(...searchQuery, ...filters, ...sortCriteria, {
+		$facet: {
+			data: [{ $skip: skip }, { $limit: limit }],
+			total: [{ $count: "count" }],
 		},
-	];
+	});
 
 	// Return aggregation pipeline
-	return aggregationPipeline;
+	return pipeline;
 }

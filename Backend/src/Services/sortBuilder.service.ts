@@ -1,17 +1,22 @@
-// Builds the sort criteria for sorting by multiple fields
-export default function buildSortCriteria(query: any) {
-	const sortCriteria: any = {};
+import { PipelineStage } from "mongoose";
 
-	// If sort query is provided, split by comma before comma is used to sort by  and after comma is used to sort in ascending or descending order
+// Builds the sort criteria for sorting by multiple fields
+export default function buildSortCriteria(query: any): PipelineStage[] {
+	const pipeline: PipelineStage[] = [];
+
+	// If sort query is provided, split by comma before comma is used to sort by
+	// if after comma negative 1 is used to sort in descending order
+	// else 1 is used to sort in ascending order
 	if (query.sort) {
 		const [sortby, order] = query.sort.split(",");
-		sortCriteria[sortby] = order === "-1" ? -1 : 1;
+		const sortOrder = order === "-1" ? -1 : 1;
+
+		pipeline.push({
+			$sort: {
+				[sortby]: sortOrder,
+			},
+		});
 	}
 
-	// If no valid sort field is provided or no valid sort fields were found, return an empty object (no sorting)
-	if (Object.keys(sortCriteria).length === 0) {
-		return {};
-	}
-
-	return sortCriteria;
+	return pipeline;
 }

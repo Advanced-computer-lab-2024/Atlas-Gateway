@@ -17,9 +17,10 @@ export const createActivities = async (req: Request, res: Response) => {
 export const getActivities = async (req: Request, res: Response) => {
 	try {
 		const pipeline = [
+			//need to join the tags and category collections to get the name of the tags and category
 			{
 				$lookup: {
-					from: "tags", // Replace with the actual name of your Tag collection
+					from: "tags", // Replace with the actual name of Tag collection
 					localField: "tags",
 					foreignField: "_id",
 					as: "tagsData",
@@ -27,7 +28,7 @@ export const getActivities = async (req: Request, res: Response) => {
 			},
 			{
 				$lookup: {
-					from: "categories", // Replace with the actual name of your Category collection
+					from: "categories", // Replace with the actual name of Category collection
 					localField: "category",
 					foreignField: "_id",
 					as: "categoryData",
@@ -37,12 +38,6 @@ export const getActivities = async (req: Request, res: Response) => {
 				req.query,
 				["name", "tagsData.name", "categoryData.name"], // Search fields
 			),
-			{
-				$project: {
-					"data.tags": 0,
-					"data.category": 0,
-				},
-			},
 		];
 
 		const result = await Activity.aggregate(pipeline);
