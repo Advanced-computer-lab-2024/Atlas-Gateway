@@ -2,7 +2,6 @@ import { schemaConfig } from "#utils";
 import { Document, Schema, Types, model } from "mongoose";
 
 interface IProduct extends Document {
-	//	id: Types.ObjectId; //Id not needed since mongo does that for us
 	sellerId: Types.ObjectId;
 	name: string;
 	description: string;
@@ -17,7 +16,6 @@ interface IProduct extends Document {
 
 const productSchema = new Schema<IProduct>(
 	{
-		//	id: { type: Schema.Types.ObjectId, required: true },
 		sellerId: {
 			type: Schema.Types.ObjectId,
 			required: true,
