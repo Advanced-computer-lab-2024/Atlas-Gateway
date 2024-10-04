@@ -2,7 +2,7 @@ import { schemaConfig } from "#utils";
 import { Document, Schema, Types, model } from "mongoose";
 
 export interface IAdvertiser extends Document {
-	userName: string;
+	username: string;
 	email: string; // story 3
 	password: string;
 	companyProfile: {
@@ -17,7 +17,7 @@ export interface IAdvertiser extends Document {
 
 const advertiserSchema = new Schema<IAdvertiser>(
 	{
-		userName: { type: String, required: true },
+		username: { type: String, required: true },
 		email: { type: String, required: true },
 		password: { type: String, required: true },
 		companyProfile: {

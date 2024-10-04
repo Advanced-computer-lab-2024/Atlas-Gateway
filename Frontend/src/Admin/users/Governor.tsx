@@ -18,7 +18,7 @@ import SheetDemo from "../components/SheetDemo";
 
 interface Governor {
 	_id: string;
-	userName: string;
+	username: string;
 	email: string;
 	password: string;
 }
@@ -56,7 +56,7 @@ const Governor = () => {
 				<TableCaption>Registered Admins.</TableCaption>
 				<TableHeader className="bg-gray-100">
 					<TableRow>
-						<TableHead>UserName</TableHead>
+						<TableHead>Username</TableHead>
 						<TableHead>Email</TableHead>
 						<TableHead>Password</TableHead>
 						<TableHead></TableHead>
@@ -69,7 +69,7 @@ const Governor = () => {
 					{Governors.map((governor) => (
 						<TableRow key={governor._id}>
 							<TableCell className="p-3">
-								{governor.userName}
+								{governor.username}
 							</TableCell>
 							<TableCell>{governor.email}</TableCell>
 							<TableCell>{governor.password}</TableCell>

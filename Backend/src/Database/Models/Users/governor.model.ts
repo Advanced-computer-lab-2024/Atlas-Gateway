@@ -2,7 +2,7 @@ import { schemaConfig } from "#utils";
 import { Document, Schema, Types, model } from "mongoose";
 
 export interface IGovernor extends Document {
-	userName: string;
+	username: string;
 	email: string; // story 3
 	password: string;
 	historicalLocations: [Types.ObjectId];
@@ -10,7 +10,7 @@ export interface IGovernor extends Document {
 
 const governorSchema = new Schema<IGovernor>(
 	{
-		userName: { type: String, required: true, unique: true },
+		username: { type: String, required: true, unique: true },
 		email: { type: String, required: true },
 		password: { type: String, required: true },
 	},

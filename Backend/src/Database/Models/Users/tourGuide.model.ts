@@ -2,7 +2,7 @@ import { schemaConfig } from "#utils";
 import { Document, Schema, Types, model } from "mongoose";
 
 export interface ITourGuide extends Document {
-	userName: string;
+	username: string;
 	email: string; // story 3
 	password: string;
 	description: string;
@@ -20,7 +20,7 @@ export interface ITourGuide extends Document {
 
 const tourGuideSchema = new Schema<ITourGuide>(
 	{
-		userName: { type: String, required: true },
+		username: { type: String, required: true },
 		email: { type: String, required: true },
 		password: { type: String, required: true },
 		description: { type: String },

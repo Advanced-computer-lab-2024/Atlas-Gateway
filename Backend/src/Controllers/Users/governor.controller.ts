@@ -4,12 +4,12 @@ import { Governor } from "../../Database/Models/Users/governor.model";
 
 export const crteatGovernor = async (req: Request, res: Response) => {
 	try {
-		const { userName, email, password, historicalLocations } = req.body;
-		if (!userName || !email || !password) {
-			res.status(400).send("userName, email and password are required");
+		const { username, email, password, historicalLocations } = req.body;
+		if (!username || !email || !password) {
+			res.status(400).send("username, email and password are required");
 		}
 		const governor = await Governor.create({
-			userName,
+			username,
 			email,
 			password,
 		});

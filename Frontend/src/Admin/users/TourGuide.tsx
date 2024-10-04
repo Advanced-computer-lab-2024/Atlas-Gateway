@@ -26,7 +26,7 @@ interface PreviousJob {
 
 interface TourGuide {
 	_id: string;
-	userName: string;
+	username: string;
 	email: string;
 	password: string;
 	description: string;
@@ -70,7 +70,7 @@ const TourGuide = () => {
 				<TableHeader className="bg-gray-100">
 					<TableRow>
 						<TableHead>Picture</TableHead>
-						<TableHead>UserName</TableHead>
+						<TableHead>Username</TableHead>
 						<TableHead>Email</TableHead>
 						<TableHead>Password</TableHead>
 						<TableHead>Description</TableHead>
@@ -91,11 +91,11 @@ const TourGuide = () => {
 							<TableCell className="p-5">
 								<img
 									src={tourGuide.picture}
-									alt={`${tourGuide.userName}`}
+									alt={`${tourGuide.username}`}
 									className="w-full h-auto"
 								/>
 							</TableCell>
-							<TableCell>{tourGuide.userName}</TableCell>
+							<TableCell>{tourGuide.username}</TableCell>
 							<TableCell>{tourGuide.email}</TableCell>
 							<TableCell>{tourGuide.password}</TableCell>
 							<TableCell>{tourGuide.description}</TableCell>

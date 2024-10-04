@@ -4,11 +4,11 @@ import { Admin } from "../../Database/Models/Users/admin.model";
 
 export const createAdmin = async (req: Request, res: Response) => {
 	try {
-		const { userName, email, password } = req.body;
-		if (!userName || !email || !password) {
-			res.status(400).send("userName, email and password are required");
+		const { username, email, password } = req.body;
+		if (!username || !email || !password) {
+			res.status(400).send("username, email and password are required");
 		}
-		const admin = await Admin.create({ userName, email, password });
+		const admin = await Admin.create({ username, email, password });
 		res.status(201).send(admin);
 	} catch (error) {
 		console.log(error);

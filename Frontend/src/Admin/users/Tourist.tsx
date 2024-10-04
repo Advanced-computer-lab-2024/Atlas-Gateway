@@ -18,7 +18,7 @@ import SheetDemo from "../components/SheetDemo";
 
 interface Tourist {
 	_id: string;
-	userName: string;
+	username: string;
 	email: string;
 	password: string;
 	wallet: number;
@@ -66,7 +66,7 @@ const Tourist = () => {
 				<TableCaption>Registered Tourists.</TableCaption>
 				<TableHeader className="bg-gray-100">
 					<TableRow>
-						<TableHead>UserName</TableHead>
+						<TableHead>Username</TableHead>
 						<TableHead>Email</TableHead>
 						<TableHead>Password</TableHead>
 						<TableHead>Address</TableHead>
@@ -85,7 +85,7 @@ const Tourist = () => {
 				<TableBody>
 					{tourists.map((tourist) => (
 						<TableRow key={tourist._id}>
-							<TableCell>{tourist.userName}</TableCell>
+							<TableCell>{tourist.username}</TableCell>
 							<TableCell>{tourist.email}</TableCell>
 							<TableCell>{tourist.password}</TableCell>
 							<TableCell>{tourist.address}</TableCell>

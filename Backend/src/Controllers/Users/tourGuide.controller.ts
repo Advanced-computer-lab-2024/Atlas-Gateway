@@ -5,7 +5,7 @@ import { TourGuide } from "../../Database/Models/Users/tourGuide.model";
 export const createTourGuide = async (req: Request, res: Response) => {
 	try {
 		const {
-			userName,
+			username,
 			email,
 			password,
 			description,
@@ -14,7 +14,7 @@ export const createTourGuide = async (req: Request, res: Response) => {
 			previous,
 		} = req.body;
 		const user = new TourGuide({
-			userName,
+			username,
 			email,
 			password,
 			description,
@@ -40,7 +40,7 @@ export const getTourGuide = async (req: Request, res: Response) => {
 export const updateTourGuide = async (req: Request, res: Response) => {
 	const id = req.params.id;
 	const {
-		userName,
+		username,
 		email,
 		password,
 		description,
@@ -53,7 +53,7 @@ export const updateTourGuide = async (req: Request, res: Response) => {
 		const adv = await TourGuide.findByIdAndUpdate(
 			id,
 			{
-				userName,
+				username,
 				email,
 				password,
 				description,

@@ -4,10 +4,10 @@ import { Seller } from "../../Database/Models/Users/seller.model";
 
 export const createSeller = async (req: Request, res: Response) => {
 	try {
-		const { userName, email, password, picture, description, products } =
+		const { username, email, password, picture, description, products } =
 			req.body;
 		const user = new Seller({
-			userName,
+			username,
 			email,
 			password,
 			picture,
@@ -31,13 +31,13 @@ export const getSeller = async (req: Request, res: Response) => {
 };
 export const updateSeller = async (req: Request, res: Response) => {
 	const id = req.params.id;
-	const { userName, email, password, picture, description, products } =
+	const { username, email, password, picture, description, products } =
 		req.body;
 	try {
 		//maybe we need to add checker here based on the flow of the page
 		const adv = await Seller.findByIdAndUpdate(
 			id,
-			{ userName, email, password, picture, description, products },
+			{ username, email, password, picture, description, products },
 			{
 				new: true,
 			},
