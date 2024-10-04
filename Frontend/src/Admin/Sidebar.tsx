@@ -1,8 +1,9 @@
 import {
 	ActivityIcon,
-	FileTextIcon,
+	Package,
 	TagIcon,
 	UserCircleIcon,
+	Users,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -35,7 +36,7 @@ const Sidebar = ({ onSelect }: Props) => {
 			</div>
 
 			<div className="flex flex-col gap-4">
-				{["Accounts", "Products", "Tags", "Activities"].map((item) => (
+				{["Accounts", "Products", "Activities", "Tags"].map((item) => (
 					<div
 						key={item}
 						className={`flex flex-col items-center w-60 p-2 cursor-pointer hover:border-l-4 ${
@@ -44,21 +45,14 @@ const Sidebar = ({ onSelect }: Props) => {
 						onClick={() => handleClick(item)}
 					>
 						{item === "Accounts" && (
-							<FileTextIcon
+							<Users
 								className="text-white p-1 rounded-full"
 								width={50}
 								height={50}
 							/>
 						)}
 						{item === "Products" && (
-							<TagIcon
-								className="text-white p-1 rounded-full"
-								width={50}
-								height={50}
-							/>
-						)}
-						{item === "Tags" && (
-							<TagIcon
+							<Package
 								className="text-white p-1 rounded-full"
 								width={50}
 								height={50}
@@ -66,6 +60,13 @@ const Sidebar = ({ onSelect }: Props) => {
 						)}
 						{item === "Activities" && (
 							<ActivityIcon
+								className="text-white p-1 rounded-full"
+								width={50}
+								height={50}
+							/>
+						)}
+						{item === "Tags" && (
+							<TagIcon
 								className="text-white p-1 rounded-full"
 								width={50}
 								height={50}

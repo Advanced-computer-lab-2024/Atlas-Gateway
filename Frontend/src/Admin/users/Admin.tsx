@@ -14,7 +14,7 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 
-import { SheetDemo } from "./SheetDemo";
+import SheetDemo from "../components/SheetDemo";
 
 interface Admin {
 	_id: string;
@@ -59,7 +59,6 @@ const Admins = () => {
 						<TableHead>UserName</TableHead>
 						<TableHead>Email</TableHead>
 						<TableHead>Password</TableHead>
-						<TableHead></TableHead>
 						<TableHead className="cursor-pointer hover:text-[#2b58ed] w-1">
 							<RotateCw onClick={() => setRefresh(!refresh)} />
 						</TableHead>
@@ -73,13 +72,18 @@ const Admins = () => {
 							</TableCell>
 							<TableCell>{admin.email}</TableCell>
 							<TableCell>{admin.password}</TableCell>
-							<TableCell className="cursor-pointer hover:text-[#2b58ed] w-1">
-								<Pencil />
-							</TableCell>
-							<TableCell className="cursor-pointer hover:text-[#2b58ed]">
-								<Trash
-									onClick={() => handleDelete(admin._id)}
-								/>
+							{/* <TableCell className="cursor-pointer hover:text-[#2b58ed] w-1">
+								<Pencil /> // this feature is disabled for sprint 1
+							</TableCell> */}
+							<TableCell className="cursor-pointer hover:text-red-600 w-1">
+								<button className="bg-red-500 text-white rounded-full p-2 shadow-lg hover:bg-red-600">
+									<Trash
+										className="w-5 h-5"
+										onClick={() => {
+											handleDelete(admin._id);
+										}}
+									/>
+								</button>
 							</TableCell>
 						</TableRow>
 					))}

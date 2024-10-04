@@ -19,10 +19,10 @@ const Navbar = ({ selectedCategory, onSelect }: Props) => {
 					<div className="flex gap-11 ml-auto mr-auto">
 						{[
 							"Admins",
-							"Tourists",
-							"Tour Guides",
 							"Advertisers",
 							"Governors",
+							"Tourists",
+							"Tour Guides",
 							"Seller",
 						].map((item) => (
 							<p
@@ -37,8 +37,8 @@ const Navbar = ({ selectedCategory, onSelect }: Props) => {
 			case "Products":
 				return (
 					<div className="flex gap-11 ml-auto mr-auto">
-						{["Inventory"].map((item) => (
-							<p
+						{["Products"].map((item) => (
+							<p // maybe add here more later
 								className={`cursor-pointer ${activeItem === item ? "text-[#2b58ed]" : ""}`}
 								onClick={() => handleClick(item)}
 							>
@@ -50,7 +50,7 @@ const Navbar = ({ selectedCategory, onSelect }: Props) => {
 			case "Tags":
 				return (
 					<div className="flex gap-11 ml-auto mr-auto">
-						{["Show Tags"].map((item) => (
+						{["Preference Tags"].map((item) => (
 							<p
 								className={`cursor-pointer ${activeItem === item ? "text-[#2b58ed]" : ""}`}
 								onClick={() => handleClick(item)}
@@ -63,7 +63,7 @@ const Navbar = ({ selectedCategory, onSelect }: Props) => {
 			case "Activities":
 				return (
 					<div className="flex gap-11 ml-auto mr-auto">
-						{["Avaliable Activities"].map((item) => (
+						{["Activities"].map((item) => (
 							<p
 								className={`cursor-pointer ${activeItem === item ? "text-[#2b58ed]" : ""}`}
 								onClick={() => handleClick(item)}
