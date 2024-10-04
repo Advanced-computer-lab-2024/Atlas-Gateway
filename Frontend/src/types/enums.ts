@@ -1,8 +1,8 @@
 export enum EAccountType {
 	Tourist = "tourist",
-	Guide = "guide",
+	Guide = "tour_guide",
 	Seller = "seller",
-	Advertisor = "advertisor",
+	Advertiser = "advertiser",
 	Admin = "admin",
-	TourismGovernor = "tourism_governor",
+	TourismGovernor = "governor",
 }

@@ -6,6 +6,7 @@ import {
 	getTourists,
 	updateTourist,
 } from "../../Controllers/Users/tourist.controller";
+
 const touristRouter = Router();
 touristRouter.post("/create", createTourist);
 touristRouter.get("/list", getTourists);

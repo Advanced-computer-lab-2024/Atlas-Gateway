@@ -15,7 +15,7 @@ const sellerSchema = new Schema<ISeller>(
 		username: { type: String, required: true },
 		email: { type: String, required: true },
 		password: { type: String, required: true },
-		picture: { type: String},
+		picture: { type: String },
 		description: { type: String },
 		products: [{ type: Schema.Types.ObjectId, ref: "Product" }],
 	},

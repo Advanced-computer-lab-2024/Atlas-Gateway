@@ -1,6 +1,6 @@
 const ENDPOINTS = {
-	login: "/login",
-	register: "/register",
+	login: "api/login",
+	register: "api/register/create",
 };
 
 export default ENDPOINTS;

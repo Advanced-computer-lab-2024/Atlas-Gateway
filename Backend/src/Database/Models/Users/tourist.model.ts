@@ -9,7 +9,7 @@ export interface ITourist extends Document {
 	mobileNumber: number;
 	nationality: string;
 	dob: Date;
-	job: string;
+	occupation: string;
 	address?: string[]; //  story 98 99 Maro comment: Multiple addresses can be added
 	currency?: string; // story 51
 	loyaltyPoints?: number; // story 70
@@ -25,13 +25,13 @@ const touristSchema = new Schema<ITourist>(
 		username: { type: String, required: true },
 		email: { type: String, required: true },
 		password: { type: String, required: true },
-		wallet: { type: Number, required: true, default: 0},
+		wallet: { type: Number, required: true, default: 0 },
 		mobileNumber: { type: Number, required: true },
-		nationality:{type: String, required: true},
+		nationality: { type: String, required: true },
 		dob: { type: Date, required: true },
-		job: { type: String, required: true },
-		address: [{ type: String}],
-		currency: { type: String},
+		occupation: { type: String, required: true },
+		address: [{ type: String }],
+		currency: { type: String },
 		loyaltyPoints: { type: Number },
 		profile: {
 			bio: { type: String },
