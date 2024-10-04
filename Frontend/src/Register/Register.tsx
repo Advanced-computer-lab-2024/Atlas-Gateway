@@ -3,11 +3,9 @@ import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { useRegister } from "@/api/data";
-import Filters from "@/components/Filters/Filters";
 import Label from "@/components/ui/Label";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Flex } from "@/components/ui/flex";
 import { Form } from "@/components/ui/form";
 import { EAccountType } from "@/types/enums";
@@ -93,139 +91,6 @@ export default function Register() {
 			<Card className="w-[500px] h-[700px] rounded-lg">
 				<CardHeader className="items-center">
 					<Label.Big600>{stageTitleMap[stage]}</Label.Big600>
-					<Filters
-						filters={{
-							checkbox: {
-								label: "Checkbox example",
-								options: [
-									{
-										value: "filter1",
-										label: "Filter 1",
-									},
-									{
-										value: "filter2",
-										label: "Filter 2",
-									},
-									{
-										value: "filter3",
-										label: "Filter 3",
-									},
-									{
-										value: "filter4",
-										label: "Filter 4",
-									},
-									{
-										value: "filter5",
-										label: "Filter 5",
-									},
-									{
-										value: "filter6",
-										label: "Filter 6",
-									},
-									{
-										value: "filter7",
-										label: "Filter 7",
-									},
-									{
-										value: "filter8",
-										label: "Filter 8",
-									},
-									{
-										value: "filter9",
-										label: "Filter 9",
-									},
-									{
-										value: "filter10",
-										label: "Filter 10",
-									},
-									{
-										value: "filter11",
-										label: "Filter 11",
-									},
-									{
-										value: "filter12",
-										label: "Filter 12",
-									},
-									{
-										value: "filter13",
-										label: "Filter 13",
-									},
-									{
-										value: "filter14",
-										label: "Filter 14",
-									},
-									{
-										value: "filter15",
-										label: "Filter 15",
-									},
-									{
-										value: "filter16",
-										label: "Filter 16",
-									},
-									{
-										value: "filter17",
-										label: "Filter 17",
-									},
-									{
-										value: "filter18",
-										label: "Filter 18",
-									},
-									{
-										value: "filter19",
-										label: "Filter 19",
-									},
-									{
-										value: "filter20",
-										label: "Filter 20",
-									},
-									{
-										value: "filter21",
-										label: "Filter 21",
-									},
-									{
-										value: "filter22",
-										label: "Filter 22",
-									},
-									{
-										value: "filter23",
-										label: "Filter 23",
-									},
-									{
-										value: "filter24",
-										label: "Filter 24",
-									},
-									{
-										value: "filter25",
-										label: "Filter 25",
-									},
-									{
-										value: "filter26",
-										label: "Filter 26",
-									},
-									{
-										value: "filter27",
-										label: "Filter 27",
-									},
-									{
-										value: "filter28",
-										label: "Filter 28",
-									},
-								],
-								filterName: "filter",
-								type: "checkbox",
-							},
-							date: {
-								label: "Date",
-								filterName: "date",
-								type: "date",
-							},
-							range: {
-								label: "Range example",
-								filterName: "range",
-								type: "range",
-							},
-						}}
-					/>
 				</CardHeader>
 				<CardContent>
 					<Form {...form}>
