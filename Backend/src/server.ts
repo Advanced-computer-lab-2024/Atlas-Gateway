@@ -11,6 +11,7 @@ import activityRouter from "./Routes/activity.route";
 import advertiserRouter from "./Routes/advertiser.route";
 import categoryRouter from "./Routes/category.route";
 import productRouter from "./Routes/product.route";
+import touristRouter from "./Routes/Users/tourist.route";
 
 const app = express();
 
@@ -25,6 +26,7 @@ async function startServer() {
 	app.use("/api/seller", sellerRouter);
 	app.use("/api/tourGuide", tourGuideRouter);
 	app.use("/api/category", categoryRouter);
+	app.use("/api/tourist",touristRouter)
 	app.listen(SERVER.port, () => {
 		console.log(
 			`Server is running on http://${SERVER.host}:${SERVER.port}`,

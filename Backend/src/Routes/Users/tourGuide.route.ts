@@ -5,6 +5,7 @@ import {
 	deleteTourGuide,
 	getTourGuide,
 	updateTourGuide,
+	// viewItinerary
 } from "../../Controllers/Users/tourGuide.controller";
 
 const tourGuideRouter = Router();
@@ -12,5 +13,6 @@ tourGuideRouter.post("/create", createTourGuide);
 tourGuideRouter.get("/list", getTourGuide);
 tourGuideRouter.put("/update/:id", updateTourGuide);
 tourGuideRouter.delete("/delete/:id", deleteTourGuide);
+// tourGuideRouter.get("/info/:id",viewItinerary)
+
 export default tourGuideRouter;
-Router;
