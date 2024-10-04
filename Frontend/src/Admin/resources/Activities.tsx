@@ -2,13 +2,18 @@ import axios from "axios";
 import { ActivityIcon, Pencil, RotateCw } from "lucide-react";
 import { useEffect, useState } from "react";
 
+interface Category {
+	_id: string;
+	name: string;
+}
+
 interface Activity {
 	_id: string;
 	description: string;
 	dateTime: Date;
 	location: string;
 	tags: string;
-	category: string;
+	category: Category;
 	minPrice: number;
 	maxPrice: number;
 	specialDiscounts: number;
@@ -50,13 +55,18 @@ const ActivityComponent = () => {
 							{activity.description}
 						</h2>
 						<h3>{activity.location}</h3>
-						<h3>{new Date(activity.dateTime).toLocaleString()}</h3>
-						<div>
-							Price Range: ${activity.minPrice} - $
-							{activity.maxPrice}
+						<h3 className="flex justify-center">
+							{new Date(activity.dateTime).toLocaleString()}
+						</h3>
+						<div className="flex justify-between">
+							<h3>
+								Price: ${activity.minPrice} - $
+								{activity.maxPrice}
+							</h3>
+							<h3>Discount: {activity.specialDiscounts}%</h3>
 						</div>
-						<h3>Discount: {activity.specialDiscounts}%</h3>
-						<h3>{activity.isOpen ? "Open" : "Closed"}</h3>
+						<h3>Status: {activity.isOpen ? "Open" : "Closed"}</h3>
+						<h3>{activity.category.name}</h3>
 						<div className="flex justify-center mt-4">
 							<button className="bg-blue-500 text-white rounded-full p-2 shadow-lg hover:bg-blue-600">
 								<Pencil className="w-5 h-5" />
