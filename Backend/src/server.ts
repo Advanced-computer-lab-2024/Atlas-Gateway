@@ -50,5 +50,6 @@ async function startServer() {
 {
 	app.use(express.json()); // Used to parse the json dta in the body of any request
 }
+
 connectDB();
 startServer();

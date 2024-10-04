@@ -3,7 +3,7 @@ import mongoose, { Types } from "mongoose";
 
 import { Seller } from "../Database/Models/Users/seller.model";
 import { Product } from "../Database/Models/product.model";
-import searchFilterSort from "../Services/search-filter-sort.service";
+import AggregateBuilder from "../Services/aggregation.service";
 
 //Create a new product entry
 export const createProduct = async (req: Request, res: Response) => {
@@ -69,36 +69,33 @@ export const getProduct = async (req: Request, res: Response) => {
 //takes a query (anded conditions) and returns a data set
 export const getProducts = async (req: Request, res: Response) => {
 	try {
-		const querySet: any = {};
+		const result = await Product.aggregate(
+			AggregateBuilder(
+				req.query,
+				["name"], // Search fields
+				["minPrice", "maxPrice"], // Filters
+				["rating"], // Sort fields
+			),
+		);
 
-		if (req.body.name) {
-			querySet.name = req.body.name;
-		}
-
-		if (req.body.priceRange) {
-			const { min, max } = req.body.priceRange; // Expecting { "priceRange": { "min": 50, "max": 150 } }
-			if (min !== undefined && max !== undefined) {
-				querySet.price = { $gte: min, $lte: max }; // Query for price range
-			} else if (min !== undefined) {
-				querySet.price = { $gte: min }; // Query for minimum price only
-			} else if (max !== undefined) {
-				querySet.price = { $lte: max }; // Query for maximum price only
-			}
-		}
-
-		//console.log(querySet);
-
-		const dataSet = await Product.find(querySet);
-
-		if (dataSet.length == 0) {
+		if (result[0].data.length === 0) {
 			return res
 				.status(404)
 				.json({ message: "No matching Products Found" });
 		}
 
-		//console.log(dataSet);
+		const response = {
+			data: result[0].data,
+			metaData: {
+				page: req.query.page || 1,
+				total: result[0].total[0].count,
+				pages: Math.ceil(
+					result[0].total[0].count / (Number(req.query.limit) || 10),
+				),
+			},
+		};
 
-		res.status(200).send(dataSet);
+		res.status(200).send(response);
 	} catch (error) {
 		res.status(500).json({ message: "Internal Server Error" });
 		console.log(error);

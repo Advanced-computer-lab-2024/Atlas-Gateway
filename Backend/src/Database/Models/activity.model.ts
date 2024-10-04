@@ -1,13 +1,13 @@
 import { schemaConfig } from "#utils";
-import { Document, Schema, model } from "mongoose";
+import { Document, Schema, Types, model } from "mongoose";
 
 export interface IActivity extends Document {
 	name: string;
 	description: string;
 	dateTime: Date;
 	location: string;
-	tags: Schema.Types.ObjectId[];
-	category: Schema.Types.ObjectId;
+	tags: [Types.ObjectId]; // could be modified later based on a question (2 and 3)
+	category: Types.ObjectId; // will be modified later based on the schema of activity category
 	minPrice: number;
 	maxPrice: number;
 	specialDiscounts: number;
@@ -17,7 +17,7 @@ export interface IActivity extends Document {
 const activitySchema = new Schema<IActivity>(
 	{
 		name: { type: String, required: true },
-		description: { type: String, required: true },
+		description: { type: String },
 		dateTime: { type: Date, required: true },
 		location: { type: String, required: true },
 		tags: [{ type: Schema.Types.ObjectId, ref: "Tag" }],
