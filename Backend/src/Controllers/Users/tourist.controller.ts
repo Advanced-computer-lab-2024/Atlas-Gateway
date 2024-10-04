@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { Tourist } from "src/Database/Models/Users/tourist.model";
+import { Tourist } from "../../Database/Models/Users/tourist.model";
 
 export const createTourist = async (req: Request, res: Response) => {
 	try {

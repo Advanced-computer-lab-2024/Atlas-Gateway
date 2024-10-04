@@ -12,6 +12,8 @@ import advertiserRouter from "./Routes/advertiser.route";
 import categoryRouter from "./Routes/category.route";
 import productRouter from "./Routes/product.route";
 import tagRouter from "./Routes/tag.route";
+import registerRouter from "./Routes/register.route";
+import tourist from "./Routes/Users/tourist.route";
 
 const app = express();
 
@@ -27,7 +29,9 @@ async function startServer() {
 	app.use("/api/tourGuide", tourGuideRouter);
 	app.use("/api/category", categoryRouter);
 	app.use("/api/tags", tagRouter);
-
+	app.use("/api/tourist", tourist);
+	app.use("/api/register", registerRouter);
+	
 	app.get("/", (req: Request, res: Response) => {
 		try {
 			res.status(200).send("Hello");

@@ -2,7 +2,6 @@ import { schemaConfig } from "#utils";
 import { Document, Schema, Types, model } from "mongoose";
 
 export interface ITourist extends Document {
-	id: Types.ObjectId;
 	username: string;
 	email: string; // story 3
 	password: string;
@@ -23,18 +22,17 @@ export interface ITourist extends Document {
 
 const touristSchema = new Schema<ITourist>(
 	{
-		id: { type: Schema.Types.ObjectId, required: true },
 		username: { type: String, required: true },
 		email: { type: String, required: true },
 		password: { type: String, required: true },
-		wallet: { type: Number, required: true },
+		wallet: { type: Number, required: true, default: 0},
 		mobileNumber: { type: Number, required: true },
 		nationality:{type: String, required: true},
 		dob: { type: Date, required: true },
 		job: { type: String, required: true },
 		address: [{ type: String}],
 		currency: { type: String},
-		loyaltyPoints: { type: Number, required: true },
+		loyaltyPoints: { type: Number },
 		profile: {
 			bio: { type: String },
 			location: { type: String },
@@ -44,4 +42,4 @@ const touristSchema = new Schema<ITourist>(
 	schemaConfig,
 );
 
-export const Tourist = model<ITourist>("User", touristSchema);
+export const Tourist = model<ITourist>("Tourist", touristSchema);
