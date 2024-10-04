@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ActivityIcon, Pencil, RotateCw } from "lucide-react";
+import { ActivityIcon, Pencil, RotateCw, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface Category {
@@ -19,7 +19,7 @@ interface Activity {
 	specialDiscounts: number;
 	isOpen: boolean;
 }
-
+// this page is unused for now
 const ActivityComponent = () => {
 	const [activities, setActivities] = useState<Activity[]>([]);
 	const [refresh, setRefresh] = useState<boolean>(false);
@@ -66,11 +66,21 @@ const ActivityComponent = () => {
 							<h3>Discount: {activity.specialDiscounts}%</h3>
 						</div>
 						<h3>Status: {activity.isOpen ? "Open" : "Closed"}</h3>
-						<h3>{activity.category.name}</h3>
-						<div className="flex justify-center mt-4">
-							<button className="bg-blue-500 text-white rounded-full p-2 shadow-lg hover:bg-blue-600">
-								<Pencil className="w-5 h-5" />
-							</button>
+						<div className="flex justify-between">
+							<h3>{activity.category.name}</h3>
+							<div className="flex gap-3">
+								<button className="bg-blue-500 text-white rounded-full p-2 shadow-lg hover:bg-blue-600">
+									<Pencil className="w-3 h-3" />
+								</button>
+								<button className="bg-red-500 text-white rounded-full p-2 shadow-lg hover:bg-red-600">
+									<Trash
+										className="w-3 h-3"
+										// onClick={() => {
+										// 	handleDelete(admin._id);
+										// }}
+									/>
+								</button>
+							</div>
 						</div>
 					</div>
 				))}

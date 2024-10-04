@@ -60,10 +60,10 @@ const Navbar = ({ selectedCategory, onSelect }: Props) => {
 						))}
 					</div>
 				);
-			case "Activities":
+			case "Activity Category":
 				return (
 					<div className="flex gap-11 ml-auto mr-auto">
-						{["Activities"].map((item) => (
+						{["Activity Category"].map((item) => (
 							<p
 								className={`cursor-pointer ${activeItem === item ? "text-[#2b58ed]" : ""}`}
 								onClick={() => handleClick(item)}
