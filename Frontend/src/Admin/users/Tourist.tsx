@@ -14,7 +14,7 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 
-import { SheetDemo } from "./SheetDemo";
+import SheetDemo from "../components/SheetDemo";
 
 interface Tourist {
 	_id: string;
@@ -108,9 +108,6 @@ const Tourist = () => {
 								) : (
 									"N/A"
 								)}
-							</TableCell>
-							<TableCell className="cursor-pointer w-6 hover:text-[#2b58ed]">
-								<Pencil />
 							</TableCell>
 							<TableCell className="cursor-pointer w-6 hover:text-[#2b58ed]">
 								<Trash
