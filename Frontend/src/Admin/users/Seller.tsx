@@ -14,7 +14,7 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 
-import { SheetDemo } from "./SheetDemo";
+import SheetDemo from "../components/SheetDemo";
 
 interface Seller {
 	_id: string;
