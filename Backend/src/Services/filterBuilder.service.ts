@@ -1,4 +1,5 @@
 import { PipelineStage } from "mongoose";
+import { match } from "node:assert";
 
 // Builds the filter query for filtering by different fields
 export default function buildFilterQuery(query: any): PipelineStage[] {
@@ -49,39 +50,45 @@ export function filterByPrice(query: any): PipelineStage[] {
 }
 
 // Function to filter by date
+// default date is the current date
+
 export function filterByDate(query: any): PipelineStage[] {
 	const pipeline: PipelineStage[] = [];
+
+	let startDate: Date = new Date();
+	const matchStage: any = { dateTime: {} };
 
 	if (query.date) {
 		const [startDateStr, endDateStr] = query.date.split(",");
 
-		//
-		let startDate: Date | null = new Date(startDateStr);
-		let endDate: Date | null = new Date(endDateStr);
+		// if no date is provided, set the start date to the current date
+		startDate = new Date(startDateStr) || new Date();
+		let endDate: Date | null = new Date(endDateStr) || null;
 
-		if (isNaN(startDate.getTime())) {
-			startDate = null; // Treat "null" as no minimum
-		}
-
-		if (isNaN(endDate.getTime())) {
-			endDate = null; // Treat "null" as no maximum
-		}
-
-		const matchStage: any = {};
-
-		if (startDate !== null) {
-			matchStage.dateTime = { $gte: startDate };
+		// If the start date is in the past, set it to the current date
+		if (startDate < new Date()) {
+			startDate = new Date();
 		}
 
 		if (endDate !== null) {
-			if (!matchStage.dateTime) {
-				matchStage.dateTime = {};
-			}
 			matchStage.dateTime.$lte = endDate;
 		}
 
+		matchStage.dateTime.$gte = startDate;
+
+		console.log(matchStage);
+
 		pipeline.push({
 			$match: matchStage,
+		});
+	} else {
+		// If no date is provided, return all activities after the current date
+		pipeline.push({
+			$match: {
+				dateTime: {
+					$gte: startDate,
+				},
+			},
 		});
 	}
 
