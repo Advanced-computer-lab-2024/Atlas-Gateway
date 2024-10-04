@@ -8,8 +8,6 @@ import buildSortCriteria from "./sortBuilder.service";
 export default function AggregateBuilder(
 	query: any,
 	searchFields: string[], // Fields to search on (e.g., name, category, tag)
-	filterFields: any, // Fields to filter (e.g., price, budget, etc.)
-	sortFields: string[], // Fields allowed for sorting (e.g., price, rating)
 	Limit: number = 10, // Default limit per page
 ): any[] {
 	const page = Number(query.page?.toString()) || 1;
@@ -23,17 +21,15 @@ export default function AggregateBuilder(
 	);
 
 	// Step 2: Build filter query
-	const filters = buildFilterQuery(query, filterFields);
+	const filters = buildFilterQuery(query);
 
 	// Step 3: Build sort criteria using allowed sort fields
-	const sortCriteria = buildSortCriteria(query, sortFields);
+	const sortCriteria = buildSortCriteria(query);
 
 	// Step 4: Build aggregation pipeline
 	const aggregationPipeline: PipelineStage[] = [
 		...searchQuery,
-		{
-			$match: { ...filters }, // Apply search and filter
-		},
+		...filters,
 		{
 			$facet: {
 				data: [

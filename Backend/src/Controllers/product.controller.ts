@@ -80,8 +80,6 @@ export const getProducts = async (req: Request, res: Response) => {
 			AggregateBuilder(
 				req.query,
 				["name"], // Search fields
-				["minPrice", "maxPrice"], // Filters
-				["rating"], // Sort fields
 			),
 		);
 

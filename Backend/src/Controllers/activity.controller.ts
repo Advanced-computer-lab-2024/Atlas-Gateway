@@ -36,20 +36,11 @@ export const getActivities = async (req: Request, res: Response) => {
 			...AggregateBuilder(
 				req.query,
 				["name", "tagsData.name", "categoryData.name"], // Search fields
-				[
-					"minPrice",
-					"maxPrice",
-					"startDate",
-					"endDate",
-					"category",
-					"rating",
-				], // Filters
-				["rating"], // Sort fields
 			),
 			{
 				$project: {
-					"data.tagsData": 0,
-					"data.categoryData": 0,
+					"data.tags": 0,
+					"data.category": 0,
 				},
 			},
 		];
