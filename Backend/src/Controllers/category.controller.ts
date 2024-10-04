@@ -26,6 +26,16 @@ export const getCategories = async (req: Request, res: Response) => {
 	}
 };
 
+export const getCategoryById = async (req: Request, res: Response) => {
+	try {
+		const { id } = req.params;
+		const category = await Category.findById(id);
+		res.status(200).send(category?.name);
+	} catch (error) {
+		res.status(500).send("Error getting category by id");
+	}
+};
+
 export const updateCategory = async (req: Request, res: Response) => {
 	try {
 		const { id } = req.params;
