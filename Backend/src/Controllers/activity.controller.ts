@@ -6,8 +6,29 @@ import AggregateBuilder from "../Services/aggregation.service";
 
 export const createActivities = async (req: Request, res: Response) => {
 	try {
-		const activity = await Activity.create(req.body);
-		res.status(201).send(activity);
+		const {
+			name,
+			dateTime,
+			location,
+			tags,
+			category,
+			minPrice,
+			maxPrice,
+			specialDiscounts,
+			isOpen,
+		} = req.body;
+		const activity = await Activity.create({
+			name,
+			dateTime,
+			location,
+			tags,
+			category,
+			minPrice,
+			maxPrice,
+			specialDiscounts,
+			isOpen,
+		});
+		res.status(201).json(activity);
 	} catch (error) {
 		console.log(error);
 		res.status(500).send("Error creating an activity");
@@ -61,7 +82,7 @@ export const getActivities = async (req: Request, res: Response) => {
 		res.status(200).send(response);
 	} catch (error) {
 		console.log(error);
-		res.status(500).send("Error getting all activities");
+		res.status(500).send("error getting activities");
 	}
 };
 
@@ -70,24 +91,27 @@ export const updateActivityById = async (req: Request, res: Response) => {
 		const { id } = req.params;
 		const activity = await Activity.findById(id);
 		if (!activity) {
-			return res.status(404).send("Cant find Activity");
+			return res.status(404).send("cant find Activity");
 		}
 		activity.set(req.body);
 		await activity.save();
 		res.status(200).send(activity);
 	} catch (error) {
 		console.log(error);
-		res.status(500).send("Error updating an activity");
+		res.status(500).send("error updating an activity");
 	}
 };
 
 export const deleteActivityById = async (req: Request, res: Response) => {
 	try {
 		const { id } = req.params;
-		await Activity.findByIdAndDelete(id);
-		res.status(200).send("Activity Deleted Successfully");
+		const activity = await Activity.findByIdAndDelete(id);
+		if (!activity) {
+			return res.status(404).send("activity not found");
+		}
+		res.status(200).send("activity deleted successfully");
 	} catch (error) {
 		console.log(error);
-		res.status(500).send("Error deleting an activity");
+		res.status(500).send("error deleting an activity");
 	}
 };

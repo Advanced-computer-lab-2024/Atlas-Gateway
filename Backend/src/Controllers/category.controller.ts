@@ -10,20 +10,20 @@ export const createCategory = async (req: Request, res: Response) => {
 			res.status(400).send("name is required");
 		}
 		const category = await Category.create({ name });
-		res.status(201).send(category);
+		res.status(201).json(category);
 	} catch (error) {
 		console.log(error);
-		res.status(500).send("Error create an activity category");
+		res.status(500).send("error create an activity category");
 	}
 };
 
 export const getCategories = async (req: Request, res: Response) => {
 	try {
 		const categories = await Category.find();
-		res.status(200).send(categories);
+		res.status(200).json(categories);
 	} catch (error) {
 		console.log(error);
-		res.status(500).send("Error getting activity categories");
+		res.status(500).send("error getting activity categories");
 	}
 };
 
@@ -33,7 +33,7 @@ export const getCategoryById = async (req: Request, res: Response) => {
 		const category = await Category.findById(id);
 		res.status(200).send(category?.name);
 	} catch (error) {
-		res.status(500).send("Error getting category by id");
+		res.status(500).send("error getting category by id");
 	}
 };
 
@@ -47,23 +47,26 @@ export const updateCategory = async (req: Request, res: Response) => {
 			{ new: true },
 		);
 		if (!category) {
-			return res.status(404).send("Cant find Activity");
+			res.status(404).send("cant find activity category");
 		}
-		res.status(200).send(category);
+		res.status(200).json(category);
 	} catch (error) {
 		console.log(error);
-		res.status(500).send("Error updating activity category");
+		res.status(500).send("error updating activity category");
 	}
 };
 
 export const deleteCategory = async (req: Request, res: Response) => {
 	try {
 		const { id } = req.params;
-		await Category.findByIdAndDelete(id);
+		const category = await Category.findByIdAndDelete(id);
+		if (!category) {
+			res.status(404).send("cant find activity category");
+		}
 		await Activity.deleteMany({ category: id });
-		res.status(200).send("Category deleted Succefully");
+		res.status(200).send("category deleted successfully");
 	} catch (error) {
 		console.log(error);
-		res.status(500).send("Error deleting Category");
+		res.status(500).send("error deleting category");
 	}
 };

@@ -5,7 +5,6 @@ export interface IGovernor extends Document {
 	username: string;
 	email: string; // story 3
 	password: string;
-	historicalLocations: [Types.ObjectId];
 }
 
 const governorSchema = new Schema<IGovernor>(

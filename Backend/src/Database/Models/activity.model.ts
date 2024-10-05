@@ -20,7 +20,7 @@ const activitySchema = new Schema<IActivity>(
 		description: { type: String },
 		dateTime: { type: Date, required: true },
 		location: { type: String, required: true },
-		tags: [{ type: Schema.Types.ObjectId, ref: "Tag" }],
+		tags: [{ type: Schema.Types.ObjectId, ref: "Tag", required: true }],
 		category: {
 			type: Schema.Types.ObjectId,
 			ref: "Category",
