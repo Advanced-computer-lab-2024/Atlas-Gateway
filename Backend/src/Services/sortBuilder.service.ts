@@ -9,12 +9,23 @@ export default function buildSortCriteria(query: any): PipelineStage[] {
 	if (query.sort) {
 		const [sortby, order] = query.sort.split(",");
 		const sortOrder = order === "-1" ? -1 : 1;
+		if (sortby === "price") {
+			pipeline.push({
+				$sort: {
+					price: sortOrder,
+					minPrice: sortOrder,
+					maxPrice: sortOrder,
+				},
+			});
+		}
+		else {
 
-		pipeline.push({
-			$sort: {
-				[sortby]: sortOrder,
-			},
-		});
+			pipeline.push({
+				$sort: {
+					[sortby]: sortOrder,
+				},
+			});
+		}
 	}
 
 	return pipeline;

@@ -72,7 +72,19 @@ export function filterByDate(query: any): PipelineStage[] {
 		matchStage.dateTime.$gte = startDate;
 
 		pipeline.push({
-			$match: matchStage,
+			$match: {
+				$or: [
+					{
+						startDate: { $gte: startDate },
+					},
+					{
+						endDate: { $lte: endDate },
+					},
+					{
+						dateTime: { $gte: startDate, $lte: endDate },
+					},
+				],
+			}
 		});
 	}
 	// If no date is provided, return all activities after the current date
