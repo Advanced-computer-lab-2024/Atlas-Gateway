@@ -14,8 +14,6 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 
-import SheetDemo from "../components/SheetDemo";
-
 interface PreviousJob {
 	title: string;
 	description: string;
@@ -64,7 +62,6 @@ const TourGuide = () => {
 
 	return (
 		<div className="flex flex-col p-3">
-			<SheetDemo />
 			<Table className="shadow-lg ">
 				<TableCaption>Registered Tour Guides.</TableCaption>
 				<TableHeader className="bg-gray-100">
@@ -74,12 +71,11 @@ const TourGuide = () => {
 						<TableHead>Email</TableHead>
 						<TableHead>Password</TableHead>
 						<TableHead>Description</TableHead>
+						<TableHead>Picture</TableHead>
 						<TableHead>Experience</TableHead>
 						<TableHead>Previous Job Title</TableHead>
-						<TableHead>Company</TableHead>
-						<TableHead>Start Date</TableHead>
-						<TableHead>End Date</TableHead>
-						<TableHead></TableHead>
+						{/* <TableHead>Start Date</TableHead>
+						<TableHead>End Date</TableHead> */}
 						<TableHead className="cursor-pointer hover:text-[#2b58ed] w-1">
 							<RotateCw onClick={() => setRefresh(!refresh)} />
 						</TableHead>
@@ -98,27 +94,41 @@ const TourGuide = () => {
 							<TableCell>{tourGuide.username}</TableCell>
 							<TableCell>{tourGuide.email}</TableCell>
 							<TableCell>{tourGuide.password}</TableCell>
-							<TableCell>{tourGuide.description}</TableCell>
-							<TableCell>{tourGuide.experience}</TableCell>
-							<TableCell>{tourGuide.previous.title}</TableCell>
-							<TableCell>{tourGuide.previous.company}</TableCell>
 							<TableCell>
+								{tourGuide?.description || "N/A"}
+							</TableCell>
+							<TableCell>{tourGuide?.picture || "N/A"}</TableCell>
+							<TableCell>
+								{tourGuide?.experience || "N/A"}
+							</TableCell>
+							<TableCell>
+								{tourGuide.previous?.title || "N/A"}
+							</TableCell>
+							{/* <TableCell>
+								{tourGuide.previous?.description || "N/A"}
+							</TableCell> */}
+							{/* <TableCell>
+								{tourGuide.previous?.company || "N/A"}
+							</TableCell> */}
+							{/* <TableCell>
 								{new Date(
-									tourGuide.previous.start,
+									tourGuide.previous?.start,
 								).toLocaleDateString()}
 							</TableCell>
 							<TableCell>
 								{new Date(
-									tourGuide.previous.end,
+									tourGuide.previous?.end,
 								).toLocaleDateString()}
-							</TableCell>
+							</TableCell> */}
 							<TableCell className="cursor-pointer hover:text-[#2b58ed] w-1">
-								<Pencil />
-							</TableCell>
-							<TableCell className="cursor-pointer hover:text-[#2b58ed] w-1">
-								<Trash
-									onClick={() => handleDelete(tourGuide._id)}
-								/>
+								<button className="bg-red-500 text-white rounded-full p-2 shadow-lg hover:bg-red-600">
+									<Trash
+										className="w-4 h-4"
+										onClick={() => {
+											handleDelete(tourGuide._id);
+										}}
+									/>
+								</button>
 							</TableCell>
 						</TableRow>
 					))}

@@ -1,510 +1,462 @@
-import React, { useState } from "react";
+"use client";
+import * as z from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/togglegroup";
 
-const PlacesForm: React.FC = () => {
-    const [values, setValues] = useState({
-        name: '',
-        description: '',
-        openHourSat: '',
-        closeHourSat: '',
-        openHourSun: '',
-        closeHourSun: '',
-        openHourMon: '',
-        closeHourMon: '',
-        openHourTue: '',
-        closeHourTue: '',
-        openHourWed: '',
-        closeHourWed: '',
-        openHourThu: '',
-        closeHourThu: '',
-        openHourFri: '',
-        closeHourFri: '',
-        ticketsN: '',
-        ticketsS: '',
-        ticketsF: ''
+const timeToMinutes = (time: string) => {
+    const [hours, minutes] = time.split(':').map(Number);
+    return hours * 60 + minutes;
+};
+
+const formSchema = z
+    .object({
+        name: z.string().min(1, "Name is required"),
+        description: z.string().min(1, "Description is required"),
+        ticketF: z.number().positive("Price for foreigners is required"),
+        ticketN: z.number().positive("Price for natives is required"),
+        ticketS: z.number().positive("Price for students is required"),
+        days: z.array(z.enum(['sat', 'sun', 'mon', 'tue', 'wed', 'thu', 'fri'])).min(1, "At least one working day is required"),
+        openSat: z.string().refine(value => /^\d{2}:\d{2}$/.test(value), {
+            message: "Invalid time format",
+        }),
+        closeSat: z.string().refine(value => /^\d{2}:\d{2}$/.test(value), {
+            message: "Invalid time format",
+        }),
+        openSun: z.string().refine(value => /^\d{2}:\d{2}$/.test(value), {
+            message: "Invalid time format",
+        }),
+        closeSun: z.string().refine(value => /^\d{2}:\d{2}$/.test(value), {
+            message: "Invalid time format",
+        }),
+        openMon: z.string().refine(value => /^\d{2}:\d{2}$/.test(value), {
+            message: "Invalid time format",
+        }),
+        closeMon: z.string().refine(value => /^\d{2}:\d{2}$/.test(value), {
+            message: "Invalid time format",
+        }),
+        openTue: z.string().refine(value => /^\d{2}:\d{2}$/.test(value), {
+            message: "Invalid time format",
+        }),
+        closeTue: z.string().refine(value => /^\d{2}:\d{2}$/.test(value), {
+            message: "Invalid time format",
+        }),
+        openWed: z.string().refine(value => /^\d{2}:\d{2}$/.test(value), {
+            message: "Invalid time format",
+        }),
+        closeWed: z.string().refine(value => /^\d{2}:\d{2}$/.test(value), {
+            message: "Invalid time format",
+        }),
+        openThu: z.string().refine(value => /^\d{2}:\d{2}$/.test(value), {
+            message: "Invalid time format",
+        }),
+        closeThu: z.string().refine(value => /^\d{2}:\d{2}$/.test(value), {
+            message: "Invalid time format",
+        }),
+        openFri: z.string().refine(value => /^\d{2}:\d{2}$/.test(value), {
+            message: "Invalid time format",
+        }),
+        closeFri: z.string().refine(value => /^\d{2}:\d{2}$/.test(value), {
+            message: "Invalid time format",
+        }),
+    }).refine(data => timeToMinutes(data.openSat) <= timeToMinutes(data.closeSat), {
+        message: "Opening hour must be less than closing hour",
+        path: ["openSat"],
+    }).refine(data => timeToMinutes(data.openSun) <= timeToMinutes(data.closeSun), {
+        message: "Opening hour must be less than closing hour",
+        path: ["openSun"],
+    }).refine(data => timeToMinutes(data.openMon) <= timeToMinutes(data.closeMon), {
+        message: "Opening hour must be less than closing hour",
+        path: ["openMon"],
+    }).refine(data => timeToMinutes(data.openTue) <= timeToMinutes(data.closeTue), {
+        message: "Opening hour must be less than closing hour",
+        path: ["openTue"],
+    }).refine(data => timeToMinutes(data.openWed) <= timeToMinutes(data.closeWed), {
+        message: "Opening hour must be less than closing hour",
+        path: ["openWed"],
+    }).refine(data => timeToMinutes(data.openThu) <= timeToMinutes(data.closeThu), {
+        message: "Opening hour must be less than closing hour",
+        path: ["openThu"],
+    }).refine(data => timeToMinutes(data.openFri) <= timeToMinutes(data.closeFri), {
+        message: "Opening hour must be less than closing hour",
+        path: ["openFri"],
     });
 
-    const [error, setError] = useState<string | null>(null);
-    const [files, setFiles] = useState<FileList | null>(null);
+const PlacesForm: React.FC = () => {
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            name: "",
+            description: "",
+            ticketF: 0,
+            ticketN: 0,
+            ticketS: 0,
+            days: [],
+        },
+    });
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
+    const { watch } = form;
+    const days = watch("days");
 
-        // Check for negative values in number inputs
-        if (e.target.type === 'number' && parseFloat(value) < 0) {
-            setError('Value cannot be negative.'); 
-            return; 
-        }
-
-        setError(null); // Clear error message if input is valid
-        setValues({ ...values, [name]: value });
-    }
-
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.files) {
-            setFiles(event.target.files);
-        }
-    };
-
-    const handleSubmit = async (event: React.FormEvent) => {
-        event.preventDefault();
-
-        //validate that opening hours are not larger that closing hours
-
-        //pass values to DB
-        // axios.post('url', values);
+    const handleSubmit = (values: z.infer<typeof formSchema>) => {
         console.log(values);
-        if (files) {
-            for (let i = 0; i < files.length; i++) {
-                console.log(files[i]); // Handle the files as needed
-            }
-        }
-
-        setValues({
-            name: '',
-            description: '',
-            openHourSat: '',
-            closeHourSat: '',
-            openHourSun: '',
-            closeHourSun: '',
-            openHourMon: '',
-            closeHourMon: '',
-            openHourTue: '',
-            closeHourTue: '',
-            openHourWed: '',
-            closeHourWed: '',
-            openHourThu: '',
-            closeHourThu: '',
-            openHourFri: '',
-            closeHourFri: '',
-            ticketsN: '',
-            ticketsS: '',
-            ticketsF: ''
-        });
-        
-        setFiles(null);
+        form.reset();
     };
 
     return (
-        <div className="container bg-white text-center p-10 rounded-lg shadow-lg mx-auto mt-20 max-w-md">
-            <h1 className="text-blue-700 text-2xl font-bold mb-6">New Place</h1>
-            <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="flex flex-col">
-                    <label htmlFor="name" className="text-left mb-1">Name</label>
-                    <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        placeholder="Enter the place name"
-                        required
-                        onChange={handleChange}
-                        className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                </div>
-
-                <div className="flex flex-col">
-                    <label htmlFor="description" className="text-left mb-1">Description</label>
-                    <textarea
-                        id="description"
-                        name="description"
-                        cols={30}
-                        rows={10}
-                        onChange={handleChange}
-                        required
-                        placeholder="Enter the place description"
-                        className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                </div>
-
-                <div className="flex flex-col">
-                    <label htmlFor="pictures" className="text-left mb-1">Pictures</label>
-                    <input
-                        type="file"
-                        id="pictures"
-                        name="pictures"
-                        accept="image/*"
-                        multiple
-                        onChange={handleFileChange}
-                        required
-                        className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                </div>
-
-                <div className="flex flex-col">
-                    <label htmlFor="openHoursSat" className="text-left mb-1">Saturday opens at</label>
-                    <select
-                        id="hour1"
-                        name="openHourSat"
-                        required
-                        onChange={handleChange}
-                        className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        <main className="flex min-h-screen flex-col items-center justify-center p-6 bg-gray-100">
+            <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-6xl">
+                <Form {...form}>
+                    <form
+                        onSubmit={form.handleSubmit(handleSubmit)}
+                        className="flex gap-8"
                     >
-                        <option value="6">6 AM</option>
-                        <option value="7">7 AM</option>
-                        <option value="8">8 AM</option>
-                        <option value="9">9 AM</option>
-                        <option value="10">10 AM</option>
-                        <option value="11">11 AM</option>
-                        <option value="12">12 PM</option>
-                        <option value="13">1 PM</option>
-                        <option value="14">2 PM</option>
-                        <option value="15">3 PM</option>
-                    </select>
-                </div>
+                        <div id="info" className="flex-1">
+                            <h2 className="text-lg font-medium mb-4">Information</h2>
+                            <FormField
+                                control={form.control}
+                                name="name"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Name</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Enter the place's name" {...field} className="border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
 
-                <div className="flex flex-col">
-                    <label htmlFor="closeHoursSat" className="text-left mb-1">Saturday closes at</label>
-                    <select
-                        name="closeHourSat"
-                        id="hour2"
-                        required
-                        onChange={handleChange}
-                        className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                        <option value="6">6 PM</option>
-                        <option value="7">7 PM</option>
-                        <option value="8">8 PM</option>
-                        <option value="9">9 PM</option>
-                        <option value="10">10 PM</option>
-                        <option value="11">11 PM</option>
-                        <option value="12">12 AM</option>
-                        <option value="13">1 AM</option>
-                        <option value="14">2 AM</option>
-                        <option value="15">3 AM</option>
-                    </select>
-                </div><div className="flex flex-col">
-                    <label htmlFor="openHoursSun" className="text-left mb-1">Sunday opens at</label>
-                    <select
-                        id="hour3"
-                        name="openHourSun"
-                        required
-                        onChange={handleChange}
-                        className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                        <option value="6">6 AM</option>
-                        <option value="7">7 AM</option>
-                        <option value="8">8 AM</option>
-                        <option value="9">9 AM</option>
-                        <option value="10">10 AM</option>
-                        <option value="11">11 AM</option>
-                        <option value="12">12 PM</option>
-                        <option value="13">1 PM</option>
-                        <option value="14">2 PM</option>
-                        <option value="15">3 PM</option>
-                    </select>
-                </div>
+                            <FormField
+                                control={form.control}
+                                name="description"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Description</FormLabel>
+                                        <FormControl>
+                                            <Textarea placeholder="Enter the place's description" {...field} className="border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
 
-                <div className="flex flex-col">
-                    <label htmlFor="closeHoursSun" className="text-left mb-1">Sunday closes at</label>
-                    <select
-                        name="closeHourSun"
-                        id="hour4"
-                        required
-                        onChange={handleChange}
-                        className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                        <option value="6">6 PM</option>
-                        <option value="7">7 PM</option>
-                        <option value="8">8 PM</option>
-                        <option value="9">9 PM</option>
-                        <option value="10">10 PM</option>
-                        <option value="11">11 PM</option>
-                        <option value="12">12 AM</option>
-                        <option value="13">1 AM</option>
-                        <option value="14">2 AM</option>
-                        <option value="15">3 AM</option>
-                    </select>
-                </div>
+                            <h3 className="text-lg font-medium mt-4">Ticket Prices</h3>
 
-                <div className="flex flex-col">
-                    <label htmlFor="openHoursMon" className="text-left mb-1">Monday opens at</label>
-                    <select
-                        id="hour5"
-                        name="openHourMon"
-                        required
-                        onChange={handleChange}
-                        className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                        <option value="6">6 AM</option>
-                        <option value="7">7 AM</option>
-                        <option value="8">8 AM</option>
-                        <option value="9">9 AM</option>
-                        <option value="10">10 AM</option>
-                        <option value="11">11 AM</option>
-                        <option value="12">12 PM</option>
-                        <option value="13">1 PM</option>
-                        <option value="14">2 PM</option>
-                        <option value="15">3 PM</option>
-                    </select>
-                </div>
+                            <FormField
+                                control={form.control}
+                                name="ticketF"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Foreigners</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Enter the price for foreigners" {...field} className="border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
 
-                <div className="flex flex-col">
-                    <label htmlFor="closeHoursMon" className="text-left mb-1">Monday closes at</label>
-                    <select
-                        name="closeHourMon"
-                        id="hour6"
-                        required
-                        onChange={handleChange}
-                        className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                        <option value="6">6 PM</option>
-                        <option value="7">7 PM</option>
-                        <option value="8">8 PM</option>
-                        <option value="9">9 PM</option>
-                        <option value="10">10 PM</option>
-                        <option value="11">11 PM</option>
-                        <option value="12">12 AM</option>
-                        <option value="13">1 AM</option>
-                        <option value="14">2 AM</option>
-                        <option value="15">3 AM</option>
-                    </select>
-                </div>
+                            <FormField
+                                control={form.control}
+                                name="ticketN"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Natives</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Enter the price for natives" {...field} className="border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
 
-                <div className="flex flex-col">
-                    <label htmlFor="openHoursTue" className="text-left mb-1">Tuesday opens at</label>
-                    <select
-                        id="hour7"
-                        name="openHourTue"
-                        required
-                        onChange={handleChange}
-                        className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                        <option value="6">6 AM</option>
-                        <option value="7">7 AM</option>
-                        <option value="8">8 AM</option>
-                        <option value="9">9 AM</option>
-                        <option value="10">10 AM</option>
-                        <option value="11">11 AM</option>
-                        <option value="12">12 PM</option>
-                        <option value="13">1 PM</option>
-                        <option value="14">2 PM</option>
-                        <option value="15">3 PM</option>
-                    </select>
-                </div>
-
-                <div className="flex flex-col">
-                    <label htmlFor="closeHoursTue" className="text-left mb-1">Tuesday closes at</label>
-                    <select
-                        name="closeHourTue"
-                        id="hour8"
-                        required
-                        onChange={handleChange}
-                        className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                        <option value="6">6 PM</option>
-                        <option value="7">7 PM</option>
-                        <option value="8">8 PM</option>
-                        <option value="9">9 PM</option>
-                        <option value="10">10 PM</option>
-                        <option value="11">11 PM</option>
-                        <option value="12">12 AM</option>
-                        <option value="13">1 AM</option>
-                        <option value="14">2 AM</option>
-                        <option value="15">3 AM</option>
-                    </select>
-                </div>
-
-                <div className="flex flex-col">
-                    <label htmlFor="openHoursWed" className="text-left mb-1">Wednesday opens at</label>
-                    <select
-                        id="hour9"
-                        name="openHourWed"
-                        required
-                        onChange={handleChange}
-                        className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                        <option value="6">6 AM</option>
-                        <option value="7">7 AM</option>
-                        <option value="8">8 AM</option>
-                        <option value="9">9 AM</option>
-                        <option value="10">10 AM</option>
-                        <option value="11">11 AM</option>
-                        <option value="12">12 PM</option>
-                        <option value="13">1 PM</option>
-                        <option value="14">2 PM</option>
-                        <option value="15">3 PM</option>
-                    </select>
-                </div>
-
-                <div className="flex flex-col">
-                    <label htmlFor="closeHoursWed" className="text-left mb-1">Wednesday closes at</label>
-                    <select
-                        name="closeHourWed"
-                        id="hour10"
-                        required
-                        onChange={handleChange}
-                        className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                        <option value="6">6 PM</option>
-                        <option value="7">7 PM</option>
-                        <option value="8">8 PM</option>
-                        <option value="9">9 PM</option>
-                        <option value="10">10 PM</option>
-                        <option value="11">11 PM</option>
-                        <option value="12">12 AM</option>
-                        <option value="13">1 AM</option>
-                        <option value="14">2 AM</option>
-                        <option value="15">3 AM</option>
-                    </select>
-                </div>
-
-                <div className="flex flex-col">
-                    <label htmlFor="openHoursThu" className="text-left mb-1">Thursday opens at</label>
-                    <select
-                        id="hour11"
-                        name="openHourThu"
-                        required
-                        onChange={handleChange}
-                        className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                        <option value="6">6 AM</option>
-                        <option value="7">7 AM</option>
-                        <option value="8">8 AM</option>
-                        <option value="9">9 AM</option>
-                        <option value="10">10 AM</option>
-                        <option value="11">11 AM</option>
-                        <option value="12">12 PM</option>
-                        <option value="13">1 PM</option>
-                        <option value="14">2 PM</option>
-                        <option value="15">3 PM</option>
-                    </select>
-                </div>
-
-                <div className="flex flex-col">
-                    <label htmlFor="closeHoursThu" className="text-left mb-1">Thursday closes at</label>
-                    <select
-                        name="closeHourThu"
-                        id="hour12"
-                        required
-                        onChange={handleChange}
-                        className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                        <option value="6">6 PM</option>
-                        <option value="7">7 PM</option>
-                        <option value="8">8 PM</option>
-                        <option value="9">9 PM</option>
-                        <option value="10">10 PM</option>
-                        <option value="11">11 PM</option>
-                        <option value="12">12 AM</option>
-                        <option value="13">1 AM</option>
-                        <option value="14">2 AM</option>
-                        <option value="15">3 AM</option>
-                    </select>
-                </div>
-
-                <div className="flex flex-col">
-                    <label htmlFor="openHoursFri" className="text-left mb-1">Friday opens at</label>
-                    <select
-                        id="hour13"
-                        name="openHourFri"
-                        required
-                        onChange={handleChange}
-                        className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                        <option value="6">6 AM</option>
-                        <option value="7">7 AM</option>
-                        <option value="8">8 AM</option>
-                        <option value="9">9 AM</option>
-                        <option value="10">10 AM</option>
-                        <option value="11">11 AM</option>
-                        <option value="12">12 PM</option>
-                        <option value="13">1 PM</option>
-                        <option value="14">2 PM</option>
-                        <option value="15">3 PM</option>
-                    </select>
-                </div>
-
-                <div className="flex flex-col">
-                    <label htmlFor="closeHoursFri" className="text-left mb-1">Friday closes at</label>
-                    <select
-                        name="closeHourFri"
-                        id="hour14"
-                        required
-                        onChange={handleChange}
-                        className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                        <option value="6">6 PM</option>
-                        <option value="7">7 PM</option>
-                        <option value="8">8 PM</option>
-                        <option value="9">9 PM</option>
-                        <option value="10">10 PM</option>
-                        <option value="11">11 PM</option>
-                        <option value="12">12 AM</option>
-                        <option value="13">1 AM</option>
-                        <option value="14">2 AM</option>
-                        <option value="15">3 AM</option>
-                    </select>
-                </div>
-
-                <div className="flex flex-col">
-                    <label htmlFor="ticketPrice" className="text-left mb-1">Natives ticket price </label>
-                    <input
-                        type="number"
-                        name="ticketsN"
-                        id="ticketPriceNatives"
-                        placeholder="Enter ticket price for natives"
-                        onChange={handleChange}
-                        required
-                        step="0.01"
-                        className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                    {error && (
-                        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
-                            <strong className="font-bold">Error!</strong>
-                            <span className="block sm:inline">{error}</span>
+                            <FormField
+                                control={form.control}
+                                name="ticketS"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Students</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Enter the price for students" {...field} className="border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
                         </div>
-                    )}
-                </div>
 
-                <div className="flex flex-col">
-                    <label htmlFor="ticketPrice" className="text-left mb-1">Students ticket price </label>
-                    <input
-                        type="number"
-                        name="ticketsS"
-                        onChange={handleChange}
-                        id="ticketPriceStudents"
-                        placeholder="Enter ticket price for students"
-                        required
-                        step="0.01"
-                        className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                    {error && (
-                        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
-                            <strong className="font-bold">Error!</strong>
-                            <span className="block sm:inline">{error}</span>
+                        <div id="hours" className="flex-1">
+                            <h2 className="text-lg font-medium mt-4">Opening Hours</h2>
+
+                            <FormField
+                                control={form.control}
+                                name="days"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Working Days</FormLabel>
+                                        <FormControl>
+                                            <ToggleGroup variant="outline" type="multiple" value={field.value} onValueChange={field.onChange} className="mb-4">
+                                                <ToggleGroupItem value="sat">Sa</ToggleGroupItem>
+                                                <ToggleGroupItem value="sun">Su</ToggleGroupItem>
+                                                <ToggleGroupItem value="mon">Mo</ToggleGroupItem>
+                                                <ToggleGroupItem value="tue">Tu</ToggleGroupItem>
+                                                <ToggleGroupItem value="wed">We</ToggleGroupItem>
+                                                <ToggleGroupItem value="thu">Th</ToggleGroupItem>
+                                                <ToggleGroupItem value="fri">Fr</ToggleGroupItem>
+                                            </ToggleGroup>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            {days.includes("sat") && (
+                                <div className="flex items-center space-x-2 mb-4">
+                                    <label className="whitespace-nowrap">Saturday</label>
+                                    <FormField
+                                        control={form.control}
+                                        name="openSat"
+                                        render={({ field }) => (
+                                            <FormItem className="flex-1">
+                                                <FormLabel>From</FormLabel>
+                                                <FormControl>
+                                                    <Input type="time" {...field} className="border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+
+                                    <FormField
+                                        control={form.control}
+                                        name="closeSat"
+                                        render={({ field }) => (
+                                            <FormItem className="flex-1">
+                                                <FormLabel>To</FormLabel>
+                                                <FormControl>
+                                                    <Input type="time" {...field} className="border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+                            )}
+
+                            {days.includes("sun") && (
+                                <div className="flex items-center space-x-2 mb-4">
+                                    <label className="whitespace-nowrap">Sunday</label>
+                                    <FormField
+                                        control={form.control}
+                                        name="openSun"
+                                        render={({ field }) => (
+                                            <FormItem className="flex-1">
+                                                <FormLabel>From</FormLabel>
+                                                <FormControl>
+                                                    <Input type="time" {...field} className="border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+
+                                    <FormField
+                                        control={form.control}
+                                        name="closeSun"
+                                        render={({ field }) => (
+                                            <FormItem className="flex-1">
+                                                <FormLabel>To</FormLabel>
+                                                <FormControl>
+                                                    <Input type="time" {...field} className="border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+                            )}
+
+                            {days.includes("mon") && (
+                                <div className="flex items-center space-x-2 mb-4">
+                                    <label className="whitespace-nowrap">Monday</label>
+                                    <FormField
+                                        control={form.control}
+                                        name="openMon"
+                                        render={({ field }) => (
+                                            <FormItem className="flex-1">
+                                                <FormLabel>From</FormLabel>
+                                                <FormControl>
+                                                    <Input type="time" {...field} className="border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+
+                                    <FormField
+                                        control={form.control}
+                                        name="closeMon"
+                                        render={({ field }) => (
+                                            <FormItem className="flex-1">
+                                                <FormLabel>To</FormLabel>
+                                                <FormControl>
+                                                    <Input type="time" {...field} className="border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+                            )}
+
+                            {days.includes("tue") && (
+                                <div className="flex items-center space-x-2 mb-4">
+                                    <label className="whitespace-nowrap">Tuesday</label>
+                                    <FormField
+                                        control={form.control}
+                                        name="openTue"
+                                        render={({ field }) => (
+                                            <FormItem className="flex-1">
+                                                <FormLabel>From</FormLabel>
+                                                <FormControl>
+                                                    <Input type="time" {...field} className="border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+
+                                    <FormField
+                                        control={form.control}
+                                        name="closeTue"
+                                        render={({ field }) => (
+                                            <FormItem className="flex-1">
+                                                <FormLabel>To</FormLabel>
+                                                <FormControl>
+                                                    <Input type="time" {...field} className="border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+                            )}
+
+                            {days.includes("wed") && (
+                                <div className="flex items-center space-x-2 mb-4">
+                                    <label className="whitespace-nowrap">Wednesday</label>
+                                    <FormField
+                                        control={form.control}
+                                        name="openWed"
+                                        render={({ field }) => (
+                                            <FormItem className="flex-1">
+                                                <FormLabel>From</FormLabel>
+                                                <FormControl>
+                                                    <Input type="time" {...field} className="border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+
+                                    <FormField
+                                        control={form.control}
+                                        name="closeWed"
+                                        render={({ field }) => (
+                                            <FormItem className="flex-1">
+                                                <FormLabel>To</FormLabel>
+                                                <FormControl>
+                                                    <Input type="time" {...field} className="border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+                            )}
+
+                            {days.includes("thu") && (
+                                <div className="flex items-center space-x-2 mb-4">
+                                    <label className="whitespace-nowrap">Thursday</label>
+                                    <FormField
+                                        control={form.control}
+                                        name="openThu"
+                                        render={({ field }) => (
+                                            <FormItem className="flex-1">
+                                                <FormLabel>From</FormLabel>
+                                                <FormControl>
+                                                    <Input type="time" {...field} className="border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+
+                                    <FormField
+                                        control={form.control}
+                                        name="closeThu"
+                                        render={({ field }) => (
+                                            <FormItem className="flex-1">
+                                                <FormLabel>To</FormLabel>
+                                                <FormControl>
+                                                    <Input type="time" {...field} className="border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+                            )}
+
+                            {days.includes("fri") && (
+                                <div className="flex items-center space-x-2 mb-4">
+                                    <label className="whitespace-nowrap">Friday</label>
+                                    <FormField
+                                        control={form.control}
+                                        name="openFri"
+                                        render={({ field }) => (
+                                            <FormItem className="flex-1">
+                                                <FormLabel>From</FormLabel>
+                                                <FormControl>
+                                                    <Input type="time" {...field} className="border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+
+                                    <FormField
+                                        control={form.control}
+                                        name="closeFri"
+                                        render={({ field }) => (
+                                            <FormItem className="flex-1">
+                                                <FormLabel>To</FormLabel>
+                                                <FormControl>
+                                                    <Input type="time" {...field} className="border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+                            )}
+
+                            <div className="mt-6 flex justify-center">
+                                <Button type="submit" className="w-1/3 bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                                    Submit
+                                </Button>
+                            </div>
                         </div>
-                    )}
-                </div>
-
-                <div className="flex flex-col">
-                    <label htmlFor="ticketPriceForeigners" className="text-left mb-1">Foreigners ticket price </label>
-                    <input
-                        type="number"
-                        name="ticketsF"
-                        id="ticketPriceForeigns"
-                        onChange={handleChange}
-                        placeholder="Enter ticket price for foreigners"
-                        required
-                        step="0.01"
-                        className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                    {error && (
-                        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
-                            <strong className="font-bold">Error!</strong>
-                            <span className="block sm:inline">{error}</span>
-                        </div>
-                    )}
-                </div>
-
-                <button
-                    type="submit"
-                    className="w-full bg-blue-600 text-white font-bold py-2 rounded-md hover:bg-blue-700 transition duration-200"
-                >
-                    Submit
-                </button>
-            </form>
-        </div>
-
+                    </form>
+                </Form>
+            </div>
+        </main>
     );
-};
+}
 
 export default PlacesForm;

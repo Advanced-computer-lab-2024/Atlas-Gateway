@@ -12,6 +12,7 @@ export default function apiRegister(payload: TRegisterForm) {
 		headers: {
 			"Content-Type": "application/json",
 		},
+		baseURL: "http://localhost:5000",
 		data: payload,
 	});
 }

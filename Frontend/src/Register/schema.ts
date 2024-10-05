@@ -1,4 +1,3 @@
-import { addYears } from "date-fns";
 import { z } from "zod";
 
 import { EAccountType } from "@/types/enums";
@@ -17,36 +16,26 @@ export const accountTypeSchema = z.object({
 	),
 });
 
-export const touristInfoSchema = z
-	.object({
-		mobile_number: z
-			.string({
-				message: "Please enter a valid mobile number",
-			})
-			.min(10, {
-				message: "Mobile number must be at least 10 characters long",
-			}),
-		nationality: z
-			.string({ message: "Please select your nationality" })
-			.min(1, { message: "Please select your nationality" }),
-		date_of_birth: z.date({
-			message: "Please enter a valid date of birth",
+export const touristInfoSchema = z.object({
+	mobileNumber: z
+		.string({
+			message: "Please enter a valid mobile number",
+		})
+		.min(10, {
+			message: "Mobile number must be at least 10 characters long",
 		}),
-		occupation: z
-			.string({
-				message: "Please select your occupation",
-			})
-			.min(1, { message: "Please select your occupation" }),
-	})
-	.superRefine(({ date_of_birth }, ctx) => {
-		if (date_of_birth > addYears(new Date(), -18)) {
-			ctx.addIssue({
-				code: "custom",
-				message: "You must be at least 18 years old to register",
-				path: ["date_of_birth"],
-			});
-		}
-	});
+	nationality: z
+		.string({ message: "Please select your nationality" })
+		.min(1, { message: "Please select your nationality" }),
+	dob: z.date({
+		message: "Please enter a valid date of birth",
+	}),
+	occupation: z
+		.string({
+			message: "Please select your occupation",
+		})
+		.min(1, { message: "Please select your occupation" }),
+});
 
 export const accountInfoSchema = z
 	.object({
@@ -82,12 +71,3 @@ export const accountInfoSchema = z
 			});
 		}
 	});
-
-export const productSchema = z.object({
-	name: z.string().min(5, { message: "Please enter a name" }),
-	description: z.string().min(15, { message: "Please enter a description" }),
-	price: z.number().nonnegative({ message: "Please enter a valid price" }),
-	quantity: z
-		.number()
-		.nonnegative({ message: "Please enter a valid quantity" }),
-});

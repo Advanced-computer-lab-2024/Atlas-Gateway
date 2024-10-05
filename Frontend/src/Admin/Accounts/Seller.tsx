@@ -14,24 +14,26 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 
-import SheetDemo from "../components/SheetDemo";
-
-interface Admin {
+interface Seller {
 	_id: string;
 	username: string;
 	email: string;
 	password: string;
+	picture: string;
+	description: string;
+	isDeleted: boolean;
+	products: string[];
 }
 
-const Admins = () => {
-	const [admins, setAdmins] = useState<Admin[]>([]);
+const Sellers = () => {
+	const [sellers, setSellers] = useState<Seller[]>([]);
 	const [refresh, setRefresh] = useState<boolean>(false);
 
 	useEffect(() => {
 		axios
-			.get("http://localhost:8000/api/admin/list")
+			.get("http://localhost:8000/api/seller/list")
 			.then((res) => {
-				setAdmins(res.data);
+				setSellers(res.data);
 			})
 			.catch((error) => {
 				console.log(error);
@@ -40,7 +42,7 @@ const Admins = () => {
 
 	const handleDelete = (id: string) => {
 		axios
-			.delete(`http://localhost:8000/api/admin/delete/${id}`)
+			.delete(`http://localhost:8000/api/seller/delete/${id}`)
 			.then((res) => {
 				setRefresh(!refresh);
 			})
@@ -51,31 +53,38 @@ const Admins = () => {
 
 	return (
 		<div className="flex flex-col p-3">
-			<SheetDemo />
 			<Table className="shadow-lg">
-				<TableCaption>Registered Admins.</TableCaption>
+				<TableCaption>Registered Sellers.</TableCaption>
 				<TableHeader className="bg-gray-100">
 					<TableRow>
 						<TableHead>Username</TableHead>
 						<TableHead>Email</TableHead>
 						<TableHead>Password</TableHead>
+						<TableHead>Picture</TableHead>
+						<TableHead>Description</TableHead>
 						<TableHead className="cursor-pointer hover:text-[#2b58ed] w-1">
 							<RotateCw onClick={() => setRefresh(!refresh)} />
 						</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>
-					{admins.map((admin) => (
-						<TableRow key={admin._id}>
-							<TableCell>{admin.username}</TableCell>
-							<TableCell>{admin.email}</TableCell>
-							<TableCell>{admin.password}</TableCell>
-							<TableCell className="cursor-pointer hover:text-red-600 w-1">
+					{sellers.map((seller) => (
+						<TableRow key={seller._id}>
+							<TableCell className="p-3">
+								{seller.username}
+							</TableCell>
+							<TableCell>{seller.email}</TableCell>
+							<TableCell>{seller.password}</TableCell>
+							<TableCell>{seller?.picture || "N/A"}</TableCell>
+							<TableCell>
+								{seller?.description || "N/A"}
+							</TableCell>
+							<TableCell className="cursor-pointer hover:text-[#2b58ed]">
 								<button className="bg-red-500 text-white rounded-full p-2 shadow-lg hover:bg-red-600">
 									<Trash
 										className="w-4 h-4"
 										onClick={() => {
-											handleDelete(admin._id);
+											handleDelete(seller._id);
 										}}
 									/>
 								</button>
@@ -88,4 +97,4 @@ const Admins = () => {
 	);
 };
 
-export default Admins;
+export default Sellers;

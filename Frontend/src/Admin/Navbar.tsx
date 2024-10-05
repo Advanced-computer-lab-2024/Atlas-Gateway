@@ -19,8 +19,8 @@ const Navbar = ({ selectedCategory, onSelect }: Props) => {
 					<div className="flex gap-11 ml-auto mr-auto">
 						{[
 							"Admins",
-							"Advertisers",
 							"Governors",
+							"Advertisers",
 							"Tourists",
 							"Tour Guides",
 							"Seller",

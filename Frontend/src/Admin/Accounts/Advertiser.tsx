@@ -14,8 +14,6 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 
-import SheetDemo from "../components/SheetDemo";
-
 interface CompanyProfile {
 	hotline: number;
 	address: string;
@@ -62,7 +60,6 @@ const Advertisers = () => {
 
 	return (
 		<div className="flex flex-col p-3">
-			<SheetDemo />
 			<Table className="shadow-lg">
 				<TableCaption>Registered Advertisers.</TableCaption>
 				<TableHeader className="bg-gray-100">
@@ -73,7 +70,8 @@ const Advertisers = () => {
 						<TableHead>Hotline</TableHead>
 						<TableHead>Address</TableHead>
 						<TableHead>Website</TableHead>
-						<TableHead></TableHead>
+						<TableHead>Logo</TableHead>
+						<TableHead>Description</TableHead>
 						<TableHead className="cursor-pointer hover:text-[#2b58ed]">
 							<RotateCw onClick={() => setRefresh(!refresh)} />
 						</TableHead>
@@ -88,26 +86,39 @@ const Advertisers = () => {
 							<TableCell>{advertiser.email}</TableCell>
 							<TableCell>{advertiser.password}</TableCell>
 							<TableCell>
-								{advertiser.companyProfile.hotline}
+								{advertiser.companyProfile?.hotline || "N/A"}
 							</TableCell>
 							<TableCell>
-								{advertiser.companyProfile.address}
+								{advertiser.companyProfile?.address || "N/A"}
 							</TableCell>
 							<TableCell>
 								<a
-									href={advertiser.companyProfile.website}
+									href={
+										advertiser.companyProfile?.website ||
+										"N/A"
+									}
 									target="_blank"
 								>
-									{advertiser.companyProfile.website}
+									{advertiser.companyProfile?.website ||
+										"N/A"}
 								</a>
 							</TableCell>
-							<TableCell className="cursor-pointer hover:text-[#2b58ed]">
-								<Pencil />
+							<TableCell>
+								{advertiser.companyProfile?.logo || "N/A"}
 							</TableCell>
-							<TableCell className="cursor-pointer hover:text-[#2b58ed]">
-								<Trash
-									onClick={() => handleDelete(advertiser._id)}
-								/>
+							<TableCell>
+								{advertiser.companyProfile?.description ||
+									"N/A"}
+							</TableCell>
+							<TableCell className="cursor-pointer hover:text-[#2b58ed] w-1">
+								<button className="bg-red-500 text-white rounded-full p-2 shadow-lg hover:bg-red-600">
+									<Trash
+										className="w-4 h-4"
+										onClick={() => {
+											handleDelete(advertiser._id);
+										}}
+									/>
+								</button>
 							</TableCell>
 						</TableRow>
 					))}

@@ -3,15 +3,16 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
-
-
+import Activites from "./Activities/Activites";
 import Admin from "./Admin/Dashboard";
-import Advertisor from "./Advertisor/Advertisor";
 import AdvertisorProfile from "./Advertisor/Profile";
+import Home from "./Home/Home";
+import Itineraries from "./Itineraries/Itineraries";
+import Products from "./Products/Products";
 import Register from "./Register/Register";
+import PlacesForm from "./TourismGovernor/HistoricalPlacesForm";
 import "./index.css";
 import Layout from "./layout/Layout";
-import PlacesForm from "./TourismGovernor/HistoricalPlacesForm";
 
 const queryClient = new QueryClient();
 
@@ -29,11 +30,25 @@ const router = createBrowserRouter([
 		element: <Layout />,
 		children: [
 			{
-				path: "/advertisor",
-				element: <Advertisor />,
-			},{
+				path: "/",
+				element: <Home />,
+				index: true,
+			},
+			{
 				path: "/places",
 				element: <PlacesForm />,
+			},
+			{
+				path: "/products",
+				element: <Products />,
+			},
+			{
+				path: "/activities",
+				element: <Activites />,
+			},
+			{
+				path: "/itineraries",
+				element: <Itineraries />,
 			},
 		],
 	},
