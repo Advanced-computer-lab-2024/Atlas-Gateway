@@ -14,6 +14,7 @@ import productRouter from "./Routes/product.route";
 import tagRouter from "./Routes/tag.route";
 import registerRouter from "./Routes/register.route";
 import tourist from "./Routes/Users/tourist.route";
+import itineraryRouter from "./Routes/Itinerary.route";
 
 const app = express();
 
@@ -31,7 +32,8 @@ async function startServer() {
 	app.use("/api/tags", tagRouter);
 	app.use("/api/tourist", tourist);
 	app.use("/api/register", registerRouter);
-	
+	app.use("/api/itinerary", itineraryRouter);
+
 	app.get("/", (req: Request, res: Response) => {
 		try {
 			res.status(200).send("Hello");
