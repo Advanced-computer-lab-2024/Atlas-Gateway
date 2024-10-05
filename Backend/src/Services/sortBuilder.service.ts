@@ -1,24 +1,32 @@
-// Builds the sort criteria for sorting by multiple fields
-export default function buildSortCriteria(query: any, sortFields: string[]) {
-	const sortCriteria: any = {};
+import { PipelineStage } from "mongoose";
 
-	// Check if user provided sort fields and make sure they're allowed by the sortFields array
-	if (query.sortBy) {
-		const fieldsToSortBy = query.sortBy.toString().split(",");
-		const sortOrders = query.order ? query.order.toString().split(",") : [];
+export default function buildSortCriteria(query: any): PipelineStage[] {
+	const pipeline: PipelineStage[] = [];
 
-		fieldsToSortBy.forEach((field: string, index: number) => {
-			// Only allow sorting by fields present in the sortFields array
-			if (sortFields.includes(field)) {
-				sortCriteria[field] = sortOrders[index] === "asc" ? 1 : -1;
-			}
-		});
+	// If sort query is provided, split by comma before comma is used to sort by
+	// if after comma negative 1 is used to sort in descending order
+	// else 1 is used to sort in ascending order
+	if (query.sort) {
+		const [sortby, order] = query.sort.split(",");
+		const sortOrder = order === "-1" ? -1 : 1;
+		if (sortby === "price") {
+			pipeline.push({
+				$sort: {
+					price: sortOrder,
+					minPrice: sortOrder,
+					maxPrice: sortOrder,
+				},
+			});
+		}
+		else {
+
+			pipeline.push({
+				$sort: {
+					[sortby]: sortOrder,
+				},
+			});
+		}
 	}
 
-	// If no valid sort field is provided or no valid sort fields were found, return an empty object (no sorting)
-	if (Object.keys(sortCriteria).length === 0) {
-		return {};
-	}
-
-	return sortCriteria;
+	return pipeline;
 }
