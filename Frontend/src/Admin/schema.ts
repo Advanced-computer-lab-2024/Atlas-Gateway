@@ -36,6 +36,7 @@ export const productSchema = z.object({
 		.min(10, {
 			message: "description must be at least 10 characters long",
 		}),
+	picture: z.string(),
 });
 
 export const tagOrCategorySchema = z.object({

@@ -48,7 +48,7 @@ const Tourist = () => {
 
 	const handleDelete = (id: string) => {
 		axios
-			.delete(`http://localhost:8000/api/admin/tourist/${id}`)
+			.delete(`http://localhost:8000/api/tourist/delete/${id}`)
 			.then((res) => {
 				setRefresh(!refresh);
 			})
@@ -73,7 +73,6 @@ const Tourist = () => {
 						<TableHead>Bio</TableHead>
 						<TableHead>Location</TableHead>
 						<TableHead>Profile Image</TableHead>
-						<TableHead></TableHead>
 						<TableHead className="cursor-pointer w-6 hover:text-[#2b58ed]">
 							<RotateCw onClick={() => setRefresh(!refresh)} />
 						</TableHead>
@@ -85,10 +84,12 @@ const Tourist = () => {
 							<TableCell>{tourist.username}</TableCell>
 							<TableCell>{tourist.email}</TableCell>
 							<TableCell>{tourist.password}</TableCell>
-							<TableCell>{tourist.address}</TableCell>
-							<TableCell>{tourist.wallet}</TableCell>
-							<TableCell>{tourist.currency}</TableCell>
-							<TableCell>{tourist.loyaltyPoints}</TableCell>
+							<TableCell>{tourist?.address || "N/A"}</TableCell>
+							<TableCell>{tourist.wallet || "N/A"}</TableCell>
+							<TableCell>{tourist?.currency || "N/A"}</TableCell>
+							<TableCell>
+								{tourist?.loyaltyPoints || "N/A"}
+							</TableCell>
 							<TableCell>
 								{tourist.profile?.bio || "N/A"}
 							</TableCell>
@@ -107,9 +108,14 @@ const Tourist = () => {
 								)}
 							</TableCell>
 							<TableCell className="cursor-pointer w-6 hover:text-[#2b58ed]">
-								<Trash
-									onClick={() => handleDelete(tourist._id)}
-								/>
+								<button className="bg-red-500 text-white rounded-full p-2 shadow-lg hover:bg-red-600">
+									<Trash
+										className="w-4 h-4"
+										onClick={() => {
+											handleDelete(tourist._id);
+										}}
+									/>
+								</button>
 							</TableCell>
 						</TableRow>
 					))}

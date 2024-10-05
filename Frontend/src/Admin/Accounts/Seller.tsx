@@ -62,7 +62,6 @@ const Sellers = () => {
 						<TableHead>Password</TableHead>
 						<TableHead>Picture</TableHead>
 						<TableHead>Description</TableHead>
-						<TableHead></TableHead>
 						<TableHead className="cursor-pointer hover:text-[#2b58ed] w-1">
 							<RotateCw onClick={() => setRefresh(!refresh)} />
 						</TableHead>
@@ -76,21 +75,19 @@ const Sellers = () => {
 							</TableCell>
 							<TableCell>{seller.email}</TableCell>
 							<TableCell>{seller.password}</TableCell>
+							<TableCell>{seller?.picture || "N/A"}</TableCell>
 							<TableCell>
-								<img
-									src={seller.picture}
-									alt={seller.username}
-									className="w-16 h-16 object-cover rounded"
-								/>
-							</TableCell>
-							<TableCell>{seller.description}</TableCell>
-							<TableCell className="cursor-pointer hover:text-[#2b58ed] w-1">
-								<Pencil />
+								{seller?.description || "N/A"}
 							</TableCell>
 							<TableCell className="cursor-pointer hover:text-[#2b58ed]">
-								<Trash
-									onClick={() => handleDelete(seller._id)}
-								/>
+								<button className="bg-red-500 text-white rounded-full p-2 shadow-lg hover:bg-red-600">
+									<Trash
+										className="w-4 h-4"
+										onClick={() => {
+											handleDelete(seller._id);
+										}}
+									/>
+								</button>
 							</TableCell>
 						</TableRow>
 					))}
