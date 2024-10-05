@@ -9,9 +9,10 @@ import sellerRouter from "./Routes/Users/seller.route";
 import tourGuideRouter from "./Routes/Users/tourGuide.route";
 import tourist from "./Routes/Users/tourist.route";
 import activityRouter from "./Routes/activity.route";
-import advertiserRouter from "./Routes/advertiser.route";
+import advertiserRouter from "./Routes/Users/advertiser.route";
 import categoryRouter from "./Routes/category.route";
 import productRouter from "./Routes/product.route";
+import touristRouter from "./Routes/Users/tourist.route";
 import registerRouter from "./Routes/register.route";
 import tagRouter from "./Routes/tag.route";
 

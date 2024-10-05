@@ -74,3 +74,13 @@ export const deleteTourGuide = async (req: Request, res: Response) => {
 		res.status(500).send("Failed to delete tourGuide");
 	}
 };
+
+export const viewItinerary = async (req: Request, res: Response) => {
+	const id=req.params.id
+	try {
+		res.status(200).send(await TourGuide.findById(id).select('itinerary'));
+	} catch (error) {
+		console.log(error);
+		res.status(500).send("failed");
+	}
+};
