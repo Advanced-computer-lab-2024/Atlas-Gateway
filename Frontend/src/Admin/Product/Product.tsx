@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/sheet";
 
 import { productSchema } from "../schema";
+import EditProduct from "./EditProduct";
 
 interface Product {
 	_id: string;
@@ -54,7 +55,7 @@ const Product = () => {
 		axios
 			.post("http://localhost:8000/api/products/create", data, {
 				headers: {
-					userId: "6700c6aaea29301fab0cdb07", // will be edited once we are able to login
+					userId: "6700c6aaea29301fab0cdb09", // will be edited once we are able to login
 				},
 			})
 			.then((res) => {
@@ -84,7 +85,12 @@ const Product = () => {
 				</div>
 				<Sheet>
 					<SheetTrigger asChild>
-						<Button variant="outline">Add a product</Button>
+						<Button
+							variant="outline"
+							className="hover:bg-[#65ba2d]"
+						>
+							Add a product
+						</Button>
 					</SheetTrigger>
 					<SheetContent>
 						<SheetHeader>
@@ -211,9 +217,13 @@ const Product = () => {
 						<div className="w-full h-40 flex justify-center items-center bg-gray-100 rounded-md">
 							<Package className="w-16 h-16 text-gray-400" />
 						</div>
-						<h2 className="text-lg font-semibold mt-2">
-							{prod.name}
-						</h2>
+						<div className="flex justify-between m-2">
+							<h2 className="text-lg font-semibold mt-2">
+								{prod.name}
+							</h2>
+							<EditProduct id={prod._id} />
+						</div>
+
 						<h3 className="">{prod.description}</h3>
 						<div className="flex justify-between mt-3">
 							<div className="flex flex-col">
@@ -235,11 +245,6 @@ const Product = () => {
 							Rating: {prod.rating} / 5
 						</h3>
 						<h3 className="pb-6">{prod.review}</h3>
-						<div className="flex justify-center">
-							<button className="bg-blue-500 text-white rounded-full p-2 shadow-lg hover:bg-blue-600">
-								<Pencil className="w-5 h-5" />
-							</button>
-						</div>
 					</div>
 				))}
 			</div>
