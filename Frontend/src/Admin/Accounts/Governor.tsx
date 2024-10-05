@@ -14,8 +14,6 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 
-import SheetDemo from "../components/SheetDemo";
-
 interface Governor {
 	_id: string;
 	username: string;
@@ -51,7 +49,6 @@ const Governor = () => {
 
 	return (
 		<div className="flex flex-col p-3 overflow-hidden">
-			<SheetDemo />
 			<Table className="shadow-lg">
 				<TableCaption>Registered Admins.</TableCaption>
 				<TableHeader className="bg-gray-100">

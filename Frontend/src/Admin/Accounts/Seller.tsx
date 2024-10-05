@@ -14,8 +14,6 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 
-import SheetDemo from "../components/SheetDemo";
-
 interface Seller {
 	_id: string;
 	username: string;
@@ -55,7 +53,6 @@ const Sellers = () => {
 
 	return (
 		<div className="flex flex-col p-3">
-			<SheetDemo />
 			<Table className="shadow-lg">
 				<TableCaption>Registered Sellers.</TableCaption>
 				<TableHeader className="bg-gray-100">
