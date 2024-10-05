@@ -5,7 +5,6 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 import Activites from "./Activities/Activites";
 import Admin from "./Admin/Dashboard";
-import AdvertisorProfile from "./Advertisor/Profile";
 import Home from "./Home/Home";
 import Itineraries from "./Itineraries/Itineraries";
 import Products from "./Products/Products";
@@ -13,6 +12,10 @@ import Register from "./Register/Register";
 import PlacesForm from "./TourismGovernor/HistoricalPlacesForm";
 import "./index.css";
 import Layout from "./layout/Layout";
+import TourGuideProfile from "./Profile/TourGuideProfile";
+import SellerProfile from "./Profile/SellerProfile";
+import TouristProfile from "./Profile/TouristProfile";
+import AdvertisorProfile from "./Profile/AdvertisorProfile";
 
 const queryClient = new QueryClient();
 

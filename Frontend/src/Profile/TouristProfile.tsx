@@ -4,9 +4,12 @@ import Label from "../components/ui/Label";
 import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
 import { Flex } from "../components/ui/flex";
 import Navbar from "../layout/Navbar";
+import { useTouristProfile } from "@/api/data/useProfile";
+import TouristSheet from "./TouristSheet";
 
 
 export default function TouristProfile() { 
+    const {data} = useTouristProfile();
 
 	return (
 		<div className="space-y-7">
@@ -21,16 +24,16 @@ export default function TouristProfile() {
 							</Avatar>
 						</Flex>
 						<Flex isColumn>
-							<Label.Big700>{form.getValues().name || "John Doe"}</Label.Big700>
-							<Label.Big400>{form.getValues().email || "joedoe123@gmail.com"}</Label.Big400>
-							<Label.Big400>{form.getValues().username || "joedoe123"}</Label.Big400>
+							<Label.Big700>{data?.name || "John Doe"}</Label.Big700>
+							<Label.Big400>{data?.email || "joedoe123@gmail.com"}</Label.Big400>
+							<Label.Big400>{data?.username || "joedoe123"}</Label.Big400>
 							<hr className="border-black" />
 							<Label.Big400>
-								Mobile Number: {form.getValues().mobileNumber || -1}
+								Mobile Number: {data?.mobileNumber || -1}
 							</Label.Big400>
 
 							<Label.Big400 >
-								Wallet Balance: {form.getValues().walletBalance}{" "}
+								Wallet Balance: {data?.walletBalance}{" "}
 								L.E
 							</Label.Big400>
 						</Flex>
