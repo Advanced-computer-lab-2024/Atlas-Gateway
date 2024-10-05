@@ -53,3 +53,33 @@ export type TActivity = {
     isBookingsOpen: boolean;
     rating: number;
 };
+export interface TTourist extends TUser {
+    name: string;
+    email: string;
+    mobileNumber: string;
+    walletBalance: number;
+}
+
+export interface TSeller extends TUser {
+    companyName: string;
+    email: string;
+    description: string;
+}
+
+export interface TAdvetisor extends TUser {
+    companyName: string;
+    email: string;
+    hotline: number;
+    website: string;
+    description: string;
+}
+
+export interface TTourGuide extends TUser {
+    name: string;
+    email: string;
+    mobileNumber: string;
+    yearsOfExperience: number;
+    previousWork: string;
+    description: string;
+}
+

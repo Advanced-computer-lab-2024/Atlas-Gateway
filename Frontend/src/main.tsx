@@ -6,7 +6,6 @@ import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
 import Activites from "./Activities/Activites";
 import ActivityDetails from "./Activities/ActivityDetails";
 import Admin from "./Admin/Dashboard";
-import AdvertisorProfile from "./Advertisor/Profile";
 import Home from "./Home/Home";
 import Itineraries from "./Itineraries/Itineraries";
 import PlaceDetails from "./Places/PlaceDetails";
@@ -17,6 +16,10 @@ import Products from "./Products/Products";
 import Register from "./Register/Register";
 import "./index.css";
 import Layout from "./layout/Layout";
+import TourGuideProfile from "./Profile/TourGuideProfile";
+import SellerProfile from "./Profile/SellerProfile";
+import TouristProfile from "./Profile/TouristProfile";
+import AdvertisorProfile from "./Profile/AdvertisorProfile";
 
 const queryClient = new QueryClient();
 
@@ -120,6 +123,19 @@ const router = createBrowserRouter([
 		path: "/advertisor/profile",
 		element: <AdvertisorProfile />,
 	},
+	{
+		path: "/guide/profile",
+		element: <TourGuideProfile />,
+	},
+	{
+		path: "/seller/profile",
+		element: <SellerProfile />,
+	},
+	{
+		path: "/profile",
+		element: <TouristProfile/>
+	}
+
 ]);
 
 createRoot(document.getElementById("root")!).render(
