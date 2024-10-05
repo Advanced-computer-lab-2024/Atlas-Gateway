@@ -1,4 +1,4 @@
-import { PipelineStage } from "mongoose";
+import { PipelineStage ,Types } from "mongoose";
 
 export default function buildFilterQuery(query: any): PipelineStage[] {
 	const pipeline: PipelineStage[] = [];
@@ -50,14 +50,14 @@ export function filterByPrice(query: any): PipelineStage[] {
 export function filterByDate(query: any): PipelineStage[] {
 	const pipeline: PipelineStage[] = [];
 
-	let startDate: Date = new Date();
-	const matchStage: any = { dateTime: {} };
+
 
 	if (query.date) {
+		const matchStage: any = { dateTime: {} };
 		const [startDateStr, endDateStr] = query.date.split(",");
 
 		// if no date is provided, set the start date to the current date
-		startDate = new Date(startDateStr) || new Date();
+		let startDate = new Date(startDateStr) || new Date();
 		let endDate: Date | null = new Date(endDateStr) || null;
 
 		// If the start date is in the past, set it to the current date
@@ -121,7 +121,7 @@ export function filterByCategory(query: any): PipelineStage[] {
 	if (query.category) {
 		pipeline.push({
 			$match: {
-				category: { $in: query.category.split(",") },
+				category: { $in: query.category.split(",").map((category : string )=> new Types.ObjectId(category)) } ,
 			},
 		});
 	}
@@ -136,7 +136,7 @@ export function filterByTags(query: any): PipelineStage[] {
 	if (query.tags) {
 		pipeline.push({
 			$match: {
-				tags: { $in: query.tags.split(",") },
+				tags: { $in: query.tags.split(",").map((tag : string )=> new Types.ObjectId(tag)) },
 			},
 		});
 	}

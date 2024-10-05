@@ -83,7 +83,6 @@ export const getProducts = async (req: Request, res: Response) => {
 				["name"], // Search fields
 			),
 		];
-		console.log(JSON.stringify(PipelineStage,null ,2));
 		const result = await Product.aggregate(PipelineStage);
 
 		if (result[0].data.length === 0) {
