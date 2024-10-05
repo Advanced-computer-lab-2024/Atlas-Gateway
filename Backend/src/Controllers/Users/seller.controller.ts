@@ -20,9 +20,22 @@ export const createSeller = async (req: Request, res: Response) => {
 		res.status(400).send(error);
 	}
 };
+
 export const getSeller = async (req: Request, res: Response) => {
 	try {
-		//maybe we need to add checker here based on the flow of the page
+		const id = req.params.id;
+		const seller = await Seller.findById(id);
+		res.status(200).send(seller);
+	} catch (error) {
+		console.log(error);
+		res.status(500).send("failed");
+	}
+}
+
+
+
+export const getSellers = async (req: Request, res: Response) => {
+	try {
 		res.status(200).send(await Seller.find());
 	} catch (error) {
 		console.log(error);

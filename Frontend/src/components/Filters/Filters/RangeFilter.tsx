@@ -10,6 +10,7 @@ import { Flex } from "@/components/ui/flex";
 import { Input } from "@/components/ui/input";
 
 import { TRangeFilter } from "../types";
+import { Button } from "@/components/ui/button";
 
 export default function RangeFilter({ filter }: { filter: TRangeFilter }) {
 	const [start, setStart] = useState("");
@@ -17,7 +18,9 @@ export default function RangeFilter({ filter }: { filter: TRangeFilter }) {
 
 	return (
 		<DropdownMenu>
-			<DropdownMenuTrigger>{filter.label}</DropdownMenuTrigger>
+			<DropdownMenuTrigger asChild>
+				<Button variant="ghost">{filter.label}</Button>
+			</DropdownMenuTrigger>
 			<DropdownMenuContent className="w-52">
 				<Flex isColumn gap="2">
 					<Flex isColumn gap="2">

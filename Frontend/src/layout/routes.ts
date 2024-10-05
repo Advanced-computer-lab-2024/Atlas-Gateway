@@ -9,27 +9,27 @@ const productsRoute: NavbarRoute = {
 	name: "Products",
 	to: "/products",
 };
+
 const activitiesRoute: NavbarRoute = {
 	name: "Activities",
 	to: "/activities",
 };
-const exploreRoute: NavbarRoute = {
-	name: "Explore",
-	to: "/explore",
+
+const placesRoute: NavbarRoute = {
+	name: "Places",
+	to: "/places",
 };
-const museumsAndHistoricalPlacesRoute: NavbarRoute = {
-	name: "Museums & Historical Places",
-	to: "/museums-and-historical-places",
-};
+
 const intinerariesRoute: NavbarRoute = {
 	name: "Intineraries",
 	to: "/intineraries",
 };
 
 const touristRoutes: NavbarRoute[] = [
+	placesRoute,
 	productsRoute,
 	activitiesRoute,
-	exploreRoute,
+	intinerariesRoute,
 ];
 
 const sellerRoutes: NavbarRoute[] = [productsRoute];
@@ -54,19 +54,19 @@ const adminRoutes: NavbarRoute[] = [
 const tourGuideRoutes: NavbarRoute[] = [
 	intinerariesRoute,
 	activitiesRoute,
-	museumsAndHistoricalPlacesRoute,
+	placesRoute,
 ];
 
 const advertiserRoutes: NavbarRoute[] = [
 	intinerariesRoute,
 	activitiesRoute,
-	museumsAndHistoricalPlacesRoute,
+	placesRoute,
 ];
 
 const tourismGovernerRoutes: NavbarRoute[] = [
 	intinerariesRoute,
 	activitiesRoute,
-	museumsAndHistoricalPlacesRoute,
+	placesRoute,
 ];
 
 export const accountRoutes: Record<EAccountType, NavbarRoute[]> = {

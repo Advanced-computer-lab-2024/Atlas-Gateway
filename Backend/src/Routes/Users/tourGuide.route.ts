@@ -11,7 +11,7 @@ import {
 
 const tourGuideRouter = Router();
 tourGuideRouter.post("/create", createTourGuide);
-tourGuideRouter.get("/show", getTourGuide);
+tourGuideRouter.get("/show/:id", getTourGuide);
 tourGuideRouter.get("/list", getTourGuides);
 tourGuideRouter.put("/update/:id", updateTourGuide);
 tourGuideRouter.delete("/delete/:id", deleteTourGuide);

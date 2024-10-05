@@ -53,7 +53,6 @@ export const createProduct = async (req: Request, res: Response) => {
 //takes an ID parameter and returns a single product
 export const getProduct = async (req: Request, res: Response) => {
 	try {
-		//TODO: Remember to fetch by ID
 		const id = req.params.id;
 
 		if (!mongoose.Types.ObjectId.isValid(id)) {

@@ -3,18 +3,18 @@ import { useCallback, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useQueryString from "use-query-string";
 
-
-
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Flex } from "@/components/ui/flex";
 
-
-
 import Label from "../ui/Label";
+import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
 import FilterDropdown from "./FilterDropdown";
 import { TFilter, TFilters } from "./types";
-
 
 export default function Filters({ filters }: { filters: TFilters }) {
 	const [isOpen, setIsOpen] = useState(false);
@@ -69,7 +69,9 @@ export default function Filters({ filters }: { filters: TFilters }) {
 	return (
 		<Flex gap="2" align="center">
 			<DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
-				<DropdownMenuTrigger>Add filters</DropdownMenuTrigger>
+				<DropdownMenuTrigger asChild>
+					<Button>Add filters</Button>
+				</DropdownMenuTrigger>
 				<DropdownMenuContent>
 					<Flex isColumn className="p-2" gap="2">
 						{filterOptions.map((option) => (
@@ -79,7 +81,7 @@ export default function Filters({ filters }: { filters: TFilters }) {
 								onClick={() =>
 									handleClick(option.value, option.checked)
 								}
-								className="cursor-pointer p-2 w-full  h-full"
+								className="cursor-pointer w-full  h-full"
 							>
 								<Checkbox
 									id={option.value.toString()}

@@ -12,6 +12,7 @@ import { Flex } from "@/components/ui/flex";
 import { Input } from "@/components/ui/input";
 
 import { SelectItem, TCheckboxFilter } from "../types";
+import { Button } from "@/components/ui/button";
 
 export default function CheckboxFilter({
 	filter,
@@ -50,7 +51,9 @@ export default function CheckboxFilter({
 
 	return (
 		<DropdownMenu>
-			<DropdownMenuTrigger>{filter.label}</DropdownMenuTrigger>
+			<DropdownMenuTrigger asChild>
+				<Button variant="ghost">{filter.label}</Button>
+			</DropdownMenuTrigger>
 			<DropdownMenuContent className="w-52">
 				<Flex isColumn gap="2">
 					<Input
@@ -60,7 +63,11 @@ export default function CheckboxFilter({
 					/>
 					{selected.length > 0 && (
 						<>
-							<Flex gap="2" isWrapped className="max-h-16 overflow-y-scroll">
+							<Flex
+								gap="2"
+								isWrapped
+								className="max-h-16 overflow-y-scroll"
+							>
 								{selected.map((item) => (
 									<Badge
 										onClick={() => removeSelectedItem(item)}
@@ -74,7 +81,11 @@ export default function CheckboxFilter({
 							<hr />
 						</>
 					)}
-					<Flex isColumn className="p-2 max-h-52 overflow-y-scroll" gap="2">
+					<Flex
+						isColumn
+						className="p-2 max-h-52 overflow-y-scroll"
+						gap="2"
+					>
 						{filter.options.map((option) => (
 							<Flex
 								gap="2"
