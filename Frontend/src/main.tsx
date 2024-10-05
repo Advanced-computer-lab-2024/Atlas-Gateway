@@ -12,7 +12,6 @@ import Itineraries from "./Itineraries/Itineraries";
 import PlaceDetails from "./Places/PlaceDetails";
 import Places from "./Places/Places";
 import PlacesForm from "./Places/PlacesForm";
-import AddProductForm from "./Products/AddProductForm";
 import ProductDetails from "./Products/ProductDetails";
 import Products from "./Products/Products";
 import Register from "./Register/Register";
@@ -73,7 +72,7 @@ const router = createBrowserRouter([
 					},
 					{
 						path: "/products/add",
-						element: <AddProductForm />,
+						element: <></>,
 					},
 				],
 			},
@@ -92,7 +91,7 @@ const router = createBrowserRouter([
 					},
 					{
 						path: "/activities/add",
-						element: <AddProductForm />,
+						element: <></>,
 					},
 				],
 			},
@@ -111,7 +110,7 @@ const router = createBrowserRouter([
 					},
 					{
 						path: "/itineraries/add",
-						element: <AddProductForm />,
+						element: <></>,
 					},
 				],
 			},
