@@ -9,7 +9,6 @@ import {
 	FormField,
 	FormItem,
 	FormLabel,
-	FormMessage,
 } from "@/components/ui/form";
 
 import Label from "../components/ui/Label";
@@ -138,7 +137,6 @@ export default function TouristSheet() {
 											<FormDescription>
 												This is your email.
 											</FormDescription>
-											<FormMessage />
 										</FormItem>
 									)}
 								/>
@@ -161,7 +159,6 @@ export default function TouristSheet() {
 											<FormDescription>
 												This is your Mobile Number
 											</FormDescription>
-											<FormMessage />
 										</FormItem>
 									)}
 								/>
