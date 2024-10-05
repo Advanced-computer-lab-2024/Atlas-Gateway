@@ -40,14 +40,14 @@ interface Product {
 }
 
 const Product = () => {
+	const [products, setProducts] = useState<Product[]>([]);
+	const [refresh, setRefresh] = useState<boolean>(false);
+
 	const formMethods = useForm<z.infer<typeof productSchema>>({
 		resolver: zodResolver(productSchema),
 	});
 
 	const { handleSubmit, control } = formMethods;
-
-	const [products, setProducts] = useState<Product[]>([]);
-	const [refresh, setRefresh] = useState<boolean>(false);
 
 	const onSubmit = (data: z.infer<typeof productSchema>) => {
 		console.log(data);
