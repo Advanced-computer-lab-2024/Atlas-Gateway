@@ -5,48 +5,48 @@ import { Places } from "../../Database/Models/places.model";
 
 export const crteatGovernor = async (req: Request, res: Response) => {
 	try {
-		const { username, email, password, historicalLocations } = req.body;
+		const { username, email, password } = req.body;
 		if (!username || !email || !password) {
 			res.status(400).send("username, email and password are required");
 		}
-		const governor = await Governor.create({
-			username,
-			email,
-			password,
-		});
-		res.status(201).send(governor);
+		const governor = await Governor.create({ username, email, password });
+		res.status(201).json(governor);
 	} catch (error) {
 		console.log(error);
-		res.status(500).send("Error creating governor");
+		res.status(500).send("error creating governor");
 	}
 };
 
 export const getGovernors = async (req: Request, res: Response) => {
 	try {
 		const governors = await Governor.find();
-		res.status(200).send(governors);
+		res.status(200).json(governors);
 	} catch (error) {
 		console.log(error);
-		res.status(500).send("Error getting governors");
+		res.status(500).send("error getting governors");
+	}
+};
+
+export const getHistoricalLocations = async (req: Request, res: Response) => {
+	try {
+		const { id } = req.params;
+		const historicalLocations = await Places.find({ governorId: id });
+		res.status(200).json(historicalLocations);
+	} catch (error) {
+		console.log(error);
+		res.status(500).send("error deleting Governor");
 	}
 };
 
 export const deleteGovernor = async (req: Request, res: Response) => {
 	try {
 		const { id } = req.params;
-		await Governor.findByIdAndDelete(id);
-		res.status(200).send("Deleted Succefully");
+		const governor = await Governor.findByIdAndDelete(id);
+		if (!governor) {
+			return res.status(404).send("governor not found");
+		}
+		res.status(200).send("deleted successfully");
 	} catch (error) {
-		res.status(500).send("Error deleting Governor");
-	}
-};
-export const viewHistoricalLocations = async (req: Request, res: Response) => {
-	const id = req.params.id;
-	try {
-		// res.status(200).send(await Museum.find())
-		res.status(200).send(await Places.find({ governorId: id }));
-	} catch (error) {
-		console.log(error);
-		res.status(500).send("failed");
+		res.status(500).send("error deleting Governor");
 	}
 };

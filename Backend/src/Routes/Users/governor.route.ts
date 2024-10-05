@@ -4,13 +4,13 @@ import {
 	crteatGovernor,
 	deleteGovernor,
 	getGovernors,
-	viewHistoricalLocations,
+	getHistoricalLocations,
 } from "../../Controllers/Users/governor.controller";
 
 const router = express.Router();
 
 router.post("/create", crteatGovernor);
 router.get("/list", getGovernors);
+router.get("/show/:id", getHistoricalLocations);
 router.delete("/delete/:id", deleteGovernor);
-router.get("/list/:id", viewHistoricalLocations);
 export default router;

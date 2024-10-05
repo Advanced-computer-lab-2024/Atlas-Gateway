@@ -9,29 +9,32 @@ export const createAdmin = async (req: Request, res: Response) => {
 			res.status(400).send("username, email and password are required");
 		}
 		const admin = await Admin.create({ username, email, password });
-		res.status(201).send(admin);
+		res.status(201).json(admin);
 	} catch (error) {
 		console.log(error);
-		res.status(500).send("Error creating admin");
+		res.status(500).send("error creating admin");
 	}
 };
 
 export const getAdmins = async (req: Request, res: Response) => {
 	try {
 		const admins = await Admin.find();
-		res.status(200).send(admins);
+		res.status(200).json(admins);
 	} catch (error) {
 		console.log(error);
-		res.status(500).send("Error getting admins");
+		res.status(500).send("error getting admins");
 	}
 };
 
 export const deleteAdmin = async (req: Request, res: Response) => {
 	try {
 		const { id } = req.params;
-		await Admin.findByIdAndDelete(id);
-		res.status(200).send("Deleted Succefully");
+		const admin = await Admin.findByIdAndDelete(id);
+		if (!admin) {
+			return res.status(404).send("admin not found");
+		}
+		res.status(200).send("deleted successfully");
 	} catch (error) {
-		res.status(500).send("Error deleting Admin");
+		res.status(500).send("error deleting Admin");
 	}
 };
