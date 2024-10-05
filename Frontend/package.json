@@ -21,6 +21,8 @@
 		"@radix-ui/react-select": "^2.1.1",
 		"@radix-ui/react-slot": "^1.1.0",
 		"@radix-ui/react-switch": "^1.1.0",
+		"@radix-ui/react-toggle": "^1.1.0",
+		"@radix-ui/react-toggle-group": "^1.1.0",
 		"@tanstack/react-query": "^5.56.2",
 		"@tanstack/react-table": "^8.20.5",
 		"axios": "^1.7.7",
@@ -34,13 +36,15 @@
 		"react-dom": "^18.3.1",
 		"react-hook-form": "^7.53.0",
 		"react-router-dom": "^6.26.2",
+		"react-time-picker": "^7.0.0",
+		"shadcn-ui": "^0.9.2",
 		"sonner": "^1.5.0",
 		"tailwind-merge": "^2.5.2",
 		"tailwind-styled-components": "^2.2.0",
 		"tailwindcss-animate": "^1.0.7",
 		"use-query-string": "^2.4.1",
 		"zod": "^3.23.8",
-		"zustand": "5.0.0-rc.2"
+		"zustand": "^5.0.0-rc.2"
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.9.0",
