@@ -10,9 +10,17 @@ export interface TTourist extends TUser {
     walletBalance: number;
 }
 
+export interface TSeller extends TUser {
+    companyName: string;
+    email: string;
+    description: string;
+}
+
 export interface TAdvetisor extends TUser {
     companyName: string;
     email: string;
+    hotline: number;
+    website: string;
     description: string;
 }
 
