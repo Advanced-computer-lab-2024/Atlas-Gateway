@@ -7,7 +7,7 @@ import Activites from "./Activities/Activites";
 import Admin from "./Admin/Dashboard";
 import AdvertisorProfile from "./Advertisor/Profile";
 import Home from "./Home/Home";
-import Itineraries from "./Itineraries/itineraries";
+import Itineraries from "./Itineraries/Itineraries";
 import Products from "./Products/Products";
 import Register from "./Register/Register";
 import PlacesForm from "./TourismGovernor/HistoricalPlacesForm";
