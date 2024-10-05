@@ -74,16 +74,7 @@ export function filterByDate(query: any): PipelineStage[] {
 		pipeline.push({
 			$match: matchStage,
 		});
-	} else {
-		pipeline.push({
-			$match: {
-				dateTime: {
-					$gte: startDate,
-				},
-			},
-		});
 	}
-
 	// If no date is provided, return all activities after the current date
 	return pipeline;
 }

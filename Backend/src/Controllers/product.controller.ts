@@ -1,4 +1,3 @@
-import { Admin } from "../Database/Models/Users/admin.model";
 import { Request, Response } from "express";
 import mongoose, { Types } from "mongoose";
 import { PipelineStage } from "mongoose";
@@ -6,6 +5,7 @@ import { PipelineStage } from "mongoose";
 import { Seller } from "../Database/Models/Users/seller.model";
 import { Product } from "../Database/Models/product.model";
 import AggregateBuilder from "../Services/aggregation.service";
+import { Admin } from "../Database/Models/Users/admin.model";
 
 //Create a new product entry
 export const createProduct = async (req: Request, res: Response) => {
@@ -83,6 +83,7 @@ export const getProducts = async (req: Request, res: Response) => {
 				["name"], // Search fields
 			),
 		];
+		console.log(JSON.stringify(PipelineStage,null ,2));
 		const result = await Product.aggregate(PipelineStage);
 
 		if (result[0].data.length === 0) {
