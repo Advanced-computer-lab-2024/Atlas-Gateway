@@ -97,16 +97,16 @@ const TourGuide = () => {
 							<TableCell>{tourGuide.password}</TableCell>
 							<TableCell>{tourGuide.description}</TableCell>
 							<TableCell>{tourGuide.experience}</TableCell>
-							<TableCell>{tourGuide.previous.title}</TableCell>
-							<TableCell>{tourGuide.previous.company}</TableCell>
+							<TableCell>{tourGuide.previous?.title}</TableCell>
+							<TableCell>{tourGuide.previous?.company}</TableCell>
 							<TableCell>
 								{new Date(
-									tourGuide.previous.start,
+									tourGuide.previous?.start,
 								).toLocaleDateString()}
 							</TableCell>
 							<TableCell>
 								{new Date(
-									tourGuide.previous.end,
+									tourGuide.previous?.end,
 								).toLocaleDateString()}
 							</TableCell>
 							<TableCell className="cursor-pointer hover:text-[#2b58ed] w-1">

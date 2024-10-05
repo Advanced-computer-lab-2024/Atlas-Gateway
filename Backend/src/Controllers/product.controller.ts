@@ -1,4 +1,4 @@
-import { Admin } from "@/Database/Models/Users/admin.model";
+import { Admin } from "../Database/Models/Users/admin.model";
 import { Request, Response } from "express";
 import mongoose, { Types } from "mongoose";
 
@@ -9,18 +9,15 @@ import AggregateBuilder from "../Services/aggregation.service";
 //Create a new product entry
 export const createProduct = async (req: Request, res: Response) => {
 	try {
-		const userId: number = Number(req.headers.userId);
-		//console.log(req.body);
+		const userId = req.headers.userid
 		const { name, description, price, quantity, picture } = req.body;
 
 		//Check if the user is an admin
 
 		// TODO: retrieve ID checks from sessoin middleware rather than from the request
-
 		const sellerId = (await Admin.findById(userId))
 			? "000000000000000000000000"
-			: new Types.ObjectId(userId);
-
+			: new Types.ObjectId(Number(userId));
 		//Check seller ID validity and existance
 		if (
 			(!Types.ObjectId.isValid(sellerId) ||

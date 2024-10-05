@@ -51,6 +51,18 @@ const Product = () => {
 
 	const onSubmit = (data: z.infer<typeof productSchema>) => {
 		console.log(data);
+		axios
+			.post("http://localhost:8000/api/products/create", data, {
+				headers: {
+					userId: "6700c6aaea29301fab0cdb07", // will be edited once we are able to login
+				},
+			})
+			.then((res) => {
+				console.log(res.status);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
 	};
 
 	useEffect(() => {
@@ -157,6 +169,25 @@ const Product = () => {
 											</FormControl>
 											<FormDescription>
 												Enter description.
+											</FormDescription>
+										</FormItem>
+									)}
+								/>
+
+								<FormField
+									control={control}
+									name="picture"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Picture</FormLabel>
+											<FormControl>
+												<Input
+													{...field}
+													placeholder="Product pic"
+												/>
+											</FormControl>
+											<FormDescription>
+												upload pic.
 											</FormDescription>
 										</FormItem>
 									)}
