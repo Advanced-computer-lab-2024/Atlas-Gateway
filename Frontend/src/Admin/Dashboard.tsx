@@ -1,17 +1,16 @@
 import { useState } from "react";
 
+import Admins from "./Accounts/Admin";
+import Advertisers from "./Accounts/Advertiser";
+import Governor from "./Accounts/Governor";
+import Seller from "./Accounts/Seller";
+import TourGuide from "./Accounts/TourGuide";
+import Tourist from "./Accounts/Tourist";
+import Category from "./Activity/Category";
+import Tags from "./Activity/Tags";
 import Navbar from "./Navbar";
+import Product from "./Product/Product";
 import Sidebar from "./Sidebar";
-import Activities from "./resources/Activities";
-import ActivityCategory from "./resources/ActivityCategory";
-import Product from "./resources/Product";
-import Tags from "./resources/Tags";
-import Admins from "./users/Admin";
-import Advertisers from "./users/Advertiser";
-import Governor from "./users/Governor";
-import Seller from "./users/Seller";
-import TourGuide from "./users/TourGuide";
-import Tourist from "./users/Tourist";
 
 const Admin = () => {
 	const [selectedCategory, setSelectedCategory] = useState(""); // manages selection from sidebar
@@ -73,7 +72,7 @@ const Admin = () => {
 				case "Activity Category":
 					return (
 						<div>
-							<ActivityCategory />
+							<Category />
 						</div>
 					);
 			}
