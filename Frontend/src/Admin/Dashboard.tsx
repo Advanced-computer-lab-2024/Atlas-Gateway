@@ -6,12 +6,11 @@ import Governor from "./Accounts/Governor";
 import Seller from "./Accounts/Seller";
 import TourGuide from "./Accounts/TourGuide";
 import Tourist from "./Accounts/Tourist";
+import Category from "./Activity/Category";
+import Tags from "./Activity/Tags";
 import Navbar from "./Navbar";
-import Product from "./Products/Product";
+import Product from "./Product/Product";
 import Sidebar from "./Sidebar";
-import Activities from "./resources/Activities";
-import ActivityCategory from "./resources/ActivityCategory";
-import Tags from "./resources/Tags";
 
 const Admin = () => {
 	const [selectedCategory, setSelectedCategory] = useState(""); // manages selection from sidebar
@@ -73,7 +72,7 @@ const Admin = () => {
 				case "Activity Category":
 					return (
 						<div>
-							<ActivityCategory />
+							<Category />
 						</div>
 					);
 			}

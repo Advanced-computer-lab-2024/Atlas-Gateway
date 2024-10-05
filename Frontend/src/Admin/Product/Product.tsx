@@ -24,7 +24,7 @@ import {
 	SheetTrigger,
 } from "@/components/ui/sheet";
 
-import { productSchema } from "./schema";
+import { productSchema } from "../schema";
 
 interface Product {
 	_id: string;

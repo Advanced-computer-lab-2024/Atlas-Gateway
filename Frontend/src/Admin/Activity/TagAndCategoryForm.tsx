@@ -22,20 +22,21 @@ import {
 	SheetTrigger,
 } from "@/components/ui/sheet";
 
-import { accountSchema } from "../schema";
+import { tagOrCategorySchema } from "../schema";
 
 interface props {
 	type: string;
 }
 
-const AddForm = ({ type }: props) => {
-	const formMethods = useForm<z.infer<typeof accountSchema>>({
-		resolver: zodResolver(accountSchema),
+const TagAndCategoryForm = ({ type }: props) => {
+	const formMethods = useForm<z.infer<typeof tagOrCategorySchema>>({
+		resolver: zodResolver(tagOrCategorySchema),
 	});
 	const { handleSubmit, control } = formMethods;
-	const onSubmit = (data: z.infer<typeof accountSchema>) => {
+	const onSubmit = (data: z.infer<typeof tagOrCategorySchema>) => {
+		const url = type == "tag" ? "tags/preference" : "category";
 		axios
-			.post(`http://localhost:8000/api/${type}/create`, data)
+			.post(`http://localhost:8000/api/${url}/create`, data)
 			.then((res) => {
 				console.log(res.status);
 				// will add here something to give a feedback later
@@ -45,76 +46,36 @@ const AddForm = ({ type }: props) => {
 			});
 	};
 	return (
-		<div>
+		<div className="flex self-end pb-3">
 			<Sheet>
 				<SheetTrigger asChild>
 					<Button variant="outline" className="hover:bg-[#65ba2d]">
-						Add {type == "admin" ? "an admin" : "a governor"}
+						Add {type}
 					</Button>
 				</SheetTrigger>
 				<SheetContent>
 					<SheetHeader>
-						<SheetTitle>
-							Add {type == "admin" ? "an admin" : "a governor"}
-						</SheetTitle>
+						<SheetTitle>Add {type}</SheetTitle>
 						<SheetDescription>
-							Add {type} details here.
+							Add {type} name here.
 						</SheetDescription>
 					</SheetHeader>
 					<FormProvider {...formMethods}>
 						<form onSubmit={handleSubmit(onSubmit)}>
 							<FormField
 								control={control}
-								name="username"
+								name="name"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>username</FormLabel>
+										<FormLabel>{type} name</FormLabel>
 										<FormControl>
 											<Input
 												{...field}
-												placeholder="username"
+												placeholder="name"
 											/>
 										</FormControl>
 										<FormDescription>
-											Enter the username.
-										</FormDescription>
-									</FormItem>
-								)}
-							/>
-							<FormField
-								control={control}
-								name="email"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>email</FormLabel>
-										<FormControl>
-											<Input
-												{...field}
-												placeholder="email"
-												type="email"
-											/>
-										</FormControl>
-										<FormDescription>
-											Enter the email.
-										</FormDescription>
-									</FormItem>
-								)}
-							/>
-							<FormField
-								control={control}
-								name="password"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>password</FormLabel>
-										<FormControl>
-											<Input
-												{...field}
-												placeholder="password"
-												type="password"
-											/>
-										</FormControl>
-										<FormDescription>
-											Enter the password.
+											Enter {type} name.
 										</FormDescription>
 									</FormItem>
 								)}
@@ -130,4 +91,4 @@ const AddForm = ({ type }: props) => {
 	);
 };
 
-export default AddForm;
+export default TagAndCategoryForm;
