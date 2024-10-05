@@ -37,7 +37,7 @@ const Tourist = () => {
 
 	useEffect(() => {
 		axios
-			.get("http://localhost:8000/api/tourist/list")
+			.get("http://localhost:5000/api/tourist/list")
 			.then((res) => {
 				setTourists(res.data);
 			})
@@ -48,7 +48,7 @@ const Tourist = () => {
 
 	const handleDelete = (id: string) => {
 		axios
-			.delete(`http://localhost:8000/api/tourist/delete/${id}`)
+			.delete(`http://localhost:5000/api/tourist/delete/${id}`)
 			.then((res) => {
 				setRefresh(!refresh);
 			})

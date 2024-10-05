@@ -40,7 +40,7 @@ const TourGuide = () => {
 
 	useEffect(() => {
 		axios
-			.get("http://localhost:8000/api/tourGuide/list")
+			.get("http://localhost:5000/api/tourGuide/list")
 			.then((res) => {
 				setTourGuides(res.data);
 			})
@@ -51,7 +51,7 @@ const TourGuide = () => {
 
 	const handleDelete = (id: string) => {
 		axios
-			.delete(`http://localhost:8000/api/tourGuide/delete/${id}`)
+			.delete(`http://localhost:5000/api/tourGuide/delete/${id}`)
 			.then((res) => {
 				setRefresh(!refresh);
 			})

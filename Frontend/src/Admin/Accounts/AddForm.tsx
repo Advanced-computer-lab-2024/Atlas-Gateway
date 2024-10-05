@@ -35,7 +35,7 @@ const AddForm = ({ type }: props) => {
 	const { handleSubmit, control } = formMethods;
 	const onSubmit = (data: z.infer<typeof accountSchema>) => {
 		axios
-			.post(`http://localhost:8000/api/${type}/create`, data)
+			.post(`http://localhost:5000/api/${type}/create`, data)
 			.then((res) => {
 				console.log(res.status);
 				// will add here something to give a feedback later

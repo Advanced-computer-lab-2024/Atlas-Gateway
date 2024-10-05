@@ -37,7 +37,7 @@ const Tags = () => {
 
 	const handleDelete = (id: string) => {
 		axios
-			.delete(`http://localhost:8000/api/tags/preference/delete/${id}`)
+			.delete(`http://localhost:5000/api/tags/preference/delete/${id}`)
 			.then((res) => {
 				setRefresh(!refresh);
 			})

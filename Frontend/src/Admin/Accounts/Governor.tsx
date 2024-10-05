@@ -29,7 +29,7 @@ const Governor = () => {
 
 	useEffect(() => {
 		axios
-			.get("http://localhost:8000/api/governor/list")
+			.get("http://localhost:5000/api/governor/list")
 			.then((res) => {
 				setGovernors(res.data);
 			})
@@ -40,7 +40,7 @@ const Governor = () => {
 
 	const handleDelete = (id: string) => {
 		axios
-			.delete(`http://localhost:8000/api/governor/delete/${id}`)
+			.delete(`http://localhost:5000/api/governor/delete/${id}`)
 			.then((res) => {
 				setRefresh(!refresh);
 			})

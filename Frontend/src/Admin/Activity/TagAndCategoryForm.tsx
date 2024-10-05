@@ -36,7 +36,7 @@ const TagAndCategoryForm = ({ type }: props) => {
 	const onSubmit = (data: z.infer<typeof tagOrCategorySchema>) => {
 		const url = type == "tag" ? "tags/preference" : "category";
 		axios
-			.post(`http://localhost:8000/api/${url}/create`, data)
+			.post(`http://localhost:5000/api/${url}/create`, data)
 			.then((res) => {
 				console.log(res.status);
 				// will add here something to give a feedback later

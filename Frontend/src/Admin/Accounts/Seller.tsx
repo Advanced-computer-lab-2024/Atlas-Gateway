@@ -31,7 +31,7 @@ const Sellers = () => {
 
 	useEffect(() => {
 		axios
-			.get("http://localhost:8000/api/seller/list")
+			.get("http://localhost:5000/api/seller/list")
 			.then((res) => {
 				setSellers(res.data);
 			})
@@ -42,7 +42,7 @@ const Sellers = () => {
 
 	const handleDelete = (id: string) => {
 		axios
-			.delete(`http://localhost:8000/api/seller/delete/${id}`)
+			.delete(`http://localhost:5000/api/seller/delete/${id}`)
 			.then((res) => {
 				setRefresh(!refresh);
 			})

@@ -27,7 +27,7 @@ const Admins = () => {
 
 	useEffect(() => {
 		axios
-			.get("http://localhost:8000/api/admin/list")
+			.get("http://localhost:5000/api/admin/list")
 			.then((res) => {
 				setAdmins(res.data);
 			})
@@ -38,7 +38,7 @@ const Admins = () => {
 
 	const handleDelete = (id: string) => {
 		axios
-			.delete(`http://localhost:8000/api/admin/delete/${id}`)
+			.delete(`http://localhost:5000/api/admin/delete/${id}`)
 			.then((res) => {
 				setRefresh(!refresh);
 			})

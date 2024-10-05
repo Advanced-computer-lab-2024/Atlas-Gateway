@@ -36,7 +36,7 @@ const EditForm = ({ id }: props) => {
 	const { handleSubmit, control } = formMethods;
 	const onSubmit = (data: z.infer<typeof productSchema>) => {
 		axios
-			.put(`http://localhost:8000/api/products/update/${id}`, data)
+			.put(`http://localhost:5000/api/products/update/${id}`, data)
 			.then((res) => {
 				console.log(res.status);
 				// will add here something to give a feedback later

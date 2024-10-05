@@ -37,7 +37,7 @@ const Advertisers = () => {
 
 	useEffect(() => {
 		axios
-			.get("http://localhost:8000/api/advertiser/list")
+			.get("http://localhost:5000/api/advertiser/list")
 			.then((res) => {
 				console.log(res.data);
 				setAdvertisers(res.data);
@@ -49,7 +49,7 @@ const Advertisers = () => {
 
 	const handleDelete = (id: string) => {
 		axios
-			.delete(`http://localhost:8000/api/advertiser/delete/${id}`)
+			.delete(`http://localhost:5000/api/advertiser/delete/${id}`)
 			.then((res) => {
 				setRefresh(!refresh);
 			})

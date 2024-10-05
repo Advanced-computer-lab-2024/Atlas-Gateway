@@ -38,7 +38,7 @@ const EditForm = ({ type, id }: props) => {
 	const onSubmit = (data: z.infer<typeof tagOrCategorySchema>) => {
 		const url = type == "tag" ? "tags/preference" : "category";
 		axios
-			.put(`http://localhost:8000/api/${url}/update/${id}`, data)
+			.put(`http://localhost:5000/api/${url}/update/${id}`, data)
 			.then((res) => {
 				console.log(res.status);
 				// will add here something to give a feedback later

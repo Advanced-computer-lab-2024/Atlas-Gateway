@@ -53,7 +53,7 @@ const Product = () => {
 	const onSubmit = (data: z.infer<typeof productSchema>) => {
 		console.log(data);
 		axios
-			.post("http://localhost:8000/api/products/create", data, {
+			.post("http://localhost:5000/api/products/create", data, {
 				headers: {
 					userId: "6700c6aaea29301fab0cdb09", // will be edited once we are able to login
 				},
@@ -68,7 +68,7 @@ const Product = () => {
 
 	useEffect(() => {
 		axios
-			.get("http://localhost:8000/api/products/list")
+			.get("http://localhost:5000/api/products/list")
 			.then((res) => {
 				setProducts(res.data.data);
 			})

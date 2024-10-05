@@ -26,7 +26,7 @@ const ActivityComponent = () => {
 
 	useEffect(() => {
 		axios
-			.get("http://localhost:8000/api/activity/list")
+			.get("http://localhost:5000/api/activity/list")
 			.then((res) => {
 				setActivities(res.data);
 			})
