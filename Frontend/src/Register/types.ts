@@ -6,8 +6,8 @@ export type TRegisterForm = {
 	confirmPassword: string;
 	username: string;
 	type: string;
-	date_of_birth?: string;
-	mobile_number?: string;
+	dob?: string;
+	mobileNumber?: string;
 	occupation?: string;
 	nationality?: string;
 };
