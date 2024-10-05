@@ -4,12 +4,14 @@ import {
 	createTourGuide,
 	deleteTourGuide,
 	getTourGuide,
+	getTourGuides,
 	updateTourGuide,
 } from "../../Controllers/Users/tourGuide.controller";
 
 const tourGuideRouter = Router();
 tourGuideRouter.post("/create", createTourGuide);
-tourGuideRouter.get("/list", getTourGuide);
+tourGuideRouter.get("/show", getTourGuide);
+tourGuideRouter.get("/list", getTourGuides);
 tourGuideRouter.put("/update/:id", updateTourGuide);
 tourGuideRouter.delete("/delete/:id", deleteTourGuide);
 export default tourGuideRouter;

@@ -31,6 +31,17 @@ export const createTourist = async (req: Request, res: Response) => {
 	}
 };
 
+export const getTourist = async (req: Request, res: Response) => {
+	try {
+		const id = req.params.id;
+		const tourist = await Tourist.findById(id);
+		res.status(200).send(tourist);
+	} catch (error) {
+		console.log(error);
+		res.status(500).send("failed");
+	}
+}
+
 export const getTourists = async (req: Request, res: Response) => {
 	try {
 		const users = await Tourist.find();

@@ -30,37 +30,31 @@ export const createTourGuide = async (req: Request, res: Response) => {
 };
 export const getTourGuide = async (req: Request, res: Response) => {
 	try {
-		//maybe we need to add checker here based on the flow of the page
-		res.status(200).send(await TourGuide.find());
+		const id = req.params.id;
+		const tourGuide = await TourGuide.findById(id);
+		res.status(200).send(tourGuide);
 	} catch (error) {
 		console.log(error);
 		res.status(500).send("failed");
 	}
 };
+
+export const getTourGuides = async (req: Request, res: Response) => {
+	try {
+		const users = await TourGuide.find();
+		res.status(201).json(users);
+	} catch (error) {
+		res.status(400).json(error);
+	}
+}
+
 export const updateTourGuide = async (req: Request, res: Response) => {
 	const id = req.params.id;
-	const {
-		username,
-		email,
-		password,
-		description,
-		picture,
-		experience,
-		previous,
-	} = req.body;
+
 	try {
-		//maybe we need to add checker here based on the flow of the page
 		const adv = await TourGuide.findByIdAndUpdate(
 			id,
-			{
-				username,
-				email,
-				password,
-				description,
-				picture,
-				experience,
-				previous,
-			},
+			req.body,
 			{
 				new: true,
 			},
@@ -75,7 +69,7 @@ export const deleteTourGuide = async (req: Request, res: Response) => {
 	try {
 		//maybe we need to add checker here based on the flow of the page
 		await TourGuide.findByIdAndDelete(id);
-		res.status(200).send("tourGuide deleted successfully");
+		res.status(200).send("tour guide deleted successfully");
 	} catch (error) {
 		res.status(500).send("Failed to delete tourGuide");
 	}
