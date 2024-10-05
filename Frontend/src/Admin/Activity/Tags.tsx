@@ -26,7 +26,7 @@ const Tags = () => {
 
 	useEffect(() => {
 		axios
-			.get("http://localhost:8000/api/tags/preference/get")
+			.get("http://localhost:5000/api/tags/preference/get")
 			.then((res) => {
 				setPrefrenceTags(res.data);
 			})

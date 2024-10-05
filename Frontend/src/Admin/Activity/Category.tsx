@@ -26,7 +26,7 @@ const ActivityCategory = () => {
 
 	useEffect(() => {
 		axios
-			.get("http://localhost:8000/api/category/list")
+			.get("http://localhost:5000/api/category/list")
 			.then((res) => {
 				setCategories(res.data);
 			})
@@ -37,7 +37,7 @@ const ActivityCategory = () => {
 
 	const handleDelete = (id: string) => {
 		axios
-			.delete(`http://localhost:8000/api/category/delete/${id}`)
+			.delete(`http://localhost:5000/api/category/delete/${id}`)
 			.then((res) => {
 				setRefresh(!refresh);
 			})
