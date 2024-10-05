@@ -40,7 +40,7 @@ export const getTourist = async (req: Request, res: Response) => {
 		console.log(error);
 		res.status(500).send("failed");
 	}
-}
+};
 
 export const getTourists = async (req: Request, res: Response) => {
 	try {

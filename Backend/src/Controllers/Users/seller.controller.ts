@@ -30,9 +30,7 @@ export const getSeller = async (req: Request, res: Response) => {
 		console.log(error);
 		res.status(500).send("failed");
 	}
-}
-
-
+};
 
 export const getSellers = async (req: Request, res: Response) => {
 	try {

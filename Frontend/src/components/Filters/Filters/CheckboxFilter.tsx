@@ -2,6 +2,7 @@ import { useCallback, useState } from "react";
 
 import Label from "@/components/ui/Label";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
 	DropdownMenu,
@@ -12,7 +13,6 @@ import { Flex } from "@/components/ui/flex";
 import { Input } from "@/components/ui/input";
 
 import { SelectItem, TCheckboxFilter } from "../types";
-import { Button } from "@/components/ui/button";
 
 export default function CheckboxFilter({
 	filter,

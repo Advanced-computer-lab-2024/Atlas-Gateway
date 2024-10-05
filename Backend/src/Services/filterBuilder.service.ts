@@ -1,4 +1,4 @@
-import { PipelineStage ,Types } from "mongoose";
+import { PipelineStage, Types } from "mongoose";
 
 export default function buildFilterQuery(query: any): PipelineStage[] {
 	const pipeline: PipelineStage[] = [];
@@ -50,8 +50,6 @@ export function filterByPrice(query: any): PipelineStage[] {
 export function filterByDate(query: any): PipelineStage[] {
 	const pipeline: PipelineStage[] = [];
 
-
-
 	if (query.date) {
 		const matchStage: any = { dateTime: {} };
 		const [startDateStr, endDateStr] = query.date.split(",");
@@ -84,7 +82,7 @@ export function filterByDate(query: any): PipelineStage[] {
 						dateTime: { $gte: startDate, $lte: endDate },
 					},
 				],
-			}
+			},
 		});
 	}
 	// If no date is provided, return all activities after the current date
@@ -118,7 +116,11 @@ export function filterByLanguage(query: any): PipelineStage[] {
 	if (query.language) {
 		pipeline.push({
 			$match: {
-				language: { $in: query.language.split(",").map((lang: string) => new RegExp(`^${lang}$`, 'i')) },
+				language: {
+					$in: query.language
+						.split(",")
+						.map((lang: string) => new RegExp(`^${lang}$`, "i")),
+				},
 			},
 		});
 	}
@@ -133,7 +135,13 @@ export function filterByCategory(query: any): PipelineStage[] {
 	if (query.category) {
 		pipeline.push({
 			$match: {
-				category: { $in: query.category.split(",").map((category : string )=> new Types.ObjectId(category)) } ,
+				category: {
+					$in: query.category
+						.split(",")
+						.map(
+							(category: string) => new Types.ObjectId(category),
+						),
+				},
 			},
 		});
 	}
@@ -148,7 +156,11 @@ export function filterByTags(query: any): PipelineStage[] {
 	if (query.tags) {
 		pipeline.push({
 			$match: {
-				tags: { $in: query.tags.split(",").map((tag : string )=> new Types.ObjectId(tag)) },
+				tags: {
+					$in: query.tags
+						.split(",")
+						.map((tag: string) => new Types.ObjectId(tag)),
+				},
 			},
 		});
 	}

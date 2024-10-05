@@ -1,16 +1,26 @@
 import { Request, Response } from "express";
 import mongoose, { PipelineStage, Types } from "mongoose";
 
-import { Itinerary } from "../Database/Models/itinerary.model";
 import { TourGuide } from "../Database/Models/Users/tourGuide.model";
+import { Itinerary } from "../Database/Models/itinerary.model";
 import { Product } from "../Database/Models/product.model";
 import AggregateBuilder from "../Services/aggregation.service";
 
 //Create a new product entry
 export const createItinerary = async (req: Request, res: Response) => {
 	try {
-		const { language, price, availability, pickUpLocation, dropOffLocation, startDate,startTime,endDate,activities, tags} =
-			req.body;
+		const {
+			language,
+			price,
+			availability,
+			pickUpLocation,
+			dropOffLocation,
+			startDate,
+			startTime,
+			endDate,
+			activities,
+			tags,
+		} = req.body;
 		const { tourGuideId } = req.params;
 		//TODO: Check ID validity and existance
 		if (
@@ -23,11 +33,32 @@ export const createItinerary = async (req: Request, res: Response) => {
 				.json({ message: "Tour Guide ID is invalid or doesn't exist" });
 		}
 
-		if (!language || !price|| !availability || !pickUpLocation || !dropOffLocation || !startDate || !startTime || !endDate || !activities || !tags ) {
+		if (
+			!language ||
+			!price ||
+			!availability ||
+			!pickUpLocation ||
+			!dropOffLocation ||
+			!startDate ||
+			!startTime ||
+			!endDate ||
+			!activities ||
+			!tags
+		) {
 			return res.status(400).json({ message: "Misisng Fields" });
 		}
 		const itineraryData = new Itinerary({
-			language, price, availability, pickUpLocation, dropOffLocation, startDate,startTime,endDate,activities, tags, createdBy: tourGuideId
+			language,
+			price,
+			availability,
+			pickUpLocation,
+			dropOffLocation,
+			startDate,
+			startTime,
+			endDate,
+			activities,
+			tags,
+			createdBy: tourGuideId,
 		});
 
 		await itineraryData.save();
@@ -47,7 +78,9 @@ export const getItineraryById = async (req: Request, res: Response) => {
 		) {
 			return res
 				.status(400)
-				.json({ message: "Tour Guide ID is invalid or doesn't exist 1" });
+				.json({
+					message: "Tour Guide ID is invalid or doesn't exist 1",
+				});
 		}
 		const itinerary = await Itinerary.findById(tourGuideId);
 		res.status(200).send(itinerary);
@@ -67,10 +100,8 @@ export const getItinerary = async (req: Request, res: Response) => {
 					as: "tagsData",
 				},
 			},
-			...AggregateBuilder(
-			req.query,
-			["name","tagsData.name"],
-		)];
+			...AggregateBuilder(req.query, ["name", "tagsData.name"]),
+		];
 
 		const result = await Itinerary.aggregate(pipeline);
 
@@ -99,9 +130,19 @@ export const getItinerary = async (req: Request, res: Response) => {
 
 export const updateItinerary = async (req: Request, res: Response) => {
 	try {
-		const { language, price, availability, pickUpLocation, dropOffLocation, startDate,startTime,endDate,activities, tags} =
-			req.body;
-		const { tourGuideId,itineraryId } = req.params;
+		const {
+			language,
+			price,
+			availability,
+			pickUpLocation,
+			dropOffLocation,
+			startDate,
+			startTime,
+			endDate,
+			activities,
+			tags,
+		} = req.body;
+		const { tourGuideId, itineraryId } = req.params;
 		if (
 			!Types.ObjectId.isValid(tourGuideId) ||
 			!(await TourGuide.findById(tourGuideId))
@@ -110,29 +151,50 @@ export const updateItinerary = async (req: Request, res: Response) => {
 				.status(400)
 				.json({ message: "Tour Guide ID is invalid or doesn't exist" });
 		}
-		
-		if (!language || !price|| !availability || !pickUpLocation || !dropOffLocation || !startDate || !startTime || !endDate || !activities || !tags ) {
+
+		if (
+			!language ||
+			!price ||
+			!availability ||
+			!pickUpLocation ||
+			!dropOffLocation ||
+			!startDate ||
+			!startTime ||
+			!endDate ||
+			!activities ||
+			!tags
+		) {
 			return res.status(400).json({ message: "Misisng Fields" });
 		}
 		const itineraryData = new Itinerary({
-			language, price, availability, pickUpLocation, dropOffLocation, startDate,startTime,endDate,activities, tags});
+			language,
+			price,
+			availability,
+			pickUpLocation,
+			dropOffLocation,
+			startDate,
+			startTime,
+			endDate,
+			activities,
+			tags,
+		});
 
 		const temp = await Itinerary.findById(itineraryId);
 		if (!temp) {
 			return res.status(404).json({ message: "Itinerary not found" });
-		  }
+		}
 		if (temp.createdBy.toString() !== tourGuideId) {
-			return res.status(400).json({ message: "Tourguid Id Doesn't match the itinerary " });
-		  }
-		  
+			return res
+				.status(400)
+				.json({ message: "Tourguid Id Doesn't match the itinerary " });
+		}
+
 		res.status(200).send(itineraryData);
 	} catch (error) {
 		res.status(500).json({ message: "Internal Server Error" });
 		console.log(error);
 	}
 };
-
-
 
 export const deleteItinerary = async (req: Request, res: Response) => {
 	try {
@@ -141,10 +203,12 @@ export const deleteItinerary = async (req: Request, res: Response) => {
 		const temp = await Itinerary.findById(id);
 		if (!temp) {
 			return res.status(404).json({ message: "Itinerary not found" });
-		  }
+		}
 		if (temp?.numberOfBookings > 0) {
-			return res.status(404).json({ message: "Itinerary is already booked" });
-		  }
+			return res
+				.status(404)
+				.json({ message: "Itinerary is already booked" });
+		}
 		await Itinerary.findByIdAndDelete(id);
 		res.status(200).send("Itinerary deleted Succefully");
 	} catch (error) {

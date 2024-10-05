@@ -58,12 +58,13 @@ export const deleteAdvertiser = async (req: Request, res: Response) => {
 };
 
 export const viewActivities = async (req: Request, res: Response) => {
-	const id=req.params.id
+	const id = req.params.id;
 	try {
-		res.status(200).send(await Advertiser.findById(id).select('activities'));
+		res.status(200).send(
+			await Advertiser.findById(id).select("activities"),
+		);
 	} catch (error) {
 		console.log(error);
 		res.status(500).send("failed");
 	}
 };
-

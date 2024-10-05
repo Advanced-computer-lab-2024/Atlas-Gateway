@@ -4,8 +4,8 @@ import useQueryString from "use-query-string";
 
 import CheckboxFilter from "./Filters/CheckboxFilter";
 import DateFilter from "./Filters/DateFilter";
-import { TCheckboxFilter, TDateFilter, TFilter, TRangeFilter } from "./types";
 import RangeFilter from "./Filters/RangeFilter";
+import { TCheckboxFilter, TDateFilter, TFilter, TRangeFilter } from "./types";
 
 export default function FilterDropdown({
 	children,

@@ -1,5 +1,3 @@
-
-
 export default function Advertisor() {
 	return (
 		<div>
@@ -10,6 +8,4 @@ export default function Advertisor() {
 			</div>
 		</div>
 	);
-};
-
-
+}

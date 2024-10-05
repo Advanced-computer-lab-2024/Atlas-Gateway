@@ -3,17 +3,17 @@ import express, { Request, Response } from "express";
 
 import { SERVER } from "./Config/config";
 import connectDB from "./Database/db";
+import itineraryRouter from "./Routes/Itinerary.route";
 import adminRouter from "./Routes/Users/admin.route";
+import advertiserRouter from "./Routes/Users/advertiser.route";
 import governorRouter from "./Routes/Users/governor.route";
 import sellerRouter from "./Routes/Users/seller.route";
 import tourGuideRouter from "./Routes/Users/tourGuide.route";
+import touristRouter from "./Routes/Users/tourist.route";
 import activityRouter from "./Routes/activity.route";
-import advertiserRouter from "./Routes/Users/advertiser.route";
 import categoryRouter from "./Routes/category.route";
 import productRouter from "./Routes/product.route";
-import touristRouter from "./Routes/Users/tourist.route";
 import registerRouter from "./Routes/register.route";
-import itineraryRouter from "./Routes/Itinerary.route";
 import tagRouter from "./Routes/tag.route";
 
 const app = express();
@@ -33,7 +33,6 @@ async function startServer() {
 	app.use("/api/tourist", touristRouter);
 	app.use("/api/register", registerRouter);
 	app.use("/api/itinerary", itineraryRouter);
-
 
 	app.get("/", (req: Request, res: Response) => {
 		try {

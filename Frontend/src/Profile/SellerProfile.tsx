@@ -1,4 +1,5 @@
 import { useSellerProfile } from "@/api/data/useProfile";
+
 import Label from "../components/ui/Label";
 import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
 import { Card } from "../components/ui/card";
@@ -6,10 +7,8 @@ import { Flex } from "../components/ui/flex";
 import Navbar from "../layout/Navbar";
 import SellerSheet from "./SellerSheet";
 
-
 export default function SellerProfile() {
-	const {data} = useSellerProfile();
-
+	const { data } = useSellerProfile();
 
 	//May needed later:
 
@@ -34,26 +33,25 @@ export default function SellerProfile() {
 							</Avatar>
 						</Flex>
 						<Flex isColumn>
-							<Label.Big700 >
+							<Label.Big700>
 								{data?.companyName || "Joe Doe Seller"}
 							</Label.Big700>
 							<Label.Big400>
 								{data?.email || "joedoe123@gmail.com"}
 							</Label.Big400>
 							<Label.Big400>
-								{data?.username  || "joedoe123"}
+								{data?.username || "joedoe123"}
 							</Label.Big400>
-							<hr className="border-black"/>
-							
-                            <br></br>
-                            <Label.Big400>
-                                {data?.description || "This is a description"}
-                            </Label.Big400>
+							<hr className="border-black" />
+
+							<br></br>
+							<Label.Big400>
+								{data?.description || "This is a description"}
+							</Label.Big400>
 						</Flex>
 					</Flex>
-                </Card>
-                <SellerSheet/>
-
+				</Card>
+				<SellerSheet />
 			</div>
 		</div>
 	);

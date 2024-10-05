@@ -2,10 +2,10 @@ import express from "express";
 
 import {
 	createItinerary,
-	updateItinerary,
+	deleteItinerary,
 	getItinerary,
 	getItineraryById,
-    deleteItinerary
+	updateItinerary,
 } from "../Controllers/itinerary.controller";
 
 const router = express.Router();

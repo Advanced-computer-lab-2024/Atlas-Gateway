@@ -50,36 +50,35 @@ export type TActivity = {
 	tags: string[];
 	categories: string[];
 	discounts: string[];
-    isBookingsOpen: boolean;
-    rating: number;
+	isBookingsOpen: boolean;
+	rating: number;
 };
 export interface TTourist extends TUser {
-    name: string;
-    email: string;
-    mobileNumber: string;
-    walletBalance: number;
+	name: string;
+	email: string;
+	mobileNumber: string;
+	walletBalance: number;
 }
 
 export interface TSeller extends TUser {
-    companyName: string;
-    email: string;
-    description: string;
+	companyName: string;
+	email: string;
+	description: string;
 }
 
 export interface TAdvetisor extends TUser {
-    companyName: string;
-    email: string;
-    hotline: number;
-    website: string;
-    description: string;
+	companyName: string;
+	email: string;
+	hotline: number;
+	website: string;
+	description: string;
 }
 
 export interface TTourGuide extends TUser {
-    name: string;
-    email: string;
-    mobileNumber: string;
-    yearsOfExperience: number;
-    previousWork: string;
-    description: string;
+	name: string;
+	email: string;
+	mobileNumber: string;
+	yearsOfExperience: number;
+	previousWork: string;
+	description: string;
 }
-

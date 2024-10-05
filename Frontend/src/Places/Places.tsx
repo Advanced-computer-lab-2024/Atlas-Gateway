@@ -381,7 +381,9 @@ export default function Places() {
 			gap="4"
 			className="w-full h-full px-10 py-8 overflow-y-scroll"
 		>
-			<Label.Big600>View a list of museums and historical locations you can visit!</Label.Big600>
+			<Label.Big600>
+				View a list of museums and historical locations you can visit!
+			</Label.Big600>
 			<Flex
 				justify="center"
 				isColumn

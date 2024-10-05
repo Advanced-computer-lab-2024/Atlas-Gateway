@@ -1,3 +1,17 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+import {
+	Form,
+	FormControl,
+	FormDescription,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from "@/components/ui/form";
+
 import Label from "../components/ui/Label";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -12,71 +26,62 @@ import {
 	SheetTrigger,
 } from "../components/ui/sheet";
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { useForm } from "react-hook-form";
- 
-
 export const formSchema = z.object({
-    name: z.string().min(2, {
-        message: "Name must be at least 2 characters.",
-    }),
-    email: z.string().email({
-        message: "Please enter a valid email address.",
-    }),
-    username: z.string().min(2, {
-        message: "Username must be at least 2 characters.",
-    }),
-    mobileNumber: z.string().min(11, {
-        message: "Mobile number must be at least 11 characters.",
-    }),
-    walletBalance: z.number().int(),
-    profilePicture: z.string().nullable(),
-})
+	name: z.string().min(2, {
+		message: "Name must be at least 2 characters.",
+	}),
+	email: z.string().email({
+		message: "Please enter a valid email address.",
+	}),
+	username: z.string().min(2, {
+		message: "Username must be at least 2 characters.",
+	}),
+	mobileNumber: z.string().min(11, {
+		message: "Mobile number must be at least 11 characters.",
+	}),
+	walletBalance: z.number().int(),
+	profilePicture: z.string().nullable(),
+});
 
 export const defaultValues = {
-    name: "",
-    email: "",
-    username: "",
-    mobileNumber: "",
-    walletBalance: 0,
-    profilePicture: null,
+	name: "",
+	email: "",
+	username: "",
+	mobileNumber: "",
+	walletBalance: 0,
+	profilePicture: null,
 };
 
-    
 export default function TouristSheet() {
+	const form = useForm<z.infer<typeof formSchema>>({
+		resolver: zodResolver(formSchema),
+		defaultValues,
+	});
 
-   const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
-        defaultValues,
-    });
+	const onSubmit = () => {
+		console.log("Submitted");
+	};
 
-    const onSubmit = () => {
-        console.log("Submitted");
-    }
-
-    return (
-        <div>
-            <Sheet>
-                <SheetTrigger asChild>
-                    <Button className="align p-6 justify-center">
-                        <Label.Big400>Update Profile</Label.Big400>
-                    </Button>
-                </SheetTrigger>
-                <SheetContent>
-                    <SheetHeader>
-                        <SheetTitle>
-                            <Label.Big600>Edit profile</Label.Big600>
-                        </SheetTitle>
-                        <SheetDescription>
-                            Make changes to your profile here. Click
-                            save when you're done.
-                        </SheetDescription>
-                    </SheetHeader>
-                    <div className="grid grid-cols gap-4 py-4">
-                        
-                            {/* Profile Picture input 
+	return (
+		<div>
+			<Sheet>
+				<SheetTrigger asChild>
+					<Button className="align p-6 justify-center">
+						<Label.Big400>Update Profile</Label.Big400>
+					</Button>
+				</SheetTrigger>
+				<SheetContent>
+					<SheetHeader>
+						<SheetTitle>
+							<Label.Big600>Edit profile</Label.Big600>
+						</SheetTitle>
+						<SheetDescription>
+							Make changes to your profile here. Click save when
+							you're done.
+						</SheetDescription>
+					</SheetHeader>
+					<div className="grid grid-cols gap-4 py-4">
+						{/* Profile Picture input 
                          <div className="flex-1 grid-cols-4 items-center gap-4">
                             <Label.Big300
                                 className="text-left"
@@ -91,76 +96,85 @@ export default function TouristSheet() {
                             />
                         </div> */}
 
-                        <Form {...form}>
-                            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                                {/* Name input */}
-                                <FormField
-                                control={form.control}
-                                name="name"
-                                render={({ field }) => (
-                                    <FormItem>
-                                    <FormLabel>Name:-</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="John Doe" {...field} />
-                                    </FormControl>
-                                        <FormDescription>
-                                            This is your public display name.
-                                    </FormDescription>
-                                    </FormItem>
-                                )}
-                                />
-                                
-                                {/* Email input */}
-                                <FormField
-                                control={form.control}
-                                name="email"
-                                render={({ field }) => (
-                                    <FormItem>
-                                    <FormLabel> Email:-</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="joedoe123@gamil.com" {...field} />
-                                    </FormControl>
-                                        <FormDescription>
-                                            This is your email.
-                                        </FormDescription>
-                                    <FormMessage />
-                                    </FormItem>
-                                )}
-                                />
-                    
-                                {/* Mobile Number input */}
-                                <FormField
-                                control={form.control}
-                                name="mobileNumber"
-                                render={({ field }) => (
-                                    <FormItem>
-                                    <FormLabel>Mobile Number:-</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="0123456789" {...field} />
-                                    </FormControl>
-                                    <FormDescription>
-                                        This is your Mobile Number
-                                    </FormDescription>
-                                    <FormMessage />
-                                    </FormItem>
-                                )}
-                                />
+						<Form {...form}>
+							<form
+								onSubmit={form.handleSubmit(onSubmit)}
+								className="space-y-8"
+							>
+								{/* Name input */}
+								<FormField
+									control={form.control}
+									name="name"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Name:-</FormLabel>
+											<FormControl>
+												<Input
+													placeholder="John Doe"
+													{...field}
+												/>
+											</FormControl>
+											<FormDescription>
+												This is your public display
+												name.
+											</FormDescription>
+										</FormItem>
+									)}
+								/>
 
-                            </form>
-                            </Form>
+								{/* Email input */}
+								<FormField
+									control={form.control}
+									name="email"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel> Email:-</FormLabel>
+											<FormControl>
+												<Input
+													placeholder="joedoe123@gamil.com"
+													{...field}
+												/>
+											</FormControl>
+											<FormDescription>
+												This is your email.
+											</FormDescription>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
 
-                    </div>
-                    <SheetFooter>
-                        <SheetClose asChild>
-                            <Button
-                                type="submit"
-                            >
-                                Save changes
-                            </Button>
-                        </SheetClose>
-                    </SheetFooter>
-                </SheetContent>
-            </Sheet>
-        </div>
-    );
+								{/* Mobile Number input */}
+								<FormField
+									control={form.control}
+									name="mobileNumber"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>
+												Mobile Number:-
+											</FormLabel>
+											<FormControl>
+												<Input
+													placeholder="0123456789"
+													{...field}
+												/>
+											</FormControl>
+											<FormDescription>
+												This is your Mobile Number
+											</FormDescription>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+							</form>
+						</Form>
+					</div>
+					<SheetFooter>
+						<SheetClose asChild>
+							<Button type="submit">Save changes</Button>
+						</SheetClose>
+					</SheetFooter>
+				</SheetContent>
+			</Sheet>
+		</div>
+	);
 }

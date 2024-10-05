@@ -67,7 +67,7 @@ export default function ProductCard({
 							{seller.username}
 						</Label.Thin300>
 					</Flex>
-					<Flex align="center" justify="between"  >
+					<Flex align="center" justify="between">
 						<Flex gap="2" align="center" justify="between">
 							<DollarSign size={20} />
 							<Label.Thin200 className="overflow-ellipsis">

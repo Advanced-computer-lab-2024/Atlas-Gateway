@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import Label from "@/components/ui/Label";
+import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -10,7 +11,6 @@ import { Flex } from "@/components/ui/flex";
 import { Input } from "@/components/ui/input";
 
 import { TRangeFilter } from "../types";
-import { Button } from "@/components/ui/button";
 
 export default function RangeFilter({ filter }: { filter: TRangeFilter }) {
 	const [start, setStart] = useState("");

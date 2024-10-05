@@ -2,15 +2,15 @@ import { Request, Response } from "express";
 import mongoose, { Types } from "mongoose";
 import { PipelineStage } from "mongoose";
 
+import { Admin } from "../Database/Models/Users/admin.model";
 import { Seller } from "../Database/Models/Users/seller.model";
 import { Product } from "../Database/Models/product.model";
 import AggregateBuilder from "../Services/aggregation.service";
-import { Admin } from "../Database/Models/Users/admin.model";
 
 //Create a new product entry
 export const createProduct = async (req: Request, res: Response) => {
 	try {
-		const userId = req.headers.userid
+		const userId = req.headers.userid;
 		const { name, description, price, quantity, picture } = req.body;
 
 		//Check if the user is an admin

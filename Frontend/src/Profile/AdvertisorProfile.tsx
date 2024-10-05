@@ -1,4 +1,5 @@
 import { useAdvertisorProfile } from "@/api/data/useProfile";
+
 import Label from "../components/ui/Label";
 import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
 import { Card } from "../components/ui/card";
@@ -7,8 +8,7 @@ import Navbar from "../layout/Navbar";
 import AdvertisorSheet from "./AdvertisorSheet";
 
 export default function AdvertisorProfile() {
-
-	const {data} = useAdvertisorProfile();
+	const { data } = useAdvertisorProfile();
 
 	//May needed later:
 
@@ -33,7 +33,7 @@ export default function AdvertisorProfile() {
 							</Avatar>
 						</Flex>
 						<Flex isColumn>
-							<Label.Big700 >
+							<Label.Big700>
 								{data?.companyName || "Joe Doe Advertisor"}
 							</Label.Big700>
 							<Label.Big400>
@@ -42,7 +42,7 @@ export default function AdvertisorProfile() {
 							<Label.Big400>
 								{data?.username || "joedoe123"}
 							</Label.Big400>
-							<hr className="border-black"/>
+							<hr className="border-black" />
 							<Label.Big400>
 								Hotline: {data?.hotline || "911"}
 							</Label.Big400>
@@ -65,8 +65,7 @@ export default function AdvertisorProfile() {
 						</Flex>
 					</Flex>
 				</Card>
-				<AdvertisorSheet/>
-				
+				<AdvertisorSheet />
 			</div>
 		</div>
 	);

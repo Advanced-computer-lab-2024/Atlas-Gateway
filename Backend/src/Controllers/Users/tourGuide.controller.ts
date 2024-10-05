@@ -46,19 +46,15 @@ export const getTourGuides = async (req: Request, res: Response) => {
 	} catch (error) {
 		res.status(400).json(error);
 	}
-}
+};
 
 export const updateTourGuide = async (req: Request, res: Response) => {
 	const id = req.params.id;
 
 	try {
-		const adv = await TourGuide.findByIdAndUpdate(
-			id,
-			req.body,
-			{
-				new: true,
-			},
-		);
+		const adv = await TourGuide.findByIdAndUpdate(id, req.body, {
+			new: true,
+		});
 		res.status(200).send(adv);
 	} catch (error) {
 		res.status(500).send("failed");
@@ -76,9 +72,9 @@ export const deleteTourGuide = async (req: Request, res: Response) => {
 };
 
 export const viewItinerary = async (req: Request, res: Response) => {
-	const id=req.params.id
+	const id = req.params.id;
 	try {
-		res.status(200).send(await TourGuide.findById(id).select('itinerary'));
+		res.status(200).send(await TourGuide.findById(id).select("itinerary"));
 	} catch (error) {
 		console.log(error);
 		res.status(500).send("failed");

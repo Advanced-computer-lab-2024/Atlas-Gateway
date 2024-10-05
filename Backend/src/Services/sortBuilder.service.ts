@@ -17,9 +17,7 @@ export default function buildSortCriteria(query: any): PipelineStage[] {
 					maxPrice: sortOrder,
 				},
 			});
-		}
-		else {
-
+		} else {
 			pipeline.push({
 				$sort: {
 					[sortby]: sortOrder,

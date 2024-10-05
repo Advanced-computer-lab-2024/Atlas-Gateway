@@ -13,13 +13,13 @@ import Places from "./Places/Places";
 import PlacesForm from "./Places/PlacesForm";
 import ProductDetails from "./Products/ProductDetails";
 import Products from "./Products/Products";
+import AdvertisorProfile from "./Profile/AdvertisorProfile";
+import SellerProfile from "./Profile/SellerProfile";
+import TourGuideProfile from "./Profile/TourGuideProfile";
+import TouristProfile from "./Profile/TouristProfile";
 import Register from "./Register/Register";
 import "./index.css";
 import Layout from "./layout/Layout";
-import TourGuideProfile from "./Profile/TourGuideProfile";
-import SellerProfile from "./Profile/SellerProfile";
-import TouristProfile from "./Profile/TouristProfile";
-import AdvertisorProfile from "./Profile/AdvertisorProfile";
 
 const queryClient = new QueryClient();
 
@@ -133,9 +133,8 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/profile",
-		element: <TouristProfile/>
-	}
-
+		element: <TouristProfile />,
+	},
 ]);
 
 createRoot(document.getElementById("root")!).render(

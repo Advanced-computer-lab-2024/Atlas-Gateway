@@ -1,4 +1,10 @@
-import { TUser, TTourist, TAdvetisor, TSeller, TTourGuide } from "@/types/global";
+import {
+	TAdvetisor,
+	TSeller,
+	TTourGuide,
+	TTourist,
+	TUser,
+} from "@/types/global";
 
 export type TRegisterationResponse = TUser & { _id: string };
 
@@ -11,5 +17,3 @@ export type TSellerProfileResponse = TSeller & { _id: string };
 export type TAdvertisorProfileResponse = TAdvetisor & { _id: string };
 
 export type TTourGuideProfileResponse = TTourGuide & { _id: string };
-
-
