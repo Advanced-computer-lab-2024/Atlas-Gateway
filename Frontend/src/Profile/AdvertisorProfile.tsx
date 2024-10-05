@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
 import { Card } from "../components/ui/card";
 import { Flex } from "../components/ui/flex";
 import Navbar from "../layout/Navbar";
+import AdvertisorSheet from "./AdvertisorSheet";
 
 export default function AdvertisorProfile() {
 
@@ -64,7 +65,7 @@ export default function AdvertisorProfile() {
 						</Flex>
 					</Flex>
 				</Card>
-
+				<AdvertisorSheet/>
 				
 			</div>
 		</div>

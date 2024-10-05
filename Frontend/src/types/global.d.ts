@@ -24,5 +24,12 @@ export interface TAdvetisor extends TUser {
     description: string;
 }
 
-
+export interface TTourGuide extends TUser {
+    name: string;
+    email: string;
+    mobileNumber: string;
+    yearsOfExperience: number;
+    previousWork: string;
+    description: string;
+}
 

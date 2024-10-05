@@ -1,7 +1,7 @@
 import axios from "axios";
 
 import ENDPOINTS from "./ENDPOINTS";
-import { TTouristProfileResponse, TAdvertisorProfileResponse } from "./types";
+import { TTouristProfileResponse, TAdvertisorProfileResponse, TTourGuideProfileResponse } from "./types";
 
 export function apiTouristProfile( id : string) {
 	return axios<TTouristProfileResponse>({
@@ -27,6 +27,17 @@ export function apiSellerProfile( id : string) {
 
 export function apiAdvertisorProfile( id : string) {
 	return axios<TAdvertisorProfileResponse>({
+		method: "GET",
+		url: ENDPOINTS.tourist.show(id),
+		headers: {
+			"Content-Type": "application/json",
+		},
+		baseURL: "http://localhost:5000",
+	});
+}
+
+export function apiTourGuideProfile( id : string) {
+	return axios<TTourGuideProfileResponse>({
 		method: "GET",
 		url: ENDPOINTS.tourist.show(id),
 		headers: {
