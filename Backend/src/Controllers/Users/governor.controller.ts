@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 
 import { Governor } from "../../Database/Models/Users/governor.model";
-import {Museum} from "../../Database/Models/historicalSite.model"
+import {Places} from "../../Database/Models/places.model";
 
 export const crteatGovernor = async (req: Request, res: Response) => {
 	try {
@@ -44,7 +44,7 @@ export const viewHistoricalLocations = async (req: Request, res: Response) => {
 	const id=req.params.id
 	try {
 		// res.status(200).send(await Museum.find())
-		res.status(200).send(await Museum.find({governorId:id}))
+		res.status(200).send(await Places.find({governorId:id}))
 	} catch (error) {
 		console.log(error);
 		res.status(500).send("failed");
