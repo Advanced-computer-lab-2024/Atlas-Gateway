@@ -4,7 +4,7 @@ import useQueryString from "use-query-string";
 
 import { useLoginStore } from "@/store/loginStore";
 
-import { apiProduct, apiProducts } from "../service/Product";
+import { apiProduct, apiProducts } from "../service/product";
 
 export function useProducts() {
 	const { user } = useLoginStore();
