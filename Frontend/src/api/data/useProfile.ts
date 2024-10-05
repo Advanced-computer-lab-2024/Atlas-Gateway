@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { useLoginStore } from "@/store/loginStore";
-import apiTouristProfile from "../service/profile";
+import {apiTouristProfile, apiAdvertisorProfile} from "../service/profile";
 
 
 
@@ -23,3 +23,23 @@ export function useTouristProfile() {
 
 	return { data : data?.data};
 }
+
+export function useSellerProfile() {
+    const { user } = useLoginStore();
+
+    const id = user?.id;
+
+    const { data } = useQuery({
+        queryFn: () => {
+            if (!id) {
+                throw new Error("User ID is undefined");
+            }
+            return apiAdvertisorProfile(id);
+        },
+        queryKey: ["profile", id],
+    });
+
+
+	return { data : data?.data};
+}
+
