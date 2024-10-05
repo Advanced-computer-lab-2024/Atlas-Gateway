@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import mongoose, { Types } from "mongoose";
+import mongoose, { PipelineStage, Types } from "mongoose";
 
 import { Itinerary } from "../Database/Models/itinerary.model";
 import { TourGuide } from "../Database/Models/Users/tourGuide.model";
@@ -58,8 +58,40 @@ export const getItineraryById = async (req: Request, res: Response) => {
 
 export const getItinerary = async (req: Request, res: Response) => {
 	try {
-		const itinerary = await Itinerary.find();
-		res.status(200).send(itinerary);
+		const pipeline: PipelineStage[] = [
+			{
+				$lookup: {
+					from: "tags",
+					localField: "tags",
+					foreignField: "_id",
+					as: "tagsData",
+				},
+			},
+			...AggregateBuilder(
+			req.query,
+			["name","tagsData.name"],
+		)];
+
+		const result = await Itinerary.aggregate(pipeline);
+
+		if (result[0].data.length === 0) {
+			return res
+				.status(404)
+				.json({ message: "No matching Itineraries Found" });
+		}
+
+		const response = {
+			data: result[0].data,
+			metaData: {
+				page: req.query.page || 1,
+				total: result[0].total[0].count,
+				pages: Math.ceil(
+					result[0].total[0].count / (Number(req.query.limit) || 10),
+				),
+			},
+		};
+
+		res.status(200).send(response);
 	} catch (error) {
 		res.status(500).send("Error getting Itinerary");
 	}

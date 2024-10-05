@@ -1,10 +1,11 @@
-import { Admin } from "../Database/Models/Users/admin.model";
 import { Request, Response } from "express";
 import mongoose, { Types } from "mongoose";
+import { PipelineStage } from "mongoose";
 
 import { Seller } from "../Database/Models/Users/seller.model";
 import { Product } from "../Database/Models/product.model";
 import AggregateBuilder from "../Services/aggregation.service";
+import { Admin } from "../Database/Models/Users/admin.model";
 
 //Create a new product entry
 export const createProduct = async (req: Request, res: Response) => {
@@ -76,14 +77,13 @@ export const getProduct = async (req: Request, res: Response) => {
 //takes a query (anded conditions) and returns a data set
 export const getProducts = async (req: Request, res: Response) => {
 	try {
-		const result = await Product.aggregate(
-			AggregateBuilder(
+		const PipelineStage: PipelineStage[] = [
+			...AggregateBuilder(
 				req.query,
 				["name"], // Search fields
-				["minPrice", "maxPrice"], // Filters
-				["rating"], // Sort fields
 			),
-		);
+		];
+		const result = await Product.aggregate(PipelineStage);
 
 		if (result[0].data.length === 0) {
 			return res
