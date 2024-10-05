@@ -57,7 +57,7 @@ const Product = () => {
 		axios
 			.get("http://localhost:8000/api/products/list")
 			.then((res) => {
-				setProducts(res.data);
+				setProducts(res.data.data);
 			})
 			.catch((error) => {
 				console.error(error);
