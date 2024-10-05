@@ -3,6 +3,8 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
 
+
+
 import Activites from "./Activities/Activites";
 import ActivityDetails from "./Activities/ActivityDetails";
 import Admin from "./Admin/Dashboard";
@@ -13,13 +15,15 @@ import Places from "./Places/Places";
 import PlacesForm from "./Places/PlacesForm";
 import ProductDetails from "./Products/ProductDetails";
 import Products from "./Products/Products";
-import AdvertisorProfile from "./Profile/AdvertisorProfile";
+import AdvertiserProfile from "./Profile/AdvertiserProfile";
 import SellerProfile from "./Profile/SellerProfile";
 import TourGuideProfile from "./Profile/TourGuideProfile";
 import TouristProfile from "./Profile/TouristProfile";
 import Register from "./Register/Register";
 import "./index.css";
 import Layout from "./layout/Layout";
+import Profile from "./Profile/Profile";
+
 
 const queryClient = new QueryClient();
 
@@ -40,6 +44,10 @@ const router = createBrowserRouter([
 				path: "/",
 				element: <Home />,
 				index: true,
+			},
+			{
+				path: "/profile",
+				element: <Profile />,
 			},
 			{
 				path: "/places",
@@ -118,22 +126,6 @@ const router = createBrowserRouter([
 				],
 			},
 		],
-	},
-	{
-		path: "/advertisor/profile",
-		element: <AdvertisorProfile />,
-	},
-	{
-		path: "/guide/profile",
-		element: <TourGuideProfile />,
-	},
-	{
-		path: "/seller/profile",
-		element: <SellerProfile />,
-	},
-	{
-		path: "/profile",
-		element: <TouristProfile />,
 	},
 ]);
 

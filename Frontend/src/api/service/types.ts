@@ -14,6 +14,6 @@ export type TTouristProfileResponse = TTourist & { _id: string };
 
 export type TSellerProfileResponse = TSeller & { _id: string };
 
-export type TAdvertisorProfileResponse = TAdvetisor & { _id: string };
+export type TAdvertiserProfileResponse = TAdvetisor & { _id: string };
 
 export type TTourGuideProfileResponse = TTourGuide & { _id: string };

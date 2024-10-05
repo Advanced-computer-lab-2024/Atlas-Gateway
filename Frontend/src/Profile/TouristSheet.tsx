@@ -1,7 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import {
+	useTouristProfile,
+	useUpdateTouristProfile,
+} from "@/api/data/useProfile";
 import {
 	Form,
 	FormControl,
@@ -10,6 +15,7 @@ import {
 	FormItem,
 	FormLabel,
 } from "@/components/ui/form";
+import { TTourist } from "@/types/global";
 
 import Label from "../components/ui/Label";
 import { Button } from "../components/ui/button";
@@ -25,10 +31,7 @@ import {
 	SheetTrigger,
 } from "../components/ui/sheet";
 
-export const formSchema = z.object({
-	name: z.string().min(2, {
-		message: "Name must be at least 2 characters.",
-	}),
+const formSchema = z.object({
 	email: z.string().email({
 		message: "Please enter a valid email address.",
 	}),
@@ -42,23 +45,26 @@ export const formSchema = z.object({
 	profilePicture: z.string().nullable(),
 });
 
-export const defaultValues = {
-	name: "",
-	email: "",
-	username: "",
-	mobileNumber: "",
-	walletBalance: 0,
-	profilePicture: null,
-};
-
 export default function TouristSheet() {
-	const form = useForm<z.infer<typeof formSchema>>({
+	const form = useForm<TTourist>({
 		resolver: zodResolver(formSchema),
-		defaultValues,
 	});
 
+	const { reset, getValues } = form;
+
+	const { data, refetch } = useTouristProfile();
+
+	useEffect(() => {
+		if (data) {
+			reset(data);
+		}
+	}, [data, reset]);
+
+	const { doEditTouristProfile } = useUpdateTouristProfile(refetch);
+
 	const onSubmit = () => {
-		console.log("Submitted");
+		const data = getValues();
+		doEditTouristProfile(data);
 	};
 
 	return (
@@ -96,31 +102,7 @@ export default function TouristSheet() {
                         </div> */}
 
 						<Form {...form}>
-							<form
-								onSubmit={form.handleSubmit(onSubmit)}
-								className="space-y-8"
-							>
-								{/* Name input */}
-								<FormField
-									control={form.control}
-									name="name"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>Name:-</FormLabel>
-											<FormControl>
-												<Input
-													placeholder="John Doe"
-													{...field}
-												/>
-											</FormControl>
-											<FormDescription>
-												This is your public display
-												name.
-											</FormDescription>
-										</FormItem>
-									)}
-								/>
-
+							<form className="space-y-8">
 								{/* Email input */}
 								<FormField
 									control={form.control}
@@ -167,7 +149,9 @@ export default function TouristSheet() {
 					</div>
 					<SheetFooter>
 						<SheetClose asChild>
-							<Button type="submit">Save changes</Button>
+							<Button type="submit" onClick={onSubmit}>
+								Save changes
+							</Button>
 						</SheetClose>
 					</SheetFooter>
 				</SheetContent>

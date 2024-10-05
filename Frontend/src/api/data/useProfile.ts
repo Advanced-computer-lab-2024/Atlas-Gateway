@@ -1,9 +1,15 @@
-import { useQuery } from "@tanstack/react-query";
+import {
+	UseMutationOptions,
+	useMutation,
+	useQuery,
+} from "@tanstack/react-query";
 
 import { useLoginStore } from "@/store/loginStore";
+import { TTourist } from "@/types/global";
 
 import {
-	apiAdvertisorProfile,
+	apiAdvertiserProfile,
+	apiEditTouristProfile,
 	apiSellerProfile,
 	apiTourGuideProfile,
 	apiTouristProfile,
@@ -14,7 +20,7 @@ export function useTouristProfile() {
 
 	const id = user?.id;
 
-	const { data } = useQuery({
+	const { data, refetch } = useQuery({
 		queryFn: () => {
 			if (!id) {
 				throw new Error("User ID is undefined");
@@ -24,7 +30,20 @@ export function useTouristProfile() {
 		queryKey: ["profile", id],
 	});
 
-	return { data: data?.data };
+	return { data: data?.data, refetch };
+}
+
+export function useUpdateTouristProfile(onSuccess: () => void) {
+	const { user } = useLoginStore();
+
+	const mutation = useMutation({
+		mutationFn: (data: TTourist) => apiEditTouristProfile(user?.id, data),
+		onSuccess,
+	});
+
+	const { mutate } = mutation;
+
+	return { doEditTouristProfile: mutate, ...mutation };
 }
 
 export function useSellerProfile() {
@@ -45,7 +64,7 @@ export function useSellerProfile() {
 	return { data: data?.data };
 }
 
-export function useAdvertisorProfile() {
+export function useAdvertiserProfile() {
 	const { user } = useLoginStore();
 
 	const id = user?.id;
@@ -55,7 +74,7 @@ export function useAdvertisorProfile() {
 			if (!id) {
 				throw new Error("User ID is undefined");
 			}
-			return apiAdvertisorProfile(id);
+			return apiAdvertiserProfile(id);
 		},
 		queryKey: ["profile", id],
 	});

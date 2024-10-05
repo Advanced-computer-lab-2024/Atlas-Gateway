@@ -1,14 +1,14 @@
-import { useSellerProfile } from "@/api/data/useProfile";
+import { useAdvertiserProfile } from "@/api/data/useProfile";
 
 import Label from "../components/ui/Label";
 import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
 import { Card } from "../components/ui/card";
 import { Flex } from "../components/ui/flex";
 import Navbar from "../layout/Navbar";
-import SellerSheet from "./SellerSheet";
+import AdvertiserSheet from "./AdvertiserSheet";
 
-export default function SellerProfile() {
-	const { data } = useSellerProfile();
+export default function AdvertiserProfile() {
+	const { data } = useAdvertiserProfile();
 
 	//May needed later:
 
@@ -32,7 +32,7 @@ export default function SellerProfile() {
 					</Flex>
 					<Flex isColumn>
 						<Label.Big700>
-							{data?.companyName || "Joe Doe Seller"}
+							{data?.companyName || "Joe Doe Advertiser"}
 						</Label.Big700>
 						<Label.Big400>
 							{data?.email || "joedoe123@gmail.com"}
@@ -41,7 +41,21 @@ export default function SellerProfile() {
 							{data?.username || "joedoe123"}
 						</Label.Big400>
 						<hr className="border-black" />
+						<Label.Big400>
+							Hotline: {data?.hotline || "911"}
+						</Label.Big400>
 
+						<Label.Big400>
+							Website:{" "}
+							<a
+								href={data?.website}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="text-blue-500 underline"
+							>
+								{data?.website || "https://example.com"}
+							</a>
+						</Label.Big400>
 						<br></br>
 						<Label.Big400>
 							{data?.description || "This is a description"}
@@ -49,7 +63,7 @@ export default function SellerProfile() {
 					</Flex>
 				</Flex>
 			</Card>
-			<SellerSheet />
+			<AdvertiserSheet />
 		</div>
 	);
 }

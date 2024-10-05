@@ -1,32 +1,19 @@
-import { UserCircleIcon } from "lucide-react";
-import { Link } from "react-router-dom";
+import { LogOut, UserCircleIcon } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 
 import Label from "@/components/ui/Label";
 import { Flex } from "@/components/ui/flex";
-import { useLoginStore } from "@/store/loginStore";
+import { onLogout, useLoginStore } from "@/store/loginStore";
 import { EAccountType } from "@/types/enums";
 
 import { accountRoutes } from "./routes";
 
 export default function Navbar() {
 	const { user } = useLoginStore();
+	const navigate = useNavigate();
 
 	const isLoggedIn = user?.id;
 	const routes = accountRoutes[(user?.type ?? "tourist") as EAccountType];
-
-	let profileLink = "/profile"; // Default profile link
-
-	if (routes === accountRoutes["tourist"]) {
-		profileLink = "/profile"; // General profile for tourists
-	} else if (routes === accountRoutes["tour_guide"]) {
-		profileLink = "/guide/profile";
-	} else if (routes === accountRoutes["seller"]) {
-		profileLink = "/seller/profile";
-	} else if (routes === accountRoutes["advertiser"]) {
-		profileLink = "/advertiser/profile";
-	} else if (routes === accountRoutes["governor"]) {
-		profileLink = "/tourism-governor/profile";
-	}
 
 	return (
 		<nav className="bg-surface-secondary h-20 flex justify-between items-center px-4 drop-shadow-2xl border-b-2 border-black">
@@ -52,12 +39,29 @@ export default function Navbar() {
 				))}
 			</Flex>
 			{isLoggedIn ? (
-				<Link
-					to={profileLink}
-					className="rounded-full w-14 h-14 bg-surface-primary flex items-center justify-center text-primary hover:no-underline hover:text-primary"
-				>
-					<UserCircleIcon width={40} height={40} />
-				</Link>
+				<Flex gap="2" align="center">
+					<Link
+						to="/profile"
+						className="rounded-full w-14 h-14 bg-surface-primary flex items-center justify-center text-primary hover:no-underline hover:text-primary"
+					>
+						<UserCircleIcon width={40} height={40} />
+					</Link>
+					<Flex
+						className="cursor-pointer rounded-full w-14 h-14 bg-surface-primary"
+						align="center"
+						justify="center"
+						onClick={() => {
+							onLogout();
+							navigate("/register");
+						}}
+					>
+						<LogOut
+							className="cursor-pointer"
+							width={40}
+							height={40}
+						/>
+					</Flex>
+				</Flex>
 			) : (
 				<Link
 					to="/register"

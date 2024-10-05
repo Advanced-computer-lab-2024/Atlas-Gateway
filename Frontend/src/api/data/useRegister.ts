@@ -11,8 +11,9 @@ export function useRegister() {
 
 	const mutation = useMutation({
 		mutationFn: apiRegister,
-		onSuccess: (data) => {
-			const { _id, type, username } = data.data;
+		onSuccess: (data, variables) => {
+			const { _id, username } = data.data;
+			const { type } = variables;
 			setUser({
 				id: _id,
 				type,

@@ -24,6 +24,19 @@ const ENDPOINTS = {
 	register: "api/register/create",
 	tourist: {
 		show: (id: string) => `api/tourist/show/${id}`,
+		update: (id: string) => `api/tourist/update/${id}`,
+	},
+	seller: {
+		show: (id: string) => `api/seller/show/${id}`,
+		update: (id: string) => `api/seller/update/${id}`,
+	},
+	tourGuide: {
+		show: (id: string) => `api/tourGuide/show/${id}`,
+		update: (id: string) => `api/tourGuide/update/${id}`,
+	},
+	advertiser: {
+		show: (id: string) => `api/advertiser/show/${id}`,
+		update: (id: string) => `api/advertiser/update/${id}`,
 	},
 };
 

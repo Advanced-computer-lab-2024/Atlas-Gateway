@@ -58,7 +58,7 @@ export const defaultValues = {
 	profilePicture: null,
 };
 
-export default function AdvertisorSheet() {
+export default function AdvertiserSheet() {
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues,

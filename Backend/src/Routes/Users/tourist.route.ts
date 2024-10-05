@@ -10,7 +10,7 @@ import {
 
 const touristRouter = Router();
 touristRouter.post("/create", createTourist);
-touristRouter.post("/show/:id", getTourist);
+touristRouter.get("/show/:id", getTourist);
 touristRouter.get("/list", getTourists);
 touristRouter.put("/update/:id", updateTourist);
 touristRouter.delete("/delete/:id", deleteTourist);
