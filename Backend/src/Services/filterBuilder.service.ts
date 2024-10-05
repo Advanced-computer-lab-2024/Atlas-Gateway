@@ -118,7 +118,7 @@ export function filterByLanguage(query: any): PipelineStage[] {
 	if (query.language) {
 		pipeline.push({
 			$match: {
-				language: { $in: query.language.split(",") },
+				language: { $in: query.language.split(",").map((lang: string) => new RegExp(`^${lang}$`, 'i')) },
 			},
 		});
 	}
