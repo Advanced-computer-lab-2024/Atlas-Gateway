@@ -39,3 +39,12 @@ export const deleteGovernor = async (req: Request, res: Response) => {
 		res.status(500).send("Error deleting Governor");
 	}
 };
+export const viewHistoricalLocations = async (req: Request, res: Response) => {
+	const id=req.params.id
+	try {
+		res.status(200).send(await Governor.findById(id));
+	} catch (error) {
+		console.log(error);
+		res.status(500).send("failed");
+	}
+};
