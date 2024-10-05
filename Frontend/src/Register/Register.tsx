@@ -87,7 +87,7 @@ export default function Register() {
 
 	return (
 		<div className="grid place-items-center items-center place-content-center w-full h-full">
-			<Card className="w-[500px] h-[700px] rounded-lg">
+			<Card className="w-[500px] h-[700px] rounded-lg border-black shadow-xl">
 				<CardHeader className="items-center">
 					<Label.Big600>{stageTitleMap[stage]}</Label.Big600>
 				</CardHeader>

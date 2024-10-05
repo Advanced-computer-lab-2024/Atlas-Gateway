@@ -28,7 +28,7 @@ export default function AccountType() {
 				<Flex
 					key={type.value}
 					className={cn(
-						"rounded-md w-full h-24 items-center justify-center border bg-card cursor-pointer",
+						"rounded-md w-full h-24 items-center justify-center border bg-card cursor-pointer border-black",
 						{
 							"bg-gray-300": form?.watch("type") === type.value,
 						},
