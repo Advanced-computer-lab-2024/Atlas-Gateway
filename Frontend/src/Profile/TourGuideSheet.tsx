@@ -1,58 +1,52 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import {
-	useTourGuideProfile,
-	useUpdateTourGuideProfile,
-} from "@/api/data/useProfile";
-import {
-	Form,
-	FormControl,
-	FormDescription,
-	FormField,
-	FormItem,
-	FormLabel,
-} from "@/components/ui/form";
+
+
+import { useTourGuideProfile, useUpdateTourGuideProfile } from "@/api/data/useProfile";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { TTourGuide } from "@/types/global";
+
+
 
 import Label from "../components/ui/Label";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
-import {
-	Sheet,
-	SheetContent,
-	SheetDescription,
-	SheetFooter,
-	SheetHeader,
-	SheetTitle,
-	SheetTrigger,
-} from "../components/ui/sheet";
+import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "../components/ui/sheet";
+
 
 const formSchema = z.object({
 	email: z.string().email({
 		message: "Please enter a valid email address.",
 	}),
-	mobileNumber: z.string().min(11, {
+	mobile: z.string().min(11, {
 		message: "Mobile number must be at least 11 characters.",
 	}),
-	yearsOfExperience: z.coerce.number(),
-	previousWork: z.string().min(2, {
+	experience: z.coerce.number(),
+	prevWork: z.string().min(2, {
 		message: "Previous work must be at least 2 characters.",
 	}),
 	profilePicture: z.string().nullable(),
 });
 
 export default function TourGuideSheet() {
+	
+
+	
+
+	const [open, setOpen] = useState(false);
+	const { data, refetch} = useTourGuideProfile();
+
 	const form = useForm<TTourGuide>({
 		resolver: zodResolver(formSchema),
+		mode: "onChange",
+		values: data,
 	});
-
-	const { reset, getValues } = form;
-	const { data, refetch } = useTourGuideProfile();
-
+	const { reset, getValues, formState } = form; 
+	console.log(formState);
 	useEffect(() => {
 		if (data) {
 			reset(data);
@@ -64,11 +58,12 @@ export default function TourGuideSheet() {
 	const onSubmit = () => {
 		const data = getValues();
 		doEditTourGuideProfile(data);
+		setOpen(false);
 	};
 
 	return (
 		<div>
-			<Sheet>
+			<Sheet open={ open } onOpenChange={setOpen}>
 				<SheetTrigger asChild>
 					<Button className="align p-6 justify-center">
 						<Label.Big400>Update Profile</Label.Big400>
@@ -112,15 +107,12 @@ export default function TourGuideSheet() {
 							{/* Mobile Number*/}
 							<FormField
 								control={form.control}
-								name="mobileNumber"
+								name="mobile"
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>Mobile Number:-</FormLabel>
 										<FormControl>
-											<Input
-												id="mobileNumber"
-												{...field}
-											/>
+											<Input id="mobile" {...field} />
 										</FormControl>
 										<FormDescription>
 											This is your Description
@@ -131,7 +123,7 @@ export default function TourGuideSheet() {
 							{/* Years of Experience input */}
 							<FormField
 								control={form.control}
-								name="yearsOfExperience"
+								name="experience"
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>
@@ -140,7 +132,7 @@ export default function TourGuideSheet() {
 										<FormControl>
 											<Input
 												type="number"
-												id="yearsOfExperience"
+												id="experience"
 												{...field}
 											/>
 										</FormControl>
@@ -154,7 +146,7 @@ export default function TourGuideSheet() {
 							{/* Description input */}
 							<FormField
 								control={form.control}
-								name="previousWork"
+								name="prevWork"
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>
@@ -162,7 +154,7 @@ export default function TourGuideSheet() {
 										</FormLabel>
 										<FormControl>
 											<Textarea
-												id="previousWork"
+												id="prevWork"
 												{...field}
 											/>
 										</FormControl>
@@ -173,9 +165,9 @@ export default function TourGuideSheet() {
 								)}
 							/>
 							<SheetFooter>
-								<Button type="submit" onClick={onSubmit}>
-									Save changes
-								</Button>
+									<Button type="submit" disabled={!(formState.isValid)} onClick={onSubmit}>
+										Save changes
+									</Button>
 							</SheetFooter>
 						</form>
 					</Form>

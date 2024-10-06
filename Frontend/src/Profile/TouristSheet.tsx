@@ -22,6 +22,7 @@ import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import {
 	Sheet,
+
 	SheetContent,
 	SheetDescription,
 	SheetFooter,
@@ -63,7 +64,6 @@ export default function TouristSheet() {
 	};
 
 	return (
-		<div>
 			<Sheet>
 				<SheetTrigger asChild>
 					<Button className="align p-6 justify-center">
@@ -130,6 +130,5 @@ export default function TouristSheet() {
 					</Form>
 				</SheetContent>
 			</Sheet>
-		</div>
 	);
 }
