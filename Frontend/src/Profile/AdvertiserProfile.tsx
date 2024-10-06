@@ -31,17 +31,17 @@ export default function AdvertiserProfile() {
 					</Flex>
 					<Flex isColumn>
 						<Label.Big700>
-							{data?.username || "joedoe123"}
+							{data?.username || "username not found"}
 						</Label.Big700>
 						<Label.Big400>
-							{data?.name || "joedoe123"}
+							{data?.name || "Name not found"}
 						</Label.Big400>
 						<Label.Big400>
-							{data?.email || "joedoe123@gmail.com"}
+							{data?.email || "Email not found"}
 						</Label.Big400>
 						<hr className="border-black" />
 						<Label.Big400>
-							Hotline: {data?.hotline || "911"}
+							Hotline: {data?.hotline || "hotline not found"}
 						</Label.Big400>
 
 						<Label.Big400>
@@ -57,7 +57,7 @@ export default function AdvertiserProfile() {
 						</Label.Big400>
 						<br></br>
 						<Label.Big400><u>Company Profile:</u></Label.Big400>
-						<Label.Mid400>{data?.description}</Label.Mid400>
+						<Label.Mid400>{data?.description || "Description here"}</Label.Mid400>
 					</Flex>
 				</Flex>
 			</Card>

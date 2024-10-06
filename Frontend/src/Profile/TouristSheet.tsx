@@ -37,21 +37,20 @@ const formSchema = z.object({
 	email: z.string().email({
 		message: "Please enter a valid email address.",
 	}),
-	mobileNumber: z.string().min(11, {
-		message: "Mobile number must be at least 11 characters.",
+	mobile: z.string().min(8, {
+		message: "Mobile number must be at least 8 characters.",
 	}),
-	walletBalance: z.number().int(),
-	profilePicture: z.string().nullable(),
 });
 
 export default function TouristSheet() {
 	const [open, setOpen] = useState(false);
+	const { data, refetch } = useTouristProfile();
 	const form = useForm<TTourist>({
 		resolver: zodResolver(formSchema),
+		mode: "onChange",
 	});
 
 	const { reset, getValues, formState } = form;
-	const { data, refetch } = useTouristProfile();
 
 	useEffect(() => {
 		if (data) {
@@ -133,24 +132,25 @@ export default function TouristSheet() {
 						{/* Mobile Number input */}
 						<FormField
 							control={form.control}
-							name="mobileNumber"
+							name="mobile"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Mobile Number</FormLabel>
 									<FormControl>
-										<Input
-											placeholder="0123456789"
-											{...field}
-										/>
+										<Input id="mobile" {...field} />
 									</FormControl>
 									<FormDescription>
-										This is your Mobile Number
+										This is your Description
 									</FormDescription>
 								</FormItem>
 							)}
 						/>
 						<SheetFooter>
-							<Button disabled={!formState.isValid} type="submit">
+							<Button
+								disabled={!formState.isValid}
+								onClick={onSubmit}
+								type="submit"
+							>
 								Save changes
 							</Button>
 						</SheetFooter>

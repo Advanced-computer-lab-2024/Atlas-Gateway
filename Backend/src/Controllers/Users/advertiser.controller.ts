@@ -5,20 +5,22 @@ import { Advertiser } from "../../Database/Models/Users/advertiser.model";
 
 export const createAdvertiser = async (req: Request, res: Response) => {
 	try {
-		const { username, email, password, companyProfile } = req.body;
+		// companyProfile;
+		const { name, username, email, password, hotline, website, description } =
+			req.body;
 		if (!username || !email || !password) {
 			res.status(400).send("username, email and password are required");
 		}
 
-		if (!companyProfile) {
-			res.status(400).send("companyProfile is required");
-		}
+		// if (!companyProfile) {
+		// 	res.status(400).send("companyProfile is required");
+		// }
 
 		const user = new Advertiser({
 			username,
 			email,
 			password,
-			companyProfile,
+			// companyProfile,
 		});
 		await user.save();
 		res.status(201).send(user);
@@ -27,26 +29,37 @@ export const createAdvertiser = async (req: Request, res: Response) => {
 	}
 };
 
-export const getAdvertiserById = async (req: Request, res: Response) => {
-	const id = req.params.id;
-	if (!id) {
-		res.status(400).send("id is required");
-	}
+// export const getAdvertiserById = async (req: Request, res: Response) => {
+// 	const id = req.params.id;
+// 	if (!id) {
+// 		res.status(400).send("id is required");
+// 	}
 
-	if (!Types.ObjectId.isValid(id)) {
-		return res.status(400).send("id is invalid");
-	}
+// 	if (!Types.ObjectId.isValid(id)) {
+// 		return res.status(400).send("id is invalid");
+// 	}
 
+// 	try {
+// 		//maybe we need to add checker here based on the flow of the page
+// 		const advertiser = await Advertiser.findById(id);
+// 		if (!advertiser) {
+// 			return res.status(404).send("advertiser not found");
+// 		}
+// 		res.status(200).send(advertiser);
+// 	} catch (error) {
+// 		console.log(error);
+// 		res.status(500).send("Failed to get advertiser");
+// 	}
+// };
+
+export const getAdvertiser = async (req: Request, res: Response) => {
 	try {
-		//maybe we need to add checker here based on the flow of the page
+		const id = req.params.id;
 		const advertiser = await Advertiser.findById(id);
-		if (!advertiser) {
-			return res.status(404).send("advertiser not found");
-		}
 		res.status(200).send(advertiser);
 	} catch (error) {
 		console.log(error);
-		res.status(500).send("Failed to get advertiser");
+		res.status(500).send("Failed to get Advertiser");
 	}
 };
 
@@ -71,21 +84,21 @@ export const updateAdvertiser = async (req: Request, res: Response) => {
 
 	const advertiser = await Advertiser.findById(id);
 	const Verified = advertiser?.isVerified;
-	const { email, password, companyProfile } = req.body;
+	
 
 	try {
-		if (Verified) {
-			const updatedAdvertiser = await Advertiser.findByIdAndUpdate(
-				id,
-				{ email, password, companyProfile },
-				{
-					new: true,
-				},
-			);
-			res.status(200).send(updatedAdvertiser);
-		} else {
-			res.status(500).send("user not Verified");
-		}
+		// if (Verified) {
+		const updatedAdvertiser = await Advertiser.findByIdAndUpdate(
+			id,
+			req.body,
+			{
+				new: true,
+			},
+		);
+		res.status(200).send(updatedAdvertiser);
+		// } else {
+		// 	res.status(500).send("user not Verified");
+		// }
 	} catch (error) {
 		res.status(500).send("Failed to update advertiser");
 	}

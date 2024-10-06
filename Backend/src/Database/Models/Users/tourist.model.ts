@@ -1,12 +1,14 @@
 import { schemaConfig } from "#utils";
 import { Document, Schema, Types, model } from "mongoose";
 
+
 export interface ITourist extends Document {
+	name: string;
 	username: string;
 	email: string; // story 3
 	password: string;
 	wallet: number; // story 11
-	mobileNumber: number;
+	mobile: string;
 	nationality: string;
 	dob: Date;
 	occupation: string;
@@ -23,11 +25,12 @@ export interface ITourist extends Document {
 
 const touristSchema = new Schema<ITourist>(
 	{
+		name: { type: String},
 		username: { type: String, required: true },
 		email: { type: String, required: true },
 		password: { type: String, required: true },
 		wallet: { type: Number, required: true, default: 0 },
-		mobileNumber: { type: Number, required: true },
+		mobile: { type: String, required: true },
 		nationality: { type: String, required: true },
 		dob: { type: Date, required: true },
 		occupation: { type: String, required: true },

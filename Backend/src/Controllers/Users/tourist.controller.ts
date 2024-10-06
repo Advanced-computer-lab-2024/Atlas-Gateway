@@ -2,25 +2,28 @@ import { Request, Response } from "express";
 import { Types } from "mongoose";
 
 import { Tourist } from "../../Database/Models/Users/tourist.model";
+import { Console } from "console";
 
 export const createTourist = async (req: Request, res: Response) => {
 	try {
 		const {
+			name,
 			userName,
 			email,
 			password,
 			profile,
-			mobileNumber,
+			mobile,
 			nationality,
 			dob,
 			job,
 		} = req.body;
 		const user = new Tourist({
+			name,
 			userName,
 			email,
 			password,
 			profile,
-			mobileNumber,
+			mobile,
 			nationality,
 			dob,
 			job,
@@ -59,39 +62,17 @@ export const getTourists = async (req: Request, res: Response) => {
 
 export const updateTourist = async (req: Request, res: Response) => {
 	const id = req.params.id;
-	const {
-		email,
-		password,
-		wallet,
-		mobileNumber,
-		nationality,
-		dob,
-		job,
-		address,
-		currency,
-		profile,
-	} = req.body;
 	try {
 		const touristData = await Tourist.findByIdAndUpdate(
 			id,
-			{
-				email,
-				password,
-				wallet,
-				mobileNumber,
-				nationality,
-				dob,
-				job,
-				address,
-				currency,
-				profile,
-			},
+			req.body,
 			{
 				new: true,
 			},
 		);
 		res.status(200).send(touristData);
 	} catch (error) {
+		console.log(error);
 		res.status(500).send("Failed to update Tourist");
 	}
 };

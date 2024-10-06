@@ -9,7 +9,7 @@ export default function Profile() {
 	const { user } = useLoginStore();
 
 	switch (user?.type) {
-		case "adverister":
+		case "advertiser":
 			return <AdvertiserProfile />;
 		case "tourist":
 			return <TouristProfile />;

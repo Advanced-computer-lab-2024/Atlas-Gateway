@@ -59,18 +59,11 @@ export const updateSeller = async (req: Request, res: Response) => {
 	if (!Types.ObjectId.isValid(id)) {
 		return res.status(400).send("Id is Invalid ");
 	}
-
-	const { name, email, password, picture, description, isVerified } =
-		req.body;
 	try {
 		//maybe we need to add checker here based on the flow of the page
-		const adv = await Seller.findByIdAndUpdate(
-			id,
-			{ name, email, password, picture, description, isVerified },
-			{
-				new: true,
-			},
-		);
+		const adv = await Seller.findByIdAndUpdate(id, req.body, {
+			new: true,
+		});
 		res.status(200).send(adv);
 	} catch (error) {
 		res.status(500).send("Failed to update Seller");

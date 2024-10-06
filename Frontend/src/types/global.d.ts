@@ -67,7 +67,7 @@ export type TActivity = {
 };
 export interface TTourist extends TUser {
 	email: string;
-	mobileNumber: string;
+	mobile: string;
 	walletBalance: number;
 }
 

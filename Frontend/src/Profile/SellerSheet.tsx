@@ -23,7 +23,6 @@ import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import {
 	Sheet,
-	SheetClose,
 	SheetContent,
 	SheetDescription,
 	SheetFooter,
@@ -36,16 +35,12 @@ const formSchema = z.object({
 	name: z.string().min(2, {
 		message: "Name must be at least 2 characters.",
 	}),
-	companyName: z.string().min(2, {
-		message: "Company Name must be at least 2 characters.",
-	}),
 	email: z.string().email({
 		message: "Please enter a valid email address.",
 	}),
 	description: z.string().min(2, {
 		message: "Description must be at least 2 characters.",
 	}),
-	profilePicture: z.string().nullable(),
 });
 
 export default function SellerSheet() {
@@ -115,25 +110,6 @@ export default function SellerSheet() {
 							)}
 						/>
 
-						{/* Name input */}
-						<FormField
-							control={form.control}
-							name="companyName"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Company Name</FormLabel>
-									<FormControl>
-										<Input
-											placeholder="Atlas gateway"
-											{...field}
-										/>
-									</FormControl>
-									<FormDescription>
-										This is your Company display name.
-									</FormDescription>
-								</FormItem>
-							)}
-						/>
 
 						{/* Email input */}
 						<FormField
@@ -141,7 +117,7 @@ export default function SellerSheet() {
 							name="email"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel> Email</FormLabel>
+									<FormLabel>Email</FormLabel>
 									<FormControl>
 										<Input
 											placeholder="joedoe123@gamil.com"
@@ -172,14 +148,13 @@ export default function SellerSheet() {
 							)}
 						/>
 						<SheetFooter>
-							<SheetClose asChild>
 								<Button
 									type="submit"
 									disabled={!formState.isValid}
+									onClick={onSubmit}
 								>
 									Save changes
 								</Button>
-							</SheetClose>
 						</SheetFooter>
 					</form>
 				</Form>

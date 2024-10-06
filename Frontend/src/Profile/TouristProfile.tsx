@@ -21,15 +21,15 @@ export default function TouristProfile() {
 					</Flex>
 					<Flex isColumn>
 						<Label.Big700>
-							{data?.username || "John Doe"}
+							{data?.username || "Username not found"}
 						</Label.Big700>
-						<Label.Big400>{data?.name || "joedoe123"}</Label.Big400>
+						<Label.Big400>{data?.name || "Name not found"}</Label.Big400>
 						<Label.Big400>
-							{data?.email || "joedoe123@gmail.com"}
+							{data?.email || "Email not found"}
 						</Label.Big400>
 						<hr className="border-black" />
 						<Label.Big400>
-							Mobile Number: {data?.mobileNumber || -1}
+							Mobile Number: {data?.mobile || -1}
 						</Label.Big400>
 
 						<Label.Big400>

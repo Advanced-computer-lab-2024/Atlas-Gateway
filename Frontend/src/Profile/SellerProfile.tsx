@@ -31,21 +31,19 @@ export default function SellerProfile() {
 					</Flex>
 					<Flex isColumn>
 						<Label.Big700>
-							{data?.username || "joedoe123"}
+							{data?.username || "username not found"}
 						</Label.Big700>
 						<Label.Big400>
-							{data?.name || "joedoe123"}
+							{data?.name || "Name not found"}
 						</Label.Big400>
+
 						<Label.Big400>
-							{data?.companyName || "Joe Doe Seller"}
-						</Label.Big400>
-						<Label.Big400>
-							{data?.email || "joedoe123@gmail.com"}
+							{data?.email || "email not found"}
 						</Label.Big400>
 						<hr className="border-black" />
 						<br></br>
 						<Label.Big400>
-							{data?.description || "This is a description"}
+							{data?.description || "description here"}
 						</Label.Big400>
 					</Flex>
 				</Flex>

@@ -1,25 +1,32 @@
 import { Request, Response } from "express";
 import { Types } from "mongoose";
 
+
+
 import { TourGuide } from "../../Database/Models/Users/tourGuide.model";
+
 
 export const createTourGuide = async (req: Request, res: Response) => {
 	try {
 		const {
+			name,
 			username,
 			email,
 			password,
 			description,
 			picture,
+			mobile,
 			experience,
 			previous,
 		} = req.body;
 		const user = new TourGuide({
+			name,
 			username,
 			email,
 			password,
 			description,
 			picture,
+			mobile,
 			experience,
 			prevWork: previous,
 		});

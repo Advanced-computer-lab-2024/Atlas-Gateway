@@ -38,8 +38,8 @@ const formSchema = z.object({
 	email: z.string().email({
 		message: "Please enter a valid email address.",
 	}),
-	hotline: z.string().min(11, {
-		message: "Hotline must be at least 11 characters.",
+	hotline: z.string().min(4, {
+		message: "Hotline must be at least 4 characters.",
 	}),
 	website: z.string().url({
 		message: "Please enter a valid URL.",
@@ -47,13 +47,13 @@ const formSchema = z.object({
 	description: z.string().min(2, {
 		message: "Description must be at least 2 characters.",
 	}),
-	profilePicture: z.string().nullable(),
 });
 
 export default function AdvertiserSheet() {
 	const [open, setOpen] = useState(false);
 	const form = useForm<TAdvetisor>({
 		resolver: zodResolver(formSchema),
+		mode: "onChange",
 	});
 
 	const { reset, getValues, formState } = form;
@@ -191,7 +191,11 @@ export default function AdvertiserSheet() {
 						/>
 
 						<SheetFooter>
-							<Button disabled={!formState.isValid} type="submit">
+							<Button
+								disabled={!formState.isValid}
+								onClick={onSubmit}
+								type="submit"
+							>
 								Save changes
 							</Button>
 						</SheetFooter>
