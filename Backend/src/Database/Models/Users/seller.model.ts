@@ -9,6 +9,7 @@ export interface ISeller extends Document {
 	description: string;
 	isDeleted: boolean;
 	products: [Types.ObjectId];
+	isVerified: { type: Boolean, default: false },
 }
 
 const sellerSchema = new Schema<ISeller>(
@@ -20,6 +21,7 @@ const sellerSchema = new Schema<ISeller>(
 		description: { type: String },
 		isDeleted: { type: Boolean, default: false },
 		products: [{ type: Schema.Types.ObjectId, ref: "Product" }],
+		isVerified:{type:Boolean,default:false}
 	},
 	schemaConfig,
 );

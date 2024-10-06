@@ -4,7 +4,6 @@ import { Advertiser } from "../../Database/Models/Users/advertiser.model";
 
 export const createAdvertiser = async (req: Request, res: Response) => {
 	try {
-		//maybe we need to add checker here based on the flow of the page
 		const { username, email, password, companyProfile, activities } =
 			req.body;
 		const user = new Advertiser({
@@ -22,7 +21,6 @@ export const createAdvertiser = async (req: Request, res: Response) => {
 };
 export const getAdvertiser = async (req: Request, res: Response) => {
 	try {
-		//maybe we need to add checker here based on the flow of the page
 		res.status(200).send(await Advertiser.find());
 	} catch (error) {
 		console.log(error);
@@ -31,9 +29,11 @@ export const getAdvertiser = async (req: Request, res: Response) => {
 };
 export const updateAdvertiser = async (req: Request, res: Response) => {
 	const id = req.params.id;
+	const advertiser=await Advertiser.findById(id);
+	const Verified=advertiser?.isVerified
 	const { username, email, password, companyProfile, activities } = req.body;
 	try {
-		//maybe we need to add checker here based on the flow of the page
+		if(Verified){
 		const adv = await Advertiser.findByIdAndUpdate(
 			id,
 			{ username, email, password, companyProfile, activities },
@@ -42,16 +42,26 @@ export const updateAdvertiser = async (req: Request, res: Response) => {
 			},
 		);
 		res.status(200).send(adv);
+	}
+	else{
+		res.status(500).send("user not Verified");
+	}
 	} catch (error) {
 		res.status(500).send("failed");
 	}
 };
 export const deleteAdvertiser = async (req: Request, res: Response) => {
 	const id = req.params.id;
+	const advertiser=await Advertiser.findById(id);
+	const Verified=advertiser?.isVerified
 	try {
-		//maybe we need to add checker here based on the flow of the page
+		if(Verified){
 		await Advertiser.findByIdAndDelete(id);
 		res.status(200).send("advertiser deleted successfully");
+		}
+		else{
+			res.status(500).send("user not Verified");
+		}
 	} catch (error) {
 		res.status(500).send("Failed to delete advertiser");
 	}
@@ -59,11 +69,16 @@ export const deleteAdvertiser = async (req: Request, res: Response) => {
 
 export const viewActivities = async (req: Request, res: Response) => {
 	const id=req.params.id
+	const advertiser=await Advertiser.findById(id);
+	const Verified=advertiser?.isVerified
 	try {
-		res.status(200).send(await Advertiser.findById(id).select('activities'));
+		if(Verified){
+		res.status(200).send(await Advertiser.findById(id));}
+		else{
+			res.status(500).send("user not Verified");
+		}
 	} catch (error) {
 		console.log(error);
 		res.status(500).send("failed");
 	}
 };
-
