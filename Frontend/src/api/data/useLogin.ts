@@ -11,8 +11,9 @@ export function useLogin() {
 
 	const mutation = useMutation({
 		mutationFn: apiLogin,
-		onSuccess: (data, variables) => {
-			const { _id, username, type } = data.data;
+		onSuccess: (data) => {
+			const { _id, username } = data.data.user;
+			const type = data.data.type;
 			setUser({
 				_id,
 				type,

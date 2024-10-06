@@ -2,11 +2,11 @@ import axios from "axios";
 
 
 import ENDPOINTS from "./ENDPOINTS";
-import { TRegisterationResponse } from "./types";
+import { TLoginResponse } from "./types";
 import { TLoginForm } from "@/Login/types";
 
 export default function apiLogin(payload: TLoginForm) {
-	return axios<TRegisterationResponse>({
+	return axios<TLoginResponse>({
 		method: "POST",
 		url: ENDPOINTS.login,
 		headers: {

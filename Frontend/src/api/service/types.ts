@@ -1,9 +1,13 @@
-import { TAdvetisor, TSeller, TTourGuide, TTourist, TUser } from "@/types/global";
-
+import { EAccountType } from "@/types/enums";
+import {
+	TAdvetisor,
+	TSeller,
+	TTourGuide,
+	TTourist,
+	TUser,
+} from "@/types/global";
 
 export type TRegisterationResponse = TUser & { _id: string };
-
-export type TLoginResponse = TUser & { _id: string };
 
 export type TTouristProfileResponse = TTourist & { _id: string };
 
@@ -20,4 +24,9 @@ export type TApiResponse<T> = {
 		total: number;
 		pages: number;
 	};
+};
+
+export type TLoginResponse = {
+	user: TUser;
+	type: EAccountType;
 };
