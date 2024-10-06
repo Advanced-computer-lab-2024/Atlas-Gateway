@@ -9,53 +9,51 @@ interface IPlaces extends Document {
 	pictures: string;
 	openingHours: {
 		sunday: {
-			open:string;
-			close:string;
-			dayOff:boolean
+			open: string;
+			close: string;
+			dayOff: boolean;
 		};
 		monday: {
-			open:string;
-			close:string;
-			dayOff:boolean
+			open: string;
+			close: string;
+			dayOff: boolean;
 		};
 		tuesday: {
-			open:string;
-			close:string;
-			dayOff:boolean
+			open: string;
+			close: string;
+			dayOff: boolean;
 		};
 		wednesday: {
-			open:string;
-			close:string;
-			dayOff:boolean
+			open: string;
+			close: string;
+			dayOff: boolean;
 		};
 		thursday: {
-			open:string;
-			close:string;
-			dayOff:boolean
+			open: string;
+			close: string;
+			dayOff: boolean;
 		};
 		friday: {
-			open:string;
-			close:string;
-			dayOff:boolean
+			open: string;
+			close: string;
+			dayOff: boolean;
 		};
 		saturday: {
-			open:string;
-			close:string;
-			dayOff:boolean
+			open: string;
+			close: string;
+			dayOff: boolean;
 		};
 	};
 	description: string;
 	ticketPrices: Number[];
-	tags: string[];
-	createdAt: Date;
-	updatedAt: Date;
+	tags: Types.ObjectId[];
 }
 
 const placesSchema = new Schema<IPlaces>(
 	{
 		governorId: {
 			type: Schema.Types.ObjectId,
-			ref: "governer",
+			ref: "governor",
 			required: true,
 		},
 		name: { type: String, required: true },
@@ -63,40 +61,40 @@ const placesSchema = new Schema<IPlaces>(
 		description: { type: String, required: true },
 		pictures: { type: String, required: true },
 		openingHours: {
-			sunday: { 
-				open: { type: String},
-				close:{ type: String},
-				dayOff:{ type: Boolean}
+			sunday: {
+				open: { type: String },
+				close: { type: String },
+				dayOff: { type: Boolean },
 			},
-			monday: { 
-				open: { type: String},
-				close:{ type: String},
-				dayOff:{ type: Boolean}
+			monday: {
+				open: { type: String },
+				close: { type: String },
+				dayOff: { type: Boolean },
 			},
-			tuesday:{ 
-				open: { type: String},
-				close:{ type: String},
-				dayOff:{ type: Boolean}
+			tuesday: {
+				open: { type: String },
+				close: { type: String },
+				dayOff: { type: Boolean },
 			},
-			wednesday: { 
-				open: { type: String},
-				close:{ type: String},
-				dayOff:{ type: Boolean}
+			wednesday: {
+				open: { type: String },
+				close: { type: String },
+				dayOff: { type: Boolean },
 			},
-			thursday:{ 
-				open: { type: String},
-				close:{ type: String},
-				dayOff:{ type: Boolean}
+			thursday: {
+				open: { type: String },
+				close: { type: String },
+				dayOff: { type: Boolean },
 			},
-			friday: { 
-				open: { type: String},
-				close:{ type: String},
-				dayOff:{ type: Boolean}
+			friday: {
+				open: { type: String },
+				close: { type: String },
+				dayOff: { type: Boolean },
 			},
-			saturday: { 
-				open: { type: String},
-				close:{ type: String},
-				dayOff:{ type: Boolean}
+			saturday: {
+				open: { type: String },
+				close: { type: String },
+				dayOff: { type: Boolean },
 			},
 		},
 		ticketPrices: [{ type: Number, required: true }],

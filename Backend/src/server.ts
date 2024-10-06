@@ -12,6 +12,7 @@ import tourGuideRouter from "./Routes/Users/tourGuide.route";
 import touristRouter from "./Routes/Users/tourist.route";
 import activityRouter from "./Routes/activity.route";
 import categoryRouter from "./Routes/category.route";
+import placesRouter from "./Routes/places.route";
 import productRouter from "./Routes/product.route";
 import registerRouter from "./Routes/register.route";
 import tagRouter from "./Routes/tag.route";
@@ -41,6 +42,7 @@ async function startServer() {
 	app.use("/api/tourist", touristRouter);
 	app.use("/api/register", registerRouter);
 	app.use("/api/itinerary", itineraryRouter);
+	app.use("/api/places", placesRouter);
 
 	app.get("/", (req: Request, res: Response) => {
 		try {
