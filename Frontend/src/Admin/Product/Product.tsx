@@ -39,8 +39,7 @@ import { productSchema } from "../schema";
 import EditProduct from "./EditProduct";
 
 const Product = () => {
-	const [refresh, setRefresh] = useState<boolean>(false);
-	const { data: products, meta } = useProducts();
+	const { data: products, meta, refetch } = useProducts();
 	const { page, onPageChange, pagesCount } = usePagination({
 		pageNum: meta?.pages || 1,
 		pagesCount: meta?.pages || 1,
@@ -68,20 +67,11 @@ const Product = () => {
 			});
 	};
 
-	useEffect(() => {
-		axios
-			.get("http://localhost:5000/api/products/list")
-			.then((res) => {})
-			.catch((error) => {
-				console.error(error);
-			});
-	}, [refresh]);
-
 	return (
 		<div className="flex flex-col p-3 h-screen overflow-y-auto pb-32">
 			<div className="flex gap-3 self-end pb-3 items-center">
 				<div className="cursor-pointer hover:text-[#2b58ed]">
-					<RotateCw onClick={() => setRefresh(!refresh)} />
+					<RotateCw onClick={() => refetch()} />
 				</div>
 				<Sheet>
 					<SheetTrigger asChild>

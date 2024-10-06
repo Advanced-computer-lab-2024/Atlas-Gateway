@@ -11,12 +11,12 @@ export function useProducts() {
 	const { _id } = user || {};
 	const [query] = useQueryString();
 
-	const { data } = useQuery({
+	const { data, refetch } = useQuery({
 		queryFn: () => apiProducts(_id, query),
 		queryKey: ["product", _id, query],
 	});
 
-	return { data: data?.data?.data, meta: data?.data?.metaData };
+	return { data: data?.data?.data, meta: data?.data?.metaData, refetch };
 }
 
 export function useProduct() {
