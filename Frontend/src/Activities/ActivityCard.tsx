@@ -109,7 +109,10 @@ export default function ActivityCard({
 								className="overflow-x-scroll w-full"
 							>
 								{categories?.map((category) => (
-									<Badge key={category} variant={"default"}>
+									<Badge
+										key={category?._id}
+										variant={"default"}
+									>
 										{category?.name}
 									</Badge>
 								))}
@@ -134,7 +137,7 @@ export default function ActivityCard({
 								className="overflow-x-scroll w-full"
 							>
 								{tags?.map((tag) => (
-									<Badge key={tag} variant={"default"}>
+									<Badge key={tag?._id} variant={"default"}>
 										{tag?.name}
 									</Badge>
 								))}
