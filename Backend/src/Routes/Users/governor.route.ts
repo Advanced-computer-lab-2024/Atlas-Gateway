@@ -1,7 +1,7 @@
 import express from "express";
 
 import {
-	crteatGovernor,
+	createGovernor,
 	deleteGovernor,
 	getGovernors,
 	getHistoricalLocations,
@@ -9,7 +9,7 @@ import {
 
 const router = express.Router();
 
-router.post("/create", crteatGovernor);
+router.post("/create", createGovernor);
 router.get("/list", getGovernors);
 router.get("/show/:id", getHistoricalLocations);
 router.delete("/delete/:id", deleteGovernor);

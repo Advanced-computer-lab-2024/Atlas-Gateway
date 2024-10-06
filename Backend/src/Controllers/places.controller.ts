@@ -32,7 +32,7 @@ export const createPlace = async (req: Request, res: Response) => {
 			!ticketPrices ||
 			!tags
 		) {
-			return res.status(400).json({ message: "Misisng Fields" });
+			return res.status(400).json({ message: "Missing Fields" });
 		}
 		const placeData = new Places({
 			name,
@@ -55,7 +55,37 @@ export const createPlace = async (req: Request, res: Response) => {
 
 export const getPlaces = async (req: Request, res: Response) => {
 	try {
-		const response = await Places.find();
+		const pipeline: PipelineStage[] = [
+			{
+				$lookup: {
+					from: "tags",
+					localField: "tags",
+					foreignField: "_id",
+					as: "tagsData",
+				},
+			},
+
+			...AggregateBuilder(req.query, ["name", "tagsData.name"]),
+		];
+
+		const result = await Places.aggregate(pipeline);
+
+		if (result[0].data.length === 0) {
+			return res
+				.status(404)
+				.json({ message: "No matching Places Found" });
+		}
+
+		const response = {
+			data: result[0].data,
+			metaData: {
+				page: req.query.page || 1,
+				total: result[0].total[0].count,
+				pages: Math.ceil(
+					result[0].total[0].count / (Number(req.query.limit) || 10),
+				),
+			},
+		};
 
 		res.status(200).send(response);
 	} catch (error) {
