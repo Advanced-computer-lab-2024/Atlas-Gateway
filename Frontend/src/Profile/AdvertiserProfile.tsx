@@ -34,6 +34,9 @@ export default function AdvertiserProfile() {
 							{data?.username || "joedoe123"}
 						</Label.Big700>
 						<Label.Big400>
+							{data?.name || "joedoe123"}
+						</Label.Big400>
+						<Label.Big400>
 							{data?.email || "joedoe123@gmail.com"}
 						</Label.Big400>
 						<hr className="border-black" />

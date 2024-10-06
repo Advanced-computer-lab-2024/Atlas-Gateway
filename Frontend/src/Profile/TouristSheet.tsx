@@ -31,6 +31,9 @@ import {
 } from "../components/ui/sheet";
 
 const formSchema = z.object({
+	name: z.string().min(2, {
+		message: "Name must be at least 2 characters.",
+	}),
 	email: z.string().email({
 		message: "Please enter a valid email address.",
 	}),
@@ -88,6 +91,25 @@ export default function TouristSheet() {
 								when you're done.
 							</SheetDescription>
 						</SheetHeader>
+						<FormField
+							control={form.control}
+							name="name"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Name</FormLabel>
+									<FormControl>
+										<Input
+											placeholder="John Doe"
+											{...field}
+										/>
+									</FormControl>
+									<FormDescription>
+										This is your name.
+									</FormDescription>
+								</FormItem>
+							)}
+						/>
+
 						{/* Email input */}
 						<FormField
 							control={form.control}

@@ -23,6 +23,7 @@ export default function TouristProfile() {
 						<Label.Big700>
 							{data?.username || "John Doe"}
 						</Label.Big700>
+						<Label.Big400>{data?.name || "joedoe123"}</Label.Big400>
 						<Label.Big400>
 							{data?.email || "joedoe123@gmail.com"}
 						</Label.Big400>

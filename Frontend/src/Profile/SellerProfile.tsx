@@ -34,6 +34,9 @@ export default function SellerProfile() {
 							{data?.username || "joedoe123"}
 						</Label.Big700>
 						<Label.Big400>
+							{data?.name || "joedoe123"}
+						</Label.Big400>
+						<Label.Big400>
 							{data?.companyName || "Joe Doe Seller"}
 						</Label.Big400>
 						<Label.Big400>

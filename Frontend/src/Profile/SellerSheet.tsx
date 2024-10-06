@@ -33,6 +33,9 @@ import {
 } from "../components/ui/sheet";
 
 const formSchema = z.object({
+	name: z.string().min(2, {
+		message: "Name must be at least 2 characters.",
+	}),
 	companyName: z.string().min(2, {
 		message: "Company Name must be at least 2 characters.",
 	}),
@@ -93,6 +96,25 @@ export default function SellerSheet() {
 							</SheetDescription>
 						</SheetHeader>
 
+						<FormField
+							control={form.control}
+							name="name"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Name</FormLabel>
+									<FormControl>
+										<Input
+											placeholder="John Doe"
+											{...field}
+										/>
+									</FormControl>
+									<FormDescription>
+										This is your name.
+									</FormDescription>
+								</FormItem>
+							)}
+						/>
+
 						{/* Name input */}
 						<FormField
 							control={form.control}
@@ -102,13 +124,12 @@ export default function SellerSheet() {
 									<FormLabel>Company Name</FormLabel>
 									<FormControl>
 										<Input
-											placeholder="John Doe"
+											placeholder="Atlas gateway"
 											{...field}
 										/>
 									</FormControl>
 									<FormDescription>
-										This is your public display Company
-										name.
+										This is your Company display name.
 									</FormDescription>
 								</FormItem>
 							)}

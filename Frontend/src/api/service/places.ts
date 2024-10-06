@@ -18,6 +18,7 @@ export function apiPlaces(
 		},
 		params: {
 			_id,
+			limit: 12,
 			...filters,
 		},
 		baseURL: "http://localhost:5000",

@@ -22,6 +22,9 @@ export default function TourGuideProfile() {
 					<Flex isColumn gap="4">
 						<Flex isColumn gap="2">
 							<Label.Big700>{data?.username}</Label.Big700>
+							<Label.Big400>
+								{data?.name || "joedoe123"}
+							</Label.Big400>
 							<Label.Big400>{data?.email || "N/A"}</Label.Big400>
 						</Flex>
 						<hr className="border-black" />
