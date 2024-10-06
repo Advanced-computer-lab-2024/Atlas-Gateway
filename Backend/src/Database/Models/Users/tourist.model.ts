@@ -18,6 +18,7 @@ export interface ITourist extends Document {
 		location?: string;
 		image?: string;
 	};
+	bookedItinerary:Types.ObjectId[]; // Tourist Can book an Itinerary, So a list to save his booked ones
 }
 
 const touristSchema = new Schema<ITourist>(
@@ -38,6 +39,7 @@ const touristSchema = new Schema<ITourist>(
 			location: { type: String },
 			image: { type: String },
 		},
+		bookedItinerary:[{type: Schema.Types.ObjectId, ref: "Itinerary" }], 
 	},
 	schemaConfig,
 );

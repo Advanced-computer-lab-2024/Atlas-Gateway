@@ -10,10 +10,10 @@ import {
 
 const router = express.Router();
 
-router.post("/create/:tourGuideId", createItinerary);
+router.post("/create", createItinerary);
 router.get("/list", getItinerary);
-router.get("/list/:tourGuideId", getItineraryById);
-router.put("/update/:tourGuideId/:itineraryId", updateItinerary);
+router.get("/show/:id", getItineraryById);
+router.put("/update/:id", updateItinerary);
 router.delete("/delete/:id", deleteItinerary);
 
 export default router;

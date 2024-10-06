@@ -12,6 +12,12 @@ export interface IActivity extends Document {
 	maxPrice: number;
 	specialDiscounts: number;
 	isOpen: boolean;
+	reviews:{
+		userId:Types.ObjectId;
+		review:string;
+		rating:number;
+	},
+	avgRating:number;
 }
 
 const activitySchema = new Schema<IActivity>(
