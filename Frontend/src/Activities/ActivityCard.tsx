@@ -1,7 +1,5 @@
-import axios from "axios";
 import { formatDate } from "date-fns";
 import { DollarSign, EllipsisVertical, MapPin, Star } from "lucide-react";
-import { Trash } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 import Label from "@/components/ui/Label";
@@ -16,34 +14,28 @@ import {
 import { Flex } from "@/components/ui/flex";
 import { TActivity } from "@/types/global";
 
-import AddActivityForm from "./Form/ActivityForm";
-
 export default function ActivityCard({
-	_id,
-	name,
-	location,
-	tags,
-	categories,
-	dateTime,
-	isOpen,
-	maxPrice,
-	specialDiscounts,
-	minPrice,
-	avgRating,
-	description,
-}: TActivity) {
+	editDrawer,
+	activity,
+}: {
+	activity: TActivity;
+	editDrawer: (activity: TActivity) => void;
+}) {
 	const navigate = useNavigate();
-
-	const handleDelete = (id: string) => {
-		axios
-			.delete(`http://localhost:5000/api/activity/delete/${id}`)
-			.then((res) => {
-				console.log(res.status);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	};
+	const {
+		_id,
+		name,
+		location,
+		tags,
+		categories,
+		dateTime,
+		isOpen,
+		maxPrice,
+		specialDiscounts,
+		minPrice,
+		avgRating,
+		description,
+	} = activity;
 
 	return (
 		<Card
@@ -61,26 +53,25 @@ export default function ActivityCard({
 						<Label.Mid500 className="justify-self-center">
 							{name}
 						</Label.Mid500>
-						<Flex>
-							<DropdownMenu>
-								<DropdownMenuTrigger className="absolute right-0">
-									<EllipsisVertical className="cursor-pointer" />
-								</DropdownMenuTrigger>
-								<DropdownMenuContent>
-									<DropdownMenuItem
-										onClick={() => {
-											navigate(`/activities/${_id}`);
-										}}
-									>
-										View Activtiy Details
-									</DropdownMenuItem>
-								</DropdownMenuContent>
-							</DropdownMenu>
-							<AddActivityForm type={"Update"} id={_id} />
-							<button onClick={() => handleDelete(_id)}>
-								<Trash />
-							</button>
-						</Flex>
+						<DropdownMenu>
+							<DropdownMenuTrigger className="absolute right-0">
+								<EllipsisVertical className="cursor-pointer" />
+							</DropdownMenuTrigger>
+							<DropdownMenuContent>
+								<DropdownMenuItem
+									onClick={() => {
+										navigate(`/activities/${_id}`);
+									}}
+								>
+									View Activtiy Details
+								</DropdownMenuItem>
+								<DropdownMenuItem
+									onClick={() => editDrawer(activity)}
+								>
+									edit
+								</DropdownMenuItem>
+							</DropdownMenuContent>
+						</DropdownMenu>
 					</Flex>
 					<Label.Thin200 className="overflow-ellipsis line-clamp-3">
 						{description}

@@ -21,7 +21,7 @@ import { useLoginStore } from "@/store/loginStore";
 import { TActivity } from "@/types/global";
 
 import ActivityCard from "./ActivityCard";
-import AddActivityForm from "./Form/ActivityForm";
+import ActivityForm from "./Form/ActivityForm";
 
 export default function Activites() {
 	const { user } = useLoginStore();
@@ -95,8 +95,10 @@ export default function Activites() {
 							}}
 						/>
 					</Flex>
-					{user?.type === "advertiser" && (
-						<AddActivityForm type={"Add"} />
+					{user?.type !== "advertiser" && (
+						<Button onClick={() => setOpen(true)} variant="ghost">
+							Add Activity
+						</Button>
 					)}
 				</Flex>
 			</Flex>
