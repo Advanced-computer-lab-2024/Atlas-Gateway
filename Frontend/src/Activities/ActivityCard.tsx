@@ -110,7 +110,7 @@ export default function ActivityCard({
 							>
 								{categories?.map((category) => (
 									<Badge key={category} variant={"default"}>
-										{category}
+										{category?.name}
 									</Badge>
 								))}
 							</Flex>
@@ -135,7 +135,7 @@ export default function ActivityCard({
 							>
 								{tags?.map((tag) => (
 									<Badge key={tag} variant={"default"}>
-										{tag}
+										{tag?.name}
 									</Badge>
 								))}
 							</Flex>
