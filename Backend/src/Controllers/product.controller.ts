@@ -15,10 +15,9 @@ export const createProduct = async (req: Request, res: Response) => {
 
 		//Check if the user is an admin
 
-		// TODO: retrieve ID checks from sessoin middleware rather than from the request
 		const sellerId = (await Admin.findById(userId))
 			? "000000000000000000000000"
-			: new Types.ObjectId(Number(userId));
+			: new Types.ObjectId(String(userId));
 		//Check seller ID validity and existance
 		if (
 			(!Types.ObjectId.isValid(sellerId) ||
@@ -45,6 +44,7 @@ export const createProduct = async (req: Request, res: Response) => {
 
 		await product.save();
 		res.status(200).send(product);
+		console.log("Product Created");
 	} catch (error) {
 		res.status(500).json({ message: "Internal Server Error" });
 		console.log(error);

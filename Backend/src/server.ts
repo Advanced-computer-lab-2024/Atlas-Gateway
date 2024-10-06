@@ -21,6 +21,14 @@ const app = express();
 async function startServer() {
 	app.use(express.json());
 	app.use(cors());
+
+	app.use((req: Request, res: Response, next) => {
+		console.log(`${req.method} ${req.url}`);
+		console.log(req.headers);
+		console.log(req.body);
+		next();
+	});
+
 	app.use("/api/admin", adminRouter);
 	app.use("/api/governor", governorRouter);
 	app.use("/api/products", productRouter);
