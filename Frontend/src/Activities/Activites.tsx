@@ -7,6 +7,7 @@ import { useTags } from "@/api/data/useTags";
 import Filters from "@/components/Filters/Filters";
 import Label from "@/components/ui/Label";
 import { Searchbar } from "@/components/ui/Searchbar";
+import { Button } from "@/components/ui/button";
 import { Flex } from "@/components/ui/flex";
 import {
 	Pagination,
@@ -20,7 +21,6 @@ import { useLoginStore } from "@/store/loginStore";
 import { TActivity } from "@/types/global";
 
 import ActivityCard from "./ActivityCard";
-import AddActivityForm from "./Form/ActivityForm";
 import ActivityForm from "./Form/ActivityForm";
 
 export default function Activites() {
@@ -28,10 +28,17 @@ export default function Activites() {
 	const { data, meta } = useActivities();
 	const [open, setOpen] = useState(false);
 	const [activity, setActivity] = useState<TActivity>();
+
 	const editDrawer = (activity: TActivity) => {
 		setOpen(true);
 		setActivity(activity);
 	};
+
+	const closeEditDrawer = (open: boolean) => {
+		setOpen(open);
+		if (!open) setActivity(undefined);
+	};
+
 	const { page, onPageChange, pagesCount } = usePagination({
 		pageNum: meta?.pages || 1,
 		pagesCount: meta?.pages || 1,
@@ -88,7 +95,11 @@ export default function Activites() {
 							}}
 						/>
 					</Flex>
-					{user?.type === "advertiser" && <ActivityForm type="Add" />}
+					{user?.type !== "advertiser" && (
+						<Button onClick={() => setOpen(true)} variant="ghost">
+							Add Activity
+						</Button>
+					)}
 				</Flex>
 			</Flex>
 			<Flex
@@ -96,7 +107,7 @@ export default function Activites() {
 				gap="4"
 			>
 				{data?.map((activity) => (
-					<ActivityCard {...activity} editDrawer={editDrawer} />
+					<ActivityCard activity={activity} editDrawer={editDrawer} />
 				))}
 			</Flex>
 			{pagesCount > 1 && (
@@ -125,6 +136,11 @@ export default function Activites() {
 					)}
 				</Pagination>
 			)}
+			<ActivityForm
+				activity={activity}
+				open={open}
+				setOpen={closeEditDrawer}
+			/>
 		</Flex>
 	);
 }

@@ -33,24 +33,13 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from "@/components/ui/sheet";
+import { TProduct } from "@/types/global";
 
 import { productSchema } from "../schema";
 import EditProduct from "./EditProduct";
 
-interface Product {
-	_id: string;
-	name: string;
-	description: string;
-	price: number;
-	picture: string;
-	quantity: number;
-	isArchived: boolean;
-	sales: number;
-	rating: number;
-	review: string;
-}
-
 const Product = () => {
+	const [products, setProducts] = useState<TProduct[]>([]);
 	const [refresh, setRefresh] = useState<boolean>(false);
 	const { data: products, meta } = useProducts();
 	const { page, onPageChange, pagesCount } = usePagination({
@@ -256,9 +245,9 @@ const Product = () => {
 							</div>
 						</div>
 						<h3 className="text-sm text-[#2b58ed]">
-							Rating: {prod?.rating} / 5
+							Rating: {prod.avgRating} / 5
 						</h3>
-						<h3 className="pb-6">{prod?.review}</h3>
+						<h3 className="pb-6">{prod.reviews}</h3>
 					</div>
 				))}
 				<div className="flex justify-center">

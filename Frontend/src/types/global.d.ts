@@ -40,6 +40,9 @@ export type TProduct = {
 	seller: TUser;
 	avgRating: number;
 	reviews: string[];
+	isArchived: boolean;
+	quantity: number;
+	sales: number;
 	availability: number;
 };
 
