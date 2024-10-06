@@ -23,6 +23,7 @@ import Register from "./Register/Register";
 import "./index.css";
 import Layout from "./layout/Layout";
 import Profile from "./Profile/Profile";
+import ItineraryForm from "./Itineraries/ItineraryForm";
 
 
 const queryClient = new QueryClient();
@@ -121,7 +122,7 @@ const router = createBrowserRouter([
 					},
 					{
 						path: "/itineraries/add",
-						element: <></>,
+						element: <ItineraryForm/>,
 					},
 				],
 			},
