@@ -21,7 +21,7 @@ export default function PlaceCard({
 	images,
 	tags,
 	categories,
-	rating,
+	avgRating,
 }: TPlace) {
 	const navigate = useNavigate();
 
@@ -71,7 +71,7 @@ export default function PlaceCard({
 						<Flex gap="1" align="center">
 							<Star color="yellow" fill="yellow" size={20} />
 							<Label.Thin300 className="overflow-ellipsis">
-								{rating}
+								{avgRating}
 							</Label.Thin300>
 						</Flex>
 					</Flex>
@@ -83,10 +83,14 @@ export default function PlaceCard({
 							<Flex
 								gap="1"
 								align="center"
-								className="overflow-x-scroll w-full"
+								className="overflow-x-scroll w-full h-8"
 							>
 								{categories?.map((category) => (
-									<Badge key={category} variant={"default"}>
+									<Badge
+										key={category}
+										variant={"default"}
+										className="whitespace-nowrap"
+									>
 										{category}
 									</Badge>
 								))}
@@ -103,10 +107,14 @@ export default function PlaceCard({
 							<Flex
 								gap="1"
 								align="center"
-								className="overflow-x-scroll w-full"
+								className="overflow-x-scroll w-full h-8"
 							>
 								{tags?.map((tag) => (
-									<Badge key={tag} variant={"default"}>
+									<Badge
+										key={tag}
+										variant={"default"}
+										className="whitespace-nowrap"
+									>
 										{tag}
 									</Badge>
 								))}

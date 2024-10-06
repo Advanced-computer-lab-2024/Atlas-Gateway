@@ -106,12 +106,13 @@ export default function ActivityCard({
 							<Flex
 								gap="1"
 								align="center"
-								className="overflow-x-scroll w-full"
+								className="overflow-x-scroll w-full h-8"
 							>
 								{categories?.map((category) => (
 									<Badge
 										key={category?._id}
 										variant={"default"}
+										className="whitespace-nowrap"
 									>
 										{category?.name}
 									</Badge>
@@ -134,10 +135,14 @@ export default function ActivityCard({
 							<Flex
 								gap="1"
 								align="center"
-								className="overflow-x-scroll w-full"
+								className="overflow-x-scroll w-full h-8"
 							>
 								{tags?.map((tag) => (
-									<Badge key={tag?._id} variant={"default"}>
+									<Badge
+										key={tag?._id}
+										variant={"default"}
+										className="whitespace-nowrap"
+									>
 										{tag?.name}
 									</Badge>
 								))}
@@ -150,7 +155,7 @@ export default function ActivityCard({
 			</CardContent>
 			<CardFooter className="flex flex-col gap-2 items-center justify-center">
 				<Label.Mid300>
-					Available Special Discounts: {specialDiscounts}
+					Available Special Discounts: {specialDiscounts}%
 				</Label.Mid300>
 				<Label.Mid300>
 					{isOpen ? "Bookings Open" : "Bookings Closed"}

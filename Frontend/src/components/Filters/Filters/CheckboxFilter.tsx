@@ -82,13 +82,13 @@ export default function CheckboxFilter({
 							<Flex
 								gap="2"
 								isWrapped
-								className="max-h-16 overflow-y-scroll"
+								className="max-h-16 h-8"
 							>
 								{selected.map((item) => (
 									<Badge
 										onClick={() => removeSelectedItem(item)}
 										variant="default"
-										className="w-fit px-2 py-1 cursor-pointer"
+										className="w-fit px-2 py-1 cursor-pointer whitespace-nowrap"
 									>
 										{item.label}
 									</Badge>
@@ -99,7 +99,7 @@ export default function CheckboxFilter({
 					)}
 					<Flex
 						isColumn
-						className="p-2 max-h-52 overflow-y-scroll"
+						className="p-2 max-h-52 h-8"
 						gap="2"
 					>
 						{filter.options.map((option) => (

@@ -1,9 +1,3 @@
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from "@radix-ui/react-dropdown-menu";
 import { formatDate } from "date-fns";
 import { DollarSign, EllipsisVertical, MapPin, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +5,12 @@ import { useNavigate } from "react-router-dom";
 import Label from "@/components/ui/Label";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Flex } from "@/components/ui/flex";
 import { TItinerary } from "@/types/global";
 
@@ -20,6 +20,7 @@ export default function ItineraryCard({
 	avgRating,
 	dropOffLocation,
 	startDateTime,
+	activities,
 	endDateTime,
 	numberOfBookings,
 	pickUpLocation,
@@ -44,7 +45,7 @@ export default function ItineraryCard({
 						className="relative w-full"
 					>
 						<Label.Mid500 className="justify-self-center">
-							{title}
+							{title ?? "Title"}
 						</Label.Mid500>
 						<DropdownMenu>
 							<DropdownMenuTrigger className="absolute right-0">
@@ -76,7 +77,7 @@ export default function ItineraryCard({
 								{dropOffLocation}
 							</Label.Thin200>
 						</Flex>
-						<Flex gap="2" align="center" justify="between">
+						<Flex gap="1" align="center" justify="between">
 							<Label.Thin200>
 								{startDateTime &&
 									formatDate(
@@ -116,16 +117,49 @@ export default function ItineraryCard({
 						className="w-full"
 					>
 						<Label.Mid200 className="overflow-ellipsis w-[95px] text-left">
+							Activities:
+						</Label.Mid200>
+						{activities?.length > 0 ? (
+							<Flex
+								gap="1"
+								align="center"
+								className="overflow-x-scroll w-full h-8"
+							>
+								{activities?.map((activity) => (
+									<Badge
+										key={activity?.title}
+										variant={"default"}
+										className="whitespace-nowrap"
+									>
+										{activity?.title}
+									</Badge>
+								))}
+							</Flex>
+						) : (
+							"N/A"
+						)}
+					</Flex>
+					<Flex
+						gap="2"
+						align="center"
+						justify="start"
+						className="w-full"
+					>
+						<Label.Mid200 className="overflow-ellipsis w-[95px] text-left">
 							Tags:
 						</Label.Mid200>
 						{tags?.length > 0 ? (
 							<Flex
 								gap="1"
 								align="center"
-								className="overflow-x-scroll w-full"
+								className="overflow-x-scroll w-full h-8"
 							>
 								{tags?.map((tag) => (
-									<Badge key={tag?._id} variant={"default"}>
+									<Badge
+										key={tag?._id}
+										variant={"default"}
+										className="whitespace-nowrap"
+									>
 										{tag?.name}
 									</Badge>
 								))}
@@ -139,7 +173,7 @@ export default function ItineraryCard({
 			<CardFooter className="flex flex-col gap-2 items-center justify-center">
 				<Label.Mid300>Language: {language}</Label.Mid300>
 				<Label.Mid300>
-					{availability}/{numberOfBookings} Bookings available
+					{numberOfBookings}/{availability} Bookings Available
 				</Label.Mid300>
 			</CardFooter>
 		</Card>

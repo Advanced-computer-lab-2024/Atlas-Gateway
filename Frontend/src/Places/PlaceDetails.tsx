@@ -15,7 +15,7 @@ export default function PlaceDetails() {
 		description,
 		location,
 		images,
-		rating,
+		avgRating,
 		categories,
 		tags,
 		openingHours,
@@ -71,7 +71,7 @@ export default function PlaceDetails() {
 									Rating:{" "}
 								</Label.Big600>
 								<Label.Mid500 className="overflow-ellipsis">
-									{rating}
+									{avgRating}
 								</Label.Mid500>
 								<Star color="yellow" fill="yellow" size={32} />
 							</Flex>
@@ -83,12 +83,13 @@ export default function PlaceDetails() {
 									<Flex
 										gap="1"
 										align="center"
-										className="overflow-x-scroll w-full"
+										className="overflow-x-scroll w-full h-8"
 									>
 										{categories?.map((category) => (
 											<Badge
 												key={category}
 												variant={"default"}
+												className="whitespace-nowrap"
 											>
 												{category}
 											</Badge>
@@ -106,12 +107,13 @@ export default function PlaceDetails() {
 									<Flex
 										gap="1"
 										align="center"
-										className="overflow-x-scroll w-full"
+										className="overflow-x-scroll w-full h-8"
 									>
 										{tags?.map((tag) => (
 											<Badge
 												key={tag}
 												variant={"default"}
+												className="whitespace-nowrap"
 											>
 												{tag}
 											</Badge>
