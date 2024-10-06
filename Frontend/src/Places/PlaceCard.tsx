@@ -14,7 +14,7 @@ import { Flex } from "@/components/ui/flex";
 import { TPlace } from "@/types/global";
 
 export default function PlaceCard({
-	id,
+	_id,
 	name,
 	description,
 	location,
@@ -27,7 +27,7 @@ export default function PlaceCard({
 
 	return (
 		<Card
-			key={id}
+			key={_id}
 			className="w-full h-[400px] flex gap-1 flex-col border-surface-secondary border-2"
 		>
 			<Flex
@@ -52,7 +52,7 @@ export default function PlaceCard({
 							<DropdownMenuContent>
 								<DropdownMenuItem
 									onClick={() => {
-										navigate(`/places/${id}`);
+										navigate(`/places/${_id}`);
 									}}
 								>
 									View Place Details
@@ -79,7 +79,7 @@ export default function PlaceCard({
 						<Label.Mid200 className="overflow-ellipsis w-[95px] text-left">
 							Categories:
 						</Label.Mid200>
-						{categories.length > 0 ? (
+						{categories?.length > 0 ? (
 							<Flex
 								gap="1"
 								align="center"
@@ -99,7 +99,7 @@ export default function PlaceCard({
 						<Label.Mid200 className="overflow-ellipsis w-[95px] text-left">
 							Tags:
 						</Label.Mid200>
-						{tags.length > 0 ? (
+						{tags?.length > 0 ? (
 							<Flex
 								gap="1"
 								align="center"

@@ -1,16 +1,29 @@
-import { Search } from "lucide-react";
+import { useState } from "react";
 
 import { useActivities } from "@/api/data/useActivities";
+import { usePagination } from "@/api/data/usePagination";
 import Filters from "@/components/Filters/Filters";
 import Label from "@/components/ui/Label";
 import { Flex } from "@/components/ui/flex";
-import { Input } from "@/components/ui/input";
-import { TActivity } from "@/types/global";
+import {
+	Pagination,
+	PaginationContent,
+	PaginationItem,
+	PaginationLink,
+	PaginationNext,
+	PaginationPrevious,
+} from "@/components/ui/pagination";
+
+import ActivityCard from "./ActivityCard";
+import { Searchbar } from "@/components/ui/Searchbar";
 
 export default function Activites() {
-	const { data } = useActivities();
-
-	const places: TActivity[] = [];
+	const { data, meta } = useActivities();
+	const [, setQuery] = useState("");
+	const { page, onPageChange, pagesCount } = usePagination({
+		pageNum: meta?.pages || 1,
+		pagesCount: meta?.pages || 1,
+	});
 
 	return (
 		<Flex
@@ -18,7 +31,7 @@ export default function Activites() {
 			gap="4"
 			className="w-full h-full px-10 py-8 overflow-y-scroll"
 		>
-			<Label.Big600>View a list of places you can visit!</Label.Big600>
+			<Label.Big600>View a list of all the activities you can experience!</Label.Big600>
 			<Flex
 				justify="center"
 				isColumn
@@ -26,12 +39,8 @@ export default function Activites() {
 				className="bg-surface-secondary p-2 rounded-lg"
 			>
 				<Flex>
-					<Flex gap="1" align="center" className="relative">
-						<Search className="absolute left-1" />
-						<Input
-							placeholder="Search..."
-							className="w-48 bg-white pl-8"
-						/>
+					<Flex gap="1" align="center">
+						<Searchbar />
 						<Filters
 							filters={{
 								tags: {
@@ -60,8 +69,34 @@ export default function Activites() {
 				className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2"
 				gap="4"
 			>
-				{places?.map((place) => <PlaceCard {...place} />)}
+				{data?.map((activity) => <ActivityCard {...activity} />)}
 			</Flex>
+			{pagesCount > 1 && (
+				<Pagination>
+					{page !== 1 && (
+						<PaginationPrevious
+							onClick={() => onPageChange(page - 1)}
+						/>
+					)}
+					<PaginationContent>
+						{[...Array(pagesCount).keys()].map((num) => (
+							<PaginationItem
+								key={num}
+								onClick={() => onPageChange(num + 1)}
+							>
+								<PaginationLink isActive={page === num + 1}>
+									{num + 1}
+								</PaginationLink>
+							</PaginationItem>
+						))}
+					</PaginationContent>
+					{page !== pagesCount && (
+						<PaginationNext
+							onClick={() => onPageChange(page + 1)}
+						/>
+					)}
+				</Pagination>
+			)}
 		</Flex>
 	);
 }

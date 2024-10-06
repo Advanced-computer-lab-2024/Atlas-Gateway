@@ -1,24 +1,27 @@
 import { useQuery } from "@tanstack/react-query";
-import { useNavigate, useParams } from "react-router-dom";
-import useQueryString from "use-query-string";
+import { useParams } from "react-router-dom";
+
+
 
 import { useLoginStore } from "@/store/loginStore";
 
+
+
 import { apiPlace, apiPlaces } from "../service/places";
+import { useQueryString } from "./useQueryString";
+
 
 export function usePlaces() {
 	const { user } = useLoginStore();
-	const { id } = user || {};
-	const navigate = useNavigate();
-	// @ts-expect-error - idk
-	const [query] = useQueryString(window.location, navigate);
+	const { _id } = user || {};
+	const [query] = useQueryString();
 
 	const { data } = useQuery({
-		queryFn: () => apiPlaces(id, query),
-		queryKey: ["places", id, query],
+		queryFn: () => apiPlaces(_id, query),
+		queryKey: ["places", _id, query],
 	});
 
-	return { data: data?.data };
+	return { data: data?.data?.data, meta: data?.data?.metaData };
 }
 
 export function usePlace() {

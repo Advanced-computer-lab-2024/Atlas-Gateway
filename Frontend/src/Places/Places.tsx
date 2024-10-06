@@ -1,379 +1,30 @@
 import { Search } from "lucide-react";
 
+import { usePagination } from "@/api/data/usePagination";
 import { usePlaces } from "@/api/data/usePlaces";
 import Filters from "@/components/Filters/Filters";
 import Label from "@/components/ui/Label";
 import { Flex } from "@/components/ui/flex";
 import { Input } from "@/components/ui/input";
-import { TPlace } from "@/types/global";
+import {
+	Pagination,
+	PaginationContent,
+	PaginationItem,
+	PaginationLink,
+	PaginationNext,
+	PaginationPrevious,
+} from "@/components/ui/pagination";
 
 import PlaceCard from "./PlaceCard";
+import { Searchbar } from "@/components/ui/Searchbar";
 
 export default function Places() {
-	const { data } = usePlaces();
+	const { data, meta } = usePlaces();
 
-	const places: TPlace[] = [
-		{
-			id: "0",
-			name: "place 1",
-			description: "place 1 description",
-			images: [],
-			location: "place 1 location",
-			rating: 1,
-			categories: ["aaa", "aaaa", "aaa", "aaaa", "aaa", "aaaa"],
-			tags: ["aaa", "aaaa"],
-			openingHours: {
-				friday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				monday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				saturday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				sunday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				thursday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				tuesday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				wednesday: {
-					open: "10:00",
-					close: "18:00",
-				},
-			},
-		},
-		{
-			id: "1",
-			name: "place 1",
-			description: "place 1 description",
-			images: [],
-			location: "place 1 location",
-			rating: 1,
-			categories: [],
-			tags: [],
-			openingHours: {
-				friday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				monday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				saturday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				sunday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				thursday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				tuesday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				wednesday: {
-					open: "10:00",
-					close: "18:00",
-				},
-			},
-		},
-		{
-			id: "2",
-			name: "place 1",
-			description: "place 1 description",
-			images: [],
-			location: "place 1 location",
-			rating: 1,
-			categories: [],
-			tags: [],
-			openingHours: {
-				friday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				monday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				saturday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				sunday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				thursday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				tuesday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				wednesday: {
-					open: "10:00",
-					close: "18:00",
-				},
-			},
-		},
-		{
-			id: "2",
-			name: "place 1",
-			description: "place 1 description",
-			images: [],
-			location: "place 1 location",
-			rating: 1,
-			categories: [],
-			tags: [],
-			openingHours: {
-				friday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				monday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				saturday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				sunday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				thursday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				tuesday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				wednesday: {
-					open: "10:00",
-					close: "18:00",
-				},
-			},
-		},
-		{
-			id: "2",
-			name: "place 1",
-			description: "place 1 description",
-			images: [],
-			location: "place 1 location",
-			rating: 1,
-			categories: [],
-			tags: [],
-			openingHours: {
-				friday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				monday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				saturday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				sunday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				thursday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				tuesday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				wednesday: {
-					open: "10:00",
-					close: "18:00",
-				},
-			},
-		},
-		{
-			id: "2",
-			name: "place 1",
-			description: "place 1 description",
-			images: [],
-			location: "place 1 location",
-			rating: 1,
-			categories: [],
-			tags: [],
-			openingHours: {
-				friday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				monday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				saturday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				sunday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				thursday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				tuesday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				wednesday: {
-					open: "10:00",
-					close: "18:00",
-				},
-			},
-		},
-		{
-			id: "2",
-			name: "place 1",
-			description: "place 1 description",
-			images: [],
-			location: "place 1 location",
-			rating: 1,
-			categories: [],
-			tags: [],
-			openingHours: {
-				friday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				monday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				saturday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				sunday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				thursday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				tuesday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				wednesday: {
-					open: "10:00",
-					close: "18:00",
-				},
-			},
-		},
-		{
-			id: "2",
-			name: "place 1",
-			description: "place 1 description",
-			images: [],
-			location: "place 1 location",
-			rating: 1,
-			categories: [],
-			tags: [],
-			openingHours: {
-				friday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				monday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				saturday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				sunday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				thursday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				tuesday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				wednesday: {
-					open: "10:00",
-					close: "18:00",
-				},
-			},
-		},
-		{
-			id: "2",
-			name: "place 1",
-			description: "place 1 description",
-			images: [],
-			location: "place 1 location",
-			rating: 1,
-			categories: [],
-			tags: [],
-			openingHours: {
-				friday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				monday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				saturday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				sunday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				thursday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				tuesday: {
-					open: "10:00",
-					close: "18:00",
-				},
-				wednesday: {
-					open: "10:00",
-					close: "18:00",
-				},
-			},
-		},
-	];
+	const { page, onPageChange, pagesCount } = usePagination({
+		pageNum: meta?.pages || 1,
+		pagesCount: meta?.pages || 1,
+	});
 
 	return (
 		<Flex
@@ -391,12 +42,8 @@ export default function Places() {
 				className="bg-surface-secondary p-2 rounded-lg"
 			>
 				<Flex>
-					<Flex gap="1" align="center" className="relative">
-						<Search className="absolute left-1" />
-						<Input
-							placeholder="Search..."
-							className="w-48 bg-white pl-8"
-						/>
+					<Flex gap="1" align="center">
+						<Searchbar />
 						<Filters
 							filters={{
 								tags: {
@@ -425,8 +72,34 @@ export default function Places() {
 				className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2"
 				gap="4"
 			>
-				{places?.map((place) => <PlaceCard {...place} />)}
+				{data?.map((place) => <PlaceCard {...place} />)}
 			</Flex>
+			{pagesCount > 1 && (
+				<Pagination>
+					{page !== 1 && (
+						<PaginationPrevious
+							onClick={() => onPageChange(page - 1)}
+						/>
+					)}
+					<PaginationContent>
+						{[...Array(pagesCount).keys()].map((num) => (
+							<PaginationItem
+								key={num}
+								onClick={() => onPageChange(num + 1)}
+							>
+								<PaginationLink isActive={page === num + 1}>
+									{num + 1}
+								</PaginationLink>
+							</PaginationItem>
+						))}
+					</PaginationContent>
+					{page !== pagesCount && (
+						<PaginationNext
+							onClick={() => onPageChange(page + 1)}
+						/>
+					)}
+				</Pagination>
+			)}
 		</Flex>
 	);
 }

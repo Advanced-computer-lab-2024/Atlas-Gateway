@@ -13,7 +13,7 @@ import { Flex } from "@/components/ui/flex";
 import { TProduct } from "@/types/global";
 
 export default function ProductCard({
-	id,
+	_id,
 	name,
 	description,
 	images,
@@ -24,7 +24,7 @@ export default function ProductCard({
 	const navigate = useNavigate();
 	return (
 		<Card
-			key={id}
+			key={_id}
 			className="w-full h-[370px] flex gap-2 flex-col border-surface-secondary border-2"
 		>
 			<Flex
@@ -50,7 +50,7 @@ export default function ProductCard({
 							<DropdownMenuContent>
 								<DropdownMenuItem
 									onClick={() => {
-										navigate(`/products/${id}`);
+										navigate(`/products/${_id}`);
 									}}
 								>
 									View Product Details
@@ -64,7 +64,7 @@ export default function ProductCard({
 							Seller
 						</Label.Mid300>
 						<Label.Thin300 className="overflow-ellipsis">
-							{seller.username}
+							{seller?.username}
 						</Label.Thin300>
 					</Flex>
 					<Flex align="center" justify="between">

@@ -15,7 +15,7 @@ export function useRegister() {
 			const { _id, username } = data.data;
 			const { type } = variables;
 			setUser({
-				id: _id,
+				_id,
 				type,
 				username,
 			});

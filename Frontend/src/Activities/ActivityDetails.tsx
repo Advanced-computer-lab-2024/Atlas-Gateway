@@ -2,11 +2,14 @@ import { formatDate } from "date-fns";
 import { ArrowLeft, MapPin, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
+
+
 import { useActivity } from "@/api/data/useActivities";
 import Label from "@/components/ui/Label";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Flex } from "@/components/ui/flex";
+
 
 export default function ActivityDetails() {
 	const navigate = useNavigate();
@@ -15,6 +18,9 @@ export default function ActivityDetails() {
 		name,
 		categories,
 		dateTime,
+		description,
+		discounts,
+		_id,
 		isBookingsOpen,
 		location,
 		maxPrice,
@@ -35,13 +41,30 @@ export default function ActivityDetails() {
 					<Flex gap="2" align="center">
 						<ArrowLeft
 							className="cursor-pointer"
-							onClick={() => navigate("/places")}
+							onClick={() => navigate("/activities")}
 							size={32}
 						/>
 						<Label.Big600>{name}</Label.Big600>
 					</Flex>
 					<Flex gap="12">
 						<Flex isColumn justify="around">
+							<Flex gap="2" align="center">
+								<Label.Big600 className="w-40 text-left">
+									Description:{" "}
+								</Label.Big600>
+								<Label.Mid500 className="overflow-ellipsis">
+									{description}
+								</Label.Mid500>
+							</Flex>
+							<Flex gap="2" align="center">
+								<Label.Big600 className="w-40 text-left">
+									Location:{" "}
+								</Label.Big600>
+								<Label.Mid500 className="overflow-ellipsis">
+									{location}
+								</Label.Mid500>
+								<MapPin size={32} />
+							</Flex>
 							<Flex gap="2" align="center">
 								<Label.Big600 className="w-40 text-left">
 									Date & Time:{" "}
@@ -53,7 +76,6 @@ export default function ActivityDetails() {
 											"dd/MM/yyyy HH:mm",
 										)}
 								</Label.Mid500>
-								<MapPin size={32} />
 							</Flex>
 							<Flex gap="2" align="center">
 								<Label.Big600 className="w-40 text-left">
