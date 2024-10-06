@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { usePagination } from "@/api/data/usePagination";
+import { useProduct, useProducts } from "@/api/data/useProducts";
 import { Button } from "@/components/ui/button";
 import {
 	FormControl,
@@ -14,6 +16,14 @@ import {
 	FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+	Pagination,
+	PaginationContent,
+	PaginationItem,
+	PaginationLink,
+	PaginationNext,
+	PaginationPrevious,
+} from "@/components/ui/pagination";
 import {
 	Sheet,
 	SheetContent,
@@ -31,6 +41,11 @@ import EditProduct from "./EditProduct";
 const Product = () => {
 	const [products, setProducts] = useState<TProduct[]>([]);
 	const [refresh, setRefresh] = useState<boolean>(false);
+	const { data: products, meta } = useProducts();
+	const { page, onPageChange, pagesCount } = usePagination({
+		pageNum: meta?.pages || 1,
+		pagesCount: meta?.pages || 1,
+	});
 
 	const formMethods = useForm<z.infer<typeof productSchema>>({
 		resolver: zodResolver(productSchema),
@@ -57,9 +72,7 @@ const Product = () => {
 	useEffect(() => {
 		axios
 			.get("http://localhost:5000/api/products/list")
-			.then((res) => {
-				setProducts(res.data.data);
-			})
+			.then((res) => {})
 			.catch((error) => {
 				console.error(error);
 			});
@@ -197,7 +210,7 @@ const Product = () => {
 			</div>
 
 			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-				{products.map((prod) => (
+				{products?.map((prod) => (
 					<div
 						key={prod._id}
 						className="relative flex flex-col p-4 bg-white shadow-lg rounded-lg"
@@ -219,14 +232,16 @@ const Product = () => {
 									Price: ${prod.price}
 								</h3>
 								<h3 className="text-sm">
-									Archived: {prod.isArchived ? "Yes" : "No"}
+									Archived: {prod?.isArchived ? "Yes" : "No"}
 								</h3>
 							</div>
 							<div className="flex flex-col">
 								<h3 className="text-sm">
-									Quantity: {prod.quantity}
+									Quantity: {prod?.quantity}
 								</h3>
-								<h3 className="text-sm">Sales: {prod.sales}</h3>
+								<h3 className="text-sm">
+									Sales: {prod?.sales}
+								</h3>
 							</div>
 						</div>
 						<h3 className="text-sm text-[#2b58ed]">
@@ -235,6 +250,36 @@ const Product = () => {
 						<h3 className="pb-6">{prod.reviews}</h3>
 					</div>
 				))}
+				<div className="flex justify-center">
+					{pagesCount > 1 && (
+						<Pagination>
+							{page !== 1 && (
+								<PaginationPrevious
+									onClick={() => onPageChange(page - 1)}
+								/>
+							)}
+							<PaginationContent>
+								{[...Array(pagesCount).keys()].map((num) => (
+									<PaginationItem
+										key={num}
+										onClick={() => onPageChange(num + 1)}
+									>
+										<PaginationLink
+											isActive={page === num + 1}
+										>
+											{num + 1}
+										</PaginationLink>
+									</PaginationItem>
+								))}
+							</PaginationContent>
+							{page !== pagesCount && (
+								<PaginationNext
+									onClick={() => onPageChange(page + 1)}
+								/>
+							)}
+						</Pagination>
+					)}
+				</div>
 			</div>
 		</div>
 	);
