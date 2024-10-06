@@ -1,5 +1,6 @@
 import { Binoculars, HandCoins, Map, Megaphone } from "lucide-react";
 import { useFormContext } from "react-hook-form";
+import { Link } from "react-router-dom";
 
 import Label from "@/components/ui/Label";
 import { Flex } from "@/components/ui/flex";
@@ -45,6 +46,12 @@ export default function AccountType() {
 			<p className={"text-[0.8rem] font-medium text-destructive h-5"}>
 				{form?.formState.errors.type?.message}
 			</p>
+			<Flex gap="1">
+				Already have an account?{" "}
+				<Link to="/login" className="text-primary">
+					Login
+				</Link>
+			</Flex>
 		</>
 	);
 }

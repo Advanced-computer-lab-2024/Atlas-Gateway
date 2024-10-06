@@ -15,7 +15,7 @@ interface IItinerary extends Document {
 		{
 			activity?: Types.ObjectId;
 			title: string;
-			dateTime: Date;
+			dateTime: string;
 			durationM: number;
 		},
 	];
@@ -29,6 +29,8 @@ interface IItinerary extends Document {
 	};
 	avgRating: number;
 	totalNumberOfRatings: number;
+	accessibility: string;
+	timeline: string;
 }
 
 const itinerarySchema = new Schema<IItinerary>(
@@ -45,7 +47,7 @@ const itinerarySchema = new Schema<IItinerary>(
 			{
 				id: { type: Schema.Types.ObjectId, required: false },
 				title: { type: String, required: true },
-				dateTime: { type: Date, required: true },
+				dateTime: { type: String, required: true },
 				durationM: { type: Number, required: true },
 			},
 		],
@@ -59,6 +61,8 @@ const itinerarySchema = new Schema<IItinerary>(
 		},
 		avgRating: { type: Number, min: 0, max: 5, default: 0 },
 		totalNumberOfRatings: { type: Number, default: 0 },
+		accessibility: { type: String, required: true },
+		timeline: { type: String, required: true },
 	},
 	schemaConfig,
 );

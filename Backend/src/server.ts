@@ -15,6 +15,7 @@ import categoryRouter from "./Routes/category.route";
 import placesRouter from "./Routes/places.route";
 import productRouter from "./Routes/product.route";
 import registerRouter from "./Routes/register.route";
+import loginRouter from "./Routes/login.route";
 import tagRouter from "./Routes/tag.route";
 
 const app = express();
@@ -43,6 +44,7 @@ async function startServer() {
 	app.use("/api/register", registerRouter);
 	app.use("/api/itinerary", itineraryRouter);
 	app.use("/api/places", placesRouter);
+	app.use("/api/login", loginRouter);
 
 	app.get("/", (req: Request, res: Response) => {
 		try {

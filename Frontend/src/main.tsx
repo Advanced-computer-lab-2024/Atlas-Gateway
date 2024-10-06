@@ -3,6 +3,8 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
 
+
+
 import Activites from "./Activities/Activites";
 import ActivityDetails from "./Activities/ActivityDetails";
 import Admin from "./Admin/Dashboard";
@@ -19,6 +21,8 @@ import Register from "./Register/Register";
 import { QueryStateProvider } from "./api/data/useQueryString";
 import "./index.css";
 import Layout from "./layout/Layout";
+import Login from "./Login/Login";
+
 
 const queryClient = new QueryClient();
 
@@ -34,6 +38,10 @@ const router = createBrowserRouter([
 	{
 		path: "/register",
 		element: <Register />,
+	},
+	{
+		path: "/login",
+		element: <Login />,
 	},
 	{
 		path: "/",

@@ -11,7 +11,7 @@ export function useCategories() {
 	const [query] = useQueryString();
 
 	const { data } = useQuery({
-		queryFn: () => apiCategories(_id, query),
+		queryFn: () => apiCategories(_id),
 		queryKey: ["category", _id, query],
 	});
 

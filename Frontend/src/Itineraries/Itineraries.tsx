@@ -1,5 +1,3 @@
-import { set } from "lodash";
-import { it } from "node:test";
 import { useState } from "react";
 
 import { useItineraries } from "@/api/data/useItineraries";
@@ -18,6 +16,7 @@ import {
 	PaginationPrevious,
 } from "@/components/ui/pagination";
 import { useLoginStore } from "@/store/loginStore";
+import { EAccountType } from "@/types/enums";
 import { TItinerary } from "@/types/global";
 
 import ItineraryForm from "./Form/ItineraryForm";
@@ -29,7 +28,7 @@ export default function Itineraries() {
 	const [open, setOpen] = useState(false);
 	const [itinerary, setItinerary] = useState<TItinerary>();
 
-	const editDrawer = (itinerary: TItinerary) => {
+	const openEditDrawer = (itinerary: TItinerary) => {
 		setOpen(true);
 		setItinerary(itinerary);
 	};
@@ -84,7 +83,7 @@ export default function Itineraries() {
 							}}
 						/>
 					</Flex>
-					{user?.type !== "guide" && ( //TODO: Check use role naming
+					{user?.type === EAccountType.Guide && (
 						<Button onClick={() => setOpen(true)} variant="ghost">
 							Add Itinerary
 						</Button>
@@ -98,7 +97,7 @@ export default function Itineraries() {
 				{data?.map((itinerary) => (
 					<ItineraryCard
 						itinerary={itinerary}
-						editDrawer={editDrawer}
+						openEditDrawer={openEditDrawer}
 					/>
 				))}
 			</Flex>

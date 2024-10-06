@@ -1,11 +1,12 @@
 import { EAccountType } from "@/types/enums";
 
+
 export type TRegisterForm = {
 	email: string;
 	password: string;
 	confirmPassword: string;
 	username: string;
-	type: string;
+	type: EAccountType;
 	dob?: string;
 	mobileNumber?: string;
 	occupation?: string;

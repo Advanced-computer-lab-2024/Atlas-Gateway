@@ -1,11 +1,4 @@
-import mongoose from "mongoose";
 import { z } from "zod";
-
-const objectIdSchema = z
-	.string()
-	.refine((val) => mongoose.Types.ObjectId.isValid(val), {
-		message: "Invalid ObjectId",
-	});
 
 export const activitySchema = z
 	.object({
@@ -35,12 +28,8 @@ export const activitySchema = z
 				})
 				.max(100, { message: "special discounts cannot exceed 100" }),
 		),
-		tags: z
-			.array(objectIdSchema)
-			.nonempty({ message: "tags must contain at least 1 tag" }),
-		categories: z
-			.array(objectIdSchema)
-			.nonempty({ message: "category must contain at least 1 category" }),
+		tags: z.array(z.string().min(1, "Tag is required")),
+		categories: z.array(z.string().min(1, "Category is required")),
 		isOpen: z.boolean(),
 	})
 	.refine((data) => data.maxPrice >= data.minPrice, {

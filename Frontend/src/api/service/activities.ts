@@ -1,9 +1,14 @@
 import axios from "axios";
 
+
+
 import { TActivity } from "@/types/global";
+
+
 
 import ENDPOINTS from "./ENDPOINTS";
 import { TApiResponse } from "./types";
+
 
 export function apiActivities(
 	id: string | undefined,
@@ -29,6 +34,41 @@ export function apiActivity(id: string | undefined) {
 	return axios<TActivity>({
 		method: "GET",
 		url: ENDPOINTS.activity.show(id ?? ""),
+		headers: {
+			"Content-Type": "application/json",
+		},
+		baseURL: "http://localhost:5000",
+	});
+}
+
+export function apiCreateActivity(payload: TActivity) {
+	return axios({
+		method: "POST",
+		url: ENDPOINTS.activity.create,
+		headers: {
+			"Content-Type": "application/json",
+		},
+		baseURL: "http://localhost:5000",
+		data: payload,
+	});
+}
+
+export function apiUpdateActivity(payload: TActivity) {
+	return axios({
+		method: "PUT",
+		url: ENDPOINTS.activity.update(payload?._id),
+		headers: {
+			"Content-Type": "application/json",
+		},
+		baseURL: "http://localhost:5000",
+		data: payload,
+	});
+}
+
+export function apiDeleteActivity(_id: string) {
+	return axios({
+		method: "DELETE",
+		url: ENDPOINTS.activity.delete(_id),
 		headers: {
 			"Content-Type": "application/json",
 		},

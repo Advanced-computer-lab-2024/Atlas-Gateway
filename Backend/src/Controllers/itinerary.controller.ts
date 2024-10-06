@@ -1,58 +1,16 @@
-import { lookup } from "dns";
 import { Request, Response } from "express";
 import mongoose, { PipelineStage, Types } from "mongoose";
-import { it } from "node:test";
 
-import { TourGuide } from "../Database/Models/Users/tourGuide.model";
 import { Itinerary } from "../Database/Models/itinerary.model";
 import AggregateBuilder from "../Services/aggregation.service";
 
 //Create a new product entry
 export const createItinerary = async (req: Request, res: Response) => {
 	try {
-		const {
-			title,
-			language,
-			price,
-			availability,
-			pickUpLocation,
-			dropOffLocation,
-			startDate,
-			startTime,
-			endDate,
-			activities,
-			tags,
-		} = req.body;
-
 		const tourGuideId = req.headers.userid;
 
-		if (
-			!title ||
-			!language ||
-			!price ||
-			!availability ||
-			!pickUpLocation ||
-			!dropOffLocation ||
-			!startDate ||
-			!startTime ||
-			!endDate ||
-			!activities ||
-			!tags
-		) {
-			return res.status(400).json({ message: "Missing Fields" });
-		}
 		const itineraryData = new Itinerary({
-			title,
-			language,
-			price,
-			availability,
-			pickUpLocation,
-			dropOffLocation,
-			startDate,
-			startTime,
-			endDate,
-			activities,
-			tags,
+			...req.body,
 			createdBy: tourGuideId,
 		});
 
@@ -93,32 +51,27 @@ export const getItinerary = async (req: Request, res: Response) => {
 					as: "tags",
 				},
 			},
-			{
-				$lookup: {
-					from: "tourguides",
-					localField: "createdBy",
-					foreignField: "_id",
-					as: "createdBy",
-				},
-			},
+			// { TODO: Lookup the tourguide who created the itinerary
+			// 	$lookup: {
+			// 		from: "tourguides",
+			// 		localField: "createdBy",
+			// 		foreignField: "_id",
+			// 		as: "createdBy",
+			// 	},
+			// },
 			...AggregateBuilder(req.query, ["name", "tagsData.name"]),
 		];
 
 		const result = await Itinerary.aggregate(pipeline);
 
-		if (result[0].data.length === 0) {
-			return res
-				.status(404)
-				.json({ message: "No matching Itineraries Found" });
-		}
 
 		const response = {
-			data: result[0].data,
+			data: result?.[0]?.data,
 			metaData: {
 				page: req.query.page || 1,
-				total: result[0].total[0].count,
+				total: result[0]?.total[0]?.count,
 				pages: Math.ceil(
-					result[0].total[0].count / (Number(req.query.limit) || 10),
+					(result[0]?.total[0]?.count ?? 0)/ (Number(req?.query?.limit) || 10),
 				),
 			},
 		};
@@ -133,19 +86,10 @@ export const updateItinerary = async (req: Request, res: Response) => {
 	try {
 		const itineraryId = req.params.id;
 
-		const itinerary = await Itinerary.findById(itineraryId);
-		if (!itinerary) {
-			return res.status(404).json({ message: "Itinerary not found" });
-		}
-		if (itinerary.numberOfBookings > 0) {
-			return res
-				.status(404)
-				.json({ message: "Itinerary is already booked" });
-		}
+		const itinerary = await Itinerary.findByIdAndUpdate(itineraryId, {
+			$set: req.body,
+		}, { new: true });
 
-		itinerary.set(req.body);
-
-		await itinerary.save();
 		res.status(200).send(itinerary);
 	} catch (error) {
 		console.log(error);

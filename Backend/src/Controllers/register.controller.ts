@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import bcrypt from "bcryptjs";
 
 import { Advertiser } from "../Database/Models/Users/advertiser.model";
 import { Governor } from "../Database/Models/Users/governor.model";
@@ -25,6 +26,9 @@ export const register = async (req: Request, res: Response) => {
 		if (!username || !email || !password) {
 			res.status(400).send("username, email and password are required");
 		}
+
+		const hashedPassword = await bcrypt.hash(password, 10);
+
 		let user;
 		switch (type) {
 			case "tourist":
@@ -36,7 +40,7 @@ export const register = async (req: Request, res: Response) => {
 				user = new Tourist({
 					username,
 					email,
-					password,
+					password: hashedPassword,
 					mobileNumber,
 					nationality,
 					dob,
@@ -47,14 +51,14 @@ export const register = async (req: Request, res: Response) => {
 				user = new Governor({
 					username,
 					email,
-					password,
+					password: hashedPassword,
 				});
 				break;
 			case "tour_guide":
 				user = new TourGuide({
 					username,
 					email,
-					password,
+					password: hashedPassword,
 					picture,
 					experience,
 					prevWork,
@@ -64,21 +68,21 @@ export const register = async (req: Request, res: Response) => {
 				user = new Seller({
 					username,
 					email,
-					password,
+					password: hashedPassword,
 				});
 				break;
 			case "advertiser":
 				user = new Advertiser({
 					username,
 					email,
-					password,
+					password: hashedPassword,
 				});
 				break;
 			default:
 				user = new Tourist({
 					username,
 					email,
-					password,
+					password: hashedPassword,
 					mobileNumber,
 					nationality,
 					dob,

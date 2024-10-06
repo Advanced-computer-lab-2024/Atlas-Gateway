@@ -11,7 +11,7 @@ export function useTags() {
 	const [query] = useQueryString();
 
 	const { data } = useQuery({
-		queryFn: () => apiTags(_id, query),
+		queryFn: () => apiTags(_id),
 		queryKey: ["tag", _id, query],
 	});
 

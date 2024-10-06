@@ -17,8 +17,8 @@ const ENDPOINTS = {
 		list: "api/activity/list",
 		show: (id: string) => `api/activity/show/${id}`,
 		create: "api/activity/create",
-		update: "api/activity/update",
-		delete: "api/activity/delete",
+		update: (id: string) => `api/activity/update/${id}`,
+		delete: (id: string) => `api/activity/delete/${id}`,
 	},
 	login: "api/login",
 	register: "api/register/create",
@@ -56,8 +56,8 @@ const ENDPOINTS = {
 		list: "api/itinerary/list",
 		show: (id: string) => `api/itinerary/show/${id}`,
 		create: "api/itinerary/create",
-		update: "api/itinerary/update",
-		delete: "api/itinerary/delete",
+		update: (id: string) => `api/itinerary/update/${id}`,
+		delete: (id: string) => `api/itinerary/delete/${id}`,
 	},
 };
 

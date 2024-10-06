@@ -1,8 +1,10 @@
+import { EAccountType } from "./enums";
+
 export type TUser = {
 	_id: string;
 	username: string;
-	name: string;
-	type: string;
+	name?: string;
+	type: EAccountType;
 };
 
 export type TPlace = {
@@ -113,22 +115,22 @@ export interface TItinerary {
 	dropOffLocation: string;
 	startDateTime: string;
 	endDateTime: string;
-	activities: [
-		{
-			activity?: Types.ObjectId;
-			title: string;
-			dateTime: Date;
-			durationM: number;
-		},
-	];
-	tags: Types.ObjectId[];
-	createdBy: Types.ObjectId;
+	activities: {
+		activity?: string;
+		title: string;
+		dateTime: string;
+		durationM: number;
+	}[];
+	tags: TTag[];
+	createdBy: string;
 	numberOfBookings: number;
 	reviews: {
-		userId: Types.ObjectId;
+		userId: string;
 		review: string;
 		rating: number;
 	};
 	avgRating: number;
 	totalNumberOfRatings: number;
+	accessibility: string;
+	timeline: string;
 }

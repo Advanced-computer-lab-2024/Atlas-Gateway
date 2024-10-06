@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import { useActivities } from "@/api/data/useActivities";
 import { useCategories } from "@/api/data/useCategories";
 import { usePagination } from "@/api/data/usePagination";
@@ -15,9 +17,12 @@ import {
 	PaginationPrevious,
 } from "@/components/ui/pagination";
 import { useLoginStore } from "@/store/loginStore";
+import { EAccountType } from "@/types/enums";
+import { TActivity } from "@/types/global";
 
 import ActivityCard from "./ActivityCard";
 import AddActivityForm from "./Form/ActivityForm";
+import ActivityForm from "./Form/ActivityForm";
 
 export default function Activites() {
 	const { user } = useLoginStore();
@@ -26,6 +31,14 @@ export default function Activites() {
 		pageNum: meta?.pages || 1,
 		pagesCount: meta?.pages || 1,
 	});
+
+	const [open, setOpen] = useState(false);
+	const [activity, setActivity] = useState<TActivity>();
+
+	const openEditDrawer = (itinerary: TActivity) => {
+		setOpen(true);
+		setActivity(itinerary);
+	};
 
 	const { data: categories } = useCategories();
 	const { data: tags } = useTags();
@@ -78,8 +91,8 @@ export default function Activites() {
 							}}
 						/>
 					</Flex>
-					{user?.type === "advertiser" && (
-						<AddActivityForm type={"Add"} />
+					{user?.type === EAccountType.Advertiser && (
+						<AddActivityForm open={open} setOpen={setOpen} />
 					)}
 				</Flex>
 			</Flex>
@@ -87,7 +100,12 @@ export default function Activites() {
 				className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2"
 				gap="4"
 			>
-				{data?.map((activity) => <ActivityCard {...activity} />)}
+				{data?.map((activity) => (
+					<ActivityCard
+						activity={activity}
+						openEditDrawer={openEditDrawer}
+					/>
+				))}
 			</Flex>
 			{pagesCount > 1 && (
 				<Pagination>
@@ -115,6 +133,7 @@ export default function Activites() {
 					)}
 				</Pagination>
 			)}
+			<ActivityForm activity={activity} open={open} setOpen={setOpen} />
 		</Flex>
 	);
 }

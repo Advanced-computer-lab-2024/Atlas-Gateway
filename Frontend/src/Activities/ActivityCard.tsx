@@ -1,9 +1,16 @@
-import axios from "axios";
 import { formatDate } from "date-fns";
-import { DollarSign, EllipsisVertical, MapPin, Star } from "lucide-react";
+import {
+	DollarSign,
+	Edit,
+	EllipsisVertical,
+	Eye,
+	MapPin,
+	Star,
+} from "lucide-react";
 import { Trash } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
+import { useActivities, useDeleteActivity } from "@/api/data/useActivities";
 import Label from "@/components/ui/Label";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -14,40 +21,26 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Flex } from "@/components/ui/flex";
+import { useLoginStore } from "@/store/loginStore";
+import { EAccountType } from "@/types/enums";
 import { TActivity } from "@/types/global";
 
-import AddActivityForm from "./Form/ActivityForm";
-
 export default function ActivityCard({
-	_id,
-	name,
-	location,
-	tags,
-	categories,
-	dateTime,
-	isOpen,
-	maxPrice,
-	specialDiscounts,
-	minPrice,
-	avgRating,
-	description,
-}: TActivity) {
+	activity,
+	openEditDrawer,
+}: {
+	activity: TActivity;
+	openEditDrawer: (activity: TActivity) => void;
+}) {
 	const navigate = useNavigate();
+	const { user } = useLoginStore();
 
-	const handleDelete = (id: string) => {
-		axios
-			.delete(`http://localhost:5000/api/activity/delete/${id}`)
-			.then((res) => {
-				console.log(res.status);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	};
+	const { refetch } = useActivities();
+	const { doDeleteActivity } = useDeleteActivity(refetch);
 
 	return (
 		<Card
-			key={_id}
+			key={activity?._id}
 			className="w-full h-[350px] flex gap-1 flex-col border-surface-secondary border-2"
 		>
 			<CardContent className="p-2">
@@ -59,43 +52,61 @@ export default function ActivityCard({
 						className="relative w-full"
 					>
 						<Label.Mid500 className="justify-self-center">
-							{name}
+							{activity?.name}
 						</Label.Mid500>
-						<Flex>
-							<DropdownMenu>
+						{user?.type === EAccountType.Advertiser && (
+							<DropdownMenu modal={false}>
 								<DropdownMenuTrigger className="absolute right-0">
 									<EllipsisVertical className="cursor-pointer" />
 								</DropdownMenuTrigger>
 								<DropdownMenuContent>
 									<DropdownMenuItem
+										className="flex gap-2 cursor-pointer"
 										onClick={() => {
-											navigate(`/activities/${_id}`);
+											navigate(
+												`/activities/${activity?._id}`,
+											);
 										}}
 									>
-										View Activtiy Details
+										<Eye />
+										View Details
+									</DropdownMenuItem>
+									<DropdownMenuItem
+										className="flex gap-2 cursor-pointer"
+										onClick={() => {
+											openEditDrawer(activity);
+										}}
+									>
+										<Edit />
+										Edit
+									</DropdownMenuItem>
+									<DropdownMenuItem
+										className="flex gap-2 cursor-pointer"
+										onClick={() => {
+											doDeleteActivity(activity?._id);
+										}}
+									>
+										<Trash />
+										Delete
 									</DropdownMenuItem>
 								</DropdownMenuContent>
 							</DropdownMenu>
-							<AddActivityForm type={"Update"} id={_id} />
-							<button onClick={() => handleDelete(_id)}>
-								<Trash />
-							</button>
-						</Flex>
+						)}
 					</Flex>
 					<Label.Thin200 className="overflow-ellipsis line-clamp-3">
-						{description}
+						{activity?.description}
 					</Label.Thin200>
 					<Flex gap="2" isColumn align="center">
 						<Flex gap="2" align="center" justify="between">
 							<MapPin size={20} />
 							<Label.Thin200 className="overflow-ellipsis">
-								{location}
+								{activity?.location}
 							</Label.Thin200>
 						</Flex>
 						<Label.Mid200 className="overflow-ellipsis">
-							{dateTime &&
+							{activity?.dateTime &&
 								formatDate(
-									new Date(dateTime),
+									new Date(activity?.dateTime),
 									"dd/MM/yyyy HH:mm:ss a",
 								)}
 						</Label.Mid200>
@@ -104,13 +115,13 @@ export default function ActivityCard({
 						<Flex gap="1" align="center">
 							<DollarSign size={20} />
 							<Label.Thin300 className="overflow-ellipsis">
-								{minPrice} - {maxPrice}
+								{activity?.minPrice} - {activity?.maxPrice}
 							</Label.Thin300>
 						</Flex>
 						<Flex gap="1" align="center">
 							<Star color="yellow" fill="yellow" size={20} />
 							<Label.Thin300 className="overflow-ellipsis">
-								{avgRating ?? "N/A"}
+								{activity?.avgRating ?? "N/A"}
 							</Label.Thin300>
 						</Flex>
 					</Flex>
@@ -123,13 +134,13 @@ export default function ActivityCard({
 						<Label.Mid200 className="overflow-ellipsis w-[95px] text-left">
 							Categories:
 						</Label.Mid200>
-						{categories?.length > 0 ? (
+						{activity?.categories?.length > 0 ? (
 							<Flex
 								gap="1"
 								align="center"
 								className="overflow-x-scroll w-full"
 							>
-								{categories?.map((category) => (
+								{activity?.categories?.map((category) => (
 									<Badge
 										key={category?._id}
 										variant={"default"}
@@ -151,13 +162,13 @@ export default function ActivityCard({
 						<Label.Mid200 className="overflow-ellipsis w-[95px] text-left">
 							Tags:
 						</Label.Mid200>
-						{tags?.length > 0 ? (
+						{activity?.tags?.length > 0 ? (
 							<Flex
 								gap="1"
 								align="center"
 								className="overflow-x-scroll w-full"
 							>
-								{tags?.map((tag) => (
+								{activity?.tags?.map((tag) => (
 									<Badge key={tag?._id} variant={"default"}>
 										{tag?.name}
 									</Badge>
@@ -171,10 +182,10 @@ export default function ActivityCard({
 			</CardContent>
 			<CardFooter className="flex flex-col gap-2 items-center justify-center">
 				<Label.Mid300>
-					Available Special Discounts: {specialDiscounts}
+					Available Special Discounts: {activity?.specialDiscounts}
 				</Label.Mid300>
 				<Label.Mid300>
-					{isOpen ? "Bookings Open" : "Bookings Closed"}
+					{activity?.isOpen ? "Bookings Open" : "Bookings Closed"}
 				</Label.Mid300>
 			</CardFooter>
 		</Card>
