@@ -39,7 +39,6 @@ import { productSchema } from "../schema";
 import EditProduct from "./EditProduct";
 
 const Product = () => {
-	const [products, setProducts] = useState<TProduct[]>([]);
 	const [refresh, setRefresh] = useState<boolean>(false);
 	const { data: products, meta } = useProducts();
 	const { page, onPageChange, pagesCount } = usePagination({
