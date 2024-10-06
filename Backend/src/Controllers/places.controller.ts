@@ -101,10 +101,52 @@ export const getPlaceById = async (req: Request, res: Response) => {
 			return res.status(400).json({ error: "Invalid Place ID" });
 		}
 		const response = await Places.findById(id);
+		if (!response) {
+			return res.status(404).json({ error: "Place not found" });
+		}
 		res.status(200).send(response);
 	} catch (error) {
 		console.log(error);
 		res.status(500).json({ message: "Place Not found" });
 	}
 };
-//TO-DO: Update Places, Delete Places
+
+export const updatePlace = async (req: Request, res: Response) => {
+	try {
+		const id = req.params.id;
+
+		const place = await Places.findById(id);
+		if (!place) {
+			return res.status(404).json({ message: "Place not found" });
+		}
+
+		place.set(req.body);
+
+		await place.save();
+		res.status(200).send(place);
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({ message: "Internal Server Error" });
+	}
+};
+
+export const deletePlace = async (req: Request, res: Response) => {
+	try {
+		const { id } = req.params;
+
+		if (!Types.ObjectId.isValid(id)) {
+			return res.status(400).json({ message: "Invalid Itinerary ID" });
+		}
+
+		const place = await Places.findById(id);
+		if (!place) {
+			return res.status(404).json({ message: "Itinerary not found" });
+		}
+
+		await Places.findByIdAndDelete(id);
+		res.status(200).send("Itinerary deleted Successfully");
+	} catch (error) {
+		console.log(error);
+		res.status(500).send("Error deleting Itinerary");
+	}
+};
