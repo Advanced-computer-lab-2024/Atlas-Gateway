@@ -119,7 +119,7 @@ export function filterByLanguage(query: any): PipelineStage[] {
 				language: {
 					$in: query.language
 						.split(",")
-						.map((lang: string) => new RegExp(`^${lang}$`, "i")),
+						.map((lang: string) => new RegExp(`^${lang}$`, "gi")),
 				},
 			},
 		});
@@ -135,7 +135,7 @@ export function filterByCategory(query: any): PipelineStage[] {
 	if (query.categories) {
 		pipeline.push({
 			$match: {
-				categories: {
+				"categories._id": {
 					$in: query.categories
 						.split(",")
 						.map(
@@ -156,7 +156,7 @@ export function filterByTags(query: any): PipelineStage[] {
 	if (query.tags) {
 		pipeline.push({
 			$match: {
-				tags: {
+				"tags._id": {
 					$in: query.tags
 						.split(",")
 						.map((tag: string) => new Types.ObjectId(tag)),
