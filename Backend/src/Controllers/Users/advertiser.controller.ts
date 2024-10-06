@@ -5,8 +5,7 @@ import { Advertiser } from "../../Database/Models/Users/advertiser.model";
 
 export const createAdvertiser = async (req: Request, res: Response) => {
 	try {
-		const { username, email, password, companyProfile, activities } =
-			req.body;
+		const { username, email, password, companyProfile } = req.body;
 		if (!username || !email || !password) {
 			res.status(400).send("username, email and password are required");
 		}
@@ -15,16 +14,11 @@ export const createAdvertiser = async (req: Request, res: Response) => {
 			res.status(400).send("companyProfile is required");
 		}
 
-		if (!activities) {
-			res.status(400).send("activities is required");
-		}
-
 		const user = new Advertiser({
 			username,
 			email,
 			password,
 			companyProfile,
-			activities,
 		});
 		await user.save();
 		res.status(201).send(user);
@@ -98,13 +92,13 @@ export const updateAdvertiser = async (req: Request, res: Response) => {
 };
 export const deleteAdvertiser = async (req: Request, res: Response) => {
 	const id = req.params.id;
-	const advertiser = await Advertiser.findById(id);
 
 	if (!id) {
 		res.status(400).send("id is required");
 	}
 	try {
 		const deletedAdvertiser = await Advertiser.findByIdAndDelete(id);
+
 		if (!deletedAdvertiser) {
 			return res.status(404).send("advertiser not found");
 		}
