@@ -69,10 +69,10 @@ export function useUpdateSellerProfile(onSuccess: () => void) {
 
 	const mutation = useMutation({
 		mutationFn: (data: TSeller) => {
-			if (!user?.id) {
+			if (!user?._id) {
 				throw new Error("User ID is undefined");
 			}
-			return apiEditSellerProfile(user.id, data);
+			return apiEditSellerProfile(user?._id, data);
 		},
 		onSuccess,
 	});
@@ -104,10 +104,10 @@ export function useUpdateAdvertiserProfile(onSuccess: () => void) {
 
     const mutation = useMutation({
 		mutationFn: (data: TAdvetisor) => {
-			if (!user?.id) {
+			if (!user?._id) {
 				throw new Error("User ID is undefined");
 			}
-			return apiEditAdvertiserProfile(user.id, data);
+			return apiEditAdvertiserProfile(user?._id, data);
 		},
 		onSuccess,
 	});
@@ -139,10 +139,10 @@ export function useUpdateTourGuideProfile(onSuccess: () => void) {
 
     const mutation = useMutation({
 		mutationFn: (data: TTourGuide) => {
-			if (!user?.id) {
+			if (!user?._id) {
 				throw new Error("User ID is undefined");
 			}
-			return apiEditTourGuideProfile(user.id, data);
+			return apiEditTourGuideProfile(user?._id, data);
 		},
 		onSuccess,
 	});
