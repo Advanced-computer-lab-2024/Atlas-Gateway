@@ -128,29 +128,29 @@ export const updateProduct = async (req: Request, res: Response) => {
 			return res.status(400).json({ message: "Invalid product ID" });
 		}
 
-		const updateSet: any = {};
+		// const updateSet: any = {};
 
-		if (req.body.name) {
-			updateSet.name = req.body.name;
-		}
+		// if (req.body.name) {
+		// 	updateSet.name = req.body.name;
+		// }
 
-		if (req.body.description) {
-			updateSet.description = req.body.description;
-		}
+		// if (req.body.description) {
+		// 	updateSet.description = req.body.description;
+		// }
 
-		if (req.body.price) {
-			updateSet.price = req.body.price;
-		}
+		// if (req.body.price) {
+		// 	updateSet.price = req.body.price;
+		// }
 
-		if (req.body.quantity) {
-			updateSet.quantity = req.body.quantity;
-		}
+		// if (req.body.quantity) {
+		// 	updateSet.quantity = req.body.quantity;
+		// }
 
-		if (req.body.picture) {
-			updateSet.picture = req.body.picture;
-		}
+		// if (req.body.picture) {
+		// 	updateSet.picture = req.body.picture;
+		// }
 
-		const product = await Product.findByIdAndUpdate(id, updateSet, {
+		const product = await Product.findByIdAndUpdate(id, req.body, {
 			new: true,
 		});
 

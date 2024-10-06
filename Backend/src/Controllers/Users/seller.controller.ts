@@ -86,14 +86,10 @@ export const updateSeller = async (req: Request, res: Response) => {
 export const deleteSeller = async (req: Request, res: Response) => {
 	const id = req.params.id;
 	const seller = await Seller.findById(id);
-	const Verified = seller?.isVerified;
+	//const Verified = seller?.isVerified;
 	try {
-		if (Verified) {
-			await Seller.findByIdAndDelete(id);
-			res.status(200).send("Seller deleted successfully");
-		} else {
-			res.status(400).send("User not verified");
-		}
+		await Seller.findByIdAndDelete(id);
+		res.status(200).send("Seller deleted successfully");
 	} catch (error) {
 		res.status(500).send("Failed to delete Seller");
 	}
