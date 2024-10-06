@@ -8,13 +8,41 @@ interface IPlaces extends Document {
 	location: string;
 	pictures: string;
 	openingHours: {
-		sunday: string;
-		monday: string;
-		tuesday: string;
-		wednesday: string;
-		thursday: string;
-		friday: string;
-		saturday: string;
+		sunday: {
+			open:string;
+			close:string;
+			dayOff:boolean
+		};
+		monday: {
+			open:string;
+			close:string;
+			dayOff:boolean
+		};
+		tuesday: {
+			open:string;
+			close:string;
+			dayOff:boolean
+		};
+		wednesday: {
+			open:string;
+			close:string;
+			dayOff:boolean
+		};
+		thursday: {
+			open:string;
+			close:string;
+			dayOff:boolean
+		};
+		friday: {
+			open:string;
+			close:string;
+			dayOff:boolean
+		};
+		saturday: {
+			open:string;
+			close:string;
+			dayOff:boolean
+		};
 	};
 	description: string;
 	ticketPrices: Number[];
@@ -35,13 +63,41 @@ const placesSchema = new Schema<IPlaces>(
 		description: { type: String, required: true },
 		pictures: { type: String, required: true },
 		openingHours: {
-			sunday: { type: String, required: true },
-			monday: { type: String, required: true },
-			tuesday: { type: String, required: true },
-			wednesday: { type: String, required: true },
-			thursday: { type: String, required: true },
-			friday: { type: String, required: true },
-			saturday: { type: String, required: true },
+			sunday: { 
+				open: { type: String},
+				close:{ type: String},
+				dayOff:{ type: Boolean}
+			},
+			monday: { 
+				open: { type: String},
+				close:{ type: String},
+				dayOff:{ type: Boolean}
+			},
+			tuesday:{ 
+				open: { type: String},
+				close:{ type: String},
+				dayOff:{ type: Boolean}
+			},
+			wednesday: { 
+				open: { type: String},
+				close:{ type: String},
+				dayOff:{ type: Boolean}
+			},
+			thursday:{ 
+				open: { type: String},
+				close:{ type: String},
+				dayOff:{ type: Boolean}
+			},
+			friday: { 
+				open: { type: String},
+				close:{ type: String},
+				dayOff:{ type: Boolean}
+			},
+			saturday: { 
+				open: { type: String},
+				close:{ type: String},
+				dayOff:{ type: Boolean}
+			},
 		},
 		ticketPrices: [{ type: Number, required: true }],
 		tags: [{ type: Schema.Types.ObjectId, ref: "Tag" }],
