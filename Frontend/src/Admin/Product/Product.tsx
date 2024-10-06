@@ -55,7 +55,7 @@ const Product = () => {
 		axios
 			.post("http://localhost:5000/api/products/create", data, {
 				headers: {
-					userId: "6700c6aaea29301fab0cdb09", // will be edited once we are able to login
+					userId: "67026125372e04cbc550745b", // will be edited once we are able to login // 6/10 - changed to a valid admin ID
 				},
 			})
 			.then((res) => {
