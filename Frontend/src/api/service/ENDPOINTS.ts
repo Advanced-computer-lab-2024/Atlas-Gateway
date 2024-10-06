@@ -46,7 +46,7 @@ const ENDPOINTS = {
 		delete: "api/category/delete",
 	},
 	tag: {
-		list: "api/tag/list",
+		list: "api/tags/list",
 		show: (id: string) => `api/tag/show/${id}`,
 		create: "api/tag/create",
 		update: "api/tag/update",

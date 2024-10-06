@@ -11,5 +11,6 @@ tagRouter.post("/preference/create", tagController.createPrefTag);
 tagRouter.get("/preference/list", tagController.getPrefTags);
 tagRouter.put("/preference/update/:id", tagController.updatePrefTag);
 tagRouter.delete("/preference/delete/:id", tagController.deletePreTag);
+tagRouter.get("/list", tagController.getAllTags);
 
 export default tagRouter;

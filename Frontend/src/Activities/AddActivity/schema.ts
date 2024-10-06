@@ -12,16 +12,7 @@ export const activitySchema = z
 		name: z
 			.string({ message: "name is required" })
 			.min(5, { message: "name must be at least 5 characters long" }),
-		dateTime: z
-			.string()
-			.refine(
-				(value) => {
-					const date = new Date(value);
-					return !isNaN(date.getTime());
-				},
-				{ message: "dateTime is required and must be a valid date." },
-			)
-			.transform((value) => new Date(value)),
+		dateTime: z.string(),
 		location: z.string({ message: "location is required" }), // should be modified here by ali
 		minPrice: z.preprocess(
 			(val) => Number(val),
@@ -47,7 +38,7 @@ export const activitySchema = z
 		tags: z
 			.array(objectIdSchema)
 			.nonempty({ message: "tags must contain at least 1 tag" }),
-		category: z
+		categories: z
 			.array(objectIdSchema)
 			.nonempty({ message: "category must contain at least 1 category" }),
 		isOpen: z.boolean(),

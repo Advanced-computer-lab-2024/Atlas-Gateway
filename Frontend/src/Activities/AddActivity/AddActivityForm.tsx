@@ -1,10 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { useCategories } from "@/api/data/useCategories";
+import { useTags } from "@/api/data/useTags";
 import { Button } from "@/components/ui/button";
+import { DateTimePicker } from "@/components/ui/date-time-picker";
+import { Flex } from "@/components/ui/flex";
 import {
 	FormControl,
 	FormDescription,
@@ -13,6 +16,7 @@ import {
 	FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { MultiSelect } from "@/components/ui/multi-select";
 import {
 	Sheet,
 	SheetContent,
@@ -25,23 +29,15 @@ import {
 import { Checkbox } from "../../components/ui/checkbox";
 import { activitySchema } from "./schema";
 
-interface Tag {
-	_id: string;
-	name: string;
-	type: string;
-}
-interface category {
-	_id: string;
-	name: string;
-}
 const AddAdvertiserForm = () => {
-	const [tags, setTags] = useState<Tag[]>([]);
-	const [category, setCategories] = useState<category[]>([]);
+	const { data: categories } = useCategories();
+	const { data: tags } = useTags();
 
 	const formMethods = useForm<z.infer<typeof activitySchema>>({
 		resolver: zodResolver(activitySchema),
 		defaultValues: {
-			category: [],
+			dateTime: new Date().toString(),
+			categories: [],
 			tags: [],
 		},
 	});
@@ -58,33 +54,6 @@ const AddAdvertiserForm = () => {
 				console.log(error);
 			});
 	};
-
-	useEffect(() => {
-		axios
-			.get("http://localhost:5000/api/category/list")
-			.then((res) => {
-				setCategories(res.data);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	}, []);
-
-	useEffect(() => {
-		const fetchTags = async () => {
-			try {
-				const [preference, historical] = await Promise.all([
-					axios.get("http://localhost:5000/api/tags/preference/list"),
-					axios.get("http://localhost:5000/api/tags/historical/list"),
-				]);
-				const tags = [...preference.data, ...historical.data];
-				setTags(tags);
-			} catch (error) {
-				console.log(error);
-			}
-		};
-		fetchTags();
-	}, []);
 
 	return (
 		<Sheet>
@@ -118,6 +87,7 @@ const AddAdvertiserForm = () => {
 								</FormItem>
 							)}
 						/>
+
 						<FormField
 							control={control}
 							name="dateTime"
@@ -125,10 +95,11 @@ const AddAdvertiserForm = () => {
 								<FormItem>
 									<FormLabel>Date & Time</FormLabel>
 									<FormControl>
-										<Input
-											{...field}
-											type="datetime-local"
-											placeholder="date and time"
+										<DateTimePicker
+											date={new Date(field?.value)}
+											setDate={(date) =>
+												field.onChange(date)
+											}
 										/>
 									</FormControl>
 									<FormDescription>
@@ -137,7 +108,7 @@ const AddAdvertiserForm = () => {
 								</FormItem>
 							)}
 						/>
-						<FormField // should be modified here by ali
+						<FormField // TODO: should be modified here by ali
 							control={control}
 							name="location"
 							render={({ field }) => (
@@ -162,7 +133,7 @@ const AddAdvertiserForm = () => {
 								name="minPrice"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>min Price</FormLabel>
+										<FormLabel>Minimum Price</FormLabel>
 										<FormControl>
 											<Input
 												type="number"
@@ -182,7 +153,7 @@ const AddAdvertiserForm = () => {
 								name="maxPrice"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>max Price</FormLabel>
+										<FormLabel>Maximum Price</FormLabel>
 										<FormControl>
 											<Input
 												type="number"
@@ -198,7 +169,6 @@ const AddAdvertiserForm = () => {
 								)}
 							/>
 						</div>
-
 						<FormField
 							control={control}
 							name="specialDiscounts"
@@ -209,135 +179,91 @@ const AddAdvertiserForm = () => {
 										<Input
 											type="number"
 											{...field}
-											placeholder="special discounts"
+											placeholder="special discounts in %"
 										/>
 									</FormControl>
 									<FormDescription>
-										Enter activity special discounts.
+										Enter activity special discounts %.
 									</FormDescription>
 								</FormItem>
 							)}
 						/>
-						<div className="flex gap-2">
-							<FormField
-								control={control}
-								name="category"
-								render={({ field }) => (
-									<FormItem>
-										<div className="flex flex-col space-y-2">
-											{category.map((cat) => (
-												<div
-													key={cat._id}
-													className="flex flex-row items-center space-x-2"
-												>
-													<FormControl>
-														<Checkbox
-															checked={field.value?.includes(
-																cat._id,
-															)}
-															onCheckedChange={(
-																checked,
-															) => {
-																if (checked) {
-																	field.onChange(
-																		[
-																			...field.value,
-																			cat._id,
-																		],
-																	);
-																} else {
-																	field.onChange(
-																		field.value.filter(
-																			(
-																				value,
-																			) =>
-																				value !==
-																				cat._id,
-																		),
-																	);
-																}
-															}}
-														/>
-													</FormControl>
-													<FormLabel className="font-normal">
-														{cat.name}
-													</FormLabel>
-												</div>
-											))}
-										</div>
-										<FormDescription>
-											Select activity categories.
-										</FormDescription>
-									</FormItem>
-								)}
-							/>
-							<FormField
-								control={control}
-								name="tags"
-								render={({ field }) => (
-									<FormItem>
-										<div className="flex flex-col space-y-2">
-											{tags.map((tag) => (
-												<div
-													key={tag._id}
-													className="flex flex-row items-center space-x-2"
-												>
-													<FormControl>
-														<Checkbox
-															checked={field.value?.includes(
-																tag._id,
-															)}
-															onCheckedChange={(
-																checked,
-															) => {
-																if (checked) {
-																	field.onChange(
-																		[
-																			...field.value,
-																			tag._id,
-																		],
-																	);
-																} else {
-																	field.onChange(
-																		field.value.filter(
-																			(
-																				value,
-																			) =>
-																				value !==
-																				tag._id,
-																		),
-																	);
-																}
-															}}
-														/>
-													</FormControl>
-													<FormLabel className="font-normal">
-														{tag.name}
-													</FormLabel>
-												</div>
-											))}
-										</div>
-										<FormDescription>
-											Select activity categories.
-										</FormDescription>
-									</FormItem>
-								)}
-							/>
-						</div>
+						<FormField
+							control={control}
+							name="categories"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel className="font-normal">
+										Select Categories
+									</FormLabel>
+									<FormControl>
+										<MultiSelect
+											options={
+												categories?.map((category) => {
+													return {
+														value: category._id,
+														label: category.name,
+													};
+												}) || []
+											}
+											value={field.value}
+											onValueChange={(values) =>
+												field.onChange(values)
+											}
+										/>
+									</FormControl>
+									<FormDescription>
+										Select activity categories.
+									</FormDescription>
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={control}
+							name="tags"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel className="font-normal">
+										Select Tags
+									</FormLabel>
+									<FormControl>
+										<MultiSelect
+											options={
+												tags?.map((tag) => {
+													return {
+														value: tag._id,
+														label: tag.name,
+													};
+												}) || []
+											}
+											value={field.value}
+											onValueChange={(values) =>
+												field.onChange(values)
+											}
+										/>
+									</FormControl>
+									<FormDescription>
+										Select activity tags.
+									</FormDescription>
+								</FormItem>
+							)}
+						/>
 						<FormField
 							control={control}
 							name="isOpen"
 							render={({ field }) => (
-								<FormItem>
-									<div className="flex items-center gap-2">
-										<FormLabel>isOpen</FormLabel>
+								<FormItem className="flex flex-col">
+									<Flex gap="2" align="center">
 										<FormControl className="w-5">
-											<Input type="checkbox" {...field} />
+											<Checkbox
+												checked={field.value}
+												onCheckedChange={field.onChange}
+											/>
 										</FormControl>
-									</div>
-									<FormDescription>
-										Enter activity special discounts.
-									</FormDescription>
+										<FormLabel>
+											Is available to book?
+										</FormLabel>
+									</Flex>
 								</FormItem>
 							)}
 						/>

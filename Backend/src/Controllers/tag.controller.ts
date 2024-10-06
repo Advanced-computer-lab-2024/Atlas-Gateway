@@ -137,3 +137,13 @@ export const deletePreTag = async (req: Request, res: Response) => {
 		res.status(500).json({ messag: "Internal Server Error" });
 	}
 };
+
+export const getAllTags = async (req: Request, res: Response) => {
+	try {
+		const dataset = await Tag.find();
+		res.status(200).send(dataset);
+	} catch (error) {
+		res.status(500).json({ message: "Internal Server Error" });
+		console.log(error);
+	}
+}

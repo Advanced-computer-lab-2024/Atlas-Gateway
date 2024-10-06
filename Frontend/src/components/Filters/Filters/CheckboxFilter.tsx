@@ -11,8 +11,8 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Flex } from "@/components/ui/flex";
-import { Input } from "@/components/ui/input";
 
+// import { Input } from "@/components/ui/input";
 import { SelectItem, TCheckboxFilter } from "../types";
 
 export default function CheckboxFilter({
@@ -20,7 +20,7 @@ export default function CheckboxFilter({
 }: {
 	filter: TCheckboxFilter;
 }) {
-	const [search, setSearch] = useState("");
+	// const [search, setSearch] = useState("");
 	const [selected, setSelected] = useState<SelectItem[]>([]);
 
 	const [query, updateQuery] = useQueryString();
@@ -72,11 +72,11 @@ export default function CheckboxFilter({
 			</DropdownMenuTrigger>
 			<DropdownMenuContent className="w-52">
 				<Flex isColumn gap="2">
-					<Input
+					{/* <Input
 						placeholder="Search"
 						value={search}
 						onChange={(e) => setSearch(e.target.value)}
-					/>
+					/> */}
 					{selected.length > 0 && (
 						<>
 							<Flex

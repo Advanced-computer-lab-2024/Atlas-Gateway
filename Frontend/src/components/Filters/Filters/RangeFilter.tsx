@@ -22,7 +22,7 @@ export default function RangeFilter({ filter }: { filter: TRangeFilter }) {
 	const applyFilter = useCallback(() => {
 		updateQuery({
 			...query,
-			[filter.filterName]: `${start},${end}`,
+			[filter.filterName]: `${start === "" ? "null" : start},${end === "" ? "null" : end}`,
 		});
 	}, [end, filter.filterName, query, start, updateQuery]);
 
