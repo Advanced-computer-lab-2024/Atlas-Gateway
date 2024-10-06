@@ -1,7 +1,6 @@
 import axios from "axios";
-import { Pencil } from "lucide-react";
-import { Trash } from "lucide-react";
-import { RotateCw } from "lucide-react";
+import { RotateCw, ShieldAlert, ShieldCheck, Trash } from "lucide-react";
+// Import both icons
 import { useEffect, useState } from "react";
 
 import {
@@ -17,12 +16,14 @@ import {
 interface Seller {
 	_id: string;
 	username: string;
+	name: string;
 	email: string;
 	password: string;
 	picture: string;
 	description: string;
 	isDeleted: boolean;
 	products: string[];
+	isVerified: boolean;
 }
 
 const Sellers = () => {
@@ -39,6 +40,19 @@ const Sellers = () => {
 				console.log(error);
 			});
 	}, [refresh]);
+
+	const handleUpdate = (id: string) => {
+		axios
+			.put(`http://localhost:5000/api/seller/update/${id}`, {
+				isVerified: true,
+			})
+			.then((res) => {
+				console.log(res.status);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
 
 	const handleDelete = (id: string) => {
 		axios
@@ -58,10 +72,12 @@ const Sellers = () => {
 				<TableHeader className="bg-gray-100">
 					<TableRow>
 						<TableHead>Username</TableHead>
+						<TableHead>Name</TableHead>
 						<TableHead>Email</TableHead>
 						<TableHead>Password</TableHead>
 						<TableHead>Picture</TableHead>
 						<TableHead>Description</TableHead>
+						<TableHead>isVerified</TableHead>
 						<TableHead className="cursor-pointer hover:text-[#2b58ed] w-1">
 							<RotateCw onClick={() => setRefresh(!refresh)} />
 						</TableHead>
@@ -73,11 +89,23 @@ const Sellers = () => {
 							<TableCell className="p-3">
 								{seller.username}
 							</TableCell>
+							<TableCell>{seller?.name}</TableCell>
 							<TableCell>{seller.email}</TableCell>
 							<TableCell>{seller.password}</TableCell>
 							<TableCell>{seller?.picture || "N/A"}</TableCell>
 							<TableCell>
 								{seller?.description || "N/A"}
+							</TableCell>
+							<TableCell>
+								{seller.isVerified ? (
+									<ShieldCheck className="text-green-500 w-5 h-5" />
+								) : (
+									<button
+										onClick={() => handleUpdate(seller._id)}
+									>
+										<ShieldAlert className="text-red-500 w-5 h-5" />
+									</button>
+								)}
 							</TableCell>
 							<TableCell className="cursor-pointer hover:text-[#2b58ed]">
 								<button className="bg-red-500 text-white rounded-full p-2 shadow-lg hover:bg-red-600">

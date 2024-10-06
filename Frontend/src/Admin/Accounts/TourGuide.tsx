@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Pencil } from "lucide-react";
+import { Pencil, ShieldAlert, ShieldCheck } from "lucide-react";
 import { Trash } from "lucide-react";
 import { RotateCw } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -32,6 +32,7 @@ interface TourGuide {
 	experience: string;
 	previous: PreviousJob;
 	itinerary: string[];
+	isVerified: boolean;
 }
 
 const TourGuide = () => {
@@ -48,6 +49,19 @@ const TourGuide = () => {
 				console.log(error);
 			});
 	}, [refresh]);
+
+	const handleUpdate = (id: string) => {
+		axios
+			.put(`http://localhost:5000/api/tourguide/update/${id}`, {
+				isVerified: true,
+			})
+			.then((res) => {
+				console.log(res.status);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
 
 	const handleDelete = (id: string) => {
 		axios
@@ -71,9 +85,11 @@ const TourGuide = () => {
 						<TableHead>Email</TableHead>
 						<TableHead>Password</TableHead>
 						<TableHead>Description</TableHead>
+						<TableHead>isVerified</TableHead>
 						<TableHead>Picture</TableHead>
 						<TableHead>Experience</TableHead>
 						<TableHead>Previous Job Title</TableHead>
+						<TableHead></TableHead>
 						{/* <TableHead>Start Date</TableHead>
 						<TableHead>End Date</TableHead> */}
 						<TableHead className="cursor-pointer hover:text-[#2b58ed] w-1">
@@ -97,12 +113,28 @@ const TourGuide = () => {
 							<TableCell>
 								{tourGuide?.description || "N/A"}
 							</TableCell>
+							<TableCell>
+								{tourGuide?.description || "N/A"}
+							</TableCell>
 							<TableCell>{tourGuide?.picture || "N/A"}</TableCell>
 							<TableCell>
 								{tourGuide?.experience || "N/A"}
 							</TableCell>
 							<TableCell>
 								{tourGuide.previous?.title || "N/A"}
+							</TableCell>
+							<TableCell>
+								{tourGuide.isVerified ? (
+									<ShieldCheck className="text-green-500 w-5 h-5" />
+								) : (
+									<button
+										onClick={() =>
+											handleUpdate(tourGuide._id)
+										}
+									>
+										<ShieldAlert className="text-red-500 w-5 h-5" />
+									</button>
+								)}
 							</TableCell>
 							{/* <TableCell>
 								{tourGuide.previous?.description || "N/A"}

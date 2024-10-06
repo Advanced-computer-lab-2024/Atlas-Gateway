@@ -15,6 +15,7 @@ export const createSeller = async (req: Request, res: Response) => {
 		}
 		const user = new Seller({
 			username,
+			name,
 			email,
 			password,
 			picture,
@@ -59,12 +60,13 @@ export const updateSeller = async (req: Request, res: Response) => {
 		return res.status(400).send("Id is Invalid ");
 	}
 
-	const { name, email, password, picture, description } = req.body;
+	const { name, email, password, picture, description, isVerified } =
+		req.body;
 	try {
 		//maybe we need to add checker here based on the flow of the page
 		const adv = await Seller.findByIdAndUpdate(
 			id,
-			{ name, email, password, picture, description },
+			{ name, email, password, picture, description, isVerified },
 			{
 				new: true,
 			},
