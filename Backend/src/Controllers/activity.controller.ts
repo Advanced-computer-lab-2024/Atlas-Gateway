@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { PipelineStage } from "mongoose";
+import { PipelineStage, Types } from "mongoose";
 
 import { Activity } from "../Database/Models/activity.model";
 import AggregateBuilder from "../Services/aggregation.service";
@@ -11,7 +11,7 @@ export const createActivities = async (req: Request, res: Response) => {
 			dateTime,
 			location,
 			tags,
-			category,
+			categories,
 			minPrice,
 			maxPrice,
 			specialDiscounts,
@@ -22,7 +22,7 @@ export const createActivities = async (req: Request, res: Response) => {
 			dateTime,
 			location,
 			tags,
-			category,
+			categories,
 			minPrice,
 			maxPrice,
 			specialDiscounts,
@@ -38,7 +38,35 @@ export const createActivities = async (req: Request, res: Response) => {
 export const getActivityById = async (req: Request, res: Response) => {
 	try {
 		const { id } = req.params;
-		const activity = await Activity.findById(id);
+		//const activity = await Activity.findById(id);
+		const activity = (
+			await Activity.aggregate([
+				{
+					$match: {
+						_id: new Types.ObjectId(id),
+					},
+				},
+				{
+					$lookup: {
+						from: "tags",
+						localField: "tags",
+						foreignField: "_id",
+						as: "tags",
+					},
+				},
+				{
+					$lookup: {
+						from: "categories",
+						localField: "categories",
+						foreignField: "_id",
+						as: "categories",
+					},
+				},
+			])
+		)[0];
+
+		console.log(activity);
+
 		if (!activity) {
 			return res.status(404).send("cant find Activity");
 		}
@@ -64,14 +92,14 @@ export const getActivities = async (req: Request, res: Response) => {
 			{
 				$lookup: {
 					from: "categories",
-					localField: "category",
+					localField: "categories",
 					foreignField: "_id",
-					as: "category",
+					as: "categories",
 				},
 			},
 			...AggregateBuilder(
 				req.query,
-				["name", "tags.name", "category.name"], // Search fields
+				["name", "tags.name", "categories.name"], // Search fields
 			),
 		];
 
