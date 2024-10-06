@@ -61,7 +61,7 @@ export const getPlaces = async (req: Request, res: Response) => {
 					from: "tags",
 					localField: "tags",
 					foreignField: "_id",
-					as: "tagsData",
+					as: "tags",
 				},
 			},
 
