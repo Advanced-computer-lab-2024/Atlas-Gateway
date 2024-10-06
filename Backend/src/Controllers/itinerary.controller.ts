@@ -1,3 +1,4 @@
+import { lookup } from "dns";
 import { Request, Response } from "express";
 import mongoose, { PipelineStage, Types } from "mongoose";
 import { it } from "node:test";
@@ -71,7 +72,9 @@ export const getItineraryById = async (req: Request, res: Response) => {
 			return res.status(400).json({ error: "Invalid Itinerary ID" });
 		}
 
-		const itinerary = await Itinerary.findById(id);
+		const itinerary = await Itinerary.findById(id)
+			.populate("tags")
+			.populate("createdBy");
 
 		res.status(200).send(itinerary);
 	} catch (error) {
@@ -88,6 +91,14 @@ export const getItinerary = async (req: Request, res: Response) => {
 					localField: "tags",
 					foreignField: "_id",
 					as: "tags",
+				},
+			},
+			{
+				$lookup: {
+					from: "tourguides",
+					localField: "createdBy",
+					foreignField: "_id",
+					as: "createdBy",
 				},
 			},
 			...AggregateBuilder(req.query, ["name", "tagsData.name"]),
