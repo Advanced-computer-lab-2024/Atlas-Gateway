@@ -15,22 +15,28 @@ import { Flex } from "@/components/ui/flex";
 import { TItinerary } from "@/types/global";
 
 export default function ItineraryCard({
-	_id,
-	availability,
-	avgRating,
-	dropOffLocation,
-	startDateTime,
-	activities,
-	endDateTime,
-	numberOfBookings,
-	pickUpLocation,
-	price,
-	tags,
-	language,
-	title,
-}: TItinerary) {
+	editDrawer,
+	itinerary,
+}: {
+	itinerary: TItinerary;
+	editDrawer: (activity: TItinerary) => void;
+}) {
 	const navigate = useNavigate();
-
+	const {
+		_id,
+		title,
+		pickUpLocation,
+		dropOffLocation,
+		startDateTime,
+		endDateTime,
+		price,
+		avgRating,
+		activities,
+		tags,
+		language,
+		numberOfBookings,
+		availability,
+	} = itinerary;
 	return (
 		<Card
 			key={_id}
@@ -58,6 +64,11 @@ export default function ItineraryCard({
 									}}
 								>
 									View Itinerary Details
+								</DropdownMenuItem>
+								<DropdownMenuItem
+									onClick={() => editDrawer(itinerary)}
+								>
+									edit
 								</DropdownMenuItem>
 							</DropdownMenuContent>
 						</DropdownMenu>

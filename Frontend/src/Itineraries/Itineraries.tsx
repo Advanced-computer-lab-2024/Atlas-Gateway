@@ -1,8 +1,13 @@
+import { set } from "lodash";
+import { it } from "node:test";
+import { useState } from "react";
+
 import { useItineraries } from "@/api/data/useItineraries";
 import { usePagination } from "@/api/data/usePagination";
 import Filters from "@/components/Filters/Filters";
 import Label from "@/components/ui/Label";
 import { Searchbar } from "@/components/ui/Searchbar";
+import { Button } from "@/components/ui/button";
 import { Flex } from "@/components/ui/flex";
 import {
 	Pagination,
@@ -12,11 +17,27 @@ import {
 	PaginationNext,
 	PaginationPrevious,
 } from "@/components/ui/pagination";
+import { useLoginStore } from "@/store/loginStore";
+import { TItinerary } from "@/types/global";
 
+import ItineraryForm from "./Form/ItineraryForm";
 import ItineraryCard from "./ItineraryCard";
 
 export default function Itineraries() {
+	const { user } = useLoginStore();
 	const { data, meta } = useItineraries();
+	const [open, setOpen] = useState(false);
+	const [itinerary, setItinerary] = useState<TItinerary>();
+
+	const editDrawer = (itinerary: TItinerary) => {
+		setOpen(true);
+		setItinerary(itinerary);
+	};
+
+	const closeEditDrawer = (open: boolean) => {
+		setOpen(open);
+		if (!open) setItinerary(undefined);
+	};
 
 	const { page, onPageChange, pagesCount } = usePagination({
 		pageNum: meta?.pages || 1,
@@ -38,7 +59,7 @@ export default function Itineraries() {
 				gap="2"
 				className="bg-surface-secondary p-2 rounded-lg"
 			>
-				<Flex>
+				<Flex justify="between">
 					<Flex gap="1" align="center">
 						<Searchbar />
 						<Filters
@@ -63,13 +84,23 @@ export default function Itineraries() {
 							}}
 						/>
 					</Flex>
+					{user?.type !== "guide" && ( //TODO: Check use role naming
+						<Button onClick={() => setOpen(true)} variant="ghost">
+							Add Itinerary
+						</Button>
+					)}
 				</Flex>
 			</Flex>
 			<Flex
 				className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2"
 				gap="4"
 			>
-				{data?.map((itinerary) => <ItineraryCard {...itinerary} />)}
+				{data?.map((itinerary) => (
+					<ItineraryCard
+						itinerary={itinerary}
+						editDrawer={editDrawer}
+					/>
+				))}
 			</Flex>
 			{pagesCount > 1 && (
 				<Pagination>
@@ -97,6 +128,11 @@ export default function Itineraries() {
 					)}
 				</Pagination>
 			)}
+			<ItineraryForm
+				itinerary={itinerary}
+				open={open}
+				setOpen={closeEditDrawer}
+			/>
 		</Flex>
 	);
 }
