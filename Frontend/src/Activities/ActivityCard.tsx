@@ -1,5 +1,7 @@
+import axios from "axios";
 import { formatDate } from "date-fns";
 import { DollarSign, EllipsisVertical, MapPin, Star } from "lucide-react";
+import { Trash } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 import Label from "@/components/ui/Label";
@@ -14,28 +16,34 @@ import {
 import { Flex } from "@/components/ui/flex";
 import { TActivity } from "@/types/global";
 
+import AddActivityForm from "./Form/ActivityForm";
+
 export default function ActivityCard({
-	editDrawer,
-	activity,
-}: {
-	activity: TActivity;
-	editDrawer: (activity: TActivity) => void;
-}) {
+	_id,
+	name,
+	location,
+	tags,
+	categories,
+	dateTime,
+	isOpen,
+	maxPrice,
+	specialDiscounts,
+	minPrice,
+	avgRating,
+	description,
+}: TActivity) {
 	const navigate = useNavigate();
-	const {
-		_id,
-		name,
-		location,
-		tags,
-		categories,
-		dateTime,
-		isOpen,
-		maxPrice,
-		specialDiscounts,
-		minPrice,
-		avgRating,
-		description,
-	} = activity;
+
+	const handleDelete = (id: string) => {
+		axios
+			.delete(`http://localhost:5000/api/activity/delete/${id}`)
+			.then((res) => {
+				console.log(res.status);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
 
 	return (
 		<Card
@@ -53,25 +61,26 @@ export default function ActivityCard({
 						<Label.Mid500 className="justify-self-center">
 							{name}
 						</Label.Mid500>
-						<DropdownMenu>
-							<DropdownMenuTrigger className="absolute right-0">
-								<EllipsisVertical className="cursor-pointer" />
-							</DropdownMenuTrigger>
-							<DropdownMenuContent>
-								<DropdownMenuItem
-									onClick={() => {
-										navigate(`/activities/${_id}`);
-									}}
-								>
-									View Activtiy Details
-								</DropdownMenuItem>
-								<DropdownMenuItem
-									onClick={() => editDrawer(activity)}
-								>
-									edit
-								</DropdownMenuItem>
-							</DropdownMenuContent>
-						</DropdownMenu>
+						<Flex>
+							<DropdownMenu>
+								<DropdownMenuTrigger className="absolute right-0">
+									<EllipsisVertical className="cursor-pointer" />
+								</DropdownMenuTrigger>
+								<DropdownMenuContent>
+									<DropdownMenuItem
+										onClick={() => {
+											navigate(`/activities/${_id}`);
+										}}
+									>
+										View Activtiy Details
+									</DropdownMenuItem>
+								</DropdownMenuContent>
+							</DropdownMenu>
+							<AddActivityForm type={"Update"} id={_id} />
+							<button onClick={() => handleDelete(_id)}>
+								<Trash />
+							</button>
+						</Flex>
 					</Flex>
 					<Label.Thin200 className="overflow-ellipsis line-clamp-3">
 						{description}
@@ -118,13 +127,12 @@ export default function ActivityCard({
 							<Flex
 								gap="1"
 								align="center"
-								className="overflow-x-scroll w-full h-8"
+								className="overflow-x-scroll w-full"
 							>
 								{categories?.map((category) => (
 									<Badge
 										key={category?._id}
 										variant={"default"}
-										className="whitespace-nowrap"
 									>
 										{category?.name}
 									</Badge>
@@ -147,14 +155,10 @@ export default function ActivityCard({
 							<Flex
 								gap="1"
 								align="center"
-								className="overflow-x-scroll w-full h-8"
+								className="overflow-x-scroll w-full"
 							>
 								{tags?.map((tag) => (
-									<Badge
-										key={tag?._id}
-										variant={"default"}
-										className="whitespace-nowrap"
-									>
+									<Badge key={tag?._id} variant={"default"}>
 										{tag?.name}
 									</Badge>
 								))}
@@ -167,7 +171,7 @@ export default function ActivityCard({
 			</CardContent>
 			<CardFooter className="flex flex-col gap-2 items-center justify-center">
 				<Label.Mid300>
-					Available Special Discounts: {specialDiscounts}%
+					Available Special Discounts: {specialDiscounts}
 				</Label.Mid300>
 				<Label.Mid300>
 					{isOpen ? "Bookings Open" : "Bookings Closed"}
