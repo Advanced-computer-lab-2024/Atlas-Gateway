@@ -3,8 +3,6 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
 
-
-
 import Activites from "./Activities/Activites";
 import ActivityDetails from "./Activities/ActivityDetails";
 import Admin from "./Admin/Dashboard";
@@ -22,13 +20,16 @@ import { QueryStateProvider } from "./api/data/useQueryString";
 import "./index.css";
 import Layout from "./layout/Layout";
 
-
 const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
 	{
 		path: "/admin",
-		element: <Admin />,
+		element: (
+			<QueryStateProvider>
+				<Admin />
+			</QueryStateProvider>
+		),
 	},
 	{
 		path: "/register",
