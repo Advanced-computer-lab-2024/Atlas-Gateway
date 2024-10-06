@@ -50,8 +50,8 @@ export type TActivity = {
 	location: string;
 	minPrice: number;
 	maxPrice: number;
-	tags: string[];
-	categories: string[];
+	tags: TTag[];
+	categories: TCategory[];
 	specialDiscounts: number;
 	isOpen: boolean;
 	rating: number;

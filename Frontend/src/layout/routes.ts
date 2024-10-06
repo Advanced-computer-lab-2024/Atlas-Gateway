@@ -52,9 +52,9 @@ const adminRoutes: NavbarRoute[] = [
 ];
 
 const tourGuideRoutes: NavbarRoute[] = [
-	intinerariesRoute,
-	activitiesRoute,
 	placesRoute,
+	activitiesRoute,
+	intinerariesRoute,
 ];
 
 const advertiserRoutes: NavbarRoute[] = [
