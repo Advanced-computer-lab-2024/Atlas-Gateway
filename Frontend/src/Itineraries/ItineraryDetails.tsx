@@ -1,14 +1,11 @@
+import { ArrowLeft } from "lucide-react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-
-
 import { useItinerary } from "@/api/data/useItineraries";
-import { Flex, Flex } from "@/components/ui/flex";
-import { Card } from "@/components/ui/card";
-import { ArrowLeft } from "lucide-react";
 import Label from "@/components/ui/Label";
-
+import { Card } from "@/components/ui/card";
+import { Flex } from "@/components/ui/flex";
 
 export default function ItineraryDetails() {
 	const navigate = useNavigate();
