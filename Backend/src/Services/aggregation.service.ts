@@ -8,11 +8,10 @@ import buildSortCriteria from "./sortBuilder.service";
 export default function AggregateBuilder(
 	query: any,
 	searchFields: string[], // Fields to search on (e.g., name, category, tag)
-	Limit: number = 10, // Default limit per page
 ): PipelineStage[] {
 	const pipeline: PipelineStage[] = [];
 	const page = Number(query.page?.toString()) || 1;
-	const limit = Number(query.limit?.toString()) || Limit;
+	const limit = Number(query.limit?.toString()) || 10;
 	const skip = (page - 1) * limit;
 
 	const searchQuery = buildSearchQuery(

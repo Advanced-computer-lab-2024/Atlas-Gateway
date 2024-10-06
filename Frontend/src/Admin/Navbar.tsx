@@ -1,5 +1,8 @@
 import { LogOut } from "lucide-react";
 import { useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
+
+import { onLogout } from "@/store/loginStore";
 
 interface Props {
 	selectedCategory: string;
@@ -7,7 +10,12 @@ interface Props {
 }
 
 const Navbar = ({ selectedCategory, onSelect }: Props) => {
+	const navigate = useNavigate();
 	const [activeItem, setActiveItem] = useState("");
+	const logOut = () => {
+		onLogout();
+		navigate("/register");
+	};
 	const handleClick = (item: string) => {
 		setActiveItem(item);
 		onSelect(item);
@@ -82,7 +90,10 @@ const Navbar = ({ selectedCategory, onSelect }: Props) => {
 		<div className="bg-[#fefefe] w-full h-[80px] flex items-center">
 			{renderOptions()}
 			<div>
-				<LogOut className="cursor-pointer mr-5 hover:text-[#2b58ed]" />
+				<LogOut
+					className="cursor-pointer mr-5 hover:text-[#2b58ed]"
+					onClick={logOut}
+				/>
 			</div>
 		</div>
 	);

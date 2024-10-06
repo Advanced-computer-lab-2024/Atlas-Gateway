@@ -4,6 +4,7 @@ import { useActivities } from "@/api/data/useActivities";
 import { usePagination } from "@/api/data/usePagination";
 import Filters from "@/components/Filters/Filters";
 import Label from "@/components/ui/Label";
+import { Searchbar } from "@/components/ui/Searchbar";
 import { Flex } from "@/components/ui/flex";
 import {
 	Pagination,
@@ -14,8 +15,8 @@ import {
 	PaginationPrevious,
 } from "@/components/ui/pagination";
 
+import AddActivityForm from "../Advertiser/Form/AddActivityForm";
 import ActivityCard from "./ActivityCard";
-import { Searchbar } from "@/components/ui/Searchbar";
 
 export default function Activites() {
 	const { data, meta } = useActivities();
@@ -31,14 +32,16 @@ export default function Activites() {
 			gap="4"
 			className="w-full h-full px-10 py-8 overflow-y-scroll"
 		>
-			<Label.Big600>View a list of all the activities you can experience!</Label.Big600>
+			<Label.Big600>
+				View a list of all the activities you can experience!
+			</Label.Big600>
 			<Flex
 				justify="center"
 				isColumn
 				gap="2"
 				className="bg-surface-secondary p-2 rounded-lg"
 			>
-				<Flex>
+				<Flex justify="between">
 					<Flex gap="1" align="center">
 						<Searchbar />
 						<Filters
@@ -63,6 +66,7 @@ export default function Activites() {
 							}}
 						/>
 					</Flex>
+					<AddActivityForm />
 				</Flex>
 			</Flex>
 			<Flex
