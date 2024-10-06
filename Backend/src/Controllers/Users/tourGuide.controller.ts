@@ -30,9 +30,7 @@ export const createTourGuide = async (req: Request, res: Response) => {
 };
 export const getTourGuide = async (req: Request, res: Response) => {
 	try {
-		const id = req.params.id;
-		const tourGuide = await TourGuide.findById(id);
-		res.status(200).send(tourGuide);
+		res.status(200).send(await TourGuide.find());
 	} catch (error) {
 		console.log(error);
 		res.status(500).send("failed");
@@ -50,22 +48,54 @@ export const getTourGuides = async (req: Request, res: Response) => {
 
 export const updateTourGuide = async (req: Request, res: Response) => {
 	const id = req.params.id;
-
+	const tourGuide = await TourGuide.findById(id);
+	const Verified = tourGuide?.isVerified;
+	const {
+		username,
+		email,
+		password,
+		description,
+		picture,
+		experience,
+		previous,
+	} = req.body;
 	try {
-		const adv = await TourGuide.findByIdAndUpdate(id, req.body, {
-			new: true,
-		});
-		res.status(200).send(adv);
+		if (Verified) {
+			res.status(200).send(
+				await TourGuide.findByIdAndUpdate(
+					id,
+					{
+						username,
+						email,
+						password,
+						description,
+						picture,
+						experience,
+						previous,
+					},
+					{
+						new: true,
+					},
+				),
+			);
+		} else {
+			res.status(500).send("user not Verified");
+		}
 	} catch (error) {
 		res.status(500).send("failed");
 	}
 };
 export const deleteTourGuide = async (req: Request, res: Response) => {
 	const id = req.params.id;
+	const tourGuide = await TourGuide.findById(id);
+	const Verified = tourGuide?.isVerified;
 	try {
-		//maybe we need to add checker here based on the flow of the page
-		await TourGuide.findByIdAndDelete(id);
-		res.status(200).send("tour guide deleted successfully");
+		if (Verified) {
+			await TourGuide.findByIdAndDelete(id);
+			res.status(200).send("tourGuide deleted successfully");
+		} else {
+			res.status(500).send("user not Verified");
+		}
 	} catch (error) {
 		res.status(500).send("Failed to delete tourGuide");
 	}
@@ -73,8 +103,14 @@ export const deleteTourGuide = async (req: Request, res: Response) => {
 
 export const viewItinerary = async (req: Request, res: Response) => {
 	const id = req.params.id;
+	const tourGuide = await TourGuide.findById(id);
+	const Verified = tourGuide?.isVerified;
 	try {
-		res.status(200).send(await TourGuide.findById(id).select("itinerary"));
+		if (Verified) {
+			res.status(200).send(await TourGuide.findById(id));
+		} else {
+			res.status(500).send("user not Verified");
+		}
 	} catch (error) {
 		console.log(error);
 		res.status(500).send("failed");

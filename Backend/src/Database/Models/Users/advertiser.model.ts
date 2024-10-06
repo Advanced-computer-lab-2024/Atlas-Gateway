@@ -13,6 +13,7 @@ export interface IAdvertiser extends Document {
 		description: string;
 	};
 	activities: [Types.ObjectId];
+	isVerified: { type: Boolean, default: false },
 }
 
 const advertiserSchema = new Schema<IAdvertiser>(
@@ -28,6 +29,7 @@ const advertiserSchema = new Schema<IAdvertiser>(
 			description: { type: String },
 		},
 		activities: [{ type: Schema.Types.ObjectId, ref: "Activity" }],
+		isVerified:{type:Boolean,default:false}
 	},
 	schemaConfig,
 );

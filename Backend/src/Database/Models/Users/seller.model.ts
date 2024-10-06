@@ -5,9 +5,11 @@ export interface ISeller extends Document {
 	username: string;
 	email: string; // story 3
 	password: string;
-	picture?: string;
-	description?: string;
-	products?: [Types.ObjectId];
+	picture: string;
+	description: string;
+	isDeleted: boolean;
+	products: [Types.ObjectId];
+	isVerified: { type: Boolean; default: false };
 }
 
 const sellerSchema = new Schema<ISeller>(
@@ -18,6 +20,7 @@ const sellerSchema = new Schema<ISeller>(
 		picture: { type: String },
 		description: { type: String },
 		products: [{ type: Schema.Types.ObjectId, ref: "Product" }],
+		isVerified: { type: Boolean, default: false },
 	},
 	schemaConfig,
 );
