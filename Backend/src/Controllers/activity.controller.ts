@@ -38,35 +38,14 @@ export const createActivities = async (req: Request, res: Response) => {
 export const getActivityById = async (req: Request, res: Response) => {
 	try {
 		const { id } = req.params;
-		//const activity = await Activity.findById(id);
-		const activity = (
-			await Activity.aggregate([
-				{
-					$match: {
-						_id: new Types.ObjectId(id),
-					},
-				},
-				{
-					$lookup: {
-						from: "tags",
-						localField: "tags",
-						foreignField: "_id",
-						as: "tags",
-					},
-				},
-				{
-					$lookup: {
-						from: "categories",
-						localField: "categories",
-						foreignField: "_id",
-						as: "categories",
-					},
-				},
-			])
-		)[0];
 
-		console.log(activity);
+		if (!Types.ObjectId.isValid(id)) {
+			return res.status(400).send("id is required");
+		}
 
+		const activity = await Activity.findById(id)
+			.populate("tags")
+			.populate("categories");
 		if (!activity) {
 			return res.status(404).send("cant find Activity");
 		}
@@ -131,6 +110,10 @@ export const getActivities = async (req: Request, res: Response) => {
 export const updateActivityById = async (req: Request, res: Response) => {
 	try {
 		const { id } = req.params;
+
+		if (!Types.ObjectId.isValid(id)) {
+			return res.status(400).send("id is required");
+		}
 		const activity = await Activity.findById(id);
 		if (!activity) {
 			return res.status(404).send("cant find Activity");
@@ -147,6 +130,10 @@ export const updateActivityById = async (req: Request, res: Response) => {
 export const deleteActivityById = async (req: Request, res: Response) => {
 	try {
 		const { id } = req.params;
+
+		if (!Types.ObjectId.isValid(id)) {
+			return res.status(400).send("id is required");
+		}
 		const activity = await Activity.findByIdAndDelete(id);
 		if (!activity) {
 			return res.status(404).send("activity not found");
