@@ -15,14 +15,25 @@ export const createProduct = async (req: Request, res: Response) => {
 
 		//Check if the user is an admin
 
-		const sellerId = (await Admin.findById(userId))
-			? "000000000000000000000000"
-			: new Types.ObjectId(String(userId));
+		const sellerId =
+			userId === "123456"
+				? (
+						await Seller.findOne({
+							username: "Atlas Gateway",
+						}).select("_id")
+					)?._id
+				: new Types.ObjectId(String(userId));
 		//Check seller ID validity and existance
+
+		if (!sellerId) {
+			return res
+				.status(400)
+				.json({ message: "Atlas Gateway Seller not found" });
+		}
+		console.log(sellerId);
 		if (
-			(!Types.ObjectId.isValid(sellerId) ||
-				!(await Seller.findById(sellerId))) &&
-			sellerId != "000000000000000000000000"
+			!Types.ObjectId.isValid(String(sellerId)) ||
+			!(await Seller.findById(String(sellerId)))
 		) {
 			return res
 				.status(400)
