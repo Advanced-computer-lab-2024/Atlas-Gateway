@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { Types } from "mongoose";
 
 import { Activity } from "../Database/Models/activity.model";
 import { Category } from "../Database/Models/category.model";
@@ -30,8 +31,13 @@ export const getCategories = async (req: Request, res: Response) => {
 export const getCategoryById = async (req: Request, res: Response) => {
 	try {
 		const { id } = req.params;
+
+		if (!Types.ObjectId.isValid(id)) {
+			return res.status(400).send("id is Invalid");
+		}
+
 		const category = await Category.findById(id);
-		res.status(200).send(category?.name);
+		res.status(200).json(category);
 	} catch (error) {
 		res.status(500).send("error getting category by id");
 	}
@@ -40,6 +46,9 @@ export const getCategoryById = async (req: Request, res: Response) => {
 export const updateCategory = async (req: Request, res: Response) => {
 	try {
 		const { id } = req.params;
+		if (!Types.ObjectId.isValid(id)) {
+			return res.status(400).send("id is Invalid");
+		}
 		const { name } = req.body;
 		const category = await Category.findByIdAndUpdate(
 			id,
@@ -59,9 +68,13 @@ export const updateCategory = async (req: Request, res: Response) => {
 export const deleteCategory = async (req: Request, res: Response) => {
 	try {
 		const { id } = req.params;
+
+		if (!Types.ObjectId.isValid(id)) {
+			return res.status(400).send("id is Invalid");
+		}
 		const category = await Category.findByIdAndDelete(id);
 		if (!category) {
-			res.status(404).send("cant find activity category");
+			res.status(404).send("can't find activity category");
 		}
 		await Activity.deleteMany({ category: id });
 		res.status(200).send("category deleted successfully");

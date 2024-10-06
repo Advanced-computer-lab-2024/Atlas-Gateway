@@ -2,14 +2,11 @@ import { formatDate } from "date-fns";
 import { ArrowLeft, DollarSign, MapPin, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-
-
 import { useActivity } from "@/api/data/useActivities";
 import Label from "@/components/ui/Label";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Flex } from "@/components/ui/flex";
-
 
 export default function ActivityDetails() {
 	const navigate = useNavigate();
@@ -99,7 +96,7 @@ export default function ActivityDetails() {
 									Special discounts:{" "}
 								</Label.Big600>
 								<Label.Mid500 className="overflow-ellipsis">
-									{specialDiscounts}
+									{specialDiscounts}%
 								</Label.Mid500>
 							</Flex>
 							<Flex gap="2" align="center">
@@ -110,12 +107,13 @@ export default function ActivityDetails() {
 									<Flex
 										gap="1"
 										align="center"
-										className="overflow-x-scroll w-full"
+										className="overflow-x-scroll w-full h-8"
 									>
 										{categories?.map((category) => (
 											<Badge
 												key={category?._id}
 												variant={"default"}
+												className="whitespace-nowrap"
 											>
 												{category?.name}
 											</Badge>
@@ -133,12 +131,13 @@ export default function ActivityDetails() {
 									<Flex
 										gap="1"
 										align="center"
-										className="overflow-x-scroll w-full"
+										className="overflow-x-scroll w-full h-8"
 									>
 										{tags?.map((tag) => (
 											<Badge
 												key={tag?._id}
 												variant={"default"}
+												className="whitespace-nowrap"
 											>
 												{tag?.name}
 											</Badge>

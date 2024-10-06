@@ -97,11 +97,14 @@ export const getPlaces = async (req: Request, res: Response) => {
 export const getPlaceById = async (req: Request, res: Response) => {
 	try {
 		const id = req.params.id;
+		if (!Types.ObjectId.isValid(id)) {
+			return res.status(400).json({ error: "Invalid Place ID" });
+		}
 		const response = await Places.findById(id);
 		res.status(200).send(response);
 	} catch (error) {
-		res.status(500).json({ message: "Place Not found" });
 		console.log(error);
+		res.status(500).json({ message: "Place Not found" });
 	}
 };
 //TO-DO: Update Places, Delete Places
