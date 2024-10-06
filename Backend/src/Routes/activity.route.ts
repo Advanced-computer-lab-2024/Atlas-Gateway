@@ -11,7 +11,7 @@ import {
 const router = express.Router();
 
 router.post("/create", createActivities);
-router.put("/show/:id", getActivityById);
+router.get("/show/:id", getActivityById);
 router.get("/list", getActivities);
 router.put("/update/:id", updateActivityById);
 router.delete("/delete/:id", deleteActivityById);
