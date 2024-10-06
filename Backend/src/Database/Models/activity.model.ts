@@ -18,6 +18,7 @@ export interface IActivity extends Document {
 		rating:number;
 	},
 	avgRating:number;
+	totalNumberOfRatings: number;
 }
 
 const activitySchema = new Schema<IActivity>(
@@ -46,6 +47,13 @@ const activitySchema = new Schema<IActivity>(
 		},
 		specialDiscounts: { type: Number, required: true, min: 0, max: 100 },
 		isOpen: { type: Boolean, required: true },
+		reviews:{
+			userId:{ type: Schema.Types.ObjectId, required: false },
+			review:{type: String, required: false},
+			rating:{type:Number, min:0,max:5},
+		},
+		avgRating:{type:Number, min:0,max:5, default: 0},
+		totalNumberOfRatings: {type:Number, default: 0},
 	},
 	schemaConfig,
 );
