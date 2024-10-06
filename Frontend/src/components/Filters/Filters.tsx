@@ -1,8 +1,7 @@
 import { TrashIcon } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import useQueryString from "use-query-string";
 
+import { useQueryString } from "@/api/data/useQueryString";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -19,9 +18,7 @@ import { TFilter, TFilters } from "./types";
 export default function Filters({ filters }: { filters: TFilters }) {
 	const [isOpen, setIsOpen] = useState(false);
 	const [activeFilters, setActiveFilters] = useState<TFilter[]>([]);
-	const navigate = useNavigate();
-	// @ts-expect-error - idk
-	const [query, setQuery] = useQueryString(window.location, navigate);
+	const [query, updateQuery] = useQueryString();
 
 	const filterOptions = useMemo(
 		() =>
@@ -36,15 +33,13 @@ export default function Filters({ filters }: { filters: TFilters }) {
 		[activeFilters, filters],
 	);
 
-	console.log(filterOptions);
-
 	const clearSelection = () => {
 		setActiveFilters([]);
 		const newQuery = { ...query };
 		activeFilters.forEach((filter) => {
 			delete newQuery[filter.filterName];
 		});
-		setQuery(newQuery);
+		updateQuery(newQuery);
 	};
 
 	const handleClick = useCallback(

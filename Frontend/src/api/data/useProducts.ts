@@ -1,24 +1,22 @@
 import { useQuery } from "@tanstack/react-query";
-import { useNavigate, useParams } from "react-router-dom";
-import useQueryString from "use-query-string";
+import { useParams } from "react-router-dom";
 
 import { useLoginStore } from "@/store/loginStore";
 
 import { apiProduct, apiProducts } from "../service/product";
+import { useQueryString } from "./useQueryString";
 
 export function useProducts() {
 	const { user } = useLoginStore();
-	const { id } = user || {};
-	const navigate = useNavigate();
-	// @ts-expect-error - idk
-	const [query] = useQueryString(window.location, navigate);
+	const { _id } = user || {};
+	const [query] = useQueryString();
 
 	const { data } = useQuery({
-		queryFn: () => apiProducts(id, query),
-		queryKey: ["product", id, query],
+		queryFn: () => apiProducts(_id, query),
+		queryKey: ["product", _id, query],
 	});
 
-	return { data: data?.data };
+	return { data: data?.data?.data, meta: data?.data?.metaData };
 }
 
 export function useProduct() {

@@ -1,33 +1,29 @@
 import { Search } from "lucide-react";
 
+import { usePagination } from "@/api/data/usePagination";
 import { useProducts } from "@/api/data/useProducts";
 import Filters from "@/components/Filters/Filters";
 import Label from "@/components/ui/Label";
+import { Searchbar } from "@/components/ui/Searchbar";
 import { Flex } from "@/components/ui/flex";
-import { Input } from "@/components/ui/input";
-import { TProduct } from "@/types/global";
+import {
+	Pagination,
+	PaginationContent,
+	PaginationItem,
+	PaginationLink,
+	PaginationNext,
+	PaginationPrevious,
+} from "@/components/ui/pagination";
 
 import ProductCard from "./ProductCard";
 
 export default function Products() {
-	const { data } = useProducts();
+	const { data, meta } = useProducts();
 
-	const product: TProduct[] = [
-		{
-			id: "0",
-			name: "place 1",
-			description: "place 1 description",
-			images: [],
-			price: 1,
-			rating: 1,
-			reviews: [],
-			seller: {
-				id: "0",
-				username: "seller",
-				type: "seller",
-			},
-		},
-	];
+	const { page, onPageChange, pagesCount } = usePagination({
+		pageNum: meta?.pages || 1,
+		pagesCount: meta?.pages || 1,
+	});
 
 	return (
 		<Flex
@@ -43,12 +39,8 @@ export default function Products() {
 				className="bg-surface-secondary p-2 rounded-lg"
 			>
 				<Flex>
-					<Flex gap="1" align="center" className="relative">
-						<Search className="absolute left-1" />
-						<Input
-							placeholder="Search..."
-							className="w-48 bg-white pl-8"
-						/>
+					<Flex gap="1" align="center">
+						<Searchbar />
 						<Filters
 							filters={{
 								tags: {
@@ -77,8 +69,34 @@ export default function Products() {
 				className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2"
 				gap="4"
 			>
-				{product?.map((product) => <ProductCard {...product} />)}
+				{data?.map((product) => <ProductCard {...product} />)}
 			</Flex>
+			{pagesCount > 1 && (
+				<Pagination>
+					{page !== 1 && (
+						<PaginationPrevious
+							onClick={() => onPageChange(page - 1)}
+						/>
+					)}
+					<PaginationContent>
+						{[...Array(pagesCount).keys()].map((num) => (
+							<PaginationItem
+								key={num}
+								onClick={() => onPageChange(num + 1)}
+							>
+								<PaginationLink isActive={page === num + 1}>
+									{num + 1}
+								</PaginationLink>
+							</PaginationItem>
+						))}
+					</PaginationContent>
+					{page !== pagesCount && (
+						<PaginationNext
+							onClick={() => onPageChange(page + 1)}
+						/>
+					)}
+				</Pagination>
+			)}
 		</Flex>
 	);
 }

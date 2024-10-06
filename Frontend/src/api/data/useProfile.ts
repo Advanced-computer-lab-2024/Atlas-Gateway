@@ -18,7 +18,7 @@ import {
 export function useTouristProfile() {
 	const { user } = useLoginStore();
 
-	const id = user?.id;
+	const id = user?._id;
 
 	const { data, refetch } = useQuery({
 		queryFn: () => {
@@ -37,7 +37,7 @@ export function useUpdateTouristProfile(onSuccess: () => void) {
 	const { user } = useLoginStore();
 
 	const mutation = useMutation({
-		mutationFn: (data: TTourist) => apiEditTouristProfile(user?.id, data),
+		mutationFn: (data: TTourist) => apiEditTouristProfile(user?._id, data),
 		onSuccess,
 	});
 
@@ -49,7 +49,7 @@ export function useUpdateTouristProfile(onSuccess: () => void) {
 export function useSellerProfile() {
 	const { user } = useLoginStore();
 
-	const id = user?.id;
+	const id = user?._id;
 
 	const { data } = useQuery({
 		queryFn: () => {
@@ -67,7 +67,7 @@ export function useSellerProfile() {
 export function useAdvertiserProfile() {
 	const { user } = useLoginStore();
 
-	const id = user?.id;
+	const id = user?._id;
 
 	const { data } = useQuery({
 		queryFn: () => {
@@ -85,7 +85,7 @@ export function useAdvertiserProfile() {
 export function useTourGuideProfile() {
 	const { user } = useLoginStore();
 
-	const id = user?.id;
+	const id = user?._id;
 
 	const { data } = useQuery({
 		queryFn: () => {

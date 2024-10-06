@@ -12,7 +12,7 @@ export default function Navbar() {
 	const { user } = useLoginStore();
 	const navigate = useNavigate();
 
-	const isLoggedIn = user?.id;
+	const isLoggedIn = user?._id;
 	const routes = accountRoutes[(user?.type ?? "tourist") as EAccountType];
 
 	return (

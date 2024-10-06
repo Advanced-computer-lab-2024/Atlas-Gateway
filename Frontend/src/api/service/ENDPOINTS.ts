@@ -13,12 +13,12 @@ const ENDPOINTS = {
 		update: "api/products/update",
 		delete: "api/products/delete",
 	},
-	activities: {
-		list: "api/activities/list",
-		show: (id: string) => `api/activities/show/${id}`,
-		create: "api/activities/create",
-		update: "api/activities/update",
-		delete: "api/activities/delete",
+	activity: {
+		list: "api/activity/list",
+		show: (id: string) => `api/activity/show/${id}`,
+		create: "api/activity/create",
+		update: "api/activity/update",
+		delete: "api/activity/delete",
 	},
 	login: "api/login",
 	register: "api/register/create",

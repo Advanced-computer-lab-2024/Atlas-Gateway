@@ -3,8 +3,6 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
 
-
-
 import Activites from "./Activities/Activites";
 import ActivityDetails from "./Activities/ActivityDetails";
 import Admin from "./Admin/Dashboard";
@@ -15,15 +13,11 @@ import Places from "./Places/Places";
 import PlacesForm from "./Places/PlacesForm";
 import ProductDetails from "./Products/ProductDetails";
 import Products from "./Products/Products";
-import AdvertiserProfile from "./Profile/AdvertiserProfile";
-import SellerProfile from "./Profile/SellerProfile";
-import TourGuideProfile from "./Profile/TourGuideProfile";
-import TouristProfile from "./Profile/TouristProfile";
+import Profile from "./Profile/Profile";
 import Register from "./Register/Register";
+import { QueryStateProvider } from "./api/data/useQueryString";
 import "./index.css";
 import Layout from "./layout/Layout";
-import Profile from "./Profile/Profile";
-
 
 const queryClient = new QueryClient();
 
@@ -38,7 +32,11 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/",
-		element: <Layout />,
+		element: (
+			<QueryStateProvider>
+				<Layout />
+			</QueryStateProvider>
+		),
 		children: [
 			{
 				path: "/",

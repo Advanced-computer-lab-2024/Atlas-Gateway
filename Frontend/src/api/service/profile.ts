@@ -9,62 +9,62 @@ import {
 	TTouristProfileResponse,
 } from "./types";
 
-export function apiTouristProfile(id: string) {
+export function apiTouristProfile(_id: string) {
 	return axios<TTouristProfileResponse>({
 		method: "GET",
-		url: ENDPOINTS.tourist.show(id),
+		url: ENDPOINTS.tourist.show(_id),
 		headers: {
 			"Content-Type": "application/json",
-			userid: id,
+			userid: _id,
 		},
 		baseURL: "http://localhost:5000",
 	});
 }
 
-export function apiEditTouristProfile(id: string, data: TTourist) {
+export function apiEditTouristProfile(_id: string, data: TTourist) {
 	return axios<TTouristProfileResponse>({
 		method: "PUT",
-		url: ENDPOINTS.tourist.update(id),
+		url: ENDPOINTS.tourist.update(_id),
 		headers: {
 			"Content-Type": "application/json",
-			userid: id,
+			userid: _id,
 		},
 		data,
 		baseURL: "http://localhost:5000",
 	});
 }
 
-export function apiSellerProfile(id: string) {
+export function apiSellerProfile(_id: string) {
 	return axios<TAdvertiserProfileResponse>({
 		method: "GET",
-		url: ENDPOINTS.seller.show(id),
+		url: ENDPOINTS.seller.show(_id),
 		headers: {
 			"Content-Type": "application/json",
-			userid: id,
+			userid: _id,
 		},
 		baseURL: "http://localhost:5000",
 	});
 }
 
-export function apiAdvertiserProfile(id: string) {
+export function apiAdvertiserProfile(_id: string) {
 	return axios<TAdvertiserProfileResponse>({
 		method: "GET",
-		url: ENDPOINTS.advertiser.show(id),
+		url: ENDPOINTS.advertiser.show(_id),
 		headers: {
 			"Content-Type": "application/json",
-			userid: id,
+			userid: _id,
 		},
 		baseURL: "http://localhost:5000",
 	});
 }
 
-export function apiTourGuideProfile(id: string) {
+export function apiTourGuideProfile(_id: string) {
 	return axios<TTourGuideProfileResponse>({
 		method: "GET",
-		url: ENDPOINTS.tourGuide.show(id),
+		url: ENDPOINTS.tourGuide.show(_id),
 		headers: {
 			"Content-Type": "application/json",
-			userid: id,
+			userid: _id,
 		},
 		baseURL: "http://localhost:5000",
 	});

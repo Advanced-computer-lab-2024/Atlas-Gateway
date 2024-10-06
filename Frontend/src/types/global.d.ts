@@ -1,11 +1,11 @@
 export type TUser = {
-	id: string;
+	_id: string;
 	username: string;
 	type: string;
 };
 
 export type TPlace = {
-	id: string;
+	_id: string;
 	name: string;
 	description: string;
 	location: string;
@@ -30,7 +30,7 @@ type TOpeningHours = {
 };
 
 export type TProduct = {
-	id: string;
+	_id: string;
 	name: string;
 	description: string;
 	price: number;
@@ -38,18 +38,20 @@ export type TProduct = {
 	seller: TUser;
 	rating: number;
 	reviews: string[];
+	availability: number;
 };
 
 export type TActivity = {
-	id: string;
+	_id: string;
 	name: string;
+	description: string;
 	dateTime: string;
 	location: string;
 	minPrice: number;
 	maxPrice: number;
 	tags: string[];
 	categories: string[];
-	discounts: string[];
+	specialDiscounts: number;
 	isBookingsOpen: boolean;
 	rating: number;
 };

@@ -1,4 +1,4 @@
-import { ArrowLeft, LocateIcon, MapPin, Star } from "lucide-react";
+import { ArrowLeft, DollarSign, LocateIcon, MapPin, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 import { useProduct } from "@/api/data/useProducts";
@@ -9,7 +9,8 @@ import { Flex } from "@/components/ui/flex";
 export default function ProductDetails() {
 	const navigate = useNavigate();
 	const { data } = useProduct();
-	const { name, description, images, price, rating } = data || {};
+	const { name, description, images, price, rating, availability } =
+		data || {};
 
 	return (
 		<Flex
@@ -49,21 +50,27 @@ export default function ProductDetails() {
 							</Flex>
 							<Flex gap="2" align="center">
 								<Label.Big600 className="w-40 text-left">
+									Availability:{" "}
+								</Label.Big600>
+								<Label.Mid500>{availability}</Label.Mid500>
+							</Flex>
+							<Flex gap="2" align="center">
+								<Label.Big600 className="w-40 text-left">
 									Price:{" "}
 								</Label.Big600>
+								<DollarSign size={32} />
 								<Label.Mid500 className="overflow-ellipsis">
 									{price}
 								</Label.Mid500>
-								<MapPin size={32} />
 							</Flex>
 							<Flex gap="2" align="center">
 								<Label.Big600 className="w-40 text-left">
 									Rating:{" "}
 								</Label.Big600>
+								<Star color="yellow" fill="yellow" size={32} />
 								<Label.Mid500 className="overflow-ellipsis">
 									{rating}
 								</Label.Mid500>
-								<Star color="yellow" fill="yellow" size={32} />
 							</Flex>
 						</Flex>
 					</Flex>
