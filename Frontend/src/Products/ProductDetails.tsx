@@ -1,4 +1,4 @@
-import { ArrowLeft, DollarSign, LocateIcon, MapPin, Star } from "lucide-react";
+import { ArrowLeft, DollarSign, LocateIcon, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 import { useProduct } from "@/api/data/useProducts";
@@ -9,7 +9,7 @@ import { Flex } from "@/components/ui/flex";
 export default function ProductDetails() {
 	const navigate = useNavigate();
 	const { data } = useProduct();
-	const { name, description, images, price, rating, availability } =
+	const { name, description, images, price, avgRating, availability } =
 		data || {};
 
 	return (
@@ -69,7 +69,7 @@ export default function ProductDetails() {
 								</Label.Big600>
 								<Star color="yellow" fill="yellow" size={32} />
 								<Label.Mid500 className="overflow-ellipsis">
-									{rating}
+									{avgRating}
 								</Label.Mid500>
 							</Flex>
 						</Flex>

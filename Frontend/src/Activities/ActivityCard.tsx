@@ -14,14 +14,16 @@ import {
 import { Flex } from "@/components/ui/flex";
 import { TActivity } from "@/types/global";
 
-import ActivityForm from "./Form/ActivityForm";
-
 export default function ActivityCard({
 	editDrawer,
-	...activity,
-}: TActivity & { editDrawer: (activity: TActivity) => void }) {
+	activity,
+}: {
+	activity: TActivity;
+	editDrawer: (activity: TActivity) => void;
+}) {
 	const navigate = useNavigate();
-	{_id,
+	const {
+		_id,
 		name,
 		location,
 		tags,
@@ -32,7 +34,9 @@ export default function ActivityCard({
 		specialDiscounts,
 		minPrice,
 		avgRating,
-		description} = activity;
+		description,
+	} = activity;
+
 	return (
 		<Card
 			key={_id}
