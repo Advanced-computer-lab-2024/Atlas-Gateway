@@ -27,9 +27,11 @@ const PlacesForm: React.FC = () => {
 		defaultValues: {
 			name: "",
 			description: "",
-			ticketF: 0,
-			ticketN: 0,
-			ticketS: 0,
+			ticketPrices: {
+				foreigner: 0,
+				native: 0,
+				student: 0,
+			},
 			days: [],
 		},
 	});
@@ -95,7 +97,7 @@ const PlacesForm: React.FC = () => {
 							<Flex gap="4" className="w-full">
 								<FormField
 									control={form.control}
-									name="ticketF"
+									name="ticketPrices.foreigner"
 									render={({ field }) => (
 										<FormItem>
 											<FormLabel>Foreigners</FormLabel>
@@ -112,7 +114,7 @@ const PlacesForm: React.FC = () => {
 								/>
 								<FormField
 									control={form.control}
-									name="ticketN"
+									name="ticketPrices.native"
 									render={({ field }) => (
 										<FormItem>
 											<FormLabel>Natives</FormLabel>
@@ -129,7 +131,7 @@ const PlacesForm: React.FC = () => {
 								/>
 								<FormField
 									control={form.control}
-									name="ticketS"
+									name="ticketPrices.student"
 									render={({ field }) => (
 										<FormItem>
 											<FormLabel>Students</FormLabel>

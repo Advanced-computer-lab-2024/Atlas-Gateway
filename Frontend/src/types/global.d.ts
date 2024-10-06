@@ -23,6 +23,11 @@ export type TPlace = {
 		saturday: TOpeningHours;
 	};
 	tags: TTag[];
+	ticketPrices: {
+		foreigner: number;
+		native: number;
+		student: number;
+	};
 };
 
 type TOpeningHours = {

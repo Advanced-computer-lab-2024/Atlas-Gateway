@@ -19,6 +19,7 @@ export default function PlaceDetails() {
 		categories,
 		tags,
 		openingHours,
+		ticketPrices,
 	} = data || {};
 
 	return (
@@ -38,7 +39,7 @@ export default function PlaceDetails() {
 						/>
 						<Label.Big600>{name}</Label.Big600>
 					</Flex>
-					<Flex gap="12">
+					<Flex gap="6">
 						<Flex
 							align="center"
 							justify="center"
@@ -52,33 +53,59 @@ export default function PlaceDetails() {
 						</Flex>
 						<Flex isColumn justify="around">
 							<Flex gap="2" align="center" justify="between">
-								<Label.Big600 className="w-40 text-left">
+								<Label.Mid600 className="text-left">
 									Description:{" "}
-								</Label.Big600>
-								<Label.Mid500>{description}</Label.Mid500>
+								</Label.Mid600>
+								<Label.Thin400 className="text-left overflow-ellipsis">
+									{description}
+								</Label.Thin400>
 							</Flex>
 							<Flex gap="2" align="center">
-								<Label.Big600 className="w-40 text-left">
+								<Label.Mid600 className="text-left">
 									Location:{" "}
-								</Label.Big600>
-								<Label.Mid500 className="overflow-ellipsis">
+								</Label.Mid600>
+								<Label.Thin400 className="overflow-ellipsis">
 									{location}
-								</Label.Mid500>
+								</Label.Thin400>
 								<MapPin size={32} />
 							</Flex>
 							<Flex gap="2" align="center">
-								<Label.Big600 className="w-40 text-left">
+								<Label.Mid600 className="text-left">
 									Rating:{" "}
-								</Label.Big600>
-								<Label.Mid500 className="overflow-ellipsis">
+								</Label.Mid600>
+								<Label.Thin400 className="overflow-ellipsis">
 									{avgRating}
-								</Label.Mid500>
+								</Label.Thin400>
 								<Star color="yellow" fill="yellow" size={32} />
 							</Flex>
 							<Flex gap="2" align="center">
-								<Label.Big600 className="w-40 text-left">
+								<Label.Mid600 className="text-left">
+									Foreigner ticket price:{" "}
+								</Label.Mid600>
+								<Label.Thin400 className="overflow-ellipsis">
+									{ticketPrices?.foreigner}
+								</Label.Thin400>
+							</Flex>
+							<Flex gap="2" align="center">
+								<Label.Mid600 className="text-left">
+									Native ticket price:{" "}
+								</Label.Mid600>
+								<Label.Thin400 className="overflow-ellipsis">
+									{ticketPrices?.native}
+								</Label.Thin400>
+							</Flex>
+							<Flex gap="2" align="center">
+								<Label.Mid600 className="text-left">
+									Student ticket price:{" "}
+								</Label.Mid600>
+								<Label.Thin400 className="overflow-ellipsis">
+									{ticketPrices?.student}
+								</Label.Thin400>
+							</Flex>
+							<Flex gap="2" align="center">
+								<Label.Mid600 className="text-left">
 									Categories:
-								</Label.Big600>
+								</Label.Mid600>
 								{categories && categories?.length > 0 ? (
 									<Flex
 										gap="1"
@@ -100,9 +127,9 @@ export default function PlaceDetails() {
 								)}
 							</Flex>
 							<Flex gap="2" align="center">
-								<Label.Big600 className="w-40 text-left">
+								<Label.Mid600 className="text-left">
 									Tags:
-								</Label.Big600>
+								</Label.Mid600>
 								{tags && tags?.length > 0 ? (
 									<Flex
 										gap="1"

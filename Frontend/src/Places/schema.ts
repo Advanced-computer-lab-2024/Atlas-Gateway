@@ -4,9 +4,11 @@ export const formSchema = z
 	.object({
 		name: z.string().min(1, "Name is required"),
 		description: z.string().min(1, "Description is required"),
-		ticketF: z.number().positive("Price for foreigners is required"),
-		ticketN: z.number().positive("Price for natives is required"),
-		ticketS: z.number().positive("Price for students is required"),
+		ticketPrices: z.object({
+			foreigner: z.number().min(0, "Price must be positive"),
+			native: z.number().min(0, "Price must be positive"),
+			student: z.number().min(0, "Price must be positive"),
+		}),
 		days: z
 			.array(z.enum(["sat", "sun", "mon", "tue", "wed", "thu", "fri"]))
 			.min(1, "At least one working day is required"),

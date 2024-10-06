@@ -45,7 +45,11 @@ interface IPlaces extends Document {
 		};
 	};
 	description: string;
-	ticketPrices: Number[];
+	ticketPrices: {
+		foreigner: number;
+		native: number
+		student: number;
+	}
 	tags: Types.ObjectId[];
 }
 
@@ -97,7 +101,11 @@ const placesSchema = new Schema<IPlaces>(
 				dayOff: { type: Boolean },
 			},
 		},
-		ticketPrices: [{ type: Number, required: true }],
+		ticketPrices: {
+			foreigner: { type: Number },
+			native: { type: Number },
+			student: { type: Number },
+		},
 		tags: [{ type: Schema.Types.ObjectId, ref: "Tag" }],
 	},
 	schemaConfig,
