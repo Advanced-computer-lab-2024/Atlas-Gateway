@@ -4,7 +4,7 @@ import { Types } from "mongoose";
 import { Activity } from "../Database/Models/activity.model";
 import { Tag } from "../Database/Models/tag.model";
 
-//Creates a historical location tag --Tourism Governer Only
+//Creates a historical location tag --Tourism Governor Only
 export const createHistTag = async (req: Request, res: Response) => {
 	try {
 		const { name, type } = req.body;
@@ -12,7 +12,7 @@ export const createHistTag = async (req: Request, res: Response) => {
 		if (!name || !type)
 			return res
 				.status(400)
-				.json({ message: "Misisng tag type or name" });
+				.json({ message: "Missing tag type or name" });
 
 		const tag = new Tag({
 			name,
@@ -23,23 +23,23 @@ export const createHistTag = async (req: Request, res: Response) => {
 
 		res.status(200).send(tag);
 	} catch (error) {
+		console.error(error);
 		res.status(500).json({ message: "Internal Server Error" });
-		console.log(error);
 	}
 };
 
-//Retieve all historical location tags --Used in many things
+//Retrieve all historical location tags --Used in many things
 export const getHistTags = async (req: Request, res: Response) => {
 	try {
 		const dataset = await Tag.find({ type: { $ne: "Preference" } });
 		res.status(200).send(dataset);
 	} catch (error) {
+		console.error(error);
 		res.status(500).json({ message: "Internal Server Error" });
-		console.log(error);
 	}
 };
 
-//Creates a preferance tag --Admin only
+//Creates a preference tag --Admin only
 export const createPrefTag = async (req: Request, res: Response) => {
 	try {
 		const { name } = req.body;
@@ -49,26 +49,26 @@ export const createPrefTag = async (req: Request, res: Response) => {
 		const type = "Preference";
 		const tag = new Tag({
 			name,
-			type,
+			type: type,
 		});
 
 		await tag.save();
 
 		res.status(200).send(tag);
 	} catch (error) {
+		console.error(error);
 		res.status(500).json({ message: "Internal Server Error" });
-		console.log(error);
 	}
 };
 
-//Retieve all preference tags --Used in many things
+//Retrieve all preference tags --Used in many things
 export const getPrefTags = async (req: Request, res: Response) => {
 	try {
 		const dataset = await Tag.find({ type: "Preference" });
 		res.status(200).send(dataset);
 	} catch (error) {
+		console.error(error);
 		res.status(500).json({ message: "Internal Server Error" });
-		console.log(error);
 	}
 };
 
@@ -79,10 +79,7 @@ export const updatePrefTag = async (req: Request, res: Response) => {
 		const { name } = req.body;
 
 		//making sure I can only update and delete preference tags
-		if (
-			!Types.ObjectId.isValid(id) ||
-			(await Tag.find({ _id: id, type: "Preference" })).length === 0
-		) {
+		if (!Types.ObjectId.isValid(id)) {
 			return res.status(400).json({ message: "Invalid ID" });
 		}
 
@@ -90,19 +87,24 @@ export const updatePrefTag = async (req: Request, res: Response) => {
 			return res.status(400).json({ message: "Tag name missing" });
 		}
 
-		const updatedTag = await Tag.findByIdAndUpdate(
-			id,
-			{ name },
-			{ new: true },
-		);
+		const tag = await Tag.findOne({ _id: id, type: "Preference" });
+		if (!tag) {
+			return res
+				.status(404)
+				.json({ message: "Tag not found or not a preference tag" });
+		}
 
-		res.status(200).json(updatedTag);
+		tag.set(name);
+
+		await tag.save();
+		res.status(200).json(tag);
 	} catch (error) {
+		console.error(error);
 		res.status(500).json({ message: "Internal Server Error" });
 	}
 };
 
-//Delete a prefernece tag along with it's references in activities/itineraries
+//Delete a preference tag along with it's references in activities/itineraries
 export const deletePreTag = async (req: Request, res: Response) => {
 	try {
 		const id = req.params.id;
@@ -125,16 +127,16 @@ export const deletePreTag = async (req: Request, res: Response) => {
 		//Delete the ID document itself
 		const tagDoc = await Tag.findByIdAndDelete(id);
 
-		//remove referenes first then delete the tag cuz of dependecies (not sure how they work, but just in case it matters, validations were already made)
+		//remove references first then delete the tag cuz of dependencies (not sure how they work, but just in case it matters, validations were already made)
 
 		res.status(200).json({
-			messge: "Tag deleted",
+			message: "Tag deleted",
 			activities_affected: updateSet.modifiedCount,
 		});
 
 		console.log("Deleted tag: ", tagDoc);
 	} catch (error) {
-		res.status(500).json({ messag: "Internal Server Error" });
+		res.status(500).json({ message: "Internal Server Error" });
 	}
 };
 
@@ -143,7 +145,7 @@ export const getAllTags = async (req: Request, res: Response) => {
 		const dataset = await Tag.find();
 		res.status(200).send(dataset);
 	} catch (error) {
+		console.error(error);
 		res.status(500).json({ message: "Internal Server Error" });
-		console.log(error);
 	}
-}
+};

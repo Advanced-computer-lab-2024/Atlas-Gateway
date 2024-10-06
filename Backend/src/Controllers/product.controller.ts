@@ -23,25 +23,24 @@ export const createProduct = async (req: Request, res: Response) => {
 						}).select("_id")
 					)?._id
 				: new Types.ObjectId(String(userId));
-		//Check seller ID validity and existance
+		//Check seller ID validity and existence
 
 		if (!sellerId) {
 			return res
 				.status(400)
 				.json({ message: "Atlas Gateway Seller not found" });
 		}
-		console.log(sellerId);
-		if (
-			!Types.ObjectId.isValid(String(sellerId)) ||
-			!(await Seller.findById(String(sellerId)))
-		) {
+
+		const seller = await Seller.findById(String(sellerId));
+
+		if (!Types.ObjectId.isValid(String(sellerId)) || !seller) {
 			return res
 				.status(400)
 				.json({ message: "Seller ID is invalid or doesn't exist" });
 		}
 
 		if (!name || !description || !price || !quantity || !picture) {
-			return res.status(400).json({ message: "Misisng Fields" });
+			return res.status(400).json({ message: "Missing Fields" });
 		}
 
 		const product = new Product({
@@ -55,10 +54,9 @@ export const createProduct = async (req: Request, res: Response) => {
 
 		await product.save();
 		res.status(200).send(product);
-		console.log("Product Created");
 	} catch (error) {
-		res.status(500).json({ message: "Internal Server Error" });
 		console.log(error);
+		res.status(500).json({ message: "Internal Server Error" });
 	}
 };
 
@@ -79,12 +77,12 @@ export const getProduct = async (req: Request, res: Response) => {
 
 		res.status(200).send(product);
 	} catch (error) {
-		res.status(500).json({ message: "Internal Server Error" });
 		console.log(error);
+		res.status(500).json({ message: "Internal Server Error" });
 	}
 };
 
-//takes a query (anded conditions) and returns a data set
+//takes a query (and conditions) and returns a data set
 export const getProducts = async (req: Request, res: Response) => {
 	try {
 		const PipelineStage: PipelineStage[] = [
@@ -114,8 +112,8 @@ export const getProducts = async (req: Request, res: Response) => {
 
 		res.status(200).send(response);
 	} catch (error) {
-		res.status(500).json({ message: "Internal Server Error" });
 		console.log(error);
+		res.status(500).json({ message: "Internal Server Error" });
 	}
 };
 
@@ -127,28 +125,6 @@ export const updateProduct = async (req: Request, res: Response) => {
 		if (!mongoose.Types.ObjectId.isValid(id)) {
 			return res.status(400).json({ message: "Invalid product ID" });
 		}
-
-		// const updateSet: any = {};
-
-		// if (req.body.name) {
-		// 	updateSet.name = req.body.name;
-		// }
-
-		// if (req.body.description) {
-		// 	updateSet.description = req.body.description;
-		// }
-
-		// if (req.body.price) {
-		// 	updateSet.price = req.body.price;
-		// }
-
-		// if (req.body.quantity) {
-		// 	updateSet.quantity = req.body.quantity;
-		// }
-
-		// if (req.body.picture) {
-		// 	updateSet.picture = req.body.picture;
-		// }
 
 		const product = await Product.findByIdAndUpdate(id, req.body, {
 			new: true,
@@ -162,7 +138,7 @@ export const updateProduct = async (req: Request, res: Response) => {
 
 		res.status(200).send(product);
 	} catch (error) {
-		res.status(500).json({ message: "Internal Server Error" });
 		console.log(error);
+		res.status(500).json({ message: "Internal Server Error" });
 	}
 };
