@@ -100,7 +100,7 @@ export const getPlaceById = async (req: Request, res: Response) => {
 		if (!Types.ObjectId.isValid(id)) {
 			return res.status(400).json({ error: "Invalid Place ID" });
 		}
-		const response = await Places.findById(id);
+		const response = await Places.findById(id).populate("tags");
 		if (!response) {
 			return res.status(404).json({ error: "Place not found" });
 		}
