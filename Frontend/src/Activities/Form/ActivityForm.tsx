@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { useEffect } from "react";
+import { Pencil } from "lucide-react";
 import { FormProvider, useForm } from "react-hook-form";
 
 import { useCategories } from "@/api/data/useCategories";
@@ -30,12 +30,11 @@ import { Checkbox } from "../../components/ui/checkbox";
 import { activitySchema } from "./schema";
 
 interface props {
-	open: boolean;
-	activity?: TActivity;
-	setOpen: (open: boolean) => void;
+	type: string;
+	id?: string;
 }
 
-const ActivityForm = ({ activity, open, setOpen }: props) => {
+const ActivityForm = ({ type, id }: props) => {
 	const { data: categories } = useCategories();
 	const { data: tags } = useTags();
 
@@ -54,8 +53,8 @@ const ActivityForm = ({ activity, open, setOpen }: props) => {
 		reset(activity);
 	}, [activity]);
 
-	const onSubmit = (data: TActivity) =>
-		activity?._id
+	const onSubmit = (data: z.infer<typeof activitySchema>) => {
+		!id
 			? axios
 					.post(`http://localhost:5000/api/activity/create`, data)
 					.then((res) => {
@@ -66,7 +65,7 @@ const ActivityForm = ({ activity, open, setOpen }: props) => {
 						console.log(error);
 					})
 			: axios
-					.post(
+					.put(
 						`http://localhost:5000/api/activity/update/${id}`,
 						data,
 					)
@@ -77,14 +76,22 @@ const ActivityForm = ({ activity, open, setOpen }: props) => {
 					.catch((error) => {
 						console.log(error);
 					});
+	};
 
 	return (
-		<Sheet open={open} onOpenChange={(open: boolean) => setOpen(open)}>
+		<Sheet>
+			<SheetTrigger asChild>
+				{id ? (
+					<button>
+						<Pencil />
+					</button>
+				) : (
+					<Button variant="outline">{type} activity</Button>
+				)}
+			</SheetTrigger>
 			<SheetContent>
 				<SheetHeader>
-					<SheetTitle>
-						{activity ? "Edit" : "Create"} an activity
-					</SheetTitle>
+					<SheetTitle>{type} an activity</SheetTitle>
 				</SheetHeader>
 				<FormProvider {...formMethods}>
 					<form
