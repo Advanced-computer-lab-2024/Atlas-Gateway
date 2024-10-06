@@ -57,7 +57,7 @@ export default function Places() {
 									options: [],
 								},
 								rating: {
-									filterName: "rating",
+									filterName: "avgRating",
 									label: "Rating",
 									type: "range",
 								},

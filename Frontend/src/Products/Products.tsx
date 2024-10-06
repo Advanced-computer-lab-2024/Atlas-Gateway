@@ -1,5 +1,3 @@
-import { Search } from "lucide-react";
-
 import { usePagination } from "@/api/data/usePagination";
 import { useProducts } from "@/api/data/useProducts";
 import Filters from "@/components/Filters/Filters";
@@ -56,7 +54,7 @@ export default function Products() {
 									options: [],
 								},
 								rating: {
-									filterName: "rating",
+									filterName: "avgRating",
 									label: "Rating",
 									type: "range",
 								},

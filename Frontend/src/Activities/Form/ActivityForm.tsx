@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
+import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { z } from "zod";
 
 import { useCategories } from "@/api/data/useCategories";
 import { useTags } from "@/api/data/useTags";
@@ -23,17 +23,23 @@ import {
 	SheetFooter,
 	SheetHeader,
 	SheetTitle,
-	SheetTrigger,
 } from "@/components/ui/sheet";
+import { TActivity } from "@/types/global";
 
 import { Checkbox } from "../../components/ui/checkbox";
 import { activitySchema } from "./schema";
 
-const AddAdvertiserForm = () => {
+interface props {
+	open: boolean;
+	activity?: TActivity;
+	setOpen: (open: boolean) => void;
+}
+
+const ActivityForm = ({ activity, open, setOpen }: props) => {
 	const { data: categories } = useCategories();
 	const { data: tags } = useTags();
 
-	const formMethods = useForm<z.infer<typeof activitySchema>>({
+	const formMethods = useForm<TActivity>({
 		resolver: zodResolver(activitySchema),
 		defaultValues: {
 			dateTime: new Date().toString(),
@@ -41,28 +47,44 @@ const AddAdvertiserForm = () => {
 			tags: [],
 		},
 	});
-	const { handleSubmit, control } = formMethods;
 
-	const onSubmit = (data: z.infer<typeof activitySchema>) => {
-		axios
-			.post(`http://localhost:5000/api/activity/create`, data)
-			.then((res) => {
-				console.log(res.status);
-				// will add here something to give a feedback later
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	};
+	const { handleSubmit, control, reset } = formMethods;
+
+	useEffect(() => {
+		reset(activity);
+	}, [activity]);
+
+	const onSubmit = (data: TActivity) =>
+		activity?._id
+			? axios
+					.post(`http://localhost:5000/api/activity/create`, data)
+					.then((res) => {
+						console.log(res.status);
+						// will add here something to give a feedback later
+					})
+					.catch((error) => {
+						console.log(error);
+					})
+			: axios
+					.post(
+						`http://localhost:5000/api/activity/update/${id}`,
+						data,
+					)
+					.then((res) => {
+						console.log(res.status);
+						// will add here something to give a feedback later
+					})
+					.catch((error) => {
+						console.log(error);
+					});
 
 	return (
-		<Sheet>
-			<SheetTrigger asChild>
-				<Button variant="outline">Add activity</Button>
-			</SheetTrigger>
+		<Sheet open={open} onOpenChange={(open: boolean) => setOpen(open)}>
 			<SheetContent>
 				<SheetHeader>
-					<SheetTitle>Add an activity</SheetTitle>
+					<SheetTitle>
+						{activity ? "Edit" : "Create"} an activity
+					</SheetTitle>
 				</SheetHeader>
 				<FormProvider {...formMethods}>
 					<form
@@ -278,4 +300,4 @@ const AddAdvertiserForm = () => {
 	);
 };
 
-export default AddAdvertiserForm;
+export default ActivityForm;

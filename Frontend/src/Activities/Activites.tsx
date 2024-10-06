@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import { useActivities } from "@/api/data/useActivities";
 import { useCategories } from "@/api/data/useCategories";
 import { usePagination } from "@/api/data/usePagination";
@@ -5,6 +7,7 @@ import { useTags } from "@/api/data/useTags";
 import Filters from "@/components/Filters/Filters";
 import Label from "@/components/ui/Label";
 import { Searchbar } from "@/components/ui/Searchbar";
+import { Button } from "@/components/ui/button";
 import { Flex } from "@/components/ui/flex";
 import {
 	Pagination,
@@ -15,13 +18,27 @@ import {
 	PaginationPrevious,
 } from "@/components/ui/pagination";
 import { useLoginStore } from "@/store/loginStore";
+import { TActivity } from "@/types/global";
 
 import ActivityCard from "./ActivityCard";
-import AddActivityForm from "./AddActivity/AddActivityForm";
+import ActivityForm from "./Form/ActivityForm";
 
 export default function Activites() {
 	const { user } = useLoginStore();
 	const { data, meta } = useActivities();
+	const [open, setOpen] = useState(false);
+	const [activity, setActivity] = useState<TActivity>();
+
+	const editDrawer = (activity: TActivity) => {
+		setOpen(true);
+		setActivity(activity);
+	};
+
+	const closeEditDrawer = (open: boolean) => {
+		setOpen(open);
+		if (!open) setActivity(undefined);
+	};
+
 	const { page, onPageChange, pagesCount } = usePagination({
 		pageNum: meta?.pages || 1,
 		pagesCount: meta?.pages || 1,
@@ -78,14 +95,20 @@ export default function Activites() {
 							}}
 						/>
 					</Flex>
-					{user?.type === "advertiser" && <AddActivityForm />}
+					{user?.type !== "advertiser" && (
+						<Button onClick={() => setOpen(true)} variant="ghost">
+							Add Activity
+						</Button>
+					)}
 				</Flex>
 			</Flex>
 			<Flex
 				className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2"
 				gap="4"
 			>
-				{data?.map((activity) => <ActivityCard {...activity} />)}
+				{data?.map((activity) => (
+					<ActivityCard activity={activity} editDrawer={editDrawer} />
+				))}
 			</Flex>
 			{pagesCount > 1 && (
 				<Pagination>
@@ -113,6 +136,11 @@ export default function Activites() {
 					)}
 				</Pagination>
 			)}
+			<ActivityForm
+				activity={activity}
+				open={open}
+				setOpen={closeEditDrawer}
+			/>
 		</Flex>
 	);
 }

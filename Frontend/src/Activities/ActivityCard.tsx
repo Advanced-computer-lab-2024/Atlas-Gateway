@@ -15,20 +15,27 @@ import { Flex } from "@/components/ui/flex";
 import { TActivity } from "@/types/global";
 
 export default function ActivityCard({
-	_id,
-	name,
-	location,
-	tags,
-	categories,
-	dateTime,
-	isOpen,
-	maxPrice,
-	specialDiscounts,
-	minPrice,
-	avgRating,
-	description,
-}: TActivity) {
+	editDrawer,
+	activity,
+}: {
+	activity: TActivity;
+	editDrawer: (activity: TActivity) => void;
+}) {
 	const navigate = useNavigate();
+	const {
+		_id,
+		name,
+		location,
+		tags,
+		categories,
+		dateTime,
+		isOpen,
+		maxPrice,
+		specialDiscounts,
+		minPrice,
+		avgRating,
+		description,
+	} = activity;
 
 	return (
 		<Card
@@ -57,6 +64,11 @@ export default function ActivityCard({
 									}}
 								>
 									View Activtiy Details
+								</DropdownMenuItem>
+								<DropdownMenuItem
+									onClick={() => editDrawer(activity)}
+								>
+									edit
 								</DropdownMenuItem>
 							</DropdownMenuContent>
 						</DropdownMenu>
