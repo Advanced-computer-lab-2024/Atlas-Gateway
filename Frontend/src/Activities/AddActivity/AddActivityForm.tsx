@@ -67,7 +67,7 @@ const AddAdvertiserForm = () => {
 				<FormProvider {...formMethods}>
 					<form
 						onSubmit={handleSubmit(onSubmit)}
-						className="flex flex-col gap-2"
+						className="flex flex-col gap-2 overflow-y-scroll h-full"
 					>
 						<FormField
 							control={control}
@@ -98,7 +98,7 @@ const AddAdvertiserForm = () => {
 										<DateTimePicker
 											date={new Date(field?.value)}
 											setDate={(date) =>
-												field.onChange(date)
+												field.onChange(date?.toString())
 											}
 										/>
 									</FormControl>
