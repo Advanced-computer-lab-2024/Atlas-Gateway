@@ -126,3 +126,24 @@ export const updatePlace = async (req: Request, res: Response) => {
 		res.status(500).json({ message: "Internal Server Error" });
 	}
 };
+
+export const deletePlace = async (req: Request, res: Response) => {
+	try {
+		const { id } = req.params;
+
+		if (!Types.ObjectId.isValid(id)) {
+			return res.status(400).json({ message: "Invalid Itinerary ID" });
+		}
+
+		const place = await Places.findById(id);
+		if (!place) {
+			return res.status(404).json({ message: "Itinerary not found" });
+		}
+
+		await Places.findByIdAndDelete(id);
+		res.status(200).send("Itinerary deleted Successfully");
+	} catch (error) {
+		console.log(error);
+		res.status(500).send("Error deleting Itinerary");
+	}
+};
