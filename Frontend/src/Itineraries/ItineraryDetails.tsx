@@ -33,7 +33,7 @@ export default function ItineraryDetails() {
 			align="center"
 			className="px-4 py-4 overflow-y-scroll"
 		>
-			<Card className="w-[80%] h-[550px] flex-col border-surface-secondary border-2 p-4">
+			<Card className="w-[80%] h-[700px] flex-col border-surface-secondary border-2 p-4">
 				<Flex isColumn gap="4">
 					<Flex gap="2" align="center">
 						<ArrowLeft
@@ -44,27 +44,27 @@ export default function ItineraryDetails() {
 						<Label.Big600>{title}</Label.Big600>
 					</Flex>
 					<Flex gap="2" align="center">
-						<Label.Big600 className="w-52 text-left">
+						<Label.Mid600 className="w-60 text-left">
 							Pickup:
-						</Label.Big600>
+						</Label.Mid600>
 						<MapPin size={20} />
 						<Label.Thin300 className="overflow-ellipsis">
 							{pickUpLocation}
 						</Label.Thin300>
 					</Flex>
 					<Flex gap="2" align="center">
-						<Label.Big600 className="w-52 text-left">
+						<Label.Mid600 className="w-60 text-left">
 							Dropoff:
-						</Label.Big600>
+						</Label.Mid600>
 						<MapPin size={20} />
 						<Label.Thin300 className="overflow-ellipsis">
 							{dropOffLocation}
 						</Label.Thin300>
 					</Flex>
 					<Flex gap="2" align="center">
-						<Label.Big600 className="w-52 text-left">
+						<Label.Mid600 className="w-60 text-left">
 							Start time:
-						</Label.Big600>
+						</Label.Mid600>
 						<MapPin size={20} />
 						<Label.Thin300 className="overflow-ellipsis">
 							{startDateTime &&
@@ -75,9 +75,9 @@ export default function ItineraryDetails() {
 						</Label.Thin300>
 					</Flex>
 					<Flex gap="2" align="center">
-						<Label.Big600 className="w-52 text-left">
+						<Label.Mid600 className="w-60 text-left">
 							End time:
-						</Label.Big600>
+						</Label.Mid600>
 						<MapPin size={20} />
 						<Label.Thin300 className="overflow-ellipsis">
 							{endDateTime &&
@@ -88,46 +88,44 @@ export default function ItineraryDetails() {
 						</Label.Thin300>
 					</Flex>
 					<Flex gap="1" align="center">
-						<Label.Big600 className="overflow-ellipsis w-52 text-left">
+						<Label.Mid600 className="overflow-ellipsis w-60 text-left">
 							Price:
-						</Label.Big600>
+						</Label.Mid600>
 						<DollarSign size={20} />
 						<Label.Thin300 className="overflow-ellipsis">
 							{price}
 						</Label.Thin300>
 					</Flex>
 					<Flex gap="1" align="center">
-						<Label.Big600 className="overflow-ellipsis w-52 text-left">
+						<Label.Mid600 className="overflow-ellipsis w-60 text-left">
 							Rating:
-						</Label.Big600>
+						</Label.Mid600>
 						<Star color="yellow" fill="yellow" size={20} />
 						<Label.Thin300 className="overflow-ellipsis">
 							{avgRating ?? "N/A"}
 						</Label.Thin300>
 					</Flex>
 					<Flex gap="1" align="center">
-						<Label.Big600 className="overflow-ellipsis w-52 text-left">
+						<Label.Mid600 className="overflow-ellipsis w-60 text-left">
 							Availablity:
-						</Label.Big600>
+						</Label.Mid600>
 						<Star color="yellow" fill="yellow" size={20} />
 						<Label.Thin300 className="overflow-ellipsis">
 							{availability}
 						</Label.Thin300>
 					</Flex>
 					<Flex gap="1" align="center">
-						<Label.Big600 className="overflow-ellipsis w-52 text-left">
+						<Label.Mid600 className="overflow-ellipsis w-60 text-left">
 							Number of bookings:
-						</Label.Big600>
-						<Star color="yellow" fill="yellow" size={20} />
+						</Label.Mid600>
 						<Label.Thin300 className="overflow-ellipsis">
 							{numberOfBookings}
 						</Label.Thin300>
 					</Flex>
 					<Flex gap="1" align="center">
-						<Label.Big600 className="overflow-ellipsis w-52 text-left">
+						<Label.Mid600 className="overflow-ellipsis w-60 text-left">
 							Language:
-						</Label.Big600>
-						<Star color="yellow" fill="yellow" size={20} />
+						</Label.Mid600>
 						<Label.Thin300 className="overflow-ellipsis">
 							{language}
 						</Label.Thin300>
@@ -138,9 +136,9 @@ export default function ItineraryDetails() {
 						justify="start"
 						className="w-full"
 					>
-						<Label.Big600 className="overflow-ellipsis w-52 text-left">
+						<Label.Mid600 className="overflow-ellipsis w-60 text-left">
 							Activities:
-						</Label.Big600>
+						</Label.Mid600>
 						{activities && activities?.length > 0 ? (
 							<Flex
 								gap="1"
@@ -167,9 +165,9 @@ export default function ItineraryDetails() {
 						justify="start"
 						className="w-full"
 					>
-						<Label.Big600 className="w-52 text-left">
+						<Label.Mid600 className="w-60 text-left">
 							Tags:
-						</Label.Big600>
+						</Label.Mid600>
 						{tags && tags?.length > 0 ? (
 							<Flex
 								gap="1"
