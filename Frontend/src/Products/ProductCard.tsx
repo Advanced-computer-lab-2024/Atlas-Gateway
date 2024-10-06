@@ -18,7 +18,7 @@ export default function ProductCard({
 	description,
 	images,
 	price,
-	rating,
+	avgRating,
 	seller,
 }: TProduct) {
 	const navigate = useNavigate();
@@ -77,7 +77,7 @@ export default function ProductCard({
 						<Flex gap="1" align="center">
 							<Star color="yellow" fill="yellow" size={20} />
 							<Label.Thin300 className="overflow-ellipsis">
-								{rating}
+								{avgRating}
 							</Label.Thin300>
 						</Flex>
 					</Flex>

@@ -9,9 +9,8 @@ interface IItinerary extends Document {
 	availability: number;
 	pickUpLocation: string;
 	dropOffLocation: string;
-	startDate: Date;
-	startTime: string;
-	endDate: Date;
+	startDateTime: string;
+	endDateTime: string;
 	activities: [
 		{
 			activity?: Types.ObjectId;
@@ -40,9 +39,8 @@ const itinerarySchema = new Schema<IItinerary>(
 		availability: { type: Number, required: true },
 		pickUpLocation: { type: String, required: true },
 		dropOffLocation: { type: String, required: true },
-		startDate: { type: Date, required: true },
-		startTime: { type: String, required: true },
-		endDate: { type: Date, required: true },
+		startDateTime: { type: String, required: true },
+		endDateTime: { type: String, required: true },
 		activities: [
 			{
 				id: { type: Schema.Types.ObjectId, required: false },

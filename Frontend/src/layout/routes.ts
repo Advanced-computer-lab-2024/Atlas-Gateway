@@ -1,5 +1,6 @@
 import { EAccountType } from "@/types/enums";
 
+
 export type NavbarRoute = {
 	name: string;
 	to: string;
@@ -16,13 +17,13 @@ const activitiesRoute: NavbarRoute = {
 };
 
 const placesRoute: NavbarRoute = {
-	name: "Places",
+	name: "Museums & Historical locations",
 	to: "/places",
 };
 
 const intinerariesRoute: NavbarRoute = {
 	name: "Intineraries",
-	to: "/intineraries",
+	to: "/itineraries",
 };
 
 const touristRoutes: NavbarRoute[] = [

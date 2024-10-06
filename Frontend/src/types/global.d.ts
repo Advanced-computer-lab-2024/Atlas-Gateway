@@ -10,7 +10,7 @@ export type TPlace = {
 	name: string;
 	description: string;
 	location: string;
-	rating: number;
+	avgRating: number;
 	images: string[];
 	categories: string[];
 	openingHours: {
@@ -38,7 +38,7 @@ export type TProduct = {
 	price: number;
 	images: string[];
 	seller: TUser;
-	rating: number;
+	avgRating: number;
 	reviews: string[];
 	availability: number;
 };
@@ -55,7 +55,7 @@ export type TActivity = {
 	categories: TCategory[];
 	specialDiscounts: number;
 	isOpen: boolean;
-	rating: number;
+	avgRating: number;
 };
 export interface TTourist extends TUser {
 	email: string;
@@ -93,4 +93,34 @@ export interface TTag {
 export interface TCategory {
 	_id: string;
 	name: string;
+}
+
+export interface TItinerary {
+	_id: string;
+	title: string;
+	language: string;
+	price: number;
+	availability: number;
+	pickUpLocation: string;
+	dropOffLocation: string;
+	startDateTime: string;
+	endDateTime: string;
+	activities: [
+		{
+			activity?: Types.ObjectId;
+			title: string;
+			dateTime: Date;
+			durationM: number;
+		},
+	];
+	tags: Types.ObjectId[];
+	createdBy: Types.ObjectId;
+	numberOfBookings: number;
+	reviews: {
+		userId: Types.ObjectId;
+		review: string;
+		rating: number;
+	};
+	avgRating: number;
+	totalNumberOfRatings: number;
 }

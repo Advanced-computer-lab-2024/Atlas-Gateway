@@ -2,11 +2,14 @@ import { formatDate } from "date-fns";
 import { ArrowLeft, DollarSign, MapPin, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
+
+
 import { useActivity } from "@/api/data/useActivities";
 import Label from "@/components/ui/Label";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Flex } from "@/components/ui/flex";
+
 
 export default function ActivityDetails() {
 	const navigate = useNavigate();
@@ -21,7 +24,7 @@ export default function ActivityDetails() {
 		location,
 		maxPrice,
 		minPrice,
-		rating,
+		avgRating,
 		tags,
 	} = data || {};
 
@@ -78,7 +81,7 @@ export default function ActivityDetails() {
 									Rating:{" "}
 								</Label.Big600>
 								<Label.Mid500 className="overflow-ellipsis">
-									{rating}
+									{avgRating}
 								</Label.Mid500>
 								<Star color="yellow" fill="yellow" size={32} />
 							</Flex>

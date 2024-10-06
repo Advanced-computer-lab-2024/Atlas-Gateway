@@ -52,6 +52,13 @@ const ENDPOINTS = {
 		update: "api/tag/update",
 		delete: "api/tag/delete",
 	},
+	itinerary: {
+		list: "api/itinerary/list",
+		show: (id: string) => `api/itinerary/show/${id}`,
+		create: "api/itinerary/create",
+		update: "api/itinerary/update",
+		delete: "api/itinerary/delete",
+	},
 };
 
 export default ENDPOINTS;

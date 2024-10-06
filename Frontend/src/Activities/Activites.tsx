@@ -70,8 +70,8 @@ export default function Activites() {
 											value: category._id,
 										})) || [],
 								},
-								rating: {
-									filterName: "rating",
+								avgRating: {
+									filterName: "avgRating",
 									label: "Rating",
 									type: "range",
 								},

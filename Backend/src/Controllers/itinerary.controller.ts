@@ -87,7 +87,7 @@ export const getItinerary = async (req: Request, res: Response) => {
 					from: "tags",
 					localField: "tags",
 					foreignField: "_id",
-					as: "tagsData",
+					as: "tags",
 				},
 			},
 			...AggregateBuilder(req.query, ["name", "tagsData.name"]),
