@@ -10,8 +10,21 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from "@/components/ui/dialog"
 import { Flex } from "@/components/ui/flex";
 import { TPlace } from "@/types/global";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/togglegroup";
 
 export default function PlaceCard({
 	id,
@@ -54,9 +67,105 @@ export default function PlaceCard({
 									onClick={() => {
 										navigate(`/places/${id}`);
 									}}
+									className="border border-gray-300 text-gray-700 hover:bg-gray-100 rounded-md"
 								>
 									View Place Details
 								</DropdownMenuItem>
+
+								{/* from here */}
+
+								<Dialog>
+									<DialogTrigger asChild>
+										<Button variant="outline" className="w-full text-left">Edit Place</Button>
+									</DialogTrigger>
+									<DialogContent className="sm:max-w-[700px]" id="test">
+										<DialogHeader>
+											<DialogTitle>Edit Place</DialogTitle>
+										</DialogHeader>
+										<div className="grid grid-cols-2 gap-4 py-4">
+											<div id="info">
+												<div className="grid grid-cols-4 items-center gap-4 mb-1">
+													<Label htmlFor="name" className="text-right" size={100} weight={"Thin"}>
+														Name
+													</Label>
+													<Input
+														placeholder="Enter the place's name"
+														className="col-span-3"
+													/>
+												</div>
+												<div className="grid grid-cols-4 items-center gap-4 mb-1">
+													<Label htmlFor="username" className="text-right" size={100} weight={"Thin"}>
+														Username
+													</Label>
+													<Textarea
+														placeholder="Enter the place's description"
+														className="col-span-3"
+													/>
+												</div>
+												<div className="grid grid-cols-4 items-center gap-4 mb-1">
+													<Label htmlFor="foreign-price" className="text-right" size={100} weight={"Thin"}>
+														Foreigner's Ticket Price
+													</Label>
+													<Input
+														id="foreign-price"
+														type="number"
+														placeholder="Enter the price for foreigners"
+														className="col-span-3"
+													/>
+												</div>
+												<div className="grid grid-cols-4 items-center gap-4 mb-1">
+													<Label htmlFor="native-price" className="text-right" size={100} weight={"Thin"}>
+														Native's Ticket Price
+													</Label>
+													<Input
+														id="native-price"
+														type="number"
+														placeholder="Enter the price for natives"
+														className="col-span-3"
+													/>
+												</div>
+												<div className="grid grid-cols-4 items-center gap-4 mb-1">
+													<Label htmlFor="student-price" className="text-right" size={100} weight={"Thin"}>
+														Student's Ticket Price
+													</Label>
+													<Input
+														id="student-price"
+														type="number"
+														placeholder="Enter the price for students"
+														className="col-span-3"
+													/>
+												</div>
+											</div>
+
+											<div id="hours" className="w-full">
+												<div className="grid grid-cols-4 items-center gap-4">
+													<Label htmlFor="hours" className="text-right" size={100} weight={"Thin"}>
+														Available Days
+													</Label>
+													<ToggleGroup
+														variant="outline"
+														type="multiple"
+														className="mb-4 col-span-3"
+													>
+														<ToggleGroupItem value="sat">Sa</ToggleGroupItem>
+														<ToggleGroupItem value="sun">Su</ToggleGroupItem>
+														<ToggleGroupItem value="mon">Mo</ToggleGroupItem>
+														<ToggleGroupItem value="tue">Tu</ToggleGroupItem>
+														<ToggleGroupItem value="wed">We</ToggleGroupItem>
+														<ToggleGroupItem value="thu">Th</ToggleGroupItem>
+														<ToggleGroupItem value="fri">Fr</ToggleGroupItem>
+													</ToggleGroup>
+												</div>
+											</div>
+										</div>
+										<DialogFooter>
+											<Button type="submit">Save changes</Button>
+										</DialogFooter>
+									</DialogContent>
+								</Dialog>
+
+								{/* till here */}
+
 							</DropdownMenuContent>
 						</DropdownMenu>
 					</Flex>

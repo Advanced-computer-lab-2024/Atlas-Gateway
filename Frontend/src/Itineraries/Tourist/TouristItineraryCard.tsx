@@ -11,7 +11,7 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Flex } from "@/components/ui/flex";
-import { TTouristItinerary } from "@/types/global"; // Assume TActivity is defined in your types
+import { TTouristItinerary } from "@/types/global"; 
 
 export default function TouristItineraryCard({
 	id,
