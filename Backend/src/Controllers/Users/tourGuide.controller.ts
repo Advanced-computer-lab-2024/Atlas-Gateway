@@ -21,7 +21,7 @@ export const createTourGuide = async (req: Request, res: Response) => {
 			description,
 			picture,
 			experience,
-			previous,
+			prevWork: previous,
 		});
 		await user.save();
 		res.status(201).send(user);
@@ -72,21 +72,20 @@ export const updateTourGuide = async (req: Request, res: Response) => {
 		const tourGuide = await TourGuide.findById(id);
 		const Verified = tourGuide?.isVerified;
 		if (Verified) {
-			res.status(200).send(
-				await TourGuide.findByIdAndUpdate(
-					id,
-					{
-						email,
-						password,
-						picture,
-						experience,
-						prevWork: previous,
-					},
-					{
-						new: true,
-					},
-				),
+			const newAdvertiser = await TourGuide.findByIdAndUpdate(
+				id,
+				{
+					email,
+					password,
+					picture,
+					experience,
+					prevWork: previous,
+				},
+				{
+					new: true,
+				},
 			);
+			res.status(200).send(newAdvertiser);
 		} else {
 			res.status(500).send("user not Verified");
 		}

@@ -15,7 +15,7 @@ export interface ISeller extends Document {
 const sellerSchema = new Schema<ISeller>(
 	{
 		username: { type: String, required: true },
-		name: { type: String, required: true },
+		name: { type: String },
 		email: { type: String, required: true },
 		password: { type: String, required: true },
 		picture: { type: String },

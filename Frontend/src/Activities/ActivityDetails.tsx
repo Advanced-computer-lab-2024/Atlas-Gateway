@@ -12,7 +12,6 @@ export default function ActivityDetails() {
 	const navigate = useNavigate();
 	const { data } = useActivity();
 	const {
-		_id,
 		name,
 		categories,
 		dateTime,
@@ -112,10 +111,10 @@ export default function ActivityDetails() {
 									>
 										{categories?.map((category) => (
 											<Badge
-												key={category}
+												key={category?._id}
 												variant={"default"}
 											>
-												{category}
+												{category?.name}
 											</Badge>
 										))}
 									</Flex>
@@ -135,10 +134,10 @@ export default function ActivityDetails() {
 									>
 										{tags?.map((tag) => (
 											<Badge
-												key={tag}
+												key={tag?._id}
 												variant={"default"}
 											>
-												{tag}
+												{tag?.name}
 											</Badge>
 										))}
 									</Flex>
