@@ -7,7 +7,7 @@ export const TEST = process.env.NODE_ENV === "test";
 
 export const SERVER = {
 	host: process.env.SERVER_HOST ?? "localhost",
-	port: 5000,
+	port: 3000,
 };
 
 export const MONGO_DB = {
