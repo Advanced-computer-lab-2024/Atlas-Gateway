@@ -27,6 +27,7 @@ export type TPlace = {
 type TOpeningHours = {
 	open: string;
 	close: string;
+	dayOff: boolean;
 };
 
 export type TProduct = {
@@ -52,7 +53,7 @@ export type TActivity = {
 	tags: string[];
 	categories: string[];
 	specialDiscounts: number;
-	isBookingsOpen: boolean;
+	isOpen: boolean;
 	rating: number;
 };
 export interface TTourist extends TUser {
@@ -82,4 +83,15 @@ export interface TTourGuide extends TUser {
 	yearsOfExperience: number;
 	previousWork: string;
 	description: string;
+}
+
+export interface TTag {
+	_id: string;
+	name: string;
+	type: string;
+}
+
+export interface TCategory {
+	_id: string;
+	name: string;
 }

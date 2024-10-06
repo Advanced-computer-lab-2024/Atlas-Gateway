@@ -1,22 +1,36 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-
-
-import { useSellerProfile, useUpdateSellerProfile } from "@/api/data/useProfile";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import {
+	useSellerProfile,
+	useUpdateSellerProfile,
+} from "@/api/data/useProfile";
+import {
+	Form,
+	FormControl,
+	FormDescription,
+	FormField,
+	FormItem,
+	FormLabel,
+} from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
-
-
+import { TSeller } from "@/types/global";
 
 import Label from "../components/ui/Label";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
-import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "../components/ui/sheet";
-import { useEffect } from "react";
-import { TSeller } from "@/types/global";
-
+import {
+	Sheet,
+	SheetClose,
+	SheetContent,
+	SheetDescription,
+	SheetFooter,
+	SheetHeader,
+	SheetTitle,
+	SheetTrigger,
+} from "../components/ui/sheet";
 
 export const formSchema = z.object({
 	companyName: z.string().min(2, {
@@ -34,29 +48,26 @@ export const formSchema = z.object({
 	profilePicture: z.string().nullable(),
 });
 
-
-
 export default function SellerSheet() {
 	const form = useForm<TSeller>({
 		resolver: zodResolver(formSchema),
-    });
-    
-    const { reset, getValues } = form;
-    const { data, refetch } = useSellerProfile();
-    
-    useEffect(() => {
+	});
+
+	const { reset, getValues } = form;
+	const { data, refetch } = useSellerProfile();
+
+	useEffect(() => {
 		if (data) {
 			reset(data);
 		}
 	}, [data, reset]);
 
-
 	const { doEditSellerProfile } = useUpdateSellerProfile(refetch);
 
-    const onSubmit = () => {
-        const data = getValues();
-        doEditSellerProfile(data);
-    }
+	const onSubmit = () => {
+		const data = getValues();
+		doEditSellerProfile(data);
+	};
 	return (
 		<div>
 			<Sheet>
@@ -66,21 +77,21 @@ export default function SellerSheet() {
 					</Button>
 				</SheetTrigger>
 				<SheetContent>
-					<SheetHeader>
-						<SheetTitle>
-							<Label.Big600>Edit profile</Label.Big600>
-						</SheetTitle>
-						<SheetDescription>
-							Make changes to your profile here. Click save when
-							you're done.
-						</SheetDescription>
-					</SheetHeader>
-
 					<Form {...form}>
 						<form
 							onSubmit={form.handleSubmit(onSubmit)}
 							className="space-y-8"
 						>
+							<SheetHeader>
+								<SheetTitle>
+									<Label.Big600>Edit profile</Label.Big600>
+								</SheetTitle>
+								<SheetDescription>
+									Make changes to your profile here. Click
+									save when you're done.
+								</SheetDescription>
+							</SheetHeader>
+
 							{/* Name input */}
 							<FormField
 								control={form.control}
@@ -141,13 +152,15 @@ export default function SellerSheet() {
 									</FormItem>
 								)}
 							/>
+							<SheetFooter>
+								<SheetClose asChild>
+									<Button type="submit" onClick={onSubmit}>
+										Save changes
+									</Button>
+								</SheetClose>
+							</SheetFooter>
 						</form>
 					</Form>
-					<SheetFooter>
-						<SheetClose asChild>
-							<Button type="submit">Save changes</Button>
-						</SheetClose>
-					</SheetFooter>
 				</SheetContent>
 			</Sheet>
 		</div>

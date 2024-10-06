@@ -29,8 +29,10 @@ export const createTourGuide = async (req: Request, res: Response) => {
 	}
 };
 export const getTourGuide = async (req: Request, res: Response) => {
+	const id = req.params.id;
 	try {
-		res.status(200).send(await TourGuide.find());
+		const tourGuide = await TourGuide.findById(id);
+		res.status(200).send(tourGuide);
 	} catch (error) {
 		console.log(error);
 		res.status(500).send("failed");

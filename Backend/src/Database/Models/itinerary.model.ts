@@ -28,8 +28,8 @@ interface IItinerary extends Document {
 		review:string;
 		rating:number;
 	},
-	avgRating:number;
-	totalNumberOfRatings: number;
+	rating:number;
+	numberOfRatings: number;
 }
 
 const itinerarySchema = new Schema<IItinerary>(
@@ -58,8 +58,8 @@ const itinerarySchema = new Schema<IItinerary>(
 			review:{type: String, required: false},
 			rating:{type:Number, min:0,max:5},
 		},
-		avgRating:{type:Number, min:0,max:5, default: 0},
-		totalNumberOfRatings: {type:Number, default: 0},
+		rating:{type:Number, min:0,max:5, default: 0},
+		numberOfRatings: {type:Number, default: 0},
 	},
 	schemaConfig,
 );

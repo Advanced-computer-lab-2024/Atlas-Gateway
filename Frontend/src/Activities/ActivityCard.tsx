@@ -21,7 +21,7 @@ export default function ActivityCard({
 	tags,
 	categories,
 	dateTime,
-	isBookingsOpen,
+	isOpen,
 	maxPrice,
 	specialDiscounts,
 	minPrice,
@@ -150,7 +150,7 @@ export default function ActivityCard({
 					Available Special Discounts: {specialDiscounts}
 				</Label.Mid300>
 				<Label.Mid300>
-					{isBookingsOpen ? "Bookings Open" : "Bookings Closed"}
+					{isOpen ? "Bookings Open" : "Bookings Closed"}
 				</Label.Mid300>
 			</CardFooter>
 		</Card>

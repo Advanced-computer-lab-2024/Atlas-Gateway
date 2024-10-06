@@ -1,19 +1,11 @@
-import { PropsWithChildren } from "react";
-import { useNavigate } from "react-router-dom";
+import { useQueryString } from "@/api/data/useQueryString";
 
 import CheckboxFilter from "./Filters/CheckboxFilter";
 import DateFilter from "./Filters/DateFilter";
 import RangeFilter from "./Filters/RangeFilter";
 import { TCheckboxFilter, TDateFilter, TFilter, TRangeFilter } from "./types";
-import { useQueryString } from "@/api/data/useQueryString";
 
-export default function FilterDropdown({
-	children,
-	filter,
-}: PropsWithChildren<{
-	filter: TFilter;
-}>) {
-	const navigate = useNavigate();
+export default function FilterDropdown({ filter }: { filter: TFilter }) {
 	const [query, updateQuery] = useQueryString();
 
 	const removefilter = (filter: TFilter) => {

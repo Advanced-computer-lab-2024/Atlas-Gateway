@@ -38,6 +38,20 @@ const ENDPOINTS = {
 		show: (id: string) => `api/advertiser/show/${id}`,
 		update: (id: string) => `api/advertiser/update/${id}`,
 	},
+	category: {
+		list: "api/category/list",
+		show: (id: string) => `api/category/show/${id}`,
+		create: "api/category/create",
+		update: "api/category/update",
+		delete: "api/category/delete",
+	},
+	tag: {
+		list: "api/tag/list",
+		show: (id: string) => `api/tag/show/${id}`,
+		create: "api/tag/create",
+		update: "api/tag/update",
+		delete: "api/tag/delete",
+	},
 };
 
 export default ENDPOINTS;

@@ -1,22 +1,36 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-
-
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import {
+	useAdvertiserProfile,
+	useUpdateAdvertiserProfile,
+} from "@/api/data/useProfile";
+import {
+	Form,
+	FormControl,
+	FormDescription,
+	FormField,
+	FormItem,
+	FormLabel,
+} from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { TAdvetisor } from "@/types/global";
-
-
 
 import Label from "../components/ui/Label";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
-import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "../components/ui/sheet";
-import { useAdvertiserProfile, useUpdateAdvertiserProfile } from "@/api/data/useProfile";
-import { useEffect } from "react";
-
+import {
+	Sheet,
+	SheetClose,
+	SheetContent,
+	SheetDescription,
+	SheetFooter,
+	SheetHeader,
+	SheetTitle,
+	SheetTrigger,
+} from "../components/ui/sheet";
 
 export const formSchema = z.object({
 	companyName: z.string().min(2, {
@@ -40,17 +54,13 @@ export const formSchema = z.object({
 	profilePicture: z.string().nullable(),
 });
 
-
-
 export default function AdvertiserSheet() {
-
 	const form = useForm<TAdvetisor>({
 		resolver: zodResolver(formSchema),
 	});
 
 	const { reset, getValues } = form;
-    const { data, refetch } = useAdvertiserProfile();
-	
+	const { data, refetch } = useAdvertiserProfile();
 
 	useEffect(() => {
 		if (data) {
@@ -74,21 +84,21 @@ export default function AdvertiserSheet() {
 					</Button>
 				</SheetTrigger>
 				<SheetContent>
-					<SheetHeader>
-						<SheetTitle>
-							<Label.Big600>Edit profile</Label.Big600>
-						</SheetTitle>
-						<SheetDescription>
-							Make changes to your profile here. Click save when
-							you're done.
-						</SheetDescription>
-					</SheetHeader>
-
 					<Form {...form}>
 						<form
 							onSubmit={form.handleSubmit(onSubmit)}
 							className="space-y-8"
 						>
+							<SheetHeader>
+								<SheetTitle>
+									<Label.Big600>Edit profile</Label.Big600>
+								</SheetTitle>
+								<SheetDescription>
+									Make changes to your profile here. Click
+									save when you're done.
+								</SheetDescription>
+							</SheetHeader>
+
 							{/* Name input */}
 							<FormField
 								control={form.control}
@@ -189,14 +199,14 @@ export default function AdvertiserSheet() {
 									</FormItem>
 								)}
 							/>
+
+							<SheetFooter>
+								<SheetClose asChild>
+									<Button type="submit">Save changes</Button>
+								</SheetClose>
+							</SheetFooter>
 						</form>
 					</Form>
-
-					<SheetFooter>
-						<SheetClose asChild>
-							<Button type="submit">Save changes</Button>
-						</SheetClose>
-					</SheetFooter>
 				</SheetContent>
 			</Sheet>
 		</div>

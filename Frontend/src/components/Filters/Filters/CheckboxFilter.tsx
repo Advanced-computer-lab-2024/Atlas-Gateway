@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react";
 
+import { useQueryString } from "@/api/data/useQueryString";
 import Label from "@/components/ui/Label";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -21,6 +22,8 @@ export default function CheckboxFilter({
 }) {
 	const [search, setSearch] = useState("");
 	const [selected, setSelected] = useState<SelectItem[]>([]);
+
+	const [query, updateQuery] = useQueryString();
 
 	const removeSelectedItem = useCallback((item: SelectItem) => {
 		setSelected((prev) =>
@@ -48,6 +51,19 @@ export default function CheckboxFilter({
 		},
 		[filter.options, selected],
 	);
+
+	const applyFilter = useCallback(() => {
+		updateQuery({
+			...query,
+			[filter.filterName]: selected.map((item) => item.value).join(","),
+		});
+	}, [filter.filterName, query, selected, updateQuery]);
+
+	const removeFilter = useCallback(() => {
+		const newQuery = { ...query };
+		delete newQuery[filter.filterName];
+		updateQuery(newQuery);
+	}, [filter.filterName, query, updateQuery]);
 
 	return (
 		<DropdownMenu>
@@ -108,6 +124,11 @@ export default function CheckboxFilter({
 								</Label.Thin200>
 							</Flex>
 						))}
+					</Flex>
+					<hr />
+					<Flex justify="between">
+						<Button onClick={removeFilter}>Remove</Button>
+						<Button onClick={applyFilter}>Apply</Button>
 					</Flex>
 				</Flex>
 			</DropdownMenuContent>

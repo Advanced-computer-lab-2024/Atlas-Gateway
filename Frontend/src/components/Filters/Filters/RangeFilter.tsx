@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
+import { useQueryString } from "@/api/data/useQueryString";
 import Label from "@/components/ui/Label";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,6 +16,21 @@ import { TRangeFilter } from "../types";
 export default function RangeFilter({ filter }: { filter: TRangeFilter }) {
 	const [start, setStart] = useState("");
 	const [end, setEnd] = useState("");
+
+	const [query, updateQuery] = useQueryString();
+
+	const applyFilter = useCallback(() => {
+		updateQuery({
+			...query,
+			[filter.filterName]: `${start},${end}`,
+		});
+	}, [end, filter.filterName, query, start, updateQuery]);
+
+	const removeFilter = useCallback(() => {
+		const newQuery = { ...query };
+		delete newQuery[filter.filterName];
+		updateQuery(newQuery);
+	}, [filter.filterName, query, updateQuery]);
 
 	return (
 		<DropdownMenu>
@@ -36,6 +52,11 @@ export default function RangeFilter({ filter }: { filter: TRangeFilter }) {
 							value={end}
 							onChange={(e) => setEnd(e.target.value)}
 						/>
+					</Flex>
+					<hr />
+					<Flex justify="between">
+						<Button onClick={removeFilter}>Remove</Button>
+						<Button onClick={applyFilter}>Apply</Button>
 					</Flex>
 				</Flex>
 			</DropdownMenuContent>

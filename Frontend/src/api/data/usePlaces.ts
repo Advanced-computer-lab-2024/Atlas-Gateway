@@ -1,15 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 
-
-
 import { useLoginStore } from "@/store/loginStore";
-
-
 
 import { apiPlace, apiPlaces } from "../service/places";
 import { useQueryString } from "./useQueryString";
-
 
 export function usePlaces() {
 	const { user } = useLoginStore();

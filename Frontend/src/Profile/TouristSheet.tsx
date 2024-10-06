@@ -35,9 +35,6 @@ const formSchema = z.object({
 	email: z.string().email({
 		message: "Please enter a valid email address.",
 	}),
-	username: z.string().min(2, {
-		message: "Username must be at least 2 characters.",
-	}),
 	mobileNumber: z.string().min(11, {
 		message: "Mobile number must be at least 11 characters.",
 	}),
@@ -51,8 +48,7 @@ export default function TouristSheet() {
 	});
 
 	const { reset, getValues } = form;
-    const { data, refetch } = useTouristProfile();
-	
+	const { data, refetch } = useTouristProfile();
 
 	useEffect(() => {
 		if (data) {
@@ -76,84 +72,65 @@ export default function TouristSheet() {
 					</Button>
 				</SheetTrigger>
 				<SheetContent>
-					<SheetHeader>
-						<SheetTitle>
-							<Label.Big600>Edit profile</Label.Big600>
-						</SheetTitle>
-						<SheetDescription>
-							Make changes to your profile here. Click save when
-							you're done.
-						</SheetDescription>
-					</SheetHeader>
-					<div className="grid grid-cols gap-4 py-4">
-						{/* Profile Picture input 
-                         <div className="flex-1 grid-cols-4 items-center gap-4">
-                            <Label.Big300
-                                className="text-left"
-                            >
-                                Profile Picture:-
-                            </Label.Big300>
-                            <Input
-                                id="profilePicture"
-                                type="file"
-                                onChange={handleInputChange}
-                                className="col-span-3 border-black"
-                            />
-                        </div> */}
+					<Form {...form}>
+						<form className="space-y-8">
+							<SheetHeader>
+								<SheetTitle>
+									<Label.Big600>Edit profile</Label.Big600>
+								</SheetTitle>
+								<SheetDescription>
+									Make changes to your profile here. Click
+									save when you're done.
+								</SheetDescription>
+							</SheetHeader>
+							{/* Email input */}
+							<FormField
+								control={form.control}
+								name="email"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel> Email:-</FormLabel>
+										<FormControl>
+											<Input
+												placeholder="joedoe123@gamil.com"
+												{...field}
+											/>
+										</FormControl>
+										<FormDescription>
+											This is your email.
+										</FormDescription>
+									</FormItem>
+								)}
+							/>
 
-						<Form {...form}>
-							<form className="space-y-8">
-								{/* Email input */}
-								<FormField
-									control={form.control}
-									name="email"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel> Email:-</FormLabel>
-											<FormControl>
-												<Input
-													placeholder="joedoe123@gamil.com"
-													{...field}
-												/>
-											</FormControl>
-											<FormDescription>
-												This is your email.
-											</FormDescription>
-										</FormItem>
-									)}
-								/>
-
-								{/* Mobile Number input */}
-								<FormField
-									control={form.control}
-									name="mobileNumber"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>
-												Mobile Number:-
-											</FormLabel>
-											<FormControl>
-												<Input
-													placeholder="0123456789"
-													{...field}
-												/>
-											</FormControl>
-											<FormDescription>
-												This is your Mobile Number
-											</FormDescription>
-										</FormItem>
-									)}
-								/>
-							</form>
-						</Form>
-					</div>
-					<SheetFooter>
-						<SheetClose asChild>
-							<Button type="submit" onClick={onSubmit}>
-								Save changes
-							</Button>
-						</SheetClose>
-					</SheetFooter>
+							{/* Mobile Number input */}
+							<FormField
+								control={form.control}
+								name="mobileNumber"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Mobile Number:-</FormLabel>
+										<FormControl>
+											<Input
+												placeholder="0123456789"
+												{...field}
+											/>
+										</FormControl>
+										<FormDescription>
+											This is your Mobile Number
+										</FormDescription>
+									</FormItem>
+								)}
+							/>
+							<SheetFooter>
+								<SheetClose asChild>
+									<Button type="submit" onClick={onSubmit}>
+										Save changes
+									</Button>
+								</SheetClose>
+							</SheetFooter>
+						</form>
+					</Form>
 				</SheetContent>
 			</Sheet>
 		</div>

@@ -16,7 +16,6 @@ import { Input } from "@/components/ui/input";
 import {
 	Sheet,
 	SheetContent,
-	SheetDescription,
 	SheetFooter,
 	SheetHeader,
 	SheetTitle,
@@ -24,8 +23,7 @@ import {
 } from "@/components/ui/sheet";
 
 import { Checkbox } from "../../components/ui/checkbox";
-import { activitySchema } from "../schema";
-import SelectCategory from "./SelectCategory";
+import { activitySchema } from "./schema";
 
 interface Tag {
 	_id: string;
@@ -91,15 +89,17 @@ const AddAdvertiserForm = () => {
 	return (
 		<Sheet>
 			<SheetTrigger asChild>
-				<Button variant="outline">Add an activity</Button>
+				<Button variant="outline">Add activity</Button>
 			</SheetTrigger>
 			<SheetContent>
 				<SheetHeader>
 					<SheetTitle>Add an activity</SheetTitle>
 				</SheetHeader>
-
 				<FormProvider {...formMethods}>
-					<form onSubmit={handleSubmit(onSubmit)}>
+					<form
+						onSubmit={handleSubmit(onSubmit)}
+						className="flex flex-col gap-2"
+					>
 						<FormField
 							control={control}
 							name="name"
@@ -118,45 +118,43 @@ const AddAdvertiserForm = () => {
 								</FormItem>
 							)}
 						/>
-						<div className="flex gap-2">
-							<FormField
-								control={control}
-								name="dateTime"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>dateTime</FormLabel>
-										<FormControl>
-											<Input
-												{...field}
-												type="datetime-local"
-												placeholder="date and time"
-											/>
-										</FormControl>
-										<FormDescription>
-											Enter activity dateTime.
-										</FormDescription>
-									</FormItem>
-								)}
-							/>
-							<FormField // should be modified here by ali
-								control={control}
-								name="location"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>location</FormLabel>
-										<FormControl>
-											<Input
-												{...field}
-												placeholder="location"
-											/>
-										</FormControl>
-										<FormDescription>
-											Enter activity location.
-										</FormDescription>
-									</FormItem>
-								)}
-							/>
-						</div>
+						<FormField
+							control={control}
+							name="dateTime"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Date & Time</FormLabel>
+									<FormControl>
+										<Input
+											{...field}
+											type="datetime-local"
+											placeholder="date and time"
+										/>
+									</FormControl>
+									<FormDescription>
+										Enter activity Date & Time.
+									</FormDescription>
+								</FormItem>
+							)}
+						/>
+						<FormField // should be modified here by ali
+							control={control}
+							name="location"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>location</FormLabel>
+									<FormControl>
+										<Input
+											{...field}
+											placeholder="location"
+										/>
+									</FormControl>
+									<FormDescription>
+										Enter activity location.
+									</FormDescription>
+								</FormItem>
+							)}
+						/>
 
 						<div className="flex gap-2">
 							<FormField

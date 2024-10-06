@@ -1,7 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import {
+	useTourGuideProfile,
+	useUpdateTourGuideProfile,
+} from "@/api/data/useProfile";
 import {
 	Form,
 	FormControl,
@@ -11,6 +16,7 @@ import {
 	FormLabel,
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
+import { TTourGuide } from "@/types/global";
 
 import Label from "../components/ui/Label";
 import { Button } from "../components/ui/button";
@@ -25,19 +31,10 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from "../components/ui/sheet";
-import { TTourGuide } from "@/types/global";
-import { useTourGuideProfile, useUpdateTourGuideProfile } from "@/api/data/useProfile";
-import { useEffect } from "react";
 
-export const formSchema = z.object({
-	name: z.string().min(2, {
-		message: "Name must be at least 2 characters.",
-	}),
+const formSchema = z.object({
 	email: z.string().email({
 		message: "Please enter a valid email address.",
-	}),
-	username: z.string().min(2, {
-		message: "Username must be at least 2 characters.",
 	}),
 	mobileNumber: z.string().min(11, {
 		message: "Mobile number must be at least 11 characters.",
@@ -55,8 +52,7 @@ export default function TourGuideSheet() {
 	});
 
 	const { reset, getValues } = form;
-    const { data, refetch } = useTourGuideProfile();
-	
+	const { data, refetch } = useTourGuideProfile();
 
 	useEffect(() => {
 		if (data) {
@@ -80,41 +76,20 @@ export default function TourGuideSheet() {
 					</Button>
 				</SheetTrigger>
 				<SheetContent>
-					<SheetHeader>
-						<SheetTitle>
-							<Label.Big600>Edit profile</Label.Big600>
-						</SheetTitle>
-						<SheetDescription>
-							Make changes to your profile here. Click save when
-							you're done.
-						</SheetDescription>
-					</SheetHeader>
 					<Form {...form}>
 						<form
 							onSubmit={form.handleSubmit(onSubmit)}
 							className="space-y-8"
 						>
-							{/* Name input */}
-							<FormField
-								control={form.control}
-								name="name"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Name:-:-</FormLabel>
-										<FormControl>
-											<Input
-												placeholder="John Doe"
-												{...field}
-											/>
-										</FormControl>
-										<FormDescription>
-											This is your public display Company
-											name.
-										</FormDescription>
-									</FormItem>
-								)}
-							/>
-
+							<SheetHeader>
+								<SheetTitle>
+									<Label.Big600>Edit profile</Label.Big600>
+								</SheetTitle>
+								<SheetDescription>
+									Make changes to your profile here. Click
+									save when you're done.
+								</SheetDescription>
+							</SheetHeader>
 							{/* Email input */}
 							<FormField
 								control={form.control}
@@ -195,14 +170,13 @@ export default function TourGuideSheet() {
 									</FormItem>
 								)}
 							/>
+							<SheetFooter>
+								<SheetClose asChild>
+									<Button type="submit">Save changes</Button>
+								</SheetClose>
+							</SheetFooter>
 						</form>
 					</Form>
-
-					<SheetFooter>
-						<SheetClose asChild>
-							<Button type="submit">Save changes</Button>
-						</SheetClose>
-					</SheetFooter>
 				</SheetContent>
 			</Sheet>
 		</div>

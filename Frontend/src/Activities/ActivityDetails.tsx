@@ -1,8 +1,6 @@
 import { formatDate } from "date-fns";
-import { ArrowLeft, MapPin, Star } from "lucide-react";
+import { ArrowLeft, DollarSign, MapPin, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
-
 
 import { useActivity } from "@/api/data/useActivities";
 import Label from "@/components/ui/Label";
@@ -10,18 +8,17 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Flex } from "@/components/ui/flex";
 
-
 export default function ActivityDetails() {
 	const navigate = useNavigate();
 	const { data } = useActivity();
 	const {
+		_id,
 		name,
 		categories,
 		dateTime,
 		description,
-		discounts,
-		_id,
-		isBookingsOpen,
+		specialDiscounts,
+		isOpen,
 		location,
 		maxPrice,
 		minPrice,
@@ -36,7 +33,7 @@ export default function ActivityDetails() {
 			align="center"
 			className="px-4 py-4 overflow-y-scroll"
 		>
-			<Card className="w-[80%] flex-col border-surface-secondary border-2 p-4">
+			<Card className="w-[80%] h-[500px] flex-col border-surface-secondary border-2 p-4">
 				<Flex isColumn gap="4">
 					<Flex gap="2" align="center">
 						<ArrowLeft
@@ -49,7 +46,7 @@ export default function ActivityDetails() {
 					<Flex gap="12">
 						<Flex isColumn justify="around">
 							<Flex gap="2" align="center">
-								<Label.Big600 className="w-40 text-left">
+								<Label.Big600 className="w-52 text-left">
 									Description:{" "}
 								</Label.Big600>
 								<Label.Mid500 className="overflow-ellipsis">
@@ -57,7 +54,7 @@ export default function ActivityDetails() {
 								</Label.Mid500>
 							</Flex>
 							<Flex gap="2" align="center">
-								<Label.Big600 className="w-40 text-left">
+								<Label.Big600 className="w-52 text-left">
 									Location:{" "}
 								</Label.Big600>
 								<Label.Mid500 className="overflow-ellipsis">
@@ -66,19 +63,19 @@ export default function ActivityDetails() {
 								<MapPin size={32} />
 							</Flex>
 							<Flex gap="2" align="center">
-								<Label.Big600 className="w-40 text-left">
+								<Label.Big600 className="w-52 text-left">
 									Date & Time:{" "}
 								</Label.Big600>
 								<Label.Mid500 className="overflow-ellipsis">
 									{dateTime &&
 										formatDate(
 											new Date(dateTime),
-											"dd/MM/yyyy HH:mm",
+											"dd/MM/yyyy, HH:mm:ss a",
 										)}
 								</Label.Mid500>
 							</Flex>
 							<Flex gap="2" align="center">
-								<Label.Big600 className="w-40 text-left">
+								<Label.Big600 className="w-52 text-left">
 									Rating:{" "}
 								</Label.Big600>
 								<Label.Mid500 className="overflow-ellipsis">
@@ -87,9 +84,26 @@ export default function ActivityDetails() {
 								<Star color="yellow" fill="yellow" size={32} />
 							</Flex>
 							<Flex gap="2" align="center">
-								<Label.Mid200 className="overflow-ellipsis w-[95px] text-left">
+								<Label.Big600 className="w-52 text-left">
+									Price:{" "}
+								</Label.Big600>
+								<DollarSign size={20} />
+								<Label.Thin300 className="overflow-ellipsis">
+									{minPrice} - {maxPrice}
+								</Label.Thin300>
+							</Flex>
+							<Flex gap="2" align="center">
+								<Label.Big600 className="w-52 text-left">
+									Special discounts:{" "}
+								</Label.Big600>
+								<Label.Mid500 className="overflow-ellipsis">
+									{specialDiscounts}
+								</Label.Mid500>
+							</Flex>
+							<Flex gap="2" align="center">
+								<Label.Big600 className="overflow-ellipsis w-52 text-left">
 									Categories:
-								</Label.Mid200>
+								</Label.Big600>
 								{categories && categories.length > 0 ? (
 									<Flex
 										gap="1"
@@ -110,7 +124,7 @@ export default function ActivityDetails() {
 								)}
 							</Flex>
 							<Flex gap="2" align="center">
-								<Label.Big600 className="w-40 text-left">
+								<Label.Big600 className="w-52 text-left">
 									Tags:
 								</Label.Big600>
 								{tags && tags?.length > 0 ? (
@@ -132,9 +146,16 @@ export default function ActivityDetails() {
 									"N/A"
 								)}
 							</Flex>
+							<Flex gap="2" align="center">
+								<Label.Big600 className="w-52 text-left">
+									Available to book:{" "}
+								</Label.Big600>
+								<Label.Thin300 className="overflow-ellipsis">
+									{isOpen ? "Yes" : "No"}
+								</Label.Thin300>
+							</Flex>
 						</Flex>
 					</Flex>
-					<hr />
 				</Flex>
 			</Card>
 		</Flex>

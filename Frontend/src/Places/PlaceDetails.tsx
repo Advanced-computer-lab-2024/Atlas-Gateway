@@ -10,39 +10,17 @@ import { Flex } from "@/components/ui/flex";
 export default function PlaceDetails() {
 	const navigate = useNavigate();
 	const { data } = usePlace();
-	const { name, description, location, images, tags, categories, rating } =
-		data || {};
+	const {
+		name,
+		description,
+		location,
+		images,
+		rating,
+		categories,
+		tags,
+		openingHours,
+	} = data || {};
 
-	const openingHours = {
-		friday: {
-			open: "10:00",
-			close: "18:00",
-		},
-		monday: {
-			open: "10:00",
-			close: "18:00",
-		},
-		saturday: {
-			open: "10:00",
-			close: "18:00",
-		},
-		sunday: {
-			open: "10:00",
-			close: "18:00",
-		},
-		thursday: {
-			open: "10:00",
-			close: "18:00",
-		},
-		tuesday: {
-			open: "10:00",
-			close: "18:00",
-		},
-		wednesday: {
-			open: "10:00",
-			close: "18:00",
-		},
-	};
 	return (
 		<Flex
 			isColumn
@@ -150,38 +128,38 @@ export default function PlaceDetails() {
 						{[
 							{
 								label: "Sunday",
-								value: openingHours.sunday,
+								value: openingHours?.sunday,
 							},
 							{
 								label: "Monday",
-								value: openingHours.monday,
+								value: openingHours?.monday,
 							},
 							{
 								label: "Tuesday",
-								value: openingHours.tuesday,
+								value: openingHours?.tuesday,
 							},
 							{
 								label: "Wednesday",
-								value: openingHours.wednesday,
+								value: openingHours?.wednesday,
 							},
 							{
 								label: "Thursday",
-								value: openingHours.thursday,
+								value: openingHours?.thursday,
 							},
 							{
 								label: "Friday",
-								value: openingHours.friday,
+								value: openingHours?.friday,
 							},
 							{
 								label: "Saturday",
-								value: openingHours.saturday,
+								value: openingHours?.saturday,
 							},
 						].map((day) => (
 							<Flex gap="2" align="center">
 								<Label.Mid500 className="w-[140px] text-left">
 									{day?.label}
 								</Label.Mid500>
-								{day?.value?.open && day?.value?.close ? (
+								{!day?.value?.dayOff ? (
 									<Label.Mid200 className="overflow-ellipsis">
 										{day?.value?.open} - {day?.value?.close}
 									</Label.Mid200>

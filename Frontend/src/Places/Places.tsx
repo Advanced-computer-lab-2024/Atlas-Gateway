@@ -1,11 +1,9 @@
-import { Search } from "lucide-react";
 
 import { usePagination } from "@/api/data/usePagination";
 import { usePlaces } from "@/api/data/usePlaces";
 import Filters from "@/components/Filters/Filters";
 import Label from "@/components/ui/Label";
 import { Flex } from "@/components/ui/flex";
-import { Input } from "@/components/ui/input";
 import {
 	Pagination,
 	PaginationContent,

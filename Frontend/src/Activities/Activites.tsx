@@ -1,7 +1,7 @@
-import { useState } from "react";
-
 import { useActivities } from "@/api/data/useActivities";
+import { useCategories } from "@/api/data/useCategories";
 import { usePagination } from "@/api/data/usePagination";
+import { useTags } from "@/api/data/useTags";
 import Filters from "@/components/Filters/Filters";
 import Label from "@/components/ui/Label";
 import { Searchbar } from "@/components/ui/Searchbar";
@@ -14,17 +14,21 @@ import {
 	PaginationNext,
 	PaginationPrevious,
 } from "@/components/ui/pagination";
+import { useLoginStore } from "@/store/loginStore";
 
-import AddActivityForm from "../Advertiser/Form/AddActivityForm";
 import ActivityCard from "./ActivityCard";
+import AddActivityForm from "./AddActivity/AddActivityForm";
 
 export default function Activites() {
+	const { user } = useLoginStore();
 	const { data, meta } = useActivities();
-	const [, setQuery] = useState("");
 	const { page, onPageChange, pagesCount } = usePagination({
 		pageNum: meta?.pages || 1,
 		pagesCount: meta?.pages || 1,
 	});
+
+	const { data: categories } = useCategories();
+	const { data: tags } = useTags();
 
 	return (
 		<Flex
@@ -50,13 +54,21 @@ export default function Activites() {
 									filterName: "tags",
 									label: "Tags",
 									type: "checkbox",
-									options: [],
+									options:
+										tags?.map((tag) => ({
+											label: tag.name,
+											value: tag._id,
+										})) || [],
 								},
 								categories: {
 									filterName: "categories",
 									label: "Categories",
 									type: "checkbox",
-									options: [],
+									options:
+										categories?.map((category) => ({
+											label: category.name,
+											value: category._id,
+										})) || [],
 								},
 								rating: {
 									filterName: "rating",
@@ -66,7 +78,7 @@ export default function Activites() {
 							}}
 						/>
 					</Flex>
-					<AddActivityForm />
+					{user?.type !== "advertiser" && <AddActivityForm />}
 				</Flex>
 			</Flex>
 			<Flex
