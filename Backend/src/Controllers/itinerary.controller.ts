@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import mongoose, { PipelineStage, Types } from "mongoose";
+import { it } from "node:test";
 
 import { TourGuide } from "../Database/Models/Users/tourGuide.model";
 import { Itinerary } from "../Database/Models/itinerary.model";
@@ -21,13 +22,8 @@ export const createItinerary = async (req: Request, res: Response) => {
 			activities,
 			tags,
 		} = req.body;
+
 		const tourGuideId = req.headers.userid;
-		//TODO: Check ID validity and existance
-		if (!(await TourGuide.findById(tourGuideId))) {
-			return res
-				.status(400)
-				.json({ message: "Tour Guide ID is invalid or doesn't exist" });
-		}
 
 		if (
 			!title ||
@@ -42,7 +38,7 @@ export const createItinerary = async (req: Request, res: Response) => {
 			!activities ||
 			!tags
 		) {
-			return res.status(400).json({ message: "Misisng Fields" });
+			return res.status(400).json({ message: "Missing Fields" });
 		}
 		const itineraryData = new Itinerary({
 			title,
@@ -62,23 +58,21 @@ export const createItinerary = async (req: Request, res: Response) => {
 		await itineraryData.save();
 		res.status(200).send(itineraryData);
 	} catch (error) {
-		res.status(500).json({ message: "Internal Server Error" });
 		console.log(error);
+		res.status(500).json({ message: "Internal Server Error" });
 	}
 };
 
 export const getItineraryById = async (req: Request, res: Response) => {
 	try {
-		const tourGuideId = req.headers.userid;
 		const id = req.params.id;
-		//TODO: Check ID validity and existance
-		console.log(tourGuideId);
-		if (!(await TourGuide.findById(tourGuideId))) {
-			return res
-				.status(400)
-				.json({ message: "Tour Guide ID is invalid or doesn't exist" });
+
+		if (!mongoose.Types.ObjectId.isValid(id)) {
+			return res.status(400).json({ error: "Invalid Itinerary ID" });
 		}
+
 		const itinerary = await Itinerary.findById(id);
+
 		res.status(200).send(itinerary);
 	} catch (error) {
 		res.status(500).send("Error getting Itinerary by id");
@@ -126,85 +120,48 @@ export const getItinerary = async (req: Request, res: Response) => {
 
 export const updateItinerary = async (req: Request, res: Response) => {
 	try {
-		const {
-			title,
-			language,
-			price,
-			availability,
-			pickUpLocation,
-			dropOffLocation,
-			startDate,
-			startTime,
-			endDate,
-			activities,
-			tags,
-		} = req.body;
 		const itineraryId = req.params.id;
-		const tourGuideId = req.headers.userid;
-		//TODO: Check ID validity and existance
-		if (!(await TourGuide.findById(tourGuideId))) {
-			return res
-				.status(400)
-				.json({ message: "Tour Guide ID is invalid or doesn't exist" });
-		}
-		const itineraryData = new Itinerary({
-			title,
-			language,
-			price,
-			availability,
-			pickUpLocation,
-			dropOffLocation,
-			startDate,
-			startTime,
-			endDate,
-			activities,
-			tags,
-		});
 
-		const temp = await Itinerary.findById(itineraryId);
-		if (!temp) {
+		const itinerary = await Itinerary.findById(itineraryId);
+		if (!itinerary) {
 			return res.status(404).json({ message: "Itinerary not found" });
 		}
-		if (temp.createdBy.toString() !== tourGuideId) {
+		if (itinerary.numberOfBookings > 0) {
 			return res
-				.status(400)
-				.json({ message: "TourGuideId Doesn't match the itinerary " });
+				.status(404)
+				.json({ message: "Itinerary is already booked" });
 		}
 
-		res.status(200).send(itineraryData);
+		itinerary.set(req.body);
+
+		await itinerary.save();
+		res.status(200).send(itinerary);
 	} catch (error) {
-		res.status(500).json({ message: "Internal Server Error" });
 		console.log(error);
+		res.status(500).json({ message: "Internal Server Error" });
 	}
 };
 
 export const deleteItinerary = async (req: Request, res: Response) => {
 	try {
 		const { id } = req.params;
-		const tourGuideId = req.headers.userid;
-		//TODO: Check ID validity and existance
-		if (!(await TourGuide.findById(tourGuideId))) {
-			return res
-				.status(400)
-				.json({ message: "Tour Guide ID is invalid or doesn't exist" });
-		}
-		const temp = await Itinerary.findById(id);
-		if (!temp) {
-			return res.status(404).json({ message: "Itinerary not found" });
-		}
-		if (temp.createdBy.toString() !== tourGuideId) {
-			return res
-				.status(400)
-				.json({ message: "TourGuideId Doesn't match the itinerary " });
+
+		if (!Types.ObjectId.isValid(id)) {
+			return res.status(400).json({ message: "Invalid Itinerary ID" });
 		}
 
-		if (temp?.numberOfBookings > 0) {
+		const itinerary = await Itinerary.findById(id);
+		if (!itinerary) {
+			return res.status(404).json({ message: "Itinerary not found" });
+		}
+
+		if (itinerary?.numberOfBookings > 0) {
 			return res
 				.status(404)
 				.json({ message: "Itinerary is already booked" });
 		}
 		await Itinerary.findByIdAndDelete(id);
-		res.status(200).send("Itinerary deleted Succefully");
+		res.status(200).send("Itinerary deleted Successfully");
 	} catch (error) {
 		console.log(error);
 		res.status(500).send("Error deleting Itinerary");
