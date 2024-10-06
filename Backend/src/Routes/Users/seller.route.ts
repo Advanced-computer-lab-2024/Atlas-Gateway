@@ -4,13 +4,13 @@ import {
 	createSeller,
 	deleteSeller,
 	getSeller,
-	listSellers,
+	getSellers,
 	updateSeller,
 } from "../../Controllers/Users/seller.controller";
 
 const SellerRouter = Router();
 SellerRouter.post("/create", createSeller);
-SellerRouter.get("/list", listSellers);
+SellerRouter.get("/list", getSellers);
 SellerRouter.get("/list/:id", getSeller);
 SellerRouter.put("/update/:id", updateSeller);
 SellerRouter.delete("/delete/:id", deleteSeller);
