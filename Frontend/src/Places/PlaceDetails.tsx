@@ -87,11 +87,11 @@ export default function PlaceDetails() {
 									>
 										{categories?.map((category) => (
 											<Badge
-												key={category}
+												key={category?._id}
 												variant={"default"}
 												className="whitespace-nowrap"
 											>
-												{category}
+												{category?.name}
 											</Badge>
 										))}
 									</Flex>
@@ -111,11 +111,11 @@ export default function PlaceDetails() {
 									>
 										{tags?.map((tag) => (
 											<Badge
-												key={tag}
+												key={tag?._id}
 												variant={"default"}
 												className="whitespace-nowrap"
 											>
-												{tag}
+												{tag?.name}
 											</Badge>
 										))}
 									</Flex>

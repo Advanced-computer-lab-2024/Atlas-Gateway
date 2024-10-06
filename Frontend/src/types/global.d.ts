@@ -12,7 +12,7 @@ export type TPlace = {
 	location: string;
 	avgRating: number;
 	images: string[];
-	categories: string[];
+	categories: TCategory[];
 	openingHours: {
 		sunday: TOpeningHours;
 		monday: TOpeningHours;
@@ -22,7 +22,7 @@ export type TPlace = {
 		friday: TOpeningHours;
 		saturday: TOpeningHours;
 	};
-	tags: string[];
+	tags: TTag[];
 };
 
 type TOpeningHours = {
