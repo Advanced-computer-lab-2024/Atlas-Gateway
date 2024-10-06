@@ -38,8 +38,7 @@ export const createActivities = async (req: Request, res: Response) => {
 export const getActivityById = async (req: Request, res: Response) => {
 	try {
 		const { id } = req.params;
-		const activity = await Activity.findById(id
-		);
+		const activity = await Activity.findById(id);
 		if (!activity) {
 			return res.status(404).send("cant find Activity");
 		}
@@ -48,7 +47,7 @@ export const getActivityById = async (req: Request, res: Response) => {
 		console.log(error);
 		res.status(500).send("error getting an activity");
 	}
-}
+};
 
 export const getActivities = async (req: Request, res: Response) => {
 	try {

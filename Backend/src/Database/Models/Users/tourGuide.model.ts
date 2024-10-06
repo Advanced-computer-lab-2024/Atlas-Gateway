@@ -16,7 +16,7 @@ export interface ITourGuide extends Document {
 		end: Date;
 	};
 	itinerary: [Types.ObjectId];
-	isVerified:boolean;
+	isVerified: boolean;
 }
 
 const tourGuideSchema = new Schema<ITourGuide>(
@@ -35,7 +35,7 @@ const tourGuideSchema = new Schema<ITourGuide>(
 			end: { type: Date },
 		},
 		itinerary: [{ type: Schema.Types.ObjectId, ref: "Itinerary" }],
-		isVerified:{type:Boolean,default:false}
+		isVerified: { type: Boolean, default: false },
 	},
 	schemaConfig,
 );

@@ -101,7 +101,7 @@ export function filterByRatings(query: any): PipelineStage[] {
 
 		pipeline.push({
 			$match: {
-				rating: { $gte: minRating, $lte: maxRating },
+				avgRating: { $gte: minRating, $lte: maxRating },
 			},
 		});
 	}

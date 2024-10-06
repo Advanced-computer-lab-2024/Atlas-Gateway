@@ -10,8 +10,13 @@ interface IProduct extends Document {
 	quantity: number;
 	isArchived: boolean;
 	sales: number;
-	rating: number;
-	review: string;
+	reviews: {
+		userId: Types.ObjectId;
+		review: string;
+		rating: number;
+	};
+	avgRating: number;
+	totalNumberOfRatings: number;
 }
 
 const productSchema = new Schema<IProduct>(
@@ -28,8 +33,13 @@ const productSchema = new Schema<IProduct>(
 		quantity: { type: Number, required: true },
 		isArchived: { type: Boolean },
 		sales: { type: Number },
-		rating: { type: Number },
-		review: { type: String },
+		reviews: {
+			userId: { type: Schema.Types.ObjectId, required: false },
+			review: { type: String, required: false },
+			rating: { type: Number, min: 0, max: 5 },
+		},
+		avgRating: { type: Number, min: 0, max: 5, default: 0 },
+		totalNumberOfRatings: { type: Number, default: 0 },
 	},
 	schemaConfig,
 );
