@@ -7,7 +7,7 @@ import { TAdvetisor, TSeller, TTourGuide, TTourist } from "@/types/global";
 
 
 import ENDPOINTS from "./ENDPOINTS";
-import { TAdvertiserProfileResponse, TTourGuideProfileResponse, TTouristProfileResponse } from "./types";
+import { TAdvertiserProfileResponse, TSellerProfileResponse, TTourGuideProfileResponse, TTouristProfileResponse } from "./types";
 
 
 export function apiTouristProfile(_id: string) {
@@ -36,7 +36,7 @@ export function apiEditTouristProfile(_id: string, data: TTourist) {
 }
 
 export function apiSellerProfile(_id: string) {
-	return axios<TAdvertiserProfileResponse>({
+	return axios<TSellerProfileResponse>({
 		method: "GET",
 		url: ENDPOINTS.seller.show(_id),
 		headers: {
@@ -46,17 +46,17 @@ export function apiSellerProfile(_id: string) {
 		baseURL: "http://localhost:5000",
 	});
 }
-export function apiEditSellerProfile(id: string, data: TSeller) {
-    return axios<TAdvertiserProfileResponse>({
-        method: "PUT",
-        url: ENDPOINTS.seller.update(id),
-        headers: {
-            "Content-Type": "application/json",
-            userid: id,
-        },
-        data,
-        baseURL: "http://localhost:5000",
-    });
+export function apiEditSellerProfile(_id: string, data: TSeller) {
+	return axios<TAdvertiserProfileResponse>({
+		method: "PUT",
+		url: ENDPOINTS.seller.update(_id),
+		headers: {
+			"Content-Type": "application/json",
+			userid: _id,
+		},
+		data,
+		baseURL: "http://localhost:5000",
+	});
 }
 
 export function apiAdvertiserProfile(_id: string) {
@@ -70,13 +70,13 @@ export function apiAdvertiserProfile(_id: string) {
 		baseURL: "http://localhost:5000",
 	});
 }
-export function apiEditAdvertiserProfile(id: string, data: TAdvetisor) {
+export function apiEditAdvertiserProfile(_id: string, data: TAdvetisor) {
 	return axios<TAdvertiserProfileResponse>({
 		method: "PUT",
-		url: ENDPOINTS.advertiser.update(id),
+		url: ENDPOINTS.advertiser.update(_id),
 		headers: {
 			"Content-Type": "application/json",
-			userid: id,
+			userid: _id,
 		},
 		data,
 		baseURL: "http://localhost:5000",
@@ -94,13 +94,13 @@ export function apiTourGuideProfile(_id: string) {
 		baseURL: "http://localhost:5000",
 	});
 }
-export function apiEditTourGuideProfile(id: string, data: TTourGuide) {
+export function apiEditTourGuideProfile(_id: string, data: TTourGuide) {
 	return axios<TTourGuideProfileResponse>({
 		method: "PUT",
-		url: ENDPOINTS.tourGuide.update(id),
+		url: ENDPOINTS.tourGuide.update(_id),
 		headers: {
 			"Content-Type": "application/json",
-			userid: id,
+			userid: _id,
 		},
 		data,
 		baseURL: "http://localhost:5000",

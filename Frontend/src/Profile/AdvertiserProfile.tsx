@@ -31,13 +31,10 @@ export default function AdvertiserProfile() {
 					</Flex>
 					<Flex isColumn>
 						<Label.Big700>
-							{data?.companyName || "Joe Doe Advertiser"}
+							{data?.username || "joedoe123"}
 						</Label.Big700>
 						<Label.Big400>
 							{data?.email || "joedoe123@gmail.com"}
-						</Label.Big400>
-						<Label.Big400>
-							{data?.username || "joedoe123"}
 						</Label.Big400>
 						<hr className="border-black" />
 						<Label.Big400>
@@ -56,9 +53,8 @@ export default function AdvertiserProfile() {
 							</a>
 						</Label.Big400>
 						<br></br>
-						<Label.Big400>
-							{data?.description || "This is a description"}
-						</Label.Big400>
+						<Label.Big400><u>Company Profile:</u></Label.Big400>
+						<Label.Mid400>{data?.description}</Label.Mid400>
 					</Flex>
 				</Flex>
 			</Card>

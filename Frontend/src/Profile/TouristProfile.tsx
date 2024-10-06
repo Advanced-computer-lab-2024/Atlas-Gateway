@@ -20,7 +20,9 @@ export default function TouristProfile() {
 						</Avatar>
 					</Flex>
 					<Flex isColumn>
-						<Label.Big700>{data?.username || "John Doe"}</Label.Big700>
+						<Label.Big700>
+							{data?.username || "John Doe"}
+						</Label.Big700>
 						<Label.Big400>
 							{data?.email || "joedoe123@gmail.com"}
 						</Label.Big400>

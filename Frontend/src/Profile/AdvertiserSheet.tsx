@@ -33,14 +33,8 @@ import {
 } from "../components/ui/sheet";
 
 export const formSchema = z.object({
-	companyName: z.string().min(2, {
-		message: "Company Name must be at least 2 characters.",
-	}),
 	email: z.string().email({
 		message: "Please enter a valid email address.",
-	}),
-	username: z.string().min(2, {
-		message: "Username must be at least 2 characters.",
 	}),
 	hotline: z.string().min(11, {
 		message: "Hotline must be at least 11 characters.",
@@ -98,27 +92,6 @@ export default function AdvertiserSheet() {
 									save when you're done.
 								</SheetDescription>
 							</SheetHeader>
-
-							{/* Name input */}
-							<FormField
-								control={form.control}
-								name="companyName"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Company Name:-:-</FormLabel>
-										<FormControl>
-											<Input
-												placeholder="John Doe"
-												{...field}
-											/>
-										</FormControl>
-										<FormDescription>
-											This is your public display Company
-											name.
-										</FormDescription>
-									</FormItem>
-								)}
-							/>
 
 							{/* Email input */}
 							<FormField
@@ -180,13 +153,13 @@ export default function AdvertiserSheet() {
 								)}
 							/>
 
-							{/* Description input */}
+							{/* Company Profile input */}
 							<FormField
 								control={form.control}
 								name="description"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Description:-</FormLabel>
+										<FormLabel>Company Profile:-</FormLabel>
 										<FormControl>
 											<Textarea
 												id="description"

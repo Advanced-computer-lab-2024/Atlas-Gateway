@@ -22,7 +22,6 @@ import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import {
 	Sheet,
-	SheetClose,
 	SheetContent,
 	SheetDescription,
 	SheetFooter,
@@ -123,11 +122,9 @@ export default function TouristSheet() {
 								)}
 							/>
 							<SheetFooter>
-								<SheetClose asChild>
 									<Button type="submit" onClick={onSubmit}>
 										Save changes
 									</Button>
-								</SheetClose>
 							</SheetFooter>
 						</form>
 					</Form>

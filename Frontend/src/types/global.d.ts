@@ -69,7 +69,6 @@ export interface TSeller extends TUser {
 }
 
 export interface TAdvetisor extends TUser {
-	companyName: string;
 	email: string;
 	hotline: number;
 	website: string;
@@ -77,7 +76,6 @@ export interface TAdvetisor extends TUser {
 }
 
 export interface TTourGuide extends TUser {
-	name: string;
 	email: string;
 	mobileNumber: string;
 	yearsOfExperience: number;

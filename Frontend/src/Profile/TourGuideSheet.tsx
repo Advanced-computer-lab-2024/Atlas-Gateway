@@ -23,7 +23,6 @@ import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import {
 	Sheet,
-	SheetClose,
 	SheetContent,
 	SheetDescription,
 	SheetFooter,
@@ -39,7 +38,7 @@ const formSchema = z.object({
 	mobileNumber: z.string().min(11, {
 		message: "Mobile number must be at least 11 characters.",
 	}),
-	yearsOfExperience: z.number().int(),
+	yearsOfExperience: z.coerce.number(),
 	previousWork: z.string().min(2, {
 		message: "Previous work must be at least 2 characters.",
 	}),
@@ -140,12 +139,13 @@ export default function TourGuideSheet() {
 										</FormLabel>
 										<FormControl>
 											<Input
+												type="number"
 												id="yearsOfExperience"
 												{...field}
 											/>
 										</FormControl>
 										<FormDescription>
-											This is your Description
+											Update Your Years of Experience
 										</FormDescription>
 									</FormItem>
 								)}
@@ -157,7 +157,9 @@ export default function TourGuideSheet() {
 								name="previousWork"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Description:-</FormLabel>
+										<FormLabel>
+											Previous Work Experience:-
+										</FormLabel>
 										<FormControl>
 											<Textarea
 												id="previousWork"
@@ -165,15 +167,15 @@ export default function TourGuideSheet() {
 											/>
 										</FormControl>
 										<FormDescription>
-											This is your Description
+											Update your Previous Work Experience
 										</FormDescription>
 									</FormItem>
 								)}
 							/>
 							<SheetFooter>
-								<SheetClose asChild>
-									<Button type="submit">Save changes</Button>
-								</SheetClose>
+								<Button type="submit" onClick={onSubmit}>
+									Save changes
+								</Button>
 							</SheetFooter>
 						</form>
 					</Form>
