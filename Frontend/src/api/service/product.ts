@@ -20,6 +20,7 @@ export function apiProducts(_id: string | undefined, filters: Record<string, str
 		},
 		params: {
 			_id,
+			limit: 12,
 			...filters,
 		},
 		baseURL: "http://localhost:5000",

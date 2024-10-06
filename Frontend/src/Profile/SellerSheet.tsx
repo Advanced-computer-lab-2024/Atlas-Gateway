@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -32,7 +32,10 @@ import {
 	SheetTrigger,
 } from "../components/ui/sheet";
 
-export const formSchema = z.object({
+const formSchema = z.object({
+	name: z.string().min(2, {
+		message: "Name must be at least 2 characters.",
+	}),
 	companyName: z.string().min(2, {
 		message: "Company Name must be at least 2 characters.",
 	}),
@@ -46,11 +49,12 @@ export const formSchema = z.object({
 });
 
 export default function SellerSheet() {
+	const [open, setOpen] = useState(false);
 	const form = useForm<TSeller>({
 		resolver: zodResolver(formSchema),
 	});
 
-	const { reset, getValues } = form;
+	const { reset, getValues, formState } = form;
 	const { data, refetch } = useSellerProfile();
 
 	useEffect(() => {
@@ -59,107 +63,127 @@ export default function SellerSheet() {
 		}
 	}, [data, reset]);
 
-	const { doEditSellerProfile } = useUpdateSellerProfile(refetch);
+	const { doEditSellerProfile } = useUpdateSellerProfile(() => {
+		refetch();
+		setOpen(false);
+	});
 
 	const onSubmit = () => {
 		const data = getValues();
 		doEditSellerProfile(data);
 	};
+
 	return (
-		<div>
-			<Sheet>
-				<SheetTrigger asChild>
-					<Button className="align p-6 justify-center">
-						<Label.Big400>Update Profile</Label.Big400>
-					</Button>
-				</SheetTrigger>
-				<SheetContent>
-					<Form {...form}>
-						<form
-							onSubmit={form.handleSubmit(onSubmit)}
-							className="space-y-8"
-						>
-							<SheetHeader>
-								<SheetTitle>
-									<Label.Big600>Edit profile</Label.Big600>
-								</SheetTitle>
-								<SheetDescription>
-									Make changes to your profile here. Click
-									save when you're done.
-								</SheetDescription>
-							</SheetHeader>
+		<Sheet open={open} onOpenChange={setOpen}>
+			<SheetTrigger asChild>
+				<Button className="align p-6 justify-center">
+					<Label.Big400>Update Profile</Label.Big400>
+				</Button>
+			</SheetTrigger>
+			<SheetContent>
+				<Form {...form}>
+					<form
+						onSubmit={form.handleSubmit(onSubmit)}
+						className="space-y-8"
+					>
+						<SheetHeader>
+							<SheetTitle>
+								<Label.Big600>Edit profile</Label.Big600>
+							</SheetTitle>
+							<SheetDescription>
+								Make changes to your profile here. Click save
+								when you're done.
+							</SheetDescription>
+						</SheetHeader>
 
-							{/* Name input */}
-							<FormField
-								control={form.control}
-								name="companyName"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Company Name:-:-</FormLabel>
-										<FormControl>
-											<Input
-												placeholder="John Doe"
-												{...field}
-											/>
-										</FormControl>
-										<FormDescription>
-											This is your public display Company
-											name.
-										</FormDescription>
-									</FormItem>
-								)}
-							/>
+						<FormField
+							control={form.control}
+							name="name"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Name</FormLabel>
+									<FormControl>
+										<Input
+											placeholder="John Doe"
+											{...field}
+										/>
+									</FormControl>
+									<FormDescription>
+										This is your name.
+									</FormDescription>
+								</FormItem>
+							)}
+						/>
 
-							{/* Email input */}
-							<FormField
-								control={form.control}
-								name="email"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel> Email:-</FormLabel>
-										<FormControl>
-											<Input
-												placeholder="joedoe123@gamil.com"
-												{...field}
-											/>
-										</FormControl>
-										<FormDescription>
-											This is your email.
-										</FormDescription>
-									</FormItem>
-								)}
-							/>
+						{/* Name input */}
+						<FormField
+							control={form.control}
+							name="companyName"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Company Name</FormLabel>
+									<FormControl>
+										<Input
+											placeholder="Atlas gateway"
+											{...field}
+										/>
+									</FormControl>
+									<FormDescription>
+										This is your Company display name.
+									</FormDescription>
+								</FormItem>
+							)}
+						/>
 
-							{/* Description input */}
-							<FormField
-								control={form.control}
-								name="description"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Description:-</FormLabel>
-										<FormControl>
-											<Textarea
-												id="description"
-												{...field}
-											/>
-										</FormControl>
-										<FormDescription>
-											This is your Description
-										</FormDescription>
-									</FormItem>
-								)}
-							/>
-							<SheetFooter>
-								<SheetClose asChild>
-									<Button type="submit" onClick={onSubmit}>
-										Save changes
-									</Button>
-								</SheetClose>
-							</SheetFooter>
-						</form>
-					</Form>
-				</SheetContent>
-			</Sheet>
-		</div>
+						{/* Email input */}
+						<FormField
+							control={form.control}
+							name="email"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel> Email</FormLabel>
+									<FormControl>
+										<Input
+											placeholder="joedoe123@gamil.com"
+											{...field}
+										/>
+									</FormControl>
+									<FormDescription>
+										This is your email.
+									</FormDescription>
+								</FormItem>
+							)}
+						/>
+
+						{/* Description input */}
+						<FormField
+							control={form.control}
+							name="description"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Description</FormLabel>
+									<FormControl>
+										<Textarea id="description" {...field} />
+									</FormControl>
+									<FormDescription>
+										This is your Description
+									</FormDescription>
+								</FormItem>
+							)}
+						/>
+						<SheetFooter>
+							<SheetClose asChild>
+								<Button
+									type="submit"
+									disabled={!formState.isValid}
+								>
+									Save changes
+								</Button>
+							</SheetClose>
+						</SheetFooter>
+					</form>
+				</Form>
+			</SheetContent>
+		</Sheet>
 	);
 }

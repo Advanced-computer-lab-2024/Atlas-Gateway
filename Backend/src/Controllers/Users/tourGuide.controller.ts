@@ -66,21 +66,15 @@ export const updateTourGuide = async (req: Request, res: Response) => {
 	if (!Types.ObjectId.isValid(id)) {
 		return res.status(400).send("Id is Invalid ");
 	}
+	
 
-	const { email, password, picture, experience, previous } = req.body;
 	try {
 		const tourGuide = await TourGuide.findById(id);
 		const Verified = tourGuide?.isVerified;
 		if (Verified) {
 			const newAdvertiser = await TourGuide.findByIdAndUpdate(
 				id,
-				{
-					email,
-					password,
-					picture,
-					experience,
-					prevWork: previous,
-				},
+				req.body,
 				{
 					new: true,
 				},

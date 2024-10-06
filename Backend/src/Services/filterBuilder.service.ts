@@ -132,11 +132,11 @@ export function filterByLanguage(query: any): PipelineStage[] {
 export function filterByCategory(query: any): PipelineStage[] {
 	const pipeline: PipelineStage[] = [];
 
-	if (query.category) {
+	if (query.categories) {
 		pipeline.push({
 			$match: {
-				category: {
-					$in: query.category
+				categories: {
+					$in: query.categories
 						.split(",")
 						.map(
 							(category: string) => new Types.ObjectId(category),

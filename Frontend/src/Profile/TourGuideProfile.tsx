@@ -22,6 +22,9 @@ export default function TourGuideProfile() {
 					<Flex isColumn gap="4">
 						<Flex isColumn gap="2">
 							<Label.Big700>{data?.username}</Label.Big700>
+							<Label.Big400>
+								{data?.name || "joedoe123"}
+							</Label.Big400>
 							<Label.Big400>{data?.email || "N/A"}</Label.Big400>
 						</Flex>
 						<hr className="border-black" />
@@ -29,7 +32,7 @@ export default function TourGuideProfile() {
 							<Flex gap="2">
 								<Label.Big400>Mobile Number:</Label.Big400>
 								<Label.Thin400>
-									{data?.mobileNumber || "N/A"}
+									{data?.mobile || "N/A"}
 								</Label.Thin400>
 							</Flex>
 							<Flex gap="2">
@@ -37,13 +40,13 @@ export default function TourGuideProfile() {
 									Years of Experience:
 								</Label.Big400>
 								<Label.Thin400>
-									{data?.yearsOfExperience || 0} years
+									{data?.experience || 0} years
 								</Label.Thin400>
 							</Flex>
 						</Flex>
 						<Flex isColumn gap="2">
 							<Label.Big400>Previous Work:</Label.Big400>
-							<Label.Mid400>{data?.previousWork}</Label.Mid400>
+							<Label.Mid400>{data?.prevWork}</Label.Mid400>
 						</Flex>
 					</Flex>
 				</Flex>

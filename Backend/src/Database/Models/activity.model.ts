@@ -7,7 +7,7 @@ export interface IActivity extends Document {
 	dateTime: Date;
 	location: string;
 	tags: [Types.ObjectId];
-	category: [Types.ObjectId];
+	categories: [Types.ObjectId];
 	minPrice: number;
 	maxPrice: number;
 	specialDiscounts: number;
@@ -28,7 +28,7 @@ const activitySchema = new Schema<IActivity>(
 		dateTime: { type: Date, required: true },
 		location: { type: String, required: true },
 		tags: [{ type: Schema.Types.ObjectId, ref: "Tag", required: true }],
-		category: [
+		categories: [
 			{
 				type: Schema.Types.ObjectId,
 				ref: "Category",

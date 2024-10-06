@@ -1,6 +1,7 @@
 export type TUser = {
 	_id: string;
 	username: string;
+	name: string;
 	type: string;
 };
 
@@ -77,9 +78,9 @@ export interface TAdvetisor extends TUser {
 
 export interface TTourGuide extends TUser {
 	email: string;
-	mobileNumber: string;
-	yearsOfExperience: number;
-	previousWork: string;
+	mobile: string;
+	experience: number;
+	prevWork: string;
 	description: string;
 }
 

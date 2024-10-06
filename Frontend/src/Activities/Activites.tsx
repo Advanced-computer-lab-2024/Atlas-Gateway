@@ -78,7 +78,7 @@ export default function Activites() {
 							}}
 						/>
 					</Flex>
-					{user?.type !== "advertiser" && <AddActivityForm />}
+					{user?.type === "advertiser" && <AddActivityForm />}
 				</Flex>
 			</Flex>
 			<Flex
