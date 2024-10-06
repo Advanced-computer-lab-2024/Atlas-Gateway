@@ -15,6 +15,7 @@ export const createSeller = async (req: Request, res: Response) => {
 		}
 		const user = new Seller({
 			username,
+			name,
 			email,
 			password,
 			picture,
