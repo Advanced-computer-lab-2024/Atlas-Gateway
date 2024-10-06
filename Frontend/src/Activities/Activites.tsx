@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import { useActivities } from "@/api/data/useActivities";
 import { useCategories } from "@/api/data/useCategories";
 import { usePagination } from "@/api/data/usePagination";
@@ -15,13 +17,21 @@ import {
 	PaginationPrevious,
 } from "@/components/ui/pagination";
 import { useLoginStore } from "@/store/loginStore";
+import { TActivity } from "@/types/global";
 
 import ActivityCard from "./ActivityCard";
-import AddActivityForm from "./AddActivity/AddActivityForm";
+import AddActivityForm from "./Form/ActivityForm";
+import ActivityForm from "./Form/ActivityForm";
 
 export default function Activites() {
 	const { user } = useLoginStore();
 	const { data, meta } = useActivities();
+	const [open, setOpen] = useState(false);
+	const [activity, setActivity] = useState<TActivity>();
+	const editDrawer = (activity: TActivity) => {
+		setOpen(true);
+		setActivity(activity);
+	};
 	const { page, onPageChange, pagesCount } = usePagination({
 		pageNum: meta?.pages || 1,
 		pagesCount: meta?.pages || 1,
@@ -78,14 +88,16 @@ export default function Activites() {
 							}}
 						/>
 					</Flex>
-					{user?.type === "advertiser" && <AddActivityForm />}
+					{user?.type === "advertiser" && <ActivityForm type="Add" />}
 				</Flex>
 			</Flex>
 			<Flex
 				className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2"
 				gap="4"
 			>
-				{data?.map((activity) => <ActivityCard {...activity} />)}
+				{data?.map((activity) => (
+					<ActivityCard {...activity} editDrawer={editDrawer} />
+				))}
 			</Flex>
 			{pagesCount > 1 && (
 				<Pagination>

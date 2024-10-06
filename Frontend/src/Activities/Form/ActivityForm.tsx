@@ -29,7 +29,12 @@ import {
 import { Checkbox } from "../../components/ui/checkbox";
 import { activitySchema } from "./schema";
 
-const AddAdvertiserForm = () => {
+interface props {
+	id?: string;
+	type: string;
+}
+
+const ActivityForm = ({ id, type }: props) => {
 	const { data: categories } = useCategories();
 	const { data: tags } = useTags();
 
@@ -44,25 +49,39 @@ const AddAdvertiserForm = () => {
 	const { handleSubmit, control } = formMethods;
 
 	const onSubmit = (data: z.infer<typeof activitySchema>) => {
-		axios
-			.post(`http://localhost:5000/api/activity/create`, data)
-			.then((res) => {
-				console.log(res.status);
-				// will add here something to give a feedback later
-			})
-			.catch((error) => {
-				console.log(error);
-			});
+		{
+			id
+				? axios
+						.post(`http://localhost:5000/api/activity/create`, data)
+						.then((res) => {
+							console.log(res.status);
+							// will add here something to give a feedback later
+						})
+						.catch((error) => {
+							console.log(error);
+						})
+				: axios
+						.post(
+							`http://localhost:5000/api/activity/update/${id}`,
+							data,
+						)
+						.then((res) => {
+							console.log(res.status);
+							// will add here something to give a feedback later
+						})
+						.catch((error) => {
+							console.log(error);
+						});
+		}
 	};
-
 	return (
 		<Sheet>
 			<SheetTrigger asChild>
-				<Button variant="outline">Add activity</Button>
+				<Button variant="outline">{type} activity</Button>
 			</SheetTrigger>
 			<SheetContent>
 				<SheetHeader>
-					<SheetTitle>Add an activity</SheetTitle>
+					<SheetTitle>{type} an activity</SheetTitle>
 				</SheetHeader>
 				<FormProvider {...formMethods}>
 					<form
@@ -278,4 +297,4 @@ const AddAdvertiserForm = () => {
 	);
 };
 
-export default AddAdvertiserForm;
+export default ActivityForm;
