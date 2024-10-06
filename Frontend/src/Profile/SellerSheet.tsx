@@ -2,29 +2,21 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import {
-	Form,
-	FormControl,
-	FormDescription,
-	FormField,
-	FormItem,
-	FormLabel,
-} from "@/components/ui/form";
+
+
+import { useSellerProfile, useUpdateSellerProfile } from "@/api/data/useProfile";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
+
+
 
 import Label from "../components/ui/Label";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
-import {
-	Sheet,
-	SheetClose,
-	SheetContent,
-	SheetDescription,
-	SheetFooter,
-	SheetHeader,
-	SheetTitle,
-	SheetTrigger,
-} from "../components/ui/sheet";
+import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "../components/ui/sheet";
+import { useEffect } from "react";
+import { TSeller } from "@/types/global";
+
 
 export const formSchema = z.object({
 	companyName: z.string().min(2, {
@@ -42,24 +34,29 @@ export const formSchema = z.object({
 	profilePicture: z.string().nullable(),
 });
 
-export const defaultValues = {
-	companyName: "",
-	email: "",
-	username: "",
-	description: "",
-	profilePicture: null,
-};
+
 
 export default function SellerSheet() {
-	const form = useForm<z.infer<typeof formSchema>>({
+	const form = useForm<TSeller>({
 		resolver: zodResolver(formSchema),
-		defaultValues,
-	});
+    });
+    
+    const { reset, getValues } = form;
+    const { data, refetch } = useSellerProfile();
+    
+    useEffect(() => {
+		if (data) {
+			reset(data);
+		}
+	}, [data, reset]);
 
-	const onSubmit = () => {
-		console.log("Submitted");
-	};
 
+	const { doEditSellerProfile } = useUpdateSellerProfile(refetch);
+
+    const onSubmit = () => {
+        const data = getValues();
+        doEditSellerProfile(data);
+    }
 	return (
 		<div>
 			<Sheet>

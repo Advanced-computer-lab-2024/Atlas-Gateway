@@ -51,8 +51,8 @@ export default function TouristSheet() {
 	});
 
 	const { reset, getValues } = form;
-
-	const { data, refetch } = useTouristProfile();
+    const { data, refetch } = useTouristProfile();
+	
 
 	useEffect(() => {
 		if (data) {

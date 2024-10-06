@@ -25,6 +25,9 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from "../components/ui/sheet";
+import { TTourGuide } from "@/types/global";
+import { useTourGuideProfile, useUpdateTourGuideProfile } from "@/api/data/useProfile";
+import { useEffect } from "react";
 
 export const formSchema = z.object({
 	name: z.string().min(2, {
@@ -46,24 +49,26 @@ export const formSchema = z.object({
 	profilePicture: z.string().nullable(),
 });
 
-export const defaultValues = {
-	name: "",
-	email: "",
-	username: "",
-	mobileNumber: "",
-	yearsOfExperience: 0,
-	previousWork: "",
-	profilePicture: null,
-};
-
 export default function TourGuideSheet() {
-	const form = useForm<z.infer<typeof formSchema>>({
+	const form = useForm<TTourGuide>({
 		resolver: zodResolver(formSchema),
-		defaultValues,
 	});
 
+	const { reset, getValues } = form;
+    const { data, refetch } = useTourGuideProfile();
+	
+
+	useEffect(() => {
+		if (data) {
+			reset(data);
+		}
+	}, [data, reset]);
+
+	const { doEditTourGuideProfile } = useUpdateTourGuideProfile(refetch);
+
 	const onSubmit = () => {
-		console.log("Submitted");
+		const data = getValues();
+		doEditTourGuideProfile(data);
 	};
 
 	return (

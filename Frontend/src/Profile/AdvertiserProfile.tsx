@@ -4,7 +4,6 @@ import Label from "../components/ui/Label";
 import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
 import { Card } from "../components/ui/card";
 import { Flex } from "../components/ui/flex";
-import Navbar from "../layout/Navbar";
 import AdvertiserSheet from "./AdvertiserSheet";
 
 export default function AdvertiserProfile() {

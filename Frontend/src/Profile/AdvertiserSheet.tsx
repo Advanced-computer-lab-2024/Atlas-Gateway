@@ -2,29 +2,21 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import {
-	Form,
-	FormControl,
-	FormDescription,
-	FormField,
-	FormItem,
-	FormLabel,
-} from "@/components/ui/form";
+
+
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
+import { TAdvetisor } from "@/types/global";
+
+
 
 import Label from "../components/ui/Label";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
-import {
-	Sheet,
-	SheetClose,
-	SheetContent,
-	SheetDescription,
-	SheetFooter,
-	SheetHeader,
-	SheetTitle,
-	SheetTrigger,
-} from "../components/ui/sheet";
+import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "../components/ui/sheet";
+import { useAdvertiserProfile, useUpdateAdvertiserProfile } from "@/api/data/useProfile";
+import { useEffect } from "react";
+
 
 export const formSchema = z.object({
 	companyName: z.string().min(2, {
@@ -48,25 +40,31 @@ export const formSchema = z.object({
 	profilePicture: z.string().nullable(),
 });
 
-export const defaultValues = {
-	companyName: "",
-	email: "",
-	username: "",
-	hotline: "",
-	website: "",
-	description: "",
-	profilePicture: null,
-};
+
 
 export default function AdvertiserSheet() {
-	const form = useForm<z.infer<typeof formSchema>>({
+
+	const form = useForm<TAdvetisor>({
 		resolver: zodResolver(formSchema),
-		defaultValues,
 	});
 
+	const { reset, getValues } = form;
+    const { data, refetch } = useAdvertiserProfile();
+	
+
+	useEffect(() => {
+		if (data) {
+			reset(data);
+		}
+	}, [data, reset]);
+
+	const { doEditAdvertiserProfile } = useUpdateAdvertiserProfile(refetch);
+
 	const onSubmit = () => {
-		console.log("Submitted");
+		const data = getValues();
+		doEditAdvertiserProfile(data);
 	};
+
 	return (
 		<div>
 			<Sheet>

@@ -1,13 +1,14 @@
 import axios from "axios";
 
-import { TTourist } from "@/types/global";
+
+
+import { TAdvetisor, TSeller, TTourGuide, TTourist } from "@/types/global";
+
+
 
 import ENDPOINTS from "./ENDPOINTS";
-import {
-	TAdvertiserProfileResponse,
-	TTourGuideProfileResponse,
-	TTouristProfileResponse,
-} from "./types";
+import { TAdvertiserProfileResponse, TTourGuideProfileResponse, TTouristProfileResponse } from "./types";
+
 
 export function apiTouristProfile(_id: string) {
 	return axios<TTouristProfileResponse>({
@@ -45,6 +46,18 @@ export function apiSellerProfile(_id: string) {
 		baseURL: "http://localhost:5000",
 	});
 }
+export function apiEditSellerProfile(id: string, data: TSeller) {
+    return axios<TAdvertiserProfileResponse>({
+        method: "PUT",
+        url: ENDPOINTS.seller.update(id),
+        headers: {
+            "Content-Type": "application/json",
+            userid: id,
+        },
+        data,
+        baseURL: "http://localhost:5000",
+    });
+}
 
 export function apiAdvertiserProfile(_id: string) {
 	return axios<TAdvertiserProfileResponse>({
@@ -57,6 +70,18 @@ export function apiAdvertiserProfile(_id: string) {
 		baseURL: "http://localhost:5000",
 	});
 }
+export function apiEditAdvertiserProfile(id: string, data: TAdvetisor) {
+	return axios<TAdvertiserProfileResponse>({
+		method: "PUT",
+		url: ENDPOINTS.advertiser.update(id),
+		headers: {
+			"Content-Type": "application/json",
+			userid: id,
+		},
+		data,
+		baseURL: "http://localhost:5000",
+	});
+}
 
 export function apiTourGuideProfile(_id: string) {
 	return axios<TTourGuideProfileResponse>({
@@ -66,6 +91,18 @@ export function apiTourGuideProfile(_id: string) {
 			"Content-Type": "application/json",
 			userid: _id,
 		},
+		baseURL: "http://localhost:5000",
+	});
+}
+export function apiEditTourGuideProfile(id: string, data: TTourGuide) {
+	return axios<TTourGuideProfileResponse>({
+		method: "PUT",
+		url: ENDPOINTS.tourGuide.update(id),
+		headers: {
+			"Content-Type": "application/json",
+			userid: id,
+		},
+		data,
 		baseURL: "http://localhost:5000",
 	});
 }
