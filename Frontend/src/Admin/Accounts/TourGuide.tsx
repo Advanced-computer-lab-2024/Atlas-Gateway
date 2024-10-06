@@ -14,24 +14,24 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 
-interface PreviousJob {
-	title: string;
-	description: string;
-	company: string;
-	start: Date;
-	end: Date;
-}
+// interface PreviousJob {
+// 	title: string;
+// 	description: string;
+// 	company: string;
+// 	start: Date;
+// 	end: Date;
+// }
 
 interface TourGuide {
 	_id: string;
+	name: string;
 	username: string;
 	email: string;
 	password: string;
-	description: string;
+	Mobile: string;
 	picture: string;
 	experience: string;
-	previous: PreviousJob;
-	itinerary: string[];
+	prevWork: string;
 	isVerified: boolean;
 }
 
@@ -81,17 +81,15 @@ const TourGuide = () => {
 				<TableHeader className="bg-gray-100">
 					<TableRow>
 						<TableHead>Picture</TableHead>
+						<TableHead>Name</TableHead>
 						<TableHead>Username</TableHead>
 						<TableHead>Email</TableHead>
 						<TableHead>Password</TableHead>
-						<TableHead>Description</TableHead>
-						<TableHead>isVerified</TableHead>
-						<TableHead>Picture</TableHead>
+						<TableHead>Mobile</TableHead>
 						<TableHead>Experience</TableHead>
-						<TableHead>Previous Job Title</TableHead>
+						<TableHead>Previous Work</TableHead>
+						<TableHead>isVerified</TableHead>
 						<TableHead></TableHead>
-						{/* <TableHead>Start Date</TableHead>
-						<TableHead>End Date</TableHead> */}
 						<TableHead className="cursor-pointer hover:text-[#2b58ed] w-1">
 							<RotateCw onClick={() => setRefresh(!refresh)} />
 						</TableHead>
@@ -100,28 +98,19 @@ const TourGuide = () => {
 				<TableBody>
 					{tourGuides.map((tourGuide) => (
 						<TableRow key={tourGuide._id}>
-							<TableCell className="p-5">
-								<img
-									src={tourGuide.picture}
-									alt={`${tourGuide.username}`}
-									className="w-full h-auto"
-								/>
+							<TableCell className="p-3">
+								{tourGuide?.picture || "N/A"}
 							</TableCell>
+							<TableCell>{tourGuide?.name}</TableCell>
 							<TableCell>{tourGuide.username}</TableCell>
 							<TableCell>{tourGuide.email}</TableCell>
 							<TableCell>{tourGuide.password}</TableCell>
-							<TableCell>
-								{tourGuide?.description || "N/A"}
-							</TableCell>
-							<TableCell>
-								{tourGuide?.description || "N/A"}
-							</TableCell>
-							<TableCell>{tourGuide?.picture || "N/A"}</TableCell>
+							<TableCell>{tourGuide?.Mobile || "N/A"}</TableCell>
 							<TableCell>
 								{tourGuide?.experience || "N/A"}
 							</TableCell>
 							<TableCell>
-								{tourGuide.previous?.title || "N/A"}
+								{tourGuide?.prevWork || "N/A"}
 							</TableCell>
 							<TableCell>
 								{tourGuide.isVerified ? (

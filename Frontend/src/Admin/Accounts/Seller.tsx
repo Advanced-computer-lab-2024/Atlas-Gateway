@@ -71,11 +71,11 @@ const Sellers = () => {
 				<TableCaption>Registered Sellers.</TableCaption>
 				<TableHeader className="bg-gray-100">
 					<TableRow>
-						<TableHead>Username</TableHead>
+						<TableHead>Picture</TableHead>
 						<TableHead>Name</TableHead>
+						<TableHead>Username</TableHead>
 						<TableHead>Email</TableHead>
 						<TableHead>Password</TableHead>
-						<TableHead>Picture</TableHead>
 						<TableHead>Description</TableHead>
 						<TableHead>isVerified</TableHead>
 						<TableHead className="cursor-pointer hover:text-[#2b58ed] w-1">
@@ -86,13 +86,13 @@ const Sellers = () => {
 				<TableBody>
 					{sellers.map((seller) => (
 						<TableRow key={seller._id}>
+							<TableCell>{seller?.picture || "N/A"}</TableCell>
+							<TableCell>{seller?.name}</TableCell>
 							<TableCell className="p-3">
 								{seller.username}
 							</TableCell>
-							<TableCell>{seller?.name}</TableCell>
 							<TableCell>{seller.email}</TableCell>
 							<TableCell>{seller.password}</TableCell>
-							<TableCell>{seller?.picture || "N/A"}</TableCell>
 							<TableCell>
 								{seller?.description || "N/A"}
 							</TableCell>
