@@ -66,23 +66,11 @@ export const updateTourGuide = async (req: Request, res: Response) => {
 	if (!Types.ObjectId.isValid(id)) {
 		return res.status(400).send("Id is Invalid ");
 	}
-	
-
 	try {
-		const tourGuide = await TourGuide.findById(id);
-		const Verified = tourGuide?.isVerified;
-		if (Verified) {
-			const newAdvertiser = await TourGuide.findByIdAndUpdate(
-				id,
-				req.body,
-				{
-					new: true,
-				},
-			);
-			res.status(200).send(newAdvertiser);
-		} else {
-			res.status(500).send("user not Verified");
-		}
+		const tourGuide = await TourGuide.findByIdAndUpdate(id, req.body, {
+			new: true,
+		});
+		res.status(200).send(tourGuide);
 	} catch (error) {
 		res.status(500).send("Failed to update tourGuide");
 	}
