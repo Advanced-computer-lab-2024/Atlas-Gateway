@@ -11,7 +11,7 @@ export const createActivities = async (req: Request, res: Response) => {
 			dateTime,
 			location,
 			tags,
-			category,
+			categories,
 			minPrice,
 			maxPrice,
 			specialDiscounts,
@@ -22,7 +22,7 @@ export const createActivities = async (req: Request, res: Response) => {
 			dateTime,
 			location,
 			tags,
-			category,
+			categories,
 			minPrice,
 			maxPrice,
 			specialDiscounts,
@@ -56,10 +56,10 @@ export const getActivityById = async (req: Request, res: Response) => {
 				},
 				{
 					$lookup: {
-						from: "category",
-						localField: "category",
+						from: "categories",
+						localField: "categories",
 						foreignField: "_id",
-						as: "category",
+						as: "categories",
 					},
 				},
 			])
@@ -92,14 +92,14 @@ export const getActivities = async (req: Request, res: Response) => {
 			{
 				$lookup: {
 					from: "categories",
-					localField: "category",
+					localField: "categories",
 					foreignField: "_id",
-					as: "category",
+					as: "categories",
 				},
 			},
 			...AggregateBuilder(
 				req.query,
-				["name", "tags.name", "category.name"], // Search fields
+				["name", "tags.name", "categories.name"], // Search fields
 			),
 		];
 
