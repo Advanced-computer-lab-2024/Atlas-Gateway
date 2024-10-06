@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { PipelineStage } from "mongoose";
+import { PipelineStage, Types } from "mongoose";
 
 import { Activity } from "../Database/Models/activity.model";
 import AggregateBuilder from "../Services/aggregation.service";
@@ -38,7 +38,35 @@ export const createActivities = async (req: Request, res: Response) => {
 export const getActivityById = async (req: Request, res: Response) => {
 	try {
 		const { id } = req.params;
-		const activity = await Activity.findById(id);
+		//const activity = await Activity.findById(id);
+		const activity = (
+			await Activity.aggregate([
+				{
+					$match: {
+						_id: new Types.ObjectId(id),
+					},
+				},
+				{
+					$lookup: {
+						from: "tags",
+						localField: "tags",
+						foreignField: "_id",
+						as: "tags",
+					},
+				},
+				{
+					$lookup: {
+						from: "category",
+						localField: "category",
+						foreignField: "_id",
+						as: "category",
+					},
+				},
+			])
+		)[0];
+
+		console.log(activity);
+
 		if (!activity) {
 			return res.status(404).send("cant find Activity");
 		}
