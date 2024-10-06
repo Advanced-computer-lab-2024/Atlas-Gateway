@@ -99,21 +99,16 @@ export const updateAdvertiser = async (req: Request, res: Response) => {
 export const deleteAdvertiser = async (req: Request, res: Response) => {
 	const id = req.params.id;
 	const advertiser = await Advertiser.findById(id);
-	const Verified = advertiser?.isVerified;
 
 	if (!id) {
 		res.status(400).send("id is required");
 	}
 	try {
-		if (Verified) {
-			const deletedAdvertiser = await Advertiser.findByIdAndDelete(id);
-			if (!deletedAdvertiser) {
-				return res.status(404).send("advertiser not found");
-			}
-			res.status(200).send("advertiser deleted successfully");
-		} else {
-			res.status(500).send("user not Verified");
+		const deletedAdvertiser = await Advertiser.findByIdAndDelete(id);
+		if (!deletedAdvertiser) {
+			return res.status(404).send("advertiser not found");
 		}
+		res.status(200).send("advertiser deleted successfully");
 	} catch (error) {
 		res.status(500).send("Failed to delete advertiser");
 	}

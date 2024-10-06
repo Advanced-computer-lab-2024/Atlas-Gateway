@@ -88,14 +88,10 @@ export const updateTourGuide = async (req: Request, res: Response) => {
 export const deleteTourGuide = async (req: Request, res: Response) => {
 	const id = req.params.id;
 	const tourGuide = await TourGuide.findById(id);
-	const Verified = tourGuide?.isVerified;
+
 	try {
-		if (Verified) {
-			await TourGuide.findByIdAndDelete(id);
-			res.status(200).send("tourGuide deleted successfully");
-		} else {
-			res.status(500).send("user not Verified");
-		}
+		await TourGuide.findByIdAndDelete(id);
+		res.status(200).send("tourGuide deleted successfully");
 	} catch (error) {
 		res.status(500).send("Failed to delete tourGuide");
 	}
