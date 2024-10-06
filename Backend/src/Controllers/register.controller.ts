@@ -12,11 +12,14 @@ export const register = async (req: Request, res: Response) => {
 			username,
 			email,
 			password,
+			picture,
 			type,
 			mobileNumber,
 			nationality,
 			dob,
 			occupation,
+			experience,
+			prevWork,
 		} = req.body;
 
 		if (!username || !email || !password) {
@@ -52,6 +55,9 @@ export const register = async (req: Request, res: Response) => {
 					username,
 					email,
 					password,
+					picture,
+					experience,
+					prevWork,
 				});
 				break;
 			case "seller":

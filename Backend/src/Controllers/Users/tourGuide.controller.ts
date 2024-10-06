@@ -21,7 +21,7 @@ export const createTourGuide = async (req: Request, res: Response) => {
 			description,
 			picture,
 			experience,
-			previous,
+			prevWork: previous,
 		});
 		await user.save();
 		res.status(201).send(user);
