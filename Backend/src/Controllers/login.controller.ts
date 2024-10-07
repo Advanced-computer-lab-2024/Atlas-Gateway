@@ -5,6 +5,7 @@ import { Governor } from "../Database/Models/Users/governor.model";
 import { Seller } from "../Database/Models/Users/seller.model";
 import { TourGuide } from "../Database/Models/Users/tourGuide.model";
 import { Tourist } from "../Database/Models/Users/tourist.model";
+import { Admin } from "@/Database/Models/Users/admin.model";
 
 const findUserByUsername = async (username: string) => {
     let user = await Tourist.findOne({ username });
@@ -21,6 +22,9 @@ const findUserByUsername = async (username: string) => {
 
     user = await Advertiser.findOne({ username });
     if (user) return { user, type: "advertiser" };
+    
+    user = await Admin.findOne({ username });
+    if (user) return { user, type: "admin" };
 
     return null;
 };
