@@ -5,4 +5,5 @@ export enum EAccountType {
 	Advertiser = "advertiser",
 	Admin = "admin",
 	TourismGovernor = "governor",
+	Guest = "guest",
 }

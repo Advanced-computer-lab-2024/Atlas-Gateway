@@ -12,11 +12,15 @@ import {
 	PaginationNext,
 	PaginationPrevious,
 } from "@/components/ui/pagination";
+import { useLoginStore } from "@/store/loginStore";
+import { EAccountType } from "@/types/enums";
 
 import ProductCard from "./ProductCard";
 import ProdcutForm from "./ProductForm";
+import ProductForm from "./ProductForm";
 
 export default function Products() {
+	const { user } = useLoginStore();
 	const { data, meta } = useProducts();
 	console.log(data);
 	const { page, onPageChange, pagesCount } = usePagination({
@@ -67,7 +71,9 @@ export default function Products() {
 							}}
 						/>
 						<div className="flex self-end">
-							<ProdcutForm type="Add" />
+							{user?.type === EAccountType.Seller && (
+								<ProductForm type="Add" />
+							)}
 						</div>
 					</Flex>
 				</Flex>

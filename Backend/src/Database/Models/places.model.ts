@@ -63,7 +63,7 @@ const placesSchema = new Schema<IPlaces>(
 		name: { type: String, required: true },
 		location: { type: String, required: true },
 		description: { type: String, required: true },
-		pictures: { type: String, required: true },
+		pictures: { type: String, required: false },
 		openingHours: {
 			sunday: {
 				open: { type: String },

@@ -13,7 +13,7 @@ export default function Navbar() {
 	const navigate = useNavigate();
 
 	const isLoggedIn = user?._id;
-	const routes = accountRoutes[(user?.type ?? "tourist") as EAccountType];
+	const routes = accountRoutes[(user?.type ?? "guest") as EAccountType];
 
 	return (
 		<nav className="bg-surface-secondary h-20 flex justify-between items-center px-4 drop-shadow-2xl border-b-2 border-black">
