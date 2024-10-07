@@ -54,44 +54,47 @@ export default function ActivityCard({
 						<Label.Mid500 className="justify-self-center">
 							{activity?.name}
 						</Label.Mid500>
-						{user?.type === EAccountType.Advertiser && (
-							<DropdownMenu modal={false}>
-								<DropdownMenuTrigger className="absolute right-0">
-									<EllipsisVertical className="cursor-pointer" />
-								</DropdownMenuTrigger>
-								<DropdownMenuContent>
-									<DropdownMenuItem
-										className="flex gap-2 cursor-pointer"
-										onClick={() => {
-											navigate(
-												`/activities/${activity?._id}`,
-											);
-										}}
-									>
-										<Eye />
-										View Details
-									</DropdownMenuItem>
-									<DropdownMenuItem
-										className="flex gap-2 cursor-pointer"
-										onClick={() => {
-											openEditDrawer(activity);
-										}}
-									>
-										<Edit />
-										Edit
-									</DropdownMenuItem>
-									<DropdownMenuItem
-										className="flex gap-2 cursor-pointer"
-										onClick={() => {
-											doDeleteActivity(activity?._id);
-										}}
-									>
-										<Trash />
-										Delete
-									</DropdownMenuItem>
-								</DropdownMenuContent>
-							</DropdownMenu>
-						)}
+
+						<DropdownMenu modal={false}>
+							<DropdownMenuTrigger className="absolute right-0">
+								<EllipsisVertical className="cursor-pointer" />
+							</DropdownMenuTrigger>
+							<DropdownMenuContent>
+								<DropdownMenuItem
+									className="flex gap-2 cursor-pointer"
+									onClick={() => {
+										navigate(
+											`/activities/${activity?._id}`,
+										);
+									}}
+								>
+									<Eye />
+									View Details
+								</DropdownMenuItem>
+								{user?.type === EAccountType.Advertiser && (
+									<>
+										<DropdownMenuItem
+											className="flex gap-2 cursor-pointer"
+											onClick={() => {
+												openEditDrawer(activity);
+											}}
+										>
+											<Edit />
+											Edit
+										</DropdownMenuItem>
+										<DropdownMenuItem
+											className="flex gap-2 cursor-pointer"
+											onClick={() => {
+												doDeleteActivity(activity?._id);
+											}}
+										>
+											<Trash />
+											Delete
+										</DropdownMenuItem>
+									</>
+								)}
+							</DropdownMenuContent>
+						</DropdownMenu>
 					</Flex>
 					<Label.Thin200 className="overflow-ellipsis line-clamp-3">
 						{activity?.description}

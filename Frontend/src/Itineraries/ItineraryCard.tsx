@@ -54,44 +54,49 @@ export default function ItineraryCard({
 						<Label.Mid500 className="justify-self-center">
 							{itinerary?.title ?? "Title"}
 						</Label.Mid500>
-						{user?.type === EAccountType.Guide && (
-							<DropdownMenu modal={false}>
-								<DropdownMenuTrigger className="absolute right-0">
-									<EllipsisVertical className="cursor-pointer" />
-								</DropdownMenuTrigger>
-								<DropdownMenuContent>
-									<DropdownMenuItem
-										className="flex gap-2 cursor-pointer"
-										onClick={() => {
-											navigate(
-												`/itineraries/${itinerary?._id}`,
-											);
-										}}
-									>
-										<Eye />
-										View Details
-									</DropdownMenuItem>
-									<DropdownMenuItem
-										className="flex gap-2 cursor-pointer"
-										onClick={() => {
-											openEditDrawer(itinerary);
-										}}
-									>
-										<Edit />
-										Edit
-									</DropdownMenuItem>
-									<DropdownMenuItem
-										className="flex gap-2 cursor-pointer"
-										onClick={() => {
-											doDeleteItinerary(itinerary?._id);
-										}}
-									>
-										<Trash />
-										Delete
-									</DropdownMenuItem>
-								</DropdownMenuContent>
-							</DropdownMenu>
-						)}
+
+						<DropdownMenu modal={false}>
+							<DropdownMenuTrigger className="absolute right-0">
+								<EllipsisVertical className="cursor-pointer" />
+							</DropdownMenuTrigger>
+							<DropdownMenuContent>
+								<DropdownMenuItem
+									className="flex gap-2 cursor-pointer"
+									onClick={() => {
+										navigate(
+											`/itineraries/${itinerary?._id}`,
+										);
+									}}
+								>
+									<Eye />
+									View Details
+								</DropdownMenuItem>
+								{user?.type === EAccountType.Guide && (
+									<>
+										<DropdownMenuItem
+											className="flex gap-2 cursor-pointer"
+											onClick={() => {
+												openEditDrawer(itinerary);
+											}}
+										>
+											<Edit />
+											Edit
+										</DropdownMenuItem>
+										<DropdownMenuItem
+											className="flex gap-2 cursor-pointer"
+											onClick={() => {
+												doDeleteItinerary(
+													itinerary?._id,
+												);
+											}}
+										>
+											<Trash />
+											Delete
+										</DropdownMenuItem>
+									</>
+								)}
+							</DropdownMenuContent>
+						</DropdownMenu>
 					</Flex>
 					<Flex gap="2" isColumn align="center">
 						<Flex gap="2" align="center" justify="between">
