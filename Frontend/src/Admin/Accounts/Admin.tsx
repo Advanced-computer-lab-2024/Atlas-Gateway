@@ -70,23 +70,25 @@ const Admins = () => {
 						</TableRow>
 					</TableHeader>
 					<TableBody>
-						{admins.map((admin) => (
-							<TableRow key={admin._id}>
-								<TableCell>{admin.username}</TableCell>
-								<TableCell>{admin.email}</TableCell>
-								<TableCell>{admin.password}</TableCell>
-								<TableCell className="cursor-pointer hover:text-red-600 w-1">
-									<button className="bg-red-500 text-white rounded-full p-2 shadow-lg hover:bg-red-600">
-										<Trash
-											className="w-4 h-4"
-											onClick={() => {
-												handleDelete(admin._id);
-											}}
-										/>
-									</button>
-								</TableCell>
-							</TableRow>
-						))}
+						{admins
+							.filter((admin) => admin._id !== user?._id)
+							.map((admin) => (
+								<TableRow key={admin._id}>
+									<TableCell>{admin.username}</TableCell>
+									<TableCell>{admin.email}</TableCell>
+									<TableCell>{admin.password}</TableCell>
+									<TableCell className="cursor-pointer hover:text-red-600 w-1">
+										<button className="bg-red-500 text-white rounded-full p-2 shadow-lg hover:bg-red-600">
+											<Trash
+												className="w-4 h-4"
+												onClick={() => {
+													handleDelete(admin._id);
+												}}
+											/>
+										</button>
+									</TableCell>
+								</TableRow>
+							))}
 					</TableBody>
 				</Table>
 			</div>
