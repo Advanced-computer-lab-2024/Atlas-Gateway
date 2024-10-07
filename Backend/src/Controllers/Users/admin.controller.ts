@@ -3,12 +3,17 @@ import { Request, Response } from "express";
 import { Types } from "mongoose";
 
 import { Admin } from "../../Database/Models/Users/admin.model";
+import uniqueUsername from "../../Services/uniqueUsername.service";
 
 export const createAdmin = async (req: Request, res: Response) => {
 	try {
 		const { username, email, password } = req.body;
 		if (!username || !email || !password) {
 			res.status(400).send("username, email and password are required");
+		}
+		const resultUnique = await uniqueUsername(username);
+		if (!resultUnique) {
+			return res.status(400).send("Username Should Be Unique");
 		}
 		const hashedPassword = await bcrypt.hash(password, 10);
 		const admin = await Admin.create({

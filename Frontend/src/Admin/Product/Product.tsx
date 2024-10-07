@@ -1,12 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { Package, Pencil, RotateCw } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Package, RotateCw } from "lucide-react";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { usePagination } from "@/api/data/usePagination";
-import { useProduct, useProducts } from "@/api/data/useProducts";
+import { useProducts } from "@/api/data/useProducts";
+import { useQueryString } from "@/api/data/useQueryString";
+import Label from "@/components/ui/Label";
 import { Button } from "@/components/ui/button";
 import {
 	FormControl,
@@ -25,6 +26,13 @@ import {
 	PaginationPrevious,
 } from "@/components/ui/pagination";
 import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
+import {
 	Sheet,
 	SheetContent,
 	SheetDescription,
@@ -33,10 +41,10 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from "@/components/ui/sheet";
-import { TProduct } from "@/types/global";
 
 import { productSchema } from "../schema";
 import EditProduct from "./EditProduct";
+import { Flex } from "@/components/ui/flex";
 
 const Product = () => {
 	const { data: products, meta, refetch } = useProducts();
@@ -45,6 +53,7 @@ const Product = () => {
 		pagesCount: meta?.pages || 1,
 	});
 
+	const [query, setQuery] = useQueryString();
 	const formMethods = useForm<z.infer<typeof productSchema>>({
 		resolver: zodResolver(productSchema),
 	});
@@ -73,6 +82,35 @@ const Product = () => {
 				<div className="cursor-pointer hover:text-[#2b58ed]">
 					<RotateCw onClick={() => refetch()} />
 				</div>
+				<Flex gap="2" align="center">
+					<Label.Mid300>Sort:</Label.Mid300>
+					<Select
+						onValueChange={(value) => {
+							if (value === "0") {
+								setQuery({
+									...query,
+									sort: undefined,
+								});
+							} else {
+								setQuery({
+									...query,
+									sort: `avgRating,${value}`,
+								});
+							}
+						}}
+					>
+						<SelectTrigger>
+							<SelectValue placeholder="Sort" />
+						</SelectTrigger>
+						<SelectContent>
+							<SelectItem value="0">None</SelectItem>
+							<SelectItem value="1">Ascending rating</SelectItem>
+							<SelectItem value="-1">
+								Descending rating
+							</SelectItem>
+						</SelectContent>
+					</Select>
+				</Flex>
 				<Sheet>
 					<SheetTrigger asChild>
 						<Button

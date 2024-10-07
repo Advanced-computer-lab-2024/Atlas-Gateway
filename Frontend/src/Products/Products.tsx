@@ -1,9 +1,11 @@
 import { usePagination } from "@/api/data/usePagination";
 import { useProducts } from "@/api/data/useProducts";
+import { useQueryString } from "@/api/data/useQueryString";
 import Filters from "@/components/Filters/Filters";
 import Label from "@/components/ui/Label";
 import { Searchbar } from "@/components/ui/Searchbar";
 import { Flex } from "@/components/ui/flex";
+import { FormControl } from "@/components/ui/form";
 import {
 	Pagination,
 	PaginationContent,
@@ -12,17 +14,23 @@ import {
 	PaginationNext,
 	PaginationPrevious,
 } from "@/components/ui/pagination";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import { useLoginStore } from "@/store/loginStore";
 import { EAccountType } from "@/types/enums";
 
 import ProductCard from "./ProductCard";
-import ProdcutForm from "./ProductForm";
 import ProductForm from "./ProductForm";
 
 export default function Products() {
 	const { user } = useLoginStore();
 	const { data, meta } = useProducts();
-	console.log(data);
+	const [query, setQuery] = useQueryString();
 	const { page, onPageChange, pagesCount } = usePagination({
 		pageNum: meta?.pages || 1,
 		pagesCount: meta?.pages || 1,
@@ -41,8 +49,39 @@ export default function Products() {
 				gap="2"
 				className="bg-surface-secondary p-2 rounded-lg"
 			>
-				<Flex>
+				<Flex justify="between">
 					<Flex gap="1" align="center">
+						<Flex gap="2" align="center">
+							<Label.Mid300>Sort:</Label.Mid300>
+							<Select
+								onValueChange={(value) => {
+									if (value === "0") {
+										setQuery({
+											...query,
+											sort: undefined,
+										});
+									} else {
+										setQuery({
+											...query,
+											sort: `avgRating,${value}`,
+										});
+									}
+								}}
+							>
+								<SelectTrigger>
+									<SelectValue placeholder="Sort" />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectItem value="0">None</SelectItem>
+									<SelectItem value="1">
+										Ascending rating
+									</SelectItem>
+									<SelectItem value="-1">
+										Descending rating
+									</SelectItem>
+								</SelectContent>
+							</Select>
+						</Flex>
 						<Searchbar />
 						<Filters
 							filters={{
@@ -53,12 +92,12 @@ export default function Products() {
 								},
 							}}
 						/>
-						<div className="flex self-end">
-							{user?.type === EAccountType.Seller && (
-								<ProductForm type="Add" />
-							)}
-						</div>
 					</Flex>
+					<div className="flex self-end">
+						{user?.type === EAccountType.Seller && (
+							<ProductForm type="Add" />
+						)}
+					</div>
 				</Flex>
 			</Flex>
 			<Flex

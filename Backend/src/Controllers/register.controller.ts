@@ -6,6 +6,7 @@ import { Governor } from "../Database/Models/Users/governor.model";
 import { Seller } from "../Database/Models/Users/seller.model";
 import { TourGuide } from "../Database/Models/Users/tourGuide.model";
 import { Tourist } from "../Database/Models/Users/tourist.model";
+import uniqueUsername from "../Services/uniqueUsername.service";
 
 export const register = async (req: Request, res: Response) => {
 	try {
@@ -29,6 +30,10 @@ export const register = async (req: Request, res: Response) => {
 
 		const hashedPassword = await bcrypt.hash(password, 10);
 
+		const resultUnique = await uniqueUsername(username);
+		if (!resultUnique) {
+			return res.status(400).send("Username Should Be Unique");
+		}
 		let user;
 		switch (type) {
 			case "tourist":

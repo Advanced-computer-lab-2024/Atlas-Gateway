@@ -4,12 +4,17 @@ import { Types } from "mongoose";
 
 import { Governor } from "../../Database/Models/Users/governor.model";
 import { Places } from "../../Database/Models/places.model";
+import uniqueUsername from "../../Services/uniqueUsername.service";
 
 export const createGovernor = async (req: Request, res: Response) => {
 	try {
 		const { username, email, password } = req.body;
 		if (!username || !email || !password) {
 			res.status(400).send("username, email and password are required");
+		}
+		const resultUnique = await uniqueUsername(username);
+		if (!resultUnique) {
+			return res.status(400).send("Username Should Be Unique");
 		}
 		const hashedPassword = await bcrypt.hash(password, 10);
 		const governor = await Governor.create({
