@@ -1,9 +1,14 @@
 import axios from "axios";
 
+
+
 import { TPlace } from "@/types/global";
+
+
 
 import ENDPOINTS from "./ENDPOINTS";
 import { TApiResponse } from "./types";
+
 
 export function apiPlaces(
 	_id: string | undefined,
@@ -48,6 +53,24 @@ export function apiCreatePlace(payload: TPlace, _id: string) {
 		data: payload,
 	});
 }
+export function apiGovernerPlaces(
+	_id: string | undefined,
+	filters: Record<string, string>,
+) {
+	return axios<TApiResponse<TPlace[]>>({
+		method: "GET",
+		url: ENDPOINTS.places.listGoverner,
+		headers: {
+			"Content-Type": "application/json",
+			userid: _id,
+		},
+		params: {
+			...filters,
+		},
+		baseURL: "http://localhost:5000",
+	});
+}
+
 
 export function apiUpdatePlace(payload: TPlace) {
 	return axios({

@@ -1,17 +1,17 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 
+
+
 import { useLoginStore } from "@/store/loginStore";
 import { TPlace } from "@/types/global";
 
-import {
-	apiCreatePlace,
-	apiDeletePlace,
-	apiPlace,
-	apiPlaces,
-	apiUpdatePlace,
-} from "../service/places";
+
+
+import { apiCreatePlace, apiDeletePlace, apiGovernerPlaces, apiPlace, apiPlaces, apiUpdatePlace } from "../service/places";
 import { useQueryString } from "./useQueryString";
+import { EAccountType } from "@/types/enums";
+
 
 export function usePlaces() {
 	const { user } = useLoginStore();
@@ -19,7 +19,10 @@ export function usePlaces() {
 	const [query] = useQueryString();
 
 	const q = useQuery({
-		queryFn: () => apiPlaces(_id, query),
+		queryFn: () =>
+			user?.type === EAccountType.TourismGovernor
+				? apiGovernerPlaces(_id, query)
+				: apiPlaces(_id, query),
 		queryKey: ["places", _id, query],
 	});
 
@@ -45,7 +48,12 @@ export function useCreatePlace(onSuccess: () => void) {
 	const { user } = useLoginStore();
 
 	const mutation = useMutation({
-		mutationFn: (place: TPlace) => apiCreatePlace(place, user._id),
+		mutationFn: (place: TPlace) => {
+			if (!user) {
+				throw new Error("User is not defined");
+			}
+			return apiCreatePlace(place, user._id);
+		},
 		onSuccess,
 	});
 

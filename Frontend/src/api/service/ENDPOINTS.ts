@@ -1,6 +1,7 @@
 const ENDPOINTS = {
 	places: {
 		list: "api/places/list",
+		listGoverner: "api/places/listGoverner",
 		show: (id: string) => `api/places/show/${id}`,
 		create: "api/places/create",
 		update: (id: string) => `api/places/update/${id}`,
