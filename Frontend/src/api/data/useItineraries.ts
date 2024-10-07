@@ -1,16 +1,16 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 
-import { useLoginStore } from "@/store/loginStore";
 
-import {
-	apiCreateItinerary,
-	apiDeleteItinerary,
-	apiItineraries,
-	apiItinerary,
-	apiUpdateItinerary,
-} from "../service/itineraries";
+
+import { useLoginStore } from "@/store/loginStore";
+import { TItinerary } from "@/types/global";
+
+
+
+import { apiCreateItinerary, apiDeleteItinerary, apiItineraries, apiItinerary, apiUpdateItinerary } from "../service/itineraries";
 import { useQueryString } from "./useQueryString";
+
 
 export function useItineraries() {
 	const { user } = useLoginStore();
@@ -41,8 +41,17 @@ export function useItinerary() {
 }
 
 export function useCreateItinerary(onSuccess: () => void) {
+	const { user } = useLoginStore();
 	const mutation = useMutation({
-		mutationFn: apiCreateItinerary,
+		mutationFn: (data: TItinerary) => {
+			const { _id } = user || {};
+
+			if (!_id) {
+				throw new Error("User ID is undefined");
+			}
+
+			return apiCreateItinerary(data, _id);
+		},
 		onSuccess,
 	});
 

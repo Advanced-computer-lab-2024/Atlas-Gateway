@@ -34,12 +34,13 @@ export function apiItinerary(_id: string | undefined) {
 	});
 }
 
-export function apiCreateItinerary(payload: TItinerary) {
+export function apiCreateItinerary(payload: TItinerary, _id: string) {
 	return axios({
 		method: "POST",
 		url: ENDPOINTS.itinerary.create,
 		headers: {
 			"Content-Type": "application/json",
+			userid: _id,
 		},
 		baseURL: "http://localhost:5000",
 		data: payload,
