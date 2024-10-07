@@ -46,26 +46,9 @@ export default function Products() {
 						<Searchbar />
 						<Filters
 							filters={{
-								tags: {
-									filterName: "tags",
-									label: "Tags",
-									type: "checkbox",
-									options: [],
-								},
-								categories: {
-									filterName: "categories",
-									label: "Categories",
-									type: "checkbox",
-									options: [],
-								},
 								price: {
 									filterName: "price",
 									label: "Price",
-									type: "range",
-								},
-								avgRating: {
-									filterName: "avgRating",
-									label: "Rating",
 									type: "range",
 								},
 							}}
