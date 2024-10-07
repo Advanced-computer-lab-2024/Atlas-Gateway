@@ -35,3 +35,39 @@ export function apiPlace(_id: string | undefined) {
 		baseURL: "http://localhost:5000",
 	});
 }
+
+export function apiCreatePlace(payload: TPlace, _id: string) {
+	return axios({
+		method: "POST",
+		url: ENDPOINTS.places.create,
+		headers: {
+			"Content-Type": "application/json",
+			userid: _id,
+		},
+		baseURL: "http://localhost:5000",
+		data: payload,
+	});
+}
+
+export function apiUpdatePlace(payload: TPlace) {
+	return axios({
+		method: "PUT",
+		url: ENDPOINTS.places.update(payload?._id),
+		headers: {
+			"Content-Type": "application/json",
+		},
+		baseURL: "http://localhost:5000",
+		data: payload,
+	});
+}
+
+export function apiDeletePlace(_id: string) {
+	return axios({
+		method: "DELETE",
+		url: ENDPOINTS.places.delete(_id),
+		headers: {
+			"Content-Type": "application/json",
+		},
+		baseURL: "http://localhost:5000",
+	});
+}

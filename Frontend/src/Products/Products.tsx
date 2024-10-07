@@ -12,12 +12,17 @@ import {
 	PaginationNext,
 	PaginationPrevious,
 } from "@/components/ui/pagination";
+import { useLoginStore } from "@/store/loginStore";
+import { EAccountType } from "@/types/enums";
 
 import ProductCard from "./ProductCard";
+import ProdcutForm from "./ProductForm";
+import ProductForm from "./ProductForm";
 
 export default function Products() {
+	const { user } = useLoginStore();
 	const { data, meta } = useProducts();
-
+	console.log(data);
 	const { page, onPageChange, pagesCount } = usePagination({
 		pageNum: meta?.pages || 1,
 		pagesCount: meta?.pages || 1,
@@ -41,30 +46,18 @@ export default function Products() {
 						<Searchbar />
 						<Filters
 							filters={{
-								tags: {
-									filterName: "tags",
-									label: "Tags",
-									type: "checkbox",
-									options: [],
-								},
-								categories: {
-									filterName: "categories",
-									label: "Categories",
-									type: "checkbox",
-									options: [],
-								},
 								price: {
 									filterName: "price",
 									label: "Price",
 									type: "range",
 								},
-								avgRating: {
-									filterName: "avgRating",
-									label: "Rating",
-									type: "range",
-								},
 							}}
 						/>
+						<div className="flex self-end">
+							{user?.type === EAccountType.Seller && (
+								<ProductForm type="Add" />
+							)}
+						</div>
 					</Flex>
 				</Flex>
 			</Flex>

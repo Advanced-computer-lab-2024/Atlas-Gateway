@@ -1,17 +1,30 @@
 import { Request, Response } from "express";
 import mongoose, { PipelineStage, Types } from "mongoose";
 
+
+
 import { Itinerary } from "../Database/Models/itinerary.model";
 import AggregateBuilder from "../Services/aggregation.service";
+
 
 //Create a new product entry
 export const createItinerary = async (req: Request, res: Response) => {
 	try {
 		const tourGuideId = req.headers.userid;
 
+		if (!tourGuideId) {
+			return res
+				.status(400)
+				.json({ message: "Tour Guide ID is required" });
+		}
+
+		if (!Types.ObjectId.isValid(tourGuideId.toString())) {
+			return res.status(400).json({ message: "Invalid Tour Guide ID" });
+		}
+
 		const itineraryData = new Itinerary({
 			...req.body,
-			createdBy: tourGuideId,
+			createdBy: new Types.ObjectId(tourGuideId.toString()),
 		});
 
 		await itineraryData.save();
@@ -40,6 +53,42 @@ export const getItineraryById = async (req: Request, res: Response) => {
 	}
 };
 
+export const getItineraryByUserId = async (req: Request, res: Response) => {
+	try {
+		const tourGuideId = req.headers.userid;
+
+		if (!tourGuideId) {
+			return res
+				.status(400)
+				.json({ message: "Tour Guide ID is required" });
+		}
+		if (!Types.ObjectId.isValid(tourGuideId.toString())) {
+			return res.status(400).json({ message: "Invalid Tour Guide ID" });
+		}
+
+		const itinerary = await Itinerary.find({
+			createdBy: tourGuideId,
+		}).populate("tags");
+
+
+		const response = {
+			data: itinerary,
+			metaData: {
+				page: req.query.page || 1,
+				total: itinerary.length,
+				pages: Math.ceil(
+					(itinerary.length ?? 0) / (Number(req?.query?.limit) || 10),
+				),
+			},
+		};
+		console.log(response);
+
+		res.status(200).send(response);
+	} catch (error) {
+		res.status(500).send("Error getting Itinerary by id");
+	}
+};
+
 export const getItinerary = async (req: Request, res: Response) => {
 	try {
 		const pipeline: PipelineStage[] = [
@@ -59,11 +108,10 @@ export const getItinerary = async (req: Request, res: Response) => {
 			// 		as: "createdBy",
 			// 	},
 			// },
-			...AggregateBuilder(req.query, ["name", "tagsData.name"]),
+			...AggregateBuilder(req.query, ["title", "tags.name"]),
 		];
 
 		const result = await Itinerary.aggregate(pipeline);
-
 
 		const response = {
 			data: result?.[0]?.data,
@@ -71,7 +119,8 @@ export const getItinerary = async (req: Request, res: Response) => {
 				page: req.query.page || 1,
 				total: result[0]?.total[0]?.count,
 				pages: Math.ceil(
-					(result[0]?.total[0]?.count ?? 0)/ (Number(req?.query?.limit) || 10),
+					(result[0]?.total[0]?.count ?? 0) /
+						(Number(req?.query?.limit) || 10),
 				),
 			},
 		};
@@ -86,9 +135,13 @@ export const updateItinerary = async (req: Request, res: Response) => {
 	try {
 		const itineraryId = req.params.id;
 
-		const itinerary = await Itinerary.findByIdAndUpdate(itineraryId, {
-			$set: req.body,
-		}, { new: true });
+		const itinerary = await Itinerary.findByIdAndUpdate(
+			itineraryId,
+			{
+				$set: req.body,
+			},
+			{ new: true },
+		);
 
 		res.status(200).send(itinerary);
 	} catch (error) {

@@ -8,40 +8,15 @@ import AggregateBuilder from "../Services/aggregation.service";
 export const createPlace = async (req: Request, res: Response) => {
 	try {
 		const governorId = req.headers.userid;
-		const {
-			name,
-			location,
-			pictures,
-			openingHours,
-			description,
-			ticketPrices,
-			tags,
-		} = req.body;
+
 		if (!(await Governor.findById(governorId))) {
 			return res
 				.status(400)
 				.json({ message: "Governor ID is invalid or doesn't exist" });
 		}
 
-		if (
-			!name ||
-			!location ||
-			!pictures ||
-			!openingHours ||
-			!description ||
-			!ticketPrices ||
-			!tags
-		) {
-			return res.status(400).json({ message: "Missing Fields" });
-		}
 		const placeData = new Places({
-			name,
-			location,
-			pictures,
-			openingHours,
-			description,
-			ticketPrices,
-			tags,
+			...req?.body,
 			governorId,
 		});
 
