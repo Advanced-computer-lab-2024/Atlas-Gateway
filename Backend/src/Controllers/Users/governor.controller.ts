@@ -1,3 +1,4 @@
+import bcrypt from "bcryptjs";
 import { Request, Response } from "express";
 import { Types } from "mongoose";
 
@@ -10,7 +11,12 @@ export const createGovernor = async (req: Request, res: Response) => {
 		if (!username || !email || !password) {
 			res.status(400).send("username, email and password are required");
 		}
-		const governor = await Governor.create({ username, email, password });
+		const hashedPassword = await bcrypt.hash(password, 10);
+		const governor = await Governor.create({
+			username,
+			email,
+			password: hashedPassword,
+		});
 		res.status(201).json(governor);
 	} catch (error) {
 		console.log(error);
