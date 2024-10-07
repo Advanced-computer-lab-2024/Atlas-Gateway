@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
 import { useLoginStore } from "@/store/loginStore";
+import { EAccountType } from "@/types/enums";
 
 import apiLogin from "../service/login";
 
@@ -19,6 +20,7 @@ export function useLogin() {
 				type,
 				username,
 			});
+			console.log(type);
 			navigate("/");
 		},
 	});

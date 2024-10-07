@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Link, Pencil } from "lucide-react";
+import { Link, Pencil, ShieldAlert, ShieldCheck } from "lucide-react";
 import { Trash } from "lucide-react";
 import { RotateCw } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -13,6 +13,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import { useLoginStore } from "@/store/loginStore";
 
 interface CompanyProfile {
 	hotline: number;
@@ -29,9 +30,11 @@ interface Advertiser {
 	password: string;
 	companyProfile: CompanyProfile;
 	activities: string[];
+	isVerified: boolean;
 }
 
 const Advertisers = () => {
+	const { user } = useLoginStore();
 	const [advertisers, setAdvertisers] = useState<Advertiser[]>([]);
 	const [refresh, setRefresh] = useState<boolean>(false);
 
@@ -46,6 +49,22 @@ const Advertisers = () => {
 				console.log(error);
 			});
 	}, [refresh]);
+
+	const handleUpdate = (id: string) => {
+		axios
+			.put(`http://localhost:5000/api/advertiser/update/${id}`, {
+				isVerified: true,
+				headers: {
+					userid: user?._id,
+				},
+			})
+			.then((res) => {
+				console.log(res.status);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
 
 	const handleDelete = (id: string) => {
 		axios
@@ -72,6 +91,7 @@ const Advertisers = () => {
 						<TableHead>Website</TableHead>
 						<TableHead>Logo</TableHead>
 						<TableHead>Description</TableHead>
+						<TableHead>isVerified</TableHead>
 						<TableHead className="cursor-pointer hover:text-[#2b58ed]">
 							<RotateCw onClick={() => setRefresh(!refresh)} />
 						</TableHead>
@@ -110,6 +130,15 @@ const Advertisers = () => {
 								{advertiser.companyProfile?.description ||
 									"N/A"}
 							</TableCell>
+							{advertiser.isVerified ? (
+								<ShieldCheck className="text-green-500 w-5 h-5" />
+							) : (
+								<button
+									onClick={() => handleUpdate(advertiser._id)}
+								>
+									<ShieldAlert className="text-red-500 w-5 h-5" />
+								</button>
+							)}
 							<TableCell className="cursor-pointer hover:text-[#2b58ed] w-1">
 								<button className="bg-red-500 text-white rounded-full p-2 shadow-lg hover:bg-red-600">
 									<Trash

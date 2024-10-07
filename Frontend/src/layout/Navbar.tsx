@@ -41,7 +41,11 @@ export default function Navbar() {
 			{isLoggedIn ? (
 				<Flex gap="2" align="center">
 					<Link
-						to="/profile"
+						to={
+							user.type == EAccountType.Admin
+								? "/admin"
+								: "/profile"
+						}
 						className="rounded-full w-14 h-14 bg-surface-primary flex items-center justify-center text-primary hover:no-underline hover:text-primary"
 					>
 						<UserCircleIcon width={40} height={40} />

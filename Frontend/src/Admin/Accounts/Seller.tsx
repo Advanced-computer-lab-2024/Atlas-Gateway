@@ -12,6 +12,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import { useLoginStore } from "@/store/loginStore";
 
 interface Seller {
 	_id: string;
@@ -27,6 +28,7 @@ interface Seller {
 }
 
 const Sellers = () => {
+	const { user } = useLoginStore();
 	const [sellers, setSellers] = useState<Seller[]>([]);
 	const [refresh, setRefresh] = useState<boolean>(false);
 
@@ -45,6 +47,9 @@ const Sellers = () => {
 		axios
 			.put(`http://localhost:5000/api/seller/update/${id}`, {
 				isVerified: true,
+				headers: {
+					userid: user?._id,
+				},
 			})
 			.then((res) => {
 				console.log(res.status);

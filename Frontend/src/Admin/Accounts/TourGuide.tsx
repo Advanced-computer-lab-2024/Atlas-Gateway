@@ -13,6 +13,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import { useLoginStore } from "@/store/loginStore";
 
 // interface PreviousJob {
 // 	title: string;
@@ -36,6 +37,7 @@ interface TourGuide {
 }
 
 const TourGuide = () => {
+	const { user } = useLoginStore();
 	const [tourGuides, setTourGuides] = useState<TourGuide[]>([]);
 	const [refresh, setRefresh] = useState<boolean>(false);
 
@@ -54,6 +56,9 @@ const TourGuide = () => {
 		axios
 			.put(`http://localhost:5000/api/tourguide/update/${id}`, {
 				isVerified: true,
+				headers: {
+					userid: user?._id,
+				},
 			})
 			.then((res) => {
 				console.log(res.status);
