@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
+import { Request, Response } from "express";
 
 import { Advertiser } from "../Database/Models/Users/advertiser.model";
 import { Governor } from "../Database/Models/Users/governor.model";
@@ -15,7 +15,7 @@ export const register = async (req: Request, res: Response) => {
 			password,
 			picture,
 			type,
-			mobileNumber,
+			mobile,
 			nationality,
 			dob,
 			occupation,
@@ -32,16 +32,18 @@ export const register = async (req: Request, res: Response) => {
 		let user;
 		switch (type) {
 			case "tourist":
-				if (!mobileNumber || !nationality || !dob || !occupation) {
-					res.status(400).send(
-						"mobileNumber, nationality ,occupation and dob are required",
-					);
+				if (!mobile || !nationality || !dob || !occupation) {
+					return res
+						.status(400)
+						.send(
+							"mobileNumber, nationality ,occupation and dob are required",
+						);
 				}
 				user = new Tourist({
 					username,
 					email,
 					password: hashedPassword,
-					mobileNumber,
+					mobile,
 					nationality,
 					dob,
 					occupation,
@@ -83,7 +85,7 @@ export const register = async (req: Request, res: Response) => {
 					username,
 					email,
 					password: hashedPassword,
-					mobileNumber,
+					mobile,
 					nationality,
 					dob,
 					occupation,
