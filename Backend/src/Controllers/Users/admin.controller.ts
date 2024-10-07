@@ -1,3 +1,4 @@
+import bcrypt from "bcryptjs";
 import { Request, Response } from "express";
 import { Types } from "mongoose";
 
@@ -9,7 +10,12 @@ export const createAdmin = async (req: Request, res: Response) => {
 		if (!username || !email || !password) {
 			res.status(400).send("username, email and password are required");
 		}
-		const admin = await Admin.create({ username, email, password });
+		const hashedPassword = await bcrypt.hash(password, 10);
+		const admin = await Admin.create({
+			username,
+			email,
+			password: hashedPassword,
+		});
 		res.status(201).json(admin);
 	} catch (error) {
 		console.log(error);
