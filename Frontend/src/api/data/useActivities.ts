@@ -8,8 +8,9 @@ import { TActivity } from "@/types/global";
 
 
 
-import { apiActivities, apiActivity, apiCreateActivity, apiDeleteActivity, apiUpdateActivity } from "../service/activities";
+import { apiActivities, apiActivity, apiAdvertisorActivities, apiCreateActivity, apiDeleteActivity, apiUpdateActivity } from "../service/activities";
 import { useQueryString } from "./useQueryString";
+import { EAccountType } from "@/types/enums";
 
 
 export function useActivities() {
@@ -19,9 +20,13 @@ export function useActivities() {
 	const [query] = useQueryString();
 
 	const q = useQuery({
-		queryFn: () => apiActivities(_id, query),
+		queryFn: () =>
+			user?.type === EAccountType.Advertiser
+				? apiAdvertisorActivities(_id, query)
+				:apiActivities(_id, query),
 		queryKey: ["activities", _id, query],
 	});
+
 
 	const { data } = q;
 

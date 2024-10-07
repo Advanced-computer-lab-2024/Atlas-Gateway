@@ -41,6 +41,25 @@ export function apiActivity(id: string | undefined) {
 	});
 }
 
+
+export function apiAdvertisorActivities(
+	_id: string | undefined,
+	filters: Record<string, string>,
+) {
+	return axios<TApiResponse<TActivity[]>>({
+		method: "GET",
+		url: ENDPOINTS.activity.listAdvertisor,
+		headers: {
+			"Content-Type": "application/json",
+			userid: _id,
+		},
+		params: {
+			...filters,
+		},
+		baseURL: "http://localhost:5000",
+	});
+}
+
 export function apiCreateActivity(payload: TActivity, _id: string) {
 	return axios({
 		method: "POST",
