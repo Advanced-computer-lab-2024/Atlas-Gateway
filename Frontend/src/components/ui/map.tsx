@@ -66,7 +66,7 @@ const searchLocations = async (lat: number, lon: number) => {
 };
 
 // Main Map component
-const Map: FC = ({ location, setLocation }) => {
+function Map({ setLocation }: { setLocation: (location: string) => void }) {
 	const initialPosition = { lat: 30.0444, lng: 31.2357 }; // Default center position
 	const [locations, setLocations] = useState<Location[]>([]);
 	const [loading, setLoading] = useState(true);
@@ -120,7 +120,6 @@ const Map: FC = ({ location, setLocation }) => {
 
 	return (
 		<div>
-			{loading ? <p>Loading locations...</p> : <p>Loaded</p>}
 			<MapContainer
 				center={initialPosition}
 				zoom={13}
@@ -149,6 +148,6 @@ const Map: FC = ({ location, setLocation }) => {
 			</MapContainer>
 		</div>
 	);
-};
+}
 
 export default Map;

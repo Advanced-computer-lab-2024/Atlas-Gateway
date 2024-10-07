@@ -48,7 +48,6 @@ const ActivityForm = ({
 }) => {
 	const { data: categories } = useCategories();
 	const { data: tags } = useTags();
-	const [location, setLocation] = useState("");
 
 	const form = useForm<TActivity>({
 		resolver: zodResolver(activitySchema),
@@ -87,7 +86,7 @@ const ActivityForm = ({
 		if (activity) {
 			doUpdateActivity({ ...activity, ...values });
 		} else {
-			doCreateActivity({ ...values, location });
+			doCreateActivity(values);
 		}
 		setOpen(false);
 	};
@@ -152,13 +151,11 @@ const ActivityForm = ({
 								)}
 							/>
 							<Map
-								location={form.watch("location")}
-								setLocation={(location) => {
+								setLocation={(location: string) => {
 									form.setValue("location", location);
-									setLocation(location);
 								}}
 							/>
-							<FormField // TODO: should be modified here by ali
+							<FormField
 								control={control}
 								name="location"
 								render={({ field }) => (
