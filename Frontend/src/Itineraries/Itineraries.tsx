@@ -17,6 +17,7 @@ import {
 	PaginationPrevious,
 } from "@/components/ui/pagination";
 import { useLoginStore } from "@/store/loginStore";
+import { languageOptions } from "@/types/consts";
 import { EAccountType } from "@/types/enums";
 import { TItinerary } from "@/types/global";
 
@@ -91,19 +92,7 @@ export default function Itineraries() {
 									filterName: "language",
 									label: "Language",
 									type: "checkbox",
-									options: [
-										{ label: "English", value: "en" },
-										{ label: "Arabic", value: "ar" },
-										{ label: "French", value: "fr" },
-										{ label: "Spanish", value: "es" },
-										{ label: "Russian", value: "ru" },
-										{ label: "German", value: "de" },
-										{ label: "Italian", value: "it" },
-										{ label: "Chinese", value: "zh" },
-										{ label: "Japanese", value: "ja" },
-										{ label: "Korean", value: "ko" },
-										{ label: "Turkish", value: "tr" },
-									],
+									options: languageOptions,
 								},
 							}}
 						/>
