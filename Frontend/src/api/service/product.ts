@@ -10,7 +10,10 @@ import ENDPOINTS from "./ENDPOINTS";
 import { TApiResponse } from "./types";
 
 
-export function apiProducts(_id: string | undefined, filters: Record<string, string>) {
+export function apiProducts(
+	_id: string | undefined,
+	filters: Record<string, string>,
+) {
 	return axios<TApiResponse<TProduct[]>>({
 		method: "GET",
 		url: ENDPOINTS.products.list,
@@ -31,6 +34,17 @@ export function apiProduct(_id: string | undefined) {
 	return axios<TProduct>({
 		method: "GET",
 		url: ENDPOINTS.products.show(_id ?? ""),
+		headers: {
+			"Content-Type": "application/json",
+		},
+		baseURL: "http://localhost:5000",
+	});
+}
+
+export function apiDeleteProduct(_id: string) {
+	return axios({
+		method: "DELETE",
+		url: ENDPOINTS.products.delete(_id),
 		headers: {
 			"Content-Type": "application/json",
 		},
