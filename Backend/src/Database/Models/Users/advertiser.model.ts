@@ -17,7 +17,7 @@ export interface IAdvertiser extends Document {
 	// 	description: string;
 	// };
 	activities: [Types.ObjectId];
-	isVerified: { type: Boolean; default: true };
+	isVerified: boolean;
 }
 
 const advertiserSchema = new Schema<IAdvertiser>(
@@ -30,7 +30,7 @@ const advertiserSchema = new Schema<IAdvertiser>(
 		website: { type: String },
 		description: { type: String },
 		activities: [{ type: Schema.Types.ObjectId, ref: "Activity" }],
-		isVerified: { type: Boolean, default: true },
+		isVerified: { type: Boolean, default: false },
 		// companyProfile: {
 		// 	hotline: { type: Number },
 		// 	address: { type: String },

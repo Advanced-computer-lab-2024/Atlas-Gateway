@@ -52,12 +52,17 @@ const Advertisers = () => {
 
 	const handleUpdate = (id: string) => {
 		axios
-			.put(`http://localhost:5000/api/advertiser/update/${id}`, {
-				isVerified: true,
-				headers: {
-					userid: user?._id,
+			.put(
+				`http://localhost:5000/api/advertiser/update/${id}`,
+				{
+					isVerified: true,
 				},
-			})
+				{
+					headers: {
+						userid: user?._id,
+					},
+				},
+			)
 			.then((res) => {
 				console.log(res.status);
 			})
