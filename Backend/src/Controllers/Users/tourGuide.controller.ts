@@ -74,6 +74,7 @@ export const updateTourGuide = async (req: Request, res: Response) => {
 	}
 	try {
 		const admin = await Admin.findById(userid);
+		console.log(userid);
 		if (!admin) {
 			const tourGuide = await TourGuide.findById(id);
 			if (tourGuide?.isVerified) {

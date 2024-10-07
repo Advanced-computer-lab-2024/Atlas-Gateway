@@ -11,6 +11,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import { useLoginStore } from "@/store/loginStore";
 
 import AddForm from "./AddForm";
 
@@ -22,6 +23,7 @@ interface Admin {
 }
 
 const Admins = () => {
+	const { user } = useLoginStore();
 	const [admins, setAdmins] = useState<Admin[]>([]);
 	const [refresh, setRefresh] = useState<boolean>(false);
 

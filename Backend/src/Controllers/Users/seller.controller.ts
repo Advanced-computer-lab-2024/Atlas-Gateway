@@ -69,7 +69,7 @@ export const updateSeller = async (req: Request, res: Response) => {
 				});
 				res.status(200).send(tourGuide);
 			} else {
-				res.status(401).send("User is not Verified");
+				res.status(401).send("admin is not Verified");
 			}
 		} else {
 			const seller = await Seller.findByIdAndUpdate(id, req.body, {
