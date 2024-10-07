@@ -1,4 +1,4 @@
-import { ArrowLeft, LocateIcon, MapPin, Star } from "lucide-react";
+import { ArrowLeft, LocateIcon, MapPin } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 import { usePlace } from "@/api/data/usePlaces";
@@ -15,7 +15,6 @@ export default function PlaceDetails() {
 		description,
 		location,
 		images,
-		avgRating,
 		tags,
 		openingHours,
 		ticketPrices,

@@ -323,6 +323,11 @@ const PlaceForm = ({
 													disabled={watch(
 														"openingHours.saturday.dayOff",
 													)}
+													onChange={(e) =>
+														field.onChange(
+															e.target.value.toString(),
+														)
+													}
 													className="border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
 												/>
 											</FormControl>
@@ -343,6 +348,11 @@ const PlaceForm = ({
 													disabled={watch(
 														"openingHours.saturday.dayOff",
 													)}
+													onChange={(e) =>
+														field.onChange(
+															e.target.value.toString(),
+														)
+													}
 													className="border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
 												/>
 											</FormControl>
@@ -385,6 +395,11 @@ const PlaceForm = ({
 													disabled={watch(
 														"openingHours.sunday.dayOff",
 													)}
+													onChange={(e) =>
+														field.onChange(
+															e.target.value.toString(),
+														)
+													}
 													className="border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
 												/>
 											</FormControl>
@@ -405,6 +420,11 @@ const PlaceForm = ({
 													disabled={watch(
 														"openingHours.sunday.dayOff",
 													)}
+													onChange={(e) =>
+														field.onChange(
+															e.target.value.toString(),
+														)
+													}
 													className="border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
 												/>
 											</FormControl>
@@ -447,6 +467,11 @@ const PlaceForm = ({
 													disabled={watch(
 														"openingHours.monday.dayOff",
 													)}
+													onChange={(e) =>
+														field.onChange(
+															e.target.value.toString(),
+														)
+													}
 													className="border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
 												/>
 											</FormControl>
@@ -467,6 +492,11 @@ const PlaceForm = ({
 													disabled={watch(
 														"openingHours.monday.dayOff",
 													)}
+													onChange={(e) =>
+														field.onChange(
+															e.target.value.toString(),
+														)
+													}
 													className="border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
 												/>
 											</FormControl>
@@ -509,6 +539,11 @@ const PlaceForm = ({
 													disabled={watch(
 														"openingHours.tuesday.dayOff",
 													)}
+													onChange={(e) =>
+														field.onChange(
+															e.target.value.toString(),
+														)
+													}
 													className="border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
 												/>
 											</FormControl>
@@ -529,6 +564,11 @@ const PlaceForm = ({
 													disabled={watch(
 														"openingHours.tuesday.dayOff",
 													)}
+													onChange={(e) =>
+														field.onChange(
+															e.target.value.toString(),
+														)
+													}
 													className="border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
 												/>
 											</FormControl>
@@ -571,6 +611,11 @@ const PlaceForm = ({
 													disabled={watch(
 														"openingHours.wednesday.dayOff",
 													)}
+													onChange={(e) =>
+														field.onChange(
+															e.target.value.toString(),
+														)
+													}
 													className="border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
 												/>
 											</FormControl>
@@ -591,6 +636,11 @@ const PlaceForm = ({
 													disabled={watch(
 														"openingHours.wednesday.dayOff",
 													)}
+													onChange={(e) =>
+														field.onChange(
+															e.target.value.toString(),
+														)
+													}
 													className="border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
 												/>
 											</FormControl>
@@ -633,6 +683,11 @@ const PlaceForm = ({
 													disabled={watch(
 														"openingHours.thursday.dayOff",
 													)}
+													onChange={(e) =>
+														field.onChange(
+															e.target.value.toString(),
+														)
+													}
 													className="border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
 												/>
 											</FormControl>
@@ -653,6 +708,11 @@ const PlaceForm = ({
 													disabled={watch(
 														"openingHours.thursday.dayOff",
 													)}
+													onChange={(e) =>
+														field.onChange(
+															e.target.value.toString(),
+														)
+													}
 													className="border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
 												/>
 											</FormControl>
@@ -695,6 +755,11 @@ const PlaceForm = ({
 													disabled={watch(
 														"openingHours.friday.dayOff",
 													)}
+													onChange={(e) =>
+														field.onChange(
+															e.target.value.toString(),
+														)
+													}
 													className="border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
 												/>
 											</FormControl>
@@ -715,6 +780,11 @@ const PlaceForm = ({
 													disabled={watch(
 														"openingHours.friday.dayOff",
 													)}
+													onChange={(e) =>
+														field.onChange(
+															e.target.value.toString(),
+														)
+													}
 													className="border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
 												/>
 											</FormControl>
