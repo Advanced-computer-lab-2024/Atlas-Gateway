@@ -87,16 +87,18 @@ export const updatePrefTag = async (req: Request, res: Response) => {
 			return res.status(400).json({ message: "Tag name missing" });
 		}
 
-		const tag = await Tag.findOne({ _id: id, type: "Preference" });
+		const tag = await Tag.findOneAndUpdate(
+			{ _id: id, type: "Preference" },
+			{ name },
+			{ new: true },
+		);
+
 		if (!tag) {
 			return res
 				.status(404)
 				.json({ message: "Tag not found or not a preference tag" });
 		}
 
-		tag.set(name);
-
-		await tag.save();
 		res.status(200).json(tag);
 	} catch (error) {
 		console.error(error);
