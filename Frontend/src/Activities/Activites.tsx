@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useActivities } from "@/api/data/useActivities";
 import { useCategories } from "@/api/data/useCategories";
 import { usePagination } from "@/api/data/usePagination";
+import { useQueryString } from "@/api/data/useQueryString";
 import { useTags } from "@/api/data/useTags";
 import Filters from "@/components/Filters/Filters";
 import Label from "@/components/ui/Label";
@@ -17,6 +18,13 @@ import {
 	PaginationNext,
 	PaginationPrevious,
 } from "@/components/ui/pagination";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import { useLoginStore } from "@/store/loginStore";
 import { EAccountType } from "@/types/enums";
 import { TActivity } from "@/types/global";
@@ -43,6 +51,8 @@ export default function Activites() {
 	const { data: categories } = useCategories();
 	const { data: tags } = useTags();
 
+	const [query, setQuery] = useQueryString();
+
 	return (
 		<Flex
 			isColumn
@@ -60,6 +70,40 @@ export default function Activites() {
 			>
 				<Flex justify="between">
 					<Flex gap="1" align="center">
+						<Select
+							onValueChange={(value) => {
+								if (value === "0") {
+									setQuery({
+										...query,
+										sort: undefined,
+									});
+								} else {
+									setQuery({
+										...query,
+										sort: value,
+									});
+								}
+							}}
+						>
+							<SelectTrigger>
+								<SelectValue placeholder="Sort" />
+							</SelectTrigger>
+							<SelectContent>
+								<SelectItem value="0">None</SelectItem>
+								<SelectItem value="avgRating,1">
+									Ascending rating
+								</SelectItem>
+								<SelectItem value="avgRating,-1">
+									Descending rating
+								</SelectItem>
+								<SelectItem value="price,1">
+									Ascending price
+								</SelectItem>
+								<SelectItem value="price,-1">
+									Descending price
+								</SelectItem>
+							</SelectContent>
+						</Select>
 						<Searchbar />
 						<Filters
 							filters={{

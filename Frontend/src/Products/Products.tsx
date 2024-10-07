@@ -63,7 +63,7 @@ export default function Products() {
 									} else {
 										setQuery({
 											...query,
-											sort: `avgRating,${value}`,
+											sort: value,
 										});
 									}
 								}}
@@ -73,10 +73,10 @@ export default function Products() {
 								</SelectTrigger>
 								<SelectContent>
 									<SelectItem value="0">None</SelectItem>
-									<SelectItem value="1">
+									<SelectItem value="avgRating,1">
 										Ascending rating
 									</SelectItem>
-									<SelectItem value="-1">
+									<SelectItem value="avgRating,-1">
 										Descending rating
 									</SelectItem>
 								</SelectContent>

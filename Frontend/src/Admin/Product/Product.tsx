@@ -9,6 +9,7 @@ import { useProducts } from "@/api/data/useProducts";
 import { useQueryString } from "@/api/data/useQueryString";
 import Label from "@/components/ui/Label";
 import { Button } from "@/components/ui/button";
+import { Flex } from "@/components/ui/flex";
 import {
 	FormControl,
 	FormDescription,
@@ -44,7 +45,6 @@ import {
 
 import { productSchema } from "../schema";
 import EditProduct from "./EditProduct";
-import { Flex } from "@/components/ui/flex";
 
 const Product = () => {
 	const { data: products, meta, refetch } = useProducts();
@@ -94,7 +94,7 @@ const Product = () => {
 							} else {
 								setQuery({
 									...query,
-									sort: `avgRating,${value}`,
+									sort: value,
 								});
 							}
 						}}
@@ -104,8 +104,10 @@ const Product = () => {
 						</SelectTrigger>
 						<SelectContent>
 							<SelectItem value="0">None</SelectItem>
-							<SelectItem value="1">Ascending rating</SelectItem>
-							<SelectItem value="-1">
+							<SelectItem value="avgRating,1">
+								Ascending rating
+							</SelectItem>
+							<SelectItem value="avgRating,-1">
 								Descending rating
 							</SelectItem>
 						</SelectContent>
