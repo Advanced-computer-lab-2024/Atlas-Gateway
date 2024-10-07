@@ -1,6 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { string } from "zod";
 
 import {
 	useActivities,
@@ -21,6 +23,7 @@ import {
 	FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import Map from "@/components/ui/map";
 import { MultiSelect } from "@/components/ui/multi-select";
 import {
 	Sheet,
@@ -45,6 +48,7 @@ const ActivityForm = ({
 }) => {
 	const { data: categories } = useCategories();
 	const { data: tags } = useTags();
+	const [location, setLocation] = useState("");
 
 	const form = useForm<TActivity>({
 		resolver: zodResolver(activitySchema),
@@ -83,7 +87,7 @@ const ActivityForm = ({
 		if (activity) {
 			doUpdateActivity({ ...activity, ...values });
 		} else {
-			doCreateActivity(values);
+			doCreateActivity({ ...values, location });
 		}
 		setOpen(false);
 	};
@@ -146,6 +150,13 @@ const ActivityForm = ({
 										</FormDescription>
 									</FormItem>
 								)}
+							/>
+							<Map
+								location={form.watch("location")}
+								setLocation={(location) => {
+									form.setValue("location", location);
+									setLocation(location);
+								}}
 							/>
 							<FormField // TODO: should be modified here by ali
 								control={control}

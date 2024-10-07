@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import {
@@ -21,6 +21,7 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import Map from "@/components/ui/map";
 import { MultiSelect } from "@/components/ui/multi-select";
 import {
 	Sheet,
@@ -43,6 +44,7 @@ const PlaceForm = ({
 	setOpen: (open: boolean) => void;
 	place?: TPlace;
 }) => {
+	const [location, setLocation] = useState("");
 	const form = useForm<TPlace>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -172,6 +174,13 @@ const PlaceForm = ({
 									</FormItem>
 								)}
 							/>
+							<Map
+								location={form.watch("location")}
+								setLocation={(location) => {
+									form.setValue("location", location);
+									setLocation(location);
+								}}
+							/>
 							<FormField
 								control={form.control}
 								name="location"
@@ -180,7 +189,7 @@ const PlaceForm = ({
 										<FormLabel>Location</FormLabel>
 										<FormControl>
 											<Input
-												placeholder="Enter the place's description"
+												placeholder="Location"
 												{...field}
 												className="border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
 											/>
