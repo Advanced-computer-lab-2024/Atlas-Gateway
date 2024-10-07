@@ -1,14 +1,9 @@
 import axios from "axios";
 
-
-
 import { TActivity } from "@/types/global";
-
-
 
 import ENDPOINTS from "./ENDPOINTS";
 import { TApiResponse } from "./types";
-
 
 export function apiActivities(
 	id: string | undefined,
@@ -24,6 +19,7 @@ export function apiActivities(
 		params: {
 			id,
 			limit: 12,
+			date: `dateTime,${new Date().toISOString()},null`,
 			...filters,
 		},
 		baseURL: "http://localhost:5000",
@@ -40,7 +36,6 @@ export function apiActivity(id: string | undefined) {
 		baseURL: "http://localhost:5000",
 	});
 }
-
 
 export function apiAdvertisorActivities(
 	_id: string | undefined,

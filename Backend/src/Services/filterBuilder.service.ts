@@ -1,4 +1,5 @@
 import { PipelineStage, Types } from "mongoose";
+import { formatDate } from "date-fns";
 
 export default function buildFilterQuery(query: any): PipelineStage[] {
 	const pipeline: PipelineStage[] = [];
@@ -31,10 +32,10 @@ export function filterByPrice(query: any): PipelineStage[] {
 			$match: {
 				$or: [
 					{
-						minPrice: { $gte: minPrice },
+						minPrice: { $gte: minPrice, $lte: maxPrice },
 					},
 					{
-						maxPrice: { $lte: maxPrice },
+						maxPrice: { $lte: maxPrice, $gte: minPrice },
 					},
 					{
 						price: { $gte: minPrice, $lte: maxPrice },
@@ -51,35 +52,51 @@ export function filterByDate(query: any): PipelineStage[] {
 	const pipeline: PipelineStage[] = [];
 
 	if (query.date) {
-		const matchStage: any = { dateTime: {} };
-		const [startDateStr, endDateStr] = query.date.split(",");
+		let matchStage = {
+		};
+		const [key, startDateStr, endDateStr] = query.date.split(",");
 
 		// if no date is provided, set the start date the lowest possible date and the end date to null
-		let startDate = new Date(startDateStr) || new Date(0);
-		let endDate: Date | null = new Date(endDateStr) || null;
+		let startDate = new Date(startDateStr) || new Date("1970-01-01T00:00:00.000Z");
+		let endDate: Date | null = endDateStr !== "null" ? new Date(endDateStr) : null;
 
-		// If the start date is in the past, set it to the current date
-		if (startDate < new Date()) {
-			startDate = new Date();
+		
+		if (startDate && endDate) {
+			matchStage = {
+				$or: [
+					{
+						key: { $gte: formatDate(startDate, "YYYY-MM-DD"), $lte: formatDate(endDate, "YYYY-MM-DD") },
+					},
+				],
+			};
+		}
+		else if (startDate) {
+			matchStage = {
+				$or: [
+					{
+						key: { $gte: formatDate(startDate, "YYYY-MM-DD") },
+					},
+				],
+			};
+		}
+		else if (endDate) {
+			matchStage = {
+				$or: [
+					{
+						key: { $lte:  formatDate(endDate, "YYYY-MM-DD") },
+					},
+				],
+			};
 		}
 
-		if (endDate !== null) {
-			matchStage.dateTime.$lte = endDate;
-		}
+		console.log(matchStage)
 
-		matchStage.dateTime.$gte = startDate;
 
 		pipeline.push({
 			$match: {
 				$or: [
 					{
-						startDateTime: { $gte: startDate },
-					},
-					{
-						endDateTime: { $lte: endDate },
-					},
-					{
-						dateTime: { $gte: startDate, $lte: endDate },
+						dateTime: { $gte: formatDate(new Date(), "YYYY-MM-DD") },
 					},
 				],
 			},
