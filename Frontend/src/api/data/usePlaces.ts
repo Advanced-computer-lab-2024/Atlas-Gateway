@@ -1,9 +1,16 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 
 import { useLoginStore } from "@/store/loginStore";
+import { TPlace } from "@/types/global";
 
-import { apiPlace, apiPlaces } from "../service/places";
+import {
+	apiCreatePlace,
+	apiDeletePlace,
+	apiPlace,
+	apiPlaces,
+	apiUpdatePlace,
+} from "../service/places";
 import { useQueryString } from "./useQueryString";
 
 export function usePlaces() {
@@ -11,12 +18,14 @@ export function usePlaces() {
 	const { _id } = user || {};
 	const [query] = useQueryString();
 
-	const { data } = useQuery({
+	const q = useQuery({
 		queryFn: () => apiPlaces(_id, query),
 		queryKey: ["places", _id, query],
 	});
 
-	return { data: data?.data?.data, meta: data?.data?.metaData };
+	const { data } = q;
+
+	return { ...q, data: data?.data?.data, meta: data?.data?.metaData };
 }
 
 export function usePlace() {
@@ -30,4 +39,39 @@ export function usePlace() {
 	});
 
 	return { data: data?.data };
+}
+
+export function useCreatePlace(onSuccess: () => void) {
+	const { user } = useLoginStore();
+
+	const mutation = useMutation({
+		mutationFn: (place: TPlace) => apiCreatePlace(place, user._id),
+		onSuccess,
+	});
+
+	const { mutate } = mutation;
+
+	return { doCreatePlace: mutate, ...mutation };
+}
+
+export function useUpdatePlace(onSuccess: () => void) {
+	const mutation = useMutation({
+		mutationFn: apiUpdatePlace,
+		onSuccess,
+	});
+
+	const { mutate } = mutation;
+
+	return { doUpdatePlace: mutate, ...mutation };
+}
+
+export function useDeletePlace(onSuccess: () => void) {
+	const mutation = useMutation({
+		mutationFn: (_id: string) => apiDeletePlace(_id),
+		onSuccess,
+	});
+
+	const { mutate } = mutation;
+
+	return { doDeletePlace: mutate, ...mutation };
 }

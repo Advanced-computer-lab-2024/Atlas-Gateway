@@ -1,6 +1,14 @@
-import { EllipsisVertical, LocateIcon, MapPin, Star } from "lucide-react";
+import {
+	Edit,
+	EllipsisVertical,
+	Eye,
+	LocateIcon,
+	MapPin,
+	Trash,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
+import { useDeletePlace, usePlaces } from "@/api/data/usePlaces";
 import Label from "@/components/ui/Label";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -11,24 +19,30 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Flex } from "@/components/ui/flex";
+import { useLoginStore } from "@/store/loginStore";
+import { EAccountType } from "@/types/enums";
 import { TPlace } from "@/types/global";
 
 export default function PlaceCard({
-	_id,
-	name,
-	description,
-	location,
-	images,
-	tags,
-	categories,
-	avgRating,
-}: TPlace) {
+	place,
+	openEditDrawer,
+}: {
+	place: TPlace;
+	openEditDrawer: (place: TPlace) => void;
+}) {
 	const navigate = useNavigate();
+	const { user } = useLoginStore();
+
+	const { _id, name, description, location, images, tags } = place;
+
+	const { refetch } = usePlaces();
+
+	const { doDeletePlace } = useDeletePlace(refetch);
 
 	return (
 		<Card
 			key={_id}
-			className="w-full h-[400px] flex gap-1 flex-col border-surface-secondary border-2"
+			className="w-full h-[380px] flex gap-1 flex-col border-surface-secondary border-2"
 		>
 			<Flex
 				align="center"
@@ -45,7 +59,7 @@ export default function PlaceCard({
 				<Flex isColumn gap="2">
 					<Flex gap="2" align="center" justify="between">
 						<Label.Mid500>{name}</Label.Mid500>
-						<DropdownMenu>
+						<DropdownMenu modal={false}>
 							<DropdownMenuTrigger>
 								<EllipsisVertical className="cursor-pointer" />
 							</DropdownMenuTrigger>
@@ -55,52 +69,44 @@ export default function PlaceCard({
 										navigate(`/places/${_id}`);
 									}}
 								>
-									View Place Details
+									<Eye />
+									View Details
 								</DropdownMenuItem>
+								{user?.type ===
+									EAccountType.TourismGovernor && (
+									<>
+										<DropdownMenuItem
+											className="flex gap-2 cursor-pointer"
+											onClick={() => {
+												openEditDrawer(place);
+											}}
+										>
+											<Edit />
+											Edit
+										</DropdownMenuItem>
+										<DropdownMenuItem
+											className="flex gap-2 cursor-pointer"
+											onClick={() => {
+												doDeletePlace(place?._id);
+											}}
+										>
+											<Trash />
+											Delete
+										</DropdownMenuItem>
+									</>
+								)}
 							</DropdownMenuContent>
 						</DropdownMenu>
 					</Flex>
 					<Label.Mid300>{description}</Label.Mid300>
-					<Flex gap="2" align="center" justify="between">
-						<Flex gap="2" align="center" justify="between">
-							<MapPin size={20} />
-							<Label.Thin200 className="overflow-ellipsis">
-								{location}
-							</Label.Thin200>
-						</Flex>
-						<Flex gap="1" align="center">
-							<Star color="yellow" fill="yellow" size={20} />
-							<Label.Thin300 className="overflow-ellipsis">
-								{avgRating}
-							</Label.Thin300>
-						</Flex>
+					<Flex gap="2" align="center">
+						<MapPin size={20} />
+						<Label.Thin200 className="overflow-ellipsis">
+							{location}
+						</Label.Thin200>
 					</Flex>
 					<Flex gap="2" align="center">
-						<Label.Mid200 className="overflow-ellipsis w-[95px] text-left">
-							Categories:
-						</Label.Mid200>
-						{categories?.length > 0 ? (
-							<Flex
-								gap="1"
-								align="center"
-								className="overflow-x-scroll w-full h-8"
-							>
-								{categories?.map((category) => (
-									<Badge
-										key={category?._id}
-										variant={"default"}
-										className="whitespace-nowrap"
-									>
-										{category?.name}
-									</Badge>
-								))}
-							</Flex>
-						) : (
-							"N/A"
-						)}
-					</Flex>
-					<Flex gap="2" align="center">
-						<Label.Mid200 className="overflow-ellipsis w-[95px] text-left">
+						<Label.Mid200 className="overflow-ellipsis w-[50px] text-left">
 							Tags:
 						</Label.Mid200>
 						{tags?.length > 0 ? (
