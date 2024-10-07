@@ -1,12 +1,14 @@
 import { schemaConfig } from "#utils";
 import { Document, Schema, Types, model } from "mongoose";
 
+
 export interface IActivity extends Document {
 	name: string;
 	description: string;
 	dateTime: Date;
 	location: string;
 	tags: [Types.ObjectId];
+	createdBy: Types.ObjectId;
 	categories: [Types.ObjectId];
 	minPrice: number;
 	maxPrice: number;
@@ -28,6 +30,7 @@ const activitySchema = new Schema<IActivity>(
 		dateTime: { type: Date, required: true },
 		location: { type: String, required: true },
 		tags: [{ type: Schema.Types.ObjectId, ref: "Tag", required: true }],
+		createdBy: { type: Schema.Types.ObjectId, ref: "Advertiser" },
 		categories: [
 			{
 				type: Schema.Types.ObjectId,
