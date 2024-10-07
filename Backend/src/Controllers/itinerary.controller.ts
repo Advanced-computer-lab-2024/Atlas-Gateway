@@ -69,7 +69,7 @@ export const getItinerary = async (req: Request, res: Response) => {
 			// 		as: "createdBy",
 			// 	},
 			// },
-			...AggregateBuilder(req.query, ["name", "tagsData.name"]),
+			...AggregateBuilder(req.query, ["title", "tags.name"]),
 		];
 
 		const result = await Itinerary.aggregate(pipeline);
