@@ -71,9 +71,11 @@ export default function SellerSheet() {
 	return (
 		<Sheet open={open} onOpenChange={setOpen}>
 			<SheetTrigger asChild>
-				<Button className="align p-6 justify-center">
-					<Label.Big400>Update Profile</Label.Big400>
-				</Button>
+				{data?.isVerified && (
+					<Button className="align p-6 justify-center">
+						<Label.Big400>Update Profile</Label.Big400>
+					</Button>
+				)}
 			</SheetTrigger>
 			<SheetContent>
 				<Form {...form}>
@@ -109,7 +111,6 @@ export default function SellerSheet() {
 								</FormItem>
 							)}
 						/>
-
 
 						{/* Email input */}
 						<FormField
@@ -148,13 +149,13 @@ export default function SellerSheet() {
 							)}
 						/>
 						<SheetFooter>
-								<Button
-									type="submit"
-									disabled={!formState.isValid}
-									onClick={onSubmit}
-								>
-									Save changes
-								</Button>
+							<Button
+								type="submit"
+								disabled={!formState.isValid}
+								onClick={onSubmit}
+							>
+								Save changes
+							</Button>
 						</SheetFooter>
 					</form>
 				</Form>

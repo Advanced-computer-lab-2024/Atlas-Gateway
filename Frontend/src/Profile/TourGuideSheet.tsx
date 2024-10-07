@@ -76,9 +76,11 @@ export default function TourGuideSheet() {
 	return (
 		<Sheet open={open} onOpenChange={setOpen}>
 			<SheetTrigger asChild>
-				<Button className="align p-6 justify-center">
-					<Label.Big400>Update Profile</Label.Big400>
-				</Button>
+				{data?.isVerified && (
+					<Button className="align p-6 justify-center">
+						<Label.Big400>Update Profile</Label.Big400>
+					</Button>
+				)}
 			</SheetTrigger>
 			<SheetContent>
 				<Form {...form}>
