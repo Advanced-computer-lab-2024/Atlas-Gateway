@@ -1,16 +1,19 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 
-
-
 import { useLoginStore } from "@/store/loginStore";
+import { EAccountType } from "@/types/enums";
 import { TItinerary } from "@/types/global";
 
-
-
-import { apiCreateItinerary, apiDeleteItinerary, apiItineraries, apiItinerary, apiUpdateItinerary } from "../service/itineraries";
+import {
+	apiCreateItinerary,
+	apiDeleteItinerary,
+	apiItineraries,
+	apiItinerary,
+	apiTourGuideItineraries,
+	apiUpdateItinerary,
+} from "../service/itineraries";
 import { useQueryString } from "./useQueryString";
-
 
 export function useItineraries() {
 	const { user } = useLoginStore();
@@ -18,7 +21,10 @@ export function useItineraries() {
 	const [query] = useQueryString();
 
 	const q = useQuery({
-		queryFn: () => apiItineraries(_id, query),
+		queryFn: () =>
+			user?.type === EAccountType.Guide
+				? apiTourGuideItineraries(_id, query)
+				: apiItineraries(_id, query),
 		queryKey: ["itinerary", _id, query],
 	});
 
