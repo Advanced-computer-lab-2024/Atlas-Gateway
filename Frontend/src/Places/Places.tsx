@@ -73,21 +73,6 @@ export default function Places() {
 											value: tag._id,
 										})) || [],
 								},
-								categories: {
-									filterName: "categories",
-									label: "Categories",
-									type: "checkbox",
-									options:
-										categories?.map((category) => ({
-											label: category.name,
-											value: category._id,
-										})) || [],
-								},
-								avgRating: {
-									filterName: "avgRating",
-									label: "Rating",
-									type: "range",
-								},
 							}}
 						/>
 					</Flex>
