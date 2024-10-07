@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Types } from "mongoose";
 
+import { Admin } from "../../Database/Models/Users/admin.model";
 import { TourGuide } from "../../Database/Models/Users/tourGuide.model";
 
 export const createTourGuide = async (req: Request, res: Response) => {
@@ -64,6 +65,7 @@ export const getTourGuides = async (req: Request, res: Response) => {
 
 export const updateTourGuide = async (req: Request, res: Response) => {
 	const id = req.params.id;
+	const userid = req.headers.userid;
 	if (!id) {
 		return res.status(400).send("Id is Required");
 	}
@@ -71,12 +73,8 @@ export const updateTourGuide = async (req: Request, res: Response) => {
 		return res.status(400).send("Id is Invalid ");
 	}
 	try {
-		if (id == "123456") {
-			const tourGuide = await TourGuide.findByIdAndUpdate(id, req.body, {
-				new: true,
-			});
-			res.status(200).send(tourGuide);
-		} else {
+		const admin = await Admin.findById(userid);
+		if (!admin) {
 			const tourGuide = await TourGuide.findById(id);
 			if (tourGuide?.isVerified) {
 				const tourGuide = await TourGuide.findByIdAndUpdate(
@@ -90,6 +88,11 @@ export const updateTourGuide = async (req: Request, res: Response) => {
 			} else {
 				res.status(401).send("User is not Verified");
 			}
+		} else {
+			const tourGuide = await TourGuide.findByIdAndUpdate(id, req.body, {
+				new: true,
+			});
+			res.status(200).send(tourGuide);
 		}
 	} catch (error) {
 		res.status(500).send("Failed to update tourGuide");
