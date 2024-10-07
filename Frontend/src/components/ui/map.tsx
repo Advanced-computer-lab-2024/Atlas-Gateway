@@ -124,7 +124,7 @@ function Map({ setLocation }: { setLocation: (location: string) => void }) {
 				center={initialPosition}
 				zoom={13}
 				scrollWheelZoom={true}
-				style={{ height: "500px", width: "100%" }}
+				style={{ height: "400px", width: "100%" }}
 			>
 				<MapEvents />
 				{/* Adding a TileLayer */}

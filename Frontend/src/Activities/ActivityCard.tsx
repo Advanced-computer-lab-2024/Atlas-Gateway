@@ -147,6 +147,7 @@ export default function ActivityCard({
 									<Badge
 										key={category?._id}
 										variant={"default"}
+										className="whitespace-nowrap"
 									>
 										{category?.name}
 									</Badge>
@@ -172,7 +173,11 @@ export default function ActivityCard({
 								className="overflow-x-scroll w-full"
 							>
 								{activity?.tags?.map((tag) => (
-									<Badge key={tag?._id} variant={"default"}>
+									<Badge
+										key={tag?._id}
+										variant={"default"}
+										className="whitespace-nowrap"
+									>
 										{tag?.name}
 									</Badge>
 								))}

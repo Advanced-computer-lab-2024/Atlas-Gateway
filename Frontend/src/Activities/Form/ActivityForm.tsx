@@ -93,7 +93,7 @@ const ActivityForm = ({
 
 	return (
 		<Sheet open={open} onOpenChange={setOpen}>
-			<SheetContent className="sm:max-w-[600px] overflow-y-scroll">
+			<SheetContent className="sm:max-w-[600px]">
 				<SheetHeader>
 					<SheetTitle>
 						{activity ? "Edit Activity" : "Add Activity"}

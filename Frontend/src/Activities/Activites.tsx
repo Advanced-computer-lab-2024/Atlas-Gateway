@@ -91,7 +91,7 @@ export default function Activites() {
 							}}
 						/>
 					</Flex>
-					{user?.type === EAccountType.Advertiser && (
+					{user?.type !== EAccountType.Advertiser && (
 						<Button
 							variant="ghost"
 							onClick={() => {

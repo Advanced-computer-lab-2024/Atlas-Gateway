@@ -44,7 +44,6 @@ const PlaceForm = ({
 	setOpen: (open: boolean) => void;
 	place?: TPlace;
 }) => {
-	const [location, setLocation] = useState("");
 	const form = useForm<TPlace>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -124,7 +123,7 @@ const PlaceForm = ({
 
 	return (
 		<Sheet open={open} onOpenChange={setOpen}>
-			<SheetContent className="sm:max-w-[600px] overflow-y-scroll">
+			<SheetContent className="sm:max-w-[600px]">
 				<SheetHeader>
 					<SheetTitle>
 						{place ? "Edit Place" : "Add Place"}
@@ -175,10 +174,8 @@ const PlaceForm = ({
 								)}
 							/>
 							<Map
-								location={form.watch("location")}
 								setLocation={(location) => {
 									form.setValue("location", location);
-									setLocation(location);
 								}}
 							/>
 							<FormField
