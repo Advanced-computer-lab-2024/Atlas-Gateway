@@ -23,8 +23,6 @@ export const register = async (req: Request, res: Response) => {
 			prevWork,
 		} = req.body;
 
-		const name = username;
-
 		if (!username || !email || !password) {
 			res.status(400).send("username, email and password are required");
 		}
@@ -77,7 +75,6 @@ export const register = async (req: Request, res: Response) => {
 				break;
 			case "advertiser":
 				user = new Advertiser({
-					name,
 					username,
 					email,
 					password: hashedPassword,
