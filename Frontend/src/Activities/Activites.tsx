@@ -132,6 +132,11 @@ export default function Activites() {
 									label: "Rating",
 									type: "range",
 								},
+								price: {
+									filterName: "price",
+									label: "Price",
+									type: "range",
+								},
 							}}
 						/>
 					</Flex>
