@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/pagination";
 
 import ProductCard from "./ProductCard";
+import ProdcutForm from "./ProductForm";
 
 export default function Products() {
 	const { data, meta } = useProducts();
@@ -65,6 +66,9 @@ export default function Products() {
 								},
 							}}
 						/>
+						<div className="flex self-end">
+							<ProdcutForm type="Add" />
+						</div>
 					</Flex>
 				</Flex>
 			</Flex>

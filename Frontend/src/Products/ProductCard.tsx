@@ -1,4 +1,7 @@
+import axios from "axios";
+import { error } from "console";
 import { DollarSign, EllipsisVertical, LocateIcon, Star } from "lucide-react";
+import { Trash } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 import Label from "@/components/ui/Label";
@@ -11,6 +14,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Flex } from "@/components/ui/flex";
 import { TProduct } from "@/types/global";
+
+import ProdcutForm from "./ProductForm";
 
 export default function ProductCard({
 	_id,
@@ -43,20 +48,23 @@ export default function ProductCard({
 				<Flex isColumn gap="2" className="px-3">
 					<Flex gap="2" align="center" justify="between">
 						<Label.Mid500>{name}</Label.Mid500>
-						<DropdownMenu>
-							<DropdownMenuTrigger>
-								<EllipsisVertical className="cursor-pointer" />
-							</DropdownMenuTrigger>
-							<DropdownMenuContent>
-								<DropdownMenuItem
-									onClick={() => {
-										navigate(`/products/${_id}`);
-									}}
-								>
-									View Product Details
-								</DropdownMenuItem>
-							</DropdownMenuContent>
-						</DropdownMenu>
+						<div className="flex items-center">
+							<ProdcutForm type="Update" id={_id} />
+							<DropdownMenu>
+								<DropdownMenuTrigger>
+									<EllipsisVertical className="cursor-pointer" />
+								</DropdownMenuTrigger>
+								<DropdownMenuContent>
+									<DropdownMenuItem
+										onClick={() => {
+											navigate(`/products/${_id}`);
+										}}
+									>
+										View Product Details
+									</DropdownMenuItem>
+								</DropdownMenuContent>
+							</DropdownMenu>
+						</div>
 					</Flex>
 					<Label.Mid300>{description}</Label.Mid300>
 					<Flex gap="1" align="center">
