@@ -2,25 +2,37 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
-
-
-import { useActivities, useCreateActivity, useUpdateActivity } from "@/api/data/useActivities";
+import {
+	useActivities,
+	useCreateActivity,
+	useUpdateActivity,
+} from "@/api/data/useActivities";
 import { useCategories } from "@/api/data/useCategories";
 import { useTags } from "@/api/data/useTags";
 import { Button } from "@/components/ui/button";
 import { DateTimePicker } from "@/components/ui/date-time-picker";
 import { Flex } from "@/components/ui/flex";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import {
+	Form,
+	FormControl,
+	FormDescription,
+	FormField,
+	FormItem,
+	FormLabel,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { MultiSelect } from "@/components/ui/multi-select";
-import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import {
+	Sheet,
+	SheetContent,
+	SheetFooter,
+	SheetHeader,
+	SheetTitle,
+} from "@/components/ui/sheet";
 import { TActivity } from "@/types/global";
-
-
 
 import { Checkbox } from "../../components/ui/checkbox";
 import { activitySchema } from "./schema";
-
 
 const ActivityForm = ({
 	open,

@@ -7,6 +7,7 @@ import { useTags } from "@/api/data/useTags";
 import Filters from "@/components/Filters/Filters";
 import Label from "@/components/ui/Label";
 import { Searchbar } from "@/components/ui/Searchbar";
+import { Button } from "@/components/ui/button";
 import { Flex } from "@/components/ui/flex";
 import {
 	Pagination,
@@ -21,7 +22,6 @@ import { EAccountType } from "@/types/enums";
 import { TActivity } from "@/types/global";
 
 import ActivityCard from "./ActivityCard";
-import AddActivityForm from "./Form/ActivityForm";
 import ActivityForm from "./Form/ActivityForm";
 
 export default function Activites() {
@@ -88,16 +88,18 @@ export default function Activites() {
 									label: "Rating",
 									type: "range",
 								},
-								date: {
-									filterName: "date",
-									label: "Date",
-									type: "date",
-								},
 							}}
 						/>
 					</Flex>
 					{user?.type === EAccountType.Advertiser && (
-						<AddActivityForm open={open} setOpen={setOpen} />
+						<Button
+							variant="ghost"
+							onClick={() => {
+								setOpen(true);
+							}}
+						>
+							Add Activity
+						</Button>
 					)}
 				</Flex>
 			</Flex>
