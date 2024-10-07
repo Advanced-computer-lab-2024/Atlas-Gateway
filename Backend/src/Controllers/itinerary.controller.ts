@@ -9,9 +9,19 @@ export const createItinerary = async (req: Request, res: Response) => {
 	try {
 		const tourGuideId = req.headers.userid;
 
+		if (!tourGuideId) {
+			return res
+				.status(400)
+				.json({ message: "Tour Guide ID is required" });
+		}
+
+		if (!Types.ObjectId.isValid(tourGuideId.toString())) {
+			return res.status(400).json({ message: "Invalid Tour Guide ID" });
+		}
+
 		const itineraryData = new Itinerary({
 			...req.body,
-			createdBy: tourGuideId,
+			createdBy: new Types.ObjectId(tourGuideId.toString()),
 		});
 
 		await itineraryData.save();
@@ -64,14 +74,14 @@ export const getItinerary = async (req: Request, res: Response) => {
 
 		const result = await Itinerary.aggregate(pipeline);
 
-
 		const response = {
 			data: result?.[0]?.data,
 			metaData: {
 				page: req.query.page || 1,
 				total: result[0]?.total[0]?.count,
 				pages: Math.ceil(
-					(result[0]?.total[0]?.count ?? 0)/ (Number(req?.query?.limit) || 10),
+					(result[0]?.total[0]?.count ?? 0) /
+						(Number(req?.query?.limit) || 10),
 				),
 			},
 		};
@@ -86,9 +96,13 @@ export const updateItinerary = async (req: Request, res: Response) => {
 	try {
 		const itineraryId = req.params.id;
 
-		const itinerary = await Itinerary.findByIdAndUpdate(itineraryId, {
-			$set: req.body,
-		}, { new: true });
+		const itinerary = await Itinerary.findByIdAndUpdate(
+			itineraryId,
+			{
+				$set: req.body,
+			},
+			{ new: true },
+		);
 
 		res.status(200).send(itinerary);
 	} catch (error) {
