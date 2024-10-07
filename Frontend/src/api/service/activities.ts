@@ -19,7 +19,7 @@ export function apiActivities(
 		params: {
 			id,
 			limit: 12,
-			date: `dateTime,${new Date().toISOString()},null`,
+			//date: `dateTime,${new Date().toISOString()},null`,
 			...filters,
 		},
 		baseURL: "http://localhost:5000",
