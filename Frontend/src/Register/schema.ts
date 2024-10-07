@@ -17,7 +17,7 @@ export const accountTypeSchema = z.object({
 });
 
 export const touristInfoSchema = z.object({
-	mobileNumber: z
+	mobile: z
 		.string({
 			message: "Please enter a valid mobile number",
 		})

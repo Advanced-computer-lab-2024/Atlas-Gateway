@@ -35,7 +35,7 @@ export default function TouristInfo() {
 		<>
 			<FormField
 				control={form.control}
-				name="mobileNumber"
+				name="mobile"
 				render={({ field }) => (
 					<FormItem>
 						<FormLabel>Mobile number</FormLabel>

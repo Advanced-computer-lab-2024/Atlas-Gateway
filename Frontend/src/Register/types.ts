@@ -8,7 +8,7 @@ export type TRegisterForm = {
 	username: string;
 	type: EAccountType;
 	dob?: string;
-	mobileNumber?: string;
+	mobile?: string;
 	occupation?: string;
 	nationality?: string;
 };
