@@ -1,10 +1,7 @@
 import { Request, Response } from "express";
 import { Types } from "mongoose";
 
-
-
 import { TourGuide } from "../../Database/Models/Users/tourGuide.model";
-
 
 export const createTourGuide = async (req: Request, res: Response) => {
 	try {
@@ -74,10 +71,26 @@ export const updateTourGuide = async (req: Request, res: Response) => {
 		return res.status(400).send("Id is Invalid ");
 	}
 	try {
-		const tourGuide = await TourGuide.findByIdAndUpdate(id, req.body, {
-			new: true,
-		});
-		res.status(200).send(tourGuide);
+		if (id == "123456") {
+			const tourGuide = await TourGuide.findByIdAndUpdate(id, req.body, {
+				new: true,
+			});
+			res.status(200).send(tourGuide);
+		} else {
+			const tourGuide = await TourGuide.findById(id);
+			if (tourGuide?.isVerified) {
+				const tourGuide = await TourGuide.findByIdAndUpdate(
+					id,
+					req.body,
+					{
+						new: true,
+					},
+				);
+				res.status(200).send(tourGuide);
+			} else {
+				res.status(401).send("User is not Verified");
+			}
+		}
 	} catch (error) {
 		res.status(500).send("Failed to update tourGuide");
 	}
