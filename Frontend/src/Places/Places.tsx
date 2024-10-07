@@ -78,7 +78,9 @@ export default function Places() {
 						/>
 					</Flex>
 					<div className="flex gpa-2">
-						<AddTags />
+						{user?.type === EAccountType.TourismGovernor && (
+							<AddTags />
+						)}
 						{user?.type === EAccountType.TourismGovernor && (
 							<Button
 								variant="ghost"
