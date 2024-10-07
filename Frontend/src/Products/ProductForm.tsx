@@ -29,6 +29,7 @@ import { productSchema } from "../Admin/schema";
 interface props {
 	id?: string;
 	type: string;
+	sellerProduct?: string;
 }
 
 const ProductForm = ({ id, type }: props) => {

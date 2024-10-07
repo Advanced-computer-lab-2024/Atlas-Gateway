@@ -13,6 +13,7 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Flex } from "@/components/ui/flex";
+import { useLoginStore } from "@/store/loginStore";
 import { TProduct } from "@/types/global";
 
 import ProdcutForm from "./ProductForm";
@@ -24,9 +25,11 @@ export default function ProductCard({
 	images,
 	price,
 	avgRating,
-	seller,
+	sellerId,
 }: TProduct) {
+	const { user } = useLoginStore();
 	const navigate = useNavigate();
+
 	return (
 		<Card
 			key={_id}
@@ -49,7 +52,11 @@ export default function ProductCard({
 					<Flex gap="2" align="center" justify="between">
 						<Label.Mid500>{name}</Label.Mid500>
 						<div className="flex items-center">
-							<ProdcutForm type="Update" id={_id} />
+							{user?._id == sellerId ? (
+								<ProdcutForm type="Update" id={_id} />
+							) : (
+								<></>
+							)}
 							<DropdownMenu>
 								<DropdownMenuTrigger>
 									<EllipsisVertical className="cursor-pointer" />
@@ -71,9 +78,9 @@ export default function ProductCard({
 						<Label.Mid300 className="overflow-ellipsis">
 							Seller
 						</Label.Mid300>
-						<Label.Thin300 className="overflow-ellipsis">
+						{/* <Label.Thin300 className="overflow-ellipsis">
 							{seller?.username}
-						</Label.Thin300>
+						</Label.Thin300> */}
 					</Flex>
 					<Flex align="center" justify="between">
 						<Flex gap="2" align="center" justify="between">

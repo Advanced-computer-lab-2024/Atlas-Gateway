@@ -18,7 +18,7 @@ import ProdcutForm from "./ProductForm";
 
 export default function Products() {
 	const { data, meta } = useProducts();
-
+	console.log(data);
 	const { page, onPageChange, pagesCount } = usePagination({
 		pageNum: meta?.pages || 1,
 		pagesCount: meta?.pages || 1,

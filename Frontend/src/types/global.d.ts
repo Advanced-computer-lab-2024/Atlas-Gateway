@@ -44,7 +44,7 @@ export type TProduct = {
 	description: string;
 	price: number;
 	images: string[];
-	seller: TUser;
+	sellerId: string;
 	avgRating: number;
 	reviews: string[];
 	isArchived: boolean;
