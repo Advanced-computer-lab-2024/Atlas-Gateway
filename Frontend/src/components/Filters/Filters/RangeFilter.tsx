@@ -13,7 +13,13 @@ import { Input } from "@/components/ui/input";
 
 import { TRangeFilter } from "../types";
 
-export default function RangeFilter({ filter }: { filter: TRangeFilter }) {
+export default function RangeFilter({
+	filter,
+	removeFilter,
+}: {
+	filter: TRangeFilter;
+	removeFilter: () => void;
+}) {
 	const [start, setStart] = useState("");
 	const [end, setEnd] = useState("");
 
@@ -25,12 +31,6 @@ export default function RangeFilter({ filter }: { filter: TRangeFilter }) {
 			[filter.filterName]: `${start === "" ? "null" : start},${end === "" ? "null" : end}`,
 		});
 	}, [end, filter.filterName, query, start, updateQuery]);
-
-	const removeFilter = useCallback(() => {
-		const newQuery = { ...query };
-		delete newQuery[filter.filterName];
-		updateQuery(newQuery);
-	}, [filter.filterName, query, updateQuery]);
 
 	return (
 		<DropdownMenu>

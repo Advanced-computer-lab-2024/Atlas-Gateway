@@ -54,8 +54,8 @@ export function filterByDate(query: any): PipelineStage[] {
 		const matchStage: any = { dateTime: {} };
 		const [startDateStr, endDateStr] = query.date.split(",");
 
-		// if no date is provided, set the start date to the current date
-		let startDate = new Date(startDateStr) || new Date();
+		// if no date is provided, set the start date the lowest possible date and the end date to null
+		let startDate = new Date(startDateStr) || new Date(0);
 		let endDate: Date | null = new Date(endDateStr) || null;
 
 		// If the start date is in the past, set it to the current date
@@ -93,8 +93,8 @@ export function filterByDate(query: any): PipelineStage[] {
 export function filterByRatings(query: any): PipelineStage[] {
 	const pipeline: PipelineStage[] = [];
 
-	if (query.ratings) {
-		const [minRatingStr, maxRatingStr] = query.ratings.split(",");
+	if (query.avgRating) {
+		const [minRatingStr, maxRatingStr] = query.avgRating.split(",");
 
 		let minRating: number | null = parseFloat(minRatingStr) || 0;
 		let maxRating: number | null = parseFloat(maxRatingStr) || 5;

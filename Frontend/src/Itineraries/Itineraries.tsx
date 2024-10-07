@@ -75,10 +75,15 @@ export default function Itineraries() {
 									type: "checkbox",
 									options: [],
 								},
-								rating: {
+								avgRating: {
 									filterName: "avgRating",
 									label: "Rating",
 									type: "range",
+								},
+								date: {
+									filterName: "date",
+									label: "Date",
+									type: "date",
 								},
 							}}
 						/>

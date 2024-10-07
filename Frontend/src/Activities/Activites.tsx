@@ -88,6 +88,11 @@ export default function Activites() {
 									label: "Rating",
 									type: "range",
 								},
+								date: {
+									filterName: "date",
+									label: "Date",
+									type: "date",
+								},
 							}}
 						/>
 					</Flex>

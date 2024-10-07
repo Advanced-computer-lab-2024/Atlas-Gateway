@@ -53,7 +53,12 @@ export default function Products() {
 									type: "checkbox",
 									options: [],
 								},
-								rating: {
+								price: {
+									filterName: "price",
+									label: "Price",
+									type: "range",
+								},
+								avgRating: {
 									filterName: "avgRating",
 									label: "Rating",
 									type: "range",

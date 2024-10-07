@@ -12,15 +12,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Flex } from "@/components/ui/flex";
 
-// import { Input } from "@/components/ui/input";
 import { SelectItem, TCheckboxFilter } from "../types";
 
 export default function CheckboxFilter({
 	filter,
+	removeFilter,
 }: {
 	filter: TCheckboxFilter;
+	removeFilter: () => void;
 }) {
-	// const [search, setSearch] = useState("");
 	const [selected, setSelected] = useState<SelectItem[]>([]);
 
 	const [query, updateQuery] = useQueryString();
@@ -59,31 +59,16 @@ export default function CheckboxFilter({
 		});
 	}, [filter.filterName, query, selected, updateQuery]);
 
-	const removeFilter = useCallback(() => {
-		const newQuery = { ...query };
-		delete newQuery[filter.filterName];
-		updateQuery(newQuery);
-	}, [filter.filterName, query, updateQuery]);
-
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
 				<Button variant="ghost">{filter.label}</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent className="w-52">
-				<Flex isColumn gap="2">
-					{/* <Input
-						placeholder="Search"
-						value={search}
-						onChange={(e) => setSearch(e.target.value)}
-					/> */}
+				<Flex isColumn gap="2" className="h-64">
 					{selected.length > 0 && (
 						<>
-							<Flex
-								gap="2"
-								isWrapped
-								className="max-h-16 h-8"
-							>
+							<Flex gap="2" isWrapped className="max-h-16 h-8">
 								{selected.map((item) => (
 									<Badge
 										onClick={() => removeSelectedItem(item)}
@@ -99,7 +84,7 @@ export default function CheckboxFilter({
 					)}
 					<Flex
 						isColumn
-						className="p-2 max-h-52 h-8"
+						className="p-2 max-h-52 overflow-y-scroll"
 						gap="2"
 					>
 						{filter.options.map((option) => (

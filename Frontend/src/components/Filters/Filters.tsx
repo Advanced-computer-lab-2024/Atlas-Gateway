@@ -1,3 +1,4 @@
+import { set } from "lodash";
 import { TrashIcon } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
 
@@ -34,11 +35,11 @@ export default function Filters({ filters }: { filters: TFilters }) {
 	);
 
 	const clearSelection = () => {
-		setActiveFilters([]);
-		const newQuery = { ...query };
+		const newQuery = { ...query, page: 1 };
 		activeFilters.forEach((filter) => {
-			delete newQuery[filter.filterName];
+			set(newQuery, filter.filterName, undefined);
 		});
+		setActiveFilters([]);
 		updateQuery(newQuery);
 	};
 
@@ -94,9 +95,17 @@ export default function Filters({ filters }: { filters: TFilters }) {
 					</Flex>
 				</DropdownMenuContent>
 			</DropdownMenu>
-			<TrashIcon className="cursor-pointer" onClick={clearSelection} />
+			{activeFilters.length > 0 && (
+				<TrashIcon
+					className="cursor-pointer"
+					onClick={clearSelection}
+				/>
+			)}
 			{activeFilters.map((filter) => (
-				<FilterDropdown filter={filter} />
+				<FilterDropdown
+					filter={filter}
+					setActiveFilters={setActiveFilters}
+				/>
 			))}
 		</Flex>
 	);

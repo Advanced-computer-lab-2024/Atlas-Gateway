@@ -1,8 +1,12 @@
-
+import { useCategories } from "@/api/data/useCategories";
 import { usePagination } from "@/api/data/usePagination";
 import { usePlaces } from "@/api/data/usePlaces";
+import { useQueryString } from "@/api/data/useQueryString";
+import { useTags } from "@/api/data/useTags";
 import Filters from "@/components/Filters/Filters";
 import Label from "@/components/ui/Label";
+import { Searchbar } from "@/components/ui/Searchbar";
+import { Button } from "@/components/ui/button";
 import { Flex } from "@/components/ui/flex";
 import {
 	Pagination,
@@ -14,7 +18,6 @@ import {
 } from "@/components/ui/pagination";
 
 import PlaceCard from "./PlaceCard";
-import { Searchbar } from "@/components/ui/Searchbar";
 
 export default function Places() {
 	const { data, meta } = usePlaces();
@@ -23,6 +26,9 @@ export default function Places() {
 		pageNum: meta?.pages || 1,
 		pagesCount: meta?.pages || 1,
 	});
+
+	const { data: categories } = useCategories();
+	const { data: tags } = useTags();
 
 	return (
 		<Flex
@@ -48,15 +54,23 @@ export default function Places() {
 									filterName: "tags",
 									label: "Tags",
 									type: "checkbox",
-									options: [],
+									options:
+										tags?.map((tag) => ({
+											label: tag.name,
+											value: tag._id,
+										})) || [],
 								},
 								categories: {
 									filterName: "categories",
 									label: "Categories",
 									type: "checkbox",
-									options: [],
+									options:
+										categories?.map((category) => ({
+											label: category.name,
+											value: category._id,
+										})) || [],
 								},
-								rating: {
+								avgRating: {
 									filterName: "avgRating",
 									label: "Rating",
 									type: "range",
