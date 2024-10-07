@@ -1,9 +1,13 @@
 import { Request, Response } from "express";
 import mongoose, { PipelineStage, Types } from "mongoose";
+import { userInfo } from "os";
+
+
 
 import { Governor } from "../Database/Models/Users/governor.model";
 import { Places } from "../Database/Models/places.model";
 import AggregateBuilder from "../Services/aggregation.service";
+
 
 export const createPlace = async (req: Request, res: Response) => {
 	try {
@@ -66,6 +70,40 @@ export const getPlaces = async (req: Request, res: Response) => {
 	} catch (error) {
 		res.status(500).json({ message: "Internal Server Error" });
 		console.log(error);
+	}
+};
+
+export const getPlacesByUserId = async (req: Request, res: Response) => {
+	try {
+		const governerId = req.headers.userid;
+		if (!governerId) {
+			return res
+				.status(400)
+				.json({ message: "Governer ID is required" });
+		}
+		if (!Types.ObjectId.isValid(governerId.toString())) {
+			return res.status(400).json({ message: "Invalid Governer ID" });
+		}
+
+		const places = await Places.find({
+			governorId : governerId,
+		}).populate("tags");
+
+		const response = {
+			data: places,
+			metaData: {
+				page: req.query.page || 1,
+				total: places.length,
+				pages: Math.ceil(
+					(places.length ?? 0) / (Number(req?.query?.limit) || 10),
+				),
+			},
+		};
+		console.log(response);
+
+		res.status(200).send(response);
+	} catch (error) {
+		res.status(500).send("Error getting Places by id");
 	}
 };
 
