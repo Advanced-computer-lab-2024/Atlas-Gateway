@@ -15,6 +15,7 @@ const ENDPOINTS = {
 	},
 	activity: {
 		list: "api/activity/list",
+		listAdvertisor: "api/activity/listAdvertisor",
 		show: (id: string) => `api/activity/show/${id}`,
 		create: "api/activity/create",
 		update: (id: string) => `api/activity/update/${id}`,
