@@ -1,6 +1,5 @@
 import { schemaConfig } from "#utils";
 import { Document, Schema, Types, model } from "mongoose";
-import { Stream } from "stream";
 
 interface IItinerary extends Document {
 	title: string;

@@ -41,12 +41,13 @@ export function apiActivity(id: string | undefined) {
 	});
 }
 
-export function apiCreateActivity(payload: TActivity) {
+export function apiCreateActivity(payload: TActivity, _id: string) {
 	return axios({
 		method: "POST",
 		url: ENDPOINTS.activity.create,
 		headers: {
 			"Content-Type": "application/json",
+			userid: _id,
 		},
 		baseURL: "http://localhost:5000",
 		data: payload,

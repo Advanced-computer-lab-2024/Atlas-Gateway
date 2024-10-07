@@ -1,11 +1,27 @@
 import { Request, Response } from "express";
 import { PipelineStage, Types } from "mongoose";
 
+
+
 import { Activity } from "../Database/Models/activity.model";
 import AggregateBuilder from "../Services/aggregation.service";
 
+
 export const createActivities = async (req: Request, res: Response) => {
 	try {
+
+		const advertisorId = req.headers.userid;
+
+		if (!advertisorId) {
+			return res
+				.status(400)
+				.json({ message: "Tour Guide ID is required" });
+		}
+
+		if (!Types.ObjectId.isValid(advertisorId.toString())) {
+			return res.status(400).json({ message: "Invalid Tour Guide ID" });
+		}
+
 		const {
 			name,
 			dateTime,
@@ -22,6 +38,7 @@ export const createActivities = async (req: Request, res: Response) => {
 			dateTime,
 			location,
 			tags,
+			createdBy: new Types.ObjectId(advertisorId.toString()),
 			categories,
 			minPrice,
 			maxPrice,
@@ -53,6 +70,42 @@ export const getActivityById = async (req: Request, res: Response) => {
 	} catch (error) {
 		console.log(error);
 		res.status(500).send("error getting an activity");
+	}
+};
+
+export const getActivitybyUserId = async (req: Request, res: Response) => {
+	try {
+		const tourGuideId = req.headers.userid;
+
+		if (!tourGuideId) {
+			return res
+				.status(400)
+				.json({ message: "Advertisor ID is required" });
+		}
+		if (!Types.ObjectId.isValid(tourGuideId.toString())) {
+			return res.status(400).json({ message: "Invalid Advertisor ID" });
+		}
+
+		const activity = await Activity.find({
+			createdBy: tourGuideId,
+		}).populate("tags");
+
+
+		const response = {
+			data: activity,
+			metaData: {
+				page: req.query.page || 1,
+				total: activity.length,
+				pages: Math.ceil(
+					(activity.length ?? 0) / (Number(req?.query?.limit) || 10),
+				),
+			},
+		};
+		console.log(response);
+
+		res.status(200).send(response);
+	} catch (error) {
+		res.status(500).send("Error getting Itinerary by id");
 	}
 };
 
