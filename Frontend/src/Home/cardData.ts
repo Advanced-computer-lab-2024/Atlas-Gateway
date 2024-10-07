@@ -26,15 +26,24 @@ const itinerariesCard = {
 	href: "/itineraries",
 };
 
+const placesCard = {
+	title: "Places",
+	description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+	Text: "View Places",
+	href: "/places",
+};
+
 export const cardsMap: Record<EAccountType, TCard[]> = {
-	[EAccountType.Tourist]: [productsCard, activitiesCard, itinerariesCard],
-	[EAccountType.Guide]: [productsCard, activitiesCard, itinerariesCard],
-	[EAccountType.Seller]: [productsCard, activitiesCard, itinerariesCard],
-	[EAccountType.Advertiser]: [productsCard, activitiesCard, itinerariesCard],
-	[EAccountType.Admin]: [productsCard, activitiesCard, itinerariesCard],
-	[EAccountType.TourismGovernor]: [
+	[EAccountType.Tourist]: [
+		placesCard,
 		productsCard,
 		activitiesCard,
 		itinerariesCard,
 	],
+	[EAccountType.Guide]: [placesCard, activitiesCard, itinerariesCard],
+	[EAccountType.Seller]: [productsCard],
+	[EAccountType.Advertiser]: [itinerariesCard, activitiesCard, placesCard],
+	[EAccountType.Admin]: [productsCard, activitiesCard, itinerariesCard, placesCard],
+	[EAccountType.TourismGovernor]: [placesCard],
+	[EAccountType.Guest]: [placesCard, activitiesCard, itinerariesCard],
 };

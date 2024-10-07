@@ -54,6 +54,7 @@ const ENDPOINTS = {
 	},
 	itinerary: {
 		list: "api/itinerary/list",
+		listTourguide: "api/itinerary/listTourGuide",
 		show: (id: string) => `api/itinerary/show/${id}`,
 		create: "api/itinerary/create",
 		update: (id: string) => `api/itinerary/update/${id}`,

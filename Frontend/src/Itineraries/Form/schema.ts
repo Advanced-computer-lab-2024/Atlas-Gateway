@@ -1,8 +1,11 @@
 import { z } from "zod";
 
-
 export const formSchema = z.object({
-	title: z.string().min(5, "Title is required"),
+	title: z
+		.string({
+			message: "Title is required",
+		})
+		.min(5, "Title has to be at least 5 characters"),
 	language: z.string().min(1, "Language of Itinerary is required"),
 	price: z
 		.number({
