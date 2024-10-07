@@ -22,7 +22,7 @@ import {
 	SheetTrigger,
 } from "@/components/ui/sheet";
 
-import { tagSchema } from "./schema"; 
+import { tagSchema } from "./schema";
 
 const AddTags = () => {
 	const formMethods = useForm<z.infer<typeof tagSchema>>({
@@ -46,9 +46,7 @@ const AddTags = () => {
 		<div className="flex self-end pb-3">
 			<Sheet>
 				<SheetTrigger asChild>
-					<Button variant="outline" className="hover:bg-[#65ba2d]">
-						Add Tag
-					</Button>
+					<Button variant="outline">Add Tag</Button>
 				</SheetTrigger>
 				<SheetContent>
 					<SheetHeader>
@@ -66,7 +64,10 @@ const AddTags = () => {
 									<FormItem>
 										<FormLabel>Tag name</FormLabel>
 										<FormControl>
-											<Input {...field} placeholder="name" />
+											<Input
+												{...field}
+												placeholder="name"
+											/>
 										</FormControl>
 										<FormDescription>
 											Enter tag name.
@@ -76,12 +77,15 @@ const AddTags = () => {
 							/>
 							<FormField
 								control={control}
-								name="category"
+								name="type"
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>Type</FormLabel>
 										<FormControl>
-											<Input {...field} placeholder="category" />
+											<Input
+												{...field}
+												placeholder="type"
+											/>
 										</FormControl>
 										<FormDescription>
 											Enter a Type.

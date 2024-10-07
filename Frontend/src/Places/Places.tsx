@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import AddTags from "@/Tags/AddTags";
 import { useCategories } from "@/api/data/useCategories";
 import { usePagination } from "@/api/data/usePagination";
 import { usePlaces } from "@/api/data/usePlaces";
@@ -76,16 +77,19 @@ export default function Places() {
 							}}
 						/>
 					</Flex>
-					{user?.type === EAccountType.TourismGovernor && (
-						<Button
-							variant="ghost"
-							onClick={() => {
-								setOpen(true);
-							}}
-						>
-							Add Place
-						</Button>
-					)}
+					<div className="flex gpa-2">
+						<AddTags />
+						{user?.type === EAccountType.TourismGovernor && (
+							<Button
+								variant="ghost"
+								onClick={() => {
+									setOpen(true);
+								}}
+							>
+								Add Place
+							</Button>
+						)}
+					</div>
 				</Flex>
 			</Flex>
 			<Flex
