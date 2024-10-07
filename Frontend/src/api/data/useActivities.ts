@@ -1,16 +1,16 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 
-import { useLoginStore } from "@/store/loginStore";
 
-import {
-	apiActivities,
-	apiActivity,
-	apiCreateActivity,
-	apiDeleteActivity,
-	apiUpdateActivity,
-} from "../service/activities";
+
+import { useLoginStore } from "@/store/loginStore";
+import { TActivity } from "@/types/global";
+
+
+
+import { apiActivities, apiActivity, apiCreateActivity, apiDeleteActivity, apiUpdateActivity } from "../service/activities";
 import { useQueryString } from "./useQueryString";
+
 
 export function useActivities() {
 	const { user } = useLoginStore();
@@ -42,8 +42,17 @@ export function useActivity() {
 }
 
 export function useCreateActivity(onSuccess: () => void) {
+	const { user } = useLoginStore();
 	const mutation = useMutation({
-		mutationFn: apiCreateActivity,
+		mutationFn: (data: TActivity) => {
+			const { _id } = user || {};
+
+			if (!_id) {
+				throw new Error("User ID is undefined");
+			}
+
+			return apiCreateActivity(data, _id);
+		},
 		onSuccess,
 	});
 
