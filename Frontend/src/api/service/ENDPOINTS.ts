@@ -3,8 +3,8 @@ const ENDPOINTS = {
 		list: "api/places/list",
 		show: (id: string) => `api/places/show/${id}`,
 		create: "api/places/create",
-		update: "api/places/update",
-		delete: "api/places/delete",
+		update: (id: string) => `api/places/update/${id}`,
+		delete: (id: string) => `api/places/delete/${id}`,
 	},
 	products: {
 		list: "api/products/list",

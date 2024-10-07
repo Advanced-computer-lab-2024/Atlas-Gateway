@@ -16,7 +16,6 @@ export default function PlaceDetails() {
 		location,
 		images,
 		avgRating,
-		categories,
 		tags,
 		openingHours,
 		ticketPrices,
@@ -51,8 +50,12 @@ export default function PlaceDetails() {
 								<LocateIcon className="w-full h-40" />
 							)}
 						</Flex>
-						<Flex isColumn justify="around">
-							<Flex gap="2" align="center" justify="between">
+						<Flex
+							isColumn
+							justify="around"
+							className="w-[400px] overflow-x-scroll"
+						>
+							<Flex gap="2" align="center">
 								<Label.Mid600 className="text-left">
 									Description:{" "}
 								</Label.Mid600>
@@ -68,15 +71,6 @@ export default function PlaceDetails() {
 									{location}
 								</Label.Thin400>
 								<MapPin size={32} />
-							</Flex>
-							<Flex gap="2" align="center">
-								<Label.Mid600 className="text-left">
-									Rating:{" "}
-								</Label.Mid600>
-								<Label.Thin400 className="overflow-ellipsis">
-									{avgRating}
-								</Label.Thin400>
-								<Star color="yellow" fill="yellow" size={32} />
 							</Flex>
 							<Flex gap="2" align="center">
 								<Label.Mid600 className="text-left">
@@ -104,37 +98,13 @@ export default function PlaceDetails() {
 							</Flex>
 							<Flex gap="2" align="center">
 								<Label.Mid600 className="text-left">
-									Categories:
-								</Label.Mid600>
-								{categories && categories?.length > 0 ? (
-									<Flex
-										gap="1"
-										align="center"
-										className="overflow-x-scroll w-full h-8"
-									>
-										{categories?.map((category) => (
-											<Badge
-												key={category?._id}
-												variant={"default"}
-												className="whitespace-nowrap"
-											>
-												{category?.name}
-											</Badge>
-										))}
-									</Flex>
-								) : (
-									"N/A"
-								)}
-							</Flex>
-							<Flex gap="2" align="center">
-								<Label.Mid600 className="text-left">
 									Tags:
 								</Label.Mid600>
 								{tags && tags?.length > 0 ? (
 									<Flex
 										gap="1"
 										align="center"
-										className="overflow-x-scroll w-full h-8"
+										className="h-8"
 									>
 										{tags?.map((tag) => (
 											<Badge

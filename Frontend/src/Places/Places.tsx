@@ -1,7 +1,8 @@
+import { useState } from "react";
+
 import { useCategories } from "@/api/data/useCategories";
 import { usePagination } from "@/api/data/usePagination";
 import { usePlaces } from "@/api/data/usePlaces";
-import { useQueryString } from "@/api/data/useQueryString";
 import { useTags } from "@/api/data/useTags";
 import Filters from "@/components/Filters/Filters";
 import Label from "@/components/ui/Label";
@@ -16,16 +17,28 @@ import {
 	PaginationNext,
 	PaginationPrevious,
 } from "@/components/ui/pagination";
+import { useLoginStore } from "@/store/loginStore";
+import { EAccountType } from "@/types/enums";
+import { TPlace } from "@/types/global";
 
+import PlaceForm from "./Form/PlacesForm";
 import PlaceCard from "./PlaceCard";
 
 export default function Places() {
+	const { user } = useLoginStore();
 	const { data, meta } = usePlaces();
+	const [open, setOpen] = useState(false);
+	const [place, setPlace] = useState<TPlace>();
 
 	const { page, onPageChange, pagesCount } = usePagination({
 		pageNum: meta?.pages || 1,
 		pagesCount: meta?.pages || 1,
 	});
+
+	const openEditDrawer = (place: TPlace) => {
+		setOpen(true);
+		setPlace(place);
+	};
 
 	const { data: categories } = useCategories();
 	const { data: tags } = useTags();
@@ -45,7 +58,7 @@ export default function Places() {
 				gap="2"
 				className="bg-surface-secondary p-2 rounded-lg"
 			>
-				<Flex>
+				<Flex align="center" justify="between">
 					<Flex gap="1" align="center">
 						<Searchbar />
 						<Filters
@@ -78,13 +91,25 @@ export default function Places() {
 							}}
 						/>
 					</Flex>
+					{user?.type === EAccountType.TourismGovernor && (
+						<Button
+							variant="ghost"
+							onClick={() => {
+								setOpen(true);
+							}}
+						>
+							Add Place
+						</Button>
+					)}
 				</Flex>
 			</Flex>
 			<Flex
 				className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2"
 				gap="4"
 			>
-				{data?.map((place) => <PlaceCard {...place} />)}
+				{data?.map((place) => (
+					<PlaceCard place={place} openEditDrawer={openEditDrawer} />
+				))}
 			</Flex>
 			{pagesCount > 1 && (
 				<Pagination>
@@ -112,6 +137,7 @@ export default function Places() {
 					)}
 				</Pagination>
 			)}
+			<PlaceForm open={open} setOpen={setOpen} place={place} />
 		</Flex>
 	);
 }
