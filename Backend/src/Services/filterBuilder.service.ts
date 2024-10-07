@@ -73,10 +73,10 @@ export function filterByDate(query: any): PipelineStage[] {
 			$match: {
 				$or: [
 					{
-						startDate: { $gte: startDate },
+						startDateTime: { $gte: startDate },
 					},
 					{
-						endDate: { $lte: endDate },
+						endDateTime: { $lte: endDate },
 					},
 					{
 						dateTime: { $gte: startDate, $lte: endDate },
@@ -88,6 +88,7 @@ export function filterByDate(query: any): PipelineStage[] {
 	// If no date is provided, return all activities after the current date
 	return pipeline;
 }
+
 
 // Function to filter by ratings
 export function filterByRatings(query: any): PipelineStage[] {
