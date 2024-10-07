@@ -2,12 +2,9 @@ import { Request, Response } from "express";
 import mongoose, { PipelineStage, Types } from "mongoose";
 import { userInfo } from "os";
 
-
-
 import { Governor } from "../Database/Models/Users/governor.model";
 import { Places } from "../Database/Models/places.model";
 import AggregateBuilder from "../Services/aggregation.service";
-
 
 export const createPlace = async (req: Request, res: Response) => {
 	try {
@@ -77,29 +74,47 @@ export const getPlacesByUserId = async (req: Request, res: Response) => {
 	try {
 		const governerId = req.headers.userid;
 		if (!governerId) {
-			return res
-				.status(400)
-				.json({ message: "Governer ID is required" });
+			return res.status(400).json({ message: "Governer ID is required" });
 		}
 		if (!Types.ObjectId.isValid(governerId.toString())) {
 			return res.status(400).json({ message: "Invalid Governer ID" });
 		}
 
-		const places = await Places.find({
-			governorId : governerId,
-		}).populate("tags");
+		const pipeline: PipelineStage[] = [
+			{
+				$lookup: {
+					from: "tags",
+					localField: "tags",
+					foreignField: "_id",
+					as: "tags",
+				},
+			},
+			{
+				$match: {
+					governorId: new Types.ObjectId(governerId.toString()),
+				},
+			},
+			...AggregateBuilder(req.query, ["name", "tagsData.name"]),
+		];
+
+		const result = await Places.aggregate(pipeline);
+
+		if (result[0].data.length === 0) {
+			return res
+				.status(404)
+				.json({ message: "No matching Places Found" });
+		}
 
 		const response = {
-			data: places,
+			data: result[0].data,
 			metaData: {
 				page: req.query.page || 1,
-				total: places.length,
+				total: result[0].total[0].count,
 				pages: Math.ceil(
-					(places.length ?? 0) / (Number(req?.query?.limit) || 10),
+					result[0].total[0].count / (Number(req.query.limit) || 10),
 				),
 			},
 		};
-		console.log(response);
 
 		res.status(200).send(response);
 	} catch (error) {

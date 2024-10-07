@@ -1,11 +1,8 @@
 import { Request, Response } from "express";
 import mongoose, { PipelineStage, Types } from "mongoose";
 
-
-
 import { Itinerary } from "../Database/Models/itinerary.model";
 import AggregateBuilder from "../Services/aggregation.service";
-
 
 //Create a new product entry
 export const createItinerary = async (req: Request, res: Response) => {
@@ -66,23 +63,36 @@ export const getItineraryByUserId = async (req: Request, res: Response) => {
 			return res.status(400).json({ message: "Invalid Tour Guide ID" });
 		}
 
-		const itinerary = await Itinerary.find({
-			createdBy: tourGuideId,
-		}).populate("tags");
+		const pipeline: PipelineStage[] = [
+			{
+				$lookup: {
+					from: "tags",
+					localField: "tags",
+					foreignField: "_id",
+					as: "tags",
+				},
+			},
+			{
+				$match: {
+					createdBy: new Types.ObjectId(tourGuideId.toString()),
+				},
+			},
+			...AggregateBuilder(req.query, ["title", "tags.name"]),
+		];
 
+		const result = await Itinerary.aggregate(pipeline);
 
 		const response = {
-			data: itinerary,
+			data: result?.[0]?.data,
 			metaData: {
 				page: req.query.page || 1,
-				total: itinerary.length,
+				total: result[0]?.total[0]?.count,
 				pages: Math.ceil(
-					(itinerary.length ?? 0) / (Number(req?.query?.limit) || 10),
+					(result[0]?.total[0]?.count ?? 0) /
+						(Number(req?.query?.limit) || 10),
 				),
 			},
 		};
-		console.log(response);
-
 		res.status(200).send(response);
 	} catch (error) {
 		res.status(500).send("Error getting Itinerary by id");
@@ -100,14 +110,6 @@ export const getItinerary = async (req: Request, res: Response) => {
 					as: "tags",
 				},
 			},
-			// { TODO: Lookup the tourguide who created the itinerary
-			// 	$lookup: {
-			// 		from: "tourguides",
-			// 		localField: "createdBy",
-			// 		foreignField: "_id",
-			// 		as: "createdBy",
-			// 	},
-			// },
 			...AggregateBuilder(req.query, ["title", "tags.name"]),
 		];
 

@@ -1,15 +1,11 @@
 import { Request, Response } from "express";
 import { PipelineStage, Types } from "mongoose";
 
-
-
 import { Activity } from "../Database/Models/activity.model";
 import AggregateBuilder from "../Services/aggregation.service";
 
-
 export const createActivities = async (req: Request, res: Response) => {
 	try {
-
 		const advertisorId = req.headers.userid;
 
 		if (!advertisorId) {
@@ -86,23 +82,53 @@ export const getActivitybyUserId = async (req: Request, res: Response) => {
 			return res.status(400).json({ message: "Invalid Advertisor ID" });
 		}
 
-		const activity = await Activity.find({
-			createdBy: tourGuideId,
-		}).populate("tags");
+		const pipeline = [
+			//need to join the tags and category collections to get the name of the tags and category
+			{
+				$lookup: {
+					from: "tags",
+					localField: "tags",
+					foreignField: "_id",
+					as: "tags",
+				},
+			},
+			{
+				$lookup: {
+					from: "categories",
+					localField: "categories",
+					foreignField: "_id",
+					as: "categories",
+				},
+			},
+			{
+				$match: {
+					createdBy: new Types.ObjectId(tourGuideId.toString()),
+				},
+			},
+			...AggregateBuilder(
+				req.query,
+				["name", "tags.name", "categories.name"], // Search fields
+			),
+		];
 
+		const result = await Activity.aggregate(pipeline);
+
+		if (result[0].data.length === 0) {
+			return res
+				.status(404)
+				.json({ message: "No matching Activities Found" });
+		}
 
 		const response = {
-			data: activity,
+			data: result[0].data,
 			metaData: {
 				page: req.query.page || 1,
-				total: activity.length,
+				total: result[0].total[0].count,
 				pages: Math.ceil(
-					(activity.length ?? 0) / (Number(req?.query?.limit) || 10),
+					result[0].total[0].count / (Number(req.query.limit) || 10),
 				),
 			},
 		};
-		console.log(response);
-
 		res.status(200).send(response);
 	} catch (error) {
 		res.status(500).send("Error getting Itinerary by id");
