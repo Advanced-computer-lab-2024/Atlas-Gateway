@@ -3,25 +3,45 @@ import { Trash2 } from "lucide-react";
 import { useEffect } from "react";
 import { useForm, useWatch } from "react-hook-form";
 
-
-
-import { useCreateItinerary, useItineraries, useUpdateItinerary } from "@/api/data/useItineraries";
+import {
+	useCreateItinerary,
+	useItineraries,
+	useUpdateItinerary,
+} from "@/api/data/useItineraries";
 import { useTags } from "@/api/data/useTags";
 import Label from "@/components/ui/Label";
 import { Button } from "@/components/ui/button";
 import { DateTimePicker } from "@/components/ui/date-time-picker";
 import { Flex } from "@/components/ui/flex";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import {
+	Form,
+	FormControl,
+	FormDescription,
+	FormField,
+	FormItem,
+	FormLabel,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { MultiSelect } from "@/components/ui/multi-select";
-import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
+import {
+	Sheet,
+	SheetContent,
+	SheetFooter,
+	SheetHeader,
+	SheetTitle,
+} from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
+import { languageOptions } from "@/types/consts";
 import { TItinerary } from "@/types/global";
 
-
-
 import { formSchema } from "./schema";
-
 
 export default function ItineraryForm({
 	open,
@@ -388,14 +408,31 @@ export default function ItineraryForm({
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>Language</FormLabel>
-										<FormControl>
-											<Input
-												placeholder="Enter the language"
-												{...field}
-												className="border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
-											/>
-										</FormControl>
-										<FormDescription>a</FormDescription>
+										<Select
+											onValueChange={field.onChange}
+											defaultValue={field.value}
+										>
+											<FormControl>
+												<SelectTrigger>
+													<SelectValue placeholder="Select your nationality" />
+												</SelectTrigger>
+											</FormControl>
+											<SelectContent>
+												{languageOptions.map(
+													(option) => (
+														<SelectItem
+															key={option.value}
+															value={option.value}
+														>
+															{option.label}
+														</SelectItem>
+													),
+												)}
+											</SelectContent>
+										</Select>
+										<FormDescription>
+											Select your nationality.
+										</FormDescription>
 									</FormItem>
 								)}
 							/>

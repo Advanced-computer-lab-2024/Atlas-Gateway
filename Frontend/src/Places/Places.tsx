@@ -41,7 +41,6 @@ export default function Places() {
 		setPlace(place);
 	};
 
-	const { data: categories } = useCategories();
 	const { data: tags } = useTags();
 
 	return (

@@ -7,6 +7,7 @@ import Label from "@/components/ui/Label";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Flex } from "@/components/ui/flex";
+import { languageOptions } from "@/types/consts";
 
 export default function ItineraryDetails() {
 	const navigate = useNavigate();
@@ -127,7 +128,9 @@ export default function ItineraryDetails() {
 							Language:
 						</Label.Mid600>
 						<Label.Thin300 className="overflow-ellipsis">
-							{language}
+							{languageOptions?.find(
+								(option) => option.value === language,
+							)?.label ?? language}
 						</Label.Thin300>
 					</Flex>
 					<Flex

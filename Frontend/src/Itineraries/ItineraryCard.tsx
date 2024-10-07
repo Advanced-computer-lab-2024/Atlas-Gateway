@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Flex } from "@/components/ui/flex";
 import { useLoginStore } from "@/store/loginStore";
+import { languageOptions } from "@/types/consts";
 import { EAccountType } from "@/types/enums";
 import { TItinerary } from "@/types/global";
 
@@ -207,7 +208,12 @@ export default function ItineraryCard({
 				</Flex>
 			</CardContent>
 			<CardFooter className="flex flex-col gap-2 items-center justify-center">
-				<Label.Mid300>Language: {itinerary?.language}</Label.Mid300>
+				<Label.Mid300>
+					Language:{" "}
+					{languageOptions?.find(
+						(option) => option.value === itinerary?.language,
+					)?.label ?? itinerary?.language}
+				</Label.Mid300>
 				<Label.Mid300>
 					{itinerary?.numberOfBookings}/{itinerary?.availability}{" "}
 					Bookings Available

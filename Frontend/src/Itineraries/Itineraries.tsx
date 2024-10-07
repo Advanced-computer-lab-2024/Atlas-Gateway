@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import { useItineraries } from "@/api/data/useItineraries";
 import { usePagination } from "@/api/data/usePagination";
+import { useTags } from "@/api/data/useTags";
 import Filters from "@/components/Filters/Filters";
 import Label from "@/components/ui/Label";
 import { Searchbar } from "@/components/ui/Searchbar";
@@ -27,6 +28,8 @@ export default function Itineraries() {
 	const { data, meta } = useItineraries();
 	const [open, setOpen] = useState(false);
 	const [itinerary, setItinerary] = useState<TItinerary>();
+
+	const { data: tags } = useTags();
 
 	const openEditDrawer = (itinerary: TItinerary) => {
 		setOpen(true);
@@ -67,23 +70,40 @@ export default function Itineraries() {
 									filterName: "tags",
 									label: "Tags",
 									type: "checkbox",
-									options: [],
-								},
-								categories: {
-									filterName: "categories",
-									label: "Categories",
-									type: "checkbox",
-									options: [],
-								},
-								avgRating: {
-									filterName: "avgRating",
-									label: "Rating",
-									type: "range",
+									options:
+										tags?.map((tag) => ({
+											label: tag.name,
+											value: tag._id,
+										})) || [],
 								},
 								date: {
+									// TODO: WIP
 									filterName: "date",
 									label: "Date",
 									type: "date",
+								},
+								price: {
+									filterName: "price",
+									label: "Price",
+									type: "range",
+								},
+								language: {
+									filterName: "language",
+									label: "Language",
+									type: "checkbox",
+									options: [
+										{ label: "English", value: "en" },
+										{ label: "Arabic", value: "ar" },
+										{ label: "French", value: "fr" },
+										{ label: "Spanish", value: "es" },
+										{ label: "Russian", value: "ru" },
+										{ label: "German", value: "de" },
+										{ label: "Italian", value: "it" },
+										{ label: "Chinese", value: "zh" },
+										{ label: "Japanese", value: "ja" },
+										{ label: "Korean", value: "ko" },
+										{ label: "Turkish", value: "tr" },
+									],
 								},
 							}}
 						/>
