@@ -1,5 +1,5 @@
-import { PipelineStage, Types } from "mongoose";
 import { formatDate } from "date-fns";
+import { PipelineStage, Types } from "mongoose";
 
 export default function buildFilterQuery(query: any): PipelineStage[] {
 	const pipeline: PipelineStage[] = [];
@@ -52,60 +52,64 @@ export function filterByDate(query: any): PipelineStage[] {
 	const pipeline: PipelineStage[] = [];
 
 	if (query.date) {
-		let matchStage = {
-		};
-		const [key, startDateStr, endDateStr] = query.date.split(",");
+		let matchStage = {};
+		const [startDateStr, endDateStr] = query.date.split(",");
 
 		// if no date is provided, set the start date the lowest possible date and the end date to null
-		let startDate = new Date(startDateStr) || new Date("1970-01-01T00:00:00.000Z");
-		let endDate: Date | null = endDateStr !== "null" ? new Date(endDateStr) : null;
+		let startDate =
+			new Date(startDateStr) || new Date("1970-01-01T00:00:00.000Z");
+		let endDate: Date | null =
+			endDateStr !== "null" ? new Date(endDateStr) : null;
 
-		
 		if (startDate && endDate) {
 			matchStage = {
 				$or: [
 					{
-						key: { $gte: formatDate(startDate, "YYYY-MM-DD"), $lte: formatDate(endDate, "YYYY-MM-DD") },
+						dateTime: {
+							$gte: startDate,
+							$lte: endDate,
+						},
+					},
+					{
+						startDateTime: { $gte: startDate },
+						endDateTime: { $lte: endDate },
 					},
 				],
 			};
-		}
-		else if (startDate) {
+		} else if (startDate) {
 			matchStage = {
 				$or: [
 					{
-						key: { $gte: formatDate(startDate, "YYYY-MM-DD") },
+						dateTime: { $gte: startDate },
+					},
+					{
+						startDateTime: { $gte: startDate },
 					},
 				],
 			};
-		}
-		else if (endDate) {
+		} else if (endDate) {
 			matchStage = {
 				$or: [
 					{
-						key: { $lte:  formatDate(endDate, "YYYY-MM-DD") },
+						dateTime: { $lte: endDate },
+					},
+					{
+						endDateTime: { $lte: endDate },
 					},
 				],
 			};
 		}
 
-		console.log(matchStage)
-
+		console.log(JSON.stringify(matchStage, null, 2));
 
 		pipeline.push({
-			$match: {
-				$or: [
-					{
-						dateTime: { $gte: formatDate(new Date(), "YYYY-MM-DD") },
-					},
-				],
-			},
+			$match: matchStage,
 		});
+		console.log(JSON.stringify(pipeline, null, 2));
 	}
 	// If no date is provided, return all activities after the current date
 	return pipeline;
 }
-
 
 // Function to filter by ratings
 export function filterByRatings(query: any): PipelineStage[] {

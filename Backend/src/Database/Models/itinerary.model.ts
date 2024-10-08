@@ -8,8 +8,8 @@ interface IItinerary extends Document {
 	availability: number;
 	pickUpLocation: string;
 	dropOffLocation: string;
-	startDateTime: string;
-	endDateTime: string;
+	startDateTime: Date;
+	endDateTime: Date;
 	activities: [
 		{
 			activity?: Types.ObjectId;
@@ -40,8 +40,8 @@ const itinerarySchema = new Schema<IItinerary>(
 		availability: { type: Number, required: true },
 		pickUpLocation: { type: String, required: true },
 		dropOffLocation: { type: String, required: true },
-		startDateTime: { type: String, required: true },
-		endDateTime: { type: String, required: true },
+		startDateTime: { type: Date, required: true },
+		endDateTime: { type: Date, required: true },
 		activities: [
 			{
 				id: { type: Schema.Types.ObjectId, required: false },
