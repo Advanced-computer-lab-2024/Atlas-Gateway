@@ -12,8 +12,8 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 
+import TagAndCategoryForm from "./CategoryAndTagsForm";
 import EditForm from "./EditForm";
-import TagAndCategoryForm from "./TagAndCategoryForm";
 
 interface Tags {
 	_id: string;

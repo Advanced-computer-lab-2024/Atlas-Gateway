@@ -44,7 +44,7 @@ import {
 } from "@/components/ui/sheet";
 
 import { productSchema } from "../schema";
-import EditProduct from "./EditProduct";
+import ProductForm from "./ProductForm";
 
 const Product = () => {
 	const { data: products, meta, refetch } = useProducts();
@@ -65,7 +65,7 @@ const Product = () => {
 		axios
 			.post("http://localhost:5000/api/products/create", data, {
 				headers: {
-					userId: "123456", // will be edited once we are able to login // 6/10 - changed to a valid admin ID
+					userId: "123456",
 				},
 			})
 			.then((res) => {
@@ -251,7 +251,7 @@ const Product = () => {
 							<h2 className="text-lg font-semibold mt-2">
 								{prod.name}
 							</h2>
-							<EditProduct id={prod._id} />
+							<ProductForm id={prod._id} />
 						</div>
 
 						<h3 className="">{prod.description}</h3>

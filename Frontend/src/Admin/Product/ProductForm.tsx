@@ -15,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import {
 	Sheet,
+	SheetClose,
 	SheetContent,
 	SheetDescription,
 	SheetFooter,
@@ -159,7 +160,9 @@ const EditForm = ({ id }: props) => {
 							)}
 						/>
 						<SheetFooter>
-							<Button type="submit">Save changes</Button>
+							<SheetClose asChild>
+								<Button type="submit">Save changes</Button>
+							</SheetClose>
 						</SheetFooter>
 					</form>
 				</FormProvider>
