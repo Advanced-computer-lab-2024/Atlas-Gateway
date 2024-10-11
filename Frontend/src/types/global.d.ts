@@ -67,6 +67,11 @@ export type TActivity = {
 	isOpen: boolean;
 	avgRating: number;
 };
+
+export interface TAdmin extends TUser {
+	email: string;
+	password: string;
+}
 export interface TTourist extends TUser {
 	email: string;
 	mobile: string;

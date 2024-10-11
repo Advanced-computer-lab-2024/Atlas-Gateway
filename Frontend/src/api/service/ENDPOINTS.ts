@@ -24,6 +24,10 @@ const ENDPOINTS = {
 	},
 	login: "api/login",
 	register: "api/register/create",
+	admin: {
+		list: "api/admin/list",
+		delete: (id: string) => `api/admin/delete/${id}`,
+	},
 	tourist: {
 		show: (id: string) => `api/tourist/show/${id}`,
 		update: (id: string) => `api/tourist/update/${id}`,

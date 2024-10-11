@@ -63,6 +63,7 @@ export const getAdmins = async (req: Request, res: Response) => {
 export const deleteAdmin = async (req: Request, res: Response) => {
 	try {
 		const { id } = req.params;
+		console.log(id);
 
 		if (!id) {
 			return res.status(400).send("Id is Required");
