@@ -2,15 +2,27 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 
 import { useLoginStore } from "@/store/loginStore";
+import { TAdmin } from "@/types/global";
 
-import { apiCreateAdmin, apiDeleteAdmin } from "../service/admins";
+import { apiAdmins, apiCreateAdmin, apiDeleteAdmin } from "../service/admins";
 
-export function useCreateAdmins() {
+export function useCreateAdmin(onSuccess: () => void) {
+	const mutation = useMutation({
+		mutationFn: (data: TAdmin) => {
+			return apiCreateAdmin(data);
+		},
+		onSuccess,
+	});
+	const { mutate } = mutation;
+	return { doCreateAdmin: mutate, ...mutation };
+}
+
+export function useAdmins() {
 	const { user } = useLoginStore();
 	const { _id } = user || {};
 
 	const { data, refetch } = useQuery({
-		queryFn: () => apiCreateAdmin(),
+		queryFn: () => apiAdmins(),
 		queryKey: ["admin", _id],
 		// staleTime: 10 * 60 * 1000, // 10 minutes
 	});

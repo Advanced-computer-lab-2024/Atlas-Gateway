@@ -26,6 +26,7 @@ const ENDPOINTS = {
 	register: "api/register/create",
 	admin: {
 		list: "api/admin/list",
+		create: "api/admin/create",
 		delete: (id: string) => `api/admin/delete/${id}`,
 	},
 	tourist: {

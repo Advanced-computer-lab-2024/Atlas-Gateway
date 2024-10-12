@@ -1,6 +1,10 @@
 import { RotateCw, Trash } from "lucide-react";
 
-import { useCreateAdmins, useDeleteAdmin } from "@/api/data/useAdmins";
+import {
+	useAdmins,
+	useCreateAdmins,
+	useDeleteAdmin,
+} from "@/api/data/useAdmins";
 import {
 	Table,
 	TableBody,
@@ -17,7 +21,7 @@ import AddForm from "./AddForm";
 
 const Admins = () => {
 	const { user } = useLoginStore();
-	const { data, refetch } = useCreateAdmins();
+	const { data, refetch } = useAdmins();
 	const { doDeleteAdmin } = useDeleteAdmin(refetch);
 
 	return (

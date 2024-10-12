@@ -3,6 +3,7 @@ import axios from "axios";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { useAdmins, useCreateAdmin } from "@/api/data/useAdmins";
 import { Button } from "@/components/ui/button";
 import {
 	FormControl,
@@ -22,6 +23,7 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from "@/components/ui/sheet";
+import { TAdmin } from "@/types/global";
 
 import { accountSchema } from "../schema";
 
@@ -30,20 +32,15 @@ interface props {
 }
 
 const AddForm = ({ type }: props) => {
+	const { refetch } = useAdmins();
+	const { doCreateAdmin } = useCreateAdmin(refetch);
 	const formMethods = useForm<z.infer<typeof accountSchema>>({
 		resolver: zodResolver(accountSchema),
 	});
 	const { handleSubmit, control } = formMethods;
-	const onSubmit = (data: z.infer<typeof accountSchema>) => {
-		axios
-			.post(`http://localhost:5000/api/${type}/create`, data)
-			.then((res) => {
-				console.log(res.status);
-				// will add here something to give a feedback later
-			})
-			.catch((error) => {
-				console.log(error);
-			});
+
+	const onSubmit = (data: TAdmin) => {
+		doCreateAdmin(data);
 	};
 	return (
 		<div>

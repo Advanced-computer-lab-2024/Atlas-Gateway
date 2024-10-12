@@ -5,7 +5,19 @@ import { TAdmin } from "@/types/global";
 import ENDPOINTS from "./ENDPOINTS";
 import { TApiResponse } from "./types";
 
-export function apiCreateAdmin() {
+export function apiCreateAdmin(payload: TAdmin) {
+	return axios({
+		method: "POST",
+		url: ENDPOINTS.admin.create,
+		headers: {
+			"Content-Type": "application/json",
+		},
+		baseURL: "http://localhost:5000",
+		data: payload,
+	});
+}
+
+export function apiAdmins() {
 	return axios<TApiResponse<TAdmin[]>>({
 		method: "GET",
 		url: ENDPOINTS.admin.list,
