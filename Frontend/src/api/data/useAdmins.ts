@@ -1,5 +1,4 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
 
 import { useLoginStore } from "@/store/loginStore";
 import { TAdmin } from "@/types/global";
@@ -24,7 +23,7 @@ export function useAdmins() {
 	const { data, refetch } = useQuery({
 		queryFn: () => apiAdmins(),
 		queryKey: ["admin", _id],
-		// staleTime: 10 * 60 * 1000, // 10 minutes
+		// staleTime: 2 * 60 * 1000, // 2 minutes
 	});
 
 	return { data: data?.data, refetch }; // i dont understand the point of data?.data?.data

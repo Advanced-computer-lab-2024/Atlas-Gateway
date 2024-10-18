@@ -1,9 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { useAdmins, useCreateAdmin } from "@/api/data/useAdmins";
+import { useCreateGovernor, useGovernors } from "@/api/data/useGovernor";
 import { Button } from "@/components/ui/button";
 import {
 	FormControl,
@@ -23,7 +23,7 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from "@/components/ui/sheet";
-import { TAdmin } from "@/types/global";
+import { TAdmin, TGovernor } from "@/types/global";
 
 import { accountSchema } from "../schema";
 
@@ -32,15 +32,17 @@ interface props {
 }
 
 const AddForm = ({ type }: props) => {
-	const { refetch } = useAdmins();
-	const { doCreateAdmin } = useCreateAdmin(refetch);
+	const { refetch: refetchAdmins } = useAdmins();
+	const { refetch: refetchGovernors } = useGovernors();
+	const { doCreateAdmin } = useCreateAdmin(refetchAdmins);
+	const { doCreateGovernor } = useCreateGovernor(refetchGovernors);
 	const formMethods = useForm<z.infer<typeof accountSchema>>({
 		resolver: zodResolver(accountSchema),
 	});
 	const { handleSubmit, control } = formMethods;
 
-	const onSubmit = (data: TAdmin) => {
-		doCreateAdmin(data);
+	const onSubmit = (data: TAdmin | TGovernor) => {
+		type == "admin" ? doCreateAdmin(data) : doCreateGovernor(data);
 	};
 	return (
 		<div>

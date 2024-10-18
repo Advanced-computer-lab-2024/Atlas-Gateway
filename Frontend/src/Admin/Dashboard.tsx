@@ -14,7 +14,7 @@ import Sidebar from "./Sidebar";
 
 const Admin = () => {
 	const [selectedCategory, setSelectedCategory] = useState(""); // manages selection from sidebar
-	const [selectedItem, setSelectedItem] = useState(""); // manages selection from navbar
+	const [selectedItem, setSelectedItem] = useState("Admins"); // manages selection from navbar
 
 	const renderContent = () => {
 		if (selectedCategory == "Accounts") {
@@ -95,6 +95,7 @@ const Admin = () => {
 				<Navbar
 					selectedCategory={selectedCategory}
 					onSelect={setSelectedItem}
+					selectedItem={selectedItem}
 				/>
 				<div className="p-4">{renderContent()}</div>
 			</div>

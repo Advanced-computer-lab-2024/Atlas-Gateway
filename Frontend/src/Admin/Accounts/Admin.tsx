@@ -1,10 +1,6 @@
 import { RotateCw, Trash } from "lucide-react";
 
-import {
-	useAdmins,
-	useCreateAdmins,
-	useDeleteAdmin,
-} from "@/api/data/useAdmins";
+import { useAdmins, useDeleteAdmin } from "@/api/data/useAdmins";
 import {
 	Table,
 	TableBody,

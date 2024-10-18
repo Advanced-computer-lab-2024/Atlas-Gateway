@@ -7,9 +7,10 @@ import { onLogout } from "@/store/loginStore";
 interface Props {
 	selectedCategory: string;
 	onSelect: (item: string) => void;
+	selectedItem: string;
 }
 
-const Navbar = ({ selectedCategory, onSelect }: Props) => {
+const Navbar = ({ selectedCategory, onSelect, selectedItem }: Props) => {
 	const navigate = useNavigate();
 	const [activeItem, setActiveItem] = useState("");
 	const logOut = () => {
@@ -21,6 +22,7 @@ const Navbar = ({ selectedCategory, onSelect }: Props) => {
 		onSelect(item);
 	};
 	const renderOptions = () => {
+		console.log(selectedItem);
 		switch (selectedCategory) {
 			case "Accounts":
 				return (
@@ -34,7 +36,7 @@ const Navbar = ({ selectedCategory, onSelect }: Props) => {
 							"Seller",
 						].map((item) => (
 							<p
-								className={`cursor-pointer ${activeItem === item ? "text-[#2b58ed]" : ""}`}
+								className={`cursor-pointer ${activeItem === item || item === selectedItem ? "text-[#2b58ed]" : ""}`}
 								onClick={() => handleClick(item)}
 							>
 								{item}

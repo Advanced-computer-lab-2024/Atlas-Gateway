@@ -1,3 +1,5 @@
+import Governor from "@/Admin/Accounts/Governor";
+
 const ENDPOINTS = {
 	places: {
 		list: "api/places/list",
@@ -28,6 +30,11 @@ const ENDPOINTS = {
 		list: "api/admin/list",
 		create: "api/admin/create",
 		delete: (id: string) => `api/admin/delete/${id}`,
+	},
+	governor: {
+		list: "api/governor/list",
+		create: "api/governor/create",
+		delete: (id: string) => `api/governor/delete/${id}`,
 	},
 	tourist: {
 		show: (id: string) => `api/tourist/show/${id}`,

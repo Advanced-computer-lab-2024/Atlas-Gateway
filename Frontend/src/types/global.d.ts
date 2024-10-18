@@ -72,6 +72,12 @@ export interface TAdmin extends TUser {
 	email: string;
 	password: string;
 }
+
+export interface TGovernor extends TUser {
+	email: string;
+	password: string;
+}
+
 export interface TTourist extends TUser {
 	email: string;
 	mobile: string;
