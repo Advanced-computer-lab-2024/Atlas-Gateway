@@ -3,6 +3,8 @@ import { RotateCw, ShieldAlert, ShieldCheck, Trash } from "lucide-react";
 // Import both icons
 import { useEffect, useState } from "react";
 
+import { useDeleteSeller, useSellers } from "@/api/data/useProfile";
+import { TSellerProfileResponse } from "@/api/service/types";
 import {
 	Table,
 	TableBody,
@@ -29,19 +31,8 @@ interface Seller {
 
 const Sellers = () => {
 	const { user } = useLoginStore();
-	const [sellers, setSellers] = useState<Seller[]>([]);
-	const [refresh, setRefresh] = useState<boolean>(false);
-
-	useEffect(() => {
-		axios
-			.get("http://localhost:5000/api/seller/list")
-			.then((res) => {
-				setSellers(res.data);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	}, [refresh]);
+	const { data, refetch } = useSellers();
+	const { doDeleteSeller } = useDeleteSeller(refetch);
 
 	const handleUpdate = (id: string) => {
 		axios
@@ -62,17 +53,7 @@ const Sellers = () => {
 			.catch((error) => {
 				console.log(error);
 			});
-	};
-
-	const handleDelete = (id: string) => {
-		axios
-			.delete(`http://localhost:5000/api/seller/delete/${id}`)
-			.then((res) => {
-				setRefresh(!refresh);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
+		refetch();
 	};
 
 	return (
@@ -81,28 +62,28 @@ const Sellers = () => {
 				<TableCaption>Registered Sellers.</TableCaption>
 				<TableHeader className="bg-gray-100">
 					<TableRow>
-						<TableHead>Picture</TableHead>
+						{/* <TableHead>Picture</TableHead> */}
 						<TableHead>Name</TableHead>
 						<TableHead>Username</TableHead>
 						<TableHead>Email</TableHead>
-						<TableHead>Password</TableHead>
+						{/* <TableHead>Password</TableHead> */}
 						<TableHead>Description</TableHead>
 						<TableHead>isVerified</TableHead>
 						<TableHead className="cursor-pointer hover:text-[#2b58ed] w-1">
-							<RotateCw onClick={() => setRefresh(!refresh)} />
+							<RotateCw onClick={() => refetch()} />
 						</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>
-					{sellers.map((seller) => (
+					{data?.map((seller: TSellerProfileResponse) => (
 						<TableRow key={seller._id}>
-							<TableCell>{seller?.picture || "N/A"}</TableCell>
+							{/* <TableCell>{seller?.picture || "N/A"}</TableCell> */}
 							<TableCell>{seller?.name}</TableCell>
 							<TableCell className="p-3">
 								{seller.username}
 							</TableCell>
 							<TableCell>{seller.email}</TableCell>
-							<TableCell>{seller.password}</TableCell>
+							{/* <TableCell>{seller.password}</TableCell> */}
 							<TableCell>
 								{seller?.description || "N/A"}
 							</TableCell>
@@ -122,7 +103,7 @@ const Sellers = () => {
 									<Trash
 										className="w-4 h-4"
 										onClick={() => {
-											handleDelete(seller._id);
+											doDeleteSeller(seller._id);
 										}}
 									/>
 								</button>

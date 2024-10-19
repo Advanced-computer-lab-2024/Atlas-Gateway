@@ -57,6 +57,17 @@ export function apiDeleteTouristProfile(_id: string) {
 	});
 }
 
+export function apiSellers() {
+	return axios<TSellerProfileResponse[]>({
+		method: "GET",
+		url: ENDPOINTS.seller.list,
+		headers: {
+			"Content-Type": "application/json",
+		},
+		baseURL: "http://localhost:5000",
+	});
+}
+
 export function apiSellerProfile(_id: string) {
 	return axios<TSellerProfileResponse>({
 		method: "GET",
@@ -77,6 +88,17 @@ export function apiEditSellerProfile(_id: string, data: TSeller) {
 			userid: _id,
 		},
 		data,
+		baseURL: "http://localhost:5000",
+	});
+}
+
+export function apiDeleteSeller(_id: string) {
+	return axios({
+		method: "DELETE",
+		url: ENDPOINTS.seller.delete(_id),
+		headers: {
+			"Content-Type": "application/json",
+		},
 		baseURL: "http://localhost:5000",
 	});
 }

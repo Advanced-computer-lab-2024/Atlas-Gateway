@@ -43,8 +43,10 @@ const ENDPOINTS = {
 		delete: (id: string) => `api/tourist/delete/${id}`,
 	},
 	seller: {
+		list: "api/seller/list",
 		show: (id: string) => `api/seller/show/${id}`,
 		update: (id: string) => `api/seller/update/${id}`,
+		delete: (id: string) => `api/seller/delete/${id}`,
 	},
 	tourGuide: {
 		list: "api/tourGuide/list",

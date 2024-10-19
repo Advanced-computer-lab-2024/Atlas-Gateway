@@ -7,6 +7,7 @@ import {
 	apiAdvertiserProfile,
 	apiAdvertisers,
 	apiDeleteAdvertiserProfile,
+	apiDeleteSeller,
 	apiDeleteTourGuideProfile,
 	apiDeleteTouristProfile,
 	apiEditAdvertiserProfile,
@@ -14,6 +15,7 @@ import {
 	apiEditTourGuideProfile,
 	apiEditTouristProfile,
 	apiSellerProfile,
+	apiSellers,
 	apiTourGuideProfile,
 	apiTourGuides,
 	apiTouristProfile,
@@ -73,6 +75,15 @@ export function useDeleteTouristProfile(onSuccess: () => void) {
 	return { doDeleteTouristProfile: mutate, ...mutation };
 }
 
+export function useSellers() {
+	const { user } = useLoginStore();
+	const { data, refetch } = useQuery({
+		queryFn: () => apiSellers(),
+		queryKey: ["sellers", user?._id],
+	});
+	return { data: data?.data, refetch };
+}
+
 export function useSellerProfile() {
 	const { user } = useLoginStore();
 
@@ -107,6 +118,15 @@ export function useUpdateSellerProfile(onSuccess: () => void) {
 	const { mutate } = mutation;
 
 	return { doEditSellerProfile: mutate, ...mutation };
+}
+
+export function useDeleteSeller(onSuccess: () => void) {
+	const mutation = useMutation({
+		mutationFn: (_id: string) => apiDeleteSeller(_id),
+		onSuccess,
+	});
+	const { mutate } = mutation;
+	return { doDeleteSeller: mutate, ...mutation };
 }
 
 export function useAdvertisers() {

@@ -1,8 +1,7 @@
 import axios from "axios";
-import { Pencil, ShieldAlert, ShieldCheck } from "lucide-react";
+import { ShieldAlert, ShieldCheck } from "lucide-react";
 import { Trash } from "lucide-react";
 import { RotateCw } from "lucide-react";
-import { useEffect, useState } from "react";
 
 import {
 	useDeleteTourGuideProfile,
@@ -20,14 +19,6 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import { useLoginStore } from "@/store/loginStore";
-
-// interface PreviousJob {
-// 	title: string;
-// 	description: string;
-// 	company: string;
-// 	start: Date;
-// 	end: Date;
-// }
 
 const TourGuide = () => {
 	const { user } = useLoginStore();
