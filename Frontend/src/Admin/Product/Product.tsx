@@ -35,6 +35,7 @@ import {
 } from "@/components/ui/select";
 import {
 	Sheet,
+	SheetClose,
 	SheetContent,
 	SheetDescription,
 	SheetFooter,
@@ -42,6 +43,7 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from "@/components/ui/sheet";
+import { TProduct } from "@/types/global";
 
 import { productSchema } from "../schema";
 import ProductForm from "./ProductForm";
@@ -230,7 +232,11 @@ const Product = () => {
 								/>
 
 								<SheetFooter>
-									<Button type="submit">Save changes</Button>
+									<SheetClose asChild>
+										<Button type="submit">
+											Save changes
+										</Button>
+									</SheetClose>
 								</SheetFooter>
 							</form>
 						</FormProvider>

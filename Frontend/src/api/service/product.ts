@@ -1,14 +1,9 @@
 import axios from "axios";
 
-
-
 import { TProduct } from "@/types/global";
-
-
 
 import ENDPOINTS from "./ENDPOINTS";
 import { TApiResponse } from "./types";
-
 
 export function apiProducts(
 	_id: string | undefined,

@@ -14,7 +14,7 @@ const ENDPOINTS = {
 		show: (id: string) => `api/products/show/${id}`,
 		create: "api/products/create",
 		update: "api/products/update",
-		delete: "api/products/delete",
+		delete: (id: string) => `api/products/delete/${id}`,
 	},
 	activity: {
 		list: "api/activity/list",
@@ -64,15 +64,15 @@ const ENDPOINTS = {
 		list: "api/category/list",
 		show: (id: string) => `api/category/show/${id}`,
 		create: "api/category/create",
-		update: "api/category/update",
-		delete: "api/category/delete",
+		update: (id: string) => `api/category/update/${id}`,
+		delete: (id: string) => `api/category/delete/${id}`,
 	},
 	tag: {
 		list: "api/tags/list",
 		show: (id: string) => `api/tag/show/${id}`,
-		create: "api/tag/create",
+		create: "api/tags/preference/create",
 		update: "api/tag/update",
-		delete: "api/tag/delete",
+		delete: (id: string) => `api/tags/preference/delete/${id}`,
 	},
 	itinerary: {
 		list: "api/itinerary/list",

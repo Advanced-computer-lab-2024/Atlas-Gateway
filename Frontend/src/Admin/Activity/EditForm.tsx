@@ -4,6 +4,7 @@ import { Pencil } from "lucide-react";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { useCategories } from "@/api/data/useCategories";
 import { Button } from "@/components/ui/button";
 import {
 	FormControl,
@@ -32,6 +33,7 @@ interface props {
 }
 
 const EditForm = ({ type, id }: props) => {
+	const { refetch } = useCategories();
 	const formMethods = useForm<z.infer<typeof tagOrCategorySchema>>({
 		resolver: zodResolver(tagOrCategorySchema),
 	});
@@ -47,6 +49,7 @@ const EditForm = ({ type, id }: props) => {
 			.catch((error) => {
 				console.log(error);
 			});
+		refetch();
 	};
 	return (
 		<Sheet>

@@ -112,7 +112,7 @@ export interface TTourGuide extends TUser {
 export interface TTag {
 	_id: string;
 	name: string;
-	type: string;
+	type?: string;
 }
 
 export interface TCategory {
