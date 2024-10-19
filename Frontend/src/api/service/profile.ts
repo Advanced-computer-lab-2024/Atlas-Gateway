@@ -128,6 +128,17 @@ export function apiDeleteAdvertiserProfile(_id: string) {
 	});
 }
 
+export function apiTourGuides() {
+	return axios<TTourGuideProfileResponse[]>({
+		method: "GET",
+		url: ENDPOINTS.tourGuide.list,
+		headers: {
+			"Content-Type": "application/json",
+		},
+		baseURL: "http://localhost:5000",
+	});
+}
+
 export function apiTourGuideProfile(_id: string) {
 	return axios<TTourGuideProfileResponse>({
 		method: "GET",
@@ -148,6 +159,17 @@ export function apiEditTourGuideProfile(_id: string, data: TTourGuide) {
 			userid: _id,
 		},
 		data,
+		baseURL: "http://localhost:5000",
+	});
+}
+
+export function apiDeleteTourGuideProfile(_id: string) {
+	return axios({
+		method: "DELETE",
+		url: ENDPOINTS.tourGuide.delete(_id),
+		headers: {
+			"Content-Type": "application/json",
+		},
 		baseURL: "http://localhost:5000",
 	});
 }

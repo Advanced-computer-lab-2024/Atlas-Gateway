@@ -2,6 +2,7 @@ import { EAccountType } from "@/types/enums";
 import {
 	TAdmin,
 	TAdvetisor,
+	TGovernor,
 	TSeller,
 	TTourGuide,
 	TTourist,
@@ -21,13 +22,13 @@ export type TAdminResponse = TAdmin & {
 	_id: string;
 };
 
-export type TGovernorResponse = TAdmin & {
+export type TGovernorResponse = TGovernor & {
 	_id: string;
 };
 
 export type TAdvertiserProfileResponse = TAdvetisor & {
 	_id: string;
-	isVerified: boolean;
+	isVerified?: boolean;
 };
 
 export type TTourGuideProfileResponse = TTourGuide & {

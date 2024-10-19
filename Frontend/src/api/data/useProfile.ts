@@ -7,6 +7,7 @@ import {
 	apiAdvertiserProfile,
 	apiAdvertisers,
 	apiDeleteAdvertiserProfile,
+	apiDeleteTourGuideProfile,
 	apiDeleteTouristProfile,
 	apiEditAdvertiserProfile,
 	apiEditSellerProfile,
@@ -14,6 +15,7 @@ import {
 	apiEditTouristProfile,
 	apiSellerProfile,
 	apiTourGuideProfile,
+	apiTourGuides,
 	apiTouristProfile,
 	apiTourists,
 } from "../service/profile";
@@ -108,9 +110,10 @@ export function useUpdateSellerProfile(onSuccess: () => void) {
 }
 
 export function useAdvertisers() {
+	const { user } = useLoginStore();
 	const { data, refetch } = useQuery({
 		queryFn: () => apiAdvertisers(),
-		queryKey: ["advertisers"],
+		queryKey: ["advertisers", user?._id],
 	});
 	return { data: data?.data, refetch };
 }
@@ -160,6 +163,15 @@ export function useDeleteAdvertiserProfile(onSuccess: () => void) {
 	return { doDeleteAdvertiserProfile: mutate, ...mutation };
 }
 
+export function useTourGuides() {
+	const { user } = useLoginStore();
+	const { data, refetch } = useQuery({
+		queryFn: () => apiTourGuides(),
+		queryKey: ["tourGuides", user?._id],
+	});
+	return { data: data?.data, refetch };
+}
+
 export function useTourGuideProfile() {
 	const { user } = useLoginStore();
 
@@ -194,4 +206,13 @@ export function useUpdateTourGuideProfile(onSuccess: () => void) {
 	const { mutate } = mutation;
 
 	return { doEditTourGuideProfile: mutate, ...mutation };
+}
+
+export function useDeleteTourGuideProfile(onSuccess: () => void) {
+	const mutation = useMutation({
+		mutationFn: (_id: string) => apiDeleteTourGuideProfile(_id),
+		onSuccess,
+	});
+	const { mutate } = mutation;
+	return { doDeleteTourGuideProfile: mutate, ...mutation };
 }
