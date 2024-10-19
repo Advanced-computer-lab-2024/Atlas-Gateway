@@ -10,6 +10,17 @@ import {
 	TTouristProfileResponse,
 } from "./types";
 
+export function apiTourists() {
+	return axios<TTouristProfileResponse[]>({
+		method: "GET",
+		url: ENDPOINTS.tourist.list,
+		headers: {
+			"Content-Type": "application/json",
+		},
+		baseURL: "http://localhost:5000",
+	});
+}
+
 export function apiTouristProfile(_id: string) {
 	return axios<TTouristProfileResponse>({
 		method: "GET",
@@ -31,6 +42,17 @@ export function apiEditTouristProfile(_id: string, data: TTourist) {
 			userid: _id,
 		},
 		data,
+		baseURL: "http://localhost:5000",
+	});
+}
+
+export function apiDeleteTouristProfile(_id: string) {
+	return axios({
+		method: "DELETE",
+		url: ENDPOINTS.tourist.delete(_id),
+		headers: {
+			"Content-Type": "application/json",
+		},
 		baseURL: "http://localhost:5000",
 	});
 }

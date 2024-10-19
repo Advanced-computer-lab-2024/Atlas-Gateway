@@ -81,6 +81,9 @@ export interface TGovernor extends TUser {
 export interface TTourist extends TUser {
 	email: string;
 	mobile: string;
+	address: string;
+	currency: string;
+	loyaltyPoints: number;
 	walletBalance: number;
 }
 
