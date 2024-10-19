@@ -3,7 +3,7 @@ import axios from "axios";
 import { TAdmin, TGovernor } from "@/types/global";
 
 import ENDPOINTS from "./ENDPOINTS";
-import { TApiResponse } from "./types";
+import { TGovernorResponse } from "./types";
 
 export function apiCreateGovernor(payload: TAdmin) {
 	return axios({
@@ -18,7 +18,7 @@ export function apiCreateGovernor(payload: TAdmin) {
 }
 
 export function apiGovernors() {
-	return axios<TApiResponse<TGovernor[]>>({
+	return axios<TGovernorResponse[]>({
 		method: "GET",
 		url: ENDPOINTS.governor.list,
 		headers: {

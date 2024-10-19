@@ -1,14 +1,20 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-
-
 import { useLoginStore } from "@/store/loginStore";
 import { TAdvetisor, TSeller, TTourGuide, TTourist } from "@/types/global";
 
-
-
-import { apiAdvertiserProfile, apiEditAdvertiserProfile, apiEditSellerProfile, apiEditTourGuideProfile, apiEditTouristProfile, apiSellerProfile, apiTourGuideProfile, apiTouristProfile } from "../service/profile";
-
+import {
+	apiAdvertiserProfile,
+	apiAdvertisers,
+	apiDeleteAdvertiserProfile,
+	apiEditAdvertiserProfile,
+	apiEditSellerProfile,
+	apiEditTourGuideProfile,
+	apiEditTouristProfile,
+	apiSellerProfile,
+	apiTourGuideProfile,
+	apiTouristProfile,
+} from "../service/profile";
 
 export function useTouristProfile() {
 	const { user } = useLoginStore();
@@ -82,6 +88,14 @@ export function useUpdateSellerProfile(onSuccess: () => void) {
 	return { doEditSellerProfile: mutate, ...mutation };
 }
 
+export function useAdvertisers() {
+	const { data, refetch } = useQuery({
+		queryFn: () => apiAdvertisers(),
+		queryKey: ["advertisers"],
+	});
+	return { data: data?.data, refetch };
+}
+
 export function useAdvertiserProfile() {
 	const { user } = useLoginStore();
 
@@ -99,10 +113,11 @@ export function useAdvertiserProfile() {
 
 	return { data: data?.data, refetch };
 }
-export function useUpdateAdvertiserProfile(onSuccess: () => void) {
-    const { user } = useLoginStore();
 
-    const mutation = useMutation({
+export function useUpdateAdvertiserProfile(onSuccess: () => void) {
+	const { user } = useLoginStore();
+
+	const mutation = useMutation({
 		mutationFn: (data: TAdvetisor) => {
 			if (!user?._id) {
 				throw new Error("User ID is undefined");
@@ -112,9 +127,18 @@ export function useUpdateAdvertiserProfile(onSuccess: () => void) {
 		onSuccess,
 	});
 
-    const { mutate } = mutation;
+	const { mutate } = mutation;
 
-    return { doEditAdvertiserProfile: mutate, ...mutation };
+	return { doEditAdvertiserProfile: mutate, ...mutation };
+}
+
+export function useDeleteAdvertiserProfile(onSuccess: () => void) {
+	const mutation = useMutation({
+		mutationFn: (_id: string) => apiDeleteAdvertiserProfile(_id),
+		onSuccess,
+	});
+	const { mutate } = mutation;
+	return { doDeleteAdvertiserProfile: mutate, ...mutation };
 }
 
 export function useTourGuideProfile() {
@@ -136,9 +160,9 @@ export function useTourGuideProfile() {
 }
 
 export function useUpdateTourGuideProfile(onSuccess: () => void) {
-    const { user } = useLoginStore();
+	const { user } = useLoginStore();
 
-    const mutation = useMutation({
+	const mutation = useMutation({
 		mutationFn: (data: TTourGuide) => {
 			if (!user?._id) {
 				throw new Error("User ID is undefined");
@@ -148,7 +172,7 @@ export function useUpdateTourGuideProfile(onSuccess: () => void) {
 		onSuccess,
 	});
 
-    const { mutate } = mutation;
+	const { mutate } = mutation;
 
-    return { doEditTourGuideProfile: mutate, ...mutation };
+	return { doEditTourGuideProfile: mutate, ...mutation };
 }

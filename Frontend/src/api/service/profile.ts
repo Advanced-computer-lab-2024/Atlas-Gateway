@@ -1,14 +1,14 @@
 import axios from "axios";
 
-
-
 import { TAdvetisor, TSeller, TTourGuide, TTourist } from "@/types/global";
 
-
-
 import ENDPOINTS from "./ENDPOINTS";
-import { TAdvertiserProfileResponse, TSellerProfileResponse, TTourGuideProfileResponse, TTouristProfileResponse } from "./types";
-
+import {
+	TAdvertiserProfileResponse,
+	TSellerProfileResponse,
+	TTourGuideProfileResponse,
+	TTouristProfileResponse,
+} from "./types";
 
 export function apiTouristProfile(_id: string) {
 	return axios<TTouristProfileResponse>({
@@ -59,6 +59,17 @@ export function apiEditSellerProfile(_id: string, data: TSeller) {
 	});
 }
 
+export function apiAdvertisers() {
+	return axios<TAdvertiserProfileResponse[]>({
+		method: "GET",
+		url: ENDPOINTS.advertiser.list,
+		headers: {
+			"Content-Type": "application/json",
+		},
+		baseURL: "http://localhost:5000",
+	});
+}
+
 export function apiAdvertiserProfile(_id: string) {
 	return axios<TAdvertiserProfileResponse>({
 		method: "GET",
@@ -70,6 +81,7 @@ export function apiAdvertiserProfile(_id: string) {
 		baseURL: "http://localhost:5000",
 	});
 }
+
 export function apiEditAdvertiserProfile(_id: string, data: TAdvetisor) {
 	return axios<TAdvertiserProfileResponse>({
 		method: "PUT",
@@ -79,6 +91,17 @@ export function apiEditAdvertiserProfile(_id: string, data: TAdvetisor) {
 			userid: _id,
 		},
 		data,
+		baseURL: "http://localhost:5000",
+	});
+}
+
+export function apiDeleteAdvertiserProfile(_id: string) {
+	return axios({
+		method: "DELETE",
+		url: ENDPOINTS.advertiser.delete(_id),
+		headers: {
+			"Content-Type": "application/json",
+		},
 		baseURL: "http://localhost:5000",
 	});
 }

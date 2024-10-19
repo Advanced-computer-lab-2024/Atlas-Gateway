@@ -49,8 +49,10 @@ const ENDPOINTS = {
 		update: (id: string) => `api/tourGuide/update/${id}`,
 	},
 	advertiser: {
+		list: "api/advertiser/list",
 		show: (id: string) => `api/advertiser/show/${id}`,
 		update: (id: string) => `api/advertiser/update/${id}`,
+		delete: (id: string) => `api/advertiser/delete/${id}`,
 	},
 	category: {
 		list: "api/category/list",

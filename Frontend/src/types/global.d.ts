@@ -94,6 +94,7 @@ export interface TAdvetisor extends TUser {
 	email: string;
 	hotline: number;
 	website: string;
+	password: string;
 	description: string;
 }
 

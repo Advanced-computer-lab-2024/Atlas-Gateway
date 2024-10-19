@@ -3,7 +3,7 @@ import axios from "axios";
 import { TAdmin } from "@/types/global";
 
 import ENDPOINTS from "./ENDPOINTS";
-import { TApiResponse } from "./types";
+import { TAdminResponse, TApiResponse } from "./types";
 
 export function apiCreateAdmin(payload: TAdmin) {
 	return axios({
@@ -18,7 +18,7 @@ export function apiCreateAdmin(payload: TAdmin) {
 }
 
 export function apiAdmins() {
-	return axios<TApiResponse<TAdmin[]>>({
+	return axios<TAdminResponse[]>({
 		method: "GET",
 		url: ENDPOINTS.admin.list,
 		headers: {

@@ -38,7 +38,7 @@ const Governor = () => {
 						<TableRow>
 							<TableHead>Username</TableHead>
 							<TableHead>Email</TableHead>
-							<TableHead>Password</TableHead>
+							{/* <TableHead>Password</TableHead> */}
 							<TableHead className="cursor-pointer hover:text-[#2b58ed] w-1">
 								<RotateCw onClick={() => refetch()} />
 							</TableHead>
@@ -51,7 +51,7 @@ const Governor = () => {
 									{governor.username}
 								</TableCell>
 								<TableCell>{governor.email}</TableCell>
-								<TableCell>{governor.password}</TableCell>
+								{/* <TableCell>{governor.password}</TableCell> */}
 								<TableCell className="cursor-pointer hover:text-red-600 w-1">
 									<button className="bg-red-500 text-white rounded-full p-2 shadow-lg hover:bg-red-600">
 										<Trash
