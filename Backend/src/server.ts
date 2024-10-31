@@ -64,6 +64,8 @@ async function startServer() {
 		var status = 500;
 		if (err instanceof HttpError) {
 			status = err.statusCode;
+		} else {
+			err.message = "Internal Server Error";
 		}
 		res.status(status).json(err.message);
 	});
