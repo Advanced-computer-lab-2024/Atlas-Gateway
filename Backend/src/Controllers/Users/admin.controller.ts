@@ -1,84 +1,79 @@
 import bcrypt from "bcryptjs";
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { Types } from "mongoose";
 
-import { Admin } from "../../Models/Users/admin.model";
-import uniqueUsername from "../../Services/uniqueUsername.service";
+import HttpError from "../../Errors/HttpError";
+import * as adminService from "../../Services/Users/admin.service";
 
-export const createAdmin = async (req: Request, res: Response) => {
+export const createAdmin = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const { username, email, password } = req.body;
+
 		if (!username || !email || !password) {
-			res.status(400).send("username, email and password are required");
+			throw new HttpError(
+				400,
+				"username, email and password are required",
+			);
 		}
-		const resultUnique = await uniqueUsername(username);
-		if (!resultUnique) {
-			return res.status(400).send("Username Should Be Unique");
-		}
-		const hashedPassword = await bcrypt.hash(password, 10);
-		const admin = await Admin.create({
-			username,
-			email,
-			password: hashedPassword,
-		});
+
+		const admin = await adminService.createAdmin(username, email, password);
+
 		res.status(201).json(admin);
 	} catch (error) {
-		console.log(error);
-		res.status(500).send("Error While Creating Admin");
+		next(error);
 	}
 };
 
-export const getAdminById = async (req: Request, res: Response) => {
-	const id = req.params.id;
-	if (!id) {
-		res.status(400).send("id is required");
-	}
-
-	if (!Types.ObjectId.isValid(id)) {
-		return res.status(400).send("id is invalid");
-	}
-
+export const getAdminById = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
-		const admin = await Admin.findById(id);
-		if (!admin) {
-			return res.status(404).send("admin not found");
+		const id = req.params.id;
+		if (!id) {
+			throw new HttpError(400, "Id is Required");
 		}
+		const admin = await adminService.getAdminById(id);
 		res.status(200).json(admin);
 	} catch (error) {
-		console.log(error);
-		res.status(500).send("Failed to get admin");
+		next(error);
 	}
 };
 
-export const getAdmins = async (req: Request, res: Response) => {
+export const getAdmins = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
-		const admins = await Admin.find();
+		const admins = await adminService.getAllAdmins();
 		res.status(200).json(admins);
 	} catch (error) {
-		console.log(error);
-		res.status(500).send("Failed to get admins");
+		next(error);
 	}
 };
 
-export const deleteAdmin = async (req: Request, res: Response) => {
+export const deleteAdmin = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
-		const { id } = req.params;
-		console.log(id);
+		const id = req.params.id;
 
 		if (!id) {
-			return res.status(400).send("Id is Required");
-		}
-		if (!Types.ObjectId.isValid(id)) {
-			return res.status(400).send("Id is Invalid");
+			throw new HttpError(400, "Id is Required");
 		}
 
-		const admin = await Admin.findByIdAndDelete(id);
+		const deletedAdmin = await adminService.deleteAdmin(id);
 
-		if (!admin) {
-			return res.status(404).send("Admin Not Found");
-		}
 		res.status(200).send("Deleted Successfully");
 	} catch (error) {
-		res.status(500).send("Error While Deleting Admin");
+		next(error);
 	}
 };
