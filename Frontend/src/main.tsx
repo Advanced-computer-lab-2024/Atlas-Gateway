@@ -15,7 +15,6 @@ import PlaceDetails from "./Places/PlaceDetails";
 import Places from "./Places/Places";
 import ProductDetails from "./Products/ProductDetails";
 import Products from "./Products/Products";
-import General from "./Profile/General";
 import Profile from "./Profile/Profile";
 import Register from "./Register/Register";
 import { QueryStateProvider } from "./api/data/useQueryString";
@@ -57,10 +56,6 @@ const router = createBrowserRouter([
 			{
 				path: "/profile",
 				element: <Profile />,
-			},
-			{
-				path: "/general", // for testing the new profile page
-				element: <General />,
 			},
 			{
 				path: "/places",

@@ -49,11 +49,11 @@ const Sellers = () => {
 			)
 			.then((res) => {
 				console.log(res.status);
+				refetch();
 			})
 			.catch((error) => {
 				console.log(error);
 			});
-		refetch();
 	};
 
 	return (
