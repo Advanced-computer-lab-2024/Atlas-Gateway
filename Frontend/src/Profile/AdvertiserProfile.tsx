@@ -56,8 +56,12 @@ export default function AdvertiserProfile() {
 							</a>
 						</Label.Big400>
 						<br></br>
-						<Label.Big400><u>Company Profile:</u></Label.Big400>
-						<Label.Mid400>{data?.description || "Description here"}</Label.Mid400>
+						<Label.Big400>
+							<u>Company Profile:</u>
+						</Label.Big400>
+						<Label.Mid400>
+							{data?.description || "Description here"}
+						</Label.Mid400>
 					</Flex>
 				</Flex>
 			</Card>

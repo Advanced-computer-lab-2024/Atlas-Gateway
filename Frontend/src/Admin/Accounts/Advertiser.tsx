@@ -40,6 +40,7 @@ const Advertisers = () => {
 			)
 			.then((res) => {
 				console.log(res.status);
+				refetch();
 			})
 			.catch((error) => {
 				console.log(error);
