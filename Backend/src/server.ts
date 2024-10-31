@@ -18,6 +18,15 @@ import governorRouter from "./Routes/Users/governor.route";
 import sellerRouter from "./Routes/Users/seller.route";
 import tourGuideRouter from "./Routes/Users/tourGuide.route";
 import touristRouter from "./Routes/Users/tourist.route";
+import activityRouter from "./Routes/activity.route";
+import categoryRouter from "./Routes/category.route";
+import loginRouter from "./Routes/login.route";
+import placesRouter from "./Routes/places.route";
+import productRouter from "./Routes/product.route";
+import registerRouter from "./Routes/register.route";
+import tagRouter from "./Routes/tag.route";
+
+const app = express();
 
 async function startServer() {
 	const app = express();
