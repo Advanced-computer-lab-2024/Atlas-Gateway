@@ -14,8 +14,21 @@ import Sidebar from "./Sidebar";
 
 const Admin = () => {
 	const [selectedCategory, setSelectedCategory] = useState(""); // manages selection from sidebar
-	const [selectedItem, setSelectedItem] = useState("Admins"); // manages selection from navbar
-
+	let [selectedItem, setSelectedItem] = useState(""); // manages selection from navbar
+	switch (selectedCategory) {
+		case "Accounts":
+			selectedItem = "Admins";
+			break;
+		case "Products":
+			selectedItem = "Products";
+			break;
+		case "Activity Category":
+			selectedItem = "Activity Category";
+			break;
+		case "Tags":
+			selectedItem = "Preference Tags";
+			break;
+	}
 	const renderContent = () => {
 		if (selectedCategory == "Accounts") {
 			switch (selectedItem) {

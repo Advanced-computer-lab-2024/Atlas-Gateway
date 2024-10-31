@@ -110,13 +110,13 @@ export interface TTourGuide extends TUser {
 }
 
 export interface TTag {
-	_id: string;
+	_id?: string;
 	name: string;
 	type?: string;
 }
 
 export interface TCategory {
-	_id: string;
+	_id?: string;
 	name: string;
 }
 

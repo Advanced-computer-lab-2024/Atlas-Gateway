@@ -3,6 +3,8 @@ import axios from "axios";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { useCategories, useCreateCategory } from "@/api/data/useCategories";
+import { useCreateTag, useTags } from "@/api/data/useTags";
 import { Button } from "@/components/ui/button";
 import {
 	FormControl,
@@ -30,21 +32,21 @@ interface props {
 }
 
 const TagAndCategoryForm = ({ type }: props) => {
+	const { refetch: tagRefetch } = useTags();
+	const { refetch: categoryRefetch } = useCategories();
+	const { doCreateTag } = useCreateTag(tagRefetch);
+	const { doCreateCategory } = useCreateCategory(categoryRefetch);
 	const formMethods = useForm<z.infer<typeof tagOrCategorySchema>>({
 		resolver: zodResolver(tagOrCategorySchema),
 	});
 	const { handleSubmit, control } = formMethods;
 	const onSubmit = (data: z.infer<typeof tagOrCategorySchema>) => {
 		const url = type == "tag" ? "tags/preference" : "category";
-		axios
-			.post(`http://localhost:5000/api/${url}/create`, data)
-			.then((res) => {
-				console.log(res.status);
-				// will add here something to give a feedback later
-			})
-			.catch((error) => {
-				console.log(error);
-			});
+		if (url == "tags/preference") {
+			doCreateTag(data);
+		} else if (url == "category") {
+			doCreateCategory(data);
+		}
 	};
 	return (
 		<div className="flex self-end pb-3">
