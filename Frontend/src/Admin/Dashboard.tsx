@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Admins from "./Accounts/Admin";
 import Advertisers from "./Accounts/Advertiser";
@@ -14,92 +14,51 @@ import Sidebar from "./Sidebar";
 
 const Admin = () => {
 	const [selectedCategory, setSelectedCategory] = useState(""); // manages selection from sidebar
-	let [selectedItem, setSelectedItem] = useState(""); // manages selection from navbar
-	switch (selectedCategory) {
-		case "Accounts":
-			selectedItem = "Admins";
-			break;
-		case "Products":
-			selectedItem = "Products";
-			break;
-		case "Activity Category":
-			selectedItem = "Activity Category";
-			break;
-		case "Tags":
-			selectedItem = "Preference Tags";
-			break;
-	}
+	let [selectedItem, setSelectedItem] = useState("Admins"); // manages selection from navbar
+	const [flag, setFlag] = useState(false);
+	useEffect(() => {
+		switch (selectedCategory) {
+			case "Accounts":
+				setSelectedItem("Admins");
+				break;
+			case "Products":
+				setSelectedItem("Products");
+				break;
+			case "Activity Category":
+				setSelectedItem("Activity Category");
+				break;
+			case "Tags":
+				setSelectedItem("Preference Tags");
+				break;
+		}
+	}, [selectedCategory]);
 	const renderContent = () => {
-		if (selectedCategory == "Accounts") {
+		console.log(selectedCategory);
+		if (selectedCategory === "Accounts") {
 			switch (selectedItem) {
 				case "Tourists":
-					return (
-						<div>
-							<Tourist />
-						</div>
-					);
+					return <Tourist />;
 				case "Admins":
-					return (
-						<div>
-							<Admins />
-						</div>
-					);
+					return <Admins />;
 				case "Tour Guides":
-					return (
-						<div>
-							<TourGuide />
-						</div>
-					);
+					return <TourGuide />;
 				case "Advertisers":
-					return (
-						<div>
-							<Advertisers />
-						</div>
-					);
+					return <Advertisers />;
 				case "Governors":
-					return (
-						<div>
-							<Governor />
-						</div>
-					);
+					return <Governor />;
 				case "Seller":
-					return (
-						<div>
-							<Seller />
-						</div>
-					);
+					return <Seller />;
+				default:
+					return null;
 			}
+		} else if (selectedCategory === "Products") {
+			if (selectedItem === "Products") return <Product />;
+		} else if (selectedCategory === "Activity Category") {
+			if (selectedItem === "Activity Category") return <Category />;
+		} else if (selectedCategory === "Tags") {
+			if (selectedItem === "Preference Tags") return <Tags />;
 		}
-		if (selectedCategory == "Products") {
-			switch (selectedItem) {
-				case "Products":
-					return (
-						<div>
-							<Product />
-						</div>
-					);
-			}
-		}
-		if (selectedCategory == "Activity Category") {
-			switch (selectedItem) {
-				case "Activity Category":
-					return (
-						<div>
-							<Category />
-						</div>
-					);
-			}
-		}
-		if (selectedCategory == "Tags") {
-			switch (selectedItem) {
-				case "Preference Tags":
-					return (
-						<div>
-							<Tags />
-						</div>
-					);
-			}
-		}
+		return null;
 	};
 	return (
 		<div className="flex h-full bg-[#ebedf1]">
