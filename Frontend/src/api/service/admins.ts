@@ -1,13 +1,14 @@
 import axios from "axios";
 
-import { TTag } from "@/types/global";
+import { TAdmin } from "@/types/global";
 
 import ENDPOINTS from "./ENDPOINTS";
+import { TAdminResponse, TApiResponse } from "./types";
 
-export function apiCreateTag(payload: TTag) {
+export function apiCreateAdmin(payload: TAdmin) {
 	return axios({
 		method: "POST",
-		url: ENDPOINTS.tag.create,
+		url: ENDPOINTS.admin.create,
 		headers: {
 			"Content-Type": "application/json",
 		},
@@ -16,24 +17,23 @@ export function apiCreateTag(payload: TTag) {
 	});
 }
 
-export function apiTags(_id: string | undefined) {
-	return axios<TTag[]>({
+export function apiAdmins() {
+	return axios<TAdminResponse[]>({
 		method: "GET",
-		url: ENDPOINTS.tag.list,
+		url: ENDPOINTS.admin.list,
 		headers: {
 			"Content-Type": "application/json",
-			userid: _id,
 		},
 		baseURL: "http://localhost:5000",
 	});
 }
 
-export function apiDeleteTag(_id: string) {
+export function apiDeleteAdmin(_id: string) {
 	return axios({
 		method: "DELETE",
-		url: ENDPOINTS.tag.delete(_id),
+		url: ENDPOINTS.admin.delete(_id),
 		headers: {
-			"Content-Type": "application/json",
+			"content-type": "application/json",
 		},
 		baseURL: "http://localhost:5000",
 	});

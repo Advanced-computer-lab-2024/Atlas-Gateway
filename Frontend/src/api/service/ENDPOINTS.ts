@@ -1,3 +1,5 @@
+import Governor from "@/Admin/Accounts/Governor";
+
 const ENDPOINTS = {
 	places: {
 		list: "api/places/list",
@@ -12,7 +14,7 @@ const ENDPOINTS = {
 		show: (id: string) => `api/products/show/${id}`,
 		create: "api/products/create",
 		update: "api/products/update",
-		delete: "api/products/delete",
+		delete: (id: string) => `api/products/delete/${id}`,
 	},
 	activity: {
 		list: "api/activity/list",
@@ -24,35 +26,53 @@ const ENDPOINTS = {
 	},
 	login: "api/login",
 	register: "api/register/create",
+	admin: {
+		list: "api/admin/list",
+		create: "api/admin/create",
+		delete: (id: string) => `api/admin/delete/${id}`,
+	},
+	governor: {
+		list: "api/governor/list",
+		create: "api/governor/create",
+		delete: (id: string) => `api/governor/delete/${id}`,
+	},
 	tourist: {
+		list: "api/tourist/list",
 		show: (id: string) => `api/tourist/show/${id}`,
 		update: (id: string) => `api/tourist/update/${id}`,
+		delete: (id: string) => `api/tourist/delete/${id}`,
 	},
 	seller: {
+		list: "api/seller/list",
 		show: (id: string) => `api/seller/show/${id}`,
 		update: (id: string) => `api/seller/update/${id}`,
+		delete: (id: string) => `api/seller/delete/${id}`,
 	},
 	tourGuide: {
+		list: "api/tourGuide/list",
 		show: (id: string) => `api/tourGuide/show/${id}`,
 		update: (id: string) => `api/tourGuide/update/${id}`,
+		delete: (id: string) => `api/tourGuide/delete/${id}`,
 	},
 	advertiser: {
+		list: "api/advertiser/list",
 		show: (id: string) => `api/advertiser/show/${id}`,
 		update: (id: string) => `api/advertiser/update/${id}`,
+		delete: (id: string) => `api/advertiser/delete/${id}`,
 	},
 	category: {
 		list: "api/category/list",
 		show: (id: string) => `api/category/show/${id}`,
 		create: "api/category/create",
-		update: "api/category/update",
-		delete: "api/category/delete",
+		update: (id: string) => `api/category/update/${id}`,
+		delete: (id: string) => `api/category/delete/${id}`,
 	},
 	tag: {
 		list: "api/tags/list",
 		show: (id: string) => `api/tag/show/${id}`,
-		create: "api/tag/create",
+		create: "api/tags/preference/create",
 		update: "api/tag/update",
-		delete: "api/tag/delete",
+		delete: (id: string) => `api/tags/preference/delete/${id}`,
 	},
 	itinerary: {
 		list: "api/itinerary/list",

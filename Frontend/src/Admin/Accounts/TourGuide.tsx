@@ -1,9 +1,14 @@
 import axios from "axios";
-import { Pencil, ShieldAlert, ShieldCheck } from "lucide-react";
+import { ShieldAlert, ShieldCheck } from "lucide-react";
 import { Trash } from "lucide-react";
 import { RotateCw } from "lucide-react";
-import { useEffect, useState } from "react";
 
+import {
+	useDeleteTourGuideProfile,
+	useTourGuides,
+	useUpdateTourGuideProfile,
+} from "@/api/data/useProfile";
+import { TTourGuideProfileResponse } from "@/api/service/types";
 import {
 	Table,
 	TableBody,
@@ -15,42 +20,11 @@ import {
 } from "@/components/ui/table";
 import { useLoginStore } from "@/store/loginStore";
 
-// interface PreviousJob {
-// 	title: string;
-// 	description: string;
-// 	company: string;
-// 	start: Date;
-// 	end: Date;
-// }
-
-interface TourGuide {
-	_id: string;
-	name: string;
-	username: string;
-	email: string;
-	password: string;
-	Mobile: string;
-	picture: string;
-	experience: string;
-	prevWork: string;
-	isVerified: boolean;
-}
-
 const TourGuide = () => {
 	const { user } = useLoginStore();
-	const [tourGuides, setTourGuides] = useState<TourGuide[]>([]);
-	const [refresh, setRefresh] = useState<boolean>(false);
-
-	useEffect(() => {
-		axios
-			.get("http://localhost:5000/api/tourGuide/list")
-			.then((res) => {
-				setTourGuides(res.data);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	}, [refresh]);
+	const { data, refetch } = useTourGuides();
+	// const {doEditTourGuideProfile} = useUpdateTourGuideProfile(refetch);
+	const { doDeleteTourGuideProfile } = useDeleteTourGuideProfile(refetch);
 
 	const handleUpdate = (id: string) => {
 		axios
@@ -71,17 +45,7 @@ const TourGuide = () => {
 			.catch((error) => {
 				console.log(error);
 			});
-	};
-
-	const handleDelete = (id: string) => {
-		axios
-			.delete(`http://localhost:5000/api/tourGuide/delete/${id}`)
-			.then((res) => {
-				setRefresh(!refresh);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
+		refetch();
 	};
 
 	return (
@@ -90,32 +54,31 @@ const TourGuide = () => {
 				<TableCaption>Registered Tour Guides.</TableCaption>
 				<TableHeader className="bg-gray-100">
 					<TableRow>
-						<TableHead>Picture</TableHead>
+						{/* <TableHead>Picture</TableHead> */}
 						<TableHead>Name</TableHead>
 						<TableHead>Username</TableHead>
 						<TableHead>Email</TableHead>
-						<TableHead>Password</TableHead>
+						{/* <TableHead>Password</TableHead> */}
 						<TableHead>Mobile</TableHead>
 						<TableHead>Experience</TableHead>
 						<TableHead>Previous Work</TableHead>
 						<TableHead>isVerified</TableHead>
-						<TableHead></TableHead>
 						<TableHead className="cursor-pointer hover:text-[#2b58ed] w-1">
-							<RotateCw onClick={() => setRefresh(!refresh)} />
+							<RotateCw onClick={() => refetch()} />
 						</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>
-					{tourGuides.map((tourGuide) => (
+					{data?.map((tourGuide: TTourGuideProfileResponse) => (
 						<TableRow key={tourGuide._id}>
-							<TableCell className="p-3">
+							{/* <TableCell className="p-3">
 								{tourGuide?.picture || "N/A"}
-							</TableCell>
+							</TableCell> */}
 							<TableCell>{tourGuide?.name}</TableCell>
 							<TableCell>{tourGuide.username}</TableCell>
 							<TableCell>{tourGuide.email}</TableCell>
-							<TableCell>{tourGuide.password}</TableCell>
-							<TableCell>{tourGuide?.Mobile || "N/A"}</TableCell>
+							{/* <TableCell>{tourGuide.password}</TableCell> */}
+							<TableCell>{tourGuide?.mobile || "N/A"}</TableCell>
 							<TableCell>
 								{tourGuide?.experience || "N/A"}
 							</TableCell>
@@ -155,9 +118,11 @@ const TourGuide = () => {
 								<button className="bg-red-500 text-white rounded-full p-2 shadow-lg hover:bg-red-600">
 									<Trash
 										className="w-4 h-4"
-										onClick={() => {
-											handleDelete(tourGuide._id);
-										}}
+										onClick={() =>
+											doDeleteTourGuideProfile(
+												tourGuide._id,
+											)
+										}
 									/>
 								</button>
 							</TableCell>

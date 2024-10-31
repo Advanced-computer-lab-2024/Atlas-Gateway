@@ -1,13 +1,14 @@
 import axios from "axios";
 
-import { TTag } from "@/types/global";
+import { TAdmin, TGovernor } from "@/types/global";
 
 import ENDPOINTS from "./ENDPOINTS";
+import { TGovernorResponse } from "./types";
 
-export function apiCreateTag(payload: TTag) {
+export function apiCreateGovernor(payload: TAdmin) {
 	return axios({
 		method: "POST",
-		url: ENDPOINTS.tag.create,
+		url: ENDPOINTS.governor.create,
 		headers: {
 			"Content-Type": "application/json",
 		},
@@ -16,24 +17,23 @@ export function apiCreateTag(payload: TTag) {
 	});
 }
 
-export function apiTags(_id: string | undefined) {
-	return axios<TTag[]>({
+export function apiGovernors() {
+	return axios<TGovernorResponse[]>({
 		method: "GET",
-		url: ENDPOINTS.tag.list,
+		url: ENDPOINTS.governor.list,
 		headers: {
 			"Content-Type": "application/json",
-			userid: _id,
 		},
 		baseURL: "http://localhost:5000",
 	});
 }
 
-export function apiDeleteTag(_id: string) {
+export function apiDeleteGovernor(_id: string) {
 	return axios({
 		method: "DELETE",
-		url: ENDPOINTS.tag.delete(_id),
+		url: ENDPOINTS.governor.delete(_id),
 		headers: {
-			"Content-Type": "application/json",
+			"content-type": "application/json",
 		},
 		baseURL: "http://localhost:5000",
 	});

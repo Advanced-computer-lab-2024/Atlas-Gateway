@@ -1,6 +1,8 @@
 import { EAccountType } from "@/types/enums";
 import {
+	TAdmin,
 	TAdvetisor,
+	TGovernor,
 	TSeller,
 	TTourGuide,
 	TTourist,
@@ -16,6 +18,14 @@ export type TSellerProfileResponse = TSeller & {
 	isVerified?: boolean;
 };
 
+export type TAdminResponse = TAdmin & {
+	_id: string;
+};
+
+export type TGovernorResponse = TGovernor & {
+	_id: string;
+};
+
 export type TAdvertiserProfileResponse = TAdvetisor & {
 	_id: string;
 	isVerified?: boolean;
@@ -27,7 +37,7 @@ export type TTourGuideProfileResponse = TTourGuide & {
 };
 
 export type TApiResponse<T> = {
-	data: T;
+	data: [T];
 	metaData: {
 		page: number;
 		total: number;

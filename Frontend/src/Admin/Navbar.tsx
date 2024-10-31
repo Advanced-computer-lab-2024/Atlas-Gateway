@@ -7,19 +7,20 @@ import { onLogout } from "@/store/loginStore";
 interface Props {
 	selectedCategory: string;
 	onSelect: (item: string) => void;
+	selectedItem: string;
 }
 
-const Navbar = ({ selectedCategory, onSelect }: Props) => {
+const Navbar = ({ selectedCategory, onSelect, selectedItem }: Props) => {
 	const navigate = useNavigate();
-	const [activeItem, setActiveItem] = useState("");
 	const logOut = () => {
 		onLogout();
 		navigate("/register");
 	};
 	const handleClick = (item: string) => {
-		setActiveItem(item);
+		selectedItem = item;
 		onSelect(item);
 	};
+
 	const renderOptions = () => {
 		switch (selectedCategory) {
 			case "Accounts":
@@ -34,7 +35,7 @@ const Navbar = ({ selectedCategory, onSelect }: Props) => {
 							"Seller",
 						].map((item) => (
 							<p
-								className={`cursor-pointer ${activeItem === item ? "text-[#2b58ed]" : ""}`}
+								className={`cursor-pointer ${selectedItem === item ? "text-[#2b58ed]" : ""}`}
 								onClick={() => handleClick(item)}
 							>
 								{item}
@@ -47,7 +48,7 @@ const Navbar = ({ selectedCategory, onSelect }: Props) => {
 					<div className="flex gap-11 ml-auto mr-auto">
 						{["Products"].map((item) => (
 							<p // maybe add here more later
-								className={`cursor-pointer ${activeItem === item ? "text-[#2b58ed]" : ""}`}
+								className={`cursor-pointer ${selectedItem === item ? "text-[#2b58ed]" : ""}`}
 								onClick={() => handleClick(item)}
 							>
 								{item}
@@ -60,7 +61,7 @@ const Navbar = ({ selectedCategory, onSelect }: Props) => {
 					<div className="flex gap-11 ml-auto mr-auto">
 						{["Preference Tags"].map((item) => (
 							<p
-								className={`cursor-pointer ${activeItem === item ? "text-[#2b58ed]" : ""}`}
+								className={`cursor-pointer ${selectedItem === item ? "text-[#2b58ed]" : ""}`}
 								onClick={() => handleClick(item)}
 							>
 								{item}
@@ -73,7 +74,7 @@ const Navbar = ({ selectedCategory, onSelect }: Props) => {
 					<div className="flex gap-11 ml-auto mr-auto">
 						{["Activity Category"].map((item) => (
 							<p
-								className={`cursor-pointer ${activeItem === item ? "text-[#2b58ed]" : ""}`}
+								className={`cursor-pointer ${selectedItem === item ? "text-[#2b58ed]" : ""}`}
 								onClick={() => handleClick(item)}
 							>
 								{item}

@@ -1,8 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { useAdmins, useCreateAdmin } from "@/api/data/useAdmins";
+import { useCreateGovernor, useGovernors } from "@/api/data/useGovernor";
 import { Button } from "@/components/ui/button";
 import {
 	FormControl,
@@ -14,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import {
 	Sheet,
+	SheetClose,
 	SheetContent,
 	SheetDescription,
 	SheetFooter,
@@ -21,6 +23,7 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from "@/components/ui/sheet";
+import { TAdmin, TGovernor } from "@/types/global";
 
 import { accountSchema } from "../schema";
 
@@ -29,20 +32,17 @@ interface props {
 }
 
 const AddForm = ({ type }: props) => {
+	const { refetch: refetchAdmins } = useAdmins();
+	const { refetch: refetchGovernors } = useGovernors();
+	const { doCreateAdmin } = useCreateAdmin(refetchAdmins);
+	const { doCreateGovernor } = useCreateGovernor(refetchGovernors);
 	const formMethods = useForm<z.infer<typeof accountSchema>>({
 		resolver: zodResolver(accountSchema),
 	});
 	const { handleSubmit, control } = formMethods;
-	const onSubmit = (data: z.infer<typeof accountSchema>) => {
-		axios
-			.post(`http://localhost:5000/api/${type}/create`, data)
-			.then((res) => {
-				console.log(res.status);
-				// will add here something to give a feedback later
-			})
-			.catch((error) => {
-				console.log(error);
-			});
+
+	const onSubmit = (data: TAdmin | TGovernor) => {
+		type == "admin" ? doCreateAdmin(data) : doCreateGovernor(data);
 	};
 	return (
 		<div>
@@ -120,7 +120,9 @@ const AddForm = ({ type }: props) => {
 								)}
 							/>
 							<SheetFooter>
-								<Button type="submit">Save changes</Button>
+								<SheetClose asChild>
+									<Button type="submit">Save changes</Button>
+								</SheetClose>
 							</SheetFooter>
 						</form>
 					</FormProvider>

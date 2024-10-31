@@ -4,6 +4,7 @@ import { Trash } from "lucide-react";
 import { RotateCw } from "lucide-react";
 import { useEffect, useState } from "react";
 
+import { useDeleteTouristProfile, useTourists } from "@/api/data/useProfile";
 import {
 	Table,
 	TableBody,
@@ -14,48 +15,9 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 
-interface Tourist {
-	_id: string;
-	username: string;
-	email: string;
-	password: string;
-	wallet: number;
-	address: string;
-	currency: string;
-	loyaltyPoints: number;
-	isDeleted: boolean;
-	profile?: {
-		bio?: string;
-		location?: string;
-		image?: string;
-	};
-}
-
 const Tourist = () => {
-	const [tourists, setTourists] = useState<Tourist[]>([]);
-	const [refresh, setRefresh] = useState<boolean>(false);
-
-	useEffect(() => {
-		axios
-			.get("http://localhost:5000/api/tourist/list")
-			.then((res) => {
-				setTourists(res.data);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	}, [refresh]);
-
-	const handleDelete = (id: string) => {
-		axios
-			.delete(`http://localhost:5000/api/tourist/delete/${id}`)
-			.then((res) => {
-				setRefresh(!refresh);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	};
+	const { data, refetch } = useTourists();
+	const { doDeleteTouristProfile } = useDeleteTouristProfile(refetch);
 
 	return (
 		<div className="flex flex-col p-3 overflow-hidden">
@@ -65,34 +27,34 @@ const Tourist = () => {
 					<TableRow>
 						<TableHead>Username</TableHead>
 						<TableHead>Email</TableHead>
-						<TableHead>Password</TableHead>
+						{/* <TableHead>Password</TableHead> */}
 						<TableHead>Address</TableHead>
 						<TableHead>Wallet</TableHead>
 						<TableHead>Currency</TableHead>
 						<TableHead>Loyalty Points</TableHead>
-						<TableHead>Bio</TableHead>
-						<TableHead>Location</TableHead>
-						<TableHead>Profile Image</TableHead>
+						{/* <TableHead>Bio</TableHead>
+						<TableHead>Location</TableHead> */}
+						{/* <TableHead>Profile Image</TableHead> */}
 						<TableHead className="cursor-pointer w-6 hover:text-[#2b58ed]">
-							<RotateCw onClick={() => setRefresh(!refresh)} />
+							<RotateCw onClick={() => refetch()} />
 						</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>
-					{tourists.map((tourist) => (
+					{data?.map((tourist) => (
 						<TableRow key={tourist._id}>
 							<TableCell>{tourist.username}</TableCell>
 							<TableCell>{tourist.email}</TableCell>
-							<TableCell>{tourist.password}</TableCell>
+							{/* <TableCell>{tourist.password}</TableCell> */}
 							<TableCell>{tourist?.address || "N/A"}</TableCell>
-							<TableCell>{tourist.wallet || "N/A"}</TableCell>
+							<TableCell>
+								{tourist.walletBalance || "N/A"}
+							</TableCell>
 							<TableCell>{tourist?.currency || "N/A"}</TableCell>
 							<TableCell>
 								{tourist?.loyaltyPoints || "N/A"}
 							</TableCell>
-							<TableCell>
-								{tourist.profile?.bio || "N/A"}
-							</TableCell>
+							{/* <TableCell>{tourist?.bio || "N/A"}</TableCell>
 							<TableCell>
 								{tourist.profile?.location || "N/A"}
 							</TableCell>
@@ -106,13 +68,13 @@ const Tourist = () => {
 								) : (
 									"N/A"
 								)}
-							</TableCell>
+							</TableCell> */}
 							<TableCell className="cursor-pointer w-6 hover:text-[#2b58ed]">
 								<button className="bg-red-500 text-white rounded-full p-2 shadow-lg hover:bg-red-600">
 									<Trash
 										className="w-4 h-4"
 										onClick={() => {
-											handleDelete(tourist._id);
+											doDeleteTouristProfile(tourist._id);
 										}}
 									/>
 								</button>

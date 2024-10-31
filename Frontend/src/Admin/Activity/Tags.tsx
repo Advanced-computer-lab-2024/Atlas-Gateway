@@ -1,7 +1,6 @@
-import axios from "axios";
-import { Pencil, RotateCw, Trash } from "lucide-react";
-import { useEffect, useState } from "react";
+import { RotateCw, Trash } from "lucide-react";
 
+import { useDeleteTag, useTags } from "@/api/data/useTags";
 import {
 	Table,
 	TableBody,
@@ -12,39 +11,12 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 
+import TagAndCategoryForm from "./CategoryAndTagsForm";
 import EditForm from "./EditForm";
-import TagAndCategoryForm from "./TagAndCategoryForm";
 
-interface Tags {
-	_id: string;
-	name: string;
-	type: string;
-}
 const Tags = () => {
-	const [prefrenceTags, setPrefrenceTags] = useState<Tags[]>([]);
-	const [refresh, setRefresh] = useState<boolean>(false);
-
-	useEffect(() => {
-		axios
-			.get("http://localhost:5000/api/tags/preference/list")
-			.then((res) => {
-				setPrefrenceTags(res.data);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	}, [refresh]);
-
-	const handleDelete = (id: string) => {
-		axios
-			.delete(`http://localhost:5000/api/tags/preference/delete/${id}`)
-			.then((res) => {
-				setRefresh(!refresh);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	};
+	const { data, refetch } = useTags();
+	const { doDeleteTag } = useDeleteTag(refetch);
 
 	return (
 		<div className="flex flex-col p-3">
@@ -60,14 +32,12 @@ const Tags = () => {
 							<TableHead>Type</TableHead>
 							<TableHead></TableHead>
 							<TableHead className="cursor-pointer hover:text-[#2b58ed] w-1">
-								<RotateCw
-									onClick={() => setRefresh(!refresh)}
-								/>
+								<RotateCw onClick={() => refetch()} />
 							</TableHead>
 						</TableRow>
 					</TableHeader>
 					<TableBody>
-						{prefrenceTags.map((tag) => (
+						{data?.map((tag) => (
 							<TableRow key={tag._id}>
 								<TableCell className="p-3">
 									{tag.name}
@@ -85,7 +55,7 @@ const Tags = () => {
 										<Trash
 											className="w-4 h-4"
 											onClick={() => {
-												handleDelete(tag._id);
+												doDeleteTag(tag._id);
 											}}
 										/>
 									</button>

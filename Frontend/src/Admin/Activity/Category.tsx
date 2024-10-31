@@ -1,7 +1,6 @@
-import axios from "axios";
-import { Pencil, RotateCw, Trash } from "lucide-react";
-import { useEffect, useState } from "react";
+import { RotateCw, Trash } from "lucide-react";
 
+import { useCategories, useDeleteCategory } from "@/api/data/useCategories";
 import {
 	Table,
 	TableBody,
@@ -12,40 +11,12 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 
+import TagAndCategoryForm from "./CategoryAndTagsForm";
 import EditForm from "./EditForm";
-import TagAndCategoryForm from "./TagAndCategoryForm";
-
-interface Category {
-	_id: string;
-	name: string;
-}
 
 const ActivityCategory = () => {
-	const [categories, setCategories] = useState<Category[]>([]);
-	const [refresh, setRefresh] = useState<boolean>(false);
-
-	useEffect(() => {
-		axios
-			.get("http://localhost:5000/api/category/list")
-			.then((res) => {
-				setCategories(res.data);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	}, [refresh]);
-
-	const handleDelete = (id: string) => {
-		axios
-			.delete(`http://localhost:5000/api/category/delete/${id}`)
-			.then((res) => {
-				setRefresh(!refresh);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	};
-
+	const { data, refetch } = useCategories();
+	const { doDeleteCategory } = useDeleteCategory(refetch);
 	return (
 		<div className="flex flex-col p-3">
 			<div className="flex self-end pb-3">
@@ -59,14 +30,12 @@ const ActivityCategory = () => {
 							<TableHead>Name</TableHead>
 							<TableHead></TableHead>
 							<TableHead className="cursor-pointer hover:text-[#2b58ed] w-1">
-								<RotateCw
-									onClick={() => setRefresh(!refresh)}
-								/>
+								<RotateCw onClick={() => refetch()} />
 							</TableHead>
 						</TableRow>
 					</TableHeader>
 					<TableBody>
-						{categories.map((category) => (
+						{data?.map((category) => (
 							<TableRow key={category._id}>
 								<TableCell className="p-3">
 									{category.name}
@@ -82,7 +51,7 @@ const ActivityCategory = () => {
 										<Trash
 											className="w-4 h-4"
 											onClick={() => {
-												handleDelete(category._id);
+												doDeleteCategory(category._id);
 											}}
 										/>
 									</button>

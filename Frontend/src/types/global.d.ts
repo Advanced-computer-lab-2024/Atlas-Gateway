@@ -67,9 +67,23 @@ export type TActivity = {
 	isOpen: boolean;
 	avgRating: number;
 };
+
+export interface TAdmin extends TUser {
+	email: string;
+	password: string;
+}
+
+export interface TGovernor extends TUser {
+	email: string;
+	password: string;
+}
+
 export interface TTourist extends TUser {
 	email: string;
 	mobile: string;
+	address: string;
+	currency: string;
+	loyaltyPoints: number;
 	walletBalance: number;
 }
 
@@ -83,6 +97,7 @@ export interface TAdvetisor extends TUser {
 	email: string;
 	hotline: number;
 	website: string;
+	password: string;
 	description: string;
 }
 
@@ -95,13 +110,13 @@ export interface TTourGuide extends TUser {
 }
 
 export interface TTag {
-	_id: string;
+	_id?: string;
 	name: string;
-	type: string;
+	type?: string;
 }
 
 export interface TCategory {
-	_id: string;
+	_id?: string;
 	name: string;
 }
 
