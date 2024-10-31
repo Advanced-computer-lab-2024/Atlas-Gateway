@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { Types } from "mongoose";
 
-import { Admin } from "../../Database/Models/Users/admin.model";
-import { Seller } from "../../Database/Models/Users/seller.model";
+import { Admin } from "../../Models/Users/admin.model";
+import { Seller } from "../../Models/Users/seller.model";
 
 export const createSeller = async (req: Request, res: Response) => {
 	try {

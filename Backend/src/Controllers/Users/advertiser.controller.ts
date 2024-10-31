@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { Types } from "mongoose";
 
-import { Admin } from "../../Database/Models/Users/admin.model";
-import { Advertiser } from "../../Database/Models/Users/advertiser.model";
+import { Admin } from "../../Models/Users/admin.model";
+import { Advertiser } from "../../Models/Users/advertiser.model";
 
 export const createAdvertiser = async (req: Request, res: Response) => {
 	try {

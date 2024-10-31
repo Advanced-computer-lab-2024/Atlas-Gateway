@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import { Request, Response } from "express";
 import { Types } from "mongoose";
 
-import { Admin } from "../../Database/Models/Users/admin.model";
+import { Admin } from "../../Models/Users/admin.model";
 import uniqueUsername from "../../Services/uniqueUsername.service";
 
 export const createAdmin = async (req: Request, res: Response) => {

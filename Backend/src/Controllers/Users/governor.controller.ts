@@ -2,8 +2,8 @@ import bcrypt from "bcryptjs";
 import { Request, Response } from "express";
 import { Types } from "mongoose";
 
-import { Governor } from "../../Database/Models/Users/governor.model";
-import { Places } from "../../Database/Models/places.model";
+import { Places } from "../../Models/Travel/places.model";
+import { Governor } from "../../Models/Users/governor.model";
 import uniqueUsername from "../../Services/uniqueUsername.service";
 
 export const createGovernor = async (req: Request, res: Response) => {

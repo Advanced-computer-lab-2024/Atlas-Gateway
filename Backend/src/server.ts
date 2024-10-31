@@ -2,21 +2,21 @@ import cors from "cors";
 import express, { Request, Response } from "express";
 
 import { SERVER } from "./Config/config";
-import connectDB from "./Database/db";
-import itineraryRouter from "./Routes/Itinerary.route";
+import connectDB from "./Config/db";
+import loginRouter from "./Routes/Auth/login.route";
+import registerRouter from "./Routes/Auth/register.route";
+import productRouter from "./Routes/Purchases/product.route";
+import itineraryRouter from "./Routes/Travel/Itinerary.route";
+import activityRouter from "./Routes/Travel/activity.route";
+import categoryRouter from "./Routes/Travel/category.route";
+import placesRouter from "./Routes/Travel/places.route";
+import tagRouter from "./Routes/Travel/tag.route";
 import adminRouter from "./Routes/Users/admin.route";
 import advertiserRouter from "./Routes/Users/advertiser.route";
 import governorRouter from "./Routes/Users/governor.route";
 import sellerRouter from "./Routes/Users/seller.route";
 import tourGuideRouter from "./Routes/Users/tourGuide.route";
 import touristRouter from "./Routes/Users/tourist.route";
-import activityRouter from "./Routes/activity.route";
-import categoryRouter from "./Routes/category.route";
-import placesRouter from "./Routes/places.route";
-import productRouter from "./Routes/product.route";
-import registerRouter from "./Routes/register.route";
-import loginRouter from "./Routes/login.route";
-import tagRouter from "./Routes/tag.route";
 
 const app = express();
 

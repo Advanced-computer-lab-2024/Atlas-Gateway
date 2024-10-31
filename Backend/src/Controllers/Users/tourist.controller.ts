@@ -1,8 +1,8 @@
+import { Console } from "console";
 import { Request, Response } from "express";
 import { Types } from "mongoose";
 
-import { Tourist } from "../../Database/Models/Users/tourist.model";
-import { Console } from "console";
+import { Tourist } from "../../Models/Users/tourist.model";
 
 export const createTourist = async (req: Request, res: Response) => {
 	try {
@@ -63,13 +63,9 @@ export const getTourists = async (req: Request, res: Response) => {
 export const updateTourist = async (req: Request, res: Response) => {
 	const id = req.params.id;
 	try {
-		const touristData = await Tourist.findByIdAndUpdate(
-			id,
-			req.body,
-			{
-				new: true,
-			},
-		);
+		const touristData = await Tourist.findByIdAndUpdate(id, req.body, {
+			new: true,
+		});
 		res.status(200).send(touristData);
 	} catch (error) {
 		console.log(error);

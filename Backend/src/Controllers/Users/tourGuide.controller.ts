@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { Types } from "mongoose";
 
-import { Admin } from "../../Database/Models/Users/admin.model";
-import { TourGuide } from "../../Database/Models/Users/tourGuide.model";
+import { Admin } from "../../Models/Users/admin.model";
+import { TourGuide } from "../../Models/Users/tourGuide.model";
 
 export const createTourGuide = async (req: Request, res: Response) => {
 	try {

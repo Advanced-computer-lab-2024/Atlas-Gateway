@@ -1,11 +1,11 @@
 import { Types } from "mongoose";
 
-import { Admin } from "../Database/Models/Users/admin.model";
-import { Advertiser } from "../Database/Models/Users/advertiser.model";
-import { Governor } from "../Database/Models/Users/governor.model";
-import { Seller } from "../Database/Models/Users/seller.model";
-import { TourGuide } from "../Database/Models/Users/tourGuide.model";
-import { Tourist } from "../Database/Models/Users/tourist.model";
+import { Admin } from "../Models/Users/admin.model";
+import { Advertiser } from "../Models/Users/advertiser.model";
+import { Governor } from "../Models/Users/governor.model";
+import { Seller } from "../Models/Users/seller.model";
+import { TourGuide } from "../Models/Users/tourGuide.model";
+import { Tourist } from "../Models/Users/tourist.model";
 
 export default async function uniqueUn(username: string) {
 	const adminUser = await Admin.find({ username });
