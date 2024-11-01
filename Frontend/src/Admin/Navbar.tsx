@@ -1,6 +1,5 @@
 import { LogOut } from "lucide-react";
-import { useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { onLogout } from "@/store/loginStore";
 
@@ -73,6 +72,19 @@ const Navbar = ({ selectedCategory, onSelect, selectedItem }: Props) => {
 				return (
 					<div className="flex gap-11 ml-auto mr-auto">
 						{["Activity Category"].map((item) => (
+							<p
+								className={`cursor-pointer ${selectedItem === item ? "text-[#2b58ed]" : ""}`}
+								onClick={() => handleClick(item)}
+							>
+								{item}
+							</p>
+						))}
+					</div>
+				);
+			case "Complaints":
+				return (
+					<div className="flex gap-11 ml-auto mr-auto">
+						{["Tourist Complaints"].map((item) => (
 							<p
 								className={`cursor-pointer ${selectedItem === item ? "text-[#2b58ed]" : ""}`}
 								onClick={() => handleClick(item)}

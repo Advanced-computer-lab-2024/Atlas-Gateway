@@ -134,6 +134,15 @@ export interface TCategory {
 	name: string;
 }
 
+export interface TComplaint {
+	_id: string;
+	touristname: string;
+	title: string;
+	body: string;
+	date: string;
+	state: string;
+}
+
 export interface TItinerary {
 	_id: string;
 	title: string;

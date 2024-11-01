@@ -7,7 +7,7 @@ import {
 	apiCategories,
 	apiCreateCategory,
 	apiDeleteCategory,
-	apiUpdateCategory,
+	// apiUpdateCategory,
 } from "../service/categories";
 import { useQueryString } from "./useQueryString";
 
