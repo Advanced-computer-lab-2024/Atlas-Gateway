@@ -15,21 +15,15 @@ export default async function uniqueUn(username: string) {
 	const tourGuideUser = await TourGuide.find({ username });
 	const touristUser = await Tourist.find({ username });
 
-	console.log(adminUser.length);
-	console.log(advertiserUser);
-	console.log(governorUser);
-	console.log(sellerUser);
-	console.log(tourGuideUser);
-	console.log(touristUser);
 	if (
-		adminUser.length == 0 &&
-		advertiserUser.length == 0 &&
-		governorUser.length == 0 &&
-		sellerUser.length == 0 &&
-		tourGuideUser.length == 0 &&
-		touristUser.length == 0
+		adminUser.length != 0 ||
+		advertiserUser.length != 0 ||
+		governorUser.length != 0 ||
+		sellerUser.length != 0 ||
+		tourGuideUser.length != 0 ||
+		touristUser.length != 0
 	) {
-		return true;
+		return false;
 	}
-	return false;
+	return true;
 }
