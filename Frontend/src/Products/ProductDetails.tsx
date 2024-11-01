@@ -5,6 +5,7 @@ import { useProduct } from "@/api/data/useProducts";
 import Label from "@/components/ui/Label";
 import { Card } from "@/components/ui/card";
 import { Flex } from "@/components/ui/flex";
+import Rating from "@/components/ui/rating";
 
 export default function ProductDetails() {
 	const navigate = useNavigate();
@@ -67,10 +68,11 @@ export default function ProductDetails() {
 								<Label.Big600 className="w-40 text-left">
 									Rating:{" "}
 								</Label.Big600>
-								<Star color="yellow" fill="yellow" size={32} />
+								{/* <Star color="yellow" fill="yellow" size={32} />
 								<Label.Mid500 className="overflow-ellipsis">
 									{avgRating}
-								</Label.Mid500>
+								</Label.Mid500> */}
+								<Rating value={avgRating} />
 							</Flex>
 						</Flex>
 					</Flex>
