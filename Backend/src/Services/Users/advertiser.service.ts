@@ -16,12 +16,11 @@ export const createAdvertiser = async (
 		throw new HttpError(400, "Username should be unique");
 	}
 	const hashedPassword = await hashPassword(password);
-	const adv = new Advertiser({
+	const adv = await Advertiser.create({
 		username,
 		email,
 		hashedPassword,
 	});
-	await adv.save();
 	return adv;
 };
 

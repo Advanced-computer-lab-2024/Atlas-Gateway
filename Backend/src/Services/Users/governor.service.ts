@@ -22,8 +22,6 @@ export const createGovernor = async (
 		password: hashedPassword,
 	});
 
-	await governor.save();
-
 	return governor;
 };
 
