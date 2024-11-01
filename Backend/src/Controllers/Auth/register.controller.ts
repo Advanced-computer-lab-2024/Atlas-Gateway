@@ -6,7 +6,7 @@ import { Governor } from "../../Models/Users/governor.model";
 import { Seller } from "../../Models/Users/seller.model";
 import { TourGuide } from "../../Models/Users/tourGuide.model";
 import { Tourist } from "../../Models/Users/tourist.model";
-import uniqueUsername from "../../Services/uniqueUsername.service";
+import uniqueUsername from "../../Services/Auth/uniqueUsername.service";
 
 export const register = async (req: Request, res: Response) => {
 	try {

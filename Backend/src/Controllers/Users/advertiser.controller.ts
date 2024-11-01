@@ -1,9 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { Types } from "mongoose";
 
 import HttpError from "../../Errors/HttpError";
-import { Admin } from "../../Models/Users/admin.model";
-import { Advertiser } from "../../Models/Users/advertiser.model";
 import * as advertiserService from "../../Services/Users/advertiser.service";
 
 export const createAdvertiser = async (

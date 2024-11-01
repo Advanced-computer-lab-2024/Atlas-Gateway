@@ -1,6 +1,4 @@
-import bcrypt from "bcryptjs";
 import { NextFunction, Request, Response } from "express";
-import { Types } from "mongoose";
 
 import HttpError from "../../Errors/HttpError";
 import * as adminService from "../../Services/Users/admin.service";

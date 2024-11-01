@@ -3,7 +3,7 @@ import { Types } from "mongoose";
 import HttpError from "../../Errors/HttpError";
 import { Advertiser, IAdvertiser } from "../../Models/Users/advertiser.model";
 import { hashPassword } from "../Auth/passwordHash.service";
-import uniqueUsername from "../uniqueUsername.service";
+import uniqueUsername from "../Auth/uniqueUsername.service";
 import * as adminService from "./admin.service";
 
 export const createAdvertiser = async (
@@ -21,7 +21,6 @@ export const createAdvertiser = async (
 		email,
 		hashedPassword,
 	});
-	await adv.validate();
 	await adv.save();
 	return adv;
 };

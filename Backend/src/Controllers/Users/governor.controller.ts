@@ -1,65 +1,72 @@
-import bcrypt from "bcryptjs";
-import { Request, Response } from "express";
-import { Types } from "mongoose";
+import HttpError from "@/Errors/HttpError";
+import { NextFunction, Request, Response } from "express";
 
-import { Places } from "../../Models/Travel/places.model";
-import { Governor } from "../../Models/Users/governor.model";
-import uniqueUsername from "../../Services/uniqueUsername.service";
+import * as governorService from "../../Services/Users/governor.service";
 
-export const createGovernor = async (req: Request, res: Response) => {
+export const createGovernor = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const { username, email, password } = req.body;
 		if (!username || !email || !password) {
-			res.status(400).send("username, email and password are required");
+			throw new HttpError(
+				400,
+				"username, email and password are required",
+			);
 		}
-		const resultUnique = await uniqueUsername(username);
-		if (!resultUnique) {
-			return res.status(400).send("Username Should Be Unique");
-		}
-		const hashedPassword = await bcrypt.hash(password, 10);
-		const governor = await Governor.create({
+
+		const governor = await governorService.createGovernor(
 			username,
 			email,
-			password: hashedPassword,
-		});
+			password,
+		);
+
 		res.status(201).json(governor);
 	} catch (error) {
-		console.log(error);
-		res.status(500).send("error creating governor");
+		next(error);
 	}
 };
 
-export const getGovernors = async (req: Request, res: Response) => {
+export const getGovernors = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
-		const governors = await Governor.find();
+		const governors = await governorService.getGovernors();
 		res.status(200).json(governors);
 	} catch (error) {
-		console.log(error);
-		res.status(500).send("error getting governors");
+		next(error);
 	}
 };
 
-export const getHistoricalLocations = async (req: Request, res: Response) => {
+export const getHistoricalLocations = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const { id } = req.params;
 
 		if (!id) {
-			return res.status(400).send("id is required");
+			throw new HttpError(400, "id is required");
 		}
 
-		if (!Types.ObjectId.isValid(id)) {
-			return res.status(400).send("id is invalid");
-		}
-		const historicalLocations = await Places.find({ governorId: id });
+		const locations = await governorService.viewHistoricalLocations(id);
 
-		res.status(200).json(historicalLocations);
+		res.status(200).json(locations);
 	} catch (error) {
-		console.log(error);
-		res.status(500).send("Error deleting Governor");
+		next(error);
 	}
 };
 
-export const deleteGovernor = async (req: Request, res: Response) => {
+export const deleteGovernor = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const { id } = req.params;
 
@@ -67,18 +74,10 @@ export const deleteGovernor = async (req: Request, res: Response) => {
 			return res.status(400).send("Id is Required");
 		}
 
-		if (!Types.ObjectId.isValid(id)) {
-			return res.status(400).send("Id is Invalid");
-		}
-
-		const governor = await Governor.findByIdAndDelete(id);
-
-		if (!governor) {
-			return res.status(404).send("governor not found");
-		}
+		await governorService.deleteGovernor(id);
 
 		res.status(200).send("Deleted successfully");
 	} catch (error) {
-		res.status(500).send("Error while deleting Governor");
+		next(error);
 	}
 };
