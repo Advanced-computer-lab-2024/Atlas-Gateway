@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import mongoose, { Types } from "mongoose";
 import { PipelineStage } from "mongoose";
 
@@ -8,7 +8,11 @@ import { Seller } from "../../Models/Users/seller.model";
 import AggregateBuilder from "../../Services/Operations/aggregation.service";
 
 //Create a new product entry
-export const createProduct = async (req: Request, res: Response) => {
+export const createProduct = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const userId = req.headers.userid;
 		const { name, description, price, quantity, picture } = req.body;
@@ -55,13 +59,16 @@ export const createProduct = async (req: Request, res: Response) => {
 		await product.save();
 		res.status(200).send(product);
 	} catch (error) {
-		console.log(error);
-		res.status(500).json({ message: "Internal Server Error" });
+		next(error);
 	}
 };
 
 //takes an ID parameter and returns a single product
-export const getProduct = async (req: Request, res: Response) => {
+export const getProduct = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const id = req.params.id;
 
@@ -77,13 +84,16 @@ export const getProduct = async (req: Request, res: Response) => {
 
 		res.status(200).send(product);
 	} catch (error) {
-		console.log(error);
-		res.status(500).json({ message: "Internal Server Error" });
+		next(error);
 	}
 };
 
 //takes a query (and conditions) and returns a data set
-export const getProducts = async (req: Request, res: Response) => {
+export const getProducts = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const PipelineStage: PipelineStage[] = [
 			...AggregateBuilder(
@@ -112,13 +122,16 @@ export const getProducts = async (req: Request, res: Response) => {
 
 		res.status(200).send(response);
 	} catch (error) {
-		console.log(error);
-		res.status(500).json({ message: "Internal Server Error" });
+		next(error);
 	}
 };
 
 //takes an ID and update the entry
-export const updateProduct = async (req: Request, res: Response) => {
+export const updateProduct = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const id = req.params.id;
 
@@ -138,7 +151,6 @@ export const updateProduct = async (req: Request, res: Response) => {
 
 		res.status(200).send(product);
 	} catch (error) {
-		console.log(error);
-		res.status(500).json({ message: "Internal Server Error" });
+		next(error);
 	}
 };

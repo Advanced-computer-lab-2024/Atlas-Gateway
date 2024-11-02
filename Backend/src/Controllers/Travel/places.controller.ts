@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import mongoose, { PipelineStage, Types } from "mongoose";
 import { userInfo } from "os";
 
@@ -6,7 +6,11 @@ import { Places } from "../../Models/Travel/places.model";
 import { Governor } from "../../Models/Users/governor.model";
 import AggregateBuilder from "../../Services/Operations/aggregation.service";
 
-export const createPlace = async (req: Request, res: Response) => {
+export const createPlace = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const governorId = req.headers.userid;
 
@@ -24,12 +28,15 @@ export const createPlace = async (req: Request, res: Response) => {
 		const response = await placeData.save();
 		res.status(200).send(response);
 	} catch (error) {
-		res.status(500).json({ message: "Internal Server Error" });
-		console.log(error);
+		next(error);
 	}
 };
 
-export const getPlaces = async (req: Request, res: Response) => {
+export const getPlaces = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const pipeline: PipelineStage[] = [
 			{
@@ -65,12 +72,15 @@ export const getPlaces = async (req: Request, res: Response) => {
 
 		res.status(200).send(response);
 	} catch (error) {
-		res.status(500).json({ message: "Internal Server Error" });
-		console.log(error);
+		next(error);
 	}
 };
 
-export const getPlacesByUserId = async (req: Request, res: Response) => {
+export const getPlacesByUserId = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const governerId = req.headers.userid;
 		if (!governerId) {
@@ -118,11 +128,15 @@ export const getPlacesByUserId = async (req: Request, res: Response) => {
 
 		res.status(200).send(response);
 	} catch (error) {
-		res.status(500).send("Error getting Places by id");
+		next(error);
 	}
 };
 
-export const getPlaceById = async (req: Request, res: Response) => {
+export const getPlaceById = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const id = req.params.id;
 		if (!Types.ObjectId.isValid(id)) {
@@ -134,12 +148,15 @@ export const getPlaceById = async (req: Request, res: Response) => {
 		}
 		res.status(200).send(response);
 	} catch (error) {
-		console.log(error);
-		res.status(500).json({ message: "Place Not found" });
+		next(error);
 	}
 };
 
-export const updatePlace = async (req: Request, res: Response) => {
+export const updatePlace = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const id = req.params.id;
 
@@ -153,12 +170,15 @@ export const updatePlace = async (req: Request, res: Response) => {
 		await place.save();
 		res.status(200).send(place);
 	} catch (error) {
-		console.log(error);
-		res.status(500).json({ message: "Internal Server Error" });
+		next(error);
 	}
 };
 
-export const deletePlace = async (req: Request, res: Response) => {
+export const deletePlace = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const { id } = req.params;
 
@@ -174,7 +194,6 @@ export const deletePlace = async (req: Request, res: Response) => {
 		await Places.findByIdAndDelete(id);
 		res.status(200).send("Itinerary deleted Successfully");
 	} catch (error) {
-		console.log(error);
-		res.status(500).send("Error deleting Itinerary");
+		next(error);
 	}
 };

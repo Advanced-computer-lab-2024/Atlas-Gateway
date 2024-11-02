@@ -1,10 +1,14 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { Types } from "mongoose";
 
 import { Activity } from "../../Models/Travel/activity.model";
 import { Category } from "../../Models/Travel/category.model";
 
-export const createCategory = async (req: Request, res: Response) => {
+export const createCategory = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const { name } = req.body;
 		if (!name) {
@@ -13,22 +17,28 @@ export const createCategory = async (req: Request, res: Response) => {
 		const category = await Category.create({ name });
 		res.status(201).json(category);
 	} catch (error) {
-		console.log(error);
-		res.status(500).send("error create an activity category");
+		next(error);
 	}
 };
 
-export const getCategories = async (req: Request, res: Response) => {
+export const getCategories = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const categories = await Category.find();
 		res.status(200).json(categories);
 	} catch (error) {
-		console.log(error);
-		res.status(500).send("error getting activity categories");
+		next(error);
 	}
 };
 
-export const getCategoryById = async (req: Request, res: Response) => {
+export const getCategoryById = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const { id } = req.params;
 
@@ -39,11 +49,15 @@ export const getCategoryById = async (req: Request, res: Response) => {
 		const category = await Category.findById(id);
 		res.status(200).json(category);
 	} catch (error) {
-		res.status(500).send("error getting category by id");
+		next(error);
 	}
 };
 
-export const updateCategory = async (req: Request, res: Response) => {
+export const updateCategory = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const { id } = req.params;
 		if (!Types.ObjectId.isValid(id)) {
@@ -60,12 +74,15 @@ export const updateCategory = async (req: Request, res: Response) => {
 		}
 		res.status(200).json(category);
 	} catch (error) {
-		console.log(error);
-		res.status(500).send("error updating activity category");
+		next(error);
 	}
 };
 
-export const deleteCategory = async (req: Request, res: Response) => {
+export const deleteCategory = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const { id } = req.params;
 
@@ -79,7 +96,6 @@ export const deleteCategory = async (req: Request, res: Response) => {
 		await Activity.deleteMany({ category: id });
 		res.status(200).send("category deleted successfully");
 	} catch (error) {
-		console.log(error);
-		res.status(500).send("error deleting category");
+		next(error);
 	}
 };

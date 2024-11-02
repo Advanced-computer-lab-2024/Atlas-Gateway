@@ -1,10 +1,14 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { PipelineStage, Types } from "mongoose";
 
 import { Activity } from "../../Models/Travel/activity.model";
 import AggregateBuilder from "../../Services/Operations/aggregation.service";
 
-export const createActivities = async (req: Request, res: Response) => {
+export const createActivities = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const advertisorId = req.headers.userid;
 
@@ -44,12 +48,15 @@ export const createActivities = async (req: Request, res: Response) => {
 
 		res.status(201).json(activity);
 	} catch (error) {
-		console.log(error);
-		res.status(500).send("Error creating an activity");
+		next(error);
 	}
 };
 
-export const getActivityById = async (req: Request, res: Response) => {
+export const getActivityById = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const { id } = req.params;
 
@@ -65,12 +72,15 @@ export const getActivityById = async (req: Request, res: Response) => {
 		}
 		res.status(200).send(activity);
 	} catch (error) {
-		console.log(error);
-		res.status(500).send("error getting an activity");
+		next(error);
 	}
 };
 
-export const getActivitybyUserId = async (req: Request, res: Response) => {
+export const getActivitybyUserId = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const tourGuideId = req.headers.userid;
 
@@ -132,11 +142,15 @@ export const getActivitybyUserId = async (req: Request, res: Response) => {
 		};
 		res.status(200).send(response);
 	} catch (error) {
-		res.status(500).send("Error getting Itinerary by id");
+		next(error);
 	}
 };
 
-export const getActivities = async (req: Request, res: Response) => {
+export const getActivities = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const pipeline = [
 			//need to join the tags and category collections to get the name of the tags and category
@@ -182,12 +196,15 @@ export const getActivities = async (req: Request, res: Response) => {
 		};
 		res.status(200).send(response);
 	} catch (error) {
-		console.log(error);
-		res.status(500).send("error getting activities");
+		next(error);
 	}
 };
 
-export const updateActivityById = async (req: Request, res: Response) => {
+export const updateActivityById = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const { id } = req.params;
 
@@ -202,12 +219,15 @@ export const updateActivityById = async (req: Request, res: Response) => {
 		await activity.save();
 		res.status(200).send(activity);
 	} catch (error) {
-		console.log(error);
-		res.status(500).send("error updating an activity");
+		next(error);
 	}
 };
 
-export const deleteActivityById = async (req: Request, res: Response) => {
+export const deleteActivityById = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const { id } = req.params;
 
@@ -220,7 +240,6 @@ export const deleteActivityById = async (req: Request, res: Response) => {
 		}
 		res.status(200).send("activity deleted successfully");
 	} catch (error) {
-		console.log(error);
-		res.status(500).send("error deleting an activity");
+		next(error);
 	}
 };

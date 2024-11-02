@@ -19,6 +19,8 @@ import sellerRouter from "./Routes/Users/seller.route";
 import tourGuideRouter from "./Routes/Users/tourGuide.route";
 import touristRouter from "./Routes/Users/tourist.route";
 
+const app = express();
+
 async function startServer() {
 	const app = express();
 	app.use(express.json());
@@ -45,18 +47,6 @@ async function startServer() {
 	app.use("/api/itinerary", itineraryRouter);
 	app.use("/api/places", placesRouter);
 	app.use("/api/login", loginRouter);
-
-	app.get("/", (req: Request, res: Response) => {
-		try {
-			res.status(200).send("Hello");
-		} catch (error) {
-			res.status(500).send("How did you possibly mess this up?");
-		}
-	});
-
-	app.use("", (req: Request, res: Response) => {
-		res.status(404).send("Page not found");
-	});
 
 	// Error handling middleware
 	app.use((err: Error, req: Request, res: Response, next: NextFunction) => {

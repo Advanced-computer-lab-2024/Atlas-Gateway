@@ -25,3 +25,25 @@ export default async function uniqueUn(username: string) {
 	}
 	return true;
 }
+
+export const findUserByUsername = async (username: string) => {
+	let user = await Tourist.findOne({ username });
+	if (user) return { user, type: "tourist" };
+
+	user = await Governor.findOne({ username });
+	if (user) return { user, type: "governor" };
+
+	user = await TourGuide.findOne({ username });
+	if (user) return { user, type: "tour_guide" };
+
+	user = await Seller.findOne({ username });
+	if (user) return { user, type: "seller" };
+
+	user = await Advertiser.findOne({ username });
+	if (user) return { user, type: "advertiser" };
+
+	user = await Admin.findOne({ username });
+	if (user) return { user, type: "admin" };
+
+	return null;
+};
