@@ -1,9 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { PipelineStage, Types } from "mongoose";
 
 import HttpError from "../../Errors/HttpError";
-import { Itinerary } from "../../Models/Travel/itinerary.model";
-import AggregateBuilder from "../../Services/Operations/aggregation.service";
 import * as itineraryService from "../../Services/Travel/itinerary.service";
 
 export const createItinerary = async (

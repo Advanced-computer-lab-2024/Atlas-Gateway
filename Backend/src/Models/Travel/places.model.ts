@@ -2,7 +2,7 @@ import { Document, Schema, Types, model } from "mongoose";
 
 import { schemaConfig } from "../../Config/schemaConfig";
 
-interface IPlaces extends Document {
+export interface IPlaces extends Document {
 	//description, pictures, location, opening hours, ticket prices
 	governorId: Types.ObjectId;
 	name: string;

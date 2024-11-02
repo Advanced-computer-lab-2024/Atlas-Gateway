@@ -1,10 +1,11 @@
 import { NextFunction, Request, Response } from "express";
-import mongoose, { PipelineStage, Types } from "mongoose";
-import { userInfo } from "os";
+import { PipelineStage, Types } from "mongoose";
 
+import HttpError from "../../Errors/HttpError";
 import { Places } from "../../Models/Travel/places.model";
 import { Governor } from "../../Models/Users/governor.model";
 import AggregateBuilder from "../../Services/Operations/aggregation.service";
+import * as placeService from "../../Services/Travel/places.service";
 
 export const createPlace = async (
 	req: Request,
@@ -14,19 +15,12 @@ export const createPlace = async (
 	try {
 		const governorId = req.headers.userid;
 
-		if (!(await Governor.findById(governorId))) {
-			return res
-				.status(400)
-				.json({ message: "Governor ID is invalid or doesn't exist" });
+		if (!governorId) {
+			throw new HttpError(400, "Governor id is required");
 		}
 
-		const placeData = new Places({
-			...req?.body,
-			governorId,
-		});
-
-		const response = await placeData.save();
-		res.status(200).send(response);
+		const place = placeService.createPlace(governorId.toString(), req.body);
+		res.status(200).send(place);
 	} catch (error) {
 		next(error);
 	}
@@ -38,27 +32,7 @@ export const getPlaces = async (
 	next: NextFunction,
 ) => {
 	try {
-		const pipeline: PipelineStage[] = [
-			{
-				$lookup: {
-					from: "tags",
-					localField: "tags",
-					foreignField: "_id",
-					as: "tags",
-				},
-			},
-
-			...AggregateBuilder(req.query, ["name", "tagsData.name"]),
-		];
-
-		const result = await Places.aggregate(pipeline);
-
-		if (result[0].data.length === 0) {
-			return res
-				.status(404)
-				.json({ message: "No matching Places Found" });
-		}
-
+		const result = await placeService.getPlaces(req.query);
 		const response = {
 			data: result[0].data,
 			metaData: {
@@ -84,36 +58,13 @@ export const getPlacesByUserId = async (
 	try {
 		const governerId = req.headers.userid;
 		if (!governerId) {
-			return res.status(400).json({ message: "Governer ID is required" });
-		}
-		if (!Types.ObjectId.isValid(governerId.toString())) {
-			return res.status(400).json({ message: "Invalid Governer ID" });
+			throw new HttpError(400, "Governer ID is required");
 		}
 
-		const pipeline: PipelineStage[] = [
-			{
-				$lookup: {
-					from: "tags",
-					localField: "tags",
-					foreignField: "_id",
-					as: "tags",
-				},
-			},
-			{
-				$match: {
-					governorId: new Types.ObjectId(governerId.toString()),
-				},
-			},
-			...AggregateBuilder(req.query, ["name", "tagsData.name"]),
-		];
-
-		const result = await Places.aggregate(pipeline);
-
-		if (result[0].data.length === 0) {
-			return res
-				.status(404)
-				.json({ message: "No matching Places Found" });
-		}
+		const result = await placeService.getPlacesByUserId(
+			governerId.toString(),
+			req.query,
+		);
 
 		const response = {
 			data: result[0].data,
@@ -139,14 +90,13 @@ export const getPlaceById = async (
 ) => {
 	try {
 		const id = req.params.id;
-		if (!Types.ObjectId.isValid(id)) {
-			return res.status(400).json({ error: "Invalid Place ID" });
+		if (!id) {
+			throw new HttpError(400, "id is required");
 		}
-		const response = await Places.findById(id).populate("tags");
-		if (!response) {
-			return res.status(404).json({ error: "Place not found" });
-		}
-		res.status(200).send(response);
+
+		const place = await placeService.getPlaceById(id);
+
+		res.status(200).send(place);
 	} catch (error) {
 		next(error);
 	}
@@ -160,14 +110,12 @@ export const updatePlace = async (
 	try {
 		const id = req.params.id;
 
-		const place = await Places.findById(id);
-		if (!place) {
-			return res.status(404).json({ message: "Place not found" });
+		if (!id) {
+			throw new HttpError(400, "id is required");
 		}
 
-		place.set(req.body);
+		const place = await placeService.updatePlace(id.toString(), req.body);
 
-		await place.save();
 		res.status(200).send(place);
 	} catch (error) {
 		next(error);
@@ -180,18 +128,9 @@ export const deletePlace = async (
 	next: NextFunction,
 ) => {
 	try {
-		const { id } = req.params;
+		const id = req.params.id;
 
-		if (!Types.ObjectId.isValid(id)) {
-			return res.status(400).json({ message: "Invalid Itinerary ID" });
-		}
-
-		const place = await Places.findById(id);
-		if (!place) {
-			return res.status(404).json({ message: "Itinerary not found" });
-		}
-
-		await Places.findByIdAndDelete(id);
+		await placeService.deletePlace(id);
 		res.status(200).send("Itinerary deleted Successfully");
 	} catch (error) {
 		next(error);

@@ -21,7 +21,6 @@ export const createItinerary = async (
 		const tourGuide = await tourGuideService.getTourGuideById(createdBy);
 
 		if (!tourGuide) {
-			await session.abortTransaction();
 			throw new HttpError(404, "Tour Guide not found");
 		}
 
@@ -34,7 +33,7 @@ export const createItinerary = async (
 
 		tourGuide.itinerary.push(itineraryData.id);
 
-		await tourGuide.save({ session });
+		await tourGuide.updateOne({ session });
 		await session.commitTransaction();
 
 		return itineraryData;
@@ -86,7 +85,7 @@ export const getItineraryByUserId = async (userId: string, query: any) => {
 
 	const result = await Itinerary.aggregate(pipeline);
 
-	if (result.length === 0) {
+	if (result[0].data.length === 0) {
 		throw new HttpError(404, "No itineraries Found");
 	}
 
@@ -108,7 +107,7 @@ export const getItineraries = async (query: any) => {
 
 	const result = await Itinerary.aggregate(pipeline);
 
-	if (result.length === 0) {
+	if (result[0].data.length === 0) {
 		throw new HttpError(404, "No itineraries Found");
 	}
 
@@ -132,16 +131,45 @@ export const deleteItinerary = async (id: string) => {
 		throw new HttpError(400, "Invalid Itinerary ID");
 	}
 
-	const itinerary = await Itinerary.findById(id);
-	if (!itinerary) {
-		throw new HttpError(404, "Itinerary not found");
+	const session = await mongoose.startSession();
+	try {
+		session.startTransaction();
+
+		// Find the itinerary to check its details
+		const itinerary = await Itinerary.findById(id).session(session);
+		if (!itinerary) {
+			throw new HttpError(404, "Itinerary not found");
+		}
+
+		// Check if the itinerary has any bookings
+		if (itinerary.numberOfBookings > 0) {
+			throw new HttpError(400, "Itinerary is already booked");
+		}
+
+		// Find the associated TourGuide document
+		const tourGuideId = itinerary.createdBy; // Assuming createdBy is the TourGuide ID
+		const tourGuide = await tourGuideService.getTourGuideById(
+			tourGuideId.toString(),
+		);
+		if (!tourGuide) {
+			throw new HttpError(404, "Tour Guide not found");
+		}
+
+		// Remove the itinerary ID from the tour guide's itineraries array
+		tourGuide.itinerary = tourGuide.itinerary.filter(
+			(itineraryId) => !itineraryId.equals(id),
+		);
+		await tourGuide.updateOne({ session });
+		// Delete the itinerary
+		await itinerary.deleteOne({ session });
+
+		await session.commitTransaction();
+
+		return itinerary;
+	} catch (error) {
+		await session.abortTransaction();
+		throw error;
+	} finally {
+		session.endSession();
 	}
-
-	if (itinerary?.numberOfBookings > 0) {
-		throw new HttpError(400, "Itinerary is already booked");
-	}
-
-	await itinerary.deleteOne();
-
-	return itinerary;
 };

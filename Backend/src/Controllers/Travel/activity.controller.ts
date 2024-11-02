@@ -1,9 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { PipelineStage, Types } from "mongoose";
 
 import HttpError from "../../Errors/HttpError";
-import { Activity } from "../../Models/Travel/activity.model";
-import AggregateBuilder from "../../Services/Operations/aggregation.service";
 import * as activityService from "../../Services/Travel/activity.service";
 
 export const createActivities = async (
@@ -67,10 +64,6 @@ export const getActivitybyUserId = async (
 			req.body,
 		);
 
-		if (result[0].data.length === 0) {
-			throw new HttpError(404, "No matching Activities Found");
-		}
-
 		const response = {
 			data: result[0].data,
 			metaData: {
@@ -94,10 +87,6 @@ export const getActivities = async (
 ) => {
 	try {
 		const result = await activityService.getActivities(req.query);
-
-		if (result[0].data.length === 0) {
-			throw new HttpError(404, "No matching Activities Found");
-		}
 
 		const response = {
 			data: result[0].data,

@@ -36,7 +36,7 @@ export const createActivity = async (
 		}
 
 		advertiser.activities.push(newActivity.id); // Add the activity ID to the array
-		await advertiser.save({ session });
+		await advertiser.updateOne({ session });
 
 		await session.commitTransaction();
 
@@ -75,6 +75,10 @@ export const getActivities = async (query: any) => {
 	];
 
 	const result = await Activity.aggregate(pipeline);
+
+	if (result[0].data.length === 0) {
+		throw new HttpError(404, "No matching Activities Found");
+	}
 
 	return result;
 };
@@ -124,9 +128,6 @@ export const deleteActivity = async (id: string) => {
 		// Extract the advertiser ID from the createdBy field in the activity
 		const advertiserId = activity.createdBy;
 
-		// Delete the activity
-		await activity.deleteOne({ session });
-
 		// Update the advertiser's activities array
 		const advertiser = await advertiserService.getAdvertiserById(
 			advertiserId.toString(),
@@ -139,7 +140,9 @@ export const deleteActivity = async (id: string) => {
 		advertiser.activities = advertiser.activities.filter(
 			(activityId) => !activityId.equals(id),
 		);
-		await advertiser.save({ session });
+		await advertiser.updateOne({ session });
+		// Delete the activity
+		await activity.deleteOne({ session });
 
 		await session.commitTransaction();
 
@@ -187,6 +190,10 @@ export const getActivitybyUserId = async (id: string, query: any) => {
 	];
 
 	const result = await Activity.aggregate(pipeline);
+
+	if (result[0].data.length === 0) {
+		throw new HttpError(404, "No matching Activities Found");
+	}
 
 	return result;
 };
