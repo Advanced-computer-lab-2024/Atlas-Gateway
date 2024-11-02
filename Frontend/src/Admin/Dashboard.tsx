@@ -14,8 +14,7 @@ import Sidebar from "./Sidebar";
 
 const Admin = () => {
 	const [selectedCategory, setSelectedCategory] = useState(""); // manages selection from sidebar
-	let [selectedItem, setSelectedItem] = useState("Admins"); // manages selection from navbar
-	const [flag, setFlag] = useState(false);
+	const [selectedItem, setSelectedItem] = useState("Admins"); // manages selection from navbar
 	useEffect(() => {
 		switch (selectedCategory) {
 			case "Accounts":
