@@ -3,13 +3,14 @@ import mongoose, { PipelineStage, Types } from "mongoose";
 
 import { Itinerary } from "../../Models/Travel/itinerary.model";
 import AggregateBuilder from "../../Services/Operations/aggregation.service";
+import * as tourGuideService from "../../Services/Users/tourGuide.service";
 
-//Create a new product entry
 export const createItinerary = async (
 	req: Request,
 	res: Response,
 	next: NextFunction,
 ) => {
+	const session = await mongoose.startSession();
 	try {
 		const tourGuideId = req.headers.userid;
 
@@ -23,15 +24,36 @@ export const createItinerary = async (
 			return res.status(400).json({ message: "Invalid Tour Guide ID" });
 		}
 
+		session.startTransaction();
+
 		const itineraryData = new Itinerary({
 			...req.body,
 			createdBy: new Types.ObjectId(tourGuideId.toString()),
 		});
 
-		await itineraryData.save();
+		await itineraryData.save({ session }); // Save to generate the ID
+
+		// Link itinerary ID to the tour guide's itinerary array
+		const tourGuide = await tourGuideService.getTourGuideById(
+			tourGuideId.toString(),
+		);
+
+		if (!tourGuide) {
+			await session.abortTransaction();
+			return res.status(404).json({ message: "Tour Guide not found" });
+		}
+
+		tourGuide.itinerary.push(itineraryData.id);
+
+		await tourGuide.save({ session });
+		await session.commitTransaction();
+
 		res.status(200).send(itineraryData);
 	} catch (error) {
+		await session.abortTransaction();
 		next(error);
+	} finally {
+		session.endSession();
 	}
 };
 
