@@ -1,9 +1,6 @@
-import HttpError from "@/Errors/HttpError";
 import { NextFunction, Request, Response } from "express";
-import { Types } from "mongoose";
 
-import { Admin } from "../../Models/Users/admin.model";
-import { Seller } from "../../Models/Users/seller.model";
+import HttpError from "../../Errors/HttpError";
 import * as sellerService from "../../Services/Users/seller.service";
 
 export const createSeller = async (

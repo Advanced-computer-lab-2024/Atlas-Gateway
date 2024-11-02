@@ -1,6 +1,6 @@
-import HttpError from "@/Errors/HttpError";
 import { NextFunction, Request, Response } from "express";
 
+import HttpError from "../../Errors/HttpError";
 import * as governorService from "../../Services/Users/governor.service";
 
 export const createGovernor = async (

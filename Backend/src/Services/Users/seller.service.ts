@@ -8,9 +8,9 @@ import * as adminService from "./admin.service";
 
 export const createSeller = async (
 	username: string,
-	name: string,
 	email: string,
 	password: string,
+	name: string,
 	picture: string,
 	description: string,
 ) => {
