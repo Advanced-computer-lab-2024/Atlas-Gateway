@@ -18,7 +18,7 @@ export interface ITourGuide extends Document {
 	// 	start: Date;
 	// 	end: Date;
 	// };
-	itinerary: [Types.ObjectId];
+	itinerary: Types.ObjectId[];
 	isVerified: boolean;
 }
 

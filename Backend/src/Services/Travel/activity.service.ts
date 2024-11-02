@@ -108,14 +108,48 @@ export const updateActivity = async (id: string, newActivity: IActivity) => {
 };
 export const deleteActivity = async (id: string) => {
 	if (!Types.ObjectId.isValid(id)) {
-		throw new HttpError(400, "id is required");
-	}
-	const activity = await Activity.findByIdAndDelete(id);
-	if (!activity) {
-		throw new HttpError(404, "activity not found");
+		throw new HttpError(400, "Valid activity ID is required");
 	}
 
-	return activity;
+	const session = await mongoose.startSession();
+	try {
+		session.startTransaction();
+
+		// Find the activity to check the createdBy field
+		const activity = await Activity.findById(id).session(session);
+		if (!activity) {
+			throw new HttpError(404, "Activity not found");
+		}
+
+		// Extract the advertiser ID from the createdBy field in the activity
+		const advertiserId = activity.createdBy;
+
+		// Delete the activity
+		await activity.deleteOne({ session });
+
+		// Update the advertiser's activities array
+		const advertiser = await advertiserService.getAdvertiserById(
+			advertiserId.toString(),
+		);
+		if (!advertiser) {
+			throw new HttpError(404, "Advertiser not found");
+		}
+
+		// Remove the activity ID from the advertiser's activities array
+		advertiser.activities = advertiser.activities.filter(
+			(activityId) => !activityId.equals(id),
+		);
+		await advertiser.save({ session });
+
+		await session.commitTransaction();
+
+		return activity;
+	} catch (error) {
+		await session.abortTransaction();
+		throw error;
+	} finally {
+		session.endSession();
+	}
 };
 
 export const getActivitybyUserId = async (id: string, query: any) => {

@@ -17,7 +17,7 @@ export interface IAdvertiser extends Document {
 	// 	logo: string;
 	// 	description: string;
 	// };
-	activities: [Types.ObjectId];
+	activities: Types.ObjectId[];
 	isVerified: boolean;
 }
 
