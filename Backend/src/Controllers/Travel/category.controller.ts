@@ -1,8 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { Types } from "mongoose";
 
-import { Activity } from "../../Models/Travel/activity.model";
-import { Category } from "../../Models/Travel/category.model";
+import HttpError from "../../Errors/HttpError";
+import * as categoryService from "../../Services/Travel//category.service";
 
 export const createCategory = async (
 	req: Request,
@@ -12,9 +11,11 @@ export const createCategory = async (
 	try {
 		const { name } = req.body;
 		if (!name) {
-			res.status(400).send("name is required");
+			throw new HttpError(400, "name is required");
 		}
-		const category = await Category.create({ name });
+
+		const category = await categoryService.createCategory(name);
+
 		res.status(201).json(category);
 	} catch (error) {
 		next(error);
@@ -27,7 +28,8 @@ export const getCategories = async (
 	next: NextFunction,
 ) => {
 	try {
-		const categories = await Category.find();
+		const categories = await categoryService.getCategories();
+
 		res.status(200).json(categories);
 	} catch (error) {
 		next(error);
@@ -42,11 +44,12 @@ export const getCategoryById = async (
 	try {
 		const { id } = req.params;
 
-		if (!Types.ObjectId.isValid(id)) {
-			return res.status(400).send("id is Invalid");
+		if (!id) {
+			throw new HttpError(400, "id is required");
 		}
 
-		const category = await Category.findById(id);
+		const category = categoryService.getCategoryById(id);
+
 		res.status(200).json(category);
 	} catch (error) {
 		next(error);
@@ -60,18 +63,18 @@ export const updateCategory = async (
 ) => {
 	try {
 		const { id } = req.params;
-		if (!Types.ObjectId.isValid(id)) {
-			return res.status(400).send("id is Invalid");
+		const name = req.body.name;
+
+		if (!id) {
+			throw new HttpError(400, "id is required");
 		}
-		const { name } = req.body;
-		const category = await Category.findByIdAndUpdate(
-			id,
-			{ name },
-			{ new: true },
-		);
-		if (!category) {
-			res.status(404).send("cant find activity category");
+
+		if (!name) {
+			throw new HttpError(400, "name is required");
 		}
+
+		const category = await categoryService.updateCategory(id, name);
+
 		res.status(200).json(category);
 	} catch (error) {
 		next(error);
@@ -85,15 +88,12 @@ export const deleteCategory = async (
 ) => {
 	try {
 		const { id } = req.params;
+		if (!id) {
+			throw new HttpError(400, "id is required");
+		}
 
-		if (!Types.ObjectId.isValid(id)) {
-			return res.status(400).send("id is Invalid");
-		}
-		const category = await Category.findByIdAndDelete(id);
-		if (!category) {
-			res.status(404).send("can't find activity category");
-		}
-		await Activity.deleteMany({ category: id });
+		await categoryService.deleteCategory(id);
+
 		res.status(200).send("category deleted successfully");
 	} catch (error) {
 		next(error);
