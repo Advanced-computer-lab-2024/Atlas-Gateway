@@ -1,39 +1,32 @@
-import bcrypt from "bcryptjs";
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 
-import { Advertiser } from "../../Models/Users/advertiser.model";
-import { Governor } from "../../Models/Users/governor.model";
-import { Seller } from "../../Models/Users/seller.model";
-import { TourGuide } from "../../Models/Users/tourGuide.model";
-import { Tourist } from "../../Models/Users/tourist.model";
-import uniqueUsername from "../../Services/Auth/uniqueUsername.service";
+import { createAdvertiser } from "../../Services/Users/advertiser.service";
+import { createGovernor } from "../../Services/Users/governor.service";
+import { createSeller } from "../../Services/Users/seller.service";
+import { createTourGuide } from "../../Services/Users/tourGuide.service";
+import { createTourist } from "../../Services/Users/tourist.service";
 
-export const register = async (req: Request, res: Response) => {
+export const register = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const {
 			username,
 			email,
 			password,
-			picture,
 			type,
 			mobile,
 			nationality,
 			dob,
 			occupation,
-			experience,
-			prevWork,
 		} = req.body;
 
 		if (!username || !email || !password) {
 			res.status(400).send("username, email and password are required");
 		}
 
-		const hashedPassword = await bcrypt.hash(password, 10);
-
-		const resultUnique = await uniqueUsername(username);
-		if (!resultUnique) {
-			return res.status(400).send("Username Should Be Unique");
-		}
 		let user;
 		switch (type) {
 			case "tourist":
@@ -44,63 +37,42 @@ export const register = async (req: Request, res: Response) => {
 							"mobileNumber, nationality ,occupation and dob are required",
 						);
 				}
-				user = new Tourist({
+				user = await createTourist(
 					username,
 					email,
-					password: hashedPassword,
+					password,
 					mobile,
 					nationality,
 					dob,
 					occupation,
-				});
+				);
 				break;
 			case "governer":
-				user = new Governor({
-					username,
-					email,
-					password: hashedPassword,
-				});
+				user = await createGovernor(username, email, password);
 				break;
 			case "tour_guide":
-				user = new TourGuide({
-					username,
-					email,
-					password: hashedPassword,
-					picture,
-					experience,
-					prevWork,
-				});
+				user = await createTourGuide(username, email, password);
 				break;
 			case "seller":
-				user = new Seller({
-					username,
-					email,
-					password: hashedPassword,
-				});
+				user = await createSeller(username, email, password);
 				break;
 			case "advertiser":
-				user = new Advertiser({
-					username,
-					email,
-					password: hashedPassword,
-				});
+				user = await createAdvertiser(username, email, password);
 				break;
 			default:
-				user = new Tourist({
+				user = await createTourist(
 					username,
 					email,
-					password: hashedPassword,
+					password,
 					mobile,
 					nationality,
 					dob,
 					occupation,
-				});
+				);
 				break;
 		}
-
-		await user.save();
 		res.status(201).send(user);
 	} catch (error) {
-		res.status(400).send(error);
+		next(error);
 	}
 };

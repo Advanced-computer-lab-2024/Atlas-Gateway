@@ -1,89 +1,93 @@
-import { Console } from "console";
-import { Request, Response } from "express";
-import { Types } from "mongoose";
+import { NextFunction, Request, Response } from "express";
 
-import { Tourist } from "../../Models/Users/tourist.model";
+import HttpError from "../../Errors/HttpError";
+import * as touristService from "../../Services/Users/tourist.service";
 
-export const createTourist = async (req: Request, res: Response) => {
+export const createTourist = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
-		const {
-			name,
+		const { userName, email, password, mobile, nationality, dob, job } =
+			req.body;
+		const user = await touristService.createTourist(
 			userName,
 			email,
 			password,
-			profile,
 			mobile,
 			nationality,
 			dob,
 			job,
-		} = req.body;
-		const user = new Tourist({
-			name,
-			userName,
-			email,
-			password,
-			profile,
-			mobile,
-			nationality,
-			dob,
-			job,
-		});
-		await user.save();
+		);
 		res.status(201).send(user);
 	} catch (error) {
-		res.status(400).send(error);
+		next(error);
 	}
 };
 
-export const getTourist = async (req: Request, res: Response) => {
+export const getTourist = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const id = req.params.id;
 
-		if (!Types.ObjectId.isValid(id)) {
-			return res.status(400).send("id is invalid");
+		if (!id) {
+			throw new HttpError(400, "Tourist Id is required");
 		}
 
-		const tourist = await Tourist.findById(id);
+		const tourist = await touristService.getTouristById(id);
 		res.status(200).send(tourist);
 	} catch (error) {
-		console.log(error);
-		res.status(500).send("failed");
+		next(error);
 	}
 };
 
-export const getTourists = async (req: Request, res: Response) => {
+export const getTourists = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
-		const users = await Tourist.find();
+		const users = await touristService.getTourists();
 		res.status(200).json(users);
 	} catch (error) {
-		res.status(400).json(error);
+		next(error);
 	}
 };
 
-export const updateTourist = async (req: Request, res: Response) => {
+export const updateTourist = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	const id = req.params.id;
 	try {
-		const touristData = await Tourist.findByIdAndUpdate(id, req.body, {
-			new: true,
-		});
+		if (!id) {
+			throw new HttpError(400, "Id is required");
+		}
+
+		const touristData = await touristService.updateTourist(id, req.body);
 		res.status(200).send(touristData);
 	} catch (error) {
-		console.log(error);
-		res.status(500).send("Failed to update Tourist");
+		next(error);
 	}
 };
-export const deleteTourist = async (req: Request, res: Response) => {
+export const deleteTourist = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	const id = req.params.id;
-
-	if (!Types.ObjectId.isValid(id)) {
-		return res.status(400).send("Id is Invalid and Required");
-	}
-
 	try {
-		//maybe we need to add checker here based on the flow of the page
-		await Tourist.findByIdAndDelete(id);
+		if (!id) {
+			throw new HttpError(400, "Tourist id is required");
+		}
+		await touristService.deleteTourist(id);
 		res.status(200).send("Tourist deleted successfully");
 	} catch (error) {
-		res.status(500).send("Failed to delete Tourist");
+		next(error);
 	}
 };

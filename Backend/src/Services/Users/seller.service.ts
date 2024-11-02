@@ -10,9 +10,6 @@ export const createSeller = async (
 	username: string,
 	email: string,
 	password: string,
-	name: string,
-	picture: string,
-	description: string,
 ) => {
 	const resultUnique = await uniqueUsername(username);
 	if (!resultUnique) {
@@ -20,12 +17,9 @@ export const createSeller = async (
 	}
 	const hashedPassword = await hashPassword(password);
 	const user = await Seller.create({
-		username,
-		name,
-		email,
-		hashedPassword,
-		picture,
-		description,
+		username: username,
+		email: email,
+		password: hashedPassword,
 	});
 
 	return user;

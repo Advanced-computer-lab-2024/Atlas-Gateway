@@ -1,7 +1,7 @@
-import { ITourGuide, TourGuide } from "@/Models/Users/tourGuide.model";
 import { Types } from "mongoose";
 
 import HttpError from "../../Errors/HttpError";
+import { ITourGuide, TourGuide } from "../../Models/Users/tourGuide.model";
 import { hashPassword } from "../Auth/passwordHash.service";
 import uniqueUsername from "../Auth/uniqueUsername.service";
 import * as adminService from "./admin.service";
@@ -18,9 +18,9 @@ export const createTourGuide = async (
 	const hashedPassword = await hashPassword(password);
 
 	const tourGuide = await TourGuide.create({
-		username,
-		email,
-		hashedPassword,
+		username: username,
+		email: email,
+		password: hashedPassword,
 	});
 
 	return tourGuide;

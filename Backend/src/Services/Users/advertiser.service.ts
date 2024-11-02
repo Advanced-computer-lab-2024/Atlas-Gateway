@@ -17,9 +17,9 @@ export const createAdvertiser = async (
 	}
 	const hashedPassword = await hashPassword(password);
 	const adv = await Advertiser.create({
-		username,
-		email,
-		hashedPassword,
+		username: username,
+		email: email,
+		password: hashedPassword,
 	});
 	return adv;
 };

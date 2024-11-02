@@ -9,23 +9,19 @@ export const createSeller = async (
 	next: NextFunction,
 ) => {
 	try {
-		const { username, name, email, password, picture, description } =
-			req.body;
+		const { username, email, password } = req.body;
 
-		if (!username || !email || !password || !name) {
+		if (!username || !email || !password) {
 			throw new HttpError(
 				400,
-				"username, name ,email and password are required",
+				"username, email and password are required",
 			);
 		}
 
 		const seller = await sellerService.createSeller(
 			username,
-			name,
 			email,
 			password,
-			picture,
-			description,
 		);
 		res.status(201).send(seller);
 	} catch (error) {
