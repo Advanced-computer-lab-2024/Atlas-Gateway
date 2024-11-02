@@ -10,6 +10,8 @@ import { Link } from "react-router-dom";
 
 import { useLoginStore } from "@/store/loginStore";
 
+import ChangePasswordSheet from "../Profile/ChangePasswordSheet";
+
 interface Props {
 	onSelect: (item: string) => void;
 }
@@ -17,6 +19,7 @@ interface Props {
 const Sidebar = ({ onSelect }: Props) => {
 	const { user } = useLoginStore();
 	const [activeItem, setActiveItem] = useState("");
+	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
 	const handleClick = (item: string) => {
 		setActiveItem(item);
@@ -42,8 +45,13 @@ const Sidebar = ({ onSelect }: Props) => {
 				<h3 className="text-[whitesmoke] text-lg font-semibold">
 					{user?.username}
 				</h3>
-				<button className="bg-[#2b58ad] text-white py-2 px-4 rounded-lg border-white">
-					Update Profile
+				<button
+					onClick={() => {
+						setIsDrawerOpen(true);
+					}}
+					className="bg-[#2b58ad] text-white py-2 px-4 rounded-lg border-white"
+				>
+					Change Password
 				</button>
 			</div>
 
@@ -90,6 +98,10 @@ const Sidebar = ({ onSelect }: Props) => {
 					),
 				)}
 			</div>
+			<ChangePasswordSheet
+				isDrawerOpen={isDrawerOpen}
+				setIsDrawerOpen={setIsDrawerOpen}
+			/>
 		</div>
 	);
 };

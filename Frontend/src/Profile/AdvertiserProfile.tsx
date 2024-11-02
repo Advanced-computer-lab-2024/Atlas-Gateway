@@ -4,16 +4,19 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
-import { Camera, EllipsisVertical } from "lucide-react";
+import { Camera, Settings } from "lucide-react";
+import { useState } from "react";
 
 import { useAdvertiserProfile } from "@/api/data/useProfile";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import profile_background from "../assets/profile_background.jpg";
 import AdvertiserSheet from "./AdvertiserSheet";
+import ChangePasswordSheet from "./ChangePasswordSheet";
 
 const General = () => {
 	const { data } = useAdvertiserProfile();
+	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 	return (
 		<div>
 			<div className="relative w-full">
@@ -48,12 +51,19 @@ const General = () => {
 					</h2>
 				</div>
 				<div className="mr-7">
-					<DropdownMenu>
+					<DropdownMenu modal={false}>
 						<DropdownMenuTrigger>
-							<EllipsisVertical className="cursor-pointer" />
+							<Settings className="cursor-pointer" />
 						</DropdownMenuTrigger>
 						<DropdownMenuContent>
-							<DropdownMenuItem>dummy</DropdownMenuItem>
+							<DropdownMenuItem
+								onClick={() => {
+									setIsDrawerOpen(true);
+								}}
+								className="cursor-pointer"
+							>
+								change password
+							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
 				</div>
@@ -61,9 +71,8 @@ const General = () => {
 
 			<div className="flex ml-10 mr-10 mt-10">
 				<Tabs defaultValue="account" className="w-full">
-					<TabsList className="grid w-full grid-cols-4">
+					<TabsList className="grid w-full grid-cols-3">
 						<TabsTrigger value="account">Account</TabsTrigger>
-						<TabsTrigger value="password">Password</TabsTrigger>
 						<TabsTrigger value="upcoming">Upcoming</TabsTrigger>
 						<TabsTrigger value="history">History</TabsTrigger>
 					</TabsList>
@@ -85,11 +94,14 @@ const General = () => {
 						</div>
 						<AdvertiserSheet />
 					</TabsContent>
-					<TabsContent value="password"></TabsContent>
 					<TabsContent value="Upcoming"></TabsContent>
 					<TabsContent value="History"></TabsContent>
 				</Tabs>
 			</div>
+			<ChangePasswordSheet
+				isDrawerOpen={isDrawerOpen}
+				setIsDrawerOpen={setIsDrawerOpen}
+			/>
 		</div>
 	);
 };

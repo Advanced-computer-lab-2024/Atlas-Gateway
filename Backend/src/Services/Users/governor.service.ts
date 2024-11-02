@@ -3,8 +3,8 @@ import { Types } from "mongoose";
 import HttpError from "../../Errors/HttpError";
 import { Places } from "../../Models/Travel/places.model";
 import { Governor } from "../../Models/Users/governor.model";
-import { hashPassword } from "../Auth/passwordHash.service";
-import uniqueUsername from "../Auth/uniqueUsername.service";
+import { hashPassword } from "../Auth/password.service";
+import uniqueUsername from "../Auth/username.service";
 
 export const createGovernor = async (
 	username: string,

@@ -2,8 +2,8 @@ import { Types } from "mongoose";
 
 import HttpError from "../../Errors/HttpError";
 import { ITourist, Tourist } from "../../Models/Users/tourist.model";
-import { hashPassword } from "../Auth/passwordHash.service";
-import uniqueUsername from "../Auth/uniqueUsername.service";
+import { hashPassword } from "../Auth/password.service";
+import uniqueUsername from "../Auth/username.service";
 
 export const createTourist = async (
 	username: string,

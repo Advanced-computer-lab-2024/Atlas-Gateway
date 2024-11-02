@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
-import { comparePassword } from "../../Services/Auth/passwordHash.service";
-import { findUserByUsername } from "../../Services/Auth/uniqueUsername.service";
+import { comparePassword } from "../../Services/Auth/password.service";
+import { findUserByUsername } from "../../Services/Auth/username.service";
 
 export const login = async (
 	req: Request,

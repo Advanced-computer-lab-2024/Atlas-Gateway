@@ -7,6 +7,11 @@ export type TUser = {
 	type: EAccountType;
 };
 
+export type TPassword = {
+	password: string;
+	confirmPassword: string;
+};
+
 export type TPlace = {
 	_id: string;
 	name: string;
