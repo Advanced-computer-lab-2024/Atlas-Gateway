@@ -3,7 +3,7 @@ import { Types } from "mongoose";
 
 import HttpError from "../../Errors/HttpError";
 import { Admin, IAdmin } from "../../Models/Users/admin.model";
-import uniqueUsername from "../Auth/uniqueUsername.service";
+import uniqueUsername from "../Auth/username.service";
 
 export const createAdmin = async (
 	username: string,
