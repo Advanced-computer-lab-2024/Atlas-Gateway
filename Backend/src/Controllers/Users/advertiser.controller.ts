@@ -1,162 +1,117 @@
-import { Request, Response } from "express";
-import { Types } from "mongoose";
+import { NextFunction, Request, Response } from "express";
 
-import { Admin } from "../../Database/Models/Users/admin.model";
-import { Advertiser } from "../../Database/Models/Users/advertiser.model";
+import HttpError from "../../Errors/HttpError";
+import * as advertiserService from "../../Services/Users/advertiser.service";
 
-export const createAdvertiser = async (req: Request, res: Response) => {
+export const createAdvertiser = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
-		// companyProfile;
-		const {
-			name,
-			username,
-			email,
-			password,
-			hotline,
-			website,
-			description,
-		} = req.body;
+		const { username, email, password } = req.body;
 		if (!username || !email || !password) {
-			res.status(400).send("username, email and password are required");
+			throw new HttpError(
+				400,
+				"username, email and password are required",
+			);
 		}
-
-		// if (!companyProfile) {
-		// 	res.status(400).send("companyProfile is required");
-		// }
-
-		const user = new Advertiser({
+		const user = await advertiserService.createAdvertiser(
 			username,
 			email,
 			password,
-			// companyProfile,
-		});
-		await user.save();
+		);
 		res.status(201).send(user);
 	} catch (error) {
-		res.status(500).send(error);
+		next(error);
 	}
 };
 
-// export const getAdvertiserById = async (req: Request, res: Response) => {
-// 	const id = req.params.id;
-// 	if (!id) {
-// 		res.status(400).send("id is required");
-// 	}
-
-// 	if (!Types.ObjectId.isValid(id)) {
-// 		return res.status(400).send("id is invalid");
-// 	}
-
-// 	try {
-// 		//maybe we need to add checker here based on the flow of the page
-// 		const advertiser = await Advertiser.findById(id);
-// 		if (!advertiser) {
-// 			return res.status(404).send("advertiser not found");
-// 		}
-// 		res.status(200).send(advertiser);
-// 	} catch (error) {
-// 		console.log(error);
-// 		res.status(500).send("Failed to get advertiser");
-// 	}
-// };
-
-export const getAdvertiser = async (req: Request, res: Response) => {
+export const getAdvertiser = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const id = req.params.id;
-		const advertiser = await Advertiser.findById(id);
+		if (!id) {
+			throw new HttpError(400, "id is required");
+		}
+		const advertiser = await advertiserService.getAdvertiserById(id);
 		res.status(200).send(advertiser);
 	} catch (error) {
-		console.log(error);
-		res.status(500).send("Failed to get Advertiser");
+		next(error);
 	}
 };
 
-export const getAdvertisers = async (req: Request, res: Response) => {
+export const getAdvertisers = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
-		const result = await Advertiser.find();
+		const result = await advertiserService.getAdvertisers();
 		res.status(200).send(result);
 	} catch (error) {
-		console.log(error);
-		res.status(500).send("Failed to get advertisers");
+		next(error);
 	}
 };
-export const updateAdvertiser = async (req: Request, res: Response) => {
+export const updateAdvertiser = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	const id = req.params.id;
 	const userid = req.headers.userid;
-	if (!id) {
-		return res.status(400).send("Id is Required");
-	}
-	if (!Types.ObjectId.isValid(id)) {
-		return res.status(400).send("Id is Invalid ");
-	}
 	try {
-		const admin = await Admin.findById(userid);
-		if (!admin) {
-			const advertiser = await Advertiser.findById(id);
-			if (advertiser?.isVerified) {
-				const tourGuide = await Advertiser.findByIdAndUpdate(
-					id,
-					req.body,
-					{
-						new: true,
-					},
-				);
-				res.status(200).send(tourGuide);
-			} else {
-				res.status(401).send("User is not Verified");
-			}
-		} else {
-			const advertiser = await Advertiser.findByIdAndUpdate(
-				id,
-				req.body,
-				{
-					new: true,
-				},
-			);
-			res.status(200).send(advertiser);
+		if (!id) {
+			throw new HttpError(400, "Id is Required");
 		}
+		if (!userid) {
+			throw new HttpError(400, "Logged in User id Required");
+		}
+		const adv = await advertiserService.updateAdvertiser(
+			id,
+			userid.toString(),
+			req.body,
+		);
+		return res.status(200).send(adv);
 	} catch (error) {
-		res.status(500).send("Failed to update tourGuide");
+		next(error);
 	}
 };
-export const deleteAdvertiser = async (req: Request, res: Response) => {
+export const deleteAdvertiser = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	const id = req.params.id;
 
-	if (!id) {
-		res.status(400).send("id is required");
-	}
 	try {
-		const deletedAdvertiser = await Advertiser.findByIdAndDelete(id);
-
-		if (!deletedAdvertiser) {
-			return res.status(404).send("advertiser not found");
+		if (!id) {
+			throw new HttpError(400, "id is required");
 		}
+		const deletedAdvertiser = await advertiserService.deleteAdvertiser(id);
 		res.status(200).send("advertiser deleted successfully");
 	} catch (error) {
-		res.status(500).send("Failed to delete advertiser");
+		next(error);
 	}
 };
 
-export const viewActivities = async (req: Request, res: Response) => {
+export const viewActivities = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	const id = req.params.id;
-	const advertiser = await Advertiser.findById(id);
-	const Verified = advertiser?.isVerified;
-	try {
-		if (Verified) {
-			res.status(200).send(await Advertiser.findById(id));
-		} else {
-			res.status(500).send("user not Verified");
-		}
-		const advertiser = await Advertiser.findById(id)
-			.populate("activities")
-			.select("activities");
-		if (!advertiser) {
-			return res.status(404).send("advertiser not found");
-		}
 
-		res.status(200).send(advertiser);
+	try {
+		if (!id) {
+			throw new HttpError(400, "Advertiser Id is Required");
+		}
+		const activities = await advertiserService.viewActivities(id);
+		res.status(200).send(activities);
 	} catch (error) {
-		console.log(error);
-		res.status(500).send("Failed to get advertiser activities");
+		next(error);
 	}
 };

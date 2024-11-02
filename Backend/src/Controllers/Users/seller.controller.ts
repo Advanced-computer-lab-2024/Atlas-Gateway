@@ -1,101 +1,105 @@
-import { Request, Response } from "express";
-import { Types } from "mongoose";
+import { NextFunction, Request, Response } from "express";
 
-import { Admin } from "../../Database/Models/Users/admin.model";
-import { Seller } from "../../Database/Models/Users/seller.model";
+import HttpError from "../../Errors/HttpError";
+import * as sellerService from "../../Services/Users/seller.service";
 
-export const createSeller = async (req: Request, res: Response) => {
+export const createSeller = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
-		const { username, name, email, password, picture, description } =
-			req.body;
+		const { username, email, password } = req.body;
 
-		if (!username || !email || !password || !name) {
-			res.status(400).send(
-				"username, name ,email and password are required",
+		if (!username || !email || !password) {
+			throw new HttpError(
+				400,
+				"username, email and password are required",
 			);
 		}
-		const user = new Seller({
+
+		const seller = await sellerService.createSeller(
 			username,
-			name,
 			email,
 			password,
-			picture,
-			description,
-		});
-		await user.save();
-		res.status(201).send(user);
+		);
+		res.status(201).send(seller);
 	} catch (error) {
-		res.status(400).send(error);
+		next(error);
 	}
 };
 
-export const getSeller = async (req: Request, res: Response) => {
+export const getSeller = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const id = req.params.id;
-		const seller = await Seller.findById(id);
+		if (!id) {
+			throw new HttpError(400, "Id is Required");
+		}
+		const seller = await sellerService.getSellerById(id);
 		res.status(200).send(seller);
 	} catch (error) {
-		console.log(error);
-		res.status(500).send("Failed to get seller");
+		next(error);
 	}
 };
 
-export const getSellers = async (req: Request, res: Response) => {
+export const getSellers = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
-		const result = await Seller.find();
-
+		const result = await sellerService.getSellers();
 		res.status(200).send(result);
 	} catch (error) {
-		console.log(error);
-		res.status(500).send("Failed to get sellers");
+		next(error);
 	}
 };
-export const updateSeller = async (req: Request, res: Response) => {
+export const updateSeller = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	const id = req.params.id;
 	const userid = req.headers.userid;
-	if (!id) {
-		return res.status(400).send("Id is Required");
-	}
-	if (!Types.ObjectId.isValid(id)) {
-		return res.status(400).send("Id is Invalid ");
-	}
+
 	try {
-		const admin = await Admin.findById(userid);
-		if (!admin) {
-			const seller = await Seller.findById(id);
-			if (seller?.isVerified) {
-				const tourGuide = await Seller.findByIdAndUpdate(id, req.body, {
-					new: true,
-				});
-				res.status(200).send(tourGuide);
-			} else {
-				res.status(401).send("admin is not Verified");
-			}
-		} else {
-			const seller = await Seller.findByIdAndUpdate(id, req.body, {
-				new: true,
-			});
-			res.status(200).send(seller);
+		if (!id) {
+			throw new HttpError(400, "Id is Required");
 		}
+		if (!userid) {
+			throw new HttpError(400, "Logged in User Id is Required");
+		}
+
+		const seller = await sellerService.updateSeller(
+			id,
+			userid.toString(),
+			req.body,
+		);
+
+		res.status(200).send(seller);
 	} catch (error) {
-		res.status(500).send("Failed to update tourGuide");
+		next(error);
 	}
 };
-export const deleteSeller = async (req: Request, res: Response) => {
+export const deleteSeller = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	const id = req.params.id;
-	if (!id) {
-		return res.status(400).send("Id is Required");
-	}
-
-	if (!Types.ObjectId.isValid(id)) {
-		return res.status(400).send("Id is Invalid");
-	}
 
 	try {
+		if (!id) {
+			throw new HttpError(400, "Id is Required");
+		}
 		//maybe we need to add checker here based on the flow of the page
-		await Seller.findByIdAndDelete(id);
+		await sellerService.deleteSeller(id);
 		res.status(200).send("Seller deleted successfully");
 	} catch (error) {
-		res.status(500).send("Failed to delete Seller");
+		next(error);
 	}
 };

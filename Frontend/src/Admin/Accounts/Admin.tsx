@@ -41,7 +41,7 @@ const Admins = () => {
 					<TableBody>
 						{data
 							?.filter((admin: TAdmin) => admin._id !== user?._id)
-							.map((admin: TAdmin) => (
+							?.map((admin: TAdmin) => (
 								<TableRow key={admin._id}>
 									<TableCell>{admin.username}</TableCell>
 									<TableCell>{admin.email}</TableCell>
