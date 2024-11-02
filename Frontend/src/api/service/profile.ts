@@ -1,8 +1,14 @@
 import axios from "axios";
 
-import { TAdvetisor, TSeller, TTourGuide, TTourist } from "@/types/global";
+import {
+	TAdvetisor,
+	TPassword,
+	TSeller,
+	TTourGuide,
+	TTourist,
+} from "@/types/global";
 
-import ENDPOINTS from "./ENDPOINTS";
+import ENDPOINTS, { baseURL } from "./ENDPOINTS";
 import {
 	TAdvertiserProfileResponse,
 	TSellerProfileResponse,
@@ -29,7 +35,19 @@ export function apiTouristProfile(_id: string) {
 			"Content-Type": "application/json",
 			userid: _id,
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
+	});
+}
+
+export function apiChangePassword(username: string, data: TPassword) {
+	return axios({
+		method: "PUT",
+		url: ENDPOINTS.changePassword,
+		data: {
+			username: username,
+			password: data.password,
+		},
+		baseURL: baseURL,
 	});
 }
 

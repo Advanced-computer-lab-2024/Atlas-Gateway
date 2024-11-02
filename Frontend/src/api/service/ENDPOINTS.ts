@@ -1,4 +1,4 @@
-import Governor from "@/Admin/Accounts/Governor";
+export const baseURL = "http://localhost:5000";
 
 const ENDPOINTS = {
 	places: {
@@ -24,6 +24,7 @@ const ENDPOINTS = {
 		update: (id: string) => `api/activity/update/${id}`,
 		delete: (id: string) => `api/activity/delete/${id}`,
 	},
+	changePassword: "/api/change-password",
 	login: "api/login",
 	register: "api/register/create",
 	admin: {

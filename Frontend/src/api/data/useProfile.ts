@@ -1,11 +1,18 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { useLoginStore } from "@/store/loginStore";
-import { TAdvetisor, TSeller, TTourGuide, TTourist } from "@/types/global";
+import {
+	TAdvetisor,
+	TPassword,
+	TSeller,
+	TTourGuide,
+	TTourist,
+} from "@/types/global";
 
 import {
 	apiAdvertiserProfile,
 	apiAdvertisers,
+	apiChangePassword,
 	apiDeleteAdvertiserProfile,
 	apiDeleteSeller,
 	apiDeleteTourGuideProfile,
@@ -46,6 +53,19 @@ export function useTouristProfile() {
 	});
 
 	return { data: data?.data, refetch };
+}
+
+export function useUpdatePassword(onSuccess: () => void) {
+	const { user } = useLoginStore();
+
+	const mutation = useMutation({
+		mutationFn: (data: TPassword) => {
+			return apiChangePassword(user?.username ?? "", data);
+		},
+		onSuccess,
+	});
+	const { mutate } = mutation;
+	return { doEditPassword: mutate, ...mutation };
 }
 
 export function useUpdateTouristProfile(onSuccess: () => void) {
