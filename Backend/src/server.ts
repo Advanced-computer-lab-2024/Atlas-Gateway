@@ -48,18 +48,6 @@ async function startServer() {
 	app.use("/api/places", placesRouter);
 	app.use("/api/login", loginRouter);
 
-	app.get("/", (req: Request, res: Response) => {
-		try {
-			res.status(200).send("Hello");
-		} catch (error) {
-			res.status(500).send("How did you possibly mess this up?");
-		}
-	});
-
-	app.use("", (req: Request, res: Response) => {
-		res.status(404).send("Page not found");
-	});
-
 	// Error handling middleware
 	app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 		console.error(err.stack);

@@ -1,11 +1,15 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import mongoose, { PipelineStage, Types } from "mongoose";
 
 import { Itinerary } from "../../Models/Travel/itinerary.model";
 import AggregateBuilder from "../../Services/Operations/aggregation.service";
 
 //Create a new product entry
-export const createItinerary = async (req: Request, res: Response) => {
+export const createItinerary = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const tourGuideId = req.headers.userid;
 
@@ -27,8 +31,7 @@ export const createItinerary = async (req: Request, res: Response) => {
 		await itineraryData.save();
 		res.status(200).send(itineraryData);
 	} catch (error) {
-		console.log(error);
-		res.status(500).json({ message: "Internal Server Error" });
+		next(error);
 	}
 };
 

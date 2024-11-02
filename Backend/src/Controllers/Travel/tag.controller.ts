@@ -1,11 +1,15 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { Types } from "mongoose";
 
 import { Activity } from "../../Models/Travel/activity.model";
 import { Tag } from "../../Models/Travel/tag.model";
 
 //Creates a historical location tag --Tourism Governor Only
-export const createHistTag = async (req: Request, res: Response) => {
+export const createHistTag = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const { name, type } = req.body;
 
@@ -23,24 +27,30 @@ export const createHistTag = async (req: Request, res: Response) => {
 
 		res.status(200).send(tag);
 	} catch (error) {
-		console.error(error);
-		res.status(500).json({ message: "Internal Server Error" });
+		next(error);
 	}
 };
 
 //Retrieve all historical location tags --Used in many things
-export const getHistTags = async (req: Request, res: Response) => {
+export const getHistTags = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const dataset = await Tag.find({ type: { $ne: "Preference" } });
 		res.status(200).send(dataset);
 	} catch (error) {
-		console.error(error);
-		res.status(500).json({ message: "Internal Server Error" });
+		next(error);
 	}
 };
 
 //Creates a preference tag --Admin only
-export const createPrefTag = async (req: Request, res: Response) => {
+export const createPrefTag = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const { name } = req.body;
 		if (!name) {
@@ -56,24 +66,30 @@ export const createPrefTag = async (req: Request, res: Response) => {
 
 		res.status(200).send(tag);
 	} catch (error) {
-		console.error(error);
-		res.status(500).json({ message: "Internal Server Error" });
+		next(error);
 	}
 };
 
 //Retrieve all preference tags --Used in many things
-export const getPrefTags = async (req: Request, res: Response) => {
+export const getPrefTags = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const dataset = await Tag.find({ type: "Preference" });
 		res.status(200).send(dataset);
 	} catch (error) {
-		console.error(error);
-		res.status(500).json({ message: "Internal Server Error" });
+		next(error);
 	}
 };
 
 //Updates a preference tag --Admin only (not needed )
-export const updatePrefTag = async (req: Request, res: Response) => {
+export const updatePrefTag = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const id = req.params.id;
 		const { name } = req.body;
@@ -101,13 +117,16 @@ export const updatePrefTag = async (req: Request, res: Response) => {
 
 		res.status(200).json(tag);
 	} catch (error) {
-		console.error(error);
-		res.status(500).json({ message: "Internal Server Error" });
+		next(error);
 	}
 };
 
 //Delete a preference tag along with it's references in activities/itineraries
-export const deletePreTag = async (req: Request, res: Response) => {
+export const deletePreTag = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const id = req.params.id;
 
@@ -138,16 +157,19 @@ export const deletePreTag = async (req: Request, res: Response) => {
 
 		console.log("Deleted tag: ", tagDoc);
 	} catch (error) {
-		res.status(500).json({ message: "Internal Server Error" });
+		next(error);
 	}
 };
 
-export const getAllTags = async (req: Request, res: Response) => {
+export const getAllTags = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const dataset = await Tag.find();
 		res.status(200).send(dataset);
 	} catch (error) {
-		console.error(error);
-		res.status(500).json({ message: "Internal Server Error" });
+		next(error);
 	}
 };
