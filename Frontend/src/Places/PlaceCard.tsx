@@ -39,10 +39,31 @@ export default function PlaceCard({
 
 	const { doDeletePlace } = useDeletePlace(refetch);
 
+	// Function to copy the place link to the clipboard
+	const handleCopyLink = () => {
+		const placeLink = `${window.location.origin}/places/${_id}`;
+		navigator.clipboard.writeText(placeLink)
+			.then(() => {
+				alert('Link copied to clipboard!');
+			})
+			.catch((err) => {
+				console.error('Failed to copy link:', err);
+			});
+	};
+
+	// Function to create a mailto link for sharing via email
+	const handleShareByEmail = () => {
+		const placeLink = `${window.location.origin}/places/${_id}`;
+		const subject = encodeURIComponent(`Check out this place: ${name}`);
+		const body = encodeURIComponent(`Hey, I found this place and thought you might like it!\n\n${placeLink}`);
+		window.location.href = `mailto:?subject=${subject}&body=${body}`;
+	};
+
+
 	return (
 		<Card
 			key={_id}
-			className="w-full h-[380px] flex gap-1 flex-col border-surface-secondary border-2"
+			className="w-full h-[400px] flex gap-1 flex-col border-surface-secondary border-2"
 		>
 			<Flex
 				align="center"
@@ -131,6 +152,24 @@ export default function PlaceCard({
 					</Flex>
 				</Flex>
 			</CardContent>
+			{/* Share buttons */}
+			<Flex gap="2" justify="center" className="p-2">
+				{/* Share via Link */}
+				<button
+					className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+					onClick={handleCopyLink}
+				>
+					Copy Link
+				</button>
+
+				{/* Share via Email */}
+				<button
+					className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+					onClick={handleShareByEmail}
+				>
+					Share via Email
+				</button>
+			</Flex>
 		</Card>
 	);
 }

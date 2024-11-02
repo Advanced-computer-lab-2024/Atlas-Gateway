@@ -38,10 +38,31 @@ export default function ActivityCard({
 	const { refetch } = useActivities();
 	const { doDeleteActivity } = useDeleteActivity(refetch);
 
+	// Function to copy the activity link to the clipboard
+    const handleCopyLink = () => {
+        const activityLink = `${window.location.origin}/activities/${activity._id}`;
+        navigator.clipboard.writeText(activityLink)
+            .then(() => {
+                alert('Link copied to clipboard!');
+            })
+            .catch((err) => {
+                console.error('Failed to copy link:', err);
+            });
+    };
+
+	// Function to create a mailto link for sharing via email
+    const handleShareByEmail = () => {
+        const activityLink = `${window.location.origin}/activities/${activity._id}`;
+        const subject = encodeURIComponent(`Check out this activity: ${activity.name}`);
+        const body = encodeURIComponent(`Hey, I found this activity and thought you might like it!\n\n${activityLink}`);
+        window.location.href = `mailto:?subject=${subject}&body=${body}`;
+    };
+
+
 	return (
 		<Card
 			key={activity?._id}
-			className="w-full h-[350px] flex gap-1 flex-col border-surface-secondary border-2"
+			className="w-full h-[385px] flex gap-1 flex-col border-surface-secondary border-2"
 		>
 			<CardContent className="p-2">
 				<Flex isColumn gap="4" align="center">
@@ -195,6 +216,24 @@ export default function ActivityCard({
 				<Label.Mid300>
 					{activity?.isOpen ? "Bookings Open" : "Bookings Closed"}
 				</Label.Mid300>
+				{/* Share buttons */}
+				<Flex gap="2" justify="center" className="mt-2">
+					{/* Share via Link */}
+					<button
+						className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+						onClick={handleCopyLink}
+					>
+						 Copy Link
+					</button>
+
+					{/* Share via Email */}
+					<button
+						className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+						onClick={handleShareByEmail}
+					>
+						 Share via Email
+					</button>
+				</Flex>
 			</CardFooter>
 		</Card>
 	);

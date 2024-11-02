@@ -29,6 +29,7 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from "../components/ui/sheet";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "../components/ui/select"; // Ensure all necessary components are imported
 
 const formSchema = z.object({
 	name: z.string().min(2, {
@@ -40,8 +41,16 @@ const formSchema = z.object({
 	mobile: z.string().min(8, {
 		message: "Mobile number must be at least 8 characters.",
 	}),
+	currency: z.string(), // Add currency to the schema
 });
 
+const availableCurrencies = [
+	{ code: "USD", name: "US Dollar" },
+	{ code: "EUR", name: "Euro" },
+	{ code: "GBP", name: "British Pound" },
+	{ code: "EGP", name: "Egyptian Pound" },
+	// Add more currencies as needed
+];
 export default function TouristSheet() {
 	const [open, setOpen] = useState(false);
 	const { data, refetch } = useTouristProfile();
@@ -145,6 +154,33 @@ export default function TouristSheet() {
 								</FormItem>
 							)}
 						/>
+
+						{/* Currency Selection */}
+						<FormField
+							control={form.control}
+							name="currency"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Currency</FormLabel>
+									<FormControl>
+										<Select onValueChange={field.onChange} defaultValue={field.value}>
+											<SelectTrigger>
+												<SelectValue placeholder="Select currency" />
+											</SelectTrigger>
+											<SelectContent>
+												{availableCurrencies.map((currency) => (
+													<SelectItem key={currency.code} value={currency.code}>
+														{currency.name}
+													</SelectItem>
+												))}
+											</SelectContent>
+										</Select>
+									</FormControl>
+									<FormDescription>Select your preferred currency.</FormDescription>
+								</FormItem>
+							)}
+						/>
+
 						<SheetFooter>
 							<Button
 								disabled={!formState.isValid}

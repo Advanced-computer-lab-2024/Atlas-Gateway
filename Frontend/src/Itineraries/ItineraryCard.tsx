@@ -39,10 +39,32 @@ export default function ItineraryCard({
 	const { refetch } = useItineraries();
 	const { doDeleteItinerary } = useDeleteItinerary(refetch);
 
+
+	// Function to copy the itinerary link to the clipboard
+	const handleCopyLink = () => {
+		const itineraryLink = `${window.location.origin}/itineraries/${itinerary?._id}`;
+		navigator.clipboard.writeText(itineraryLink)
+			.then(() => {
+				alert('Link copied to clipboard!');
+			})
+			.catch((err) => {
+				console.error('Failed to copy link:', err);
+			});
+	};
+
+	// Function to create a mailto link for sharing via email
+	const handleShareByEmail = () => {
+		const itineraryLink = `${window.location.origin}/itineraries/${itinerary?._id}`;
+		const subject = encodeURIComponent(`Check out this itinerary: ${itinerary?.title}`);
+		const body = encodeURIComponent(`Hey, I found this itinerary and thought you might like it!\n\n${itineraryLink}`);
+		window.location.href = `mailto:?subject=${subject}&body=${body}`;
+	};
+
+
 	return (
 		<Card
 			key={itinerary?._id}
-			className="w-full h-[350px] flex gap-1 flex-col border-surface-secondary border-2"
+			className="w-full h-[385px] flex gap-1 flex-col border-surface-secondary border-2"
 		>
 			<CardContent className="p-2">
 				<Flex isColumn gap="4" align="center">
@@ -218,6 +240,24 @@ export default function ItineraryCard({
 					{itinerary?.numberOfBookings}/{itinerary?.availability}{" "}
 					Bookings Available
 				</Label.Mid300>
+				{/* Share buttons */}
+				<Flex gap="2" justify="center" className="mt-2">
+					{/* Share via Link */}
+					<button
+						className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+						onClick={handleCopyLink}
+					>
+						Copy Link
+					</button>
+
+					{/* Share via Email */}
+					<button
+						className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+						onClick={handleShareByEmail}
+					>
+						Share via Email
+					</button>
+				</Flex>
 			</CardFooter>
 		</Card>
 	);
