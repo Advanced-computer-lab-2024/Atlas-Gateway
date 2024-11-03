@@ -4,6 +4,7 @@ import express, { NextFunction, Request, Response } from "express";
 import { SERVER } from "./Config/config";
 import connectDB from "./Config/db";
 import HttpError from "./Errors/HttpError";
+import passwordRouter from "./Routes/Auth/changePassword.route";
 import loginRouter from "./Routes/Auth/login.route";
 import registerRouter from "./Routes/Auth/register.route";
 import productRouter from "./Routes/Purchases/product.route";
@@ -47,6 +48,7 @@ async function startServer() {
 	app.use("/api/itinerary", itineraryRouter);
 	app.use("/api/places", placesRouter);
 	app.use("/api/login", loginRouter);
+	app.use("/api/change-password", passwordRouter);
 
 	// Error handling middleware
 	app.use((err: Error, req: Request, res: Response, next: NextFunction) => {

@@ -4,16 +4,19 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
-import { Camera, EllipsisVertical } from "lucide-react";
+import { Camera, Settings } from "lucide-react";
+import { useState } from "react";
 
 import { useSellerProfile } from "@/api/data/useProfile";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import profile_background from "../assets/profile_background.jpg";
+import ChangePasswordSheet from "./ChangePasswordSheet";
 import SellerSheet from "./SellerSheet";
 
 const General = () => {
 	const { data } = useSellerProfile();
+	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 	//May needed later:
 
 	// // Function to truncate description for display
@@ -57,12 +60,19 @@ const General = () => {
 					</h2>
 				</div>
 				<div className="mr-7">
-					<DropdownMenu>
+					<DropdownMenu modal={false}>
 						<DropdownMenuTrigger>
-							<EllipsisVertical className="cursor-pointer" />
+							<Settings className="cursor-pointer" />
 						</DropdownMenuTrigger>
 						<DropdownMenuContent>
-							<DropdownMenuItem>dummy</DropdownMenuItem>
+							<DropdownMenuItem
+								onClick={() => {
+									setIsDrawerOpen(true);
+								}}
+								className="cursor-pointer"
+							>
+								change password
+							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
 				</div>
@@ -96,6 +106,10 @@ const General = () => {
 					<TabsContent value="History"></TabsContent>
 				</Tabs>
 			</div>
+			<ChangePasswordSheet
+				isDrawerOpen={isDrawerOpen}
+				setIsDrawerOpen={setIsDrawerOpen}
+			/>
 		</div>
 	);
 };

@@ -1,19 +1,22 @@
+import { Camera, Settings } from "lucide-react";
+import { useState } from "react";
+
+import { useTouristProfile } from "@/api/data/useProfile";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuTrigger,
-} from "@radix-ui/react-dropdown-menu";
-import { Camera, EllipsisVertical } from "lucide-react";
-
-import { useTouristProfile } from "@/api/data/useProfile";
+} from "@/components/ui/dropdown-menu";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import profile_background from "../assets/profile_background.jpg";
+import ChangePasswordSheet from "./ChangePasswordSheet";
 import TouristSheet from "./TouristSheet";
 
 export default function TouristProfile() {
 	const { data } = useTouristProfile();
+	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
 	return (
 		<div>
@@ -49,21 +52,29 @@ export default function TouristProfile() {
 					</h2>
 					<div className="flex gap-7">
 						<h2 className="text-2xl">
-							{data?.wallet || "wallet not found"}
-							{data?.currency || " Currency not found"}
+							{data?.walletBalance} {data?.currency}
 						</h2>
 						<h2 className="text-2xl text-yellow-400">
-							{data?.loyaltyPoints || "loyaltyPoints not found"}
+							{data?.loyaltyPoints}
+							{" Points"}
 						</h2>
 					</div>
 				</div>
 				<div className="mr-7">
-					<DropdownMenu>
+					<TouristSheet />
+					<DropdownMenu modal={false}>
 						<DropdownMenuTrigger>
-							<EllipsisVertical className="cursor-pointer" />
+							<Settings className="cursor-pointer" />
 						</DropdownMenuTrigger>
 						<DropdownMenuContent>
-							<DropdownMenuItem>dummy</DropdownMenuItem>
+							<DropdownMenuItem
+								onClick={() => {
+									setIsDrawerOpen(true);
+								}}
+								className="cursor-pointer"
+							>
+								change password
+							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
 				</div>
@@ -71,9 +82,8 @@ export default function TouristProfile() {
 
 			<div className="flex ml-10 mr-10 mt-10">
 				<Tabs defaultValue="account" className="w-full">
-					<TabsList className="grid w-full grid-cols-4">
+					<TabsList className="grid w-full grid-cols-3">
 						<TabsTrigger value="account">Account</TabsTrigger>
-						<TabsTrigger value="password">Password</TabsTrigger>
 						<TabsTrigger value="upcoming">Upcoming</TabsTrigger>
 						<TabsTrigger value="history">History</TabsTrigger>
 					</TabsList>
@@ -92,13 +102,15 @@ export default function TouristProfile() {
 								Address: {data?.address || "Address here"}
 							</h3>
 						</div>
-						<TouristSheet />
 					</TabsContent>
-					<TabsContent value="password"></TabsContent>
 					<TabsContent value="Upcoming"></TabsContent>
 					<TabsContent value="History"></TabsContent>
 				</Tabs>
 			</div>
+			<ChangePasswordSheet
+				isDrawerOpen={isDrawerOpen}
+				setIsDrawerOpen={setIsDrawerOpen}
+			/>
 		</div>
 	);
 }
