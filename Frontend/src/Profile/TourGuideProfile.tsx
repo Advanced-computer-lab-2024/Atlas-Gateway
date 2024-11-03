@@ -11,10 +11,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import profile_background from "../assets/profile_background.jpg";
 import TourGuideSheet from "./TourGuideSheet";
+import UploadForm from "./UploadForm";
 
 export default function TourGuideProfile() {
 	const { data } = useTourGuideProfile();
-
+	console.log(data?.type);
 	return (
 		<div>
 			<div className="relative w-full">
@@ -49,6 +50,7 @@ export default function TourGuideProfile() {
 					</h2>
 				</div>
 				<div className="mr-7">
+					<TourGuideSheet />
 					<DropdownMenu>
 						<DropdownMenuTrigger>
 							<EllipsisVertical className="cursor-pointer" />
@@ -91,7 +93,10 @@ export default function TourGuideProfile() {
 								prevWork: {data?.prevWork || "prevWork here"}
 							</h3>
 						</div>
-						<TourGuideSheet />
+						<UploadForm
+							username={data?.username}
+							type={data?.type}
+						/>
 					</TabsContent>
 					<TabsContent value="password"></TabsContent>
 					<TabsContent value="Upcoming"></TabsContent>

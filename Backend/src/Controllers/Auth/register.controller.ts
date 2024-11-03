@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 
+import { uploadDocuments } from "../../Services/Auth/uploadDocuments";
 import { createAdvertiser } from "../../Services/Users/advertiser.service";
 import { createGovernor } from "../../Services/Users/governor.service";
 import { createSeller } from "../../Services/Users/seller.service";
@@ -22,7 +23,6 @@ export const register = async (
 			dob,
 			occupation,
 		} = req.body;
-
 		if (!username || !email || !password) {
 			res.status(400).send("username, email and password are required");
 		}
@@ -74,5 +74,20 @@ export const register = async (
 		res.status(201).send(user);
 	} catch (error) {
 		next(error);
+	}
+};
+
+export const uploadDocument = async (req: Request, res: Response) => {
+	try {
+		const file = req.file as Express.Multer.File | undefined;
+		const { username, type } = req.body;
+		console.log(type);
+		if (!file) {
+			return res.status(400).send("File is required");
+		}
+		const result = await uploadDocuments(username, type, file);
+		res.status(200).send(result);
+	} catch (error) {
+		res.status(500).send(error);
 	}
 };

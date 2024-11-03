@@ -26,6 +26,7 @@ const ENDPOINTS = {
 	},
 	login: "api/login",
 	register: "api/register/create",
+	upload: "api/register/upload",
 	admin: {
 		list: "api/admin/list",
 		create: "api/admin/create",
