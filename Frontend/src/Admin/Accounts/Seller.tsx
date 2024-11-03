@@ -35,7 +35,6 @@ const Sellers = () => {
 			.then((res) => {
 				const link = document.createElement("a");
 				link.href = res.data;
-				link.target = "_blank";
 				document.body.appendChild(link);
 				link.click();
 				document.body.removeChild(link);

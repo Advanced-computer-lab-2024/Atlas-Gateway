@@ -96,8 +96,11 @@ export const downloadDocument = async (req: Request, res: Response) => {
 	try {
 		const { filePath } = req.body;
 		const result = await downloadDocuments(filePath);
+		if (result == "File not found") {
+			return res.status(404).send(result);
+		}
 		res.status(200).send(result);
 	} catch (error) {
-		res.status(500).send(error);
+		res.status(500).send("File not found");
 	}
 };
