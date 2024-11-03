@@ -1,9 +1,11 @@
 import { formatDate } from "date-fns";
 import {
+	Copy,
 	DollarSign,
 	Edit,
 	EllipsisVertical,
 	Eye,
+	Mail,
 	MapPin,
 	Star,
 	Trash,
@@ -39,6 +41,28 @@ export default function ItineraryCard({
 	const { refetch } = useItineraries();
 	const { doDeleteItinerary } = useDeleteItinerary(refetch);
 
+
+	// Function to copy the itinerary link to the clipboard
+	const handleCopyLink = () => {
+		const itineraryLink = `${window.location.origin}/itineraries/${itinerary?._id}`;
+		navigator.clipboard.writeText(itineraryLink)
+			.then(() => {
+				alert('Link copied to clipboard!');
+			})
+			.catch((err) => {
+				console.error('Failed to copy link:', err);
+			});
+	};
+
+	// Function to create a mailto link for sharing via email
+	const handleShareByEmail = () => {
+		const itineraryLink = `${window.location.origin}/itineraries/${itinerary?._id}`;
+		const subject = encodeURIComponent(`Check out this itinerary: ${itinerary?.title}`);
+		const body = encodeURIComponent(`Hey, I found this itinerary and thought you might like it!\n\n${itineraryLink}`);
+		window.location.href = `mailto:?subject=${subject}&body=${body}`;
+	};
+
+
 	return (
 		<Card
 			key={itinerary?._id}
@@ -71,6 +95,20 @@ export default function ItineraryCard({
 								>
 									<Eye />
 									View Details
+								</DropdownMenuItem>
+								<DropdownMenuItem
+									className="flex gap-2 cursor-pointer"
+									onClick={handleCopyLink}
+								>
+									<Copy />
+									Copy Link
+								</DropdownMenuItem>
+								<DropdownMenuItem
+									className="flex gap-2 cursor-pointer"
+									onClick={handleShareByEmail}
+								>
+									<Mail/>
+									Share Via Email
 								</DropdownMenuItem>
 								{user?.type === EAccountType.Guide && (
 									<>
@@ -218,6 +256,7 @@ export default function ItineraryCard({
 					{itinerary?.numberOfBookings}/{itinerary?.availability}{" "}
 					Bookings Available
 				</Label.Mid300>
+				
 			</CardFooter>
 		</Card>
 	);

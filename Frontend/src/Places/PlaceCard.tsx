@@ -1,8 +1,10 @@
 import {
+	Copy,
 	Edit,
 	EllipsisVertical,
 	Eye,
 	LocateIcon,
+	Mail,
 	MapPin,
 	Trash,
 } from "lucide-react";
@@ -39,6 +41,27 @@ export default function PlaceCard({
 
 	const { doDeletePlace } = useDeletePlace(refetch);
 
+	// Function to copy the place link to the clipboard
+	const handleCopyLink = () => {
+		const placeLink = `${window.location.origin}/places/${_id}`;
+		navigator.clipboard.writeText(placeLink)
+			.then(() => {
+				alert('Link copied to clipboard!');
+			})
+			.catch((err) => {
+				console.error('Failed to copy link:', err);
+			});
+	};
+
+	// Function to create a mailto link for sharing via email
+	const handleShareByEmail = () => {
+		const placeLink = `${window.location.origin}/places/${_id}`;
+		const subject = encodeURIComponent(`Check out this place: ${name}`);
+		const body = encodeURIComponent(`Hey, I found this place and thought you might like it!\n\n${placeLink}`);
+		window.location.href = `mailto:?subject=${subject}&body=${body}`;
+	};
+
+
 	return (
 		<Card
 			key={_id}
@@ -71,6 +94,20 @@ export default function PlaceCard({
 								>
 									<Eye />
 									View Details
+								</DropdownMenuItem>
+								<DropdownMenuItem
+									className="flex gap-2 cursor-pointer"
+									onClick={handleCopyLink}
+								>
+									<Copy />
+									Copy Link
+								</DropdownMenuItem>
+								<DropdownMenuItem
+									className="flex gap-2 cursor-pointer"
+									onClick={handleShareByEmail}
+								>
+									<Mail/>
+									Share Via Email
 								</DropdownMenuItem>
 								{user?.type ===
 									EAccountType.TourismGovernor && (
@@ -131,6 +168,7 @@ export default function PlaceCard({
 					</Flex>
 				</Flex>
 			</CardContent>
+			
 		</Card>
 	);
 }
