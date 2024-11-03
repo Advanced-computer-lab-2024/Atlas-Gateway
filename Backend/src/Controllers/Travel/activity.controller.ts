@@ -3,6 +3,7 @@ import { PipelineStage, Types } from "mongoose";
 
 import { Activity } from "../../Models/Travel/activity.model";
 import AggregateBuilder from "../../Services/Operations/aggregation.service";
+import { Tourist } from "@/Models/Users/tourist.model";
 
 export const createActivities = async (
 	req: Request,
@@ -218,6 +219,93 @@ export const updateActivityById = async (
 		activity.set(req.body);
 		await activity.save();
 		res.status(200).send(activity);
+	} catch (error) {
+		next(error);
+	}
+};
+
+
+export const bookActivity = async (req: Request, res: Response) => {
+	try {
+		const activityId = req.params.activityId;
+		const touristId = req.params.touristId;
+
+		if (!Types.ObjectId.isValid(activityId)) {
+			return res.status(400).json({ message: "Invalid Activity ID" });
+		}
+
+		const activity = await Activity.findById(activityId);
+		if (!activity) {
+			return res.status(404).json({ message: "Activity not found" });
+		}
+
+		if (!Types.ObjectId.isValid(touristId)) {
+			return res.status(400).json({ message: "Invalid Tourist ID" });
+		}
+
+		const tourist = await Tourist.findById(touristId);
+		if (!tourist) {
+			return res.status(404).json({ message: "Tourist not found" });
+		}
+
+		activity.tourists.push({
+			touristId: tourist.id,
+			name: tourist.name,
+			mobile: tourist.mobile,
+			currency: tourist.currency,
+			walletBalance: tourist.walletBalance,
+		});
+
+		await activity.save();
+
+		return res.status(200).json({ message: "Activity booked successfully" });
+	}
+	catch (error) {
+		console.log(error);
+		res.status(500).send("Error booking Activity");
+	}
+};
+
+export const cancelBookingActivity = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	try {
+		const activityId = req.params.activityId;
+		const touristId = req.params.touristId;
+
+		if (!Types.ObjectId.isValid(activityId)) {
+			return res.status(400).json({ message: "Invalid Activity ID" });
+		}
+
+		const activity = await Activity.findById(activityId);
+		if (!activity) {
+			return res.status(404).json({ message: "Activity not found" });
+		}
+
+		if (!Types.ObjectId.isValid(touristId)) {
+			return res.status(400).json({ message: "Invalid Tourist ID" });
+		}
+
+		const tourist = await Tourist.findById(touristId);
+		if (!tourist) {
+			return res.status(404).json({ message: "Tourist not found" });
+		}
+
+		const currentDate = new Date();		
+		const millisecondsBeforeActivity = activity.dateTime.getTime() - currentDate.getTime();
+		const hoursBeforeActivity = millisecondsBeforeActivity / (1000 * 3600);
+		
+		if (hoursBeforeActivity >= 48) {
+			activity.tourists = activity.tourists.filter(tourist => tourist.touristId.toString() !== touristId.toString());
+
+			await activity.save();
+
+			return res.status(200).send("Booking canceled successfully");
+		}
+		
+		return res.status(505).send("Cannot cancel this Booking");
 	} catch (error) {
 		next(error);
 	}

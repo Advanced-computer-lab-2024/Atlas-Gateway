@@ -21,6 +21,8 @@ export interface ITourist extends Document {
 		image?: string;
 	};
 	bookedItinerary: Types.ObjectId[];
+	bookedActivity: Types.ObjectId[];
+	bookedTransportation: Types.ObjectId[];
 }
 
 const touristSchema = new Schema<ITourist>(
@@ -43,6 +45,8 @@ const touristSchema = new Schema<ITourist>(
 			image: { type: String },
 		},
 		bookedItinerary: [{ type: Schema.Types.ObjectId, ref: "Itinerary" }],
+		bookedActivity: [{ type: Schema.Types.ObjectId, ref: "Activity" }],
+		bookedTransportation: [{ type: Schema.Types.ObjectId, ref: "Transportation" }],
 	},
 	schemaConfig,
 );

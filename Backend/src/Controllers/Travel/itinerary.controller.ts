@@ -3,6 +3,7 @@ import mongoose, { PipelineStage, Types } from "mongoose";
 
 import { Itinerary } from "../../Models/Travel/itinerary.model";
 import AggregateBuilder from "../../Services/Operations/aggregation.service";
+import { Tourist } from "@/Models/Users/tourist.model";
 
 //Create a new product entry
 export const createItinerary = async (
@@ -152,6 +153,98 @@ export const updateItinerary = async (req: Request, res: Response) => {
 	} catch (error) {
 		console.log(error);
 		res.status(500).json({ message: "Internal Server Error" });
+	}
+};
+
+export const bookItinerary = async (req: Request, res: Response) => {
+    try {
+        const itineraryId = req.params.itineraryId;
+        const touristId = req.params.touristId;
+
+        if (!Types.ObjectId.isValid(itineraryId)) {
+            return res.status(400).json({ message: "Invalid Itinerary ID" });
+        }
+
+        const itinerary = await Itinerary.findById(itineraryId);
+        if (!itinerary) {
+            return res.status(404).json({ message: "Itinerary not found" });
+        }
+
+        if (!Types.ObjectId.isValid(touristId)) {
+            return res.status(400).json({ message: "Invalid Tourist ID" });
+        }
+
+        const tourist = await Tourist.findById(touristId);
+        if (!tourist) {
+            return res.status(404).json({ message: "Tourist not found" });
+        }
+
+        if (itinerary.availability <= 0) {
+            return res.status(400).json({ message: "No available slots for this itinerary" });
+        }
+
+        itinerary.numberOfBookings += 1;
+        itinerary.availability -= 1;
+
+        itinerary.tourists.push({
+            touristId: tourist.id,
+            name: tourist.name,
+            mobile: tourist.mobile,
+            currency: tourist.currency,
+            walletBalance: tourist.walletBalance,
+        });
+        await itinerary.save();
+
+        return res.status(200).json({ message: "Itinerary booked successfully"});
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).send("Error booking Itinerary");
+    }
+};
+
+export const cancelBookingItinerary = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	try {
+		const itineraryId = req.params.ItineraryId;
+		const touristId = req.params.touristId;
+
+		if (!Types.ObjectId.isValid(itineraryId)) {
+			return res.status(400).json({ message: "Invalid Itinerary ID" });
+		}
+
+		const itinerary = await Itinerary.findById(itineraryId);
+		if (!itinerary) {
+			return res.status(404).json({ message: "Itinerary not found" });
+		}
+
+		if (!Types.ObjectId.isValid(touristId)) {
+			return res.status(400).json({ message: "Invalid Tourist ID" });
+		}
+
+		const tourist = await Tourist.findById(touristId);
+		if (!tourist) {
+			return res.status(404).json({ message: "Tourist not found" });
+		}
+
+		const currentDate = new Date();		
+		const millisecondsBeforeItinerary = itinerary.startDateTime.getTime() - currentDate.getTime();
+		const hoursBeforeItinerary = millisecondsBeforeItinerary / (1000 * 3600);
+		
+		if (hoursBeforeItinerary >= 48) {
+			itinerary.tourists = itinerary.tourists.filter(tourist => tourist.touristId.toString() !== touristId.toString());
+
+			await itinerary.save();
+
+			return res.status(200).send("Booking canceled successfully");
+		}
+		
+		return res.status(505).send("Cannot cancel this Booking");
+	} catch (error) {
+		next(error);
 	}
 };
 
