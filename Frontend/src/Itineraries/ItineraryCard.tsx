@@ -1,9 +1,11 @@
 import { formatDate } from "date-fns";
 import {
+	Copy,
 	DollarSign,
 	Edit,
 	EllipsisVertical,
 	Eye,
+	Mail,
 	MapPin,
 	Star,
 	Trash,
@@ -64,7 +66,7 @@ export default function ItineraryCard({
 	return (
 		<Card
 			key={itinerary?._id}
-			className="w-full h-[385px] flex gap-1 flex-col border-surface-secondary border-2"
+			className="w-full h-[350px] flex gap-1 flex-col border-surface-secondary border-2"
 		>
 			<CardContent className="p-2">
 				<Flex isColumn gap="4" align="center">
@@ -93,6 +95,20 @@ export default function ItineraryCard({
 								>
 									<Eye />
 									View Details
+								</DropdownMenuItem>
+								<DropdownMenuItem
+									className="flex gap-2 cursor-pointer"
+									onClick={handleCopyLink}
+								>
+									<Copy />
+									Copy Link
+								</DropdownMenuItem>
+								<DropdownMenuItem
+									className="flex gap-2 cursor-pointer"
+									onClick={handleShareByEmail}
+								>
+									<Mail/>
+									Share Via Email
 								</DropdownMenuItem>
 								{user?.type === EAccountType.Guide && (
 									<>
@@ -240,24 +256,7 @@ export default function ItineraryCard({
 					{itinerary?.numberOfBookings}/{itinerary?.availability}{" "}
 					Bookings Available
 				</Label.Mid300>
-				{/* Share buttons */}
-				<Flex gap="2" justify="center" className="mt-2">
-					{/* Share via Link */}
-					<button
-						className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-						onClick={handleCopyLink}
-					>
-						Copy Link
-					</button>
-
-					{/* Share via Email */}
-					<button
-						className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
-						onClick={handleShareByEmail}
-					>
-						Share via Email
-					</button>
-				</Flex>
+				
 			</CardFooter>
 		</Card>
 	);

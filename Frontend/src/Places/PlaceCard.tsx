@@ -1,8 +1,10 @@
 import {
+	Copy,
 	Edit,
 	EllipsisVertical,
 	Eye,
 	LocateIcon,
+	Mail,
 	MapPin,
 	Trash,
 } from "lucide-react";
@@ -63,7 +65,7 @@ export default function PlaceCard({
 	return (
 		<Card
 			key={_id}
-			className="w-full h-[400px] flex gap-1 flex-col border-surface-secondary border-2"
+			className="w-full h-[380px] flex gap-1 flex-col border-surface-secondary border-2"
 		>
 			<Flex
 				align="center"
@@ -92,6 +94,20 @@ export default function PlaceCard({
 								>
 									<Eye />
 									View Details
+								</DropdownMenuItem>
+								<DropdownMenuItem
+									className="flex gap-2 cursor-pointer"
+									onClick={handleCopyLink}
+								>
+									<Copy />
+									Copy Link
+								</DropdownMenuItem>
+								<DropdownMenuItem
+									className="flex gap-2 cursor-pointer"
+									onClick={handleShareByEmail}
+								>
+									<Mail/>
+									Share Via Email
 								</DropdownMenuItem>
 								{user?.type ===
 									EAccountType.TourismGovernor && (
@@ -152,24 +168,7 @@ export default function PlaceCard({
 					</Flex>
 				</Flex>
 			</CardContent>
-			{/* Share buttons */}
-			<Flex gap="2" justify="center" className="p-2">
-				{/* Share via Link */}
-				<button
-					className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-					onClick={handleCopyLink}
-				>
-					Copy Link
-				</button>
-
-				{/* Share via Email */}
-				<button
-					className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
-					onClick={handleShareByEmail}
-				>
-					Share via Email
-				</button>
-			</Flex>
+			
 		</Card>
 	);
 }
