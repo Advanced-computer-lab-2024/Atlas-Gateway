@@ -4,15 +4,18 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
-import { Camera, EllipsisVertical } from "lucide-react";
+import { Camera, Settings } from "lucide-react";
 
 import { useSellerProfile } from "@/api/data/useProfile";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useLoginStore } from "@/store/loginStore";
 
 import profile_background from "../assets/profile_background.jpg";
 import SellerSheet from "./SellerSheet";
+import UploadForm from "./UploadForm";
 
 const General = () => {
+	const { user } = useLoginStore();
 	const { data } = useSellerProfile();
 	//May needed later:
 
@@ -56,13 +59,18 @@ const General = () => {
 						#{data?.username || "username not found"}
 					</h2>
 				</div>
-				<div className="mr-7">
+				<div className="border-solid border-2 border-[rgb(44,44,44)] flex items-center mr-7 p-2 h-10">
+					{data?.isVerified && (
+						<div className="p-1">
+							<SellerSheet />
+						</div>
+					)}
 					<DropdownMenu>
 						<DropdownMenuTrigger>
-							<EllipsisVertical className="cursor-pointer" />
+							<Settings />
 						</DropdownMenuTrigger>
 						<DropdownMenuContent>
-							<DropdownMenuItem>dummy</DropdownMenuItem>
+							<DropdownMenuItem></DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
 				</div>
@@ -88,8 +96,11 @@ const General = () => {
 								Company description:{" "}
 								{data?.description || "Description here"}
 							</h3>
+							<UploadForm
+								username={data?.username}
+								type={user?.type}
+							/>
 						</div>
-						<SellerSheet />
 					</TabsContent>
 					<TabsContent value="password"></TabsContent>
 					<TabsContent value="Upcoming"></TabsContent>

@@ -30,7 +30,7 @@ const Advertisers = () => {
 	const { data, refetch } = useAdvertisers();
 	const { doDeleteAdvertiserProfile } = useDeleteAdvertiserProfile(refetch);
 
-	const handleDownloadId = async (username: string, type: string) => {
+	const handleDownload = async (username: string, type: string) => {
 		const filePath =
 			type == "id"
 				? `advertiser/${username}_id.pdf`
@@ -85,7 +85,7 @@ const Advertisers = () => {
 						<TableHead>Description</TableHead>
 						<TableHead>isVerified</TableHead>
 						<TableHead>ID</TableHead>
-						<TableHead>Certificates</TableHead>
+						<TableHead>registryCards</TableHead>
 						<TableHead className="cursor-pointer hover:text-[#2b58ed]">
 							<RotateCw onClick={() => refetch()} />
 						</TableHead>
@@ -127,7 +127,7 @@ const Advertisers = () => {
 							<TableCell>
 								<button
 									onClick={() =>
-										handleDownloadId(
+										handleDownload(
 											advertiser.username,
 											"id",
 										)
@@ -139,7 +139,7 @@ const Advertisers = () => {
 							<TableCell>
 								<button
 									onClick={() =>
-										handleDownloadId(
+										handleDownload(
 											advertiser.username,
 											"registryCard",
 										)

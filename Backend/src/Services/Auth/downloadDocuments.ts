@@ -14,11 +14,14 @@ const s3 = new S3Client({
 });
 
 export const downloadDocuments = async (filePath: string) => {
-	console.log(filePath);
-	const command = new GetObjectCommand({
-		Bucket: process.env.AWS_BUCKET_NAME!,
-		Key: `${filePath}`,
-	});
-	const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
-	return url;
+	try {
+		const command = new GetObjectCommand({
+			Bucket: process.env.AWS_BUCKET_NAME!,
+			Key: `${filePath}`,
+		});
+		await s3.send(command);
+		return await getSignedUrl(s3, command, { expiresIn: 3600 });
+	} catch (error) {
+		console.log(error);
+	}
 };

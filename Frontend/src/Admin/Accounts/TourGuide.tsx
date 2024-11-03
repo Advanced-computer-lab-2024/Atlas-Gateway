@@ -31,7 +31,7 @@ const TourGuide = () => {
 	// const {doEditTourGuideProfile} = useUpdateTourGuideProfile(refetch);
 	const { doDeleteTourGuideProfile } = useDeleteTourGuideProfile(refetch);
 
-	const handleDownloadId = async (username: string, type: string) => {
+	const handleDownload = async (username: string, type: string) => {
 		const filePath =
 			type == "id"
 				? `tour_guide/${username}_id.pdf`
@@ -127,10 +127,7 @@ const TourGuide = () => {
 							<TableCell>
 								<button
 									onClick={() =>
-										handleDownloadId(
-											tourGuide.username,
-											"id",
-										)
+										handleDownload(tourGuide.username, "id")
 									}
 								>
 									<IdCard />
@@ -139,7 +136,7 @@ const TourGuide = () => {
 							<TableCell>
 								<button
 									onClick={() =>
-										handleDownloadId(
+										handleDownload(
 											tourGuide.username,
 											"certificate",
 										)
