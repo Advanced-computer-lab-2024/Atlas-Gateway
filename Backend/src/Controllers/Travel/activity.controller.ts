@@ -224,7 +224,6 @@ export const updateActivityById = async (
 	}
 };
 
-
 export const bookActivity = async (req: Request, res: Response) => {
 	try {
 		const activityId = req.params.activityId;
@@ -256,6 +255,9 @@ export const bookActivity = async (req: Request, res: Response) => {
 			walletBalance: tourist.walletBalance,
 		});
 
+		tourist.bookedActivity.push(activity.id);
+
+		await tourist.save();
 		await activity.save();
 
 		return res.status(200).json({ message: "Activity booked successfully" });
@@ -299,7 +301,9 @@ export const cancelBookingActivity = async (
 		
 		if (hoursBeforeActivity >= 48) {
 			activity.tourists = activity.tourists.filter(tourist => tourist.touristId.toString() !== touristId.toString());
+			tourist.bookedActivity = tourist.bookedActivity.filter(activity => activityId.toString() !== activityId.toString());
 
+			await tourist.save();
 			await activity.save();
 
 			return res.status(200).send("Booking canceled successfully");

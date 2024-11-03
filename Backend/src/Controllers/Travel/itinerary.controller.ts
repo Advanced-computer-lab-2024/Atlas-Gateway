@@ -193,6 +193,10 @@ export const bookItinerary = async (req: Request, res: Response) => {
             currency: tourist.currency,
             walletBalance: tourist.walletBalance,
         });
+
+		tourist.bookedItinerary.push(itinerary.id);
+
+		await tourist.save();
         await itinerary.save();
 
         return res.status(200).json({ message: "Itinerary booked successfully"});
@@ -236,7 +240,9 @@ export const cancelBookingItinerary = async (
 		
 		if (hoursBeforeItinerary >= 48) {
 			itinerary.tourists = itinerary.tourists.filter(tourist => tourist.touristId.toString() !== touristId.toString());
+			tourist.bookedItinerary = tourist.bookedItinerary.filter(itinerary => itineraryId.toString() !== itineraryId.toString());
 
+			await tourist.save();
 			await itinerary.save();
 
 			return res.status(200).send("Booking canceled successfully");

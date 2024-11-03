@@ -141,6 +141,10 @@ export const bookTransportation = async (req: Request, res: Response) => {
             currency: tourist.currency,
             walletBalance: tourist.walletBalance,
         });
+
+        tourist.bookedTransportation.push(transportation.id);
+
+		await tourist.save();
         await transportation.save();
 
         return res.status(200).json({ message: "Transportation booked successfully"});
