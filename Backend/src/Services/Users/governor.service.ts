@@ -34,9 +34,7 @@ export const getGovernorById = async (id: string) => {
 		throw new HttpError(400, "Governor ID is invalid");
 	}
 	const governor = await Governor.findById(id);
-	if (!governor) {
-		throw new HttpError(404, "Governor Not Found");
-	}
+
 	return governor;
 };
 
