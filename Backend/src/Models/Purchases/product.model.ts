@@ -2,7 +2,7 @@ import { Document, Schema, Types, model } from "mongoose";
 
 import { schemaConfig } from "../../Config/schemaConfig";
 
-interface IProduct extends Document {
+export interface IProduct extends Document {
 	sellerId: Types.ObjectId;
 	name: string;
 	description: string;

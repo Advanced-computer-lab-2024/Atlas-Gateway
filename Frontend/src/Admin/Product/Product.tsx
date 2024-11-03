@@ -5,7 +5,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { usePagination } from "@/api/data/usePagination";
-import { useProducts } from "@/api/data/useProducts";
+import { useCreateProduct, useProducts } from "@/api/data/useProducts";
 import { useQueryString } from "@/api/data/useQueryString";
 import Label from "@/components/ui/Label";
 import { Button } from "@/components/ui/button";
@@ -60,22 +60,15 @@ const Product = () => {
 		resolver: zodResolver(productSchema),
 	});
 
+	const { doCreateProduct } = useCreateProduct(() => {
+		refetch();
+		formMethods.reset();
+	});
+
 	const { handleSubmit, control } = formMethods;
 
 	const onSubmit = (data: z.infer<typeof productSchema>) => {
-		console.log(data);
-		axios
-			.post("http://localhost:5000/api/products/create", data, {
-				headers: {
-					userId: "123456",
-				},
-			})
-			.then((res) => {
-				console.log(res.status);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
+		doCreateProduct(data);
 	};
 
 	return (

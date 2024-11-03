@@ -2,7 +2,7 @@ import axios from "axios";
 
 import { TProduct } from "@/types/global";
 
-import ENDPOINTS from "./ENDPOINTS";
+import ENDPOINTS, { baseURL } from "./ENDPOINTS";
 import { TApiResponse } from "./types";
 
 export function apiProducts(
@@ -21,7 +21,7 @@ export function apiProducts(
 			limit: 12,
 			...filters,
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 
@@ -32,7 +32,7 @@ export function apiProduct(_id: string | undefined) {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 
@@ -43,6 +43,32 @@ export function apiDeleteProduct(_id: string) {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
+	});
+}
+
+export function apiCreateProduct(payload: TProduct, id: string) {
+	return axios({
+		method: "POST",
+		url: ENDPOINTS.products.create,
+		headers: {
+			"Content-Type": "application/json",
+			userid: id,
+		},
+		data: payload,
+		baseURL: baseURL,
+	});
+}
+
+export function apiUpdateProduct(payload: TProduct, _id: string) {
+	return axios({
+		method: "PUT",
+		url: ENDPOINTS.places.update(payload?._id),
+		headers: {
+			"Content-Type": "application/json",
+			userid: _id,
+		},
+		baseURL: baseURL,
+		data: payload,
 	});
 }
