@@ -1,7 +1,10 @@
 import { Request, Response } from "express";
 import { Types } from "mongoose";
 
-import { complaint } from "../Database/Models/complaint.model";
+
+
+import { complaint } from "../Models/Interactions/complaint.model";
+
 
 //Creates a Complaint --Tourist Only
 export const createComplaint = async (req: Request, res: Response) => {
@@ -62,6 +65,7 @@ export const updateComplaintByAdmin = async (req: Request, res: Response) => {
 			{ state, reply, replyedBy },
 			{ new: true },
 		);
+
 		if (!updatedComplaint) {
 			return res.status(404).json({ message: "Complaint not found" });
 		}
@@ -75,7 +79,7 @@ export const updateComplaintByAdmin = async (req: Request, res: Response) => {
 //Update a Complaint --Used by Tourist --Tourist Reply Changed
 export const updateComplaintByTourist = async (req: Request, res: Response) => {
 	try {
-		const { id } = req.params;
+		const { id, createdBy } = req.params;
 		const { body, date, state } = req.body;
 
 		if (state === "resolved") {

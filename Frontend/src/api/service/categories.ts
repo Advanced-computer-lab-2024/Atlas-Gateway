@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { TCategory, TComplaint } from "@/types/global";
+import { TCategory } from "@/types/global";
 
 import ENDPOINTS from "./ENDPOINTS";
 
@@ -18,18 +18,6 @@ export function apiCreateCategory(payload: TCategory) {
 
 export function apiCategories(_id: string | undefined) {
 	return axios<TCategory[]>({
-		method: "GET",
-		url: ENDPOINTS.category.list,
-		headers: {
-			"Content-Type": "application/json",
-			userid: _id,
-		},
-		baseURL: "http://localhost:5000",
-	});
-}
-
-export function apiComplaints(_id: string | undefined) {
-	return axios<TComplaint[]>({
 		method: "GET",
 		url: ENDPOINTS.category.list,
 		headers: {

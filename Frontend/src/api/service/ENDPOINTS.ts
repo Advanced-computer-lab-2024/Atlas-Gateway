@@ -87,6 +87,13 @@ const ENDPOINTS = {
 		update: (id: string) => `api/itinerary/update/${id}`,
 		delete: (id: string) => `api/itinerary/delete/${id}`,
 	},
+	complaint: {
+		list: "api/complaint/list",
+		show: (id: string) => `api/complaint/show/${id}`,
+		create: "api/complaint/create",
+		updateByAdmin: (id: string) => `api/complaint/updatebyadmin/${id}`,
+		updateByTourist: (id: string) => `api/complaint/updatebytourist/${id}`,
+	},
 };
 
 export default ENDPOINTS;
