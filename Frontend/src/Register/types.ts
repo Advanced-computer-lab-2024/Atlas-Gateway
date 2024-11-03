@@ -13,8 +13,7 @@ export type TRegisterForm = {
 };
 
 export type TUploadForm = {
-	username: string;
-	type: string;
+	filePath: string;
 	file: File;
 };
 

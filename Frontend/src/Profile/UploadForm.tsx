@@ -11,7 +11,6 @@ import {
 	FormItem,
 	FormLabel,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import {
 	Sheet,
 	SheetClose,
@@ -38,9 +37,9 @@ const UploadForm = ({ username, type }: props) => {
 	const { handleSubmit, control } = formMethods;
 	const onSubmit = (data: z.infer<typeof uploadSchema>) => {
 		const file = data.file;
+		const filePath = `${type}/${username}`;
 		const payload = {
-			username: username || "",
-			type: type || "",
+			filePath,
 			file,
 		};
 		doUpload(payload);
@@ -48,14 +47,12 @@ const UploadForm = ({ username, type }: props) => {
 	return (
 		<Sheet>
 			<SheetTrigger asChild>
-				<Button className="align p-6 justify-center">
-					<p>Update Account</p>
-				</Button>
+				<button className="font-bold">Upload Documents</button>
 			</SheetTrigger>
 			<SheetContent>
 				<SheetHeader>
-					<SheetTitle>update</SheetTitle>
-					<SheetDescription>update name here.</SheetDescription>
+					<SheetTitle>Upload</SheetTitle>
+					<SheetDescription>upload file here.</SheetDescription>
 				</SheetHeader>
 				<FormProvider {...formMethods}>
 					<form onSubmit={handleSubmit(onSubmit)}>
@@ -64,7 +61,7 @@ const UploadForm = ({ username, type }: props) => {
 							name="file"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Upload ID</FormLabel>
+									<FormLabel>Upload file</FormLabel>
 									<FormControl>
 										<input
 											type="file"
@@ -76,7 +73,7 @@ const UploadForm = ({ username, type }: props) => {
 										/>
 									</FormControl>
 									<FormDescription>
-										Upload your ID file here.
+										Upload your file here.
 									</FormDescription>
 								</FormItem>
 							)}

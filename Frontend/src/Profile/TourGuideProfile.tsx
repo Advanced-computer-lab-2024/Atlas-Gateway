@@ -4,10 +4,11 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
-import { Camera, EllipsisVertical } from "lucide-react";
+import { Camera, Settings } from "lucide-react";
 
 import { useTourGuideProfile } from "@/api/data/useProfile";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useLoginStore } from "@/store/loginStore";
 
 import profile_background from "../assets/profile_background.jpg";
 import TourGuideSheet from "./TourGuideSheet";
@@ -15,7 +16,7 @@ import UploadForm from "./UploadForm";
 
 export default function TourGuideProfile() {
 	const { data } = useTourGuideProfile();
-	console.log(data?.type);
+	const { user } = useLoginStore();
 	return (
 		<div>
 			<div className="relative w-full">
@@ -42,21 +43,25 @@ export default function TourGuideProfile() {
 
 			<div className="flex justify-between ml-96 mt-8 pr-10">
 				<div>
-					<h1 className="text-xl">
+					<h1 className="text-2xl">
 						{data?.name || "Name not found"}
 					</h1>
-					<h2 className="text-2xl">
+					<h2 className="text-xl">
 						#{data?.username || "username not found"}
 					</h2>
 				</div>
-				<div className="mr-7">
-					<TourGuideSheet />
+				<div className="border-solid border-2 border-[rgb(44,44,44)] flex items-center mr-7 p-2 h-10">
+					{data?.isVerified && (
+						<div className="p-1">
+							<TourGuideSheet />
+						</div>
+					)}
 					<DropdownMenu>
 						<DropdownMenuTrigger>
-							<EllipsisVertical className="cursor-pointer" />
+							<Settings />
 						</DropdownMenuTrigger>
 						<DropdownMenuContent>
-							<DropdownMenuItem>dummy</DropdownMenuItem>
+							<DropdownMenuItem></DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
 				</div>
@@ -95,7 +100,7 @@ export default function TourGuideProfile() {
 						</div>
 						<UploadForm
 							username={data?.username}
-							type={data?.type}
+							type={user?.type}
 						/>
 					</TabsContent>
 					<TabsContent value="password"></TabsContent>

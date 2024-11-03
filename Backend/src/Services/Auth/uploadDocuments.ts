@@ -1,8 +1,4 @@
-import {
-	GetObjectCommand,
-	PutObjectCommand,
-	S3Client,
-} from "@aws-sdk/client-s3";
+import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 
 const s3 = new S3Client({
 	credentials: {
@@ -13,15 +9,13 @@ const s3 = new S3Client({
 });
 
 export const uploadDocuments = async (
-	username: string,
-	type: string,
+	filePath: string,
 	file: Express.Multer.File,
 ) => {
 	try {
-		const fileName = `${username}_${file?.originalname}`;
 		const params = {
 			Bucket: process.env.AWS_BUCKET_NAME!,
-			Key: `${type}/${fileName}`,
+			Key: `${filePath}_${file?.originalname}`,
 			Body: file?.buffer,
 			contentType: file?.mimetype,
 		};

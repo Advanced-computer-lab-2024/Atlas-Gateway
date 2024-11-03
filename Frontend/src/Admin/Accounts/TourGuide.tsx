@@ -1,7 +1,12 @@
 import axios from "axios";
-import { ShieldAlert, ShieldCheck } from "lucide-react";
-import { Trash } from "lucide-react";
-import { RotateCw } from "lucide-react";
+import {
+	FileUser,
+	IdCard,
+	RotateCw,
+	ShieldAlert,
+	ShieldCheck,
+	Trash,
+} from "lucide-react";
 
 import {
 	useDeleteTourGuideProfile,
@@ -25,6 +30,25 @@ const TourGuide = () => {
 	const { data, refetch } = useTourGuides();
 	// const {doEditTourGuideProfile} = useUpdateTourGuideProfile(refetch);
 	const { doDeleteTourGuideProfile } = useDeleteTourGuideProfile(refetch);
+
+	const handleDownloadId = async (username: string, type: string) => {
+		const filePath =
+			type == "id"
+				? `tour_guide/${username}_id.pdf`
+				: `tour_guide/${username}_certificate.pdf`;
+		axios
+			.post("http://localhost:5000/api/register/download", { filePath })
+			.then((res) => {
+				const link = document.createElement("a");
+				link.href = res.data;
+				document.body.appendChild(link);
+				link.click();
+				document.body.removeChild(link);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
 
 	const handleUpdate = (id: string) => {
 		axios
@@ -55,7 +79,7 @@ const TourGuide = () => {
 				<TableHeader className="bg-gray-100">
 					<TableRow>
 						{/* <TableHead>Picture</TableHead> */}
-						<TableHead>Name</TableHead>
+						{/* <TableHead>Name</TableHead> */}
 						<TableHead>Username</TableHead>
 						<TableHead>Email</TableHead>
 						{/* <TableHead>Password</TableHead> */}
@@ -63,6 +87,8 @@ const TourGuide = () => {
 						<TableHead>Experience</TableHead>
 						<TableHead>Previous Work</TableHead>
 						<TableHead>isVerified</TableHead>
+						<TableHead>ID</TableHead>
+						<TableHead>Certificates</TableHead>
 						<TableHead className="cursor-pointer hover:text-[#2b58ed] w-1">
 							<RotateCw onClick={() => refetch()} />
 						</TableHead>
@@ -74,7 +100,7 @@ const TourGuide = () => {
 							{/* <TableCell className="p-3">
 								{tourGuide?.picture || "N/A"}
 							</TableCell> */}
-							<TableCell>{tourGuide?.name}</TableCell>
+							{/* <TableCell>{tourGuide?.name}</TableCell> */}
 							<TableCell>{tourGuide.username}</TableCell>
 							<TableCell>{tourGuide.email}</TableCell>
 							{/* <TableCell>{tourGuide.password}</TableCell> */}
@@ -97,6 +123,30 @@ const TourGuide = () => {
 										<ShieldAlert className="text-red-500 w-5 h-5" />
 									</button>
 								)}
+							</TableCell>
+							<TableCell>
+								<button
+									onClick={() =>
+										handleDownloadId(
+											tourGuide.username,
+											"id",
+										)
+									}
+								>
+									<IdCard />
+								</button>
+							</TableCell>
+							<TableCell>
+								<button
+									onClick={() =>
+										handleDownloadId(
+											tourGuide.username,
+											"certificate",
+										)
+									}
+								>
+									<FileUser />
+								</button>
 							</TableCell>
 							{/* <TableCell>
 								{tourGuide.previous?.description || "N/A"}
