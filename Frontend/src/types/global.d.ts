@@ -1,5 +1,6 @@
 import { EAccountType } from "./enums";
 
+
 export type TUser = {
 	_id: string;
 	username: string;
@@ -141,6 +142,9 @@ export interface TComplaint {
 	body: string;
 	date: string;
 	state: string;
+	createdBy: TUser[];
+	reply: string;
+	replyedBy: TUser[];
 }
 
 export interface TItinerary {

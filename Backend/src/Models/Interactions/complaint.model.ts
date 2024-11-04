@@ -6,6 +6,7 @@ import { schemaConfig } from "../../Config/schemaConfig";
 
 
 interface IComplaint extends Document {
+	touristname: string;
 	title: string;
 	// type: string;
 	body: string;

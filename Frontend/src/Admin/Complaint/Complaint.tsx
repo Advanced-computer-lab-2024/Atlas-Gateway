@@ -1,4 +1,14 @@
-import { RotateCw } from "lucide-react";
+import { EllipsisVertical, Eye, RotateCw } from "lucide-react";
+
+
+
+import { useComplaints } from "@/api/data/useComplaints";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
 	Table,
 	TableBody,
@@ -8,8 +18,6 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { useComplaints } from "@/api/data/useComplaints";
-
 
 
 const Complaint = () => {
@@ -23,10 +31,11 @@ const Complaint = () => {
 					<TableCaption>Complaints from tourists.</TableCaption>
 					<TableHeader className="bg-gray-100">
 						<TableRow>
-							<TableHead>Name</TableHead>
-							<TableHead>Complaint Title</TableHead>
-							<TableHead>Complaint Date</TableHead>
-                            <TableHead>State</TableHead>
+							{/* <TableHead>Name</TableHead> */}
+							<TableHead className="p-3">Complaint Title</TableHead>
+							<TableHead className="p-3">Complaint Date</TableHead>
+                            <TableHead className="p-3">State</TableHead>
+							<TableHead></TableHead>
 							<TableHead></TableHead>
 							<TableHead className="cursor-pointer hover:text-[#2b58ed] w-1">
 								<RotateCw onClick={() => refetch()} />
@@ -34,27 +43,37 @@ const Complaint = () => {
 						</TableRow>
 					</TableHeader>
 					<TableBody>
-						{data?.map((tag) => (
-							<TableRow key={tag._id}>
-								<TableCell className="p-3">
-									{tag.touristname}
-								</TableCell>
-								<TableCell className="p-3">
-									{tag.title}
-								</TableCell>
-								<TableCell className="p-3">
-									{tag.date}
-								</TableCell>
-								<TableCell className="p-3">
-									{tag.state}
-								</TableCell>
+						{data?.map((complaint) => (
+							<TableRow key={complaint._id}>
+								{/* <TableCell>{complaint.createdBy}</TableCell> */}
+								<TableCell>{complaint.title}</TableCell>
+								<TableCell>{complaint.date}</TableCell>
+								<TableCell>{complaint.state}</TableCell>
+								<DropdownMenu modal={false} >
+										<DropdownMenuTrigger className="absolute right-0">
+											<EllipsisVertical className="cursor-pointer hover:text-[#2b58ed]" />
+										</DropdownMenuTrigger>
+												
+										<DropdownMenuContent>
+											<DropdownMenuItem
+												className="flex gap-2 cursor-pointer hover:text-[#2b58ed]"
+												onClick={() => {
+										
+												}}
+											>
+												<Eye />
+												View Details
+											</DropdownMenuItem>
+										</DropdownMenuContent>
+									</DropdownMenu>
 							</TableRow>
+							
 						))}
 					</TableBody>
+					
 				</Table>
 			</div>
 		</div>
 	);
 };
-
 export default Complaint;
