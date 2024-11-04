@@ -9,14 +9,17 @@ import { useState } from "react";
 
 import { useAdvertiserProfile } from "@/api/data/useProfile";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useLoginStore } from "@/store/loginStore";
 
 import profile_background from "../assets/profile_background.jpg";
 import AdvertiserSheet from "./AdvertiserSheet";
 import ChangePasswordSheet from "./ChangePasswordSheet";
+import UploadForm from "./UploadForm";
 
 const General = () => {
 	const { data } = useAdvertiserProfile();
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+	const { user } = useLoginStore();
 	return (
 		<div>
 			<div className="relative w-full">
@@ -50,7 +53,12 @@ const General = () => {
 						#{data?.username || "username not found"}
 					</h2>
 				</div>
-				<div className="mr-7">
+				<div className="border-solid border-2 border-[rgb(44,44,44)] flex items-center mr-7 p-2 h-10">
+					{data?.isVerified && (
+						<div className="p-1">
+							<AdvertiserSheet />
+						</div>
+					)}
 					<DropdownMenu modal={false}>
 						<DropdownMenuTrigger>
 							<Settings className="cursor-pointer" />
@@ -92,7 +100,10 @@ const General = () => {
 								{data?.description || "Description here"}
 							</h3>
 						</div>
-						<AdvertiserSheet />
+						<UploadForm
+							username={data?.username}
+							type={user?.type}
+						/>
 					</TabsContent>
 					<TabsContent value="Upcoming"></TabsContent>
 					<TabsContent value="History"></TabsContent>

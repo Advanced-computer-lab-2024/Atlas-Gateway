@@ -1,6 +1,5 @@
 import { EAccountType } from "@/types/enums";
 
-
 export type TRegisterForm = {
 	email: string;
 	password: string;
@@ -11,6 +10,11 @@ export type TRegisterForm = {
 	mobile?: string;
 	occupation?: string;
 	nationality?: string;
+};
+
+export type TUploadForm = {
+	filePath: string;
+	file: File;
 };
 
 export const accountTypeArray = [

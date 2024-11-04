@@ -1,7 +1,12 @@
 import axios from "axios";
-import { ShieldAlert, ShieldCheck } from "lucide-react";
-import { Trash } from "lucide-react";
-import { RotateCw } from "lucide-react";
+import {
+	FileUser,
+	IdCard,
+	RotateCw,
+	ShieldAlert,
+	ShieldCheck,
+	Trash,
+} from "lucide-react";
 
 import {
 	useAdvertisers,
@@ -24,6 +29,25 @@ const Advertisers = () => {
 	const { user } = useLoginStore();
 	const { data, refetch } = useAdvertisers();
 	const { doDeleteAdvertiserProfile } = useDeleteAdvertiserProfile(refetch);
+
+	const handleDownload = async (username: string, type: string) => {
+		const filePath =
+			type == "id"
+				? `advertiser/${username}_id.pdf`
+				: `advertiser/${username}_registryCard.pdf`;
+		axios
+			.post("http://localhost:5000/api/register/download", { filePath })
+			.then((res) => {
+				const link = document.createElement("a");
+				link.href = res.data;
+				document.body.appendChild(link);
+				link.click();
+				document.body.removeChild(link);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
 
 	const handleUpdate = (id: string) => {
 		axios
@@ -60,6 +84,8 @@ const Advertisers = () => {
 						<TableHead>Website</TableHead>
 						<TableHead>Description</TableHead>
 						<TableHead>isVerified</TableHead>
+						<TableHead>ID</TableHead>
+						<TableHead>registryCards</TableHead>
 						<TableHead className="cursor-pointer hover:text-[#2b58ed]">
 							<RotateCw onClick={() => refetch()} />
 						</TableHead>
@@ -97,6 +123,30 @@ const Advertisers = () => {
 										<ShieldAlert className="text-red-500 w-5 h-5" />
 									</button>
 								)}
+							</TableCell>
+							<TableCell>
+								<button
+									onClick={() =>
+										handleDownload(
+											advertiser.username,
+											"id",
+										)
+									}
+								>
+									<IdCard />
+								</button>
+							</TableCell>
+							<TableCell>
+								<button
+									onClick={() =>
+										handleDownload(
+											advertiser.username,
+											"registryCard",
+										)
+									}
+								>
+									<FileUser />
+								</button>
 							</TableCell>
 							<TableCell className="cursor-pointer hover:text-[#2b58ed] w-1">
 								<button className="bg-red-500 text-white rounded-full p-2 shadow-lg hover:bg-red-600">

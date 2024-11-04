@@ -1,9 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
+import { TUploadForm } from "@/Register/types";
 import { useLoginStore } from "@/store/loginStore";
 
-import apiRegister from "../service/register";
+import { apiRegister, apiUpload } from "../service/register";
 
 export function useRegister() {
 	const { setUser } = useLoginStore();
@@ -26,4 +27,14 @@ export function useRegister() {
 	const { mutate } = mutation;
 
 	return { doRegister: mutate, ...mutation };
+}
+
+export function useUpload() {
+	const mutation = useMutation({
+		mutationFn: (data: TUploadForm) => {
+			return apiUpload(data);
+		},
+	});
+	const { mutate } = mutation;
+	return { doUpload: mutate, ...mutation };
 }

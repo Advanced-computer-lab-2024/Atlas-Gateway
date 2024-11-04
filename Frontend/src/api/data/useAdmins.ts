@@ -26,7 +26,7 @@ export function useAdmins() {
 		// staleTime: 2 * 60 * 1000, // 2 minutes
 	});
 
-	return { data: data?.data, refetch }; // i dont understand the point of data?.data?.data
+	return { data: data?.data, refetch };
 }
 
 export function useDeleteAdmin(onSuccess: () => void) {
