@@ -1,8 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { PipelineStage, Types } from "mongoose";
 
-import { Activity } from "../../Models/Travel/activity.model";
-import AggregateBuilder from "../../Services/Operations/aggregation.service";
+import HttpError from "../../Errors/HttpError";
+import * as activityService from "../../Services/Travel/activity.service";
 
 export const createActivities = async (
 	req: Request,
@@ -13,39 +12,13 @@ export const createActivities = async (
 		const advertisorId = req.headers.userid;
 
 		if (!advertisorId) {
-			return res
-				.status(400)
-				.json({ message: "Tour Guide ID is required" });
+			throw new HttpError(400, "Tour Guide ID is required");
 		}
 
-		if (!Types.ObjectId.isValid(advertisorId.toString())) {
-			return res.status(400).json({ message: "Invalid Tour Guide ID" });
-		}
-
-		const {
-			name,
-			dateTime,
-			location,
-			tags,
-			categories,
-			minPrice,
-			maxPrice,
-			specialDiscounts,
-			isOpen,
-		} = req.body;
-		const activity = await Activity.create({
-			name,
-			dateTime,
-			location,
-			tags,
-			createdBy: new Types.ObjectId(advertisorId.toString()),
-			categories,
-			minPrice,
-			maxPrice,
-			specialDiscounts,
-			isOpen,
-		});
-
+		const activity = await activityService.createActivity(
+			req.body,
+			advertisorId.toString(),
+		);
 		res.status(201).json(activity);
 	} catch (error) {
 		next(error);
@@ -58,18 +31,14 @@ export const getActivityById = async (
 	next: NextFunction,
 ) => {
 	try {
-		const { id } = req.params;
+		const id = req.params.id;
 
-		if (!Types.ObjectId.isValid(id)) {
-			return res.status(400).send("id is required");
+		if (!id) {
+			throw new HttpError(400, "id is Required");
 		}
 
-		const activity = await Activity.findById(id)
-			.populate("tags")
-			.populate("categories");
-		if (!activity) {
-			return res.status(404).send("cant find Activity");
-		}
+		const activity = await activityService.getActivityById(id);
+
 		res.status(200).send(activity);
 	} catch (error) {
 		next(error);
@@ -89,46 +58,11 @@ export const getActivitybyUserId = async (
 				.status(400)
 				.json({ message: "Advertisor ID is required" });
 		}
-		if (!Types.ObjectId.isValid(tourGuideId.toString())) {
-			return res.status(400).json({ message: "Invalid Advertisor ID" });
-		}
 
-		const pipeline = [
-			//need to join the tags and category collections to get the name of the tags and category
-			{
-				$lookup: {
-					from: "tags",
-					localField: "tags",
-					foreignField: "_id",
-					as: "tags",
-				},
-			},
-			{
-				$lookup: {
-					from: "categories",
-					localField: "categories",
-					foreignField: "_id",
-					as: "categories",
-				},
-			},
-			{
-				$match: {
-					createdBy: new Types.ObjectId(tourGuideId.toString()),
-				},
-			},
-			...AggregateBuilder(
-				req.query,
-				["name", "tags.name", "categories.name"], // Search fields
-			),
-		];
-
-		const result = await Activity.aggregate(pipeline);
-
-		if (result[0].data.length === 0) {
-			return res
-				.status(404)
-				.json({ message: "No matching Activities Found" });
-		}
+		const result = await activityService.getActivitybyUserId(
+			tourGuideId.toString(),
+			req.body,
+		);
 
 		const response = {
 			data: result[0].data,
@@ -152,37 +86,7 @@ export const getActivities = async (
 	next: NextFunction,
 ) => {
 	try {
-		const pipeline = [
-			//need to join the tags and category collections to get the name of the tags and category
-			{
-				$lookup: {
-					from: "tags",
-					localField: "tags",
-					foreignField: "_id",
-					as: "tags",
-				},
-			},
-			{
-				$lookup: {
-					from: "categories",
-					localField: "categories",
-					foreignField: "_id",
-					as: "categories",
-				},
-			},
-			...AggregateBuilder(
-				req.query,
-				["name", "tags.name", "categories.name"], // Search fields
-			),
-		];
-
-		const result = await Activity.aggregate(pipeline);
-
-		if (result[0].data.length === 0) {
-			return res
-				.status(404)
-				.json({ message: "No matching Activities Found" });
-		}
+		const result = await activityService.getActivities(req.query);
 
 		const response = {
 			data: result[0].data,
@@ -206,17 +110,14 @@ export const updateActivityById = async (
 	next: NextFunction,
 ) => {
 	try {
-		const { id } = req.params;
+		const id = req.params.id;
 
-		if (!Types.ObjectId.isValid(id)) {
-			return res.status(400).send("id is required");
+		if (!id) {
+			throw new HttpError(400, "id is required");
 		}
-		const activity = await Activity.findById(id);
-		if (!activity) {
-			return res.status(404).send("cant find Activity");
-		}
-		activity.set(req.body);
-		await activity.save();
+
+		const activity = await activityService.updateActivity(id, req.body);
+
 		res.status(200).send(activity);
 	} catch (error) {
 		next(error);
@@ -229,15 +130,12 @@ export const deleteActivityById = async (
 	next: NextFunction,
 ) => {
 	try {
-		const { id } = req.params;
+		const id = req.params.id;
 
-		if (!Types.ObjectId.isValid(id)) {
-			return res.status(400).send("id is required");
+		if (!id) {
+			throw new HttpError(400, "id is required");
 		}
-		const activity = await Activity.findByIdAndDelete(id);
-		if (!activity) {
-			return res.status(404).send("activity not found");
-		}
+		await activityService.deleteActivity(id);
 		res.status(200).send("activity deleted successfully");
 	} catch (error) {
 		next(error);

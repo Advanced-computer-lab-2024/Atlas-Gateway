@@ -1,9 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
-import { Pencil } from "lucide-react";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
+import {
+	useCreateProduct,
+	useProducts,
+	useUpdateProduct,
+} from "@/api/data/useProducts";
 import { Button } from "@/components/ui/button";
 import {
 	FormControl,
@@ -22,7 +25,6 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from "@/components/ui/sheet";
-import { useLoginStore } from "@/store/loginStore";
 
 import { productSchema } from "../Admin/schema";
 
@@ -33,44 +35,27 @@ interface props {
 }
 
 const ProductForm = ({ id, type }: props) => {
-	const { user } = useLoginStore();
 	const formMethods = useForm<z.infer<typeof productSchema>>({
 		resolver: zodResolver(productSchema),
 	});
 	const { handleSubmit, control } = formMethods;
+	const { refetch } = useProducts();
+	const { doCreateProduct } = useCreateProduct(() => {
+		refetch();
+		formMethods.reset();
+	});
+
+	const { doUpdateProduct } = useUpdateProduct(() => {
+		refetch();
+		formMethods.reset();
+	});
 
 	const onSubmit = (data: z.infer<typeof productSchema>) => {
-		!id
-			? axios
-					.post("http://localhost:5000/api/products/create", data, {
-						headers: {
-							userid: user?._id,
-						},
-					})
-					.then((res) => {
-						console.log(res.status);
-						// will add here something to give a feedback later
-					})
-					.catch((error) => {
-						console.log(error);
-					})
-			: axios
-					.put(
-						`http://localhost:5000/api/products/update/${id}`,
-						data,
-						{
-							headers: {
-								userid: user?._id,
-							},
-						},
-					)
-					.then((res) => {
-						console.log(res.status);
-						// will add here something to give a feedback later
-					})
-					.catch((error) => {
-						console.log(error);
-					});
+		if (!id) {
+			doCreateProduct(data);
+		} else {
+			doUpdateProduct(data);
+		}
 	};
 	return (
 		<Sheet>

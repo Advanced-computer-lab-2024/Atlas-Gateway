@@ -32,9 +32,6 @@ export const getSellerById = async (id: string) => {
 
 	const seller = await Seller.findById(id);
 
-	if (!seller) {
-		throw new HttpError(404, "Seller not Found");
-	}
 	return seller;
 };
 

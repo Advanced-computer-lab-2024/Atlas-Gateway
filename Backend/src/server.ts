@@ -69,5 +69,6 @@ async function startServer() {
 	});
 }
 
-connectDB();
 startServer();
+
+connectDB();

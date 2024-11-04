@@ -3,7 +3,7 @@ import express from "express";
 import {
 	createItinerary,
 	deleteItinerary,
-	getItinerary,
+	getItineraries,
 	getItineraryById,
 	getItineraryByUserId,
 	updateItinerary,
@@ -12,7 +12,7 @@ import {
 const router = express.Router();
 
 router.post("/create", createItinerary);
-router.get("/list", getItinerary);
+router.get("/list", getItineraries);
 router.get("/listTourGuide", getItineraryByUserId);
 router.get("/show/:id", getItineraryById);
 router.put("/update/:id", updateItinerary);

@@ -6,7 +6,7 @@ export interface IGovernor extends Document {
 	username: string;
 	email: string;
 	password: string;
-	places: [Types.ObjectId];
+	places: Types.ObjectId[];
 }
 
 const governorSchema = new Schema<IGovernor>(

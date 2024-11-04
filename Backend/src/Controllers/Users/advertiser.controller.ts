@@ -38,6 +38,10 @@ export const getAdvertiser = async (
 			throw new HttpError(400, "id is required");
 		}
 		const advertiser = await advertiserService.getAdvertiserById(id);
+
+		if (!advertiser) {
+			throw new HttpError(404, "advertiser not found");
+		}
 		res.status(200).send(advertiser);
 	} catch (error) {
 		next(error);

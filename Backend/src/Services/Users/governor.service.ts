@@ -29,7 +29,14 @@ export const getGovernors = async () => {
 	return await Governor.find();
 };
 
-export const getGovernorById = async (id: string) => {};
+export const getGovernorById = async (id: string) => {
+	if (!Types.ObjectId.isValid(id)) {
+		throw new HttpError(400, "Governor ID is invalid");
+	}
+	const governor = await Governor.findById(id);
+
+	return governor;
+};
 
 export const updateGovernor = async (id: string) => {};
 

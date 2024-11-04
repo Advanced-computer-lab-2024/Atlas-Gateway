@@ -1,11 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import mongoose, { Types } from "mongoose";
-import { PipelineStage } from "mongoose";
 
-import { Product } from "../../Models/Purchases/product.model";
-import { Admin } from "../../Models/Users/admin.model";
-import { Seller } from "../../Models/Users/seller.model";
-import AggregateBuilder from "../../Services/Operations/aggregation.service";
+import HttpError from "../../Errors/HttpError";
+import * as productService from "../../Services/Purchases/product.service";
 
 //Create a new product entry
 export const createProduct = async (
@@ -17,47 +13,26 @@ export const createProduct = async (
 		const userId = req.headers.userid;
 		const { name, description, price, quantity, picture } = req.body;
 
-		//Check if the user is an admin
-
-		const sellerId =
-			userId === "123456"
-				? (
-						await Seller.findOne({
-							username: "Atlas Gateway",
-						}).select("_id")
-					)?._id
-				: new Types.ObjectId(String(userId));
-		//Check seller ID validity and existence
-
-		if (!sellerId) {
-			return res
-				.status(400)
-				.json({ message: "Atlas Gateway Seller not found" });
-		}
-
-		const seller = await Seller.findById(String(sellerId));
-
-		if (!Types.ObjectId.isValid(String(sellerId)) || !seller) {
-			return res
-				.status(400)
-				.json({ message: "Seller ID is invalid or doesn't exist" });
+		if (!userId) {
+			throw new HttpError(400, "Logged in User id is required");
 		}
 
 		if (!name || !description || !price || !quantity || !picture) {
-			return res.status(400).json({ message: "Missing Fields" });
+			throw new HttpError(
+				400,
+				"name , description, price, quantity and picture are required",
+			);
 		}
 
-		const product = new Product({
-			sellerId,
+		const product = await productService.createProduct(
+			userId.toString(),
 			name,
 			description,
 			price,
 			quantity,
 			picture,
-		});
-
-		await product.save();
-		res.status(200).send(product);
+		);
+		res.status(201).send(product);
 	} catch (error) {
 		next(error);
 	}
@@ -71,12 +46,11 @@ export const getProduct = async (
 ) => {
 	try {
 		const id = req.params.id;
-
-		if (!mongoose.Types.ObjectId.isValid(id)) {
-			return res.status(400).json({ error: "Invalid product ID" });
+		if (!id) {
+			throw new HttpError(400, "id is required");
 		}
 
-		const product = await Product.findById(id);
+		const product = await productService.getProductById(id);
 
 		if (!product) {
 			return res.status(404).json({ message: "Product not found" });
@@ -95,20 +69,12 @@ export const getProducts = async (
 	next: NextFunction,
 ) => {
 	try {
-		const PipelineStage: PipelineStage[] = [
-			...AggregateBuilder(
-				req.query,
-				["name"], // Search fields
-			),
-		];
-		const result = await Product.aggregate(PipelineStage);
-
+		const result = await productService.getProducts(req.query);
 		if (result[0].data.length === 0) {
 			return res
 				.status(404)
 				.json({ message: "No matching Products Found" });
 		}
-
 		const response = {
 			data: result[0].data,
 			metaData: {
@@ -134,14 +100,11 @@ export const updateProduct = async (
 ) => {
 	try {
 		const id = req.params.id;
-
-		if (!mongoose.Types.ObjectId.isValid(id)) {
-			return res.status(400).json({ message: "Invalid product ID" });
+		if (!id) {
+			throw new HttpError(400, "id is required");
 		}
 
-		const product = await Product.findByIdAndUpdate(id, req.body, {
-			new: true,
-		});
+		const product = await productService.updateProduct(id, req.body);
 
 		if (!product) {
 			return res.status(404).json({

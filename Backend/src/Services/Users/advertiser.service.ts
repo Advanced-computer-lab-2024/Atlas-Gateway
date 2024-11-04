@@ -33,9 +33,6 @@ export const getAdvertiserById = async (id: string) => {
 		throw new HttpError(400, "id is invalid");
 	}
 	const adv = await Advertiser.findById(id);
-	if (!adv) {
-		throw new HttpError(404, "advertiser not found");
-	}
 
 	return adv;
 };

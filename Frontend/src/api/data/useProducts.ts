@@ -1,9 +1,15 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 
 import { useLoginStore } from "@/store/loginStore";
+import { TProduct } from "@/types/global";
 
-import { apiProduct, apiProducts } from "../service/product";
+import {
+	apiCreateProduct,
+	apiProduct,
+	apiProducts,
+	apiUpdateProduct,
+} from "../service/product";
 import { useQueryString } from "./useQueryString";
 
 export function useProducts() {
@@ -30,4 +36,39 @@ export function useProduct() {
 	});
 
 	return { data: data?.data };
+}
+
+export function useCreateProduct(onSuccess: () => void) {
+	const { user } = useLoginStore();
+
+	const mutation = useMutation({
+		mutationFn: (product: TProduct) => {
+			if (!user?._id) {
+				throw new Error("User is not defined");
+			}
+			return apiCreateProduct(product, user._id);
+		},
+		onSuccess,
+	});
+
+	const { mutate } = mutation;
+
+	return { doCreateProduct: mutate, ...mutation };
+}
+
+export function useUpdateProduct(onSuccess: () => void) {
+	const { user } = useLoginStore();
+	const mutation = useMutation({
+		mutationFn: (product: TProduct) => {
+			if (!user) {
+				throw new Error("User is not defined");
+			}
+			return apiUpdateProduct(product, user._id);
+		},
+		onSuccess,
+	});
+
+	const { mutate } = mutation;
+
+	return { doUpdateProduct: mutate, ...mutation };
 }
