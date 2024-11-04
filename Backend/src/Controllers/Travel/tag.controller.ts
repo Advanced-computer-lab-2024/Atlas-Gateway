@@ -1,8 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import { Types } from "mongoose";
 
+import HttpError from "../../Errors/HttpError";
 import { Activity } from "../../Models/Travel/activity.model";
 import { Tag } from "../../Models/Travel/tag.model";
+import * as tagService from "../../Services/Travel/tag.service";
 
 //Creates a historical location tag --Tourism Governor Only
 export const createHistTag = async (
@@ -13,18 +15,11 @@ export const createHistTag = async (
 	try {
 		const { name, type } = req.body;
 
-		if (!name || !type)
-			return res
-				.status(400)
-				.json({ message: "Missing tag type or name" });
+		if (!name || !type) {
+			throw new HttpError(400, "Missing tag type or name");
+		}
 
-		const tag = new Tag({
-			name,
-			type,
-		});
-
-		await tag.save();
-
+		const tag = await tagService.createHistTag(name, type);
 		res.status(200).send(tag);
 	} catch (error) {
 		next(error);
@@ -38,8 +33,9 @@ export const getHistTags = async (
 	next: NextFunction,
 ) => {
 	try {
-		const dataset = await Tag.find({ type: { $ne: "Preference" } });
-		res.status(200).send(dataset);
+		const data = await tagService.getHistTags();
+
+		res.status(200).send(data);
 	} catch (error) {
 		next(error);
 	}
@@ -56,13 +52,8 @@ export const createPrefTag = async (
 		if (!name) {
 			return res.status(400).json({ message: "Tag name missing" });
 		}
-		const type = "Preference";
-		const tag = new Tag({
-			name,
-			type: type,
-		});
 
-		await tag.save();
+		const tag = await tagService.createPrefTag(name);
 
 		res.status(200).send(tag);
 	} catch (error) {
@@ -77,8 +68,8 @@ export const getPrefTags = async (
 	next: NextFunction,
 ) => {
 	try {
-		const dataset = await Tag.find({ type: "Preference" });
-		res.status(200).send(dataset);
+		const data = await tagService.getPrefTags();
+		res.status(200).send(data);
 	} catch (error) {
 		next(error);
 	}
@@ -94,25 +85,18 @@ export const updatePrefTag = async (
 		const id = req.params.id;
 		const { name } = req.body;
 
-		//making sure I can only update and delete preference tags
-		if (!Types.ObjectId.isValid(id)) {
-			return res.status(400).json({ message: "Invalid ID" });
+		if (!id) {
+			throw new HttpError(400, "Tag id is required");
 		}
 
 		if (!name) {
-			return res.status(400).json({ message: "Tag name missing" });
+			throw new HttpError(400, "Tag name missing");
 		}
 
-		const tag = await Tag.findOneAndUpdate(
-			{ _id: id, type: "Preference" },
-			{ name },
-			{ new: true },
-		);
+		const tag = tagService.updatePrefTag(id, name);
 
 		if (!tag) {
-			return res
-				.status(404)
-				.json({ message: "Tag not found or not a preference tag" });
+			throw new HttpError(404, "Tag not found or not a preference tag");
 		}
 
 		res.status(200).json(tag);
@@ -130,32 +114,16 @@ export const deletePreTag = async (
 	try {
 		const id = req.params.id;
 
-		//making sure I can only update and delete preference tags
-
-		if (
-			!Types.ObjectId.isValid(id) ||
-			(await Tag.find({ _id: id, type: "Preference" })).length === 0
-		) {
-			return res.status(400).json({ message: "Invalid ID" });
+		if (!id) {
+			throw new HttpError(400, "Tag id is required");
 		}
 
-		//Delete all references in activities
-		const updateSet = await Activity.updateMany(
-			{ tags: { $in: [id] } },
-			{ $pull: { tags: id } },
-		);
-
-		//Delete the ID document itself
-		const tagDoc = await Tag.findByIdAndDelete(id);
-
-		//remove references first then delete the tag cuz of dependencies (not sure how they work, but just in case it matters, validations were already made)
+		const { tag, updateSet } = await tagService.deletePreTag(id);
 
 		res.status(200).json({
 			message: "Tag deleted",
 			activities_affected: updateSet.modifiedCount,
 		});
-
-		console.log("Deleted tag: ", tagDoc);
 	} catch (error) {
 		next(error);
 	}
@@ -167,8 +135,8 @@ export const getAllTags = async (
 	next: NextFunction,
 ) => {
 	try {
-		const dataset = await Tag.find();
-		res.status(200).send(dataset);
+		const data = await tagService.getAllTags();
+		res.status(200).send(data);
 	} catch (error) {
 		next(error);
 	}
