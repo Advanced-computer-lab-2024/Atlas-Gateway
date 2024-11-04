@@ -14,7 +14,7 @@ export type TRegisterForm = {
 
 export type TUploadForm = {
 	filePath: string;
-	file: File;
+	file: File | null;
 };
 
 export const accountTypeArray = [

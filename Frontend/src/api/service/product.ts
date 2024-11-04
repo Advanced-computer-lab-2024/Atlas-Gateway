@@ -9,7 +9,7 @@ export function apiProducts(
 	_id: string | undefined,
 	filters: Record<string, string>,
 ) {
-	return axios<TApiResponse<TProduct[]>>({
+	return axios<TApiResponse<TProduct>>({
 		method: "GET",
 		url: ENDPOINTS.products.list,
 		headers: {

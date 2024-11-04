@@ -37,6 +37,11 @@ export const productSchema = z.object({
 			message: "description must be at least 10 characters long",
 		}),
 	picture: z.string(),
+	file: z
+		.instanceof(File)
+		.refine((file) => file && file.size <= 5 * 1024 * 1024, {
+			message: "File size should be less than 5MB",
+		}),
 });
 
 export const tagOrCategorySchema = z.object({

@@ -36,7 +36,7 @@ const Advertisers = () => {
 				? `advertiser/${username}_id.pdf`
 				: `advertiser/${username}_registryCard.pdf`;
 		axios
-			.post("http://localhost:5000/api/register/download", { filePath })
+			.post("http://localhost:5000/api/medial/download", { filePath })
 			.then((res) => {
 				const link = document.createElement("a");
 				link.href = res.data;

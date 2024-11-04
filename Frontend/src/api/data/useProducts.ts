@@ -38,7 +38,7 @@ export function useProduct() {
 	return { data: data?.data };
 }
 
-export function useCreateProduct(onSuccess: () => void) {
+export function useCreateProduct(onSuccess: (data: any) => void) {
 	const { user } = useLoginStore();
 
 	const mutation = useMutation({

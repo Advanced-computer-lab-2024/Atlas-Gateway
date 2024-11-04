@@ -48,7 +48,7 @@ export type TProduct = {
 	name: string;
 	description: string;
 	price: number;
-	images: string[];
+	picture: string;
 	sellerId: string;
 	avgRating: number;
 	reviews: string[];

@@ -37,7 +37,7 @@ const TourGuide = () => {
 				? `tour_guide/${username}_id.pdf`
 				: `tour_guide/${username}_certificate.pdf`;
 		axios
-			.post("http://localhost:5000/api/register/download", { filePath })
+			.post("http://localhost:5000/api/media/download", { filePath })
 			.then((res) => {
 				const link = document.createElement("a");
 				link.href = res.data;

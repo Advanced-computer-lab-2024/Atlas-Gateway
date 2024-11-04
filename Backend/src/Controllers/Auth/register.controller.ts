@@ -1,7 +1,5 @@
 import { NextFunction, Request, Response } from "express";
 
-import { downloadDocuments } from "../../Services/Auth/downloadDocuments";
-import { uploadDocuments } from "../../Services/Auth/uploadDocuments";
 import { createAdvertiser } from "../../Services/Users/advertiser.service";
 import { createGovernor } from "../../Services/Users/governor.service";
 import { createSeller } from "../../Services/Users/seller.service";
@@ -75,32 +73,5 @@ export const register = async (
 		res.status(201).send(user);
 	} catch (error) {
 		next(error);
-	}
-};
-
-export const uploadDocument = async (req: Request, res: Response) => {
-	try {
-		const file = req.file as Express.Multer.File | undefined;
-		const { filePath } = req.body;
-		if (!file) {
-			return res.status(400).send("File is required");
-		}
-		const result = await uploadDocuments(filePath, file);
-		res.status(200).send(result);
-	} catch (error) {
-		res.status(500).send(error);
-	}
-};
-
-export const downloadDocument = async (req: Request, res: Response) => {
-	try {
-		const { filePath } = req.body;
-		const result = await downloadDocuments(filePath);
-		if (result == "File not found") {
-			return res.status(404).send(result);
-		}
-		res.status(200).send(result);
-	} catch (error) {
-		res.status(500).send("File not found");
 	}
 };

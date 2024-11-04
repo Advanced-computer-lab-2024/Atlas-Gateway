@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Camera } from "lucide-react";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -47,7 +48,13 @@ const UploadForm = ({ username, type }: props) => {
 	return (
 		<Sheet>
 			<SheetTrigger asChild>
-				<button className="font-bold">Upload Documents</button>
+				<button className="font-bold">
+					{type == "product" ? (
+						<Camera className="w-full h-28" />
+					) : (
+						"Upload Documents"
+					)}
+				</button>
 			</SheetTrigger>
 			<SheetContent>
 				<SheetHeader>

@@ -31,7 +31,7 @@ const Sellers = () => {
 				? `seller/${username}_id.pdf`
 				: `seller/${username}_taxationRegisteryCard.pdf`;
 		axios
-			.post("http://localhost:5000/api/register/download", { filePath })
+			.post("http://localhost:5000/api/media/download", { filePath })
 			.then((res) => {
 				const link = document.createElement("a");
 				link.href = res.data;
