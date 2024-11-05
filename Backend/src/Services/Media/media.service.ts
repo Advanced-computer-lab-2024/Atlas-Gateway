@@ -4,6 +4,8 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import s3 from "../../Config/s3Client";
 import * as productService from "../../Services/Purchases/product.service";
 import * as advertiserService from "../../Services/Users/advertiser.service";
+import * as sellerService from "../../Services/Users/seller.service";
+import * as tourGuideService from "../../Services/Users/tourGuide.service";
 
 export const upload = async (
 	userType: string,
@@ -34,6 +36,14 @@ export const upload = async (
 				await productService.updateProduct(userId, payload);
 			case "advertiser":
 				await advertiserService.updateAdvertiser(
+					userId,
+					userId,
+					payload,
+				);
+			case "seller":
+				await sellerService.updateSeller(userId, userId, payload);
+			case "tour_guide":
+				const newGuide = await tourGuideService.updateTourGuide(
 					userId,
 					userId,
 					payload,

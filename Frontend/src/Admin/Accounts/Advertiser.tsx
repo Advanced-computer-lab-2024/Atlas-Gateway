@@ -11,7 +11,6 @@ import {
 import {
 	useAdvertisers,
 	useDeleteAdvertiserProfile,
-	useUpdateAdvertiserProfile,
 } from "@/api/data/useProfile";
 import { TAdvertiserProfileResponse } from "@/api/service/types";
 import {

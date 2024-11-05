@@ -4,7 +4,7 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
-import { Camera, Settings } from "lucide-react";
+import { Camera, Image, Settings } from "lucide-react";
 import { useState } from "react";
 
 import { useTourGuideProfile } from "@/api/data/useProfile";
@@ -38,18 +38,22 @@ export default function TourGuideProfile() {
 					</button>
 				</div>
 
-				<div className="relative">
-					<button
-						onClick={() => setIsDrawerOpen4(true)}
-						className="absolute left-36 -bottom-16 w-48 h-48 rounded-full overflow-hidden border-4 border-white focus:outline-none"
-					>
-						<img
-							src={profile_background}
-							alt="Profile"
-							className="object-cover w-full h-full"
-						/>
-					</button>
-				</div>
+				<button
+					onClick={() => setIsDrawerOpen4(true)}
+					className="absolute left-36 -bottom-16 w-48 h-48 rounded-full overflow-hidden border-4 border-white focus:outline-none group"
+				>
+					<img
+						src={profile_background}
+						alt="Profile"
+						className="object-cover w-full h-full"
+					/>
+					<div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+						<div className="flex flex-col justify-center items-center">
+							<Image className="text-white opacity-70 w-16 h-16" />
+							<p className="text-white">Change profile photo</p>
+						</div>
+					</div>
+				</button>
 			</div>
 
 			<div className="flex justify-between ml-96 mt-8 pr-10">

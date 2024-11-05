@@ -15,3 +15,11 @@ export function apiUpload(payload: TUploadForm) {
 		data: payload,
 	});
 }
+
+export function apiDownload(filePath: string) {
+	return axios<string>({
+		method: "GET",
+		url: ENDPOINTS.media.download(filePath),
+		baseURL: "http://localhost:5000",
+	});
+}

@@ -25,13 +25,9 @@ const Sellers = () => {
 	const { user } = useLoginStore();
 	const { data, refetch } = useSellers();
 	const { doDeleteSeller } = useDeleteSeller(refetch);
-	const handleDownload = async (username: string, type: string) => {
-		const filePath =
-			type == "id"
-				? `seller/${username}_id.pdf`
-				: `seller/${username}_taxationRegisteryCard.pdf`;
+	const handleDownload = async (filePath: string) => {
 		axios
-			.post("http://localhost:5000/api/media/download", { filePath })
+			.post(`http://localhost:5000/api/media/download`, { filePath })
 			.then((res) => {
 				const link = document.createElement("a");
 				link.href = res.data;
@@ -71,11 +67,8 @@ const Sellers = () => {
 				<TableCaption>Registered Sellers.</TableCaption>
 				<TableHeader className="bg-gray-100">
 					<TableRow>
-						{/* <TableHead>Picture</TableHead> */}
-						{/* <TableHead>Name</TableHead> */}
 						<TableHead>Username</TableHead>
 						<TableHead>Email</TableHead>
-						{/* <TableHead>Password</TableHead> */}
 						<TableHead>Description</TableHead>
 						<TableHead>isVerified</TableHead>
 						<TableHead>ID</TableHead>
@@ -88,13 +81,10 @@ const Sellers = () => {
 				<TableBody>
 					{data?.map((seller: TSellerProfileResponse) => (
 						<TableRow key={seller._id}>
-							{/* <TableCell>{seller?.picture || "N/A"}</TableCell> */}
-							{/* <TableCell>{seller?.name}</TableCell> */}
 							<TableCell className="p-3">
 								{seller.username}
 							</TableCell>
 							<TableCell>{seller.email}</TableCell>
-							{/* <TableCell>{seller.password}</TableCell> */}
 							<TableCell>
 								{seller?.description || "N/A"}
 							</TableCell>
@@ -112,7 +102,7 @@ const Sellers = () => {
 							<TableCell>
 								<button
 									onClick={() =>
-										handleDownload(seller.username, "id")
+										handleDownload(seller.idPath)
 									}
 								>
 									<IdCard />
@@ -121,10 +111,7 @@ const Sellers = () => {
 							<TableCell>
 								<button
 									onClick={() =>
-										handleDownload(
-											seller.username,
-											"taxationRegisteryCard",
-										)
+										handleDownload(seller.taxCardPath)
 									}
 								>
 									<FileUser />

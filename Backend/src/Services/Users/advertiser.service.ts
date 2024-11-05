@@ -51,7 +51,11 @@ export const updateAdvertiser = async (
 	const admin = await adminService.getAdminById(userId);
 	if (!admin) {
 		const advertiser = await getAdvertiserById(id);
-		if (!advertiser || !advertiser.isVerified) {
+		const overRide = true
+			? Object.keys(newAdvertiser)[0] == "idPath" ||
+				Object.keys(newAdvertiser)[0] == "taxCardPath"
+			: false;
+		if (!advertiser || (!advertiser.isVerified && !overRide)) {
 			throw new HttpError(401, "User is not Verified");
 		}
 	}

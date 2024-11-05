@@ -42,7 +42,7 @@ export const getSellers = async () => {
 export const updateSeller = async (
 	id: string,
 	userid: string,
-	newSeller: ISeller,
+	newSeller: Partial<ISeller>,
 ) => {
 	if (!Types.ObjectId.isValid(id)) {
 		throw new HttpError(400, "Id is Invalid ");
@@ -54,7 +54,11 @@ export const updateSeller = async (
 	const admin = await adminService.getAdminById(userid);
 	if (!admin) {
 		const seller = await Seller.findById(id);
-		if (!seller?.isVerified) {
+		const overRide = true
+			? Object.keys(newSeller)[0] == "idPath" ||
+				Object.keys(newSeller)[0] == "taxCardPath"
+			: false;
+		if (!seller?.isVerified && !overRide) {
 			throw new HttpError(401, "Seller is not Verified");
 		}
 	}
