@@ -9,11 +9,16 @@ export const upload = async (
 ) => {
 	try {
 		const file = req.file as Express.Multer.File | undefined;
-		const { filePath } = req.body;
+		const { userType, userId, fileType } = req.body;
 		if (!file) {
 			return res.status(400).send("File is required");
 		}
-		const result = await mediaService.upload(filePath, file);
+		const result = await mediaService.upload(
+			userType,
+			userId,
+			fileType,
+			file,
+		);
 		res.status(200).send(result);
 	} catch (error) {
 		next(error);

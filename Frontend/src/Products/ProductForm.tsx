@@ -150,24 +150,6 @@ const ProductForm = ({ id, type }: props) => {
 							)}
 						/>
 
-						<FormField
-							control={control}
-							name="picture"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Picture</FormLabel>
-									<FormControl>
-										<Input
-											{...field}
-											placeholder="Product pic"
-										/>
-									</FormControl>
-									<FormDescription>
-										upload pic.
-									</FormDescription>
-								</FormItem>
-							)}
-						/>
 						<SheetFooter>
 							<Button type="submit">Save changes</Button>
 						</SheetFooter>

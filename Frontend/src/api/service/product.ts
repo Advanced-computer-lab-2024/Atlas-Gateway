@@ -47,7 +47,7 @@ export function apiDeleteProduct(_id: string) {
 	});
 }
 
-export function apiCreateProduct(payload: TProduct, id: string) {
+export function apiCreateProduct(payload: Partial<TProduct>, id: string) {
 	return axios({
 		method: "POST",
 		url: ENDPOINTS.products.create,

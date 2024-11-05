@@ -3,7 +3,7 @@ import { Camera } from "lucide-react";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { useUpload } from "@/api/data/useRegister";
+import { useUpload } from "@/api/data/useMedia";
 import { Button } from "@/components/ui/button";
 import {
 	FormControl,
@@ -26,36 +26,39 @@ import {
 import { uploadSchema } from "./schema";
 
 interface props {
-	username?: string;
-	type?: string;
+	userType?: string;
+	userId?: string;
+	fileType: string;
+	isDrawerOpen: boolean;
+	setIsDrawerOpen: (open: boolean) => void;
 }
 
-const UploadForm = ({ username, type }: props) => {
-	const { doUpload } = useUpload();
+const UploadForm = ({
+	userType,
+	userId,
+	fileType,
+	isDrawerOpen,
+	setIsDrawerOpen,
+}: props) => {
+	const { doUpload } = useUpload(() => {
+		setIsDrawerOpen(false);
+	});
 	const formMethods = useForm<z.infer<typeof uploadSchema>>({
 		resolver: zodResolver(uploadSchema),
 	});
 	const { handleSubmit, control } = formMethods;
 	const onSubmit = (data: z.infer<typeof uploadSchema>) => {
 		const file = data.file;
-		const filePath = `${type}/${username}`;
 		const payload = {
-			filePath,
+			userType: `${userType}`,
+			userId: userId,
+			fileType: `${fileType}`,
 			file,
 		};
 		doUpload(payload);
 	};
 	return (
-		<Sheet>
-			<SheetTrigger asChild>
-				<button className="font-bold">
-					{type == "product" ? (
-						<Camera className="w-full h-28" />
-					) : (
-						"Upload Documents"
-					)}
-				</button>
-			</SheetTrigger>
+		<Sheet open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
 			<SheetContent>
 				<SheetHeader>
 					<SheetTitle>Upload</SheetTitle>

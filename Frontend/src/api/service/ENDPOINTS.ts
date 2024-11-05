@@ -27,7 +27,10 @@ const ENDPOINTS = {
 	changePassword: "/api/change-password",
 	login: "api/login",
 	register: "api/register/create",
-	upload: "api/media/upload",
+	media: {
+		upload: "api/media/upload",
+		download: "api/media/download",
+	},
 	admin: {
 		list: "api/admin/list",
 		create: "api/admin/create",

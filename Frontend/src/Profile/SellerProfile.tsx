@@ -20,6 +20,9 @@ const General = () => {
 	const { user } = useLoginStore();
 	const { data } = useSellerProfile();
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+	const [isDrawerOpen2, setIsDrawerOpen2] = useState(false);
+	const [isDrawerOpen3, setIsDrawerOpen3] = useState(false);
+	const [isDrawerOpen4, setIsDrawerOpen4] = useState(false);
 	//May needed later:
 
 	// // Function to truncate description for display
@@ -44,12 +47,17 @@ const General = () => {
 					</button>
 				</div>
 
-				<div className="absolute left-36 -bottom-16 w-48 h-48 rounded-full overflow-hidden border-4 border-white">
-					<img
-						src={profile_background}
-						alt="Profile"
-						className="object-cover w-full h-full"
-					/>
+				<div className="relative">
+					<button
+						onClick={() => setIsDrawerOpen4(true)}
+						className="absolute left-36 -bottom-16 w-48 h-48 rounded-full overflow-hidden border-4 border-white focus:outline-none"
+					>
+						<img
+							src={profile_background}
+							alt="Profile"
+							className="object-cover w-full h-full"
+						/>
+					</button>
 				</div>
 			</div>
 
@@ -81,6 +89,22 @@ const General = () => {
 							>
 								change password
 							</DropdownMenuItem>
+							<DropdownMenuItem
+								onClick={() => {
+									setIsDrawerOpen2(true);
+								}}
+								className="cursor-pointer"
+							>
+								Upload Id
+							</DropdownMenuItem>
+							<DropdownMenuItem
+								onClick={() => {
+									setIsDrawerOpen3(true);
+								}}
+								className="cursor-pointer"
+							>
+								Upload taxation card
+							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
 				</div>
@@ -106,10 +130,6 @@ const General = () => {
 								Company description:{" "}
 								{data?.description || "Description here"}
 							</h3>
-							<UploadForm
-								username={data?.username}
-								type={user?.type}
-							/>
 						</div>
 					</TabsContent>
 					<TabsContent value="password"></TabsContent>
@@ -120,6 +140,27 @@ const General = () => {
 			<ChangePasswordSheet
 				isDrawerOpen={isDrawerOpen}
 				setIsDrawerOpen={setIsDrawerOpen}
+			/>
+			<UploadForm
+				userType={user?.type}
+				userId={user?._id}
+				fileType={"image"}
+				isDrawerOpen={isDrawerOpen4}
+				setIsDrawerOpen={setIsDrawerOpen4}
+			/>
+			<UploadForm
+				userType={user?.type}
+				userId={user?._id}
+				fileType={"id"}
+				isDrawerOpen={isDrawerOpen2}
+				setIsDrawerOpen={setIsDrawerOpen2}
+			/>
+			<UploadForm
+				userType={user?.type}
+				userId={user?._id}
+				fileType={"taxCard"}
+				isDrawerOpen={isDrawerOpen3}
+				setIsDrawerOpen={setIsDrawerOpen3}
 			/>
 		</div>
 	);

@@ -17,9 +17,12 @@ import ChangePasswordSheet from "./ChangePasswordSheet";
 import UploadForm from "./UploadForm";
 
 const General = () => {
+	const { user } = useLoginStore();
 	const { data } = useAdvertiserProfile();
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-	const { user } = useLoginStore();
+	const [isDrawerOpen2, setIsDrawerOpen2] = useState(false);
+	const [isDrawerOpen3, setIsDrawerOpen3] = useState(false);
+	const [isDrawerOpen4, setIsDrawerOpen4] = useState(false);
 	return (
 		<div>
 			<div className="relative w-full">
@@ -35,12 +38,17 @@ const General = () => {
 					</button>
 				</div>
 
-				<div className="absolute left-36 -bottom-16 w-48 h-48 rounded-full overflow-hidden border-4 border-white">
-					<img
-						src={profile_background}
-						alt="Profile"
-						className="object-cover w-full h-full"
-					/>
+				<div className="relative">
+					<button
+						onClick={() => setIsDrawerOpen4(true)}
+						className="absolute left-36 -bottom-16 w-48 h-48 rounded-full overflow-hidden border-4 border-white focus:outline-none"
+					>
+						<img
+							src={profile_background}
+							alt="Profile"
+							className="object-cover w-full h-full"
+						/>
+					</button>
 				</div>
 			</div>
 
@@ -72,6 +80,22 @@ const General = () => {
 							>
 								change password
 							</DropdownMenuItem>
+							<DropdownMenuItem
+								onClick={() => {
+									setIsDrawerOpen2(true);
+								}}
+								className="cursor-pointer"
+							>
+								Upload Id
+							</DropdownMenuItem>
+							<DropdownMenuItem
+								onClick={() => {
+									setIsDrawerOpen3(true);
+								}}
+								className="cursor-pointer"
+							>
+								Upload taxation card
+							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
 				</div>
@@ -100,10 +124,6 @@ const General = () => {
 								{data?.description || "Description here"}
 							</h3>
 						</div>
-						<UploadForm
-							username={data?.username}
-							type={user?.type}
-						/>
 					</TabsContent>
 					<TabsContent value="Upcoming"></TabsContent>
 					<TabsContent value="History"></TabsContent>
@@ -112,6 +132,27 @@ const General = () => {
 			<ChangePasswordSheet
 				isDrawerOpen={isDrawerOpen}
 				setIsDrawerOpen={setIsDrawerOpen}
+			/>
+			<UploadForm
+				userType={user?.type}
+				userId={user?._id}
+				fileType={"image"}
+				isDrawerOpen={isDrawerOpen4}
+				setIsDrawerOpen={setIsDrawerOpen4}
+			/>
+			<UploadForm
+				userType={user?.type}
+				userId={user?._id}
+				fileType={"id"}
+				isDrawerOpen={isDrawerOpen2}
+				setIsDrawerOpen={setIsDrawerOpen2}
+			/>
+			<UploadForm
+				userType={user?.type}
+				userId={user?._id}
+				fileType={"taxCard"}
+				isDrawerOpen={isDrawerOpen3}
+				setIsDrawerOpen={setIsDrawerOpen3}
 			/>
 		</div>
 	);

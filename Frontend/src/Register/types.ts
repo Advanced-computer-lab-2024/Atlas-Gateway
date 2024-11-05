@@ -13,7 +13,9 @@ export type TRegisterForm = {
 };
 
 export type TUploadForm = {
-	filePath: string;
+	userType: string;
+	userId: string | undefined;
+	fileType: string;
 	file: File | null;
 };
 

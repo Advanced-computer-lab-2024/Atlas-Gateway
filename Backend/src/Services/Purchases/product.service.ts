@@ -12,7 +12,6 @@ export const createProduct = async (
 	description: string,
 	price: Number,
 	quantity: Number,
-	picture: string,
 ) => {
 	if (!Types.ObjectId.isValid(userId)) {
 		throw new HttpError(400, "User id is invalid");
@@ -34,7 +33,6 @@ export const createProduct = async (
 		description,
 		price,
 		quantity,
-		picture,
 	});
 
 	await product.save();
@@ -64,7 +62,10 @@ export const getProductById = async (id: string) => {
 	return product;
 };
 
-export const updateProduct = async (id: string, newProduct: IProduct) => {
+export const updateProduct = async (
+	id: string,
+	newProduct: Partial<IProduct>,
+) => {
 	if (!Types.ObjectId.isValid(id)) {
 		throw new HttpError(400, "Invalid product ID");
 	}

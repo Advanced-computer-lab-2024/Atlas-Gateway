@@ -40,7 +40,7 @@ export const getAdvertiserById = async (id: string) => {
 export const updateAdvertiser = async (
 	id: string,
 	userId: string,
-	newAdvertiser: IAdvertiser,
+	newAdvertiser: Partial<IAdvertiser>,
 ) => {
 	if (!Types.ObjectId.isValid(id)) {
 		throw new HttpError(400, "id is invalid");

@@ -5,8 +5,8 @@ import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { useUpload } from "@/api/data/useMedia";
 import { useCreateProduct, useProducts } from "@/api/data/useProducts";
-import { useUpload } from "@/api/data/useRegister";
 import { Button } from "@/components/ui/button";
 import {
 	FormControl,
@@ -35,16 +35,16 @@ interface props {
 }
 
 const EditForm = ({ id, type }: props) => {
-	const { refetch } = useProducts();
-	const { doUpload } = useUpload();
 	let createdProductId = "";
 	const [file, setFile] = useState<File | null>(null);
+	const { refetch } = useProducts();
+	const { doUpload } = useUpload(() => {});
 	const { doCreateProduct } = useCreateProduct((response) => {
 		createdProductId = response.data._id;
-		console.log(createdProductId);
-		const filePath = `product/${createdProductId}`;
 		const payload = {
-			filePath,
+			userType: "product",
+			userId: createdProductId,
+			fileType: "image",
 			file,
 		};
 		doUpload(payload);
@@ -56,9 +56,8 @@ const EditForm = ({ id, type }: props) => {
 	});
 	const { handleSubmit, control } = formMethods;
 	const onSubmit = (data: z.infer<typeof productSchema>) => {
-		console.log("entered");
 		if (type == "Add") {
-			setFile(data.file);
+			setFile(data.file!);
 			doCreateProduct(data);
 		} else {
 			axios
@@ -70,6 +69,7 @@ const EditForm = ({ id, type }: props) => {
 				.catch((error) => {
 					console.log(error);
 				});
+			refetch();
 		}
 	};
 	return (
@@ -90,7 +90,6 @@ const EditForm = ({ id, type }: props) => {
 						{type} product details here.
 					</SheetDescription>
 				</SheetHeader>
-
 				<FormProvider {...formMethods}>
 					<form onSubmit={handleSubmit(onSubmit)}>
 						<FormField
@@ -111,7 +110,6 @@ const EditForm = ({ id, type }: props) => {
 								</FormItem>
 							)}
 						/>
-
 						<FormField
 							control={control}
 							name="price"
@@ -131,7 +129,6 @@ const EditForm = ({ id, type }: props) => {
 								</FormItem>
 							)}
 						/>
-
 						<FormField
 							control={control}
 							name="quantity"
@@ -151,7 +148,6 @@ const EditForm = ({ id, type }: props) => {
 								</FormItem>
 							)}
 						/>
-
 						<FormField
 							control={control}
 							name="description"
@@ -170,48 +166,30 @@ const EditForm = ({ id, type }: props) => {
 								</FormItem>
 							)}
 						/>
-
-						<FormField
-							control={control}
-							name="picture"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Picture</FormLabel>
-									<FormControl>
-										<Input
-											{...field}
-											placeholder="Product pic"
-										/>
-									</FormControl>
-									<FormDescription>
-										upload pic.
-									</FormDescription>
-								</FormItem>
-							)}
-						/>
-
-						<FormField
-							control={control}
-							name="file"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Upload file</FormLabel>
-									<FormControl>
-										<input
-											type="file"
-											onChange={(e) =>
-												field.onChange(
-													e.target.files?.[0],
-												)
-											}
-										/>
-									</FormControl>
-									<FormDescription>
-										Upload your file here.
-									</FormDescription>
-								</FormItem>
-							)}
-						/>
+						{type == "Add" && (
+							<FormField
+								control={control}
+								name="file"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Upload file</FormLabel>
+										<FormControl>
+											<input
+												type="file"
+												onChange={(e) =>
+													field.onChange(
+														e.target.files?.[0],
+													)
+												}
+											/>
+										</FormControl>
+										<FormDescription>
+											Upload your file here.
+										</FormDescription>
+									</FormItem>
+								)}
+							/>
+						)}
 						<SheetFooter>
 							<SheetClose asChild>
 								<Button type="submit">Save changes</Button>

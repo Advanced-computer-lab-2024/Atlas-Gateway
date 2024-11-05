@@ -11,13 +11,13 @@ export const createProduct = async (
 ) => {
 	try {
 		const userId = req.headers.userid;
-		const { name, description, price, quantity, picture } = req.body;
+		const { name, description, price, quantity } = req.body;
 
 		if (!userId) {
 			throw new HttpError(400, "Logged in User id is required");
 		}
 
-		if (!name || !description || !price || !quantity || !picture) {
+		if (!name || !description || !price || !quantity) {
 			throw new HttpError(
 				400,
 				"name , description, price, quantity and picture are required",
@@ -30,7 +30,6 @@ export const createProduct = async (
 			description,
 			price,
 			quantity,
-			picture,
 		);
 		res.status(201).send(product);
 	} catch (error) {

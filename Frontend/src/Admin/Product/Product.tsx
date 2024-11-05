@@ -1,6 +1,5 @@
-import { RotateCw } from "lucide-react";
+import { Package, RotateCw } from "lucide-react";
 
-import UploadForm from "@/Profile/UploadForm";
 import { usePagination } from "@/api/data/usePagination";
 import { useProducts } from "@/api/data/useProducts";
 import { useQueryString } from "@/api/data/useQueryString";
@@ -79,7 +78,7 @@ const Product = () => {
 						className="relative flex flex-col p-4 bg-white shadow-lg rounded-lg"
 					>
 						<div className="w-full h-40 flex justify-center items-center bg-gray-100 rounded-md">
-							<UploadForm username={prod._id} type="product" />
+							<Package className="w-20 h-20" />
 						</div>
 						<div className="flex justify-between m-2">
 							<h2 className="text-lg font-semibold mt-2">
