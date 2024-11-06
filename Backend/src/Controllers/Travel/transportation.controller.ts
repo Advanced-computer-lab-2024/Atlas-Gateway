@@ -4,7 +4,7 @@ import mongoose, { PipelineStage, Types } from "mongoose";
 import { Transportation } from "../../Models/Travel/transportation.model";
 import AggregateBuilder from "../../Services/Operations/aggregation.service";
 import { Tourist } from "@/Models/Users/tourist.model";
-import { addBookedTransportation } from "@/Services/Users/tourist.service";
+import { addBookedTransportation, cancelTransportation } from "@/Services/Users/tourist.service";
 
 //Create a new product entry
 export const createTransportation = async (
@@ -168,4 +168,90 @@ export const deleteTransportation = async (req: Request, res: Response) => {
     } catch (error) {
         res.status(500).send("Error deleting Transportation");
     }
+};
+
+export const bookTransportation = async (req: Request, res: Response) => {
+	try {
+		const transportationId = req.params.transportationId;
+		const touristId = req.headers.userId;
+
+		if (!touristId) {
+			return res.status(400).json({ message: "User ID is required" });
+		}
+
+		if (!transportationId) {
+			return res.status(400).json({ message: "Transportation ID is required" });
+		}
+
+		if (!Types.ObjectId.isValid(transportationId)) {
+			return res.status(400).json({ message: "Invalid Transportation ID" });
+		}
+
+		const transportation = await Transportation.findById(transportationId);
+
+		if (!transportation) {
+			return res.status(404).json({ message: "Transportation not found" });
+		}
+
+		const tourist = await Tourist.findById(touristId);
+
+		if (!tourist) {
+			return res.status(404).json({ message: "Tourist not found" });
+		}
+
+		const bookingResult = bookTransportation(transportation.id, tourist.id);
+
+		const addBookingResult = addBookedTransportation(tourist.id, transportation.id);
+
+		if (!(bookingResult || addBookingResult)) {
+			return res.status(400).json({ message: "Cannot book Transportation" });
+		}
+
+		return res.status(201).json({ message: "Transportation booked successfully" });
+	} catch (error) {
+		return res.status(500).json({ message: "Error booking Transportation" });
+	}
+};
+
+export const cancelBookingTransportation = async (req: Request, res: Response) => {
+	try {
+		const transportationId = req.params.transportationId;
+		const touristId = req.headers.userId;
+
+		if (!touristId) {
+			return res.status(400).json({ message: "User ID is required" });
+		}
+
+		if (!transportationId) {
+			return res.status(400).json({ message: "Transportation ID is required" });
+		}
+
+		if (!Types.ObjectId.isValid(transportationId)) {
+			return res.status(400).json({ message: "Invalid Transportation ID" });
+		}
+
+		const transportation = await Transportation.findById(transportationId);
+
+		if (!transportation) {
+			return res.status(404).json({ message: "Transportation not found" });
+		}
+
+		const tourist = await Tourist.findById(touristId);
+
+		if (!tourist) {
+			return res.status(404).json({ message: "Tourist not found" });
+		}
+
+		const cancelBookingResult = cancelBookingTransportation(transportation.id, tourist.id);
+
+		const removeBookingResult = cancelTransportation(tourist.id, transportation.id);
+
+		if (!(cancelBookingResult || removeBookingResult)) {
+			return res.status(400).json({ message: "Cannot book Transportation" });
+		}
+
+		return res.status(201).json({ message: "Transportation booked successfully" });
+	} catch (error) {
+		return res.status(500).json({ message: "Error booking Transportation" });
+	}
 };

@@ -5,6 +5,7 @@ import * as activityService from "../../Services/Travel/activity.service";
 import { addBookedActivity, cancelActivity } from "@/Services/Users/tourist.service";
 import { Activity } from "@/Models/Travel/activity.model";
 import { Types } from "mongoose";
+import { Tourist } from "@/Models/Users/tourist.model";
 
 export const createActivities = async (
 	req: Request,
@@ -154,24 +155,33 @@ export const bookActivity = async (req: Request, res: Response) => {
 			return res.status(400).json({ message: "User ID is required" });
 		}
 
+		if (!activityId) {
+			return res.status(400).json({ message: "Activity ID is required" });
+		}
+
 		if (!Types.ObjectId.isValid(activityId)) {
 			return res.status(400).json({ message: "Invalid Activity ID" });
 		}
 
 		const activity = await Activity.findById(activityId);
+
 		if (!activity) {
 			return res.status(404).json({ message: "Activity not found" });
 		}
 
-		const tId = touristId.toString();
-
-		const tourist = await addBookedActivity(tId, activity.id);
+		const tourist = await Tourist.findById(touristId);
 
 		if (!tourist) {
-			return res.status(500).json({ message: "Error booking Activity" });
+			return res.status(404).json({ message: "Tourist not found" });
 		}
 
-		
+		const bookingResult = bookActivity(activity.id, tourist.id);
+
+		const addBookingResult = addBookedActivity(tourist.id, activity.id);
+
+		if (!(bookingResult || addBookingResult)) {
+			return res.status(400).json({ message: "Cannot book Activity" });
+		}
 
 		return res.status(201).json({ message: "Activity booked successfully" });
 	} catch (error) {
@@ -182,10 +192,14 @@ export const bookActivity = async (req: Request, res: Response) => {
 export const cancelBookingActivity = async (req: Request, res: Response) => {
 	try {
 		const activityId = req.params.activityId;
-		const touristId = req.headers.touristId;
+		const touristId = req.headers.userId;
 
 		if (!touristId) {
 			return res.status(400).json({ message: "User ID is required" });
+		}
+
+		if (!activityId) {
+			return res.status(400).json({ message: "Activity ID is required" });
 		}
 
 		if (!Types.ObjectId.isValid(activityId)) {
@@ -193,32 +207,27 @@ export const cancelBookingActivity = async (req: Request, res: Response) => {
 		}
 
 		const activity = await Activity.findById(activityId);
+
 		if (!activity) {
 			return res.status(404).json({ message: "Activity not found" });
 		}
 
-		const tId = touristId.toString();
+		const tourist = await Tourist.findById(touristId);
 
-		const currentDate = new Date();
-		const millisecondsBeforeActivity = activity.dateTime.getTime() - currentDate.getTime();
-		const hoursBeforeActivity = millisecondsBeforeActivity / (1000 * 3600);
-
-		if (hoursBeforeActivity >= 48) {
-			
-			const tourist = await cancelActivity(tId, activity.id);
-
-			if (!tourist) {
-				return res.status(505).send("Tourist didn't book this activity");
-			}
-
-			activity.numberOfBookings--;
-
-			await activity.save();
-
-			return res.status(200).send("Booking canceled successfully");
+		if (!tourist) {
+			return res.status(404).json({ message: "Tourist not found" });
 		}
-		return res.status(505).send("Cannot cancel this Booking");
+
+		const cancelBookingResult = cancelBookingActivity(activity.id, tourist.id);
+
+		const removeBookingResult = cancelActivity(tourist.id, activity.id);
+
+		if (!(cancelBookingResult || removeBookingResult)) {
+			return res.status(400).json({ message: "Cannot book Activity" });
+		}
+
+		return res.status(201).json({ message: "Activity booked successfully" });
 	} catch (error) {
-		return res.status(505).send("Error canceling this Booking");
+		return res.status(500).json({ message: "Error booking Activity" });
 	}
 };
