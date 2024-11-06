@@ -81,131 +81,117 @@ function isOlderThan18(dob: Date): boolean {
 	}
 
 	return age >= 18;
-}
-
-export const addBookedActivity = async (
-	touristId: string,
-	activityId: Object,
-) => {
-	try {
-		if (!Types.ObjectId.isValid(touristId)) {
-			throw new HttpError(400, "Tourist id is not valid");
-		}
-
-		const tourist = await Tourist.findById(touristId);
-		if (!tourist) {
-			throw new HttpError(404, "Tourist not found");
-		}
-
-		if (!isOlderThan18(tourist.dob)) {
-			throw new HttpError(400, "Tourist must be older than 18");
-		}
-
-		const activity = await Activity.findById(activityId);
-		if (!activity) {
-			throw new HttpError(404, "Activity not found");
-		}
-
-		tourist.bookedActivities.push(activity.id);
-
-		await tourist.save();
-
-		return tourist;
-	} catch (error) {
-		if (error instanceof HttpError) {
-			throw error;
-		} else {
-			console.error("Unexpected error in addBookedActivity:", error);
-			throw new HttpError(
-				500,
-				"An unexpected error occurred while adding booked activity",
-			);
-		}
-	}
 };
 
-export const addBookedItinerary = async (
-	touristId: string,
-	itineraryId: string,
-) => {
+export const addBookedActivity = async (touristId: string, activityId: Object) => {
 	try {
-		if (!Types.ObjectId.isValid(touristId)) {
-			throw new HttpError(400, "Tourist id is not valid");
-		}
-
-		const tourist = await Tourist.findById(touristId);
-		if (!tourist) {
-			throw new HttpError(404, "Tourist not found");
-		}
-
-		if (!isOlderThan18(tourist.dob)) {
-			throw new HttpError(400, "Tourist must be older than 18");
-		}
-
-		const itinerary = await Itinerary.findById(itineraryId);
-		if (!itinerary) {
-			throw new HttpError(404, "Itinerary not found");
-		}
-
-		tourist.bookedItineraries.push(itinerary.id);
-		await tourist.save();
-
-		return tourist;
+	  if (!Types.ObjectId.isValid(touristId)) {
+		throw new HttpError(400, "Tourist id is not valid");
+	  }
+  
+	  const tourist = await Tourist.findById(touristId);
+	  if (!tourist) {
+		throw new HttpError(404, "Tourist not found");
+	  }
+  
+	  if (!isOlderThan18(tourist.dob)) {
+		throw new HttpError(400, "Tourist must be older than 18");
+	  }
+  
+	  const activity = await Activity.findById(activityId);
+	  if (!activity) {
+		throw new HttpError(404, "Activity not found");
+	  }
+  
+	  tourist.bookedActivities.push(activity.id);
+  
+	  await tourist.save();
+  
+	  return tourist;
+  
 	} catch (error) {
-		if (error instanceof HttpError) {
-			throw error;
-		} else {
-			console.error("Unexpected error in addBookedItinerary:", error);
-			throw new HttpError(
-				500,
-				"An unexpected error occurred while adding booked itinerary",
-			);
-		}
+	  if (error instanceof HttpError) {
+		throw error;
+	  } else {
+		console.error("Unexpected error in addBookedActivity:", error);
+		throw new HttpError(500, "An unexpected error occurred while adding booked activity");
+	  }
 	}
-};
-
-export const addBookedTransportation = async (
-	touristId: string,
-	transportationId: string,
-) => {
+  };
+  
+  export const addBookedItinerary = async (touristId: string, itineraryId: string) => {
 	try {
-		if (!Types.ObjectId.isValid(touristId)) {
-			throw new HttpError(400, "Tourist id is not valid");
-		}
-
-		const tourist = await Tourist.findById(touristId);
-		if (!tourist) {
-			throw new HttpError(404, "Tourist not found");
-		}
-
-		if (!isOlderThan18(tourist.dob)) {
-			throw new HttpError(400, "Tourist must be older than 18");
-		}
-
-		const transportation = await Transportation.findById(transportationId);
-		if (!transportation) {
-			throw new HttpError(404, "Transportation not found");
-		}
-
-		tourist.bookedTransportations.push(transportation.id);
-
-		await tourist.save();
-
-		return tourist;
+	  if (!Types.ObjectId.isValid(touristId)) {
+		throw new HttpError(400, "Tourist id is not valid");
+	  }
+  
+	  const tourist = await Tourist.findById(touristId);
+	  if (!tourist) {
+		throw new HttpError(404, "Tourist not found");
+	  }
+  
+	  if (!isOlderThan18(tourist.dob)) {
+		throw new HttpError(400, "Tourist must be older than 18");
+	  }
+  
+	  const itinerary = await Itinerary.findById(itineraryId);
+	  if (!itinerary) {
+		throw new HttpError(404, "Itinerary not found");
+	  }
+  
+	  tourist.bookedItineraries.push(itinerary.id);
+  	  await tourist.save();
+  
+	  return tourist;
+  
 	} catch (error) {
-		if (error instanceof HttpError) {
-			throw error;
-		} else {
-			console.error("Unexpected error:", error);
-			throw new HttpError(500, "An unexpected error occurred");
-		}
+	  if (error instanceof HttpError) {
+		throw error;
+	  } else {
+		console.error("Unexpected error in addBookedItinerary:", error);
+		throw new HttpError(500, "An unexpected error occurred while adding booked itinerary");
+	  }
 	}
-};
+  };  
 
-export const cancelItinerary = async (
-	touristId: string,
-	itineraryId: string,
-) => {
+export const addBookedTransportation = async (touristId: string, transportationId: string) => {
+	try {
+	  if (!Types.ObjectId.isValid(touristId)) {
+		throw new HttpError(400, "Tourist id is not valid");
+	  }
+  
+	  const tourist = await Tourist.findById(touristId);
+	  if (!tourist) {
+		throw new HttpError(404, "Tourist not found");
+	  }
+  
+	  if (!isOlderThan18(tourist.dob)) {
+		throw new HttpError(400, "Tourist must be older than 18");
+	  }
+  
+	  const transportation = await Transportation.findById(transportationId);
+	  if (!transportation) {
+		throw new HttpError(404, "Transportation not found");
+	  }
+  
+	  tourist.bookedTransportations.push(transportation.id);
+  
+	  await tourist.save();
+  
+	  return tourist;
+  
+	} catch (error) {
+	  if (error instanceof HttpError) {
+		throw error;
+	  } else {
+		console.error("Unexpected error:", error);
+		throw new HttpError(500, "An unexpected error occurred");
+	  }
+	}
+  };  
+
+export const cancelItinerary = async (touristId: string, itineraryId: string) => {
+
 	if (!Types.ObjectId.isValid(touristId)) {
 		throw new HttpError(400, "Tourist id is not valid");
 	}
@@ -313,4 +299,3 @@ export const cancelTransportation = async (
 	return tourist;
 };
 
-export const getTouristsByUsername = async (username: string) => {};

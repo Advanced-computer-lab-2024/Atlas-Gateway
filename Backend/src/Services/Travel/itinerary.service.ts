@@ -178,105 +178,91 @@ export const deleteItinerary = async (id: string) => {
 
 export const bookItinerary = async (itineraryId: string, touristId: string) => {
 	try {
-		const itinerary = await Itinerary.findById(itineraryId);
-		if (!itinerary) {
-			throw new HttpError(404, "Itinerary not found");
-		}
-
-		if (itinerary.availability <= itinerary.numberOfBookings) {
-			throw new HttpError(500, "Itinerary is fully booked");
-		}
-
-		const tourist = await Tourist.findById(touristId);
-		if (!tourist) {
-			throw new HttpError(404, "Tourist not found");
-		}
-
-		itinerary.tourists.push(tourist.id);
-
-		itinerary.numberOfBookings++;
-
-		const result = await itinerary.save();
-		return result;
+	  const itinerary = await Itinerary.findById(itineraryId);
+	  if (!itinerary) {
+		throw new HttpError(404, "Itinerary not found");
+	  }
+  
+	  if (itinerary.availability <= itinerary.numberOfBookings) {
+		throw new HttpError(500, "Itinerary is fully booked");
+	  }
+  
+	  const tourist = await Tourist.findById(touristId);
+	  if (!tourist) {
+		throw new HttpError(404, "Tourist not found");
+	  }
+  
+	  itinerary.tourists.push(tourist.id);
+  
+	  itinerary.numberOfBookings++;
+  
+	  const result = await itinerary.save();
+	  return result;
+  
 	} catch (error) {
-		if (error instanceof HttpError) {
-			throw error;
-		} else {
-			console.error("Unexpected error in bookItinerary:", error);
-			throw new HttpError(
-				500,
-				"An unexpected error occurred while booking the itinerary",
-			);
-		}
+	  if (error instanceof HttpError) {
+		throw error;
+	  } else {
+		console.error("Unexpected error in bookItinerary:", error);
+		throw new HttpError(500, "An unexpected error occurred while booking the itinerary");
+	  }
 	}
-};
-
-export const cancelBookingItinerary = async (
-	itineraryId: string,
-	touristId: string,
-) => {
+  };
+  
+  export const cancelBookingItinerary = async (itineraryId: string, touristId: string) => {
 	try {
-		const itinerary = await Itinerary.findById(itineraryId);
-		if (!itinerary) {
-			throw new HttpError(404, "Itinerary not found");
-		}
-
-		const currentDate = new Date();
-		const millisecondsBeforeItinerary =
-			itinerary.startDateTime.getTime() - currentDate.getTime();
-		const hoursBeforeItinerary =
-			millisecondsBeforeItinerary / (1000 * 3600);
-		if (hoursBeforeItinerary < 48) {
-			throw new HttpError(
-				400,
-				"Cannot cancel within 48 hours of itinerary.",
-			);
-		}
-
-		const tourist = await Tourist.findById(touristId);
-		if (!tourist) {
-			throw new HttpError(404, "Tourist not found");
-		}
-
-		if (!itinerary.tourists.includes(tourist.id)) {
-			throw new HttpError(
-				404,
-				"Itinerary not found in the tourist's list",
-			);
-		}
-
-		const removed = await itinerary.updateOne({
-			$pull: { tourists: touristId },
-		});
-
-		if (removed.modifiedCount === 0) {
-			throw new HttpError(404, "Failed to cancel itinerary booking");
-		}
-
-		let touristResult;
-		try {
-			touristResult = await cancelItinerary(touristId, itinerary.id);
-		} catch (error) {
-			throw new HttpError(500, "Failed to cancel tourist booking.");
-		}
-
-		if (!touristResult) {
-			throw new HttpError(404, "Tourist not found in the system");
-		}
-
-		itinerary.numberOfBookings--;
-
-		const result = await itinerary.save();
-		return result;
+	  const itinerary = await Itinerary.findById(itineraryId);
+	  if (!itinerary) {
+		throw new HttpError(404, "Itinerary not found");
+	  }
+  
+	  const currentDate = new Date();
+	  const millisecondsBeforeItinerary = itinerary.startDateTime.getTime() - currentDate.getTime();
+	  const hoursBeforeItinerary = millisecondsBeforeItinerary / (1000 * 3600);
+	  if (hoursBeforeItinerary < 48) {
+		throw new HttpError(400, "Cannot cancel within 48 hours of itinerary.");
+	  }
+  
+	  const tourist = await Tourist.findById(touristId);
+	  if (!tourist) {
+		throw new HttpError(404, "Tourist not found");
+	  }
+  
+	  if (!itinerary.tourists.includes(tourist.id)) {
+		throw new HttpError(404, "Itinerary not found in the tourist's list");
+	  }
+  
+	  const removed = await itinerary.updateOne({
+		$pull: { tourists: touristId }
+	  });
+  
+	  if (removed.modifiedCount === 0) {
+		throw new HttpError(404, "Failed to cancel itinerary booking");
+	  }
+  
+	  let touristResult;
+	  try {
+		touristResult = await cancelItinerary(touristId, itinerary.id);
+	  } catch (error) {
+		throw new HttpError(500, "Failed to cancel tourist booking.");
+	  }
+  
+	  if (!touristResult) {
+		throw new HttpError(404, "Tourist not found in the system");
+	  }
+  
+	  itinerary.numberOfBookings--;
+  
+	  const result = await itinerary.save();
+	  return result;
+  
 	} catch (error) {
-		if (error instanceof HttpError) {
-			throw error;
-		} else {
-			console.error("Unexpected error in cancelBookingItinerary:", error);
-			throw new HttpError(
-				500,
-				"An unexpected error occurred while canceling the itinerary booking",
-			);
-		}
+	  if (error instanceof HttpError) {
+		throw error;
+	  } else {
+		console.error("Unexpected error in cancelBookingItinerary:", error);
+		throw new HttpError(500, "An unexpected error occurred while canceling the itinerary booking");
+	  }
 	}
-};
+  };
+ 

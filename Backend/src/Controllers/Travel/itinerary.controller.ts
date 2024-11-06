@@ -5,10 +5,10 @@ import HttpError from "../../Errors/HttpError";
 import { Itinerary } from "../../Models/Travel/itinerary.model";
 import { Tourist } from "../../Models/Users/tourist.model";
 import * as itineraryService from "../../Services/Travel/itinerary.service";
-import {
-	addBookedItinerary,
-	cancelItinerary,
-} from "../../Services/Users/tourist.service";
+import { Types } from "mongoose";
+import { Itinerary } from "@/Models/Travel/itinerary.model";
+import { Tourist } from "@/Models/Users/tourist.model";
+import { addBookedItinerary, cancelItinerary } from "@/Services/Users/tourist.service";
 
 export const createItinerary = async (
 	req: Request,
@@ -165,9 +165,7 @@ export const bookItinerary = async (req: Request, res: Response) => {
 		}
 
 		if (!itineraryId) {
-			return res
-				.status(400)
-				.json({ message: "Itinerary ID is required" });
+			return res.status(400).json({ message: "Itinerary ID is required" });
 		}
 
 		if (!Types.ObjectId.isValid(itineraryId)) {
@@ -194,9 +192,7 @@ export const bookItinerary = async (req: Request, res: Response) => {
 			return res.status(400).json({ message: "Cannot book Itinerary" });
 		}
 
-		return res
-			.status(201)
-			.json({ message: "Itinerary booked successfully" });
+		return res.status(201).json({ message: "Itinerary booked successfully" });
 	} catch (error) {
 		return res.status(500).json({ message: "Error booking Itinerary" });
 	}
@@ -212,9 +208,7 @@ export const cancelBookingItinerary = async (req: Request, res: Response) => {
 		}
 
 		if (!itineraryId) {
-			return res
-				.status(400)
-				.json({ message: "Itinerary ID is required" });
+			return res.status(400).json({ message: "Itinerary ID is required" });
 		}
 
 		if (!Types.ObjectId.isValid(itineraryId)) {
@@ -233,10 +227,7 @@ export const cancelBookingItinerary = async (req: Request, res: Response) => {
 			return res.status(404).json({ message: "Tourist not found" });
 		}
 
-		const cancelBookingResult = cancelBookingItinerary(
-			itinerary.id,
-			tourist.id,
-		);
+		const cancelBookingResult = cancelBookingItinerary(itinerary.id, tourist.id);
 
 		const removeBookingResult = cancelItinerary(tourist.id, itinerary.id);
 
@@ -244,9 +235,7 @@ export const cancelBookingItinerary = async (req: Request, res: Response) => {
 			return res.status(400).json({ message: "Cannot book Itinerary" });
 		}
 
-		return res
-			.status(201)
-			.json({ message: "Itinerary booked successfully" });
+		return res.status(201).json({ message: "Itinerary booked successfully" });
 	} catch (error) {
 		return res.status(500).json({ message: "Error booking Itinerary" });
 	}
