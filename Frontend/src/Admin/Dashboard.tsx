@@ -11,6 +11,7 @@ import Tags from "./Activity/Tags";
 import Navbar from "./Navbar";
 import Product from "./Product/Product";
 import Sidebar from "./Sidebar";
+import Complaint from "./Complaint/Complaint";
 
 const Admin = () => {
 	const [selectedCategory, setSelectedCategory] = useState(""); // manages selection from sidebar
@@ -28,6 +29,9 @@ const Admin = () => {
 				break;
 			case "Tags":
 				setSelectedItem("Preference Tags");
+				break;
+			case "Complaints":
+				setSelectedItem("Tourist Complaints");
 				break;
 		}
 	}, [selectedCategory]);
@@ -56,6 +60,8 @@ const Admin = () => {
 			if (selectedItem === "Activity Category") return <Category />;
 		} else if (selectedCategory === "Tags") {
 			if (selectedItem === "Preference Tags") return <Tags />;
+		}else if (selectedCategory === "Complaints") {
+			if (selectedItem === "Tourist Complaints") return <Complaint />;
 		}
 		return null;
 	};

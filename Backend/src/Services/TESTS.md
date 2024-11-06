@@ -2,11 +2,11 @@
 
 Assumptions:
 
--   You have a well-structured MongoDB database with collections for Activity, Product, Itinerary, Tag, and Category.
+- You have a well-structured MongoDB database with collections for Activity, Product, Itinerary, Tag, and Category.
 
--   The search function from the previous response is implemented and accessible.
+- The search function from the previous response is implemented and accessible.
 
--   You have test data populated in your database.
+- You have test data populated in your database.
 
 1. Search for specific museum/historical place/activity/itinerary by its name or category or tag
 
