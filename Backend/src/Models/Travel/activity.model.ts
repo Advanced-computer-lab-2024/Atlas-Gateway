@@ -21,13 +21,8 @@ export interface IActivity extends Document {
 	};
 	avgRating: number;
 	totalNumberOfRatings: number;
-	tourists: {
-		touristId: Types.ObjectId;
-		name: string;
-		mobile: string;
-		currency?: string;
-		walletBalance: number;
-	}[];	
+	tourists: Types.ObjectId[];
+	numberOfBookings: number;
 }
 
 const activitySchema = new Schema<IActivity>(
@@ -66,15 +61,8 @@ const activitySchema = new Schema<IActivity>(
 		},
 		avgRating: { type: Number, min: 0, max: 5, default: 0 },
 		totalNumberOfRatings: { type: Number, default: 0 },
-		tourists: [
-			{
-				touristId: { type: Schema.Types.ObjectId, ref: "Tourist" },
-				name: { type: String, required: true },
-				mobile: { type: String, required: true },
-				currency: { type: String, required: true },
-				walletBalance: { type: Number, required: true },
-			},
-		],		
+		tourists: [{ type: Schema.Types.ObjectId, ref: 'Tourist' }],
+		numberOfBookings: { type: Number, required: true},
 	},
 	schemaConfig,
 );

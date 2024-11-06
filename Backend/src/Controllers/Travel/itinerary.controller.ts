@@ -4,6 +4,7 @@ import mongoose, { PipelineStage, Types } from "mongoose";
 import { Itinerary } from "../../Models/Travel/itinerary.model";
 import AggregateBuilder from "../../Services/Operations/aggregation.service";
 import { Tourist } from "@/Models/Users/tourist.model";
+import { addBookedItinerary, cancelItinerary } from "@/Services/Users/tourist.service";
 
 //Create a new product entry
 export const createItinerary = async (
@@ -93,7 +94,7 @@ export const getItineraryByUserId = async (req: Request, res: Response) => {
 				total: result[0]?.total[0]?.count,
 				pages: Math.ceil(
 					(result[0]?.total[0]?.count ?? 0) /
-						(Number(req?.query?.limit) || 10),
+					(Number(req?.query?.limit) || 10),
 				),
 			},
 		};
@@ -126,7 +127,7 @@ export const getItinerary = async (req: Request, res: Response) => {
 				total: result[0]?.total[0]?.count,
 				pages: Math.ceil(
 					(result[0]?.total[0]?.count ?? 0) /
-						(Number(req?.query?.limit) || 10),
+					(Number(req?.query?.limit) || 10),
 				),
 			},
 		};
@@ -156,65 +157,14 @@ export const updateItinerary = async (req: Request, res: Response) => {
 	}
 };
 
-export const bookItinerary = async (req: Request, res: Response) => {
-    try {
-        const itineraryId = req.params.itineraryId;
-        const touristId = req.params.touristId;
-
-        if (!Types.ObjectId.isValid(itineraryId)) {
-            return res.status(400).json({ message: "Invalid Itinerary ID" });
-        }
-
-        const itinerary = await Itinerary.findById(itineraryId);
-        if (!itinerary) {
-            return res.status(404).json({ message: "Itinerary not found" });
-        }
-
-        if (!Types.ObjectId.isValid(touristId)) {
-            return res.status(400).json({ message: "Invalid Tourist ID" });
-        }
-
-        const tourist = await Tourist.findById(touristId);
-        if (!tourist) {
-            return res.status(404).json({ message: "Tourist not found" });
-        }
-
-        if (itinerary.availability <= 0) {
-            return res.status(400).json({ message: "No available slots for this itinerary" });
-        }
-
-        itinerary.numberOfBookings += 1;
-        itinerary.availability -= 1;
-
-        itinerary.tourists.push({
-            touristId: tourist.id,
-            name: tourist.name,
-            mobile: tourist.mobile,
-            currency: tourist.currency,
-            walletBalance: tourist.walletBalance,
-        });
-
-		tourist.bookedItinerary.push(itinerary.id);
-
-		await tourist.save();
-        await itinerary.save();
-
-        return res.status(200).json({ message: "Itinerary booked successfully"});
-    }
-    catch (error) {
-        console.log(error);
-        res.status(500).send("Error booking Itinerary");
-    }
-};
-
-export const cancelBookingItinerary = async (
-	req: Request,
-	res: Response,
-	next: NextFunction,
-) => {
+export const bookitinerary = async (req: Request, res: Response) => {
 	try {
-		const itineraryId = req.params.ItineraryId;
-		const touristId = req.params.touristId;
+		const itineraryId = req.params.itineraryId;
+		const touristId = req.headers.userId;
+
+		if (!touristId) {
+			return res.status(400).json({ message: "User ID is required" });
+		}
 
 		if (!Types.ObjectId.isValid(itineraryId)) {
 			return res.status(400).json({ message: "Invalid Itinerary ID" });
@@ -225,32 +175,70 @@ export const cancelBookingItinerary = async (
 			return res.status(404).json({ message: "Itinerary not found" });
 		}
 
-		if (!Types.ObjectId.isValid(touristId)) {
-			return res.status(400).json({ message: "Invalid Tourist ID" });
+		if (itinerary.numberOfBookings < itinerary.availability) {
+			const tId = touristId.toString();
+			const tourist = await addBookedItinerary(tId, itinerary.id);
+
+			if (!tourist) {
+				return res.status(500).json({ message: "Error booking Activity" });
+			}
+
+			itinerary.tourists.push(tourist.id);
+
+			itinerary.numberOfBookings++;
+
+			await itinerary.save();
+
+			return res.status(201).json({ message: "Itinerary booked successfully" });
+		}
+		return res.status(505).json({ message: "Can't book. Itinerary is fully booked" });
+	} catch (error) {
+		console.log(error);
+		return res.status(500).json({ message: "Error booking itinerary" });
+	}
+};
+
+export const cancelBookingItinerary = async (req: Request, res: Response) => {
+	try {
+		const itineraryId = req.params.itineraryId;
+		const touristId = req.headers.touristId;
+
+		if (!touristId) {
+			return res.status(400).json({ message: "User ID is required" });
 		}
 
-		const tourist = await Tourist.findById(touristId);
-		if (!tourist) {
-			return res.status(404).json({ message: "Tourist not found" });
+		if (!Types.ObjectId.isValid(itineraryId)) {
+			return res.status(400).json({ message: "Invalid Itinerary ID" });
 		}
 
-		const currentDate = new Date();		
+		const itinerary = await Itinerary.findById(itineraryId);
+		if (!itinerary) {
+			return res.status(404).json({ message: "Itinerary not found" });
+		}
+
+		const tId = touristId.toString();
+
+		const currentDate = new Date();
 		const millisecondsBeforeItinerary = itinerary.startDateTime.getTime() - currentDate.getTime();
 		const hoursBeforeItinerary = millisecondsBeforeItinerary / (1000 * 3600);
-		
-		if (hoursBeforeItinerary >= 48) {
-			itinerary.tourists = itinerary.tourists.filter(tourist => tourist.touristId.toString() !== touristId.toString());
-			tourist.bookedItinerary = tourist.bookedItinerary.filter(itinerary => itineraryId.toString() !== itineraryId.toString());
 
-			await tourist.save();
+		if (hoursBeforeItinerary >= 48) {
+			itinerary.tourists = itinerary.tourists.filter(tourist => tourist.id.toString() !== touristId.toString());
+			const tourist = await cancelItinerary(tId, itinerary.id);
+
+			if (!tourist) {
+				return res.status(505).send("Tourist didn't book this itinerary");
+			}
+
+			itinerary.numberOfBookings--;
+
 			await itinerary.save();
 
 			return res.status(200).send("Booking canceled successfully");
 		}
-		
 		return res.status(505).send("Cannot cancel this Booking");
 	} catch (error) {
-		next(error);
+		return res.status(505).send("Error canceling this Booking");
 	}
 };
 

@@ -17,7 +17,8 @@ export interface IAdvertiser extends Document {
 	// 	logo: string;
 	// 	description: string;
 	// };
-	activities: [Types.ObjectId];
+	activities: Schema.Types.ObjectId[];
+	transportations: Schema.Types.ObjectId[];
 	isVerified: boolean;
 }
 
@@ -31,6 +32,7 @@ const advertiserSchema = new Schema<IAdvertiser>(
 		website: { type: String },
 		description: { type: String },
 		activities: [{ type: Schema.Types.ObjectId, ref: "Activity" }],
+		transportations: [{ type: Schema.Types.ObjectId, ref: "Transportation" }],
 		isVerified: { type: Boolean, default: false },
 		// companyProfile: {
 		// 	hotline: { type: Number },

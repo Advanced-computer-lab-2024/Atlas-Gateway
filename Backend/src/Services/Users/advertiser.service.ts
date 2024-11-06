@@ -1,4 +1,4 @@
-import { Types } from "mongoose";
+import { ObjectId, Types } from "mongoose";
 
 import HttpError from "../../Errors/HttpError";
 import { Advertiser, IAdvertiser } from "../../Models/Users/advertiser.model";
@@ -62,6 +62,48 @@ export const updateAdvertiser = async (
 		new: true,
 	});
 	return advertiser;
+};
+
+
+export const addTransportation = async (advertiserId: string, transportationId: ObjectId) => {
+	if (!Types.ObjectId.isValid(advertiserId)) {
+	  throw new HttpError(400, "Advertiser id is not valid");
+	}
+  
+	const advertiser = await Advertiser.findById(advertiserId);
+	if (!advertiser) {
+	  throw new HttpError(404, "Advertiser not found");
+	}
+	advertiser.transportations.push(transportationId);
+	await advertiser.save();
+	return advertiser;
+};
+
+export const removeTransportation = async (advertiserId: string, transportationId: ObjectId) => {
+  if (!Types.ObjectId.isValid(advertiserId)) {
+    throw new HttpError(400, "Advertiser id is not valid");
+  }
+
+  const advertiser = await Advertiser.findById(advertiserId);
+  if (!advertiser) {
+    throw new HttpError(404, "Advertiser not found");
+  }
+
+  if (!advertiser.transportations.includes(transportationId)) {
+    throw new HttpError(404, "Transportation not found in the advertiser's list");
+  }
+
+  const removed = await advertiser.updateOne({
+    $pull: { transportations: transportationId }
+  });
+
+  if (removed.modifiedCount === 0) {
+    throw new HttpError(404, "Failed to remove transportation");
+  }
+
+  await advertiser.save();
+
+  return advertiser;
 };
 
 export const deleteAdvertiser = async (id: string) => {

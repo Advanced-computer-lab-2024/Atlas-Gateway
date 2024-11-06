@@ -4,6 +4,7 @@ import mongoose, { PipelineStage, Types } from "mongoose";
 import { Transportation } from "../../Models/Travel/transportation.model";
 import AggregateBuilder from "../../Services/Operations/aggregation.service";
 import { Tourist } from "@/Models/Users/tourist.model";
+import { addBookedTransportation } from "@/Services/Users/tourist.service";
 
 //Create a new product entry
 export const createTransportation = async (
@@ -104,55 +105,46 @@ export const updateTransportation = async (req: Request, res: Response) => {
     }
 };
 
-export const bookTransportation = async (req: Request, res: Response) => {
-    try {
-        const transportationId = req.params.transportationId;
-        const touristId = req.params.touristId;
+export const booktransportation = async (req: Request, res: Response) => {
+	try {
+		const transportationId = req.params.transportationId;
+		const touristId = req.headers.userId;
 
-        if (!Types.ObjectId.isValid(transportationId)) {
-            return res.status(400).json({ message: "Invalid Transportation ID" });
+		if (!touristId) {
+			return res.status(400).json({ message: "User ID is required" });
+		}
+
+		if (!Types.ObjectId.isValid(transportationId)) {
+			return res.status(400).json({ message: "Invalid Transportation ID" });
+		}
+
+		const transportation = await Transportation.findById(transportationId);
+		if (!transportation) {
+			return res.status(404).json({ message: "Transportation not found" });
+		}
+
+        if (transportation.availability > transportation.numberOfBookings) {
+            const tId = touristId.toString();
+
+            const tourist = await addBookedTransportation(tId, transportation.id);
+        
+            if (!tourist) {
+                return res.status(500).json({ message: "Error booking Transportation" });
+            }
+
+            transportation.tourists.push(tourist.id);
+        
+            transportation.numberOfBookings++;
+
+            await transportation.save();
+
+            return res.status(201).json({ message: "Transportation booked successfully" });
         }
-
-        const transportation = await Transportation.findById(transportationId);
-        if (!transportation) {
-            return res.status(404).json({ message: "Transportation not found" });
-        }
-
-        if (!Types.ObjectId.isValid(touristId)) {
-            return res.status(400).json({ message: "Invalid Tourist ID" });
-        }
-
-        const tourist = await Tourist.findById(touristId);
-        if (!tourist) {
-            return res.status(404).json({ message: "Tourist not found" });
-        }
-
-        if (transportation.availability <= 0) {
-            return res.status(400).json({ message: "No available slots for this transportation" });
-        }
-
-        transportation.numberOfBookings += 1;
-        transportation.availability -= 1;
-
-        transportation.tourists.push({
-            touristId: tourist.id,
-            name: tourist.name,
-            mobile: tourist.mobile,
-            currency: tourist.currency,
-            walletBalance: tourist.walletBalance,
-        });
-
-        tourist.bookedTransportation.push(transportation.id);
-
-		await tourist.save();
-        await transportation.save();
-
-        return res.status(200).json({ message: "Transportation booked successfully"});
-    }
-    catch (error) {
-        console.log(error);
-        res.status(500).send("Error booking Transportation");
-    }
+        return res.status(505).json({ message: "Transportation fully booked" });
+	} catch (error) {
+		console.log(error);
+		return res.status(500).json({ message: "Error booking transportation" });
+	}
 };
 
 export const deleteTransportation = async (req: Request, res: Response) => {

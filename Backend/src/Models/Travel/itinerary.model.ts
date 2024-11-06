@@ -31,13 +31,7 @@ interface IItinerary extends Document {
 	totalNumberOfRatings: number;
 	accessibility: string;
 	timeline: string;
-	tourists: {
-		touristId: Types.ObjectId;
-		name: string;
-		mobile: string;
-		currency?: string;
-		walletBalance: number;
-	}[];
+	tourists: Types.ObjectId[];	
 }
 
 const itinerarySchema = new Schema<IItinerary>(
@@ -70,15 +64,7 @@ const itinerarySchema = new Schema<IItinerary>(
 		totalNumberOfRatings: { type: Number, default: 0 },
 		accessibility: { type: String, required: true },
 		timeline: { type: String, required: true },
-		tourists: [
-			{
-				touristId: { type: Schema.Types.ObjectId, ref: "Tourist" },
-				name: { type: String, required: true },
-                mobile: { type: String, required: true },
-                currency: { type: String, required: true },
-				walletBalance: { type: Number, required: true },
-			},
-		],
+		tourists: [{ type: Schema.Types.ObjectId, ref: "Tourist" }],	
 	},
 	schemaConfig,
 );

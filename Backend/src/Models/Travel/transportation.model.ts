@@ -11,15 +11,7 @@ interface ITransportation extends Document {
     dateTime: Date;
     timeTaken: number;
     numberOfBookings: number;
-	tourists: [
-		{
-			touristId: Types.ObjectId;
-			name: string;
-            mobile: string;
-            currency?: string;
-			walletBalance: number;
-		},
-	];
+	tourists: Types.ObjectId[];
 	createdBy: Types.ObjectId;
 }
 
@@ -33,15 +25,7 @@ const transportationSchema = new Schema<ITransportation>(
         dateTime: { type: Date, required: true },
         timeTaken: { type: Number, required: true },
         numberOfBookings: { type: Number, required: true },
-		tourists: [
-			{
-				touristId: { type: Schema.Types.ObjectId, ref: "Tourist" },
-				name: { type: String, required: true },
-                mobile: { type: String, required: true },
-                currency: { type: String, required: true },
-				walletBalance: { type: Number, required: true },
-			},
-		],
+		tourists: [{ type: Schema.Types.ObjectId, ref: "Tourist" }],	
 		createdBy: { type: Schema.Types.ObjectId, ref: "Advertiser" },
 	},
 	schemaConfig,
