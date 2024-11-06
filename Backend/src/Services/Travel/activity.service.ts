@@ -4,6 +4,8 @@ import HttpError from "../../Errors/HttpError";
 import { Activity, IActivity } from "../../Models/Travel/activity.model";
 import * as advertiserService from "../../Services/Users/advertiser.service";
 import AggregateBuilder from "../Operations/aggregation.service";
+import { cancelActivity } from "../Users/tourist.service";
+import { Tourist } from "@/Models/Users/tourist.model";
 
 export const createActivity = async (
 	activity: IActivity,
@@ -195,5 +197,74 @@ export const getActivitybyUserId = async (id: string, query: any) => {
 		throw new HttpError(404, "No matching Activities Found");
 	}
 
+	return result;
+};
+
+export const bookActivity = async (activityId: string, touristId: string) => {
+	const activity = await Activity.findById(activityId);
+	if (!activity) {
+		throw new HttpError(404, "Activity not found");
+	}
+
+	const tourist = await Tourist.findById(touristId);
+
+	if (!tourist) {
+		throw new HttpError(404, "Tourist not found");
+	}
+
+	activity.tourists.push(tourist.id);
+
+	activity.numberOfBookings++;
+
+	const result = await activity.save();
+
+	return result;
+};
+
+export const cancelBookingActivity = async (activityId: string, touristId: string) => {
+	const activity = await Activity.findById(activityId);
+	if (!activity) {
+		throw new HttpError(404, "Activity not found");
+	}
+
+	const currentDate = new Date();
+	const millisecondsBeforeActivity = activity.dateTime.getTime() - currentDate.getTime();
+	const hoursBeforeActivity = millisecondsBeforeActivity / (1000 * 3600);
+
+	if (hoursBeforeActivity < 48) {
+		throw new HttpError(400, "Cannot cancel within 48 hours of activity.");
+	}
+
+	const tourist = await Tourist.findById(touristId);
+
+	if (!tourist) {
+		throw new HttpError(404, "Tourist not found");
+	}
+
+	if (!activity.tourists.includes(tourist.id)) {
+		throw new HttpError(404, "Activity not found in the tourist's list");
+	}
+
+	const removed = await activity.updateOne({
+		$pull: { tourists: touristId }
+	});
+
+	if (removed.modifiedCount === 0) {
+		throw new HttpError(404, "Failed to cancel Activity booking");
+	}
+
+	let touristResult;
+	try {
+		touristResult = await cancelActivity(touristId, activity.id);
+	} catch (error) {
+		throw new HttpError(500, "Failed to cancel tourist booking.");
+	}
+	if (!touristResult) {
+		throw new HttpError(404, "Tourist not found");
+	}
+
+	activity.numberOfBookings--;
+
+	const result = await activity.save();
 	return result;
 };

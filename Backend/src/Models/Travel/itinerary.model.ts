@@ -29,6 +29,7 @@ export interface IItinerary extends Document {
 	totalNumberOfRatings: number;
 	accessibility: string;
 	timeline: string;
+	tourists: Types.ObjectId[];
 }
 
 const itinerarySchema = new Schema<IItinerary>(
@@ -61,6 +62,7 @@ const itinerarySchema = new Schema<IItinerary>(
 		totalNumberOfRatings: { type: Number, default: 0 },
 		accessibility: { type: String, required: true },
 		timeline: { type: String, required: true },
+		tourists: [{ type: Schema.Types.ObjectId, ref: 'Tourist' }],
 	},
 	schemaConfig,
 );

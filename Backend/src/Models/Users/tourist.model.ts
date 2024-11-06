@@ -20,7 +20,9 @@ export interface ITourist extends Document {
 		location?: string;
 		image?: string;
 	};
-	bookedItinerary: Types.ObjectId[];
+	bookedItineraries: Types.ObjectId[];
+	bookedActivities: Types.ObjectId[];
+	bookedTransportations: Types.ObjectId[];
 }
 
 const touristSchema = new Schema<ITourist>(
@@ -42,7 +44,9 @@ const touristSchema = new Schema<ITourist>(
 			location: { type: String },
 			image: { type: String },
 		},
-		bookedItinerary: [{ type: Schema.Types.ObjectId, ref: "Itinerary" }],
+		bookedItineraries: [{ type: Schema.Types.ObjectId, ref: "Itinerary" }],
+		bookedActivities: [{ type: Schema.Types.ObjectId, ref: "Activity" }],
+		bookedTransportations: [{ type: Schema.Types.ObjectId, ref: "Transportation" }],
 	},
 	schemaConfig,
 );
