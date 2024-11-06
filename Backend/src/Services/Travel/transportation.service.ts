@@ -5,6 +5,8 @@ import AggregateBuilder from "../Operations/aggregation.service";
 import { Tourist } from "@/Models/Users/tourist.model";
 import { cancelTransportation } from "../Users/tourist.service";
 import { ITransportation, Transportation } from "@/Models/Travel/transportation.model";
+import { Advertiser } from "@/Models/Users/advertiser.model";
+import { getAdvertiserById } from "../Users/advertiser.service";
 
 export const createTransportation = async (
 	transportation: ITransportation,
@@ -19,13 +21,13 @@ export const createTransportation = async (
 		session.startTransaction();
 
 		// Link transportation ID to the Advertiser's transportation array
-		const Advertiser = await AdvertiserService.getAdvertiserById(createdBy);
+		const Advertiser = await getAdvertiserById(createdBy);
 
 		if (!Advertiser) {
 			throw new HttpError(404, "Advertiser not found");
 		}
 
-		const transportationData = new transportation({
+		const transportationData = new Transportation({
 			transportation,
 			createdBy: new Types.ObjectId(createdBy),
 		});
@@ -96,15 +98,15 @@ export const deleteTransportation = async (id: string) => {
 
 		// Find the associated Advertiser document
 		const AdvertiserId = transportation.createdBy; // Assuming createdBy is the Advertiser ID
-		const Advertiser = await AdvertiserService.getAdvertiserById(
+		const advertiser = await getAdvertiserById(
 			AdvertiserId.toString(),
 		);
-		if (!Advertiser) {
+		if (!advertiser) {
 			throw new HttpError(404, "Advertiser not found");
 		}
 
 		// Remove the transportation ID from the Advertiser's itineraries array
-		Advertiser.transportations = Advertiser.transportations.filter(
+		advertiser.transportations = advertiser.transportations.filter(
 			(transportationId) => !transportationId.equals(id),
 		);
 		await Advertiser.updateOne({ session });

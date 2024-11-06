@@ -2,7 +2,7 @@ import { Document, Schema, Types, model } from "mongoose";
 
 import { schemaConfig } from "../../Config/schemaConfig";
 
-interface ITransportation extends Document {
+export interface ITransportation extends Document {
 	type: string;
 	price: number;
 	availability: number;
