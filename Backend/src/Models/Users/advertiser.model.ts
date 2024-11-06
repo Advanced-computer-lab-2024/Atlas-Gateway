@@ -10,6 +10,9 @@ export interface IAdvertiser extends Document {
 	hotline: string;
 	website: string;
 	description: string;
+	idPath: string;
+	taxCardPath: string;
+	imagePath: string;
 	// companyProfile: {
 	// 	hotline: number;
 	// 	address: string;
@@ -34,6 +37,9 @@ const advertiserSchema = new Schema<IAdvertiser>(
 		activities: [{ type: Schema.Types.ObjectId, ref: "Activity" }],
 		transportations: [{ type: Schema.Types.ObjectId, ref: "Transportation" }],
 		isVerified: { type: Boolean, default: false },
+		idPath: { type: String, default: "" },
+		taxCardPath: { type: String, default: "" },
+		imagePath: { type: String, default: "" },
 		// companyProfile: {
 		// 	hotline: { type: Number },
 		// 	address: { type: String },

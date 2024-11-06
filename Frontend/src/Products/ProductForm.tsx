@@ -1,9 +1,14 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
-import { Pencil } from "lucide-react";
+import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { useUpload } from "@/api/data/useMedia";
+import {
+	useCreateProduct,
+	useProducts,
+	useUpdateProduct,
+} from "@/api/data/useProducts";
 import { Button } from "@/components/ui/button";
 import {
 	FormControl,
@@ -22,7 +27,6 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from "@/components/ui/sheet";
-import { useLoginStore } from "@/store/loginStore";
 
 import { productSchema } from "../Admin/schema";
 
@@ -33,44 +37,40 @@ interface props {
 }
 
 const ProductForm = ({ id, type }: props) => {
-	const { user } = useLoginStore();
 	const formMethods = useForm<z.infer<typeof productSchema>>({
 		resolver: zodResolver(productSchema),
 	});
 	const { handleSubmit, control } = formMethods;
+	const [file, setFile] = useState<File | null>(null);
+	const { refetch } = useProducts();
+	const { doUpload } = useUpload(() => {
+		refetch();
+	});
+	const { doCreateProduct } = useCreateProduct((response) => {
+		const createdProductId = response.data._id;
+		const payload = {
+			userType: "product",
+			userId: createdProductId,
+			fileType: "image",
+			file,
+		};
+		doUpload(payload);
+		refetch();
+		formMethods.reset();
+	});
+
+	const { doUpdateProduct } = useUpdateProduct(() => {
+		refetch();
+		formMethods.reset();
+	});
 
 	const onSubmit = (data: z.infer<typeof productSchema>) => {
-		!id
-			? axios
-					.post("http://localhost:5000/api/products/create", data, {
-						headers: {
-							userid: user?._id,
-						},
-					})
-					.then((res) => {
-						console.log(res.status);
-						// will add here something to give a feedback later
-					})
-					.catch((error) => {
-						console.log(error);
-					})
-			: axios
-					.put(
-						`http://localhost:5000/api/products/update/${id}`,
-						data,
-						{
-							headers: {
-								userid: user?._id,
-							},
-						},
-					)
-					.then((res) => {
-						console.log(res.status);
-						// will add here something to give a feedback later
-					})
-					.catch((error) => {
-						console.log(error);
-					});
+		if (!id) {
+			setFile(data.file!);
+			doCreateProduct(data);
+		} else {
+			doUpdateProduct({ ...data, _id: id });
+		}
 	};
 	return (
 		<Sheet>
@@ -165,24 +165,31 @@ const ProductForm = ({ id, type }: props) => {
 							)}
 						/>
 
-						<FormField
-							control={control}
-							name="picture"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Picture</FormLabel>
-									<FormControl>
-										<Input
-											{...field}
-											placeholder="Product pic"
-										/>
-									</FormControl>
-									<FormDescription>
-										upload pic.
-									</FormDescription>
-								</FormItem>
-							)}
-						/>
+						{type == "Add" && (
+							<FormField
+								control={control}
+								name="file"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Upload file</FormLabel>
+										<FormControl>
+											<input
+												type="file"
+												onChange={(e) =>
+													field.onChange(
+														e.target.files?.[0],
+													)
+												}
+											/>
+										</FormControl>
+										<FormDescription>
+											Upload your file here.
+										</FormDescription>
+									</FormItem>
+								)}
+							/>
+						)}
+
 						<SheetFooter>
 							<Button type="submit">Save changes</Button>
 						</SheetFooter>

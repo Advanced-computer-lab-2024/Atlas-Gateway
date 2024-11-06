@@ -8,7 +8,9 @@ export interface ITourGuide extends Document {
 	email: string; // story 3
 	password: string;
 	mobile: string;
-	picture: string;
+	idPath: string;
+	certificatePath: string;
+	imagePath: string;
 	experience: number;
 	prevWork: string;
 	// {
@@ -18,7 +20,7 @@ export interface ITourGuide extends Document {
 	// 	start: Date;
 	// 	end: Date;
 	// };
-	itinerary: [Types.ObjectId];
+	itinerary: Types.ObjectId[];
 	isVerified: boolean;
 }
 
@@ -29,7 +31,9 @@ const tourGuideSchema = new Schema<ITourGuide>(
 		email: { type: String, required: true },
 		password: { type: String, required: true },
 		mobile: { type: String, default: "" },
-		picture: { type: String, default: "" },
+		idPath: { type: String, default: "" },
+		certificatePath: { type: String, default: "" },
+		imagePath: { type: String, default: "" },
 		experience: { type: Number, default: 0 },
 		prevWork: { type: String, default: "" },
 		// {

@@ -1,13 +1,53 @@
 import { NextFunction, Request, Response } from "express";
-import mongoose, { PipelineStage, Types } from "mongoose";
 
 import { Itinerary } from "../../Models/Travel/itinerary.model";
 import AggregateBuilder from "../../Services/Operations/aggregation.service";
 import { Tourist } from "@/Models/Users/tourist.model";
 import { addBookedItinerary, cancelItinerary } from "@/Services/Users/tourist.service";
+import * as itineraryService from "../../Services/Travel/itinerary.service";
 
-//Create a new product entry
 export const createItinerary = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	try {
+		const tourGuideId = req.headers.userid;
+		if (!tourGuideId) {
+			throw new HttpError(400, "User id is required");
+		}
+		const itinerary = await itineraryService.createItinerary(
+			req.body,
+			tourGuideId.toString(),
+		);
+
+		res.status(201).json(itinerary);
+	} catch (err) {
+		next(err);
+	}
+};
+
+export const getItineraryById = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	try {
+		const id = req.params.id;
+
+		if (!id) {
+			throw new HttpError(400, "id is required");
+		}
+
+		const itinerary = await itineraryService.getItineraryById(id);
+
+		res.status(200).send(itinerary);
+	} catch (error) {
+		next(error);
+	}
+};
+
+export const getItineraryByUserId = async (
 	req: Request,
 	res: Response,
 	next: NextFunction,
@@ -21,105 +61,35 @@ export const createItinerary = async (
 				.json({ message: "Tour Guide ID is required" });
 		}
 
-		if (!Types.ObjectId.isValid(tourGuideId.toString())) {
-			return res.status(400).json({ message: "Invalid Tour Guide ID" });
-		}
+		const result = await itineraryService.getItineraryByUserId(
+			tourGuideId.toString(),
+			req.query,
+		);
 
-		const itineraryData = new Itinerary({
-			...req.body,
-			createdBy: new Types.ObjectId(tourGuideId.toString()),
-		});
-
-		await itineraryData.save();
-		res.status(200).send(itineraryData);
+		const response = {
+			data: result?.[0]?.data,
+			metaData: {
+				page: req.query.page || 1,
+				total: result[0]?.total[0]?.count,
+				pages: Math.ceil(
+					(result[0]?.total[0]?.count ?? 0) /
+					(Number(req?.query?.limit) || 10),
+				),
+			},
+		};
+		res.status(200).send(response);
 	} catch (error) {
 		next(error);
 	}
 };
 
-export const getItineraryById = async (req: Request, res: Response) => {
+export const getItineraries = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
-		const id = req.params.id;
-
-		if (!mongoose.Types.ObjectId.isValid(id)) {
-			return res.status(400).json({ error: "Invalid Itinerary ID" });
-		}
-
-		const itinerary = await Itinerary.findById(id)
-			.populate("tags")
-			.populate("createdBy");
-
-		res.status(200).send(itinerary);
-	} catch (error) {
-		res.status(500).send("Error getting Itinerary by id");
-	}
-};
-
-export const getItineraryByUserId = async (req: Request, res: Response) => {
-	try {
-		const tourGuideId = req.headers.userid;
-
-		if (!tourGuideId) {
-			return res
-				.status(400)
-				.json({ message: "Tour Guide ID is required" });
-		}
-		if (!Types.ObjectId.isValid(tourGuideId.toString())) {
-			return res.status(400).json({ message: "Invalid Tour Guide ID" });
-		}
-
-		const pipeline: PipelineStage[] = [
-			{
-				$lookup: {
-					from: "tags",
-					localField: "tags",
-					foreignField: "_id",
-					as: "tags",
-				},
-			},
-			{
-				$match: {
-					createdBy: new Types.ObjectId(tourGuideId.toString()),
-				},
-			},
-			...AggregateBuilder(req.query, ["title", "tags.name"]),
-		];
-
-		const result = await Itinerary.aggregate(pipeline);
-
-		const response = {
-			data: result?.[0]?.data,
-			metaData: {
-				page: req.query.page || 1,
-				total: result[0]?.total[0]?.count,
-				pages: Math.ceil(
-					(result[0]?.total[0]?.count ?? 0) /
-					(Number(req?.query?.limit) || 10),
-				),
-			},
-		};
-		res.status(200).send(response);
-	} catch (error) {
-		res.status(500).send("Error getting Itinerary by id");
-	}
-};
-
-export const getItinerary = async (req: Request, res: Response) => {
-	try {
-		const pipeline: PipelineStage[] = [
-			{
-				$lookup: {
-					from: "tags",
-					localField: "tags",
-					foreignField: "_id",
-					as: "tags",
-				},
-			},
-			...AggregateBuilder(req.query, ["title", "tags.name"]),
-		];
-
-		const result = await Itinerary.aggregate(pipeline);
-
+		const result = await itineraryService.getItineraries(req.query);
 		const response = {
 			data: result?.[0]?.data,
 			metaData: {
@@ -134,26 +104,30 @@ export const getItinerary = async (req: Request, res: Response) => {
 
 		res.status(200).send(response);
 	} catch (error) {
-		res.status(500).send("Error getting Itinerary");
+		next(error);
 	}
 };
 
-export const updateItinerary = async (req: Request, res: Response) => {
+export const updateItinerary = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const itineraryId = req.params.id;
 
-		const itinerary = await Itinerary.findByIdAndUpdate(
+		if (!itineraryId) {
+			throw new HttpError(400, "itinerary id is required");
+		}
+
+		const itinerary = await itineraryService.updateItinerary(
 			itineraryId,
-			{
-				$set: req.body,
-			},
-			{ new: true },
+			req.body,
 		);
 
 		res.status(200).send(itinerary);
 	} catch (error) {
-		console.log(error);
-		res.status(500).json({ message: "Internal Server Error" });
+		next(error);
 	}
 };
 
@@ -242,28 +216,22 @@ export const cancelBookingItinerary = async (req: Request, res: Response) => {
 	}
 };
 
-export const deleteItinerary = async (req: Request, res: Response) => {
+export const deleteItinerary = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
-		const { id } = req.params;
+		const id = req.params.id;
 
-		if (!Types.ObjectId.isValid(id)) {
-			return res.status(400).json({ message: "Invalid Itinerary ID" });
+		if (!id) {
+			throw new HttpError(400, "id is required");
 		}
 
-		const itinerary = await Itinerary.findById(id);
-		if (!itinerary) {
-			return res.status(404).json({ message: "Itinerary not found" });
-		}
+		await itineraryService.deleteItinerary(id);
 
-		if (itinerary?.numberOfBookings > 0) {
-			return res
-				.status(404)
-				.json({ message: "Itinerary is already booked" });
-		}
-		await Itinerary.findByIdAndDelete(id);
 		res.status(200).send("Itinerary deleted Successfully");
 	} catch (error) {
-		console.log(error);
-		res.status(500).send("Error deleting Itinerary");
+		next(error);
 	}
 };

@@ -2,7 +2,7 @@ import { Document, Schema, Types, model } from "mongoose";
 
 import { schemaConfig } from "../../Config/schemaConfig";
 
-interface IItinerary extends Document {
+export interface IItinerary extends Document {
 	title: string;
 	language: string;
 	price: number;
@@ -11,14 +11,12 @@ interface IItinerary extends Document {
 	dropOffLocation: string;
 	startDateTime: Date;
 	endDateTime: Date;
-	activities: [
-		{
-			activity?: Types.ObjectId;
-			title: string;
-			dateTime: string;
-			durationM: number;
-		},
-	];
+	activities: {
+		activity?: Types.ObjectId;
+		title: string;
+		dateTime: string;
+		durationM: number;
+	}[];
 	tags: Types.ObjectId[];
 	createdBy: Types.ObjectId;
 	numberOfBookings: number;

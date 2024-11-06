@@ -44,7 +44,7 @@ export const getTourGuides = async () => {
 export const updateTourGuide = async (
 	id: string,
 	userid: string,
-	newGuide: ITourGuide,
+	newGuide: Partial<ITourGuide>,
 ) => {
 	if (!Types.ObjectId.isValid(id)) {
 		throw new HttpError(400, "Id is Invalid ");
@@ -56,7 +56,12 @@ export const updateTourGuide = async (
 	const admin = await adminService.getAdminById(userid);
 	if (!admin) {
 		const tourGuide = await TourGuide.findById(id);
-		if (!tourGuide?.isVerified) {
+		const overRide = true
+			? Object.keys(newGuide)[0] == "idPath" ||
+				Object.keys(newGuide)[0] == "certificatePath" ||
+				Object.keys(newGuide)[0] == "imagePath"
+			: false;
+		if (!tourGuide?.isVerified && !overRide) {
 			throw new HttpError(401, "Tour Guide is Not verified");
 		}
 	}

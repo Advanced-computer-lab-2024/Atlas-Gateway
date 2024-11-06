@@ -1,12 +1,16 @@
 import axios from "axios";
-import { ShieldAlert, ShieldCheck } from "lucide-react";
-import { Trash } from "lucide-react";
-import { RotateCw } from "lucide-react";
+import {
+	FileUser,
+	IdCard,
+	RotateCw,
+	ShieldAlert,
+	ShieldCheck,
+	Trash,
+} from "lucide-react";
 
 import {
 	useDeleteTourGuideProfile,
 	useTourGuides,
-	useUpdateTourGuideProfile,
 } from "@/api/data/useProfile";
 import { TTourGuideProfileResponse } from "@/api/service/types";
 import {
@@ -23,8 +27,22 @@ import { useLoginStore } from "@/store/loginStore";
 const TourGuide = () => {
 	const { user } = useLoginStore();
 	const { data, refetch } = useTourGuides();
-	// const {doEditTourGuideProfile} = useUpdateTourGuideProfile(refetch);
 	const { doDeleteTourGuideProfile } = useDeleteTourGuideProfile(refetch);
+
+	const handleDownload = async (filePath: string) => {
+		axios
+			.post(`http://localhost:5000/api/media/download`, { filePath })
+			.then((res) => {
+				const link = document.createElement("a");
+				link.href = res.data;
+				document.body.appendChild(link);
+				link.click();
+				document.body.removeChild(link);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
 
 	const handleUpdate = (id: string) => {
 		axios
@@ -54,15 +72,14 @@ const TourGuide = () => {
 				<TableCaption>Registered Tour Guides.</TableCaption>
 				<TableHeader className="bg-gray-100">
 					<TableRow>
-						{/* <TableHead>Picture</TableHead> */}
-						<TableHead>Name</TableHead>
 						<TableHead>Username</TableHead>
 						<TableHead>Email</TableHead>
-						{/* <TableHead>Password</TableHead> */}
 						<TableHead>Mobile</TableHead>
 						<TableHead>Experience</TableHead>
 						<TableHead>Previous Work</TableHead>
 						<TableHead>isVerified</TableHead>
+						<TableHead>ID</TableHead>
+						<TableHead>Certificates</TableHead>
 						<TableHead className="cursor-pointer hover:text-[#2b58ed] w-1">
 							<RotateCw onClick={() => refetch()} />
 						</TableHead>
@@ -71,13 +88,8 @@ const TourGuide = () => {
 				<TableBody>
 					{data?.map((tourGuide: TTourGuideProfileResponse) => (
 						<TableRow key={tourGuide._id}>
-							{/* <TableCell className="p-3">
-								{tourGuide?.picture || "N/A"}
-							</TableCell> */}
-							<TableCell>{tourGuide?.name}</TableCell>
 							<TableCell>{tourGuide.username}</TableCell>
 							<TableCell>{tourGuide.email}</TableCell>
-							{/* <TableCell>{tourGuide.password}</TableCell> */}
 							<TableCell>{tourGuide?.mobile || "N/A"}</TableCell>
 							<TableCell>
 								{tourGuide?.experience || "N/A"}
@@ -98,22 +110,26 @@ const TourGuide = () => {
 									</button>
 								)}
 							</TableCell>
-							{/* <TableCell>
-								{tourGuide.previous?.description || "N/A"}
-							</TableCell> */}
-							{/* <TableCell>
-								{tourGuide.previous?.company || "N/A"}
-							</TableCell> */}
-							{/* <TableCell>
-								{new Date(
-									tourGuide.previous?.start,
-								).toLocaleDateString()}
+							<TableCell>
+								<button
+									onClick={() =>
+										handleDownload(tourGuide.idPath)
+									}
+								>
+									<IdCard />
+								</button>
 							</TableCell>
 							<TableCell>
-								{new Date(
-									tourGuide.previous?.end,
-								).toLocaleDateString()}
-							</TableCell> */}
+								<button
+									onClick={() =>
+										handleDownload(
+											tourGuide.certificatePath,
+										)
+									}
+								>
+									<FileUser />
+								</button>
+							</TableCell>
 							<TableCell className="cursor-pointer hover:text-[#2b58ed] w-1">
 								<button className="bg-red-500 text-white rounded-full p-2 shadow-lg hover:bg-red-600">
 									<Trash

@@ -13,7 +13,7 @@ const ENDPOINTS = {
 		list: "api/products/list",
 		show: (id: string) => `api/products/show/${id}`,
 		create: "api/products/create",
-		update: "api/products/update",
+		update: (id: string) => `api/products/update/${id}`,
 		delete: (id: string) => `api/products/delete/${id}`,
 	},
 	activity: {
@@ -27,6 +27,10 @@ const ENDPOINTS = {
 	changePassword: "/api/change-password",
 	login: "api/login",
 	register: "api/register/create",
+	media: {
+		upload: "api/media/upload",
+		download: "api/media/download",
+	},
 	admin: {
 		list: "api/admin/list",
 		create: "api/admin/create",

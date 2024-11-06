@@ -7,9 +7,9 @@ export interface IActivity extends Document {
 	description: string;
 	dateTime: Date;
 	location: string;
-	tags: [Types.ObjectId];
+	tags: Types.ObjectId[];
 	createdBy: Types.ObjectId;
-	categories: [Types.ObjectId];
+	categories: Types.ObjectId[];
 	minPrice: number;
 	maxPrice: number;
 	specialDiscounts: number;

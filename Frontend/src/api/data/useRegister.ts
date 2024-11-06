@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { useLoginStore } from "@/store/loginStore";
 
-import apiRegister from "../service/register";
+import { apiRegister } from "../service/register";
 
 export function useRegister() {
 	const { setUser } = useLoginStore();

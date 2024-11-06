@@ -22,7 +22,6 @@ export const register = async (
 			dob,
 			occupation,
 		} = req.body;
-
 		if (!username || !email || !password) {
 			res.status(400).send("username, email and password are required");
 		}

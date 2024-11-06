@@ -79,9 +79,7 @@ export default function AdvertiserSheet() {
 		<Sheet open={open} onOpenChange={setOpen}>
 			<SheetTrigger asChild>
 				{data?.isVerified && (
-					<Button className="align p-6 justify-center">
-						<Label.Big400>Update Profile</Label.Big400>
-					</Button>
+					<button className="font-bold">Edit profile</button>
 				)}
 			</SheetTrigger>
 			<SheetContent>

@@ -1,7 +1,12 @@
 import axios from "axios";
-import { RotateCw, ShieldAlert, ShieldCheck, Trash } from "lucide-react";
-// Import both icons
-import { useEffect, useState } from "react";
+import {
+	FileUser,
+	IdCard,
+	RotateCw,
+	ShieldAlert,
+	ShieldCheck,
+	Trash,
+} from "lucide-react";
 
 import { useDeleteSeller, useSellers } from "@/api/data/useProfile";
 import { TSellerProfileResponse } from "@/api/service/types";
@@ -16,24 +21,24 @@ import {
 } from "@/components/ui/table";
 import { useLoginStore } from "@/store/loginStore";
 
-interface Seller {
-	_id: string;
-	username: string;
-	name: string;
-	email: string;
-	password: string;
-	picture: string;
-	description: string;
-	isDeleted: boolean;
-	products: string[];
-	isVerified: boolean;
-}
-
 const Sellers = () => {
 	const { user } = useLoginStore();
 	const { data, refetch } = useSellers();
 	const { doDeleteSeller } = useDeleteSeller(refetch);
-
+	const handleDownload = async (filePath: string) => {
+		axios
+			.post(`http://localhost:5000/api/media/download`, { filePath })
+			.then((res) => {
+				const link = document.createElement("a");
+				link.href = res.data;
+				document.body.appendChild(link);
+				link.click();
+				document.body.removeChild(link);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
 	const handleUpdate = (id: string) => {
 		axios
 			.put(
@@ -62,13 +67,12 @@ const Sellers = () => {
 				<TableCaption>Registered Sellers.</TableCaption>
 				<TableHeader className="bg-gray-100">
 					<TableRow>
-						{/* <TableHead>Picture</TableHead> */}
-						<TableHead>Name</TableHead>
 						<TableHead>Username</TableHead>
 						<TableHead>Email</TableHead>
-						{/* <TableHead>Password</TableHead> */}
 						<TableHead>Description</TableHead>
 						<TableHead>isVerified</TableHead>
+						<TableHead>ID</TableHead>
+						<TableHead>taxationRegisteryCard</TableHead>
 						<TableHead className="cursor-pointer hover:text-[#2b58ed] w-1">
 							<RotateCw onClick={() => refetch()} />
 						</TableHead>
@@ -77,13 +81,10 @@ const Sellers = () => {
 				<TableBody>
 					{data?.map((seller: TSellerProfileResponse) => (
 						<TableRow key={seller._id}>
-							{/* <TableCell>{seller?.picture || "N/A"}</TableCell> */}
-							<TableCell>{seller?.name}</TableCell>
 							<TableCell className="p-3">
 								{seller.username}
 							</TableCell>
 							<TableCell>{seller.email}</TableCell>
-							{/* <TableCell>{seller.password}</TableCell> */}
 							<TableCell>
 								{seller?.description || "N/A"}
 							</TableCell>
@@ -97,6 +98,24 @@ const Sellers = () => {
 										<ShieldAlert className="text-red-500 w-5 h-5" />
 									</button>
 								)}
+							</TableCell>
+							<TableCell>
+								<button
+									onClick={() =>
+										handleDownload(seller.idPath)
+									}
+								>
+									<IdCard />
+								</button>
+							</TableCell>
+							<TableCell>
+								<button
+									onClick={() =>
+										handleDownload(seller.taxCardPath)
+									}
+								>
+									<FileUser />
+								</button>
 							</TableCell>
 							<TableCell className="cursor-pointer hover:text-[#2b58ed]">
 								<button className="bg-red-500 text-white rounded-full p-2 shadow-lg hover:bg-red-600">

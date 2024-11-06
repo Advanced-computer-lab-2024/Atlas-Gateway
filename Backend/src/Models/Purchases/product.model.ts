@@ -2,12 +2,12 @@ import { Document, Schema, Types, model } from "mongoose";
 
 import { schemaConfig } from "../../Config/schemaConfig";
 
-interface IProduct extends Document {
+export interface IProduct extends Document {
 	sellerId: Types.ObjectId;
 	name: string;
 	description: string;
 	price: number;
-	picture: string;
+	imagePath: string;
 	quantity: number;
 	isArchived: boolean;
 	sales: number;
@@ -30,7 +30,7 @@ const productSchema = new Schema<IProduct>(
 		name: { type: String, required: true },
 		description: { type: String },
 		price: { type: Number, required: true },
-		picture: { type: String, required: true },
+		imagePath: { type: String },
 		quantity: { type: Number, required: true },
 		isArchived: { type: Boolean },
 		sales: { type: Number },
