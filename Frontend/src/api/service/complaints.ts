@@ -1,6 +1,10 @@
 import axios from "axios";
 
+
+
 import { TComplaint } from "@/types/global";
+
+
 
 import ENDPOINTS from "./ENDPOINTS";
 
@@ -17,30 +21,43 @@ export function apiComplaints(_id: string | undefined) {
 	});
 }
 
-
 export function apiComplaint(id: string | undefined) {
-    return axios<TComplaint>({
-        method: "GET",
-        url: ENDPOINTS.complaint.show(id ?? ""),
-        headers: {
-            "Content-Type": "application/json",
-        },
-        baseURL: "http://localhost:5000",
-    });
+	return axios<TComplaint>({
+		method: "GET",
+		url: ENDPOINTS.complaint.show(id ?? ""),
+		headers: {
+			"Content-Type": "application/json",
+		},
+		baseURL: "http://localhost:5000",
+	});
 }
+
+export function apiComplaintsUpdateByAdmin(
+	id: string,
+	data: { state: string; reply: string },
+	replyedBy: string,
+) {
+	return axios({
+		method: "PUT",
+		url: ENDPOINTS.complaint.updateByAdmin(id),
+		headers: {
+			"Content-Type": "application/json",
+			replyedBy, // Include replyedBy in headers
+		},
+		baseURL: "http://localhost:5000",
+		data, // Send state and reply as body data
+	});
+}
+
 
 export function apiComplaintsCreate(data: TComplaint) {
-    return axios({
-        method: "POST",
-        url: ENDPOINTS.complaint.create,
-        headers: {
-            "Content-Type": "application/json",
-        },
-        baseURL: "http://localhost:5000",
-        data: data,
-    });
+	return axios({
+		method: "POST",
+		url: ENDPOINTS.complaint.create,
+		headers: {
+			"Content-Type": "application/json",
+		},
+		baseURL: "http://localhost:5000",
+		data: data,
+	});
 }
-
-
-
-

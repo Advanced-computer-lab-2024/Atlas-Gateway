@@ -142,9 +142,9 @@ export interface TComplaint {
 	body: string;
 	date: string;
 	state: string;
-	createdBy: TUser[];
+	createdBy: TUser;
 	reply: string;
-	replyedBy: TUser[];
+	replyedBy: TUser;
 }
 
 export interface TItinerary {

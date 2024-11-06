@@ -1,27 +1,17 @@
 import { EllipsisVertical, Eye, RotateCw } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 
 
 import { useComplaints } from "@/api/data/useComplaints";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-	Table,
-	TableBody,
-	TableCaption,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from "@/components/ui/table";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 
 const Complaint = () => {
 	const { data, refetch } = useComplaints();
+	console.log(data);
+	const navigate = useNavigate();
 
 	return (
 		<div className="flex flex-col p-3">
@@ -32,6 +22,7 @@ const Complaint = () => {
 					<TableHeader className="bg-gray-100">
 						<TableRow>
 							{/* <TableHead>Name</TableHead> */}
+							<TableHeader className="w-1/2">Tourist Name</TableHeader>
 							<TableHead className="p-3">Complaint Title</TableHead>
 							<TableHead className="p-3">Complaint Date</TableHead>
                             <TableHead className="p-3">State</TableHead>
@@ -45,7 +36,7 @@ const Complaint = () => {
 					<TableBody>
 						{data?.map((complaint) => (
 							<TableRow key={complaint._id}>
-								{/* <TableCell>{complaint.createdBy}</TableCell> */}
+								<TableCell>{complaint.createdBy?.username}</TableCell>
 								<TableCell>{complaint.title}</TableCell>
 								<TableCell>{complaint.date}</TableCell>
 								<TableCell>{complaint.state}</TableCell>
@@ -58,7 +49,9 @@ const Complaint = () => {
 											<DropdownMenuItem
 												className="flex gap-2 cursor-pointer hover:text-[#2b58ed]"
 												onClick={() => {
-										
+													navigate(
+														`/admin/complaint/${complaint?._id}`,
+													);
 												}}
 											>
 												<Eye />

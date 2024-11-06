@@ -20,7 +20,7 @@ import governorRouter from "./Routes/Users/governor.route";
 import sellerRouter from "./Routes/Users/seller.route";
 import tourGuideRouter from "./Routes/Users/tourGuide.route";
 import touristRouter from "./Routes/Users/tourist.route";
-import complaintRouter from "./Routes/complaint.route";
+import complaintRouter from "./Routes/Interactions/complaint.route";
 
 const app = express();
 

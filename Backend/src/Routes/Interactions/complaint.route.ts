@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import * as ComplaintController from "../Controllers/complaint.controller";
+import * as ComplaintController from "../../Controllers/Interactions/complaint.controller";
 
 const complaintRouter = Router();
 
