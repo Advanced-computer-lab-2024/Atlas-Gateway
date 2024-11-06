@@ -29,13 +29,9 @@ const Advertisers = () => {
 	const { data, refetch } = useAdvertisers();
 	const { doDeleteAdvertiserProfile } = useDeleteAdvertiserProfile(refetch);
 
-	const handleDownload = async (username: string, type: string) => {
-		const filePath =
-			type == "id"
-				? `advertiser/${username}_id.pdf`
-				: `advertiser/${username}_registryCard.pdf`;
+	const handleDownload = async (filePath: string) => {
 		axios
-			.post("http://localhost:5000/api/medial/download", { filePath })
+			.post(`http://localhost:5000/api/media/download`, { filePath })
 			.then((res) => {
 				const link = document.createElement("a");
 				link.href = res.data;
@@ -126,10 +122,7 @@ const Advertisers = () => {
 							<TableCell>
 								<button
 									onClick={() =>
-										handleDownload(
-											advertiser.username,
-											"id",
-										)
+										handleDownload(advertiser.idPath)
 									}
 								>
 									<IdCard />
@@ -138,10 +131,7 @@ const Advertisers = () => {
 							<TableCell>
 								<button
 									onClick={() =>
-										handleDownload(
-											advertiser.username,
-											"registryCard",
-										)
+										handleDownload(advertiser.taxCardPath)
 									}
 								>
 									<FileUser />
