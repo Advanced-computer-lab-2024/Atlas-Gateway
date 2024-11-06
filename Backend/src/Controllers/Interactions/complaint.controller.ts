@@ -38,6 +38,12 @@ export const getAllComplaints = async (
 					as: "createdBy",
 				},
 			},
+			{
+				$unwind: {
+					path: "$createdBy",
+					preserveNullAndEmptyArrays: true,
+				},
+			},
 		];
 		pipeline.push(...filterByComplaintStatus(req.query));
 		const complaints = await complaint.aggregate(pipeline);
