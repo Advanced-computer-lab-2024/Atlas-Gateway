@@ -7,11 +7,14 @@ export interface ItourGuideComments extends Document {
 	tourGuideId: Types.ObjectId;
 	text: string;
 }
-const tourGuideCommentSchema = new Schema<ItourGuideComments>({
-	touristId: { type: Schema.ObjectId, ref: "Tourist" },
-	tourGuideId: { type: Schema.ObjectId, ref: "TourGuide" },
-	text: { type: String },
-});
+const tourGuideCommentSchema = new Schema<ItourGuideComments>(
+	{
+		touristId: { type: Schema.ObjectId, ref: "Tourist" },
+		tourGuideId: { type: Schema.ObjectId, ref: "TourGuide" },
+		text: { type: String },
+	},
+	schemaConfig,
+);
 export const TourGuideComment = model<ItourGuideComments>(
 	"TourGuideComment",
 	tourGuideCommentSchema,
