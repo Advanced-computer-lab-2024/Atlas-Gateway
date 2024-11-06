@@ -78,7 +78,7 @@ const General = () => {
 						<img
 							src={profilePic}
 							alt="Profile"
-							className="object-cover w-full h-full"
+							className="object-contain w-full h-full"
 						/>
 					)}
 					<div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">

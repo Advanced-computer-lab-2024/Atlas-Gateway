@@ -107,7 +107,7 @@ const Product = () => {
 								<img
 									src={productsPics[prod._id]}
 									alt="Product Picture"
-									className="object-cover w-full h-full"
+									className="object-contain w-full h-full"
 								/>
 							)}
 						</div>

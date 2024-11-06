@@ -62,7 +62,7 @@ export default function ProductCard({
 					<img
 						src={productPic}
 						alt="Product Picture"
-						className="object-cover w-full h-full"
+						className="object-contain w-full h-full"
 					/>
 				)}
 			</Flex>
