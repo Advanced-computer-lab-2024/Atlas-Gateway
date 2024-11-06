@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
-import { PipelineStage } from "mongoose";
+import { NextFunction, Request, Response } from "express";
+import { PipelineStage, Types } from "mongoose";
 
 import { complaint } from "../../Models/Interactions/complaint.model";
 import { filterByComplaintStatus } from "../../Services/Operations/Filter/filterBuilder.service";
@@ -7,8 +7,7 @@ import { filterByComplaintStatus } from "../../Services/Operations/Filter/filter
 //Creates a Complaint --Tourist Only
 export const createComplaint = async (req: Request, res: Response) => {
 	try {
-		const { touristname, title, body, date, state, reply, createdBy } =
-			req.body;
+		const { title, body, date, state, reply, createdBy } = req.body;
 		const newComplaint = await complaint.create({
 			title,
 			body,
@@ -24,24 +23,27 @@ export const createComplaint = async (req: Request, res: Response) => {
 };
 
 //Retrieve all Complaints --Used by Admin --list
-export const getAllComplaints = async (req: Request, res: Response) => {
+export const getAllComplaints = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const pipeline: PipelineStage[] = [
 			{
 				$lookup: {
-					from: "tourist",
+					from: "tourists",
 					localField: "createdBy",
 					foreignField: "_id",
 					as: "createdBy",
 				},
 			},
-
-			...filterByComplaintStatus(req.query),
 		];
+		pipeline.push(...filterByComplaintStatus(req.query));
 		const complaints = await complaint.aggregate(pipeline);
 		res.status(200).json(complaints);
 	} catch (error) {
-		res.status(500).json({ message: "Internal Server Error" });
+		next(error);
 	}
 };
 
