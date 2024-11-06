@@ -7,14 +7,17 @@ import { filterByComplaintStatus } from "../../Services/Operations/Filter/filter
 //Creates a Complaint --Tourist Only
 export const createComplaint = async (req: Request, res: Response) => {
 	try {
-		const { title, body, date, state, reply, createdBy } = req.body;
+		const { userid } = req.headers;
+		const { title, body, date, state, reply } = req.body;
+		// TODO :: title, body are required fields, check if they are present
+		// TODO :: userid is required, check if it is present
+		// TODO :: update the array of complaints in the tourist model
 		const newComplaint = await complaint.create({
 			title,
 			body,
 			date,
-			reply,
 			state,
-			createdBy,
+			createdBy : userid,
 		});
 		res.status(201).json(newComplaint);
 	} catch (error) {
@@ -47,6 +50,23 @@ export const getAllComplaints = async (
 		];
 		pipeline.push(...filterByComplaintStatus(req.query));
 		const complaints = await complaint.aggregate(pipeline);
+		res.status(200).json(complaints);
+	} catch (error) {
+		next(error);
+	}
+};
+
+//Reterive all Complaints by Tourist --Used by Tourist --list
+export const getAllComplaintsByTourist = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	try {
+		//TODO :: Check if userid is present
+		const { userid } = req.headers;
+		const complaints = await complaint
+			.find({ createdBy: userid })
 		res.status(200).json(complaints);
 	} catch (error) {
 		next(error);
