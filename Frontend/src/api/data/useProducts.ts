@@ -59,7 +59,7 @@ export function useCreateProduct(onSuccess: (data: any) => void) {
 export function useUpdateProduct(onSuccess: () => void) {
 	const { user } = useLoginStore();
 	const mutation = useMutation({
-		mutationFn: (product: TProduct) => {
+		mutationFn: (product: Partial<TProduct>) => {
 			if (!user) {
 				throw new Error("User is not defined");
 			}

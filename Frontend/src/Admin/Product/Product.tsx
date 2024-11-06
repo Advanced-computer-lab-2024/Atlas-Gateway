@@ -1,4 +1,6 @@
+import axios from "axios";
 import { Package, RotateCw } from "lucide-react";
+import { useEffect, useState } from "react";
 
 import { usePagination } from "@/api/data/usePagination";
 import { useProducts } from "@/api/data/useProducts";
@@ -29,7 +31,28 @@ const Product = () => {
 		pageNum: meta?.pages || 1,
 		pagesCount: meta?.pages || 1,
 	});
-
+	const [productsPics, setProductsPics] = useState<{ [key: string]: string }>(
+		{},
+	);
+	const handleDownload = async (productId: string, filePath: string) => {
+		try {
+			const res = await axios.post(
+				`http://localhost:5000/api/media/download`,
+				{ filePath },
+			);
+			setProductsPics((prevPics) => ({
+				...prevPics,
+				[productId]: res.data,
+			}));
+		} catch (error) {
+			console.error(error);
+		}
+	};
+	useEffect(() => {
+		products?.forEach((prod) => {
+			handleDownload(prod._id, prod.imagePath);
+		});
+	}, [products]);
 	const [query, setQuery] = useQueryString();
 	return (
 		<div className="flex flex-col p-3 h-screen overflow-y-auto pb-32">
@@ -78,7 +101,15 @@ const Product = () => {
 						className="relative flex flex-col p-4 bg-white shadow-lg rounded-lg"
 					>
 						<div className="w-full h-40 flex justify-center items-center bg-gray-100 rounded-md">
-							<Package className="w-20 h-20" />
+							{!productsPics[prod._id] ? (
+								<Package className="w-20 h-20" />
+							) : (
+								<img
+									src={productsPics[prod._id]}
+									alt="Product Picture"
+									className="object-cover w-full h-full"
+								/>
+							)}
 						</div>
 						<div className="flex justify-between m-2">
 							<h2 className="text-lg font-semibold mt-2">

@@ -35,12 +35,13 @@ interface props {
 }
 
 const EditForm = ({ id, type }: props) => {
-	let createdProductId = "";
 	const [file, setFile] = useState<File | null>(null);
 	const { refetch } = useProducts();
-	const { doUpload } = useUpload();
+	const { doUpload } = useUpload(() => {
+		refetch();
+	});
 	const { doCreateProduct } = useCreateProduct((response) => {
-		createdProductId = response.data._id;
+		const createdProductId = response.data._id;
 		const payload = {
 			userType: "product",
 			userId: createdProductId,
