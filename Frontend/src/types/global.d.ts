@@ -1,5 +1,6 @@
 import { EAccountType } from "./enums";
 
+
 export type TUser = {
 	_id: string;
 	username: string;
@@ -132,6 +133,18 @@ export interface TTag {
 export interface TCategory {
 	_id?: string;
 	name: string;
+}
+
+export interface TComplaint {
+	_id: string;
+	touristname: string;
+	title: string;
+	body: string;
+	date: string;
+	state: string;
+	createdBy: TUser;
+	reply: string;
+	replyedBy: TUser;
 }
 
 export interface TItinerary {

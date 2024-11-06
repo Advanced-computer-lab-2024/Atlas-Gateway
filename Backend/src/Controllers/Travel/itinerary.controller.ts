@@ -1,6 +1,9 @@
 import { NextFunction, Request, Response } from "express";
+import { Types } from "mongoose";
 
 import HttpError from "../../Errors/HttpError";
+import { Itinerary } from "../../Models/Travel/itinerary.model";
+import { Tourist } from "../../Models/Users/tourist.model";
 import * as itineraryService from "../../Services/Travel/itinerary.service";
 import { Types } from "mongoose";
 import { Itinerary } from "@/Models/Travel/itinerary.model";

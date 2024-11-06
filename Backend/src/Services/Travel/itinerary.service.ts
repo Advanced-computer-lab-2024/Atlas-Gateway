@@ -2,10 +2,10 @@ import mongoose, { PipelineStage, Types } from "mongoose";
 
 import HttpError from "../../Errors/HttpError";
 import { IItinerary, Itinerary } from "../../Models/Travel/itinerary.model";
+import { Tourist } from "../../Models/Users/tourist.model";
 import AggregateBuilder from "../Operations/aggregation.service";
-import * as tourGuideService from "./../Users/tourGuide.service";
 import { cancelItinerary } from "../Users/tourist.service";
-import { Tourist } from "@/Models/Users/tourist.model";
+import * as tourGuideService from "./../Users/tourGuide.service";
 
 export const createItinerary = async (
 	itinerary: IItinerary,
@@ -265,4 +265,4 @@ export const bookItinerary = async (itineraryId: string, touristId: string) => {
 	  }
 	}
   };
-  
+ 

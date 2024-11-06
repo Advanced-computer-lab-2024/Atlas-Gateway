@@ -1,11 +1,11 @@
 import { Types } from "mongoose";
 
 import HttpError from "../../Errors/HttpError";
+import { Transportation } from "../../Models/Travel/transportation.model";
 import { Advertiser, IAdvertiser } from "../../Models/Users/advertiser.model";
 import { hashPassword } from "../Auth/password.service";
 import uniqueUsername from "../Auth/username.service";
 import * as adminService from "./admin.service";
-import { Transportation } from "@/Models/Travel/transportation.model";
 
 export const createAdvertiser = async (
 	username: string,
@@ -169,3 +169,4 @@ export const addTransportation = async (advertiserId: string, transportationId: 
 	}
   };
   
+

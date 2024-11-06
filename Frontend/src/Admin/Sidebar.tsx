@@ -1,9 +1,11 @@
 import {
 	ActivityIcon,
+	MessageCircleWarning,
 	Package,
 	TagIcon,
 	UserCircleIcon,
 	Users,
+	
 } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -56,7 +58,7 @@ const Sidebar = ({ onSelect }: Props) => {
 			</div>
 
 			<div className="flex flex-col gap-4">
-				{["Accounts", "Products", "Activity Category", "Tags"].map(
+				{["Accounts", "Products", "Activity Category", "Tags", "Complaints"].map(
 					(item) => (
 						<div
 							key={item}
@@ -92,6 +94,12 @@ const Sidebar = ({ onSelect }: Props) => {
 									width={50}
 									height={50}
 								/>
+							)}
+							{item === "Complaints" && (
+								<MessageCircleWarning
+									className="text-white p-1 rounded-full"
+									width={50}
+									height={50}/>
 							)}
 							<p className="text-[whitesmoke]">{item}</p>
 						</div>

@@ -5,6 +5,7 @@ import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
 
 import Activites from "./Activities/Activites";
 import ActivityDetails from "./Activities/ActivityDetails";
+import ComplaintDetails from "./Admin/Complaint/ComplaintDetails";
 import Admin from "./Admin/Dashboard";
 import Home from "./Home/Home";
 import Itineraries from "./Itineraries/Itineraries";
@@ -28,10 +29,21 @@ const router = createBrowserRouter([
 		path: "/admin",
 		element: (
 			<QueryStateProvider>
-				<Admin />
+				<Outlet />
 			</QueryStateProvider>
 		),
+		children: [
+			{
+				path: "/admin",
+				element: <Admin />,
+			},
+			{
+				path: "/admin/complaint/:id",
+				element: <ComplaintDetails />,
+			},
+		],
 	},
+
 	{
 		path: "/register",
 		element: <Register />,

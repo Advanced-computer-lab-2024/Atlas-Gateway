@@ -49,3 +49,12 @@ export const tagOrCategorySchema = z.object({
 		message: "name must be at least 5 characters long",
 	}),
 });
+
+export const complaintSchema = z.object({
+	name: z.string({ message: "name is required" }).min(5, {
+		message: "name must be at least 5 characters long",
+	}),
+	complaint: z.string({ message: "complaint is required" }).min(10, {
+		message: "complaint must be at least 10 characters long",
+	}),
+});
