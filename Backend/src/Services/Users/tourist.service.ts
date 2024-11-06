@@ -4,6 +4,9 @@ import HttpError from "../../Errors/HttpError";
 import { ITourist, Tourist } from "../../Models/Users/tourist.model";
 import { hashPassword } from "../Auth/password.service";
 import uniqueUsername from "../Auth/username.service";
+import { Itinerary } from "@/Models/Travel/itinerary.model";
+import { Activity } from "@/Models/Travel/activity.model";
+import { Transportation } from "@/Models/Travel/transportation.model";
 
 export const createTourist = async (
 	username: string,
@@ -64,5 +67,170 @@ export const deleteTourist = async (id: string) => {
 
 	return tourist;
 };
+
+export const addBookedActivity = async (touristId: string, activityId: Object) => {
+	if (!Types.ObjectId.isValid(touristId)) {
+		throw new HttpError(400, "Tourist id is not valid");
+	}
+
+	const tourist = await Tourist.findById(touristId);
+	if (!tourist) {
+		throw new HttpError(404, "Tourist not found");
+	}
+
+	const activity = await Activity.findById(activityId);
+
+	if (!activity) {
+		throw new HttpError(404, "Activity not found");
+	}
+
+	tourist.bookedActivities.push(activity.id);
+	await tourist.save();
+	return tourist;
+};
+
+export const addBookedItinerary = async (touristId: string, itineraryId: string) => {
+	if (!Types.ObjectId.isValid(touristId)) {
+		throw new HttpError(400, "Tourist id is not valid");
+	}
+
+	const tourist = await Tourist.findById(touristId);
+	if (!tourist) {
+		throw new HttpError(404, "Tourist not found");
+	}
+
+	const itinerary = await Itinerary.findById(itineraryId);
+
+	if (!itinerary) {
+		throw new HttpError(404, "Itinerary not found");
+	}
+
+	tourist.bookedItineraries.push(itinerary.id);
+	await tourist.save();
+	return tourist;
+};
+
+export const addBookedTransportation = async (touristId: string, transportationId: string) => {
+	if (!Types.ObjectId.isValid(touristId)) {
+		throw new HttpError(400, "Tourist id is not valid");
+	}
+
+	const tourist = await Tourist.findById(touristId);
+	if (!tourist) {
+		throw new HttpError(404, "Tourist not found");
+	}
+
+	const transportation = await Transportation.findById(transportationId);
+
+	if (!transportation) {
+		throw new HttpError(404, "Transportation not found");
+	}
+
+	tourist.bookedTransportations.push(transportation.id);
+	await tourist.save();
+	return tourist;
+};
+
+
+export const cancelItinerary = async (touristId: string, itineraryId: string) => {
+	if (!Types.ObjectId.isValid(touristId)) {
+		throw new HttpError(400, "Tourist id is not valid");
+	}
+
+	const tourist = await Tourist.findById(touristId);
+	if (!tourist) {
+		throw new HttpError(404, "Tourist not found");
+	}
+
+	const itinerary = await Itinerary.findById(itineraryId);
+
+	if (!itinerary) {
+		throw new HttpError(404, "Itinerary not found");
+	}
+
+	if (!tourist.bookedItineraries.includes(itinerary.id)) {
+		throw new HttpError(404, "Transportation not found in the tourist's list");
+	}
+
+	const removed = await tourist.updateOne({
+		$pull: { itineraries: itineraryId }
+	});
+
+	if (removed.modifiedCount === 0) {
+		throw new HttpError(404, "Failed to cancel transportation booking");
+	}
+
+	await tourist.save();
+
+	return tourist;
+};
+
+export const cancelActivity = async (touristId: string, activityId: string) => {
+	if (!Types.ObjectId.isValid(touristId)) {
+		throw new HttpError(400, "Tourist id is not valid");
+	}
+
+	const tourist = await Tourist.findById(touristId);
+	if (!tourist) {
+		throw new HttpError(404, "Tourist not found");
+	}
+
+	
+	const activity = await Activity.findById(activityId);
+
+	if (!activity) {
+		throw new HttpError(404, "Activity not found");
+	}
+
+	if (!tourist.bookedActivities.includes(activity.id)) {
+		throw new HttpError(404, "Activity not found in the tourist's list");
+	}
+
+	const removed = await tourist.updateOne({
+		$pull: { activitys: activityId }
+	});
+
+	if (removed.modifiedCount === 0) {
+		throw new HttpError(404, "Failed to cancel activity booking");
+	}
+
+	await tourist.save();
+
+	return tourist;
+};
+
+export const cancelTransportation = async (touristId: string, transportationId: string) => {
+	if (!Types.ObjectId.isValid(touristId)) {
+		throw new HttpError(400, "Tourist id is not valid");
+	}
+
+	const tourist = await Tourist.findById(touristId);
+	if (!tourist) {
+		throw new HttpError(404, "Tourist not found");
+	}
+	
+	const transportation = await Transportation.findById(transportationId);
+
+	if (!transportation) {
+		throw new HttpError(404, "Transportation not found");
+	}
+
+	if (!tourist.bookedTransportations.includes(transportation.id)) {
+		throw new HttpError(404, "Transportation not found in the tourist's list");
+	}
+
+	const removed = await tourist.updateOne({
+		$pull: { transportations: transportationId }
+	});
+
+	if (removed.modifiedCount === 0) {
+		throw new HttpError(404, "Failed to cancel Transportation booking");
+	}
+
+	await tourist.save();
+
+	return tourist;
+};
+
 
 export const getTouristsByUsername = async (username: string) => {};

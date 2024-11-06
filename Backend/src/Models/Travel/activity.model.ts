@@ -21,6 +21,8 @@ export interface IActivity extends Document {
 	};
 	avgRating: number;
 	totalNumberOfRatings: number;
+	numberOfBookings: number;
+	tourists: Types.ObjectId[];
 }
 
 const activitySchema = new Schema<IActivity>(
@@ -59,6 +61,8 @@ const activitySchema = new Schema<IActivity>(
 		},
 		avgRating: { type: Number, min: 0, max: 5, default: 0 },
 		totalNumberOfRatings: { type: Number, default: 0 },
+		numberOfBookings: { type: Number, default: 0 },
+		tourists: [{ type: Schema.Types.ObjectId, ref: 'Tourist' }],
 	},
 	schemaConfig,
 );
