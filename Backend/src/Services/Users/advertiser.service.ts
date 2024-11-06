@@ -1,11 +1,11 @@
 import { Types } from "mongoose";
 
 import HttpError from "../../Errors/HttpError";
+import { Transportation } from "../../Models/Travel/transportation.model";
 import { Advertiser, IAdvertiser } from "../../Models/Users/advertiser.model";
 import { hashPassword } from "../Auth/password.service";
 import uniqueUsername from "../Auth/username.service";
 import * as adminService from "./admin.service";
-import { Transportation } from "@/Models/Travel/transportation.model";
 
 export const createAdvertiser = async (
 	username: string,
@@ -96,76 +96,88 @@ export const viewActivities = async (id: string) => {
 	return activities.activities;
 };
 
-export const addTransportation = async (advertiserId: string, transportationId: string) => {
+export const addTransportation = async (
+	advertiserId: string,
+	transportationId: string,
+) => {
 	try {
-	  if (!Types.ObjectId.isValid(advertiserId)) {
-		throw new HttpError(400, "Advertiser id is not valid");
-	  }
-  
-	  const advertiser = await Advertiser.findById(advertiserId);
-	  if (!advertiser) {
-		throw new HttpError(404, "Advertiser not found");
-	  }
-  
-	  const transportation = await Transportation.findById(transportationId);
-	  if (!transportation) {
-		throw new HttpError(404, "Transportation not found");
-	  }
-  
-	  advertiser.transportations.push(transportation.id);
-	  await advertiser.save();
-  
-	  return advertiser;
-  
+		if (!Types.ObjectId.isValid(advertiserId)) {
+			throw new HttpError(400, "Advertiser id is not valid");
+		}
+
+		const advertiser = await Advertiser.findById(advertiserId);
+		if (!advertiser) {
+			throw new HttpError(404, "Advertiser not found");
+		}
+
+		const transportation = await Transportation.findById(transportationId);
+		if (!transportation) {
+			throw new HttpError(404, "Transportation not found");
+		}
+
+		advertiser.transportations.push(transportation.id);
+		await advertiser.save();
+
+		return advertiser;
 	} catch (error) {
-	  if (error instanceof HttpError) {
-		throw error;
-	  } else {
-		console.error("Unexpected error in addTransportation:", error);
-		throw new HttpError(500, "An unexpected error occurred while adding transportation");
-	  }
+		if (error instanceof HttpError) {
+			throw error;
+		} else {
+			console.error("Unexpected error in addTransportation:", error);
+			throw new HttpError(
+				500,
+				"An unexpected error occurred while adding transportation",
+			);
+		}
 	}
-  };
-  
-  export const removeTransportation = async (advertiserId: string, transportationId: string) => {
+};
+
+export const removeTransportation = async (
+	advertiserId: string,
+	transportationId: string,
+) => {
 	try {
-	  if (!Types.ObjectId.isValid(advertiserId)) {
-		throw new HttpError(400, "Advertiser id is not valid");
-	  }
-  
-	  const advertiser = await Advertiser.findById(advertiserId);
-	  if (!advertiser) {
-		throw new HttpError(404, "Advertiser not found");
-	  }
-  
-	  const transportation = await Transportation.findById(transportationId);
-	  if (!transportation) {
-		throw new HttpError(404, "Transportation not found");
-	  }
-  
-	  if (!advertiser.transportations.includes(transportation.id)) {
-		throw new HttpError(404, "Transportation not found in the advertiser's list");
-	  }
-  
-	  const removed = await advertiser.updateOne({
-		$pull: { transportations: transportationId }
-	  });
-  
-	  if (removed.modifiedCount === 0) {
-		throw new HttpError(404, "Failed to remove transportation");
-	  }
-  
-	  await advertiser.save();
-  
-	  return advertiser;
-  
+		if (!Types.ObjectId.isValid(advertiserId)) {
+			throw new HttpError(400, "Advertiser id is not valid");
+		}
+
+		const advertiser = await Advertiser.findById(advertiserId);
+		if (!advertiser) {
+			throw new HttpError(404, "Advertiser not found");
+		}
+
+		const transportation = await Transportation.findById(transportationId);
+		if (!transportation) {
+			throw new HttpError(404, "Transportation not found");
+		}
+
+		if (!advertiser.transportations.includes(transportation.id)) {
+			throw new HttpError(
+				404,
+				"Transportation not found in the advertiser's list",
+			);
+		}
+
+		const removed = await advertiser.updateOne({
+			$pull: { transportations: transportationId },
+		});
+
+		if (removed.modifiedCount === 0) {
+			throw new HttpError(404, "Failed to remove transportation");
+		}
+
+		await advertiser.save();
+
+		return advertiser;
 	} catch (error) {
-	  if (error instanceof HttpError) {
-		throw error;
-	  } else {
-		console.error("Unexpected error in removeTransportation:", error);
-		throw new HttpError(500, "An unexpected error occurred while removing transportation");
-	  }
+		if (error instanceof HttpError) {
+			throw error;
+		} else {
+			console.error("Unexpected error in removeTransportation:", error);
+			throw new HttpError(
+				500,
+				"An unexpected error occurred while removing transportation",
+			);
+		}
 	}
-  };
-  
+};

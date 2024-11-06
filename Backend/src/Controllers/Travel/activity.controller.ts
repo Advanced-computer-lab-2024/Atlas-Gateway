@@ -1,11 +1,14 @@
 import { NextFunction, Request, Response } from "express";
+import { Types } from "mongoose";
 
 import HttpError from "../../Errors/HttpError";
+import { Activity } from "../../Models/Travel/activity.model";
+import { Tourist } from "../../Models/Users/tourist.model";
 import * as activityService from "../../Services/Travel/activity.service";
-import { addBookedActivity, cancelActivity } from "@/Services/Users/tourist.service";
-import { Activity } from "@/Models/Travel/activity.model";
-import { Types } from "mongoose";
-import { Tourist } from "@/Models/Users/tourist.model";
+import {
+	addBookedActivity,
+	cancelActivity,
+} from "../../Services/Users/tourist.service";
 
 export const createActivities = async (
 	req: Request,
@@ -183,7 +186,9 @@ export const bookActivity = async (req: Request, res: Response) => {
 			return res.status(400).json({ message: "Cannot book Activity" });
 		}
 
-		return res.status(201).json({ message: "Activity booked successfully" });
+		return res
+			.status(201)
+			.json({ message: "Activity booked successfully" });
 	} catch (error) {
 		return res.status(500).json({ message: "Error booking Activity" });
 	}
@@ -218,7 +223,10 @@ export const cancelBookingActivity = async (req: Request, res: Response) => {
 			return res.status(404).json({ message: "Tourist not found" });
 		}
 
-		const cancelBookingResult = cancelBookingActivity(activity.id, tourist.id);
+		const cancelBookingResult = cancelBookingActivity(
+			activity.id,
+			tourist.id,
+		);
 
 		const removeBookingResult = cancelActivity(tourist.id, activity.id);
 
@@ -226,7 +234,9 @@ export const cancelBookingActivity = async (req: Request, res: Response) => {
 			return res.status(400).json({ message: "Cannot book Activity" });
 		}
 
-		return res.status(201).json({ message: "Activity booked successfully" });
+		return res
+			.status(201)
+			.json({ message: "Activity booked successfully" });
 	} catch (error) {
 		return res.status(500).json({ message: "Error booking Activity" });
 	}

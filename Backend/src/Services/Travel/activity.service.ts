@@ -2,10 +2,10 @@ import mongoose, { Types } from "mongoose";
 
 import HttpError from "../../Errors/HttpError";
 import { Activity, IActivity } from "../../Models/Travel/activity.model";
+import { Tourist } from "../../Models/Users/tourist.model";
 import * as advertiserService from "../../Services/Users/advertiser.service";
 import AggregateBuilder from "../Operations/aggregation.service";
 import { cancelActivity } from "../Users/tourist.service";
-import { Tourist } from "@/Models/Users/tourist.model";
 
 export const createActivity = async (
 	activity: IActivity,
@@ -202,87 +202,100 @@ export const getActivitybyUserId = async (id: string, query: any) => {
 
 export const bookActivity = async (activityId: string, touristId: string) => {
 	try {
-	  const activity = await Activity.findById(activityId);
-	  if (!activity) {
-		throw new HttpError(404, "Activity not found");
-	  }
-  
-	  const tourist = await Tourist.findById(touristId);
-	  if (!tourist) {
-		throw new HttpError(404, "Tourist not found");
-	  }
-  
-	  activity.tourists.push(tourist.id);
-  
-	  activity.numberOfBookings++;
-  
-	  const result = await activity.save();
-	  return result;
-  
+		const activity = await Activity.findById(activityId);
+		if (!activity) {
+			throw new HttpError(404, "Activity not found");
+		}
+
+		const tourist = await Tourist.findById(touristId);
+		if (!tourist) {
+			throw new HttpError(404, "Tourist not found");
+		}
+
+		activity.tourists.push(tourist.id);
+
+		activity.numberOfBookings++;
+
+		const result = await activity.save();
+		return result;
 	} catch (error) {
-	  if (error instanceof HttpError) {
-		throw error;
-	  } else {
-		console.error("Unexpected error in bookActivity:", error);
-		throw new HttpError(500, "An unexpected error occurred while booking the activity");
-	  }
+		if (error instanceof HttpError) {
+			throw error;
+		} else {
+			console.error("Unexpected error in bookActivity:", error);
+			throw new HttpError(
+				500,
+				"An unexpected error occurred while booking the activity",
+			);
+		}
 	}
-  };
-  
-  export const cancelBookingActivity = async (activityId: string, touristId: string) => {
+};
+
+export const cancelBookingActivity = async (
+	activityId: string,
+	touristId: string,
+) => {
 	try {
-	  const activity = await Activity.findById(activityId);
-	  if (!activity) {
-		throw new HttpError(404, "Activity not found");
-	  }
-  
-	  const currentDate = new Date();
-	  const millisecondsBeforeActivity = activity.dateTime.getTime() - currentDate.getTime();
-	  const hoursBeforeActivity = millisecondsBeforeActivity / (1000 * 3600);
-	  if (hoursBeforeActivity < 48) {
-		throw new HttpError(400, "Cannot cancel within 48 hours of activity.");
-	  }
-  
-	  const tourist = await Tourist.findById(touristId);
-	  if (!tourist) {
-		throw new HttpError(404, "Tourist not found");
-	  }
-  
-	  if (!activity.tourists.includes(tourist.id)) {
-		throw new HttpError(404, "Tourist not found in the activity's list");
-	  }
-  
-	  const removed = await activity.updateOne({
-		$pull: { tourists: touristId }
-	  });
-  
-	  if (removed.modifiedCount === 0) {
-		throw new HttpError(404, "Failed to cancel activity booking");
-	  }
-  
-	  let touristResult;
-	  try {
-		touristResult = await cancelActivity(touristId, activity.id);
-	  } catch (error) {
-		throw new HttpError(500, "Failed to cancel tourist booking.");
-	  }
-  
-	  if (!touristResult) {
-		throw new HttpError(404, "Tourist not found in the system");
-	  }
-  
-	  activity.numberOfBookings--;
-  
-	  const result = await activity.save();
-	  return result;
-  
+		const activity = await Activity.findById(activityId);
+		if (!activity) {
+			throw new HttpError(404, "Activity not found");
+		}
+
+		const currentDate = new Date();
+		const millisecondsBeforeActivity =
+			activity.dateTime.getTime() - currentDate.getTime();
+		const hoursBeforeActivity = millisecondsBeforeActivity / (1000 * 3600);
+		if (hoursBeforeActivity < 48) {
+			throw new HttpError(
+				400,
+				"Cannot cancel within 48 hours of activity.",
+			);
+		}
+
+		const tourist = await Tourist.findById(touristId);
+		if (!tourist) {
+			throw new HttpError(404, "Tourist not found");
+		}
+
+		if (!activity.tourists.includes(tourist.id)) {
+			throw new HttpError(
+				404,
+				"Tourist not found in the activity's list",
+			);
+		}
+
+		const removed = await activity.updateOne({
+			$pull: { tourists: touristId },
+		});
+
+		if (removed.modifiedCount === 0) {
+			throw new HttpError(404, "Failed to cancel activity booking");
+		}
+
+		let touristResult;
+		try {
+			touristResult = await cancelActivity(touristId, activity.id);
+		} catch (error) {
+			throw new HttpError(500, "Failed to cancel tourist booking.");
+		}
+
+		if (!touristResult) {
+			throw new HttpError(404, "Tourist not found in the system");
+		}
+
+		activity.numberOfBookings--;
+
+		const result = await activity.save();
+		return result;
 	} catch (error) {
-	  if (error instanceof HttpError) {
-		throw error;
-	  } else {
-		console.error("Unexpected error in cancelBookingActivity:", error);
-		throw new HttpError(500, "An unexpected error occurred while canceling the activity booking");
-	  }
+		if (error instanceof HttpError) {
+			throw error;
+		} else {
+			console.error("Unexpected error in cancelBookingActivity:", error);
+			throw new HttpError(
+				500,
+				"An unexpected error occurred while canceling the activity booking",
+			);
+		}
 	}
-  };
-  
+};

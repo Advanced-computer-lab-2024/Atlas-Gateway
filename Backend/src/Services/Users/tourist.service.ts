@@ -1,12 +1,12 @@
 import { Types } from "mongoose";
 
 import HttpError from "../../Errors/HttpError";
+import { Activity } from "../../Models/Travel/activity.model";
+import { Itinerary } from "../../Models/Travel/itinerary.model";
+import { Transportation } from "../../Models/Travel/transportation.model";
 import { ITourist, Tourist } from "../../Models/Users/tourist.model";
 import { hashPassword } from "../Auth/password.service";
 import uniqueUsername from "../Auth/username.service";
-import { Itinerary } from "@/Models/Travel/itinerary.model";
-import { Activity } from "@/Models/Travel/activity.model";
-import { Transportation } from "@/Models/Travel/transportation.model";
 
 export const createTourist = async (
 	username: string,
@@ -81,116 +81,131 @@ function isOlderThan18(dob: Date): boolean {
 	}
 
 	return age >= 18;
+}
+
+export const addBookedActivity = async (
+	touristId: string,
+	activityId: Object,
+) => {
+	try {
+		if (!Types.ObjectId.isValid(touristId)) {
+			throw new HttpError(400, "Tourist id is not valid");
+		}
+
+		const tourist = await Tourist.findById(touristId);
+		if (!tourist) {
+			throw new HttpError(404, "Tourist not found");
+		}
+
+		if (!isOlderThan18(tourist.dob)) {
+			throw new HttpError(400, "Tourist must be older than 18");
+		}
+
+		const activity = await Activity.findById(activityId);
+		if (!activity) {
+			throw new HttpError(404, "Activity not found");
+		}
+
+		tourist.bookedActivities.push(activity.id);
+
+		await tourist.save();
+
+		return tourist;
+	} catch (error) {
+		if (error instanceof HttpError) {
+			throw error;
+		} else {
+			console.error("Unexpected error in addBookedActivity:", error);
+			throw new HttpError(
+				500,
+				"An unexpected error occurred while adding booked activity",
+			);
+		}
+	}
 };
 
-export const addBookedActivity = async (touristId: string, activityId: Object) => {
+export const addBookedItinerary = async (
+	touristId: string,
+	itineraryId: string,
+) => {
 	try {
-	  if (!Types.ObjectId.isValid(touristId)) {
-		throw new HttpError(400, "Tourist id is not valid");
-	  }
-  
-	  const tourist = await Tourist.findById(touristId);
-	  if (!tourist) {
-		throw new HttpError(404, "Tourist not found");
-	  }
-  
-	  if (!isOlderThan18(tourist.dob)) {
-		throw new HttpError(400, "Tourist must be older than 18");
-	  }
-  
-	  const activity = await Activity.findById(activityId);
-	  if (!activity) {
-		throw new HttpError(404, "Activity not found");
-	  }
-  
-	  tourist.bookedActivities.push(activity.id);
-  
-	  await tourist.save();
-  
-	  return tourist;
-  
-	} catch (error) {
-	  if (error instanceof HttpError) {
-		throw error;
-	  } else {
-		console.error("Unexpected error in addBookedActivity:", error);
-		throw new HttpError(500, "An unexpected error occurred while adding booked activity");
-	  }
-	}
-  };
-  
-  export const addBookedItinerary = async (touristId: string, itineraryId: string) => {
-	try {
-	  if (!Types.ObjectId.isValid(touristId)) {
-		throw new HttpError(400, "Tourist id is not valid");
-	  }
-  
-	  const tourist = await Tourist.findById(touristId);
-	  if (!tourist) {
-		throw new HttpError(404, "Tourist not found");
-	  }
-  
-	  if (!isOlderThan18(tourist.dob)) {
-		throw new HttpError(400, "Tourist must be older than 18");
-	  }
-  
-	  const itinerary = await Itinerary.findById(itineraryId);
-	  if (!itinerary) {
-		throw new HttpError(404, "Itinerary not found");
-	  }
-  
-	  tourist.bookedItineraries.push(itinerary.id);
-  	  await tourist.save();
-  
-	  return tourist;
-  
-	} catch (error) {
-	  if (error instanceof HttpError) {
-		throw error;
-	  } else {
-		console.error("Unexpected error in addBookedItinerary:", error);
-		throw new HttpError(500, "An unexpected error occurred while adding booked itinerary");
-	  }
-	}
-  };  
+		if (!Types.ObjectId.isValid(touristId)) {
+			throw new HttpError(400, "Tourist id is not valid");
+		}
 
-export const addBookedTransportation = async (touristId: string, transportationId: string) => {
-	try {
-	  if (!Types.ObjectId.isValid(touristId)) {
-		throw new HttpError(400, "Tourist id is not valid");
-	  }
-  
-	  const tourist = await Tourist.findById(touristId);
-	  if (!tourist) {
-		throw new HttpError(404, "Tourist not found");
-	  }
-  
-	  if (!isOlderThan18(tourist.dob)) {
-		throw new HttpError(400, "Tourist must be older than 18");
-	  }
-  
-	  const transportation = await Transportation.findById(transportationId);
-	  if (!transportation) {
-		throw new HttpError(404, "Transportation not found");
-	  }
-  
-	  tourist.bookedTransportations.push(transportation.id);
-  
-	  await tourist.save();
-  
-	  return tourist;
-  
-	} catch (error) {
-	  if (error instanceof HttpError) {
-		throw error;
-	  } else {
-		console.error("Unexpected error:", error);
-		throw new HttpError(500, "An unexpected error occurred");
-	  }
-	}
-  };  
+		const tourist = await Tourist.findById(touristId);
+		if (!tourist) {
+			throw new HttpError(404, "Tourist not found");
+		}
 
-export const cancelItinerary = async (touristId: string, itineraryId: string) => {
+		if (!isOlderThan18(tourist.dob)) {
+			throw new HttpError(400, "Tourist must be older than 18");
+		}
+
+		const itinerary = await Itinerary.findById(itineraryId);
+		if (!itinerary) {
+			throw new HttpError(404, "Itinerary not found");
+		}
+
+		tourist.bookedItineraries.push(itinerary.id);
+		await tourist.save();
+
+		return tourist;
+	} catch (error) {
+		if (error instanceof HttpError) {
+			throw error;
+		} else {
+			console.error("Unexpected error in addBookedItinerary:", error);
+			throw new HttpError(
+				500,
+				"An unexpected error occurred while adding booked itinerary",
+			);
+		}
+	}
+};
+
+export const addBookedTransportation = async (
+	touristId: string,
+	transportationId: string,
+) => {
+	try {
+		if (!Types.ObjectId.isValid(touristId)) {
+			throw new HttpError(400, "Tourist id is not valid");
+		}
+
+		const tourist = await Tourist.findById(touristId);
+		if (!tourist) {
+			throw new HttpError(404, "Tourist not found");
+		}
+
+		if (!isOlderThan18(tourist.dob)) {
+			throw new HttpError(400, "Tourist must be older than 18");
+		}
+
+		const transportation = await Transportation.findById(transportationId);
+		if (!transportation) {
+			throw new HttpError(404, "Transportation not found");
+		}
+
+		tourist.bookedTransportations.push(transportation.id);
+
+		await tourist.save();
+
+		return tourist;
+	} catch (error) {
+		if (error instanceof HttpError) {
+			throw error;
+		} else {
+			console.error("Unexpected error:", error);
+			throw new HttpError(500, "An unexpected error occurred");
+		}
+	}
+};
+
+export const cancelItinerary = async (
+	touristId: string,
+	itineraryId: string,
+) => {
 	if (!Types.ObjectId.isValid(touristId)) {
 		throw new HttpError(400, "Tourist id is not valid");
 	}
@@ -207,11 +222,14 @@ export const cancelItinerary = async (touristId: string, itineraryId: string) =>
 	}
 
 	if (!tourist.bookedItineraries.includes(itinerary.id)) {
-		throw new HttpError(404, "Transportation not found in the tourist's list");
+		throw new HttpError(
+			404,
+			"Transportation not found in the tourist's list",
+		);
 	}
 
 	const removed = await tourist.updateOne({
-		$pull: { itineraries: itineraryId }
+		$pull: { itineraries: itineraryId },
 	});
 
 	if (removed.modifiedCount === 0) {
@@ -233,7 +251,6 @@ export const cancelActivity = async (touristId: string, activityId: string) => {
 		throw new HttpError(404, "Tourist not found");
 	}
 
-
 	const activity = await Activity.findById(activityId);
 
 	if (!activity) {
@@ -245,7 +262,7 @@ export const cancelActivity = async (touristId: string, activityId: string) => {
 	}
 
 	const removed = await tourist.updateOne({
-		$pull: { activitys: activityId }
+		$pull: { activitys: activityId },
 	});
 
 	if (removed.modifiedCount === 0) {
@@ -257,7 +274,10 @@ export const cancelActivity = async (touristId: string, activityId: string) => {
 	return tourist;
 };
 
-export const cancelTransportation = async (touristId: string, transportationId: string) => {
+export const cancelTransportation = async (
+	touristId: string,
+	transportationId: string,
+) => {
 	if (!Types.ObjectId.isValid(touristId)) {
 		throw new HttpError(400, "Tourist id is not valid");
 	}
@@ -274,11 +294,14 @@ export const cancelTransportation = async (touristId: string, transportationId: 
 	}
 
 	if (!tourist.bookedTransportations.includes(transportation.id)) {
-		throw new HttpError(404, "Transportation not found in the tourist's list");
+		throw new HttpError(
+			404,
+			"Transportation not found in the tourist's list",
+		);
 	}
 
 	const removed = await tourist.updateOne({
-		$pull: { transportations: transportationId }
+		$pull: { transportations: transportationId },
 	});
 
 	if (removed.modifiedCount === 0) {
@@ -290,5 +313,4 @@ export const cancelTransportation = async (touristId: string, transportationId: 
 	return tourist;
 };
 
-
-export const getTouristsByUsername = async (username: string) => { };
+export const getTouristsByUsername = async (username: string) => {};
