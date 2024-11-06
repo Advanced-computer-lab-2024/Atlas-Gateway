@@ -11,7 +11,6 @@ import {
 import {
 	useDeleteTourGuideProfile,
 	useTourGuides,
-	useUpdateTourGuideProfile,
 } from "@/api/data/useProfile";
 import { TTourGuideProfileResponse } from "@/api/service/types";
 import {

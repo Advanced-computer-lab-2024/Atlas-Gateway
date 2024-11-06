@@ -56,7 +56,8 @@ export const updateSeller = async (
 		const seller = await Seller.findById(id);
 		const overRide = true
 			? Object.keys(newSeller)[0] == "idPath" ||
-				Object.keys(newSeller)[0] == "taxCardPath"
+				Object.keys(newSeller)[0] == "taxCardPath" ||
+				Object.keys(newSeller)[0] == "imagePath"
 			: false;
 		if (!seller?.isVerified && !overRide) {
 			throw new HttpError(401, "Seller is not Verified");

@@ -29,7 +29,7 @@ const ENDPOINTS = {
 	register: "api/register/create",
 	media: {
 		upload: "api/media/upload",
-		download: (filePath: string) => `api/media/download/${filePath}`,
+		download: "api/media/download",
 	},
 	admin: {
 		list: "api/admin/list",

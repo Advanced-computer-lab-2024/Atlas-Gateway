@@ -4,8 +4,9 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
+import axios from "axios";
 import { Camera, Image, Settings } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useSellerProfile } from "@/api/data/useProfile";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -23,6 +24,22 @@ const General = () => {
 	const [isDrawerOpen2, setIsDrawerOpen2] = useState(false);
 	const [isDrawerOpen3, setIsDrawerOpen3] = useState(false);
 	const [isDrawerOpen4, setIsDrawerOpen4] = useState(false);
+	const [profilePic, setProfilePic] = useState("");
+	const handleDownload = async (filePath: string) => {
+		axios
+			.post(`http://localhost:5000/api/media/download`, { filePath })
+			.then((res) => {
+				setProfilePic(res.data);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
+	useEffect(() => {
+		if (data?.imagePath) {
+			handleDownload(data.imagePath);
+		}
+	}, [data?.imagePath]);
 	//May needed later:
 
 	// // Function to truncate description for display
@@ -51,11 +68,19 @@ const General = () => {
 					onClick={() => setIsDrawerOpen4(true)}
 					className="absolute left-36 -bottom-16 w-48 h-48 rounded-full overflow-hidden border-4 border-white focus:outline-none group"
 				>
-					<img
-						src={profile_background}
-						alt="Profile"
-						className="object-cover w-full h-full"
-					/>
+					{profilePic == "" ? (
+						<img
+							src={profile_background}
+							alt="Profile"
+							className="object-cover w-full h-full"
+						/>
+					) : (
+						<img
+							src={profilePic}
+							alt="Profile"
+							className="object-cover w-full h-full"
+						/>
+					)}
 					<div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
 						<div className="flex flex-col justify-center items-center">
 							<Image className="text-white opacity-70 w-16 h-16" />

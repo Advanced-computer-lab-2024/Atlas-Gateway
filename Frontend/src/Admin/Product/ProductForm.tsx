@@ -38,7 +38,7 @@ const EditForm = ({ id, type }: props) => {
 	let createdProductId = "";
 	const [file, setFile] = useState<File | null>(null);
 	const { refetch } = useProducts();
-	const { doUpload } = useUpload(() => {});
+	const { doUpload } = useUpload();
 	const { doCreateProduct } = useCreateProduct((response) => {
 		createdProductId = response.data._id;
 		const payload = {
