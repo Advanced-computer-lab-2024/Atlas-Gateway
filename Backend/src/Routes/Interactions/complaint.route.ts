@@ -11,9 +11,6 @@ complaintRouter.put(
 	"/updatebyadmin/:id",
 	ComplaintController.updateComplaintByAdmin,
 );
-complaintRouter.put(
-	"/updatebytourist/:id",
-	ComplaintController.updateComplaintByTourist,
-);
+
 
 export default complaintRouter;

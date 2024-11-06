@@ -77,9 +77,6 @@ export const updateComplaintByAdmin = async (req: Request, res: Response) => {
 		const { id } = req.params;
 		const { state, reply } = req.body;
 		// Log incoming data
-		console.log("Headers (replyedBy):", replyedBy);
-		console.log("Params (id):", id);
-		console.log("Body (state, reply):", state, reply);
 
 		const updatedComplaint = await complaint.findByIdAndUpdate(
 			id,
@@ -98,30 +95,21 @@ export const updateComplaintByAdmin = async (req: Request, res: Response) => {
 };
 
 //Update a Complaint --Used by Tourist --Tourist Reply Changed
-export const updateComplaintByTourist = async (req: Request, res: Response) => {
+export const updateComplaintByTourist = async (req: Request, res: Response, next:NextFunction) => {
 	try {
-		const { id, createdBy } = req.params;
-		const { body, date, state } = req.body;
-
-		if (state === "resolved") {
-			return res
-				.status(400)
-				.json({ message: "Complaint already resolved" });
-		} else {
-			const updatedComplaint = await complaint.findByIdAndUpdate(
-				id,
-				{ body, date },
-				{ new: true },
-			);
-
-			if (!updatedComplaint) {
-				return res.status(404).json({ message: "Complaint not found" });
-			}
-
-			res.status(200).json(updatedComplaint);
+		const { id } = req.params;
+		const { reply } = req.body;
+		const updatedComplaint = await complaint.findByIdAndUpdate(
+			id,
+			{ reply },
+			{ new: true },
+		);
+		if (!updatedComplaint) {
+			return res.status(404).json({ message: "Complaint not found" });
 		}
+		res.status(200).json(updatedComplaint);
 	} catch (error) {
-		res.status(500).json({ message: "Internal Server Error" });
+		next(error);
 	}
 };
 

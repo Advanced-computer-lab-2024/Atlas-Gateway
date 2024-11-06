@@ -15,9 +15,10 @@ import { Textarea } from "@/components/ui/textarea";
 export default function ComplaintDetails() {
 	const navigate = useNavigate();
 	const { data, refetch } = useComplaint();
-	const { doUpdateComplaintByAdmin } = useComplaintsUpdateByAdmin(refetch);
 
 	const { title, body, date, state, reply, createdBy } = data || {};
+
+	const { doUpdateComplaintByAdmin } = useComplaintsUpdateByAdmin(refetch);
 
 	const [replyByAdmin, setReplyByAdmin] = useState(reply);
 
@@ -48,23 +49,24 @@ export default function ComplaintDetails() {
 									{createdBy?.username}
 								</Label.Mid500>
 							</Flex>
-							<Card className="border-hidden">
-								<Flex gap="20">
-									<Label.Big600 className="text-left">
-										Complaint:{" "}
-									</Label.Big600>
-									<Card className="border border-[#2b58ed]">
-										<Label.Mid500 className="p-3">
-											<Label.Big500 className="text-left">
-												{title}
-											</Label.Big500>
-											<Label.Mid500 className="text-center">
-												{body}
-											</Label.Mid500>
-										</Label.Mid500>
-									</Card>
-								</Flex>
-							</Card>
+							<Flex gap="2" align="center">
+								<Label.Big600 className=" w-52 text-left">
+									Complaint title:{" "}
+								</Label.Big600>
+								<Label.Big500 className="text-center">
+									{title}
+								</Label.Big500>
+							</Flex>
+							<Flex gap="2" align="center" >
+								<Label.Big600 className="w-52 text-left">
+									Complaint body:{" "}
+								</Label.Big600>
+								<Card className="p-5 overflow-auto w-[80%] h-[100px] border-[#2b58ed] border">
+									<Label.Mid500 className="overflow-ellipsis text-left">
+										{body}
+									</Label.Mid500>
+								</Card>
+							</Flex>
 
 							<Flex gap="2" align="center">
 								<Label.Big600 className="w-52 text-left">
@@ -84,21 +86,6 @@ export default function ComplaintDetails() {
 								<Label.Mid500 className="overflow-ellipsis">
 									{state}
 								</Label.Mid500>
-								<Button
-									onClick={() => {
-										doUpdateComplaintByAdmin({
-											state:
-												state === "pending"
-													? "resolved"
-													: "pending",
-										});
-									}}
-								>
-									Mark as{" "}
-									{state === "pending"
-										? "resolved"
-										: "pending"}
-								</Button>
 							</Flex>
 							<Flex gap="2">
 								<Label.Big600 className="w-52 text-left">
@@ -109,21 +96,29 @@ export default function ComplaintDetails() {
 										className="border border-[#2b58ed]"
 										id="description"
 										name="description"
-										onChange={(e) => setReplyByAdmin(e.target.value)}
+										onChange={(e) =>
+											setReplyByAdmin(e.target.value)
+										}
 										value={replyByAdmin}
 									/>
 								</Label.Mid500>
-								<Button
-									onClick={() =>
-										doUpdateComplaintByAdmin({
-											...data,
-											reply: replyByAdmin,
-										})
-									}
-								>
-									Send Reply
-								</Button>
 							</Flex>
+							<br></br>
+							<Button
+								onClick={() => {
+									doUpdateComplaintByAdmin({
+										state:
+											state === "pending"
+												? "resolved"
+												: "pending",
+										reply: replyByAdmin,
+									});
+								}}
+							>
+								Mark as{" "}
+								{state === "pending" ? "resolved" : "pending"}{" "}
+								and Send Reply
+							</Button>
 						</Flex>
 					</Flex>
 				</Flex>
