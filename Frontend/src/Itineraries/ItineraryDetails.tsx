@@ -1,5 +1,8 @@
+import axios from "axios";
 import { formatDate } from "date-fns";
 import { ArrowLeft, DollarSign, MapPin, Star } from "lucide-react";
+import { useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useItinerary } from "@/api/data/useItineraries";
@@ -7,6 +10,7 @@ import Label from "@/components/ui/Label";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Flex } from "@/components/ui/flex";
+import Rating, { ratingType } from "@/components/ui/rating";
 import { languageOptions } from "@/types/consts";
 
 export default function ItineraryDetails() {
@@ -26,6 +30,43 @@ export default function ItineraryDetails() {
 		language,
 		title,
 	} = data || {};
+
+	const [displayValue, setDisplayValue] = React.useState<number | undefined>(
+		0,
+	);
+
+	useEffect(() => {
+		setDisplayValue(avgRating || 0);
+	}, [avgRating]);
+
+	const handleRatingChange = async (inputRating: number) => {
+		try {
+			const res = await axios.post(
+				"http://localhost:5000/api/itineraries/addRating",
+				{
+					productId: data?._id,
+					rating: inputRating,
+					//User ID will be included in the request header
+				},
+			); //TODO: Add the correct endpoint when it is available
+
+			if (!(res.status % 100 === 2)) {
+				throw new Error("Error while saving rating");
+			}
+
+			//Show "Rating Saved" Prompt in frontend
+			const confirmText = document.getElementById("confirmation");
+			if (confirmText) {
+				confirmText.classList.remove("hidden");
+				setDisplayValue(inputRating);
+				setTimeout(() => {
+					confirmText.classList.add("hidden");
+				}, 3000);
+			}
+		} catch (error) {
+			console.error(error);
+		}
+	};
 
 	return (
 		<Flex
@@ -97,14 +138,28 @@ export default function ItineraryDetails() {
 							{price}
 						</Label.Thin300>
 					</Flex>
-					<Flex gap="1" align="center">
-						<Label.Mid600 className="overflow-ellipsis w-60 text-left">
-							Rating:
-						</Label.Mid600>
-						<Star color="yellow" fill="yellow" size={20} />
-						<Label.Thin300 className="overflow-ellipsis">
-							{avgRating ?? "N/A"}
-						</Label.Thin300>
+					<Flex gap="2" align="center">
+						<Label.Big600 className="w-40 text-left">
+							Rating:{" "}
+						</Label.Big600>
+						{/* <Star color="yellow" fill="yellow" size={32} />
+								<Label.Mid500 className="overflow-ellipsis">
+									{avgRating}
+								</Label.Mid500> */}
+						<Flex className="flex-col items-start">
+							<Rating
+								value={displayValue}
+								ratingType={ratingType.DETAILS}
+								interactive={true} //TODO: Get Value from loading details API
+								onChange={(value) => handleRatingChange(value)}
+							/>
+							<p
+								id="confirmation"
+								className="flex-basis-full mt-0 ml-60 text-left hidden z-10 absolute bg-green-500 text-white p-2 rounded-lg"
+							>
+								Saved
+							</p>
+						</Flex>
 					</Flex>
 					<Flex gap="1" align="center">
 						<Label.Mid600 className="overflow-ellipsis w-60 text-left">

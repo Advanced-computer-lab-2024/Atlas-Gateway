@@ -1,5 +1,4 @@
 import axios from "axios";
-import { set } from "lodash";
 import { ArrowLeft, DollarSign, LocateIcon } from "lucide-react";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -7,8 +6,11 @@ import { useNavigate } from "react-router-dom";
 import { useProduct } from "@/api/data/useProducts";
 import Label from "@/components/ui/Label";
 import { Card } from "@/components/ui/card";
+import { CommentsContainer } from "@/components/ui/comments";
 import { Flex } from "@/components/ui/flex";
 import Rating, { ratingType } from "@/components/ui/rating";
+import { EAccountType } from "@/types/enums";
+import { TComment } from "@/types/global";
 
 export default function ProductDetails() {
 	const navigate = useNavigate();
@@ -19,28 +21,60 @@ export default function ProductDetails() {
 		0,
 	);
 
-	useEffect(() => {
-		setDisplayValue(avgRating || 0);
-	}, [avgRating]);
+	const [fetchedComments, setFetchedComments] = React.useState<TComment[]>(
+		[],
+	);
 
-	const handleRateingChange = async (inputRating: number) => {
+	useEffect(() => {
 		try {
-			await axios.post("http://localhost:5000/api/products/addRating", {
-				productId: data?._id,
-				rating: inputRating,
-				//User ID will be included in the request header
-			}); //TODO: Add the correct endpoint when it is available
-			//Show "Rating Saved" Prompt in frontend
+			const fetchComments = async () => {
+				const res = await axios.get(
+					"http://localhost:5000/api/products/getComments",
+					{
+						params: {
+							productId: data?._id,
+							skipCount: fetchedComments.length,
+						},
+					},
+				);
+
+				//concatenate the new comments with the old ones
+				setFetchedComments([...fetchedComments, ...res.data]);
+			};
+			fetchComments();
 		} catch (error) {
 			console.error(error);
 		}
-		const confirmText = document.getElementById("confirmation");
-		if (confirmText) {
-			confirmText.classList.remove("hidden");
-			setDisplayValue(inputRating);
-			setTimeout(() => {
-				confirmText.classList.add("hidden");
-			}, 3000);
+
+		setDisplayValue(avgRating || 0);
+	}, [avgRating, data?._id, fetchedComments]);
+
+	const handleRatingChange = async (inputRating: number) => {
+		try {
+			const res = await axios.post(
+				"http://localhost:5000/api/products/addRating",
+				{
+					productId: data?._id,
+					rating: inputRating,
+					//User ID will be included in the request header
+				},
+			); //TODO: Add the correct endpoint when it is available
+
+			if (!(res.status % 100 === 2)) {
+				throw new Error("Error while saving rating");
+			}
+
+			//Show "Rating Saved" Prompt in frontend
+			const confirmText = document.getElementById("confirmation");
+			if (confirmText) {
+				confirmText.classList.remove("hidden");
+				setDisplayValue(inputRating);
+				setTimeout(() => {
+					confirmText.classList.add("hidden");
+				}, 3000);
+			}
+		} catch (error) {
+			console.error(error);
 		}
 	};
 
@@ -107,8 +141,10 @@ export default function ProductDetails() {
 									<Rating
 										value={displayValue}
 										ratingType={ratingType.DETAILS}
-										interactable={true}
-										onChange={handleRateingChange}
+										interactive={true} //TODO: Get Value from loading details API
+										onChange={(value) =>
+											handleRatingChange(value)
+										}
 									/>
 									<p
 										id="confirmation"
@@ -122,6 +158,94 @@ export default function ProductDetails() {
 					</Flex>
 				</Flex>
 			</Card>
+			<CommentsContainer
+				interactive={true}
+				comments={[
+					...[
+						{
+							_id: "x",
+							user: {
+								username: "user1",
+								_id: "x1",
+								email: "mail",
+								mobile: "123",
+								address: "address",
+								currency: "USD",
+								loyaltyPoints: 0,
+								walletBalance: 0,
+								type: EAccountType.Tourist,
+							},
+							text: "This is a comment",
+							createdAt: "Yes",
+						},
+						{
+							_id: "x",
+							user: {
+								username: "user1",
+								_id: "x1",
+								email: "mail",
+								mobile: "123",
+								address: "address",
+								currency: "USD",
+								loyaltyPoints: 0,
+								walletBalance: 0,
+								type: EAccountType.Tourist,
+							},
+							text: "This is a comment",
+							createdAt: "Yes",
+						},
+						{
+							_id: "x",
+							user: {
+								username: "user1",
+								_id: "x1",
+								email: "mail",
+								mobile: "123",
+								address: "address",
+								currency: "USD",
+								loyaltyPoints: 0,
+								walletBalance: 0,
+								type: EAccountType.Tourist,
+							},
+							text: "This is a comment",
+							createdAt: "Yes",
+						},
+						{
+							_id: "x",
+							user: {
+								username: "user1",
+								_id: "x1",
+								email: "mail",
+								mobile: "123",
+								address: "address",
+								currency: "USD",
+								loyaltyPoints: 0,
+								walletBalance: 0,
+								type: EAccountType.Tourist,
+							},
+							text: "This is a comment",
+							createdAt: "Yes",
+						},
+						{
+							_id: "x",
+							user: {
+								username: "user1",
+								_id: "x1",
+								email: "mail",
+								mobile: "123",
+								address: "address",
+								currency: "USD",
+								loyaltyPoints: 0,
+								walletBalance: 0,
+								type: EAccountType.Tourist,
+							},
+							text: "This is a comment",
+							createdAt: "Yes",
+						},
+					],
+					...fetchedComments,
+				]}
+			/>
 		</Flex>
 	);
 }

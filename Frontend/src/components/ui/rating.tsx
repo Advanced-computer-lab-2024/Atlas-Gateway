@@ -8,22 +8,22 @@ export enum ratingType {
 
 interface RatingProps {
 	value: number;
-	onChange?: (value: number) => void | null;
+	onChange?: (value: number) => void;
 	ratingType?: ratingType;
-	interactable?: boolean;
+	interactive?: boolean;
 }
 
 const Rating: React.FC<RatingProps> = ({
 	value,
 	ratingType = ratingType.CARDS,
-	interactable = false,
+	interactive: interactive = false,
 	onChange,
 }) => {
 	const [hoverValue, setHoverValue] = React.useState<number | null>(null);
 	const displayValue: number = hoverValue !== null ? hoverValue : value;
 	const hoverClass = "hover:scale-125";
 	const handleMouseEnter = (index: number, event: React.MouseEvent) => {
-		if (interactable) {
+		if (interactive) {
 			setHoverValue(index + 1);
 
 			event.currentTarget.classList.add(hoverClass);
@@ -31,13 +31,13 @@ const Rating: React.FC<RatingProps> = ({
 	};
 
 	const handleMouseLeave = (event: React.MouseEvent) => {
-		if (interactable) {
+		if (interactive) {
 			event.currentTarget.classList.remove(hoverClass);
 		}
 	};
 
-	const handleClick = (index: number, event: React.MouseEvent) => {
-		if (interactable) {
+	const handleClick = (index: number) => {
+		if (interactive) {
 			onChange(index + 1);
 			//send rating request to server
 			//Show "Rating Saved" Prompt in frontend
@@ -45,7 +45,7 @@ const Rating: React.FC<RatingProps> = ({
 	};
 
 	const rateLeave = () => {
-		if (interactable) {
+		if (interactive) {
 			setHoverValue(null);
 		}
 	};
@@ -63,7 +63,7 @@ const Rating: React.FC<RatingProps> = ({
 					size={starSize}
 					onMouseEnter={(e) => handleMouseEnter(i, e)}
 					onMouseLeave={(e) => handleMouseLeave(e)}
-					onClick={(e) => handleClick(i, e)}
+					onClick={() => handleClick(i)}
 				/>
 			))}
 
@@ -76,9 +76,7 @@ const Rating: React.FC<RatingProps> = ({
 						handleMouseEnter(Math.floor(displayValue), e)
 					}
 					onMouseLeave={(e) => handleMouseLeave(e)}
-					onClick={(e: React.MouseEvent<Element, MouseEvent>) =>
-						handleClick(Math.floor(displayValue), e)
-					}
+					onClick={() => handleClick(Math.floor(displayValue))}
 				>
 					<Star
 						className="absolute top-0 left-0 z-10 "
@@ -113,7 +111,7 @@ const Rating: React.FC<RatingProps> = ({
 					size={starSize}
 					onMouseEnter={(e) => handleMouseEnter(displayValue + i, e)}
 					onMouseLeave={(e) => handleMouseLeave(e)}
-					onClick={(e) => handleClick(displayValue + i, e)}
+					onClick={() => handleClick(displayValue + i)}
 				/>
 			))}
 		</div>

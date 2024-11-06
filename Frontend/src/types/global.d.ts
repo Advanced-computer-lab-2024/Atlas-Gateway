@@ -149,3 +149,10 @@ export interface TItinerary {
 	accessibility: string;
 	timeline: string;
 }
+
+export interface TComment {
+	_id: string;
+	user: TTourist;
+	text: string;
+	createdAt: string;
+}
