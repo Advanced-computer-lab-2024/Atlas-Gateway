@@ -22,7 +22,7 @@ const Complaint = () => {
 					<TableHeader className="bg-gray-100">
 						<TableRow>
 							{/* <TableHead>Name</TableHead> */}
-							<TableHeader className="w-1/2">Tourist Name</TableHeader>
+							<TableHead className="p-3">Tourist Name</TableHead>
 							<TableHead className="p-3">Complaint Title</TableHead>
 							<TableHead className="p-3">Complaint Date</TableHead>
                             <TableHead className="p-3">State</TableHead>

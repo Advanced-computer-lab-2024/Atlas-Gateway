@@ -76,6 +76,10 @@ export const updateComplaintByAdmin = async (req: Request, res: Response) => {
 		const { replyedBy } = req.headers;
 		const { id } = req.params;
 		const { state, reply } = req.body;
+		// Log incoming data
+		console.log("Headers (replyedBy):", replyedBy);
+		console.log("Params (id):", id);
+		console.log("Body (state, reply):", state, reply);
 
 		const updatedComplaint = await complaint.findByIdAndUpdate(
 			id,
@@ -86,7 +90,7 @@ export const updateComplaintByAdmin = async (req: Request, res: Response) => {
 		if (!updatedComplaint) {
 			return res.status(404).json({ message: "Complaint not found" });
 		}
-
+		console.log(updatedComplaint);
 		res.status(200).json(updatedComplaint);
 	} catch (error) {
 		res.status(500).json({ message: "Internal Server Error" });

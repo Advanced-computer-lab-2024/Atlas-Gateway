@@ -1,27 +1,25 @@
 import { ArrowLeft } from "lucide-react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { useComplaint, useComplaintsUpdateByAdmin } from "@/api/data/useComplaints";
+import {
+	useComplaint,
+	useComplaintsUpdateByAdmin,
+} from "@/api/data/useComplaints";
 import Label from "@/components/ui/Label";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuRadioGroup,
-	DropdownMenuRadioItem,
-	DropdownMenuSeparator,
-	DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Flex } from "@/components/ui/flex";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
 export default function ComplaintDetails() {
 	const navigate = useNavigate();
-	const { data } = useComplaint();
-	const { Updatedata, refetch, setState, setReply } = useComplaintsUpdateByAdmin();
+	const { data, refetch } = useComplaint();
+	const { doUpdateComplaintByAdmin } = useComplaintsUpdateByAdmin(refetch);
+
 	const { title, body, date, state, reply, createdBy } = data || {};
+
+	const [replyByAdmin, setReplyByAdmin] = useState(reply);
 
 	return (
 		<Flex
@@ -84,36 +82,47 @@ export default function ComplaintDetails() {
 									Status:{""}
 								</Label.Big600>
 								<Label.Mid500 className="overflow-ellipsis">
-									<DropdownMenu>
-										<DropdownMenuTrigger className="">
-											<Button variant="ghost" size="sm">
-												{state}
-											</Button>
-										</DropdownMenuTrigger>
-										<DropdownMenuContent className="w-56">
-											<DropdownMenuSeparator />
-											<DropdownMenuRadioGroup
-												value={state}
-												onValueChange={setState}
-											>
-												<DropdownMenuRadioItem value="pending">
-													Pending
-												</DropdownMenuRadioItem>
-												<DropdownMenuRadioItem value="resolved">
-													Resolved
-												</DropdownMenuRadioItem>
-											</DropdownMenuRadioGroup>
-										</DropdownMenuContent>
-									</DropdownMenu>
+									{state}
 								</Label.Mid500>
+								<Button
+									onClick={() => {
+										doUpdateComplaintByAdmin({
+											state:
+												state === "pending"
+													? "resolved"
+													: "pending",
+										});
+									}}
+								>
+									Mark as{" "}
+									{state === "pending"
+										? "resolved"
+										: "pending"}
+								</Button>
 							</Flex>
 							<Flex gap="2">
 								<Label.Big600 className="w-52 text-left">
 									Reply:{" "}
 								</Label.Big600>
 								<Label.Mid500 className="overflow-ellipsis">
-									<Textarea className="border border-[#2b58ed]" id="description" {...reply} />
+									<Textarea
+										className="border border-[#2b58ed]"
+										id="description"
+										name="description"
+										onChange={(e) => setReplyByAdmin(e.target.value)}
+										value={replyByAdmin}
+									/>
 								</Label.Mid500>
+								<Button
+									onClick={() =>
+										doUpdateComplaintByAdmin({
+											...data,
+											reply: replyByAdmin,
+										})
+									}
+								>
+									Send Reply
+								</Button>
 							</Flex>
 						</Flex>
 					</Flex>

@@ -1,16 +1,15 @@
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 
-
-
 import { useLoginStore } from "@/store/loginStore";
+import { TComplaint } from "@/types/global";
 
-
-
-import { apiComplaint, apiComplaints, apiComplaintsUpdateByAdmin } from "../service/complaints";
+import {
+	apiComplaint,
+	apiComplaints,
+	apiComplaintsUpdateByAdmin,
+} from "../service/complaints";
 import { useQueryString } from "./useQueryString";
-
 
 export function useComplaints() {
 	const { user } = useLoginStore();
@@ -27,35 +26,49 @@ export function useComplaints() {
 
 export function useComplaint() {
 	const { id } = useParams<{
-		id: string
+		id: string;
 	}>();
 
-	const { data } = useQuery({
+	const { data, refetch } = useQuery({
 		queryFn: () => apiComplaint(id),
 		queryKey: ["complaint", id],
 	});
 
-	return { data: data?.data };
-
+	return { data: data?.data, refetch };
 }
 
 // update Complaint by Admin
-export function useComplaintsUpdateByAdmin() {
+export function useComplaintsUpdateByAdmin(onSuccess: () => void) {
 	const { user } = useLoginStore();
-	const { _id: replyedBy } = user || {}; // Set replyedBy from user ID
+	const { id } = useParams<{ id: string }>();
 
-	const [state, setState] = useState(''); // Example state
-	const [reply, setReply] = useState(''); // Example reply
+	const mutation = useMutation({
+		mutationFn: (data: Partial<TComplaint>) => {
+			const { _id: userid } = user || {};
 
-	const { data, refetch } = useQuery({
-		queryFn: () => {
-			if (!replyedBy) {
+			// Check if userid is available
+			console.log("User ID:", userid);
+
+			if (!userid) {
+				console.error("User ID is undefined");
 				throw new Error("User ID is undefined");
 			}
-			return apiComplaintsUpdateByAdmin("complaint_id_here", { state, reply }, replyedBy);
+
+			console.log("Updating complaint with data:", { _id: id, ...data });
+
+			// Perform the API call
+			return apiComplaintsUpdateByAdmin({ _id: id, ...data }, userid);
 		},
-		queryKey: ["complaint", replyedBy, state, reply],
+		onSuccess: () => {
+			console.log("Update successful");
+			onSuccess();
+		},
+		onError: (error) => {
+			console.error("Error in mutation:", error);
+		},
 	});
 
-	return { data: data?.data, refetch, setState, setReply };
+	const { mutate } = mutation;
+
+	return { doUpdateComplaintByAdmin: mutate, ...mutation };
 }

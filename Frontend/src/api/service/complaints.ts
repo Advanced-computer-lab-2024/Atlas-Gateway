@@ -33,21 +33,21 @@ export function apiComplaint(id: string | undefined) {
 }
 
 export function apiComplaintsUpdateByAdmin(
-	id: string,
-	data: { state: string; reply: string },
-	replyedBy: string,
+	data: Partial<TComplaint>,
+	_id: string,
 ) {
 	return axios({
 		method: "PUT",
-		url: ENDPOINTS.complaint.updateByAdmin(id),
+		url: ENDPOINTS.complaint.updateByAdmin(_id), // Pass _id directly here
 		headers: {
 			"Content-Type": "application/json",
-			replyedBy, // Include replyedBy in headers
+			replyedBy: _id, // Include `replyedBy` as per backend requirement
 		},
 		baseURL: "http://localhost:5000",
 		data, // Send state and reply as body data
 	});
 }
+
 
 
 export function apiComplaintsCreate(data: TComplaint) {
