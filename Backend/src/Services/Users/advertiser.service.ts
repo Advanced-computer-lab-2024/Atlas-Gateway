@@ -40,7 +40,7 @@ export const getAdvertiserById = async (id: string) => {
 export const updateAdvertiser = async (
 	id: string,
 	userId: string,
-	newAdvertiser: IAdvertiser,
+	newAdvertiser: Partial<IAdvertiser>,
 ) => {
 	if (!Types.ObjectId.isValid(id)) {
 		throw new HttpError(400, "id is invalid");
@@ -51,7 +51,12 @@ export const updateAdvertiser = async (
 	const admin = await adminService.getAdminById(userId);
 	if (!admin) {
 		const advertiser = await getAdvertiserById(id);
-		if (!advertiser || !advertiser.isVerified) {
+		const overRide = true
+			? Object.keys(newAdvertiser)[0] == "idPath" ||
+				Object.keys(newAdvertiser)[0] == "taxCardPath" ||
+				Object.keys(newAdvertiser)[0] == "imagePath"
+			: false;
+		if (!advertiser || (!advertiser.isVerified && !overRide)) {
 			throw new HttpError(401, "User is not Verified");
 		}
 	}

@@ -7,6 +7,7 @@ import HttpError from "./Errors/HttpError";
 import passwordRouter from "./Routes/Auth/changePassword.route";
 import loginRouter from "./Routes/Auth/login.route";
 import registerRouter from "./Routes/Auth/register.route";
+import mediaRouter from "./Routes/Media/media.route";
 import productRouter from "./Routes/Purchases/product.route";
 import itineraryRouter from "./Routes/Travel/Itinerary.route";
 import activityRouter from "./Routes/Travel/activity.route";
@@ -49,6 +50,7 @@ async function startServer() {
 	app.use("/api/places", placesRouter);
 	app.use("/api/login", loginRouter);
 	app.use("/api/change-password", passwordRouter);
+	app.use("/api/media", mediaRouter);
 
 	// Error handling middleware
 	app.use((err: Error, req: Request, res: Response, next: NextFunction) => {

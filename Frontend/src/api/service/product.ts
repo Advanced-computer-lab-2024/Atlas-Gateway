@@ -9,7 +9,7 @@ export function apiProducts(
 	_id: string | undefined,
 	filters: Record<string, string>,
 ) {
-	return axios<TApiResponse<TProduct[]>>({
+	return axios<TApiResponse<TProduct>>({
 		method: "GET",
 		url: ENDPOINTS.products.list,
 		headers: {
@@ -47,7 +47,7 @@ export function apiDeleteProduct(_id: string) {
 	});
 }
 
-export function apiCreateProduct(payload: TProduct, id: string) {
+export function apiCreateProduct(payload: Partial<TProduct>, id: string) {
 	return axios({
 		method: "POST",
 		url: ENDPOINTS.products.create,
@@ -60,10 +60,11 @@ export function apiCreateProduct(payload: TProduct, id: string) {
 	});
 }
 
-export function apiUpdateProduct(payload: TProduct, _id: string) {
+export function apiUpdateProduct(payload: Partial<TProduct>, _id: string) {
+	// needs to be modified later
 	return axios({
 		method: "PUT",
-		url: ENDPOINTS.places.update(payload?._id),
+		url: ENDPOINTS.products.update(payload?._id!),
 		headers: {
 			"Content-Type": "application/json",
 			userid: _id,

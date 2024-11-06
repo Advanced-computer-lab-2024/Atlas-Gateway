@@ -1,9 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { Pencil } from "lucide-react";
+import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { useUpload } from "@/api/data/useMedia";
+import { useCreateProduct, useProducts } from "@/api/data/useProducts";
 import { Button } from "@/components/ui/button";
 import {
 	FormControl,
@@ -27,40 +30,67 @@ import {
 import { productSchema } from "../schema";
 
 interface props {
-	id: string;
+	id?: string;
+	type?: string;
 }
 
-const EditForm = ({ id }: props) => {
+const EditForm = ({ id, type }: props) => {
+	const [file, setFile] = useState<File | null>(null);
+	const { refetch } = useProducts();
+	const { doUpload } = useUpload(() => {
+		refetch();
+	});
+	const { doCreateProduct } = useCreateProduct((response) => {
+		const createdProductId = response.data._id;
+		const payload = {
+			userType: "product",
+			userId: createdProductId,
+			fileType: "image",
+			file,
+		};
+		doUpload(payload);
+		refetch();
+		formMethods.reset();
+	});
 	const formMethods = useForm<z.infer<typeof productSchema>>({
 		resolver: zodResolver(productSchema),
 	});
 	const { handleSubmit, control } = formMethods;
 	const onSubmit = (data: z.infer<typeof productSchema>) => {
-		axios
-			.put(`http://localhost:5000/api/products/update/${id}`, data)
-			.then((res) => {
-				console.log(res.status);
-				// will add here something to give a feedback later
-			})
-			.catch((error) => {
-				console.log(error);
-			});
+		if (type == "Add") {
+			setFile(data.file!);
+			doCreateProduct(data);
+		} else {
+			axios
+				.put(`http://localhost:5000/api/products/update/${id}`, data)
+				.then((res) => {
+					console.log(res.status);
+					refetch();
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+			refetch();
+		}
 	};
 	return (
 		<Sheet>
 			<SheetTrigger asChild>
-				<button className="bg-blue-500 text-white rounded-full p-2 shadow-lg hover:bg-blue-600">
-					<Pencil className="w-4 h-4" />
+				<button className=" ">
+					{type == "Update" ? (
+						<Pencil className="w-5 h-5	" />
+					) : (
+						<button>Add Product</button>
+					)}
 				</button>
 			</SheetTrigger>
 			<SheetContent>
 				<SheetHeader>
-					<SheetTitle>update a product</SheetTitle>
+					<SheetTitle>{type} a product</SheetTitle>
 					<SheetDescription>
-						Add product details here.
+						{type} product details here.
 					</SheetDescription>
 				</SheetHeader>
-
 				<FormProvider {...formMethods}>
 					<form onSubmit={handleSubmit(onSubmit)}>
 						<FormField
@@ -81,7 +111,6 @@ const EditForm = ({ id }: props) => {
 								</FormItem>
 							)}
 						/>
-
 						<FormField
 							control={control}
 							name="price"
@@ -101,7 +130,6 @@ const EditForm = ({ id }: props) => {
 								</FormItem>
 							)}
 						/>
-
 						<FormField
 							control={control}
 							name="quantity"
@@ -121,7 +149,6 @@ const EditForm = ({ id }: props) => {
 								</FormItem>
 							)}
 						/>
-
 						<FormField
 							control={control}
 							name="description"
@@ -140,25 +167,30 @@ const EditForm = ({ id }: props) => {
 								</FormItem>
 							)}
 						/>
-
-						<FormField
-							control={control}
-							name="picture"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Picture</FormLabel>
-									<FormControl>
-										<Input
-											{...field}
-											placeholder="Product pic"
-										/>
-									</FormControl>
-									<FormDescription>
-										upload pic.
-									</FormDescription>
-								</FormItem>
-							)}
-						/>
+						{type == "Add" && (
+							<FormField
+								control={control}
+								name="file"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Upload file</FormLabel>
+										<FormControl>
+											<input
+												type="file"
+												onChange={(e) =>
+													field.onChange(
+														e.target.files?.[0],
+													)
+												}
+											/>
+										</FormControl>
+										<FormDescription>
+											Upload your file here.
+										</FormDescription>
+									</FormItem>
+								)}
+							/>
+						)}
 						<SheetFooter>
 							<SheetClose asChild>
 								<Button type="submit">Save changes</Button>

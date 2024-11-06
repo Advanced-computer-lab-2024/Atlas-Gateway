@@ -7,7 +7,9 @@ export interface ISeller extends Document {
 	name: string;
 	email: string; // story 3
 	password: string;
-	picture: string;
+	idPath: string;
+	taxCardPath: string;
+	imagePath: string;
 	description: string;
 	isDeleted: boolean;
 	isVerified: { type: Boolean; default: false };
@@ -19,7 +21,9 @@ const sellerSchema = new Schema<ISeller>(
 		name: { type: String },
 		email: { type: String, required: true },
 		password: { type: String, required: true },
-		picture: { type: String },
+		idPath: { type: String, default: "" },
+		taxCardPath: { type: String, default: "" },
+		imagePath: { type: String, default: "" },
 		description: { type: String },
 		isVerified: { type: Boolean, default: false },
 	},

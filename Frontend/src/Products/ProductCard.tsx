@@ -1,7 +1,6 @@
 import axios from "axios";
-import { error } from "console";
-import { DollarSign, EllipsisVertical, LocateIcon, Star } from "lucide-react";
-import { Trash } from "lucide-react";
+import { DollarSign, EllipsisVertical, Package, Star } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Label from "@/components/ui/Label";
@@ -22,14 +21,31 @@ export default function ProductCard({
 	_id,
 	name,
 	description,
-	images,
+	imagePath,
 	price,
 	avgRating,
 	sellerId,
 }: TProduct) {
 	const { user } = useLoginStore();
 	const navigate = useNavigate();
-
+	const [productPic, setProductPic] = useState("");
+	const handleDownload = async (filePath: string) => {
+		try {
+			axios
+				.post(`http://localhost:5000/api/media/download`, { filePath })
+				.then((res) => {
+					setProductPic(res.data);
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		} catch (error) {
+			console.log(error);
+		}
+	};
+	useEffect(() => {
+		handleDownload(imagePath);
+	}, [imagePath]);
 	return (
 		<Card
 			key={_id}
@@ -40,10 +56,14 @@ export default function ProductCard({
 				justify="center"
 				className="w-full h-40 bg-gray-200 rounded-xl"
 			>
-				{images?.[0] ? (
-					<img src={images[0]} />
+				{!productPic ? (
+					<Package className="w-20 h-20" />
 				) : (
-					<LocateIcon className="w-full h-40" />
+					<img
+						src={productPic}
+						alt="Product Picture"
+						className="object-cover w-full h-full"
+					/>
 				)}
 			</Flex>
 			<hr />

@@ -1,7 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { useUpload } from "@/api/data/useMedia";
 import {
 	useCreateProduct,
 	useProducts,
@@ -39,8 +41,20 @@ const ProductForm = ({ id, type }: props) => {
 		resolver: zodResolver(productSchema),
 	});
 	const { handleSubmit, control } = formMethods;
+	const [file, setFile] = useState<File | null>(null);
 	const { refetch } = useProducts();
-	const { doCreateProduct } = useCreateProduct(() => {
+	const { doUpload } = useUpload(() => {
+		refetch();
+	});
+	const { doCreateProduct } = useCreateProduct((response) => {
+		const createdProductId = response.data._id;
+		const payload = {
+			userType: "product",
+			userId: createdProductId,
+			fileType: "image",
+			file,
+		};
+		doUpload(payload);
 		refetch();
 		formMethods.reset();
 	});
@@ -52,9 +66,10 @@ const ProductForm = ({ id, type }: props) => {
 
 	const onSubmit = (data: z.infer<typeof productSchema>) => {
 		if (!id) {
+			setFile(data.file!);
 			doCreateProduct(data);
 		} else {
-			doUpdateProduct(data);
+			doUpdateProduct({ ...data, _id: id });
 		}
 	};
 	return (
@@ -150,24 +165,31 @@ const ProductForm = ({ id, type }: props) => {
 							)}
 						/>
 
-						<FormField
-							control={control}
-							name="picture"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Picture</FormLabel>
-									<FormControl>
-										<Input
-											{...field}
-											placeholder="Product pic"
-										/>
-									</FormControl>
-									<FormDescription>
-										upload pic.
-									</FormDescription>
-								</FormItem>
-							)}
-						/>
+						{type == "Add" && (
+							<FormField
+								control={control}
+								name="file"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Upload file</FormLabel>
+										<FormControl>
+											<input
+												type="file"
+												onChange={(e) =>
+													field.onChange(
+														e.target.files?.[0],
+													)
+												}
+											/>
+										</FormControl>
+										<FormDescription>
+											Upload your file here.
+										</FormDescription>
+									</FormItem>
+								)}
+							/>
+						)}
+
 						<SheetFooter>
 							<Button type="submit">Save changes</Button>
 						</SheetFooter>

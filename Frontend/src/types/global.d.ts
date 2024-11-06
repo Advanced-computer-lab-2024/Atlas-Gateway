@@ -48,7 +48,7 @@ export type TProduct = {
 	name: string;
 	description: string;
 	price: number;
-	images: string[];
+	imagePath: string;
 	sellerId: string;
 	avgRating: number;
 	reviews: string[];
@@ -96,6 +96,9 @@ export interface TSeller extends TUser {
 	companyName: string;
 	email: string;
 	description: string;
+	idPath: string;
+	taxCardPath: string;
+	imagePath: string;
 }
 
 export interface TAdvetisor extends TUser {
@@ -104,6 +107,9 @@ export interface TAdvetisor extends TUser {
 	website: string;
 	password: string;
 	description: string;
+	idPath: string;
+	taxCardPath: string;
+	imagePath: string;
 }
 
 export interface TTourGuide extends TUser {
@@ -112,6 +118,9 @@ export interface TTourGuide extends TUser {
 	experience: number;
 	prevWork: string;
 	description: string;
+	idPath: string;
+	certificatePath: string;
+	imagePath: string;
 }
 
 export interface TTag {

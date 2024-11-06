@@ -38,11 +38,11 @@ export function useProduct() {
 	return { data: data?.data };
 }
 
-export function useCreateProduct(onSuccess: () => void) {
+export function useCreateProduct(onSuccess: (data: any) => void) {
 	const { user } = useLoginStore();
 
 	const mutation = useMutation({
-		mutationFn: (product: TProduct) => {
+		mutationFn: (product: Partial<TProduct>) => {
 			if (!user?._id) {
 				throw new Error("User is not defined");
 			}
@@ -59,7 +59,7 @@ export function useCreateProduct(onSuccess: () => void) {
 export function useUpdateProduct(onSuccess: () => void) {
 	const { user } = useLoginStore();
 	const mutation = useMutation({
-		mutationFn: (product: TProduct) => {
+		mutationFn: (product: Partial<TProduct>) => {
 			if (!user) {
 				throw new Error("User is not defined");
 			}

@@ -13,8 +13,10 @@ export type TRegisterForm = {
 };
 
 export type TUploadForm = {
-	filePath: string;
-	file: File;
+	userType: string;
+	userId: string | undefined;
+	fileType: string;
+	file: File | null;
 };
 
 export const accountTypeArray = [
