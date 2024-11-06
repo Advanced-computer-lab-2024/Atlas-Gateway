@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
-import { Types } from "mongoose";
+import { PipelineStage } from "mongoose";
 
 import { complaint } from "../../Models/Interactions/complaint.model";
+import { filterByComplaintStatus } from "../../Services/Operations/Filter/filterBuilder.service";
 
 //Creates a Complaint --Tourist Only
 export const createComplaint = async (req: Request, res: Response) => {
@@ -25,7 +26,19 @@ export const createComplaint = async (req: Request, res: Response) => {
 //Retrieve all Complaints --Used by Admin --list
 export const getAllComplaints = async (req: Request, res: Response) => {
 	try {
-        const complaints = await complaint.find().populate("createdBy");  
+		const pipeline: PipelineStage[] = [
+			{
+				$lookup: {
+					from: "tourist",
+					localField: "createdBy",
+					foreignField: "_id",
+					as: "createdBy",
+				},
+			},
+
+			...filterByComplaintStatus(req.query),
+		];
+		const complaints = await complaint.aggregate(pipeline);
 		res.status(200).json(complaints);
 	} catch (error) {
 		res.status(500).json({ message: "Internal Server Error" });

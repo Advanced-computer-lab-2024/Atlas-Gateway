@@ -48,6 +48,43 @@ export function filterByPrice(query: any): PipelineStage[] {
 	return pipeline;
 }
 
+export function filterByDefaultDate(query: any): PipelineStage[] {
+	const pipeline: PipelineStage[] = [];
+	if (query.date) {
+		let matchStage = {};
+		const [startDateStr, endDateStr] = query.date.split(",");
+
+		// if no date is provided, set the start date the lowest possible date and the end date to null
+		let startDate =
+			new Date(startDateStr) || new Date("1970-01-01T00:00:00.000Z");
+		let endDate: Date | null =
+			endDateStr !== "null" ? new Date(endDateStr) : null;
+
+		if (startDate && endDate) {
+			matchStage = {
+				createdAt: {
+					$gte: startDate,
+					$lte: endDate,
+				},
+			};
+		} else if (startDate) {
+			matchStage = {
+				createdAt: { $gte: startDate },
+			};
+		} else if (endDate) {
+			matchStage = {
+				createdAt: { $lte: endDate },
+			};
+		}
+
+		pipeline.push({
+			$match: matchStage,
+		});
+	}
+	// If no date is provided, return all activities after the current date
+	return pipeline;
+}
+
 export function filterByDate(query: any): PipelineStage[] {
 	const pipeline: PipelineStage[] = [];
 
@@ -100,12 +137,9 @@ export function filterByDate(query: any): PipelineStage[] {
 			};
 		}
 
-		console.log(JSON.stringify(matchStage, null, 2));
-
 		pipeline.push({
 			$match: matchStage,
 		});
-		console.log(JSON.stringify(pipeline, null, 2));
 	}
 	// If no date is provided, return all activities after the current date
 	return pipeline;
@@ -183,6 +217,20 @@ export function filterByTags(query: any): PipelineStage[] {
 						.split(",")
 						.map((tag: string) => new Types.ObjectId(tag)),
 				},
+			},
+		});
+	}
+
+	return pipeline;
+}
+
+export function filterByComplaintStatus(query: any): PipelineStage[] {
+	const pipeline: PipelineStage[] = [];
+
+	if (query.status) {
+		pipeline.push({
+			$match: {
+				state: query.status,
 			},
 		});
 	}
