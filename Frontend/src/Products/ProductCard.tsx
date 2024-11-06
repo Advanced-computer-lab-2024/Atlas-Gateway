@@ -30,14 +30,18 @@ export default function ProductCard({
 	const navigate = useNavigate();
 	const [productPic, setProductPic] = useState("");
 	const handleDownload = async (filePath: string) => {
-		axios
-			.post(`http://localhost:5000/api/media/download`, { filePath })
-			.then((res) => {
-				setProductPic(res.data);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
+		try {
+			axios
+				.post(`http://localhost:5000/api/media/download`, { filePath })
+				.then((res) => {
+					setProductPic(res.data);
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		} catch (error) {
+			console.log(error);
+		}
 	};
 	useEffect(() => {
 		handleDownload(imagePath);
