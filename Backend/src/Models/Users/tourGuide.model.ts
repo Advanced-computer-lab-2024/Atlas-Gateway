@@ -23,6 +23,7 @@ export interface ITourGuide extends Document {
 	itinerary: Types.ObjectId[];
 	isVerified: boolean;
 	acceptedTerms: boolean;
+	isDeleted?: boolean;
 }
 
 const tourGuideSchema = new Schema<ITourGuide>(
@@ -47,6 +48,7 @@ const tourGuideSchema = new Schema<ITourGuide>(
 		itinerary: [{ type: Schema.Types.ObjectId, ref: "Itinerary" }],
 		isVerified: { type: Boolean, default: false },
 		acceptedTerms: { type: Boolean, default: false },
+		isDeleted: { type: Boolean, default: false },
 	},
 	schemaConfig,
 );

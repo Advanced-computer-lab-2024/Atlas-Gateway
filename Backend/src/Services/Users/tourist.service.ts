@@ -1,9 +1,6 @@
 import { Types } from "mongoose";
 
 import HttpError from "../../Errors/HttpError";
-import { Activity } from "../../Models/Travel/activity.model";
-import { Itinerary } from "../../Models/Travel/itinerary.model";
-import { Transportation } from "../../Models/Travel/transportation.model";
 import { ITourist, Tourist } from "../../Models/Users/tourist.model";
 import { hashPassword } from "../Auth/password.service";
 import uniqueUsername from "../Auth/username.service";
@@ -303,6 +300,19 @@ export const cancelTransportation = async (
 	if (removed.modifiedCount === 0) {
 		throw new HttpError(404, "Failed to cancel Transportation booking");
 	}
+
+	return tourist;
+};
+
+export const softDeleteTourist = async (id: string) => {
+	if (!Types.ObjectId.isValid(id)) {
+		throw new HttpError(400, "Id is Invalid and Required");
+	}
+	const tourist = await Tourist.findByIdAndUpdate(
+		id,
+		{ isDeleted: true },
+		{ new: true },
+	);
 
 	return tourist;
 };
