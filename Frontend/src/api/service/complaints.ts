@@ -4,13 +4,21 @@ import { TComplaint } from "@/types/global";
 
 import ENDPOINTS from "./ENDPOINTS";
 
-export function apiComplaints(_id: string | undefined) {
+export function apiComplaints(
+	_id: string | undefined,
+	filters: Record<string, string>,
+) {
 	return axios<TComplaint[]>({
 		method: "GET",
 		url: ENDPOINTS.complaint.list,
 		headers: {
 			"Content-Type": "application/json",
 			userid: _id,
+		},
+		params: {
+			_id,
+			limit: 12,
+			...filters,
 		},
 		baseURL: "http://localhost:5000",
 	});
@@ -33,13 +41,13 @@ export function apiComplaintsUpdateByAdmin(
 ) {
 	return axios({
 		method: "PUT",
-		url: ENDPOINTS.complaint.updateByAdmin(payload._id ?? ""), // Pass _id directly here
+		url: ENDPOINTS.complaint.updateByAdmin(payload._id ?? ""),
 		headers: {
 			"Content-Type": "application/json",
-			replyedBy: _id, // Include `replyedBy` as per backend requirement
+			userid: _id,
 		},
 		baseURL: "http://localhost:5000",
-		data: { state: payload.state, reply: payload.reply }, // Send state and reply as body data
+		data: payload,
 	});
 }
 

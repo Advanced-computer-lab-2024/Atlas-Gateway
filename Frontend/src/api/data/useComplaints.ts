@@ -17,7 +17,7 @@ export function useComplaints() {
 	const [query] = useQueryString();
 
 	const { data, refetch } = useQuery({
-		queryFn: () => apiComplaints(_id),
+		queryFn: () => apiComplaints(_id, query),
 		queryKey: ["complaint", _id, query],
 	});
 
@@ -37,7 +37,6 @@ export function useComplaint() {
 	return { data: data?.data, refetch };
 }
 
-// update Complaint by Admin
 export function useComplaintsUpdateByAdmin(onSuccess: () => void) {
 	const { user } = useLoginStore();
 	const { id } = useParams<{ id: string }>();
@@ -45,27 +44,9 @@ export function useComplaintsUpdateByAdmin(onSuccess: () => void) {
 	const mutation = useMutation({
 		mutationFn: (data: Partial<TComplaint>) => {
 			const userid = user?._id;
-
-			// Check if userid is available
-			console.log("User ID:", userid);
-
-			if (!userid) {
-				console.error("User ID is undefined");
-				throw new Error("User ID is undefined");
-			}
-
-			console.log("Updating complaint with data:", { _id: id, ...data });
-
-			// Perform the API call
-			return apiComplaintsUpdateByAdmin({ _id: id, ...data }, userid);
+			return apiComplaintsUpdateByAdmin({ _id: id, ...data }, userid!);
 		},
-		onSuccess: () => {
-			console.log("Update successful");
-			onSuccess();
-		},
-		onError: (error) => {
-			console.error("Error in mutation:", error);
-		},
+		onSuccess: onSuccess,
 	});
 
 	const { mutate } = mutation;

@@ -1,4 +1,4 @@
-import { Document, ObjectId, Schema, Types, model } from "mongoose";
+import { Document, Schema, Types, model } from "mongoose";
 
 import { schemaConfig } from "../../Config/schemaConfig";
 
@@ -6,8 +6,7 @@ interface IComplaint extends Document {
 	title: string;
 	// type: string;
 	body: string;
-	date: Date;
-	state: string;
+	status: string;
 	reply: string;
 	replyedBy: Types.ObjectId;
 	createdBy: Types.ObjectId;
@@ -18,8 +17,7 @@ const complaintSchema = new Schema<IComplaint>(
 		title: { type: String, required: true },
 		body: { type: String },
 		// type: { type: String, enum: ["activities", "locations", "both"], default: "activities"},
-		date: { type: Date, required: true },
-		state: {
+		status: {
 			type: String,
 			enum: ["pending", "resolved"],
 			default: "pending",
