@@ -68,7 +68,9 @@ export const getProducts = async (
 	next: NextFunction,
 ) => {
 	try {
-		const result = await productService.getProducts(req.query);
+		const usertype = req.headers.usertype as string;
+
+		const result = await productService.getProducts(usertype, req.query);
 		if (result[0].data.length === 0) {
 			return res
 				.status(404)

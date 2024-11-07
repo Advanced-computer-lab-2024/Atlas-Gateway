@@ -1,5 +1,7 @@
 import axios from "axios";
 import {
+	Archive,
+	ArchiveRestore,
 	DollarSign,
 	Edit,
 	EllipsisVertical,
@@ -10,6 +12,8 @@ import {
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { useProducts, useUpdateProduct } from "@/api/data/useProducts";
+import { useSellerProfile } from "@/api/data/useProfile";
 import Label from "@/components/ui/Label";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -33,8 +37,16 @@ export default function ProductCard({
 }) {
 	const { user } = useLoginStore();
 	const navigate = useNavigate();
+	const { refetch } = useProducts();
 	const [productPic, setProductPic] = useState("");
+	const { doUpdateProduct } = useUpdateProduct(() => {
+		refetch();
+	});
+	const handleArchive = (isArchived: boolean, id: string) => {
+		doUpdateProduct({ isArchived: !isArchived, _id: id });
+	};
 
+	const { data: seller } = useSellerProfile(product.sellerId); //TODO: Join product with seller instead of this garbage
 	const {
 		_id,
 		name,
@@ -44,6 +56,7 @@ export default function ProductCard({
 		avgRating,
 		sellerId,
 		sales,
+		isArchived,
 	} = product;
 
 	const convertCurrency = useCurrency();
@@ -66,7 +79,7 @@ export default function ProductCard({
 		handleDownload(imagePath);
 	}, [imagePath]);
 
-	const canViewSales =
+	const isAdminOrCreator =
 		user?.type === sellerId || user?.type === EAccountType.Admin;
 
 	return (
@@ -99,6 +112,24 @@ export default function ProductCard({
 								<EllipsisVertical className="cursor-pointer" />
 							</DropdownMenuTrigger>
 							<DropdownMenuContent>
+								{isAdminOrCreator && (
+									<DropdownMenuItem
+										className="flex gap-2 cursor-pointer"
+										onClick={() =>
+											handleArchive(isArchived, _id)
+										}
+									>
+										{isArchived ? (
+											<>
+												<Archive /> Unarchive
+											</>
+										) : (
+											<>
+												<ArchiveRestore /> Archive
+											</>
+										)}
+									</DropdownMenuItem>
+								)}
 								<DropdownMenuItem
 									className="flex gap-2 cursor-pointer"
 									onClick={() => {
@@ -107,7 +138,7 @@ export default function ProductCard({
 								>
 									<Eye />
 									View Details
-								</DropdownMenuItem>{" "}
+								</DropdownMenuItem>
 								<DropdownMenuItem
 									className="flex gap-2 cursor-pointer"
 									onClick={() => {
@@ -121,14 +152,16 @@ export default function ProductCard({
 						</DropdownMenu>
 					</Flex>
 					<Label.Mid300>{description}</Label.Mid300>
-					<Flex gap="1" align="center">
-						<Label.Mid300 className="overflow-ellipsis">
-							Seller
-						</Label.Mid300>
-						{/* <Label.Thin300 className="overflow-ellipsis">
-							{seller?.username}
-						</Label.Thin300> */}
-					</Flex>
+					{seller && (
+						<Flex gap="1" align="center">
+							<Label.Mid300 className="overflow-ellipsis">
+								Seller
+							</Label.Mid300>
+							<Label.Thin300 className="overflow-ellipsis">
+								{seller?.username}
+							</Label.Thin300>
+						</Flex>
+					)}
 					<Flex align="center" justify="between">
 						<Flex gap="2" align="center" justify="between">
 							<DollarSign size={20} />
@@ -143,7 +176,7 @@ export default function ProductCard({
 							</Label.Thin300>
 						</Flex>
 					</Flex>
-					{canViewSales && (
+					{isAdminOrCreator && (
 						<Flex gap="1" align="center">
 							<Label.Mid300 className="overflow-ellipsis">
 								Sales

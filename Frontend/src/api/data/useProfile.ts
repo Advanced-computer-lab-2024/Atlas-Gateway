@@ -107,7 +107,7 @@ export function useSellers() {
 	return { data: data?.data, refetch };
 }
 
-export function useSellerProfile() {
+export function useSellerProfile(sellerId?: string) {
 	const { user } = useLoginStore();
 
 	const id = user?._id;
@@ -117,9 +117,9 @@ export function useSellerProfile() {
 			if (!id) {
 				throw new Error("User ID is undefined");
 			}
-			return apiSellerProfile(id);
+			return apiSellerProfile(sellerId ?? id);
 		},
-		queryKey: ["profile", id],
+		queryKey: ["profile", sellerId ?? id],
 	});
 
 	return { data: data?.data, refetch };

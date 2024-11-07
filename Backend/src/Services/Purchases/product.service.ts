@@ -40,8 +40,24 @@ export const createProduct = async (
 	return product;
 };
 
-export const getProducts = async (query?: any) => {
+const productFiltersMap: Record<string, PipelineStage> = {
+	tourist: {
+		$match: {
+			isArchived: false, // TODO: Add appropriate filter
+		},
+	},
+	default: {
+		$match: {},
+	},
+};
+
+export const getProducts = async (type: string, query?: any) => {
+	const filter =
+		productFiltersMap?.[type as keyof typeof productFiltersMap] ||
+		productFiltersMap.default;
+
 	const PipelineStage: PipelineStage[] = [
+		filter,
 		...AggregateBuilder(
 			query,
 			["name"], // Search fields

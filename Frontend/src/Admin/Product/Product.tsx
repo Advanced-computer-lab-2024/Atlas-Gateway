@@ -1,9 +1,9 @@
 import axios from "axios";
-import { Package, RotateCw } from "lucide-react";
+import { Archive, ArchiveRestore, Package, RotateCw } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { usePagination } from "@/api/data/usePagination";
-import { useProducts } from "@/api/data/useProducts";
+import { useProducts, useUpdateProduct } from "@/api/data/useProducts";
 import { useQueryString } from "@/api/data/useQueryString";
 import Label from "@/components/ui/Label";
 import { Flex } from "@/components/ui/flex";
@@ -28,6 +28,9 @@ import ProductForm from "./ProductForm";
 
 const Product = () => {
 	const { data: products, meta, refetch } = useProducts();
+	const { doUpdateProduct } = useUpdateProduct(() => {
+		refetch();
+	});
 	const { page, onPageChange, pagesCount } = usePagination({
 		pageNum: meta?.pages || 1,
 		pagesCount: meta?.pages || 1,
@@ -37,6 +40,9 @@ const Product = () => {
 	);
 
 	const convertCurrency = useCurrency();
+	const handleArchive = (isArchived: boolean, id: string) => {
+		doUpdateProduct({ isArchived: !isArchived, _id: id });
+	};
 
 	const handleDownload = async (productId: string, filePath: string) => {
 		try {
@@ -128,8 +134,22 @@ const Product = () => {
 								<h3 className="text-sm">
 									Price: ${convertCurrency(prod?.price)}
 								</h3>
-								<h3 className="text-sm">
+								<h3 className="flex gap-2 text-sm">
 									Archived: {prod?.isArchived ? "Yes" : "No"}
+									<button
+										onClick={() =>
+											handleArchive(
+												prod?.isArchived,
+												prod._id,
+											)
+										}
+									>
+										{prod?.isArchived ? (
+											<Archive />
+										) : (
+											<ArchiveRestore />
+										)}
+									</button>
 								</h3>
 							</div>
 							<div className="flex flex-col">

@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/select";
 import { useLoginStore } from "@/store/loginStore";
 import { EAccountType } from "@/types/enums";
+import { TProduct } from "@/types/global";
 
 import ProductCard from "./ProductCard";
 import ProductForm from "./ProductForm";

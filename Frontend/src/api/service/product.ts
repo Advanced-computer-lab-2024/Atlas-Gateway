@@ -7,6 +7,7 @@ import { TApiResponse } from "./types";
 
 export function apiProducts(
 	_id: string | undefined,
+	type: string | undefined,
 	filters: Record<string, string>,
 ) {
 	return axios<TApiResponse<TProduct>>({
@@ -15,6 +16,7 @@ export function apiProducts(
 		headers: {
 			"Content-Type": "application/json",
 			userid: _id,
+			usertype: type,
 		},
 		params: {
 			_id,

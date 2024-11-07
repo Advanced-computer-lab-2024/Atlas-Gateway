@@ -1,24 +1,24 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 
+
+
 import { useLoginStore } from "@/store/loginStore";
 import { TProduct } from "@/types/global";
 
-import {
-	apiCreateProduct,
-	apiProduct,
-	apiProducts,
-	apiUpdateProduct,
-} from "../service/product";
+
+
+import { apiCreateProduct, apiProduct, apiProducts, apiUpdateProduct } from "../service/product";
 import { useQueryString } from "./useQueryString";
+
 
 export function useProducts() {
 	const { user } = useLoginStore();
-	const { _id } = user || {};
+	const { _id, type } = user || {};
 	const [query] = useQueryString();
 
 	const { data, refetch } = useQuery({
-		queryFn: () => apiProducts(_id, query),
+		queryFn: () => apiProducts(_id, type, query),
 		queryKey: ["product", _id, query],
 	});
 
@@ -38,7 +38,7 @@ export function useProduct() {
 	return { data: data?.data };
 }
 
-export function useCreateProduct(onSuccess: (data: any) => void) {
+export function useCreateProduct(onSuccess: () => void) {
 	const { user } = useLoginStore();
 
 	const mutation = useMutation({
