@@ -1,16 +1,15 @@
 import axios from "axios";
 import {
-	Archive,
-	ArchiveRestore,
 	DollarSign,
+	Edit,
 	EllipsisVertical,
+	Eye,
 	Package,
 	Star,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { useProducts, useUpdateProduct } from "@/api/data/useProducts";
 import Label from "@/components/ui/Label";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -26,26 +25,29 @@ import { EAccountType } from "@/types/enums";
 import { TProduct } from "@/types/global";
 
 export default function ProductCard({
-	_id,
-	name,
-	description,
-	imagePath,
-	price,
-	isArchived,
-	avgRating,
-	sellerId,
-}: TProduct) {
+	product,
+	openEditDrawer,
+}: {
+	product: TProduct;
+	openEditDrawer: (product: TProduct) => void;
+}) {
 	const { user } = useLoginStore();
 	const navigate = useNavigate();
-	const { refetch } = useProducts();
 	const [productPic, setProductPic] = useState("");
-	const { doUpdateProduct } = useUpdateProduct(() => {
-		refetch();
-	});
+
+	const {
+		_id,
+		name,
+		description,
+		imagePath,
+		price,
+		avgRating,
+		sellerId,
+		sales,
+	} = product;
+
 	const convertCurrency = useCurrency();
-	const handleArchive = (isArchived: boolean, id: string) => {
-		doUpdateProduct({ isArchived: !isArchived, _id: id });
-	};
+
 	const handleDownload = async (filePath: string) => {
 		try {
 			axios
@@ -140,24 +142,6 @@ export default function ProductCard({
 								{avgRating}
 							</Label.Thin300>
 						</Flex>
-					</Flex>
-					<Flex gap="2">
-						<Label.Thin200 className="overflow-ellipsis">
-							<h3 className="flex gap-2 text-sm">
-								Archived: {isArchived ? "Yes" : "No"}
-								<button
-									onClick={() =>
-										handleArchive(isArchived, _id)
-									}
-								>
-									{isArchived ? (
-										<Archive />
-									) : (
-										<ArchiveRestore />
-									)}
-								</button>
-							</h3>
-						</Label.Thin200>
 					</Flex>
 					{canViewSales && (
 						<Flex gap="1" align="center">

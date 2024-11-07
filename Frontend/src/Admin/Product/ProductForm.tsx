@@ -6,11 +6,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { useUpload } from "@/api/data/useMedia";
-import {
-	useCreateProduct,
-	useProducts,
-	useUpdateProduct,
-} from "@/api/data/useProducts";
+import { useCreateProduct, useProducts } from "@/api/data/useProducts";
 import { Button } from "@/components/ui/button";
 import {
 	FormControl,
@@ -41,9 +37,6 @@ interface props {
 const EditForm = ({ id, type }: props) => {
 	const [file, setFile] = useState<File | null>(null);
 	const { refetch } = useProducts();
-	const { doUpdateProduct } = useUpdateProduct(() => {
-		refetch();
-	});
 	const { doUpload } = useUpload(() => {
 		refetch();
 	});
@@ -68,16 +61,16 @@ const EditForm = ({ id, type }: props) => {
 			setFile(data.file!);
 			doCreateProduct(data);
 		} else {
-			// axios
-			// 	.put(`http://localhost:5000/api/products/update/${id}`, data)
-			// 	.then((res) => {
-			// 		console.log(res.status);
-			// 		refetch();
-			// 	})
-			// 	.catch((error) => {
-			// 		console.log(error);
-			// 	});
-			doUpdateProduct({ _id: id, ...data });
+			axios
+				.put(`http://localhost:5000/api/products/update/${id}`, data)
+				.then((res) => {
+					console.log(res.status);
+					refetch();
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+			refetch();
 		}
 	};
 	return (
