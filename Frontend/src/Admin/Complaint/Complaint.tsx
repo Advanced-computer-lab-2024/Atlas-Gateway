@@ -112,7 +112,7 @@ const Complaint = () => {
 						<TableRow
 							key={complaint._id}
 							onClick={() => {
-								navigate(`/admin/complaint/${complaint?._id}`);
+								navigate(`/admin/complaints/${complaint?._id}`);
 							}}
 						>
 							<TableCell>

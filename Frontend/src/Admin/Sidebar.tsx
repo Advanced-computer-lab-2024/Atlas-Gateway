@@ -7,24 +7,23 @@ import {
 	Users,
 } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { useLoginStore } from "@/store/loginStore";
 
 import ChangePasswordSheet from "../Profile/ChangePasswordSheet";
 
-interface Props {
-	onSelect: (item: string) => void;
-}
-
-const Sidebar = ({ onSelect }: Props) => {
+const Sidebar = () => {
 	const { user } = useLoginStore();
-	const [activeItem, setActiveItem] = useState("");
+	const navigate = useNavigate();
+	const location = useLocation();
+
+	const activeCategory = location.pathname.split("/")[2];
+
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
 	const handleClick = (item: string) => {
-		setActiveItem(item);
-		onSelect(item);
+		navigate(`/admin/${item.toLowerCase().replace(" ", "-")}`);
 	};
 
 	return (
@@ -63,50 +62,53 @@ const Sidebar = ({ onSelect }: Props) => {
 					"Activity Category",
 					"Tags",
 					"Complaints",
-				].map((item) => (
+				].map((category) => (
 					<div
-						key={item}
+						key={category}
 						className={`flex flex-col items-center w-60 p-2 cursor-pointer hover:border-l-4 ${
-							activeItem === item ? "bg-[#1e4b9d]" : ""
+							activeCategory ===
+							category.toLowerCase().split(" ").join("-")
+								? "bg-[#1e4b9d]"
+								: ""
 						}`}
-						onClick={() => handleClick(item)}
+						onClick={() => handleClick(category)}
 					>
-						{item === "Accounts" && (
+						{category === "Accounts" && (
 							<Users
 								className="text-white p-1 rounded-full"
 								width={50}
 								height={50}
 							/>
 						)}
-						{item === "Products" && (
+						{category === "Products" && (
 							<Package
 								className="text-white p-1 rounded-full"
 								width={50}
 								height={50}
 							/>
 						)}
-						{item === "Activity Category" && (
+						{category === "Activity Category" && (
 							<ActivityIcon
 								className="text-white p-1 rounded-full"
 								width={50}
 								height={50}
 							/>
 						)}
-						{item === "Tags" && (
+						{category === "Tags" && (
 							<TagIcon
 								className="text-white p-1 rounded-full"
 								width={50}
 								height={50}
 							/>
 						)}
-						{item === "Complaints" && (
+						{category === "Complaints" && (
 							<MessageCircleWarning
 								className="text-white p-1 rounded-full"
 								width={50}
 								height={50}
 							/>
 						)}
-						<p className="text-[whitesmoke]">{item}</p>
+						<p className="text-[whitesmoke]">{category}</p>
 					</div>
 				))}
 			</div>

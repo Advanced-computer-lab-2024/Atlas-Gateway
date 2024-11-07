@@ -1,13 +1,12 @@
 import { formatDate } from "date-fns";
 import { capitalize } from "lodash";
-import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 import {
 	useComplaint,
 	useComplaintsUpdateByAdmin,
 } from "@/api/data/useComplaints";
+import BackButton from "@/components/ui/BackButton";
 import Label from "@/components/ui/Label";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -15,7 +14,6 @@ import { Flex } from "@/components/ui/flex";
 import { Textarea } from "@/components/ui/textarea";
 
 export default function ComplaintDetails() {
-	const navigate = useNavigate();
 	const { data, refetch } = useComplaint();
 
 	const { title, body, createdAt, updatedAt, status, reply, createdBy } =
@@ -27,14 +25,10 @@ export default function ComplaintDetails() {
 
 	return (
 		<Flex align="center" justify="center" className="w-full h-full">
-			<Card className="w-[80%] h-[80%] border-[#2b58ed] border-2">
+			<Card className="w-[90%] h-[90%] border-[#2b58ed] border-2">
 				<CardHeader>
 					<Flex gap="2" align="center">
-						<ArrowLeft
-							className="cursor-pointer"
-							onClick={() => navigate("/admin")}
-							size={32}
-						/>
+						<BackButton />
 						<Label.Big600>Complaint Details</Label.Big600>
 					</Flex>
 				</CardHeader>
