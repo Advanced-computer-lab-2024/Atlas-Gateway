@@ -32,8 +32,8 @@ const productSchema = new Schema<IProduct>(
 		price: { type: Number, required: true },
 		imagePath: { type: String },
 		quantity: { type: Number, required: true },
-		isArchived: { type: Boolean },
-		sales: { type: Number },
+		isArchived: { type: Boolean, default: false },
+		sales: { type: Number, default: 0 },
 		reviews: {
 			userId: { type: Schema.Types.ObjectId, required: false },
 			review: { type: String, required: false },
