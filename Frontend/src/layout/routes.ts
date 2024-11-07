@@ -63,6 +63,8 @@ const advertiserRoutes: NavbarRoute[] = [
 	placesRoute,
 ];
 
+const transportationAdvertiserRoutes: NavbarRoute[] = [productsRoute];
+
 const guestRoutes: NavbarRoute[] = [
 	placesRoute,
 	activitiesRoute,
@@ -79,4 +81,5 @@ export const accountRoutes: Record<EAccountType, NavbarRoute[]> = {
 	[EAccountType.Advertiser]: advertiserRoutes,
 	[EAccountType.TourismGovernor]: tourismGovernerRoutes,
 	[EAccountType.Guest]: guestRoutes,
+	[EAccountType.TransportationAdvertiser]: transportationAdvertiserRoutes,
 };

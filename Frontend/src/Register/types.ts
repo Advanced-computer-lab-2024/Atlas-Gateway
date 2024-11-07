@@ -24,4 +24,5 @@ export const accountTypeArray = [
 	EAccountType.Guide,
 	EAccountType.Seller,
 	EAccountType.Advertiser,
+	EAccountType.TransportationAdvertiser,
 ];

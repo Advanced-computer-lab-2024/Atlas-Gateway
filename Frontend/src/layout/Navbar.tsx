@@ -24,7 +24,8 @@ export default function Navbar() {
 		if (
 			(user?.type == EAccountType.Advertiser ||
 				user?.type == EAccountType.Guide ||
-				user?.type == EAccountType.Seller) &&
+				user?.type == EAccountType.Seller ||
+				user?.type == EAccountType.TransportationAdvertiser) &&
 			!user.acceptedTerms &&
 			user.isVerified
 		) {

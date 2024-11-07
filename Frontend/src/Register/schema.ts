@@ -9,6 +9,7 @@ export const accountTypeSchema = z.object({
 			EAccountType.Guide,
 			EAccountType.Seller,
 			EAccountType.Advertiser,
+			EAccountType.TransportationAdvertiser,
 		],
 		{
 			message: "Please select an account type to continue",

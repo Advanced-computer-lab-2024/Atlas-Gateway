@@ -22,6 +22,7 @@ import governorRouter from "./Routes/Users/governor.route";
 import sellerRouter from "./Routes/Users/seller.route";
 import tourGuideRouter from "./Routes/Users/tourGuide.route";
 import touristRouter from "./Routes/Users/tourist.route";
+import transportation_advertiserRouter from "./Routes/Users/transportation_advertiser.route";
 
 const app = express();
 
@@ -55,6 +56,7 @@ async function startServer() {
 	app.use("/api/change-password", passwordRouter);
 	app.use("/api/media", mediaRouter);
 	app.use("/api/complaint", complaintRouter);
+	app.use("/api/transportation_advertiser", transportation_advertiserRouter);
 
 	// Error handling middleware
 	app.use((err: Error, req: Request, res: Response, next: NextFunction) => {

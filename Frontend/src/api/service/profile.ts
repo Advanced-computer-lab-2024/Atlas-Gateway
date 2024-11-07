@@ -2,18 +2,22 @@ import axios from "axios";
 
 import {
 	TAdvetisor,
+	TGovernor,
 	TPassword,
 	TSeller,
 	TTourGuide,
 	TTourist,
+	TTransportationAdvetisor,
 } from "@/types/global";
 
 import ENDPOINTS, { baseURL } from "./ENDPOINTS";
 import {
 	TAdvertiserProfileResponse,
+	TGovernorProfileResponse,
 	TSellerProfileResponse,
 	TTourGuideProfileResponse,
 	TTouristProfileResponse,
+	TTransportationAdvertiserProfileResponse,
 } from "./types";
 
 export function apiTourists() {
@@ -96,7 +100,6 @@ export function apiSellers() {
 		baseURL: baseURL,
 	});
 }
-
 export function apiSellerProfile(_id: string) {
 	return axios<TSellerProfileResponse>({
 		method: "GET",
@@ -120,7 +123,6 @@ export function apiEditSellerProfile(_id: string, data: Partial<TSeller>) {
 		baseURL: baseURL,
 	});
 }
-
 export function apiDeleteSeller(_id: string) {
 	return axios({
 		method: "DELETE",
@@ -142,6 +144,51 @@ export function apiRequestDeleteSellerProfile(_id: string) {
 		baseURL: baseURL,
 	});
 }
+
+export function apiGovernors() {
+	return axios<TGovernorProfileResponse[]>({
+		method: "GET",
+		url: ENDPOINTS.governor.list,
+		headers: {
+			"Content-Type": "application/json",
+		},
+		baseURL: "http://localhost:5000",
+	});
+}
+export function apiGovernorProfile(_id: string) {
+	return axios<TGovernorProfileResponse>({
+		method: "GET",
+		url: ENDPOINTS.governor.showGoverner(_id),
+		headers: {
+			"Content-Type": "application/json",
+			userid: _id,
+		},
+		baseURL: "http://localhost:5000",
+	});
+}
+export function apiEditGovernorProfile(_id: string, data: Partial<TGovernor>) {
+	return axios<TGovernorProfileResponse>({
+		method: "PUT",
+		url: ENDPOINTS.governor.update(_id),
+		headers: {
+			"Content-Type": "application/json",
+			userid: _id,
+		},
+		data,
+		baseURL: "http://localhost:5000",
+	});
+}
+export function apiDeleteGovernor(_id: string) {
+	return axios({
+		method: "DELETE",
+		url: ENDPOINTS.governor.delete(_id),
+		headers: {
+			"Content-Type": "application/json",
+		},
+		baseURL: "http://localhost:5000",
+	});
+}
+
 
 export function apiAdvertisers() {
 	return axios<TAdvertiserProfileResponse[]>({
@@ -201,6 +248,56 @@ export function apiRequestDeleteAdvertiserProfile(_id: string) {
 			"Content-Type": "application/json",
 		},
 		baseURL: baseURL,
+	});
+}
+
+export function apiTransportationAdvertisers() {
+	return axios<TTransportationAdvertiserProfileResponse[]>({
+		method: "GET",
+		url: ENDPOINTS.transportation_advertiser.list,
+		headers: {
+			"Content-Type": "application/json",
+		},
+		baseURL: "http://localhost:5000",
+	});
+}
+
+export function apiTransportationAdvertiserProfile(_id: string) {
+	return axios<TTransportationAdvertiserProfileResponse>({
+		method: "GET",
+		url: ENDPOINTS.transportation_advertiser.show(_id),
+		headers: {
+			"Content-Type": "application/json",
+			userid: _id,
+		},
+		baseURL: "http://localhost:5000",
+	});
+}
+
+export function apiEditTransportationAdvertiserProfile(
+	_id: string,
+	data: Partial<TTransportationAdvetisor>,
+) {
+	return axios<TTransportationAdvertiserProfileResponse>({
+		method: "PUT",
+		url: ENDPOINTS.transportation_advertiser.update(_id),
+		headers: {
+			"Content-Type": "application/json",
+			userid: _id,
+		},
+		data,
+		baseURL: "http://localhost:5000",
+	});
+}
+
+export function apiDeleteTransportationAdvertiserProfile(_id: string) {
+	return axios({
+		method: "DELETE",
+		url: ENDPOINTS.transportation_advertiser.delete(_id),
+		headers: {
+			"Content-Type": "application/json",
+		},
+		baseURL: "http://localhost:5000",
 	});
 }
 

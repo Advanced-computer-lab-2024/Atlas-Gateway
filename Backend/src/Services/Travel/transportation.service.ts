@@ -6,14 +6,14 @@ import {
 	Transportation,
 } from "../../Models/Travel/transportation.model";
 import { Advertiser } from "../../Models/Users/advertiser.model";
-import { Tourist } from "../../Models/Users/tourist.model";
+
+import { TransportationAdvertiser } from "@/Models/Users/transportation_advertiser.model";
+import { Tourist } from "@/Models/Users/tourist.model";
+
 import AggregateBuilder from "../Operations/aggregation.service";
 import { getAdvertiserById } from "../Users/advertiser.service";
-import {
-	addBookedTransportation,
-	cancelTransportation,
-	getTouristById,
-} from "../Users/tourist.service";
+import { addBookedTransportation, cancelTransportation, getTouristById } from "../Users/tourist.service";
+import { getTransportationAdvertiserById } from "../Users/transportation_advertiser.service";
 
 export const createTransportation = async (
 	transportation: ITransportation,
@@ -22,16 +22,17 @@ export const createTransportation = async (
 	const session = await mongoose.startSession();
 	try {
 		if (!Types.ObjectId.isValid(createdBy)) {
-			throw new HttpError(400, "Invalid Advertiser ID");
+			throw new HttpError(400, "Invalid Transportation Advertiser ID");
 		}
 
 		session.startTransaction();
 
 		// Link transportation ID to the Advertiser's transportation array
-		const Advertiser = await getAdvertiserById(createdBy);
+		const TransportationAdvertiser =
+			await getTransportationAdvertiserById(createdBy);
 
-		if (!Advertiser) {
-			throw new HttpError(404, "Advertiser not found");
+		if (!TransportationAdvertiser) {
+			throw new HttpError(404, "Transportation Advertiser not found");
 		}
 
 		const transportationData = new Transportation({
@@ -41,9 +42,9 @@ export const createTransportation = async (
 
 		await transportationData.save({ session }); // Save to generate the ID
 
-		Advertiser.transportations.push(transportationData.id);
+		TransportationAdvertiser.transportations.push(transportationData.id);
 
-		await Advertiser.updateOne({ session });
+		await TransportationAdvertiser.updateOne({ session });
 		await session.commitTransaction();
 
 		return transportationData;
@@ -110,18 +111,21 @@ export const deleteTransportation = async (id: string) => {
 			throw new HttpError(400, "Transportation is already booked");
 		}
 
-		// Find the associated Advertiser document
-		const AdvertiserId = transportation.createdBy; // Assuming createdBy is the Advertiser ID
-		const advertiser = await getAdvertiserById(AdvertiserId.toString());
-		if (!advertiser) {
-			throw new HttpError(404, "Advertiser not found");
+		// Find the associated Transportation Advertiser document
+		const TransportationAdvertiserId = transportation.createdBy; // Assuming createdBy is the Advertiser ID
+		const transportation_advertiser = await getTransportationAdvertiserById(
+			TransportationAdvertiserId.toString(),
+		);
+		if (!transportation_advertiser) {
+			throw new HttpError(404, "Transportation Advertiser not found");
 		}
 
 		// Remove the transportation ID from the Advertiser's itineraries array
-		advertiser.transportations = advertiser.transportations.filter(
-			(transportationId) => !transportationId.equals(id),
-		);
-		await Advertiser.updateOne({ session });
+		transportation_advertiser.transportations =
+			transportation_advertiser.transportations.filter(
+				(transportationId) => !transportationId.equals(id),
+			);
+		await TransportationAdvertiser.updateOne({ session });
 		// Delete the transportation
 		await transportation.deleteOne({ session });
 

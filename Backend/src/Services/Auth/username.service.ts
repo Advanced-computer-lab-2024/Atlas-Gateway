@@ -4,6 +4,7 @@ import { Governor } from "../../Models/Users/governor.model";
 import { Seller } from "../../Models/Users/seller.model";
 import { TourGuide } from "../../Models/Users/tourGuide.model";
 import { Tourist } from "../../Models/Users/tourist.model";
+import { TransportationAdvertiser } from "../../Models/Users/transportation_advertiser.model";
 
 export default async function uniqueUn(username: string) {
 	const adminUser = await Admin.find({ username });
@@ -44,6 +45,11 @@ export const findUserByUsername = async (username: string) => {
 
 	user = await Admin.findOne({ username });
 	if (user) return { user, type: "admin" };
+
+	user = await TransportationAdvertiser.findOne({
+		username,
+	});
+	if (user) return { user, type: "advertiser" };
 
 	return null;
 };
