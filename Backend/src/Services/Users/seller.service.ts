@@ -4,6 +4,7 @@ import HttpError from "../../Errors/HttpError";
 import { ISeller, Seller } from "../../Models/Users/seller.model";
 import { hashPassword } from "../Auth/password.service";
 import uniqueUsername from "../Auth/username.service";
+import * as productService from "../Purchases/product.service";
 import * as adminService from "./admin.service";
 
 export const createSeller = async (
@@ -79,5 +80,27 @@ export const deleteSeller = async (id: string) => {
 	if (!seller) {
 		throw new HttpError(404, "Seller not Found");
 	}
+
+	const products = await productService.getProductBySellerId(id);
+	for (const product of products) {
+		await productService.deleteProduct(product.id.toString());
+	}
+
+	return seller;
+};
+
+export const softDeleteSeller = async (id: string) => {
+	const seller = await getSellerById(id);
+	if (!seller) {
+		throw new HttpError(404, "Seller not Found");
+	}
+	const products = await productService.getProductBySellerId(id);
+
+	for (const product of products) {
+		await productService.softDeleteProduct(product.id.toString());
+	}
+
+	await seller.updateOne({ isDeleted: true });
+
 	return seller;
 };

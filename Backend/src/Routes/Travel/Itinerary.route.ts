@@ -1,6 +1,8 @@
 import express from "express";
 
 import {
+	bookItinerary,
+	cancelBookingItinerary,
 	createItinerary,
 	deleteItinerary,
 	getItineraries,
@@ -17,5 +19,7 @@ router.get("/listTourGuide", getItineraryByUserId);
 router.get("/show/:id", getItineraryById);
 router.put("/update/:id", updateItinerary);
 router.delete("/delete/:id", deleteItinerary);
+router.post("/book/:id", bookItinerary);
+router.delete("/cancelBooking/:id", cancelBookingItinerary);
 
 export default router;

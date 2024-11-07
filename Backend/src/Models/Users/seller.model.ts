@@ -28,6 +28,7 @@ const sellerSchema = new Schema<ISeller>(
 		description: { type: String },
 		isVerified: { type: Boolean, default: false },
 		acceptedTerms: { type: Boolean, default: false },
+		isDeleted: { type: Boolean, default: false },
 	},
 	schemaConfig,
 );

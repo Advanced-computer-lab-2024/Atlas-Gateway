@@ -28,9 +28,10 @@ export const createPlace = async (createdBy: string, place: IPlaces) => {
 
 		await placeData.save({ session }); // Save to generate the ID
 
-		governor.places.push(placeData.id);
-
-		await governor.save({ session });
+		await governor.updateOne(
+			{ $push: { places: placeData.id } },
+			{ session },
+		);
 		await session.commitTransaction();
 
 		return placeData;

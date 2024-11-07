@@ -5,6 +5,7 @@ import {
 	deleteSeller,
 	getSeller,
 	getSellers,
+	softDeleteSeller,
 	updateSeller,
 } from "../../Controllers/Users/seller.controller";
 
@@ -14,4 +15,5 @@ SellerRouter.get("/list", getSellers);
 SellerRouter.get("/show/:id", getSeller);
 SellerRouter.put("/update/:id", updateSeller);
 SellerRouter.delete("/delete/:id", deleteSeller);
+SellerRouter.delete("/requestDelete/:id", softDeleteSeller);
 export default SellerRouter;

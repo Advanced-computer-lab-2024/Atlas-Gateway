@@ -103,3 +103,20 @@ export const deleteSeller = async (
 		next(error);
 	}
 };
+
+export const softDeleteSeller = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	const id = req.params.id;
+	try {
+		if (!id) {
+			throw new HttpError(400, "Id is Required");
+		}
+		await sellerService.softDeleteSeller(id);
+		res.status(200).send("Seller deleted successfully");
+	} catch (error) {
+		next(error);
+	}
+};

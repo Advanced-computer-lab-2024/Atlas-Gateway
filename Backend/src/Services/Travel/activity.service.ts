@@ -2,10 +2,9 @@ import mongoose, { Types } from "mongoose";
 
 import HttpError from "../../Errors/HttpError";
 import { Activity, IActivity } from "../../Models/Travel/activity.model";
-import { Tourist } from "../../Models/Users/tourist.model";
 import * as advertiserService from "../../Services/Users/advertiser.service";
 import AggregateBuilder from "../Operations/aggregation.service";
-import { cancelActivity } from "../Users/tourist.service";
+import * as touristService from "../Users/tourist.service";
 
 export const createActivity = async (
 	activity: IActivity,
@@ -33,12 +32,14 @@ export const createActivity = async (
 		const advertiser = await advertiserService.getAdvertiserById(createdBy);
 
 		if (!advertiser) {
-			await session.abortTransaction();
 			throw new HttpError(404, "Advertiser not found");
 		}
 
-		advertiser.activities.push(newActivity.id); // Add the activity ID to the array
-		await advertiser.updateOne({ session });
+		// Push the new activity ID to the advertiser's activities array
+		await advertiser.updateOne(
+			{ $push: { activities: newActivity._id } }, // Update data
+			{ session }, // Pass session here
+		);
 
 		await session.commitTransaction();
 
@@ -298,4 +299,16 @@ export const cancelBookingActivity = async (
 			);
 		}
 	}
+};
+
+export const softDeleteActivity = async (id: string) => {
+	const activity = await getActivityById(id);
+
+	if (!activity) {
+		throw new HttpError(404, "Activity not found");
+	}
+
+	await activity.updateOne({ isDeleted: true });
+
+	return activity;
 };

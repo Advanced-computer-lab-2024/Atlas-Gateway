@@ -5,6 +5,7 @@ import {
 	deleteTourGuide,
 	getTourGuide,
 	getTourGuides,
+	softDeleteTourGuide,
 	updateTourGuide,
 } from "../../Controllers/Users/tourGuide.controller";
 
@@ -14,5 +15,6 @@ tourGuideRouter.get("/show/:id", getTourGuide);
 tourGuideRouter.get("/list", getTourGuides);
 tourGuideRouter.put("/update/:id", updateTourGuide);
 tourGuideRouter.delete("/delete/:id", deleteTourGuide);
+tourGuideRouter.delete("/requestDelete/:id", softDeleteTourGuide);
 
 export default tourGuideRouter;

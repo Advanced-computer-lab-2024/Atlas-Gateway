@@ -92,3 +92,35 @@ export const updateProduct = async (
 
 	return product;
 };
+
+export const getProductBySellerId = async (sellerId: string) => {
+	if (!Types.ObjectId.isValid(sellerId)) {
+		throw new HttpError(400, "Invalid seller ID");
+	}
+
+	const products = await Product.find({ sellerId });
+
+	return products;
+};
+
+export const deleteProduct = async (id: string) => {
+	if (!Types.ObjectId.isValid(id)) {
+		throw new HttpError(400, "Invalid product ID");
+	}
+
+	const product = await Product.findByIdAndDelete(id);
+
+	return product;
+};
+
+export const softDeleteProduct = async (id: string) => {
+	const product = await getProductById(id);
+
+	if (!product) {
+		throw new HttpError(404, "Product not found");
+	}
+
+	await product.updateOne({ isDeleted: true });
+
+	return product;
+};
