@@ -5,10 +5,6 @@ import HttpError from "../../Errors/HttpError";
 import { Itinerary } from "../../Models/Travel/itinerary.model";
 import { Tourist } from "../../Models/Users/tourist.model";
 import * as itineraryService from "../../Services/Travel/itinerary.service";
-import {
-	addBookedItinerary,
-	cancelItinerary,
-} from "../../Services/Users/tourist.service";
 
 export const createItinerary = async (
 	req: Request,
@@ -155,10 +151,14 @@ export const deleteItinerary = async (
 	}
 };
 
-export const bookItinerary = async (req: Request, res: Response) => {
+export const bookItinerary = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
-		const itineraryId = req.params.itineraryId;
-		const touristId = req.headers.userId;
+		const itineraryId = req.params.id;
+		const touristId = req.headers.userid;
 
 		if (!touristId) {
 			return res.status(400).json({ message: "User ID is required" });
@@ -170,27 +170,12 @@ export const bookItinerary = async (req: Request, res: Response) => {
 				.json({ message: "Itinerary ID is required" });
 		}
 
-		if (!Types.ObjectId.isValid(itineraryId)) {
-			return res.status(400).json({ message: "Invalid Itinerary ID" });
-		}
+		const bookingResult = await itineraryService.bookItinerary(
+			itineraryId,
+			touristId.toString(),
+		);
 
-		const itinerary = await Itinerary.findById(itineraryId);
-
-		if (!itinerary) {
-			return res.status(404).json({ message: "Itinerary not found" });
-		}
-
-		const tourist = await Tourist.findById(touristId);
-
-		if (!tourist) {
-			return res.status(404).json({ message: "Tourist not found" });
-		}
-
-		const bookingResult = bookItinerary(itinerary.id, tourist.id);
-
-		const addBookingResult = addBookedItinerary(tourist.id, itinerary.id);
-
-		if (!(bookingResult || addBookingResult)) {
+		if (!bookingResult) {
 			return res.status(400).json({ message: "Cannot book Itinerary" });
 		}
 
@@ -198,14 +183,18 @@ export const bookItinerary = async (req: Request, res: Response) => {
 			.status(201)
 			.json({ message: "Itinerary booked successfully" });
 	} catch (error) {
-		return res.status(500).json({ message: "Error booking Itinerary" });
+		next(error);
 	}
 };
 
-export const cancelBookingItinerary = async (req: Request, res: Response) => {
+export const cancelBookingItinerary = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
-		const itineraryId = req.params.itineraryId;
-		const touristId = req.headers.userId;
+		const itineraryId = req.params.id;
+		const touristId = req.headers.userid;
 
 		if (!touristId) {
 			return res.status(400).json({ message: "User ID is required" });
@@ -217,37 +206,19 @@ export const cancelBookingItinerary = async (req: Request, res: Response) => {
 				.json({ message: "Itinerary ID is required" });
 		}
 
-		if (!Types.ObjectId.isValid(itineraryId)) {
-			return res.status(400).json({ message: "Invalid Itinerary ID" });
-		}
-
-		const itinerary = await Itinerary.findById(itineraryId);
-
-		if (!itinerary) {
-			return res.status(404).json({ message: "Itinerary not found" });
-		}
-
-		const tourist = await Tourist.findById(touristId);
-
-		if (!tourist) {
-			return res.status(404).json({ message: "Tourist not found" });
-		}
-
-		const cancelBookingResult = cancelBookingItinerary(
-			itinerary.id,
-			tourist.id,
-		);
-
-		const removeBookingResult = cancelItinerary(tourist.id, itinerary.id);
-
-		if (!(cancelBookingResult || removeBookingResult)) {
-			return res.status(400).json({ message: "Cannot book Itinerary" });
+		const cancelBookingResult =
+			await itineraryService.cancelBookingItinerary(
+				itineraryId,
+				touristId.toString(),
+			);
+		if (!cancelBookingResult) {
+			return res.status(400).json({ message: "Cannot cancel booking" });
 		}
 
 		return res
 			.status(201)
-			.json({ message: "Itinerary booked successfully" });
+			.json({ message: "Itinerary booking cancelled successfully" });
 	} catch (error) {
-		return res.status(500).json({ message: "Error booking Itinerary" });
+		next(error);
 	}
 };
