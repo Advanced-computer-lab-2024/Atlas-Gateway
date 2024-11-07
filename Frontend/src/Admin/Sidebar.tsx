@@ -5,7 +5,6 @@ import {
 	TagIcon,
 	UserCircleIcon,
 	Users,
-	
 } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -58,53 +57,58 @@ const Sidebar = ({ onSelect }: Props) => {
 			</div>
 
 			<div className="flex flex-col gap-4">
-				{["Accounts", "Products", "Activity Category", "Tags", "Complaints"].map(
-					(item) => (
-						<div
-							key={item}
-							className={`flex flex-col items-center w-60 p-2 cursor-pointer hover:border-l-4 ${
-								activeItem === item ? "bg-[#1e4b9d]" : ""
-							}`}
-							onClick={() => handleClick(item)}
-						>
-							{item === "Accounts" && (
-								<Users
-									className="text-white p-1 rounded-full"
-									width={50}
-									height={50}
-								/>
-							)}
-							{item === "Products" && (
-								<Package
-									className="text-white p-1 rounded-full"
-									width={50}
-									height={50}
-								/>
-							)}
-							{item === "Activity Category" && (
-								<ActivityIcon
-									className="text-white p-1 rounded-full"
-									width={50}
-									height={50}
-								/>
-							)}
-							{item === "Tags" && (
-								<TagIcon
-									className="text-white p-1 rounded-full"
-									width={50}
-									height={50}
-								/>
-							)}
-							{item === "Complaints" && (
-								<MessageCircleWarning
-									className="text-white p-1 rounded-full"
-									width={50}
-									height={50}/>
-							)}
-							<p className="text-[whitesmoke]">{item}</p>
-						</div>
-					),
-				)}
+				{[
+					"Accounts",
+					"Products",
+					"Activity Category",
+					"Tags",
+					"Complaints",
+				].map((item) => (
+					<div
+						key={item}
+						className={`flex flex-col items-center w-60 p-2 cursor-pointer hover:border-l-4 ${
+							activeItem === item ? "bg-[#1e4b9d]" : ""
+						}`}
+						onClick={() => handleClick(item)}
+					>
+						{item === "Accounts" && (
+							<Users
+								className="text-white p-1 rounded-full"
+								width={50}
+								height={50}
+							/>
+						)}
+						{item === "Products" && (
+							<Package
+								className="text-white p-1 rounded-full"
+								width={50}
+								height={50}
+							/>
+						)}
+						{item === "Activity Category" && (
+							<ActivityIcon
+								className="text-white p-1 rounded-full"
+								width={50}
+								height={50}
+							/>
+						)}
+						{item === "Tags" && (
+							<TagIcon
+								className="text-white p-1 rounded-full"
+								width={50}
+								height={50}
+							/>
+						)}
+						{item === "Complaints" && (
+							<MessageCircleWarning
+								className="text-white p-1 rounded-full"
+								width={50}
+								height={50}
+							/>
+						)}
+						<p className="text-[whitesmoke]">{item}</p>
+					</div>
+				))}
 			</div>
 			<ChangePasswordSheet
 				isDrawerOpen={isDrawerOpen}

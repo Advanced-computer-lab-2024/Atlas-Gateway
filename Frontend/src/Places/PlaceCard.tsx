@@ -44,12 +44,13 @@ export default function PlaceCard({
 	// Function to copy the place link to the clipboard
 	const handleCopyLink = () => {
 		const placeLink = `${window.location.origin}/places/${_id}`;
-		navigator.clipboard.writeText(placeLink)
+		navigator.clipboard
+			.writeText(placeLink)
 			.then(() => {
-				alert('Link copied to clipboard!');
+				alert("Link copied to clipboard!");
 			})
 			.catch((err) => {
-				console.error('Failed to copy link:', err);
+				console.error("Failed to copy link:", err);
 			});
 	};
 
@@ -57,10 +58,11 @@ export default function PlaceCard({
 	const handleShareByEmail = () => {
 		const placeLink = `${window.location.origin}/places/${_id}`;
 		const subject = encodeURIComponent(`Check out this place: ${name}`);
-		const body = encodeURIComponent(`Hey, I found this place and thought you might like it!\n\n${placeLink}`);
+		const body = encodeURIComponent(
+			`Hey, I found this place and thought you might like it!\n\n${placeLink}`,
+		);
 		window.location.href = `mailto:?subject=${subject}&body=${body}`;
 	};
-
 
 	return (
 		<Card
@@ -106,7 +108,7 @@ export default function PlaceCard({
 									className="flex gap-2 cursor-pointer"
 									onClick={handleShareByEmail}
 								>
-									<Mail/>
+									<Mail />
 									Share Via Email
 								</DropdownMenuItem>
 								{user?.type ===
@@ -168,7 +170,6 @@ export default function PlaceCard({
 					</Flex>
 				</Flex>
 			</CardContent>
-			
 		</Card>
 	);
 }

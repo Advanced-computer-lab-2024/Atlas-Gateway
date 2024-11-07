@@ -22,6 +22,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import useCurrency from "@/hooks/useCurrency";
 
 import ProductForm from "./ProductForm";
 
@@ -34,6 +35,9 @@ const Product = () => {
 	const [productsPics, setProductsPics] = useState<{ [key: string]: string }>(
 		{},
 	);
+
+	const convertCurrency = useCurrency();
+
 	const handleDownload = async (productId: string, filePath: string) => {
 		try {
 			const res = await axios.post(
@@ -122,7 +126,7 @@ const Product = () => {
 						<div className="flex justify-between mt-3">
 							<div className="flex flex-col">
 								<h3 className="text-sm">
-									Price: ${prod.price}
+									Price: ${convertCurrency(prod?.price)}
 								</h3>
 								<h3 className="text-sm">
 									Archived: {prod?.isArchived ? "Yes" : "No"}

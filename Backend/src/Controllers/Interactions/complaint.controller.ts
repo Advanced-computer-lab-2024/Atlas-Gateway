@@ -17,7 +17,7 @@ export const createComplaint = async (req: Request, res: Response) => {
 			body,
 			date,
 			state,
-			createdBy : userid,
+			createdBy: userid,
 		});
 		res.status(201).json(newComplaint);
 	} catch (error) {
@@ -65,8 +65,7 @@ export const getAllComplaintsByTourist = async (
 	try {
 		//TODO :: Check if userid is present
 		const { userid } = req.headers;
-		const complaints = await complaint
-			.find({ createdBy: userid })
+		const complaints = await complaint.find({ createdBy: userid });
 		res.status(200).json(complaints);
 	} catch (error) {
 		next(error);
@@ -115,7 +114,11 @@ export const updateComplaintByAdmin = async (req: Request, res: Response) => {
 };
 
 //Update a Complaint --Used by Tourist --Tourist Reply Changed
-export const updateComplaintByTourist = async (req: Request, res: Response, next:NextFunction) => {
+export const updateComplaintByTourist = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const { id } = req.params;
 		const { reply } = req.body;

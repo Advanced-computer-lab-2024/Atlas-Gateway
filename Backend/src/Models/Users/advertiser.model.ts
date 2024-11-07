@@ -23,6 +23,7 @@ export interface IAdvertiser extends Document {
 	activities: Types.ObjectId[];
 	transportations: Types.ObjectId[];
 	isVerified: boolean;
+	acceptedTerms: boolean;
 }
 
 const advertiserSchema = new Schema<IAdvertiser>(
@@ -35,7 +36,9 @@ const advertiserSchema = new Schema<IAdvertiser>(
 		website: { type: String },
 		description: { type: String },
 		activities: [{ type: Schema.Types.ObjectId, ref: "Activity" }],
-		transportations: [{ type: Schema.Types.ObjectId, ref: "Transportation" }],
+		transportations: [
+			{ type: Schema.Types.ObjectId, ref: "Transportation" },
+		],
 		isVerified: { type: Boolean, default: false },
 		idPath: { type: String, default: "" },
 		taxCardPath: { type: String, default: "" },
@@ -47,6 +50,7 @@ const advertiserSchema = new Schema<IAdvertiser>(
 		// 	logo: { type: String },
 		// 	description: { type: String },
 		// },
+		acceptedTerms: { type: Boolean, default: false },
 	},
 	schemaConfig,
 );

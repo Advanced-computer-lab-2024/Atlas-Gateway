@@ -69,12 +69,15 @@ export function useUpdatePassword(onSuccess: () => void) {
 }
 
 export function useUpdateTouristProfile(onSuccess: () => void) {
-	const { user } = useLoginStore();
+	const { user, setUser } = useLoginStore();
 
 	const mutation = useMutation({
 		mutationFn: (data: TTourist) => {
 			if (!user?._id) {
 				throw new Error("User ID is undefined");
+			}
+			if (data?.currency && data?.currency !== user.currency) {
+				setUser({ ...user, currency: data.currency });
 			}
 			return apiEditTouristProfile(user._id, data);
 		},
@@ -126,7 +129,7 @@ export function useUpdateSellerProfile(onSuccess: () => void) {
 	const { user } = useLoginStore();
 
 	const mutation = useMutation({
-		mutationFn: (data: TSeller) => {
+		mutationFn: (data: Partial<TSeller>) => {
 			if (!user?._id) {
 				throw new Error("User ID is undefined");
 			}
@@ -180,7 +183,7 @@ export function useUpdateAdvertiserProfile(onSuccess: () => void) {
 	const { user } = useLoginStore();
 
 	const mutation = useMutation({
-		mutationFn: (data: TAdvetisor) => {
+		mutationFn: (data: Partial<TAdvetisor>) => {
 			if (!user?._id) {
 				throw new Error("User ID is undefined");
 			}
@@ -234,7 +237,7 @@ export function useUpdateTourGuideProfile(onSuccess: () => void) {
 	const { user } = useLoginStore();
 
 	const mutation = useMutation({
-		mutationFn: (data: TTourGuide) => {
+		mutationFn: (data: Partial<TTourGuide>) => {
 			if (!user?._id) {
 				throw new Error("User ID is undefined");
 			}

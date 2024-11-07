@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { TAdmin, TGovernor } from "@/types/global";
+import { TAdmin } from "@/types/global";
 
 import ENDPOINTS from "./ENDPOINTS";
 import { TGovernorResponse } from "./types";

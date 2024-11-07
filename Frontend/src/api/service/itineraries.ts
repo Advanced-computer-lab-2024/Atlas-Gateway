@@ -41,7 +41,6 @@ export function apiTourGuideItineraries(
 	});
 }
 
-
 export function apiItinerary(_id: string | undefined) {
 	return axios<TItinerary>({
 		method: "GET",

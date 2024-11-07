@@ -46,7 +46,9 @@ const touristSchema = new Schema<ITourist>(
 		},
 		bookedItineraries: [{ type: Schema.Types.ObjectId, ref: "Itinerary" }],
 		bookedActivities: [{ type: Schema.Types.ObjectId, ref: "Activity" }],
-		bookedTransportations: [{ type: Schema.Types.ObjectId, ref: "Transportation" }],
+		bookedTransportations: [
+			{ type: Schema.Types.ObjectId, ref: "Transportation" },
+		],
 	},
 	schemaConfig,
 );

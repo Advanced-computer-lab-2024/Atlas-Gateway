@@ -8,9 +8,9 @@ export interface ITransportation extends Document {
 	availability: number;
 	pickUpLocation: string;
 	dropOffLocation: string;
-    dateTime: Date;
-    timeTaken: number;
-    numberOfBookings: number;
+	dateTime: Date;
+	timeTaken: number;
+	numberOfBookings: number;
 	tourists: Types.ObjectId[];
 	createdBy: Types.ObjectId;
 }
@@ -22,13 +22,16 @@ const transportationSchema = new Schema<ITransportation>(
 		availability: { type: Number, required: true },
 		pickUpLocation: { type: String, required: true },
 		dropOffLocation: { type: String, required: true },
-        dateTime: { type: Date, required: true },
-        timeTaken: { type: Number, required: true },
+		dateTime: { type: Date, required: true },
+		timeTaken: { type: Number, required: true },
 		numberOfBookings: { type: Number, default: 0 },
-		tourists: [{ type: Schema.Types.ObjectId, ref: "Tourist" }],	
+		tourists: [{ type: Schema.Types.ObjectId, ref: "Tourist" }],
 		createdBy: { type: Schema.Types.ObjectId, ref: "Advertiser" },
 	},
 	schemaConfig,
 );
 
-export const Transportation = model<ITransportation>("Transportation", transportationSchema);
+export const Transportation = model<ITransportation>(
+	"Transportation",
+	transportationSchema,
+);
