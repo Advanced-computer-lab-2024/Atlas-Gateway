@@ -8,6 +8,7 @@ import {
 	Trash,
 } from "lucide-react";
 
+import { useDownload } from "@/api/data/useMedia";
 import {
 	useDeleteTourGuideProfile,
 	useTourGuides,
@@ -28,22 +29,13 @@ const TourGuide = () => {
 	const { user } = useLoginStore();
 	const { data, refetch } = useTourGuides();
 	const { doDeleteTourGuideProfile } = useDeleteTourGuideProfile(refetch);
-
-	const handleDownload = async (filePath: string) => {
-		axios
-			.post(`http://localhost:5000/api/media/download`, { filePath })
-			.then((res) => {
-				const link = document.createElement("a");
-				link.href = res.data;
-				document.body.appendChild(link);
-				link.click();
-				document.body.removeChild(link);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	};
-
+	const { doDownload } = useDownload((response) => {
+		const link = document.createElement("a");
+		link.href = response.data;
+		document.body.appendChild(link);
+		link.click();
+		document.body.removeChild(link);
+	});
 	const handleUpdate = (id: string) => {
 		axios
 			.put(
@@ -112,9 +104,7 @@ const TourGuide = () => {
 							</TableCell>
 							<TableCell>
 								<button
-									onClick={() =>
-										handleDownload(tourGuide.idPath)
-									}
+									onClick={() => doDownload(tourGuide.idPath)}
 								>
 									<IdCard />
 								</button>
@@ -122,9 +112,7 @@ const TourGuide = () => {
 							<TableCell>
 								<button
 									onClick={() =>
-										handleDownload(
-											tourGuide.certificatePath,
-										)
+										doDownload(tourGuide.certificatePath)
 									}
 								>
 									<FileUser />

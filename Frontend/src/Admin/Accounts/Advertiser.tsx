@@ -8,6 +8,7 @@ import {
 	Trash,
 } from "lucide-react";
 
+import { useDownload } from "@/api/data/useMedia";
 import {
 	useAdvertisers,
 	useDeleteAdvertiserProfile,
@@ -28,22 +29,13 @@ const Advertisers = () => {
 	const { user } = useLoginStore();
 	const { data, refetch } = useAdvertisers();
 	const { doDeleteAdvertiserProfile } = useDeleteAdvertiserProfile(refetch);
-
-	const handleDownload = async (filePath: string) => {
-		axios
-			.post(`http://localhost:5000/api/media/download`, { filePath })
-			.then((res) => {
-				const link = document.createElement("a");
-				link.href = res.data;
-				document.body.appendChild(link);
-				link.click();
-				document.body.removeChild(link);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	};
-
+	const { doDownload } = useDownload((response) => {
+		const link = document.createElement("a");
+		link.href = response.data;
+		document.body.appendChild(link);
+		link.click();
+		document.body.removeChild(link);
+	});
 	const handleUpdate = (id: string) => {
 		axios
 			.put(
@@ -122,7 +114,7 @@ const Advertisers = () => {
 							<TableCell>
 								<button
 									onClick={() =>
-										handleDownload(advertiser.idPath)
+										doDownload(advertiser.idPath)
 									}
 								>
 									<IdCard />
@@ -131,7 +123,7 @@ const Advertisers = () => {
 							<TableCell>
 								<button
 									onClick={() =>
-										handleDownload(advertiser.taxCardPath)
+										doDownload(advertiser.taxCardPath)
 									}
 								>
 									<FileUser />

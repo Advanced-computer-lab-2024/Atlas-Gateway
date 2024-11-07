@@ -57,9 +57,6 @@ const UploadForm = ({
 			file,
 		};
 		doUpload(payload);
-		// setTimeout(() => {
-		// 	onUploadSuccess?.();
-		// }, 2000);
 	};
 	return (
 		<Sheet open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>

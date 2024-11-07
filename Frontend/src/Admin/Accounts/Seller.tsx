@@ -8,6 +8,7 @@ import {
 	Trash,
 } from "lucide-react";
 
+import { useDownload } from "@/api/data/useMedia";
 import { useDeleteSeller, useSellers } from "@/api/data/useProfile";
 import { TSellerProfileResponse } from "@/api/service/types";
 import {
@@ -25,20 +26,13 @@ const Sellers = () => {
 	const { user } = useLoginStore();
 	const { data, refetch } = useSellers();
 	const { doDeleteSeller } = useDeleteSeller(refetch);
-	const handleDownload = async (filePath: string) => {
-		axios
-			.post(`http://localhost:5000/api/media/download`, { filePath })
-			.then((res) => {
-				const link = document.createElement("a");
-				link.href = res.data;
-				document.body.appendChild(link);
-				link.click();
-				document.body.removeChild(link);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	};
+	const { doDownload } = useDownload((response) => {
+		const link = document.createElement("a");
+		link.href = response.data;
+		document.body.appendChild(link);
+		link.click();
+		document.body.removeChild(link);
+	});
 	const handleUpdate = (id: string) => {
 		axios
 			.put(
@@ -101,9 +95,7 @@ const Sellers = () => {
 							</TableCell>
 							<TableCell>
 								<button
-									onClick={() =>
-										handleDownload(seller.idPath)
-									}
+									onClick={() => doDownload(seller.idPath)}
 								>
 									<IdCard />
 								</button>
@@ -111,7 +103,7 @@ const Sellers = () => {
 							<TableCell>
 								<button
 									onClick={() =>
-										handleDownload(seller.taxCardPath)
+										doDownload(seller.taxCardPath)
 									}
 								>
 									<FileUser />
