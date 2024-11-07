@@ -5,10 +5,12 @@ import { useProduct } from "@/api/data/useProducts";
 import Label from "@/components/ui/Label";
 import { Card } from "@/components/ui/card";
 import { Flex } from "@/components/ui/flex";
+import useCurrency from "@/hooks/useCurrency";
 
 export default function ProductDetails() {
 	const navigate = useNavigate();
 	const { data } = useProduct();
+	const convertCurrency = useCurrency();
 	const { name, description, images, price, avgRating, availability } =
 		data || {};
 
@@ -60,7 +62,7 @@ export default function ProductDetails() {
 								</Label.Big600>
 								<DollarSign size={32} />
 								<Label.Mid500 className="overflow-ellipsis">
-									{price}
+									{convertCurrency(price)}
 								</Label.Mid500>
 							</Flex>
 							<Flex gap="2" align="center">

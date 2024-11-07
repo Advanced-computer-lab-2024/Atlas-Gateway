@@ -23,6 +23,7 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Flex } from "@/components/ui/flex";
+import useCurrency from "@/hooks/useCurrency";
 import { useLoginStore } from "@/store/loginStore";
 import { EAccountType } from "@/types/enums";
 import { TActivity } from "@/types/global";
@@ -36,30 +37,35 @@ export default function ActivityCard({
 }) {
 	const navigate = useNavigate();
 	const { user } = useLoginStore();
+	const convertCurrency = useCurrency();
 
 	const { refetch } = useActivities();
 	const { doDeleteActivity } = useDeleteActivity(refetch);
 
 	// Function to copy the activity link to the clipboard
-    const handleCopyLink = () => {
-        const activityLink = `${window.location.origin}/activities/${activity._id}`;
-        navigator.clipboard.writeText(activityLink)
-            .then(() => {
-                alert('Link copied to clipboard!');
-            })
-            .catch((err) => {
-                console.error('Failed to copy link:', err);
-            });
-    };
+	const handleCopyLink = () => {
+		const activityLink = `${window.location.origin}/activities/${activity._id}`;
+		navigator.clipboard
+			.writeText(activityLink)
+			.then(() => {
+				alert("Link copied to clipboard!");
+			})
+			.catch((err) => {
+				console.error("Failed to copy link:", err);
+			});
+	};
 
 	// Function to create a mailto link for sharing via email
-    const handleShareByEmail = () => {
-        const activityLink = `${window.location.origin}/activities/${activity._id}`;
-        const subject = encodeURIComponent(`Check out this activity: ${activity.name}`);
-        const body = encodeURIComponent(`Hey, I found this activity and thought you might like it!\n\n${activityLink}`);
-        window.location.href = `mailto:?subject=${subject}&body=${body}`;
-    };
-
+	const handleShareByEmail = () => {
+		const activityLink = `${window.location.origin}/activities/${activity._id}`;
+		const subject = encodeURIComponent(
+			`Check out this activity: ${activity.name}`,
+		);
+		const body = encodeURIComponent(
+			`Hey, I found this activity and thought you might like it!\n\n${activityLink}`,
+		);
+		window.location.href = `mailto:?subject=${subject}&body=${body}`;
+	};
 
 	return (
 		<Card
@@ -105,7 +111,7 @@ export default function ActivityCard({
 									className="flex gap-2 cursor-pointer"
 									onClick={handleShareByEmail}
 								>
-									<Mail/>
+									<Mail />
 									Share Via Email
 								</DropdownMenuItem>
 								{user?.type === EAccountType.Advertiser && (
@@ -155,7 +161,8 @@ export default function ActivityCard({
 						<Flex gap="1" align="center">
 							<DollarSign size={20} />
 							<Label.Thin300 className="overflow-ellipsis">
-								{activity?.minPrice} - {activity?.maxPrice}
+								{convertCurrency(activity?.minPrice)} -{" "}
+								{convertCurrency(activity?.maxPrice)}
 							</Label.Thin300>
 						</Flex>
 						<Flex gap="1" align="center">
@@ -232,7 +239,6 @@ export default function ActivityCard({
 				<Label.Mid300>
 					{activity?.isOpen ? "Bookings Open" : "Bookings Closed"}
 				</Label.Mid300>
-				
 			</CardFooter>
 		</Card>
 	);

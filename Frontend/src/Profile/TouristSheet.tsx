@@ -15,11 +15,19 @@ import {
 	FormItem,
 	FormLabel,
 } from "@/components/ui/form";
+import { currencyOptions } from "@/types/consts";
 import { TTourist } from "@/types/global";
 
 import Label from "../components/ui/Label";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "../components/ui/select";
 import {
 	Sheet,
 	SheetContent,
@@ -29,7 +37,8 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from "../components/ui/sheet";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "../components/ui/select"; // Ensure all necessary components are imported
+
+// Ensure all necessary components are imported
 
 const formSchema = z.object({
 	name: z.string().min(2, {
@@ -44,13 +53,6 @@ const formSchema = z.object({
 	currency: z.string(), // Add currency to the schema
 });
 
-const availableCurrencies = [
-	{ code: "USD", name: "US Dollar" },
-	{ code: "EUR", name: "Euro" },
-	{ code: "GBP", name: "British Pound" },
-	{ code: "EGP", name: "Egyptian Pound" },
-	// Add more currencies as needed
-];
 export default function TouristSheet() {
 	const [open, setOpen] = useState(false);
 	const { data, refetch } = useTouristProfile();
@@ -155,7 +157,6 @@ export default function TouristSheet() {
 							)}
 						/>
 
-						{/* Currency Selection */}
 						<FormField
 							control={form.control}
 							name="currency"
@@ -163,20 +164,32 @@ export default function TouristSheet() {
 								<FormItem>
 									<FormLabel>Currency</FormLabel>
 									<FormControl>
-										<Select onValueChange={field.onChange} defaultValue={field.value}>
+										<Select
+											onValueChange={field.onChange}
+											defaultValue={field.value}
+										>
 											<SelectTrigger>
 												<SelectValue placeholder="Select currency" />
 											</SelectTrigger>
 											<SelectContent>
-												{availableCurrencies.map((currency) => (
-													<SelectItem key={currency.code} value={currency.code}>
-														{currency.name}
-													</SelectItem>
-												))}
+												{currencyOptions.map(
+													(currency) => (
+														<SelectItem
+															key={currency.value}
+															value={
+																currency.value
+															}
+														>
+															{currency.label}
+														</SelectItem>
+													),
+												)}
 											</SelectContent>
 										</Select>
 									</FormControl>
-									<FormDescription>Select your preferred currency.</FormDescription>
+									<FormDescription>
+										Select your preferred currency.
+									</FormDescription>
 								</FormItem>
 							)}
 						/>

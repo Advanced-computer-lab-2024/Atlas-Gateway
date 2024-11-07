@@ -1,17 +1,19 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 
-
-
 import { useLoginStore } from "@/store/loginStore";
+import { EAccountType } from "@/types/enums";
 import { TActivity } from "@/types/global";
 
-
-
-import { apiActivities, apiActivity, apiAdvertisorActivities, apiCreateActivity, apiDeleteActivity, apiUpdateActivity } from "../service/activities";
+import {
+	apiActivities,
+	apiActivity,
+	apiAdvertisorActivities,
+	apiCreateActivity,
+	apiDeleteActivity,
+	apiUpdateActivity,
+} from "../service/activities";
 import { useQueryString } from "./useQueryString";
-import { EAccountType } from "@/types/enums";
-
 
 export function useActivities() {
 	const { user } = useLoginStore();
@@ -23,10 +25,9 @@ export function useActivities() {
 		queryFn: () =>
 			user?.type === EAccountType.Advertiser
 				? apiAdvertisorActivities(_id, query)
-				:apiActivities(_id, query),
+				: apiActivities(_id, query),
 		queryKey: ["activities", _id, query],
 	});
-
 
 	const { data } = q;
 

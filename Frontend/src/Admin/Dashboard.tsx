@@ -8,10 +8,10 @@ import TourGuide from "./Accounts/TourGuide";
 import Tourist from "./Accounts/Tourist";
 import Category from "./Activity/Category";
 import Tags from "./Activity/Tags";
+import Complaint from "./Complaint/Complaint";
 import Navbar from "./Navbar";
 import Product from "./Product/Product";
 import Sidebar from "./Sidebar";
-import Complaint from "./Complaint/Complaint";
 
 const Admin = () => {
 	const [selectedCategory, setSelectedCategory] = useState(""); // manages selection from sidebar
@@ -60,7 +60,7 @@ const Admin = () => {
 			if (selectedItem === "Activity Category") return <Category />;
 		} else if (selectedCategory === "Tags") {
 			if (selectedItem === "Preference Tags") return <Tags />;
-		}else if (selectedCategory === "Complaints") {
+		} else if (selectedCategory === "Complaints") {
 			if (selectedItem === "Tourist Complaints") return <Complaint />;
 		}
 		return null;

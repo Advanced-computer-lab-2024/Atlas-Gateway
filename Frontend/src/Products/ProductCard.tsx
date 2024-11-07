@@ -12,6 +12,7 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Flex } from "@/components/ui/flex";
+import useCurrency from "@/hooks/useCurrency";
 import { useLoginStore } from "@/store/loginStore";
 import { TProduct } from "@/types/global";
 
@@ -29,6 +30,9 @@ export default function ProductCard({
 	const { user } = useLoginStore();
 	const navigate = useNavigate();
 	const [productPic, setProductPic] = useState("");
+
+	const convertCurrency = useCurrency();
+
 	const handleDownload = async (filePath: string) => {
 		try {
 			axios
@@ -46,6 +50,7 @@ export default function ProductCard({
 	useEffect(() => {
 		handleDownload(imagePath);
 	}, [imagePath]);
+
 	return (
 		<Card
 			key={_id}
@@ -106,7 +111,7 @@ export default function ProductCard({
 						<Flex gap="2" align="center" justify="between">
 							<DollarSign size={20} />
 							<Label.Thin200 className="overflow-ellipsis">
-								{price}
+								{convertCurrency(price)}
 							</Label.Thin200>
 						</Flex>
 						<Flex gap="1" align="center">

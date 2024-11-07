@@ -1,14 +1,9 @@
 import axios from "axios";
 
-
-
 import { TPlace } from "@/types/global";
-
-
 
 import ENDPOINTS from "./ENDPOINTS";
 import { TApiResponse } from "./types";
-
 
 export function apiPlaces(
 	_id: string | undefined,
@@ -70,7 +65,6 @@ export function apiGovernerPlaces(
 		baseURL: "http://localhost:5000",
 	});
 }
-
 
 export function apiUpdatePlace(payload: TPlace) {
 	return axios({

@@ -2,7 +2,6 @@ import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
 import { useLoginStore } from "@/store/loginStore";
-import { EAccountType } from "@/types/enums";
 
 import apiLogin from "../service/login";
 
@@ -13,14 +12,17 @@ export function useLogin() {
 	const mutation = useMutation({
 		mutationFn: apiLogin,
 		onSuccess: (data) => {
-			const { _id, username } = data.data.user;
+			const { _id, username, currency, acceptedTerms, isVerified } =
+				data.data.user;
 			const type = data.data.type;
 			setUser({
 				_id,
 				type,
 				username,
+				currency: currency || "EGP",
+				acceptedTerms,
+				isVerified,
 			});
-			console.log(type);
 			navigate("/");
 		},
 	});

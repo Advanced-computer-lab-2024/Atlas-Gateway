@@ -1,6 +1,8 @@
 import { LogOut, UserCircleIcon } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
+import { TermsDialog } from "@/Login/TermsDialog";
 import Label from "@/components/ui/Label";
 import { Flex } from "@/components/ui/flex";
 import { onLogout, useLoginStore } from "@/store/loginStore";
@@ -12,8 +14,23 @@ export default function Navbar() {
 	const { user } = useLoginStore();
 	const navigate = useNavigate();
 
+	const [isTermsDialogOpen, setIsTermsDialogOpen] = useState(false);
+	const closeTermsDialog = () => setIsTermsDialogOpen(false);
+
 	const isLoggedIn = user?._id;
 	const routes = accountRoutes[(user?.type ?? "guest") as EAccountType];
+
+	useEffect(() => {
+		if (
+			(user?.type == EAccountType.Advertiser ||
+				user?.type == EAccountType.Guide ||
+				user?.type == EAccountType.Seller) &&
+			!user.acceptedTerms &&
+			user.isVerified
+		) {
+			setIsTermsDialogOpen(true);
+		}
+	}, [user]);
 
 	return (
 		<nav className="bg-surface-secondary h-20 flex justify-between items-center px-4 drop-shadow-2xl border-b-2 border-black">
@@ -74,6 +91,7 @@ export default function Navbar() {
 					<Label.Mid400 variant="primary">Sign up/Login</Label.Mid400>
 				</Link>
 			)}
+			<TermsDialog isOpen={isTermsDialogOpen} close={closeTermsDialog} />
 		</nav>
 	);
 }

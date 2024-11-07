@@ -1,9 +1,9 @@
 import axios from "axios";
 
+import { TLoginForm } from "@/Login/types";
 
 import ENDPOINTS from "./ENDPOINTS";
 import { TLoginResponse } from "./types";
-import { TLoginForm } from "@/Login/types";
 
 export default function apiLogin(payload: TLoginForm) {
 	return axios<TLoginResponse>({

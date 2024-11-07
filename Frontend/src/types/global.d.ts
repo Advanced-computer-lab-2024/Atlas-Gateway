@@ -1,11 +1,14 @@
+import { Currency } from "./consts";
 import { EAccountType } from "./enums";
-
 
 export type TUser = {
 	_id: string;
 	username: string;
 	name?: string;
 	type: EAccountType;
+	currency: Currency;
+	acceptedTerms?: boolean;
+	isVerified?: boolean;
 };
 
 export type TPassword = {
@@ -88,7 +91,7 @@ export interface TTourist extends TUser {
 	email: string;
 	mobile: string;
 	address: string;
-	currency: string;
+	currency: Currency;
 	loyaltyPoints: number;
 	walletBalance: number;
 }

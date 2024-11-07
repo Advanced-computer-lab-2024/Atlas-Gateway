@@ -13,6 +13,7 @@ export interface ISeller extends Document {
 	description: string;
 	isDeleted: boolean;
 	isVerified: { type: Boolean; default: false };
+	acceptedTerms: { type: Boolean; default: false };
 }
 
 const sellerSchema = new Schema<ISeller>(
@@ -26,6 +27,7 @@ const sellerSchema = new Schema<ISeller>(
 		imagePath: { type: String, default: "" },
 		description: { type: String },
 		isVerified: { type: Boolean, default: false },
+		acceptedTerms: { type: Boolean, default: false },
 	},
 	schemaConfig,
 );

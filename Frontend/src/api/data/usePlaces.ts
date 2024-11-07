@@ -1,17 +1,19 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 
-
-
 import { useLoginStore } from "@/store/loginStore";
+import { EAccountType } from "@/types/enums";
 import { TPlace } from "@/types/global";
 
-
-
-import { apiCreatePlace, apiDeletePlace, apiGovernerPlaces, apiPlace, apiPlaces, apiUpdatePlace } from "../service/places";
+import {
+	apiCreatePlace,
+	apiDeletePlace,
+	apiGovernerPlaces,
+	apiPlace,
+	apiPlaces,
+	apiUpdatePlace,
+} from "../service/places";
 import { useQueryString } from "./useQueryString";
-import { EAccountType } from "@/types/enums";
-
 
 export function usePlaces() {
 	const { user } = useLoginStore();

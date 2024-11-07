@@ -57,7 +57,7 @@ export default function ComplaintDetails() {
 									{title}
 								</Label.Big500>
 							</Flex>
-							<Flex gap="2" align="center" >
+							<Flex gap="2" align="center">
 								<Label.Big600 className="w-52 text-left">
 									Complaint body:{" "}
 								</Label.Big600>

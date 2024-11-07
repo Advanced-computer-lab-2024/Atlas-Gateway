@@ -30,8 +30,7 @@ export default function Login() {
 
 	const { handleSubmit } = form;
 
-    const onSubmit = async (data: TLoginForm) => {
-        console.log(data);
+	const onSubmit = async (data: TLoginForm) => {
 		doLogin(data);
 	};
 

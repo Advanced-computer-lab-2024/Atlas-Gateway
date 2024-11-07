@@ -47,7 +47,10 @@ const Tags = () => {
 								</TableCell>
 								<TableCell className="w-1">
 									<TableCell className="w-1">
-										<EditForm type="tag" id={tag._id ?? ''} />
+										<EditForm
+											type="tag"
+											id={tag._id ?? ""}
+										/>
 									</TableCell>
 								</TableCell>
 								<TableCell className="cursor-pointer hover:text-red-600 w-1">

@@ -7,6 +7,7 @@ import HttpError from "./Errors/HttpError";
 import passwordRouter from "./Routes/Auth/changePassword.route";
 import loginRouter from "./Routes/Auth/login.route";
 import registerRouter from "./Routes/Auth/register.route";
+import complaintRouter from "./Routes/Interactions/complaint.route";
 import mediaRouter from "./Routes/Media/media.route";
 import productRouter from "./Routes/Purchases/product.route";
 import itineraryRouter from "./Routes/Travel/Itinerary.route";
@@ -20,7 +21,6 @@ import governorRouter from "./Routes/Users/governor.route";
 import sellerRouter from "./Routes/Users/seller.route";
 import tourGuideRouter from "./Routes/Users/tourGuide.route";
 import touristRouter from "./Routes/Users/tourist.route";
-import complaintRouter from "./Routes/Interactions/complaint.route";
 
 const app = express();
 

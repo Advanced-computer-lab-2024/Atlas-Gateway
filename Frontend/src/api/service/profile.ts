@@ -97,7 +97,7 @@ export function apiSellerProfile(_id: string) {
 		baseURL: "http://localhost:5000",
 	});
 }
-export function apiEditSellerProfile(_id: string, data: TSeller) {
+export function apiEditSellerProfile(_id: string, data: Partial<TSeller>) {
 	return axios<TAdvertiserProfileResponse>({
 		method: "PUT",
 		url: ENDPOINTS.seller.update(_id),
@@ -144,7 +144,10 @@ export function apiAdvertiserProfile(_id: string) {
 	});
 }
 
-export function apiEditAdvertiserProfile(_id: string, data: TAdvetisor) {
+export function apiEditAdvertiserProfile(
+	_id: string,
+	data: Partial<TAdvetisor>,
+) {
 	return axios<TAdvertiserProfileResponse>({
 		method: "PUT",
 		url: ENDPOINTS.advertiser.update(_id),
@@ -190,7 +193,10 @@ export function apiTourGuideProfile(_id: string) {
 		baseURL: "http://localhost:5000",
 	});
 }
-export function apiEditTourGuideProfile(_id: string, data: TTourGuide) {
+export function apiEditTourGuideProfile(
+	_id: string,
+	data: Partial<TTourGuide>,
+) {
 	return axios<TTourGuideProfileResponse>({
 		method: "PUT",
 		url: ENDPOINTS.tourGuide.update(_id),

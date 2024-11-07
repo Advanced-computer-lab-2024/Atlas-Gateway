@@ -6,8 +6,7 @@ import { TCategory } from "@/types/global";
 import {
 	apiCategories,
 	apiCreateCategory,
-	apiDeleteCategory,
-	// apiUpdateCategory,
+	apiDeleteCategory, // apiUpdateCategory,
 } from "../service/categories";
 import { useQueryString } from "./useQueryString";
 

@@ -7,10 +7,12 @@ import Label from "@/components/ui/Label";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Flex } from "@/components/ui/flex";
+import useCurrency from "@/hooks/useCurrency";
 import { languageOptions } from "@/types/consts";
 
 export default function ItineraryDetails() {
 	const navigate = useNavigate();
+	const convertCurrency = useCurrency();
 	const { data } = useItinerary();
 	const {
 		availability,
@@ -94,7 +96,7 @@ export default function ItineraryDetails() {
 						</Label.Mid600>
 						<DollarSign size={20} />
 						<Label.Thin300 className="overflow-ellipsis">
-							{price}
+							{convertCurrency(price)}
 						</Label.Thin300>
 					</Flex>
 					<Flex gap="1" align="center">

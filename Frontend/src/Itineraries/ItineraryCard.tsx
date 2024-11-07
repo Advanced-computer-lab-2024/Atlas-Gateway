@@ -23,6 +23,7 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Flex } from "@/components/ui/flex";
+import useCurrency from "@/hooks/useCurrency";
 import { useLoginStore } from "@/store/loginStore";
 import { languageOptions } from "@/types/consts";
 import { EAccountType } from "@/types/enums";
@@ -37,31 +38,35 @@ export default function ItineraryCard({
 }) {
 	const navigate = useNavigate();
 	const { user } = useLoginStore();
+	const convertCurrency = useCurrency();
 
 	const { refetch } = useItineraries();
 	const { doDeleteItinerary } = useDeleteItinerary(refetch);
 
-
 	// Function to copy the itinerary link to the clipboard
 	const handleCopyLink = () => {
 		const itineraryLink = `${window.location.origin}/itineraries/${itinerary?._id}`;
-		navigator.clipboard.writeText(itineraryLink)
+		navigator.clipboard
+			.writeText(itineraryLink)
 			.then(() => {
-				alert('Link copied to clipboard!');
+				alert("Link copied to clipboard!");
 			})
 			.catch((err) => {
-				console.error('Failed to copy link:', err);
+				console.error("Failed to copy link:", err);
 			});
 	};
 
 	// Function to create a mailto link for sharing via email
 	const handleShareByEmail = () => {
 		const itineraryLink = `${window.location.origin}/itineraries/${itinerary?._id}`;
-		const subject = encodeURIComponent(`Check out this itinerary: ${itinerary?.title}`);
-		const body = encodeURIComponent(`Hey, I found this itinerary and thought you might like it!\n\n${itineraryLink}`);
+		const subject = encodeURIComponent(
+			`Check out this itinerary: ${itinerary?.title}`,
+		);
+		const body = encodeURIComponent(
+			`Hey, I found this itinerary and thought you might like it!\n\n${itineraryLink}`,
+		);
 		window.location.href = `mailto:?subject=${subject}&body=${body}`;
 	};
-
 
 	return (
 		<Card
@@ -107,7 +112,7 @@ export default function ItineraryCard({
 									className="flex gap-2 cursor-pointer"
 									onClick={handleShareByEmail}
 								>
-									<Mail/>
+									<Mail />
 									Share Via Email
 								</DropdownMenuItem>
 								{user?.type === EAccountType.Guide && (
@@ -175,7 +180,7 @@ export default function ItineraryCard({
 						<Flex gap="1" align="center">
 							<DollarSign size={20} />
 							<Label.Thin300 className="overflow-ellipsis">
-								{itinerary?.price}
+								{convertCurrency(itinerary?.price)}
 							</Label.Thin300>
 						</Flex>
 						<Flex gap="1" align="center">
@@ -256,7 +261,6 @@ export default function ItineraryCard({
 					{itinerary?.numberOfBookings}/{itinerary?.availability}{" "}
 					Bookings Available
 				</Label.Mid300>
-				
 			</CardFooter>
 		</Card>
 	);

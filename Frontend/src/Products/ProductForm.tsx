@@ -105,7 +105,6 @@ const ProductForm = ({ id, type }: props) => {
 								</FormItem>
 							)}
 						/>
-
 						<FormField
 							control={control}
 							name="price"
@@ -120,7 +119,7 @@ const ProductForm = ({ id, type }: props) => {
 										/>
 									</FormControl>
 									<FormDescription>
-										Enter the product price.
+										Enter the product price in EGP.
 									</FormDescription>
 								</FormItem>
 							)}

@@ -12,5 +12,4 @@ complaintRouter.put(
 	ComplaintController.updateComplaintByAdmin,
 );
 
-
 export default complaintRouter;

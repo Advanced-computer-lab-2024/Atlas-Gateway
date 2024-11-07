@@ -1,9 +1,6 @@
 import { Document, ObjectId, Schema, Types, model } from "mongoose";
 
-
-
 import { schemaConfig } from "../../Config/schemaConfig";
-
 
 interface IComplaint extends Document {
 	title: string;

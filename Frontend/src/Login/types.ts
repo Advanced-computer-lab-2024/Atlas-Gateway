@@ -1,4 +1,4 @@
 export type TLoginForm = {
-    username: string;
-    password: string;
+	username: string;
+	password: string;
 };

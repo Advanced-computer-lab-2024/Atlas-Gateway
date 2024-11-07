@@ -7,9 +7,11 @@ import Label from "@/components/ui/Label";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Flex } from "@/components/ui/flex";
+import useCurrency from "@/hooks/useCurrency";
 
 export default function ActivityDetails() {
 	const navigate = useNavigate();
+	const convertCurrency = useCurrency();
 	const { data } = useActivity();
 	const {
 		name,
@@ -88,7 +90,8 @@ export default function ActivityDetails() {
 								</Label.Big600>
 								<DollarSign size={20} />
 								<Label.Thin300 className="overflow-ellipsis">
-									{minPrice} - {maxPrice}
+									{convertCurrency(minPrice)} -{" "}
+									{convertCurrency(maxPrice)}
 								</Label.Thin300>
 							</Flex>
 							<Flex gap="2" align="center">
