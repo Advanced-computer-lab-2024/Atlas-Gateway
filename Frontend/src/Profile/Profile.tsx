@@ -1,7 +1,6 @@
 import { useLoginStore } from "@/store/loginStore";
 import { EAccountType } from "@/types/enums";
 
-import Dashboard from "../Admin/Dashboard";
 import AdvertiserProfile from "./AdvertiserProfile";
 import SellerProfile from "./SellerProfile";
 import TourGuideProfile from "./TourGuideProfile";

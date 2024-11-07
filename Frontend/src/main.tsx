@@ -1,17 +1,31 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
+import {
+	Navigate,
+	Outlet,
+	RouterProvider,
+	createBrowserRouter,
+} from "react-router-dom";
 
 import Activites from "./Activities/Activites";
 import ActivityDetails from "./Activities/ActivityDetails";
+import Admins from "./Admin/Accounts/Admin";
+import Advertisers from "./Admin/Accounts/Advertiser";
+import Governor from "./Admin/Accounts/Governor";
+import Seller from "./Admin/Accounts/Seller";
+import TourGuide from "./Admin/Accounts/TourGuide";
+import Tourists from "./Admin/Accounts/Tourist";
+import Category from "./Admin/Activity/Category";
+import Tags from "./Admin/Activity/Tags";
+import AdminLayout from "./Admin/AdminLayout";
+import Complaint from "./Admin/Complaint/Complaint";
 import ComplaintDetails from "./Admin/Complaint/ComplaintDetails";
-import Admin from "./Admin/Dashboard";
+import AdminProducts from "./Admin/Product/Product";
 import Home from "./Home/Home";
 import Itineraries from "./Itineraries/Itineraries";
 import ItineraryDetails from "./Itineraries/ItineraryDetails";
 import Login from "./Login/Login";
-import PlacesForm from "./Places/Form/PlacesForm";
 import PlaceDetails from "./Places/PlaceDetails";
 import Places from "./Places/Places";
 import ProductDetails from "./Products/ProductDetails";
@@ -26,20 +40,86 @@ const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
 	{
-		path: "/admin",
-		element: (
-			<QueryStateProvider>
-				<Outlet />
-			</QueryStateProvider>
-		),
 		children: [
 			{
 				path: "/admin",
-				element: <Admin />,
-			},
-			{
-				path: "/admin/complaint/:id",
-				element: <ComplaintDetails />,
+				element: (
+					<QueryStateProvider>
+						<AdminLayout>
+							<Outlet />
+						</AdminLayout>
+					</QueryStateProvider>
+				),
+				children: [
+					{
+						index: true,
+						path: "/admin",
+						element: <Navigate to="/admin/accounts" />,
+					},
+					{
+						path: "/admin/accounts",
+						element: <Outlet />,
+						children: [
+							{
+								index: true,
+								path: "/admin/accounts",
+								element: (
+									<Navigate to="/admin/accounts/tourists" />
+								),
+							},
+							{
+								path: "/admin/accounts/tourists",
+								element: <Tourists />,
+							},
+							{
+								path: "/admin/accounts/admins",
+								element: <Admins />,
+							},
+							{
+								path: "/admin/accounts/tour-guides",
+								element: <TourGuide />,
+							},
+							{
+								path: "/admin/accounts/advertisers",
+								element: <Advertisers />,
+							},
+							{
+								path: "/admin/accounts/governors",
+								element: <Governor />,
+							},
+							{
+								path: "/admin/accounts/sellers",
+								element: <Seller />,
+							},
+						],
+					},
+					{
+						path: "/admin/products",
+						element: <AdminProducts />,
+					},
+					{
+						path: "/admin/activity-category",
+						element: <Category />,
+					},
+					{
+						path: "/admin/tags",
+						element: <Tags />,
+					},
+					{
+						path: "/admin/complaints",
+						element: <Outlet />,
+						children: [
+							{
+								index: true,
+								element: <Complaint />,
+							},
+							{
+								path: "/admin/complaints/:id",
+								element: <ComplaintDetails />,
+							},
+						],
+					},
+				],
 			},
 		],
 	},
@@ -81,10 +161,6 @@ const router = createBrowserRouter([
 					{
 						path: "/places/:id",
 						element: <PlaceDetails />,
-					},
-					{
-						path: "/places/add",
-						element: <PlacesForm />,
 					},
 				],
 			},
