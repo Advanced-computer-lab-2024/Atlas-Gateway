@@ -68,7 +68,26 @@ export const deleteTourist = async (id: string) => {
 	return tourist;
 };
 
-function isOlderThan18(dob: Date): boolean {
+export const bookActivity = async (touristId: string, activityId: string) => {
+	if (!Types.ObjectId.isValid(activityId)) {
+		throw new HttpError(400, "Activity id is not valid");
+	}
+
+	const tourist = await getTouristById(touristId);
+	if (!tourist) {
+		throw new HttpError(404, "Tourist not found");
+	}
+	if (!isOlderThan18(tourist.dob)) {
+		throw new HttpError(400, "Tourist must be older than 18");
+	}
+
+	await tourist.updateOne({
+		$push: { bookedActivities: activityId },
+	});
+
+	return tourist;
+};
+export function isOlderThan18(dob: Date): boolean {
 	const today = new Date();
 
 	let age = today.getFullYear() - dob.getFullYear();
@@ -209,67 +228,47 @@ export const cancelItinerary = async (
 	if (!Types.ObjectId.isValid(touristId)) {
 		throw new HttpError(400, "Tourist id is not valid");
 	}
-
-	const tourist = await Tourist.findById(touristId);
+	const tourist = await getTouristById(touristId);
 	if (!tourist) {
 		throw new HttpError(404, "Tourist not found");
 	}
 
-	const itinerary = await Itinerary.findById(itineraryId);
-
-	if (!itinerary) {
-		throw new HttpError(404, "Itinerary not found");
-	}
-
-	if (!tourist.bookedItineraries.includes(itinerary.id)) {
-		throw new HttpError(
-			404,
-			"Transportation not found in the tourist's list",
-		);
+	if (!tourist.bookedItineraries.includes(new Types.ObjectId(itineraryId))) {
+		throw new HttpError(404, "Itinerary not found in the tourist's list");
 	}
 
 	const removed = await tourist.updateOne({
-		$pull: { itineraries: itineraryId },
+		$pull: { bookedItineraries: itineraryId },
 	});
 
 	if (removed.modifiedCount === 0) {
 		throw new HttpError(404, "Failed to cancel transportation booking");
 	}
 
-	await tourist.save();
-
 	return tourist;
 };
 
 export const cancelActivity = async (touristId: string, activityId: string) => {
-	if (!Types.ObjectId.isValid(touristId)) {
-		throw new HttpError(400, "Tourist id is not valid");
+	if (!Types.ObjectId.isValid(activityId)) {
+		throw new HttpError(400, "Activity id is not valid");
 	}
 
-	const tourist = await Tourist.findById(touristId);
+	const tourist = await getTouristById(touristId);
 	if (!tourist) {
 		throw new HttpError(404, "Tourist not found");
 	}
 
-	const activity = await Activity.findById(activityId);
-
-	if (!activity) {
-		throw new HttpError(404, "Activity not found");
-	}
-
-	if (!tourist.bookedActivities.includes(activity.id)) {
+	if (!tourist.bookedActivities.includes(new Types.ObjectId(activityId))) {
 		throw new HttpError(404, "Activity not found in the tourist's list");
 	}
 
 	const removed = await tourist.updateOne({
-		$pull: { activitys: activityId },
+		$pull: { bookedActivities: activityId },
 	});
 
 	if (removed.modifiedCount === 0) {
 		throw new HttpError(404, "Failed to cancel activity booking");
 	}
-
-	await tourist.save();
 
 	return tourist;
 };
@@ -278,22 +277,19 @@ export const cancelTransportation = async (
 	touristId: string,
 	transportationId: string,
 ) => {
-	if (!Types.ObjectId.isValid(touristId)) {
-		throw new HttpError(400, "Tourist id is not valid");
+	if (!Types.ObjectId.isValid(transportationId)) {
+		throw new HttpError(400, "Transportation id is not valid");
 	}
-
-	const tourist = await Tourist.findById(touristId);
+	const tourist = await getTouristById(touristId);
 	if (!tourist) {
 		throw new HttpError(404, "Tourist not found");
 	}
 
-	const transportation = await Transportation.findById(transportationId);
-
-	if (!transportation) {
-		throw new HttpError(404, "Transportation not found");
-	}
-
-	if (!tourist.bookedTransportations.includes(transportation.id)) {
+	if (
+		!tourist.bookedTransportations.includes(
+			new Types.ObjectId(transportationId),
+		)
+	) {
 		throw new HttpError(
 			404,
 			"Transportation not found in the tourist's list",
@@ -301,14 +297,12 @@ export const cancelTransportation = async (
 	}
 
 	const removed = await tourist.updateOne({
-		$pull: { transportations: transportationId },
+		$pull: { bookedTransportations: transportationId },
 	});
 
 	if (removed.modifiedCount === 0) {
 		throw new HttpError(404, "Failed to cancel Transportation booking");
 	}
-
-	await tourist.save();
 
 	return tourist;
 };

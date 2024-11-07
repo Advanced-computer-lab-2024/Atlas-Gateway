@@ -1,6 +1,8 @@
 import express from "express";
 
 import {
+	bookActivity,
+	cancelBookingActivity,
 	createActivities,
 	deleteActivityById,
 	getActivities,
@@ -17,5 +19,7 @@ router.get("/listAdvertisor", getActivitybyUserId);
 router.get("/list", getActivities);
 router.put("/update/:id", updateActivityById);
 router.delete("/delete/:id", deleteActivityById);
+router.post("/book/:id", bookActivity);
+router.delete("/cancelBooking/:id", cancelBookingActivity);
 
 export default router;

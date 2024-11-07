@@ -2,10 +2,9 @@ import mongoose, { Types } from "mongoose";
 
 import HttpError from "../../Errors/HttpError";
 import { Activity, IActivity } from "../../Models/Travel/activity.model";
-import { Tourist } from "../../Models/Users/tourist.model";
 import * as advertiserService from "../../Services/Users/advertiser.service";
 import AggregateBuilder from "../Operations/aggregation.service";
-import { cancelActivity } from "../Users/tourist.service";
+import * as touristService from "../Users/tourist.service";
 
 export const createActivity = async (
 	activity: IActivity,

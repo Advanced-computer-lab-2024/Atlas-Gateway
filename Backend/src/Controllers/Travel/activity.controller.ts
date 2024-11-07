@@ -5,10 +5,6 @@ import HttpError from "../../Errors/HttpError";
 import { Activity } from "../../Models/Travel/activity.model";
 import { Tourist } from "../../Models/Users/tourist.model";
 import * as activityService from "../../Services/Travel/activity.service";
-import {
-	addBookedActivity,
-	cancelActivity,
-} from "../../Services/Users/tourist.service";
 
 export const createActivities = async (
 	req: Request,
@@ -149,40 +145,29 @@ export const deleteActivityById = async (
 	}
 };
 
-export const bookActivity = async (req: Request, res: Response) => {
+export const bookActivity = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
-		const activityId = req.params.activityId;
-		const touristId = req.headers.userId;
+		const activityId = req.params.id;
+		const touristId = req.headers.userid;
 
 		if (!touristId) {
-			return res.status(400).json({ message: "User ID is required" });
+			throw new HttpError(400, "User ID is required");
 		}
 
 		if (!activityId) {
-			return res.status(400).json({ message: "Activity ID is required" });
+			throw new HttpError(400, "Activity ID is required");
 		}
 
-		if (!Types.ObjectId.isValid(activityId)) {
-			return res.status(400).json({ message: "Invalid Activity ID" });
-		}
+		const bookingResult = await activityService.bookActivity(
+			activityId,
+			touristId.toString(),
+		);
 
-		const activity = await Activity.findById(activityId);
-
-		if (!activity) {
-			return res.status(404).json({ message: "Activity not found" });
-		}
-
-		const tourist = await Tourist.findById(touristId);
-
-		if (!tourist) {
-			return res.status(404).json({ message: "Tourist not found" });
-		}
-
-		const bookingResult = bookActivity(activity.id, tourist.id);
-
-		const addBookingResult = addBookedActivity(tourist.id, activity.id);
-
-		if (!(bookingResult || addBookingResult)) {
+		if (!bookingResult) {
 			return res.status(400).json({ message: "Cannot book Activity" });
 		}
 
@@ -190,54 +175,38 @@ export const bookActivity = async (req: Request, res: Response) => {
 			.status(201)
 			.json({ message: "Activity booked successfully" });
 	} catch (error) {
-		return res.status(500).json({ message: "Error booking Activity" });
+		next(error);
 	}
 };
 
-export const cancelBookingActivity = async (req: Request, res: Response) => {
+export const cancelBookingActivity = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
-		const activityId = req.params.activityId;
-		const touristId = req.headers.userId;
+		const activityId = req.params.id;
+		const touristId = req.headers.userid;
 
 		if (!touristId) {
-			return res.status(400).json({ message: "User ID is required" });
+			throw new HttpError(400, "User ID is required");
 		}
 
 		if (!activityId) {
-			return res.status(400).json({ message: "Activity ID is required" });
+			throw new HttpError(400, "Activity ID is required");
 		}
 
-		if (!Types.ObjectId.isValid(activityId)) {
-			return res.status(400).json({ message: "Invalid Activity ID" });
-		}
-
-		const activity = await Activity.findById(activityId);
-
-		if (!activity) {
-			return res.status(404).json({ message: "Activity not found" });
-		}
-
-		const tourist = await Tourist.findById(touristId);
-
-		if (!tourist) {
-			return res.status(404).json({ message: "Tourist not found" });
-		}
-
-		const cancelBookingResult = cancelBookingActivity(
-			activity.id,
-			tourist.id,
+		const cancelBookingResult = await activityService.cancelBookingActivity(
+			activityId,
+			touristId.toString(),
 		);
 
-		const removeBookingResult = cancelActivity(tourist.id, activity.id);
-
-		if (!(cancelBookingResult || removeBookingResult)) {
-			return res.status(400).json({ message: "Cannot book Activity" });
+		if (!cancelBookingResult) {
+			throw new HttpError(400, "Cannot cancel Activity");
 		}
 
-		return res
-			.status(201)
-			.json({ message: "Activity booked successfully" });
+		return res.status(201).json({ message: " Activity Cancelled" });
 	} catch (error) {
-		return res.status(500).json({ message: "Error booking Activity" });
+		next(error);
 	}
 };
