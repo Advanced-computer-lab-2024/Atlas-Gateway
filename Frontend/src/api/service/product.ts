@@ -60,15 +60,14 @@ export function apiCreateProduct(payload: Partial<TProduct>, id: string) {
 	});
 }
 
-export function apiUpdateProduct(payload: Partial<TProduct>, _id: string) {
-	// needs to be modified later
+export function apiUpdateProduct(payload: Partial<TProduct>, _id?: string) {
 	return axios({
 		method: "PUT",
 		url: ENDPOINTS.products.update(payload?._id!),
-		headers: {
-			"Content-Type": "application/json",
-			userid: _id,
-		},
+		// headers: {
+		// 	"Content-Type": "application/json",
+		// 	userid: _id,
+		// },
 		baseURL: baseURL,
 		data: payload,
 	});
