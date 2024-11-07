@@ -1,9 +1,12 @@
+import { useState } from "react";
+
 import { usePagination } from "@/api/data/usePagination";
 import { useProducts } from "@/api/data/useProducts";
 import { useQueryString } from "@/api/data/useQueryString";
 import Filters from "@/components/Filters/Filters";
 import Label from "@/components/ui/Label";
 import { Searchbar } from "@/components/ui/Searchbar";
+import { Button } from "@/components/ui/button";
 import { Flex } from "@/components/ui/flex";
 import {
 	Pagination,
@@ -34,6 +37,14 @@ export default function Products() {
 		pageNum: meta?.pages || 1,
 		pagesCount: meta?.pages || 1,
 	});
+
+	const [isProductFormOpen, setIsProductFormOpen] = useState(false);
+	const [product, setProduct] = useState<TProduct | undefined>(undefined);
+
+	const openEditDrawer = (product: TProduct) => {
+		setIsProductFormOpen(true);
+		setProduct(product);
+	};
 
 	return (
 		<Flex
@@ -92,18 +103,23 @@ export default function Products() {
 							}}
 						/>
 					</Flex>
-					<div className="flex self-end">
-						{user?.type === EAccountType.Seller && (
-							<ProductForm type="Add" />
-						)}
-					</div>
+					{user?.type === EAccountType.Seller && (
+						<Button onClick={() => setIsProductFormOpen(true)}>
+							Add Product
+						</Button>
+					)}
 				</Flex>
 			</Flex>
 			<Flex
 				className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2"
 				gap="4"
 			>
-				{data?.map((product) => <ProductCard {...product} />)}
+				{data?.map((product) => (
+					<ProductCard
+						product={product}
+						openEditDrawer={openEditDrawer}
+					/>
+				))}
 			</Flex>
 			{pagesCount > 1 && (
 				<Pagination>
@@ -131,6 +147,11 @@ export default function Products() {
 					)}
 				</Pagination>
 			)}
+			<ProductForm
+				open={isProductFormOpen}
+				setOpen={setIsProductFormOpen}
+				product={product}
+			/>
 		</Flex>
 	);
 }
