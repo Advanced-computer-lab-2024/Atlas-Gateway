@@ -1,4 +1,6 @@
-import { ArrowLeft, DollarSign, LocateIcon, Star } from "lucide-react";
+import axios from "axios";
+import { ArrowLeft, DollarSign, Package, Star } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useProduct } from "@/api/data/useProducts";
@@ -6,13 +8,48 @@ import Label from "@/components/ui/Label";
 import { Card } from "@/components/ui/card";
 import { Flex } from "@/components/ui/flex";
 import useCurrency from "@/hooks/useCurrency";
+import { useLoginStore } from "@/store/loginStore";
+import { EAccountType } from "@/types/enums";
 
 export default function ProductDetails() {
 	const navigate = useNavigate();
 	const { data } = useProduct();
 	const convertCurrency = useCurrency();
-	const { name, description, images, price, avgRating, availability } =
-		data || {};
+	const {
+		name,
+		description,
+		price,
+		imagePath,
+		avgRating,
+		quantity,
+		sales,
+		sellerId,
+	} = data || {};
+
+	const { user } = useLoginStore();
+	const [productPic, setProductPic] = useState("");
+
+	const handleDownload = async (filePath: string) => {
+		try {
+			axios
+				.post(`http://localhost:5000/api/media/download`, { filePath })
+				.then((res) => {
+					setProductPic(res.data);
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	useEffect(() => {
+		handleDownload(imagePath || "");
+	}, [imagePath]);
+
+	const canViewSales =
+		user?.type === sellerId || user?.type === EAccountType.Admin;
 
 	return (
 		<Flex
@@ -37,10 +74,14 @@ export default function ProductDetails() {
 							justify="center"
 							className="w-[600px] h-[400px] bg-gray-200 rounded-xl"
 						>
-							{images?.[0] ? (
-								<img src={images[0]} />
+							{!productPic ? (
+								<Package className="w-20 h-20" />
 							) : (
-								<LocateIcon className="w-full h-40" />
+								<img
+									src={productPic}
+									alt="Product Picture"
+									className="object-contain w-full h-full"
+								/>
 							)}
 						</Flex>
 						<Flex isColumn justify="around">
@@ -52,9 +93,9 @@ export default function ProductDetails() {
 							</Flex>
 							<Flex gap="2" align="center">
 								<Label.Big600 className="w-40 text-left">
-									Availability:{" "}
+									Quantity Available:{" "}
 								</Label.Big600>
-								<Label.Mid500>{availability}</Label.Mid500>
+								<Label.Mid500>{quantity}</Label.Mid500>
 							</Flex>
 							<Flex gap="2" align="center">
 								<Label.Big600 className="w-40 text-left">
@@ -74,6 +115,17 @@ export default function ProductDetails() {
 									{avgRating}
 								</Label.Mid500>
 							</Flex>
+							{canViewSales && (
+								<Flex gap="2" align="center">
+									<Label.Big600 className="w-40 text-left">
+										Sales Made:{" "}
+									</Label.Big600>
+									<DollarSign size={32} />
+									<Label.Mid500 className="overflow-ellipsis">
+										{sales}
+									</Label.Mid500>
+								</Flex>
+							)}
 						</Flex>
 					</Flex>
 				</Flex>

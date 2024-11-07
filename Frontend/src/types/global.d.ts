@@ -49,6 +49,7 @@ type TOpeningHours = {
 
 export type TProduct = {
 	_id: string;
+	sellerId: string;
 	name: string;
 	description: string;
 	price: number;
@@ -59,7 +60,10 @@ export type TProduct = {
 	isArchived: boolean;
 	quantity: number;
 	sales: number;
-	availability: number;
+
+	reviews: string[];
+	avgRating: number;
+	isArchived: boolean;
 };
 
 export type TActivity = {

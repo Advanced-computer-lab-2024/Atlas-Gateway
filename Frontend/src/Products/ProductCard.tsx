@@ -1,5 +1,12 @@
 import axios from "axios";
-import { DollarSign, EllipsisVertical, Package, Star } from "lucide-react";
+import {
+	DollarSign,
+	Edit,
+	EllipsisVertical,
+	Eye,
+	Package,
+	Star,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -14,22 +21,30 @@ import {
 import { Flex } from "@/components/ui/flex";
 import useCurrency from "@/hooks/useCurrency";
 import { useLoginStore } from "@/store/loginStore";
+import { EAccountType } from "@/types/enums";
 import { TProduct } from "@/types/global";
 
-import ProdcutForm from "./ProductForm";
-
 export default function ProductCard({
-	_id,
-	name,
-	description,
-	imagePath,
-	price,
-	avgRating,
-	sellerId,
-}: TProduct) {
+	product,
+	openEditDrawer,
+}: {
+	product: TProduct;
+	openEditDrawer: (product: TProduct) => void;
+}) {
 	const { user } = useLoginStore();
 	const navigate = useNavigate();
 	const [productPic, setProductPic] = useState("");
+
+	const {
+		_id,
+		name,
+		description,
+		imagePath,
+		price,
+		avgRating,
+		sellerId,
+		sales,
+	} = product;
 
 	const convertCurrency = useCurrency();
 
@@ -50,6 +65,9 @@ export default function ProductCard({
 	useEffect(() => {
 		handleDownload(imagePath);
 	}, [imagePath]);
+
+	const canViewSales =
+		user?.type === sellerId || user?.type === EAccountType.Admin;
 
 	return (
 		<Card
@@ -76,27 +94,31 @@ export default function ProductCard({
 				<Flex isColumn gap="2" className="px-3">
 					<Flex gap="2" align="center" justify="between">
 						<Label.Mid500>{name}</Label.Mid500>
-						<div className="flex items-center">
-							{user?._id == sellerId ? (
-								<ProdcutForm type="Update" id={_id} />
-							) : (
-								<></>
-							)}
-							<DropdownMenu>
-								<DropdownMenuTrigger>
-									<EllipsisVertical className="cursor-pointer" />
-								</DropdownMenuTrigger>
-								<DropdownMenuContent>
-									<DropdownMenuItem
-										onClick={() => {
-											navigate(`/products/${_id}`);
-										}}
-									>
-										View Product Details
-									</DropdownMenuItem>
-								</DropdownMenuContent>
-							</DropdownMenu>
-						</div>
+						<DropdownMenu modal={false}>
+							<DropdownMenuTrigger>
+								<EllipsisVertical className="cursor-pointer" />
+							</DropdownMenuTrigger>
+							<DropdownMenuContent>
+								<DropdownMenuItem
+									className="flex gap-2 cursor-pointer"
+									onClick={() => {
+										navigate(`/products/${_id}`);
+									}}
+								>
+									<Eye />
+									View Details
+								</DropdownMenuItem>{" "}
+								<DropdownMenuItem
+									className="flex gap-2 cursor-pointer"
+									onClick={() => {
+										openEditDrawer(product);
+									}}
+								>
+									<Edit />
+									Edit
+								</DropdownMenuItem>
+							</DropdownMenuContent>
+						</DropdownMenu>
 					</Flex>
 					<Label.Mid300>{description}</Label.Mid300>
 					<Flex gap="1" align="center">
@@ -121,6 +143,16 @@ export default function ProductCard({
 							</Label.Thin300>
 						</Flex>
 					</Flex>
+					{canViewSales && (
+						<Flex gap="1" align="center">
+							<Label.Mid300 className="overflow-ellipsis">
+								Sales
+							</Label.Mid300>
+							<Label.Thin200 className="overflow-ellipsis">
+								{sales}
+							</Label.Thin200>
+						</Flex>
+					)}
 				</Flex>
 			</CardContent>
 		</Card>
