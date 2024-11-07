@@ -143,11 +143,12 @@ export interface TComplaint {
 	touristname: string;
 	title: string;
 	body: string;
-	date: string;
-	state: string;
+	status: string;
 	createdBy: TUser;
 	reply: string;
 	replyedBy: TUser;
+	createdAt: string;
+	updatedAt: string;
 }
 
 export interface TItinerary {

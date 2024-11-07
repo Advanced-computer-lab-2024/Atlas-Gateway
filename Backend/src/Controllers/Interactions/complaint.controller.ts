@@ -8,15 +8,11 @@ import { filterByComplaintStatus } from "../../Services/Operations/Filter/filter
 export const createComplaint = async (req: Request, res: Response) => {
 	try {
 		const { userid } = req.headers;
-		const { title, body, date, state, reply } = req.body;
 		// TODO :: title, body are required fields, check if they are present
 		// TODO :: userid is required, check if it is present
 		// TODO :: update the array of complaints in the tourist model
 		const newComplaint = await complaint.create({
-			title,
-			body,
-			date,
-			state,
+			...req.body,
 			createdBy: userid,
 		});
 		res.status(201).json(newComplaint);
@@ -63,7 +59,6 @@ export const getAllComplaintsByTourist = async (
 	next: NextFunction,
 ) => {
 	try {
-		//TODO :: Check if userid is present
 		const { userid } = req.headers;
 		const complaints = await complaint.find({ createdBy: userid });
 		res.status(200).json(complaints);
@@ -89,17 +84,16 @@ export const getComplaintById = async (req: Request, res: Response) => {
 	}
 };
 
-//Update a Complaint --Used by Admin --Admin Reply and change state from pending to resolved
 export const updateComplaintByAdmin = async (req: Request, res: Response) => {
 	try {
-		const { replyedBy } = req.headers;
+		const { userid } = req.headers;
 		const { id } = req.params;
-		const { state, reply } = req.body;
+		const { status, reply } = req.body;
 		// Log incoming data
 
 		const updatedComplaint = await complaint.findByIdAndUpdate(
 			id,
-			{ state, reply, replyedBy },
+			{ status, reply, replyedBy: userid },
 			{ new: true },
 		);
 

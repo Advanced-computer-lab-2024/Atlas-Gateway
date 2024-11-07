@@ -230,7 +230,7 @@ export function filterByComplaintStatus(query: any): PipelineStage[] {
 	if (query.status) {
 		pipeline.push({
 			$match: {
-				state: query.status,
+				status: query.status,
 			},
 		});
 	}
