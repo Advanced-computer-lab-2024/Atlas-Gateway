@@ -119,3 +119,20 @@ export const viewActivities = async (
 		next(error);
 	}
 };
+
+export const softDeleteAdvertiser = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	const id = req.params.id;
+	try {
+		if (!id) {
+			throw new HttpError(400, "id is required");
+		}
+		await advertiserService.softDeleteAdvertiser(id);
+		res.status(200).send("Advertiser deleted successfully");
+	} catch (error) {
+		next(error);
+	}
+};

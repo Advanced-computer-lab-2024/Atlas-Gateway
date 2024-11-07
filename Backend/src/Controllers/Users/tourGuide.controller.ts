@@ -1,9 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { Types } from "mongoose";
 
 import HttpError from "../../Errors/HttpError";
-import { Admin } from "../../Models/Users/admin.model";
-import { TourGuide } from "../../Models/Users/tourGuide.model";
 import * as tourGuideService from "../../Services/Users/tourGuide.service";
 
 export const createTourGuide = async (
@@ -97,6 +94,23 @@ export const deleteTourGuide = async (
 		}
 		await tourGuideService.deleteTourGuide(id);
 
+		res.status(200).send("tourGuide deleted successfully");
+	} catch (error) {
+		next(error);
+	}
+};
+
+export const softDeleteTourGuide = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	const id = req.params.id;
+	try {
+		if (!id) {
+			throw new HttpError(400, "id is required");
+		}
+		await tourGuideService.softDeleteTourGuide(id);
 		res.status(200).send("tourGuide deleted successfully");
 	} catch (error) {
 		next(error);

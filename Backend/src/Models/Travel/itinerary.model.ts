@@ -30,6 +30,7 @@ export interface IItinerary extends Document {
 	accessibility: string;
 	timeline: string;
 	tourists: Types.ObjectId[];
+	isDeleted?: boolean;
 }
 
 const itinerarySchema = new Schema<IItinerary>(

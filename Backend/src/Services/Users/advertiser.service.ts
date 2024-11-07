@@ -6,6 +6,7 @@ import { Transportation } from "../../Models/Travel/transportation.model";
 import { Advertiser, IAdvertiser } from "../../Models/Users/advertiser.model";
 import { hashPassword } from "../Auth/password.service";
 import uniqueUsername from "../Auth/username.service";
+import * as activityService from "../Travel/activity.service";
 import * as adminService from "./admin.service";
 
 export const createAdvertiser = async (
@@ -181,4 +182,44 @@ export const removeTransportation = async (
 			);
 		}
 	}
+};
+
+/*"an account will be deleted only
+ if no events or activities or itenararies are upcoming 
+ and have bookings that are paid for.
+ The account profiles along with all associated events, activities and itineraries will not be visible to tourists."
+ */
+export const softDeleteAdvertiser = async (id: string) => {
+	const advertiser = await getAdvertiserById(id);
+
+	if (!advertiser) {
+		throw new HttpError(404, "Advertiser not Found");
+	}
+
+	await advertiser.populate("activities");
+
+	const upcomingBookedActivities = advertiser.activities.filter(
+		(activity: any) => {
+			return (
+				activity.dateTime > new Date() && activity.numberOfBookings > 0
+			);
+		},
+	);
+
+	// soft delete advertiser and activities if there is upcoming booked activities
+	if (upcomingBookedActivities.length > 0) {
+		await advertiser.updateOne({ isDeleted: true });
+		advertiser.activities.forEach(async (activity: any) => {
+			await activityService.softDeleteActivity(activity.id);
+		});
+		return advertiser;
+	}
+
+	// hard delete advertiser and activities if there is no upcoming booked activities
+	for (const activity of advertiser.activities) {
+		await activityService.deleteActivity(activity.toString());
+	}
+	await advertiser.deleteOne();
+
+	return advertiser;
 };

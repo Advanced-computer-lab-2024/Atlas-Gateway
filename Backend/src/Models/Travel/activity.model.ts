@@ -23,6 +23,7 @@ export interface IActivity extends Document {
 	totalNumberOfRatings: number;
 	numberOfBookings: number;
 	tourists: Types.ObjectId[];
+	isDeleted?: boolean;
 }
 
 const activitySchema = new Schema<IActivity>(

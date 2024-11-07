@@ -33,9 +33,11 @@ export const createItinerary = async (
 
 		await itineraryData.save({ session }); // Save to generate the ID
 
-		tourGuide.itinerary.push(itineraryData.id);
+		await tourGuide.updateOne(
+			{ $push: { itinerary: itineraryData.id } }, // Update data
 
-		await tourGuide.updateOne({ session });
+			{ session },
+		);
 		await session.commitTransaction();
 
 		return itineraryData;
@@ -279,4 +281,20 @@ export const cancelBookingItinerary = async (
 			);
 		}
 	}
+};
+
+export const softDeleteItinerary = async (id: string) => {
+	const itinerary = await getItineraryById(id);
+
+	if (!itinerary) {
+		throw new HttpError(404, "Itinerary not found");
+	}
+
+	const itineraryDeleted = await Itinerary.findByIdAndUpdate(
+		id,
+		{ isDeleted: true },
+		{ new: true },
+	);
+
+	return itineraryDeleted;
 };

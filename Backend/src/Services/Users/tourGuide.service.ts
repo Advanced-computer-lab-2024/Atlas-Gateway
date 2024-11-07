@@ -4,6 +4,7 @@ import HttpError from "../../Errors/HttpError";
 import { ITourGuide, TourGuide } from "../../Models/Users/tourGuide.model";
 import { hashPassword } from "../Auth/password.service";
 import uniqueUsername from "../Auth/username.service";
+import * as itineraryService from "../Travel/itinerary.service";
 import * as adminService from "./admin.service";
 
 export const createTourGuide = async (
@@ -78,4 +79,50 @@ export const deleteTourGuide = async (id: string) => {
 
 	const tourGuide = await TourGuide.findByIdAndDelete(id);
 	return tourGuide;
+};
+
+/*
+"an account will be deleted only if no events or activities or itenararies are upcoming and have bookings that are paid for.
+ The account profiles along with all associated events, activities and itineraries will not be visible to tourists."
+ */
+
+export const softDeleteTourGuide = async (id: string) => {
+	const tourGuide = await getTourGuideById(id);
+
+	if (!tourGuide) {
+		throw new HttpError(404, "Tour Guide not found");
+	}
+
+	// Check if the tour guide has any upcoming itineraries
+	await tourGuide.populate("itinerary");
+
+	let tourGuideDeleted;
+
+	const upcomingItineraries = tourGuide.itinerary.filter(
+		(itineraries: any) => {
+			return (
+				itineraries.startDateTime > new Date() &&
+				itineraries.numberOfBookings > 0
+			);
+		},
+	);
+
+	if (upcomingItineraries.length > 0) {
+		tourGuideDeleted = await TourGuide.findByIdAndUpdate(
+			id,
+			{ isDeleted: true },
+			{ new: true },
+		);
+		tourGuide.itinerary.forEach(async (itinerary: any) => {
+			await itineraryService.softDeleteItinerary(itinerary._id);
+		});
+	} else {
+		// if the tour guide has no upcoming itineraries, delete the account
+		tourGuideDeleted = await deleteTourGuide(id);
+		tourGuide.itinerary.forEach(async (itinerary: any) => {
+			await itineraryService.deleteItinerary(itinerary._id);
+		});
+	}
+
+	return tourGuideDeleted;
 };

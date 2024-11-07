@@ -18,6 +18,7 @@ export interface IProduct extends Document {
 	};
 	avgRating: number;
 	totalNumberOfRatings: number;
+	isDeleted?: boolean;
 }
 
 const productSchema = new Schema<IProduct>(
@@ -41,6 +42,7 @@ const productSchema = new Schema<IProduct>(
 		},
 		avgRating: { type: Number, min: 0, max: 5, default: 0 },
 		totalNumberOfRatings: { type: Number, default: 0 },
+		isDeleted: { type: Boolean, default: false },
 	},
 	schemaConfig,
 );
