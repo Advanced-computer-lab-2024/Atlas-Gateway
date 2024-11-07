@@ -304,15 +304,54 @@ export const cancelTransportation = async (
 	return tourist;
 };
 
+/*
+ * Soft delete tourist
+	 set isDeleted to true when there are no upcoming bookings
+	 else delete the account
+ * @param id
+ * @throws {HttpError}
+ * @returns {Promise<ITourist>}
+ */
+
 export const softDeleteTourist = async (id: string) => {
-	if (!Types.ObjectId.isValid(id)) {
-		throw new HttpError(400, "Id is Invalid and Required");
+	const tourist = await getTouristById(id);
+	if (!tourist) {
+		throw new HttpError(404, "Tourist not found");
 	}
-	const tourist = await Tourist.findByIdAndUpdate(
-		id,
-		{ isDeleted: true },
-		{ new: true },
+	await tourist.populate([
+		"bookedActivities",
+		"bookedItineraries",
+		"bookedTransportations",
+	]);
+	const currentDate = new Date();
+
+	const upcomingActivities = tourist.bookedActivities.filter(
+		(activity: any) => activity.dateTime > currentDate,
 	);
+
+	const upcomingItineraries = tourist.bookedItineraries.filter(
+		(itinerary: any) => itinerary.startDateTime > currentDate,
+	);
+
+	const upcomingTransportations = tourist.bookedTransportations.filter(
+		(transportation: any) => transportation.dateTime > currentDate,
+	);
+
+	console.log(
+		upcomingActivities,
+		upcomingItineraries,
+		upcomingTransportations,
+	);
+
+	if (
+		upcomingActivities.length > 0 ||
+		upcomingItineraries.length > 0 ||
+		upcomingTransportations.length > 0
+	) {
+		await tourist.updateOne({ isDeleted: true });
+	} else {
+		await deleteTourist(id);
+	}
 
 	return tourist;
 };

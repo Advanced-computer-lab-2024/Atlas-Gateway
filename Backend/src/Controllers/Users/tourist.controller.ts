@@ -91,3 +91,20 @@ export const deleteTourist = async (
 		next(error);
 	}
 };
+
+export const softDeleteTourist = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	const id = req.params.id;
+	try {
+		if (!id) {
+			throw new HttpError(400, "Tourist id is required");
+		}
+		await touristService.softDeleteTourist(id);
+		res.status(200).send("Tourist deleted successfully");
+	} catch (error) {
+		next(error);
+	}
+};
