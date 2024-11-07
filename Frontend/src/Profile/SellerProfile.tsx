@@ -4,10 +4,10 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
-import axios from "axios";
 import { Camera, Image, Settings } from "lucide-react";
 import { useEffect, useState } from "react";
 
+import { useDownload } from "@/api/data/useMedia";
 import { useSellerProfile } from "@/api/data/useProfile";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useLoginStore } from "@/store/loginStore";
@@ -19,26 +19,17 @@ import UploadForm from "./UploadForm";
 
 const General = () => {
 	const { user } = useLoginStore();
-	const { data } = useSellerProfile();
+	const { data, refetch } = useSellerProfile();
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 	const [isDrawerOpen2, setIsDrawerOpen2] = useState(false);
 	const [isDrawerOpen3, setIsDrawerOpen3] = useState(false);
 	const [isDrawerOpen4, setIsDrawerOpen4] = useState(false);
 	const [profilePic, setProfilePic] = useState("");
-	const handleDownload = async (filePath: string) => {
-		axios
-			.post(`http://localhost:5000/api/media/download`, { filePath })
-			.then((res) => {
-				setProfilePic(res.data);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	};
+	const { doDownload } = useDownload((response) => {
+		setProfilePic(response.data);
+	});
 	useEffect(() => {
-		if (data?.imagePath) {
-			handleDownload(data.imagePath);
-		}
+		doDownload(data?.imagePath!);
 	}, [data?.imagePath]);
 	//May needed later:
 
@@ -176,6 +167,10 @@ const General = () => {
 				fileType={"image"}
 				isDrawerOpen={isDrawerOpen4}
 				setIsDrawerOpen={setIsDrawerOpen4}
+				onUploadSuccess={() => {
+					refetch();
+					doDownload(data?.imagePath!);
+				}}
 			/>
 			<UploadForm
 				userType={user?.type}

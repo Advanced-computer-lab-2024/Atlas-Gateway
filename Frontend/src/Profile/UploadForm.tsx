@@ -29,6 +29,7 @@ interface props {
 	fileType: string;
 	isDrawerOpen: boolean;
 	setIsDrawerOpen: (open: boolean) => void;
+	onUploadSuccess?: () => void;
 }
 
 const UploadForm = ({
@@ -37,9 +38,11 @@ const UploadForm = ({
 	fileType,
 	isDrawerOpen,
 	setIsDrawerOpen,
+	onUploadSuccess,
 }: props) => {
 	const { doUpload } = useUpload(() => {
 		setIsDrawerOpen(false);
+		onUploadSuccess?.();
 	});
 	const formMethods = useForm<z.infer<typeof uploadSchema>>({
 		resolver: zodResolver(uploadSchema),
@@ -54,6 +57,9 @@ const UploadForm = ({
 			file,
 		};
 		doUpload(payload);
+		// setTimeout(() => {
+		// 	onUploadSuccess?.();
+		// }, 2000);
 	};
 	return (
 		<Sheet open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>

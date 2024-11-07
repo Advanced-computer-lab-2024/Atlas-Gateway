@@ -16,11 +16,11 @@ export function apiUpload(payload: TUploadForm) {
 	});
 }
 
-// export function apiDownload(filePath: string) {
-// 	return axios<string>({
-// 		method: "POST",
-// 		url: ENDPOINTS.media.download,
-// 		baseURL: "http://localhost:5000",
-// 		data: { filePath },
-// 	});
-// }
+export function apiDownload(filePath: string) {
+	return axios<string>({
+		method: "POST",
+		url: ENDPOINTS.media.download,
+		baseURL: "http://localhost:5000",
+		data: { filePath },
+	});
+}
