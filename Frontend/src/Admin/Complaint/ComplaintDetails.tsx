@@ -121,7 +121,7 @@ export default function ComplaintDetails() {
 									disabled={reply !== ""}
 									value={replyInput}
 								/>
-								{!reply ? (
+								{reply !== "" ? (
 									<Button
 										onClick={() => {
 											doUpdateComplaintByAdmin({
