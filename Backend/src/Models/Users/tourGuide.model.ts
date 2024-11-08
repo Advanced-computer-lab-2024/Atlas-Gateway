@@ -20,7 +20,9 @@ export interface ITourGuide extends Document {
 	// 	start: Date;
 	// 	end: Date;
 	// };
-	itinerary: Types.ObjectId[];
+	avgRating: number;
+	totalNumberOfRatings: number;
+	itinerary: [Types.ObjectId];
 	isVerified: boolean;
 	acceptedTerms: boolean;
 	isDeleted?: boolean;
@@ -45,6 +47,8 @@ const tourGuideSchema = new Schema<ITourGuide>(
 		// 	start: { type: Date },
 		// 	end: { type: Date },
 		// },
+		avgRating: { type: Number, default: 0 },
+		totalNumberOfRatings: { type: Number, default: 0 },
 		itinerary: [{ type: Schema.Types.ObjectId, ref: "Itinerary" }],
 		isVerified: { type: Boolean, default: false },
 		acceptedTerms: { type: Boolean, default: false },
