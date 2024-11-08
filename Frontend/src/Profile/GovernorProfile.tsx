@@ -1,14 +1,14 @@
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from "@radix-ui/react-dropdown-menu";
 import { Camera, Image, Settings } from "lucide-react";
 import { useState } from "react";
 
 import { useDownload } from "@/api/data/useMedia";
 import { useGovernorProfile } from "@/api/data/useProfile";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useLoginStore } from "@/store/loginStore";
 
@@ -28,7 +28,7 @@ const General = () => {
 	const { doDownload } = useDownload((response) => {
 		setProfilePic(response.data);
 	});
-	
+
 	//May needed later:
 
 	// // Function to truncate description for display
@@ -86,11 +86,11 @@ const General = () => {
 					</h2>
 				</div>
 				<div className="border-solid border-2 border-[rgb(44,44,44)] flex items-center mr-7 p-2 h-10">
-					{(
+					{
 						<div className="p-1">
 							<GovernorSheet />
 						</div>
-					)}
+					}
 					<DropdownMenu modal={false}>
 						<DropdownMenuTrigger>
 							<Settings className="cursor-pointer" />
@@ -111,9 +111,9 @@ const General = () => {
 
 			<div className="flex ml-10 mr-10 mt-10">
 				<Tabs defaultValue="account" className="w-full">
-					<TabsList className="grid w-full grid-cols-4">
+					<TabsList className="grid w-full grid-cols-3">
 						<TabsTrigger value="account">Account</TabsTrigger>
-						<TabsTrigger value="password">Password</TabsTrigger>
+
 						<TabsTrigger value="upcoming">Upcoming</TabsTrigger>
 						<TabsTrigger value="history">History</TabsTrigger>
 					</TabsList>
@@ -127,7 +127,7 @@ const General = () => {
 							</h2>
 						</div>
 					</TabsContent>
-					<TabsContent value="password"></TabsContent>
+
 					<TabsContent value="Upcoming"></TabsContent>
 					<TabsContent value="History"></TabsContent>
 				</Tabs>
