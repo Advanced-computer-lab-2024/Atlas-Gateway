@@ -108,3 +108,20 @@ export const softDeleteTourist = async (
 		next(error);
 	}
 };
+
+export const redeemPoints = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	try {
+		const id = req.params.id;
+		if (!id) {
+			throw new HttpError(400, "Tourist id is required");
+		}
+		await touristService.redeemPoints(id);
+		res.status(200).send("Points redeemed successfully");
+	} catch (error) {
+		next(error);
+	}
+};
