@@ -270,7 +270,7 @@ export const rateActivity = async (req: Request, res: Response) => {
 	try {
 		const { touristId, activityId, value } = req.body;
 		const tourist = await Tourist.findById(touristId);
-		const activity = await activityId.findById(activityId);
+		const activity = await Activity.findById(activityId);
 		if (!tourist) {
 			res.status(404).send("tourist not found");
 			return;
