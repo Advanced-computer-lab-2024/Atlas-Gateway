@@ -93,8 +93,6 @@ export const softDeleteTourGuide = async (id: string) => {
 		throw new HttpError(404, "Tour Guide not found");
 	}
 
-	console.log(tourGuide.itinerary);
-
 	tourGuide.itinerary.forEach(async (itinerary: any) => {
 		itineraryService.softDeleteItinerary(itinerary._id);
 	});

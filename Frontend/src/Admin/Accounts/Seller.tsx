@@ -67,6 +67,7 @@ const Sellers = () => {
 						<TableHead>isVerified</TableHead>
 						<TableHead>ID</TableHead>
 						<TableHead>taxationRegisteryCard</TableHead>
+						<TableHead>Request To Delete</TableHead>
 						<TableHead className="cursor-pointer hover:text-[#2b58ed] w-1">
 							<RotateCw onClick={() => refetch()} />
 						</TableHead>
@@ -108,6 +109,11 @@ const Sellers = () => {
 								>
 									<FileUser />
 								</button>
+							</TableCell>
+							<TableCell>
+								{seller.isDeleted
+									? "Request Sent"
+									: "Request Not Sent"}
 							</TableCell>
 							<TableCell className="cursor-pointer hover:text-[#2b58ed]">
 								<button className="bg-red-500 text-white rounded-full p-2 shadow-lg hover:bg-red-600">

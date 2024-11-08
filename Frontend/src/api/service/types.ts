@@ -12,20 +12,23 @@ import {
 
 export type TRegisterationResponse = TUser & { _id: string };
 
-export type TTouristProfileResponse = TTourist & { _id: string };
+export type TTouristProfileResponse = TTourist & {
+	_id: string;
+	isDeleted?: boolean;
+};
 
 export type TSellerProfileResponse = TSeller & {
 	_id: string;
 	isVerified?: boolean;
+	isDeleted?: boolean;
 };
 
 export type TAdminResponse = TAdmin & {
 	_id: string;
 };
 
-
 export type TGovernorProfileResponse = TGovernor & {
-	_id: string 
+	_id: string;
 };
 
 export type TGovernorResponse = TGovernor & {
@@ -35,16 +38,19 @@ export type TGovernorResponse = TGovernor & {
 export type TAdvertiserProfileResponse = TAdvetisor & {
 	_id: string;
 	isVerified?: boolean;
+	isDeleted?: boolean;
 };
 
-export type TTransportationAdvertiserProfileResponse = TTransportationAdvetisor & {
-	_id: string;
-	isVerified?: boolean;
-};
+export type TTransportationAdvertiserProfileResponse =
+	TTransportationAdvetisor & {
+		_id: string;
+		isVerified?: boolean;
+	};
 
 export type TTourGuideProfileResponse = TTourGuide & {
 	_id: string;
 	isVerified?: boolean;
+	isDeleted?: boolean;
 };
 
 export type TApiResponse<T> = {

@@ -1,8 +1,5 @@
-import axios from "axios";
-import { Pencil } from "lucide-react";
 import { Trash } from "lucide-react";
 import { RotateCw } from "lucide-react";
-import { useEffect, useState } from "react";
 
 import { useDeleteTouristProfile, useTourists } from "@/api/data/useProfile";
 import {
@@ -35,6 +32,7 @@ const Tourist = () => {
 						{/* <TableHead>Bio</TableHead>
 						<TableHead>Location</TableHead> */}
 						{/* <TableHead>Profile Image</TableHead> */}
+						<TableHead>Request To Delete</TableHead>
 						<TableHead className="cursor-pointer w-6 hover:text-[#2b58ed]">
 							<RotateCw onClick={() => refetch()} />
 						</TableHead>
@@ -69,6 +67,11 @@ const Tourist = () => {
 									"N/A"
 								)}
 							</TableCell> */}
+							<TableCell>
+								{tourist.isDeleted
+									? "Request Sent"
+									: "Request Not Sent"}
+							</TableCell>
 							<TableCell className="cursor-pointer w-6 hover:text-[#2b58ed]">
 								<button className="bg-red-500 text-white rounded-full p-2 shadow-lg hover:bg-red-600">
 									<Trash
