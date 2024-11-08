@@ -5,6 +5,7 @@ import {
 	useRequestDeleteTouristProfile,
 	useTouristProfile,
 } from "@/api/data/useProfile";
+import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -16,6 +17,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import profile_background from "../../assets/profile_background.jpg";
 import ChangePasswordSheet from "../ChangePasswordSheet";
+import TouristBadge from "./TouristBadge";
 import TouristSheet from "./TouristSheet";
 import Complaints from "./tabs/Complaints";
 
@@ -35,12 +37,11 @@ export default function TouristProfile() {
 						backgroundImage: `url(${profile_background})`,
 					}}
 				>
-					<button className="flex absolute bottom-4 right-4 mr-7 bg-orange-500 text-white px-4 py-1 rounded-lg hover:bg-orange-600">
+					<Button className="flex absolute bottom-4 right-4 mr-7 bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600">
 						<Camera />
 						<h2 className="ml-2">Upload Cover Photo</h2>
-					</button>
+					</Button>
 				</div>
-
 				<div className="absolute left-36 -bottom-16 w-48 h-48 rounded-full overflow-hidden border-4 border-white">
 					<img
 						src={profile_background}
@@ -48,6 +49,9 @@ export default function TouristProfile() {
 						className="object-cover w-full h-full"
 					/>
 				</div>
+				<Flex className="absolute left-72">
+					<TouristBadge level={data?.level || 1} />
+				</Flex>
 			</div>
 
 			<div className="flex justify-between ml-96 mt-2 pr-10">

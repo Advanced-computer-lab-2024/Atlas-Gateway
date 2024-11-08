@@ -99,6 +99,7 @@ export interface TTourist extends TUser {
 	currency: Currency;
 	loyaltyPoints: number;
 	walletBalance: number;
+	level: 1 | 2 | 3;
 }
 
 export interface TSeller extends TUser {
