@@ -1,8 +1,10 @@
 import { Express, Router } from "express";
 
 import {
+	commentActivity,
 	commentItinerary,
 	commentTourGuide,
+	rateActivity,
 	rateItinerary, // rateProduct,
 	rateTourGuide,
 } from "../../Controllers/Interactions/tourist.interaction.controller";
@@ -26,5 +28,7 @@ touristRouter.post("/commentTourGuide", commentTourGuide);
 // touristRouter.post("/rateProduct", rateProduct);
 touristRouter.post("/rateItinerary", rateItinerary);
 touristRouter.post("/commentItinerary", commentItinerary);
+touristRouter.post("/rateActivity", rateActivity);
+touristRouter.post("/commentActivty", commentActivity);
 export default touristRouter;
 Router;

@@ -160,9 +160,9 @@ export const deleteItinerary = async (id: string) => {
 		}
 
 		// Remove the itinerary ID from the tour guide's itineraries array
-		tourGuide.itinerary = tourGuide.itinerary.filter(
-			(itineraryId) => !itineraryId.equals(id),
-		);
+		// tourGuide.itinerary = tourGuide.itinerary.filter(
+		// 	(itineraryId) => !itineraryId.equals(id),
+		// );
 		await tourGuide.updateOne({ session });
 		// Delete the itinerary
 		await itinerary.deleteOne({ session });
