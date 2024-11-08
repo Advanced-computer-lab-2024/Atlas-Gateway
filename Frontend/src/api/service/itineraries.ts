@@ -104,7 +104,7 @@ export function apiBookItinerary(_id: string, _userId: string) {
 	});
 }
 
-export function apiCancelBooking(_id: string, _userId: string) {
+export function apiCancelItineraryBooking(_id: string, _userId: string) {
 	return axios({
 		method: "POST",
 		url: ENDPOINTS.itinerary.cancelBooking(_id),

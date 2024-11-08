@@ -10,7 +10,7 @@ import {
 	apiActivity,
 	apiAdvertisorActivities,
 	apiBookActivity,
-	apiCancelBooking,
+	apiCancelActivityBooking,
 	apiCreateActivity,
 	apiDeleteActivity,
 	apiUpdateActivity,
@@ -112,7 +112,7 @@ export function useCancelActivityBooking(onSuccess: () => void) {
 		throw new Error("User ID is undefined");
 	}
 	const mutation = useMutation({
-		mutationFn: (_id: string) => apiCancelBooking(_id, user?._id),
+		mutationFn: (_id: string) => apiCancelActivityBooking(_id, user?._id),
 		onSuccess,
 	});
 

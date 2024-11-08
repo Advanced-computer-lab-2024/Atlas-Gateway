@@ -7,6 +7,7 @@ import { TItinerary } from "@/types/global";
 
 import {
 	apiBookItinerary,
+	apiCancelItineraryBooking,
 	apiCreateItinerary,
 	apiDeleteItinerary,
 	apiItineraries,
@@ -107,7 +108,7 @@ export function useCancelItineraryBooking(onSuccess: () => void) {
 	const userId = user?._id ?? "";
 
 	const mutation = useMutation({
-		mutationFn: (id: string) => apiBookItinerary(id, userId),
+		mutationFn: (id: string) => apiCancelItineraryBooking(id, userId),
 		onSuccess,
 	});
 

@@ -107,7 +107,7 @@ export function apiBookActivity(_id: string, userid: string) {
 	});
 }
 
-export function apiCancelBooking(_id: string, userid: string) {
+export function apiCancelActivityBooking(_id: string, userid: string) {
 	return axios({
 		method: "POST",
 		url: ENDPOINTS.activity.cancelBooking(_id),
