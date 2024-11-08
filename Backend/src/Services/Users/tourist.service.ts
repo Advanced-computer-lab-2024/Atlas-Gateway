@@ -304,3 +304,22 @@ export const softDeleteTourist = async (id: string) => {
 
 	return tourist;
 };
+
+export const redeemPoints = async (id: string) => {
+	const tourist = await Tourist.findById(id);
+	if (!tourist) {
+		throw new HttpError(404, "Tourist not found");
+	}
+	if (tourist.loyaltyPoints < 10000) {
+		throw new HttpError(404, "Not enough points to redeem");
+	}
+	const newLoyaltyPoints = tourist.loyaltyPoints - 10000;
+	const newWalletBalance = tourist.walletBalance + 100;
+	return await tourist.updateOne(
+		{
+			loyaltyPoints: newLoyaltyPoints,
+			walletBalance: newWalletBalance,
+		},
+		{ new: true },
+	);
+};

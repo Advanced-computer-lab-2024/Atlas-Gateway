@@ -1,3 +1,4 @@
+import { Tourist } from "@/Models/Users/tourist.model";
 import mongoose, { PipelineStage, Types } from "mongoose";
 
 import HttpError from "../../Errors/HttpError";
