@@ -30,5 +30,6 @@ touristRouter.post("/rateItinerary", rateItinerary);
 touristRouter.post("/commentItinerary", commentItinerary);
 touristRouter.post("/rateActivity", rateActivity);
 touristRouter.post("/commentActivty", commentActivity);
+touristRouter.delete("/requestDelete/:id", softDeleteTourist);
 export default touristRouter;
 Router;

@@ -258,27 +258,6 @@ export const softDeleteTourist = async (id: string) => {
 		throw new HttpError(404, "Tourist not found");
 	}
 
-	for (const id of tourist.bookedActivities) {
-		await activityService.cancelBookingActivity(
-			id.toString(),
-			tourist.id.toString(),
-		);
-	}
-
-	for (const id of tourist.bookedItineraries) {
-		await itineraryService.cancelBookingItinerary(
-			id.toString(),
-			tourist.id.toString(),
-		);
-	}
-
-	for (const id of tourist.bookedTransportations) {
-		await transportationService.cancelBookingTransportation(
-			id.toString(),
-			tourist.id.toString(),
-		);
-	}
-
 	await tourist.updateOne({ isDeleted: true });
 
 	return tourist;

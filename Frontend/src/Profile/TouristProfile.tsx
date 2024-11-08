@@ -81,8 +81,7 @@ export default function TouristProfile() {
 							>
 								change password
 							</DropdownMenuItem>
-						</DropdownMenuContent>
-						<DropdownMenuContent>
+
 							<DropdownMenuItem
 								onClick={() => {
 									if (data?._id)

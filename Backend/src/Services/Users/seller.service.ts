@@ -96,8 +96,8 @@ export const softDeleteSeller = async (id: string) => {
 	}
 	const products = await productService.getProductBySellerId(id);
 
-	for (const id of products) {
-		await productService.softDeleteProduct(id.toString());
+	for (const product of products) {
+		await productService.softDeleteProduct(product.id.toString());
 	}
 
 	await seller.updateOne({ isDeleted: true });
