@@ -2,7 +2,7 @@ import axios from "axios";
 
 import { TActivity } from "@/types/global";
 
-import ENDPOINTS from "./ENDPOINTS";
+import ENDPOINTS, { baseURL } from "./ENDPOINTS";
 import { TApiResponse } from "./types";
 
 export function apiActivities(
@@ -24,7 +24,7 @@ export function apiActivities(
 			//date: `dateTime,${new Date().toISOString()},null`,
 			...filters,
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 
@@ -35,7 +35,7 @@ export function apiActivity(id: string | undefined) {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 
@@ -55,7 +55,7 @@ export function apiAdvertisorActivities(
 		params: {
 			...filters,
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 
@@ -67,7 +67,7 @@ export function apiCreateActivity(payload: TActivity, _id: string) {
 			"Content-Type": "application/json",
 			userid: _id,
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 		data: payload,
 	});
 }
@@ -79,7 +79,7 @@ export function apiUpdateActivity(payload: TActivity) {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 		data: payload,
 	});
 }
@@ -91,6 +91,30 @@ export function apiDeleteActivity(_id: string) {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
+	});
+}
+
+export function apiBookActivity(_id: string, userid: string) {
+	return axios({
+		method: "POST",
+		url: ENDPOINTS.activity.book(_id),
+		headers: {
+			"Content-Type": "application/json",
+			userid: userid,
+		},
+		baseURL: baseURL,
+	});
+}
+
+export function apiCancelBooking(_id: string, userid: string) {
+	return axios({
+		method: "POST",
+		url: ENDPOINTS.activity.cancelBooking(_id),
+		headers: {
+			"Content-Type": "application/json",
+			userid: userid,
+		},
+		baseURL: baseURL,
 	});
 }

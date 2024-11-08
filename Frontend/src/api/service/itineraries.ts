@@ -2,7 +2,7 @@ import axios from "axios";
 
 import { TItinerary } from "@/types/global";
 
-import ENDPOINTS from "./ENDPOINTS";
+import ENDPOINTS, { baseURL } from "./ENDPOINTS";
 import { TApiResponse } from "./types";
 
 export function apiItineraries(
@@ -21,7 +21,7 @@ export function apiItineraries(
 		params: {
 			...filters,
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 
@@ -41,7 +41,7 @@ export function apiTourGuideItineraries(
 		params: {
 			...filters,
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 
@@ -52,7 +52,7 @@ export function apiItinerary(_id: string | undefined) {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 
@@ -64,7 +64,7 @@ export function apiCreateItinerary(payload: TItinerary, _id: string) {
 			"Content-Type": "application/json",
 			userid: _id,
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 		data: payload,
 	});
 }
@@ -76,7 +76,7 @@ export function apiUpdateItinerary(payload: TItinerary) {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 		data: payload,
 	});
 }
@@ -88,6 +88,30 @@ export function apiDeleteItinerary(_id: string) {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
+	});
+}
+
+export function apiBookItinerary(_id: string, _userId: string) {
+	return axios({
+		method: "POST",
+		url: ENDPOINTS.itinerary.book(_id),
+		headers: {
+			"Content-Type": "application/json",
+			userid: _userId,
+		},
+		baseURL: baseURL,
+	});
+}
+
+export function apiCancelBooking(_id: string, _userId: string) {
+	return axios({
+		method: "POST",
+		url: ENDPOINTS.itinerary.cancelBooking(_id),
+		headers: {
+			"Content-Type": "application/json",
+			userid: _userId,
+		},
+		baseURL: baseURL,
 	});
 }

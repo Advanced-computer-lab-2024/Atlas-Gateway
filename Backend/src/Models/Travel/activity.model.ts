@@ -24,6 +24,7 @@ export interface IActivity extends Document {
 	numberOfBookings: number;
 	tourists: Types.ObjectId[];
 	isDeleted?: boolean;
+	isArchived?: boolean;
 }
 
 const activitySchema = new Schema<IActivity>(
@@ -61,6 +62,8 @@ const activitySchema = new Schema<IActivity>(
 			rating: { type: Number, min: 0, max: 5 },
 		},
 		avgRating: { type: Number, min: 0, max: 5, default: 0 },
+		isArchived: { type: Boolean, default: false },
+		isDeleted: { type: Boolean, default: false },
 		totalNumberOfRatings: { type: Number, default: 0 },
 		numberOfBookings: { type: Number, default: 0 },
 		tourists: [{ type: Schema.Types.ObjectId, ref: "Tourist" }],

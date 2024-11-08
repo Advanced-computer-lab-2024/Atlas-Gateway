@@ -2,18 +2,27 @@ import { formatDate } from "date-fns";
 import { ArrowLeft, DollarSign, MapPin, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-import { useItinerary } from "@/api/data/useItineraries";
+import {
+	useBookItinerary,
+	useCancelItineraryBooking,
+	useItinerary,
+} from "@/api/data/useItineraries";
 import Label from "@/components/ui/Label";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Flex } from "@/components/ui/flex";
 import useCurrency from "@/hooks/useCurrency";
+import { useLoginStore } from "@/store/loginStore";
 import { languageOptions } from "@/types/consts";
+import { EAccountType } from "@/types/enums";
 
 export default function ItineraryDetails() {
 	const navigate = useNavigate();
 	const convertCurrency = useCurrency();
-	const { data } = useItinerary();
+	const { user } = useLoginStore();
+
+	const { data, refetch } = useItinerary();
 	const {
 		availability,
 		avgRating,
@@ -27,7 +36,14 @@ export default function ItineraryDetails() {
 		tags,
 		language,
 		title,
+		tourists,
 	} = data || {};
+	const { doBookItinerary } = useBookItinerary(() => {
+		refetch();
+	});
+	const { doCancelItineraryBooking } = useCancelItineraryBooking(() => {
+		refetch();
+	});
 
 	return (
 		<Flex
@@ -38,13 +54,37 @@ export default function ItineraryDetails() {
 		>
 			<Card className="w-[80%] h-[700px] flex-col border-surface-secondary border-2 p-4">
 				<Flex isColumn gap="4">
-					<Flex gap="2" align="center">
-						<ArrowLeft
-							className="cursor-pointer"
-							onClick={() => navigate("/itineraries")}
-							size={32}
-						/>
-						<Label.Big600>{title}</Label.Big600>
+					<Flex justify="between" align="center">
+						<Flex gap="2" align="center">
+							<ArrowLeft
+								className="cursor-pointer"
+								onClick={() => navigate("/itineraries")}
+								size={32}
+							/>
+							<Label.Big600>{title}</Label.Big600>
+						</Flex>
+						{user?.type === EAccountType.Tourist &&
+							(tourists?.includes(user?._id) ? (
+								<Button
+									size="lg"
+									onClick={() => {
+										if (data?._id)
+											doCancelItineraryBooking(data?._id);
+									}}
+								>
+									Cancel
+								</Button>
+							) : (
+								<Button
+									size="lg"
+									onClick={() => {
+										if (data?._id)
+											doBookItinerary(data?._id);
+									}}
+								>
+									Book
+								</Button>
+							))}
 					</Flex>
 					<Flex gap="2" align="center">
 						<Label.Mid600 className="w-60 text-left">
