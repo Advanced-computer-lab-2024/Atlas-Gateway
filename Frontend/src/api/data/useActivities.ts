@@ -9,6 +9,8 @@ import {
 	apiActivities,
 	apiActivity,
 	apiAdvertisorActivities,
+	apiBookActivity,
+	apiCancelBooking,
 	apiCreateActivity,
 	apiDeleteActivity,
 	apiUpdateActivity,
@@ -24,8 +26,8 @@ export function useActivities() {
 	const q = useQuery({
 		queryFn: () =>
 			user?.type === EAccountType.Advertiser
-				? apiAdvertisorActivities(_id, query)
-				: apiActivities(_id, query),
+				? apiAdvertisorActivities(_id, query, user?.type ?? "")
+				: apiActivities(_id, query, user?.type ?? ""),
 		queryKey: ["activities", _id, query],
 	});
 
@@ -39,12 +41,12 @@ export function useActivity() {
 		id: string;
 	}>();
 
-	const { data } = useQuery({
+	const { data, refetch } = useQuery({
 		queryFn: () => apiActivity(id),
 		queryKey: ["activity", id],
 	});
 
-	return { data: data?.data };
+	return { data: data?.data, refetch };
 }
 
 export function useCreateActivity(onSuccess: () => void) {
@@ -87,4 +89,34 @@ export function useDeleteActivity(onSuccess: () => void) {
 	const { mutate } = mutation;
 
 	return { doDeleteActivity: mutate, ...mutation };
+}
+
+export function useBookActivity(onSuccess: () => void) {
+	const { user } = useLoginStore();
+	if (!user?._id) {
+		throw new Error("User ID is undefined");
+	}
+	const mutation = useMutation({
+		mutationFn: (_id: string) => apiBookActivity(_id, user?._id),
+		onSuccess,
+	});
+
+	const { mutate } = mutation;
+
+	return { doBookActivity: mutate, ...mutation };
+}
+
+export function useCancelActivityBooking(onSuccess: () => void) {
+	const { user } = useLoginStore();
+	if (!user?._id) {
+		throw new Error("User ID is undefined");
+	}
+	const mutation = useMutation({
+		mutationFn: (_id: string) => apiCancelBooking(_id, user?._id),
+		onSuccess,
+	});
+
+	const { mutate } = mutation;
+
+	return { doCancelActivityBooking: mutate, ...mutation };
 }

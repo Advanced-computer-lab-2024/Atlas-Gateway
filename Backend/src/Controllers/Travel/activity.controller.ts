@@ -89,7 +89,12 @@ export const getActivities = async (
 	next: NextFunction,
 ) => {
 	try {
-		const result = await activityService.getActivities(req.query);
+		const usertype = req.headers.usertype as string;
+
+		if (!usertype) {
+			throw new HttpError(400, "User type is required");
+		}
+		const result = await activityService.getActivities(usertype,req.query);
 
 		const response = {
 			data: result[0].data,

@@ -1,7 +1,6 @@
 import { Currency } from "./consts";
 import { EAccountType } from "./enums";
 
-
 export type TUser = {
 	_id: string;
 	username: string;
@@ -80,9 +79,8 @@ export type TActivity = {
 	specialDiscounts: number;
 	isOpen: boolean;
 	avgRating: number;
+	tourists: string[];
 };
-
-
 
 export interface TAdmin extends TUser {
 	email: string;
@@ -198,4 +196,5 @@ export interface TItinerary {
 	totalNumberOfRatings: number;
 	accessibility: string;
 	timeline: string;
+	tourists: string[];
 }

@@ -89,7 +89,15 @@ export const getItineraries = async (
 	next: NextFunction,
 ) => {
 	try {
-		const result = await itineraryService.getItineraries(req.query);
+		const usertype = req.headers.usertype as string;
+
+		if (!usertype) {
+			throw new HttpError(400, "User type is required");
+		}
+		const result = await itineraryService.getItineraries(
+			usertype,
+			req.query,
+		);
 		const response = {
 			data: result?.[0]?.data,
 			metaData: {

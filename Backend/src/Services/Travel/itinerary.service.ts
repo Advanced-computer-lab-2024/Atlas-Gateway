@@ -8,6 +8,18 @@ import { cancelItinerary } from "../Users/tourist.service";
 import * as tourGuideService from "./../Users/tourGuide.service";
 import * as touristService from "./../Users/tourist.service";
 
+const ItineraryFiltersMap: Record<string, PipelineStage> = {
+	tourist: {
+		$match: {
+			isArchived: false, // TODO: Add appropriate filter
+			isDeleted: false,
+		},
+	},
+	default: {
+		$match: {},
+	},
+};
+
 export const createItinerary = async (
 	itinerary: IItinerary,
 	createdBy: string,
@@ -97,8 +109,12 @@ export const getItineraryByUserId = async (userId: string, query: any) => {
 	return result;
 };
 
-export const getItineraries = async (query: any) => {
+export const getItineraries = async (type: string, query: any) => {
+	const filter =
+		ItineraryFiltersMap?.[type as keyof typeof ItineraryFiltersMap] ||
+		ItineraryFiltersMap.default;
 	const pipeline: PipelineStage[] = [
+		filter,
 		{
 			$lookup: {
 				from: "tags",

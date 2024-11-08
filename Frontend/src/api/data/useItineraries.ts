@@ -6,6 +6,7 @@ import { EAccountType } from "@/types/enums";
 import { TItinerary } from "@/types/global";
 
 import {
+	apiBookItinerary,
 	apiCreateItinerary,
 	apiDeleteItinerary,
 	apiItineraries,
@@ -23,8 +24,8 @@ export function useItineraries() {
 	const q = useQuery({
 		queryFn: () =>
 			user?.type === EAccountType.Guide
-				? apiTourGuideItineraries(_id, query)
-				: apiItineraries(_id, query),
+				? apiTourGuideItineraries(_id, query, EAccountType.Guide)
+				: apiItineraries(_id, query, EAccountType.Tourist),
 		queryKey: ["itinerary", _id, query],
 	});
 
@@ -38,12 +39,12 @@ export function useItinerary() {
 		id: string;
 	}>();
 
-	const { data } = useQuery({
+	const { data, refetch } = useQuery({
 		queryFn: () => apiItinerary(id),
 		queryKey: ["itinerary", id],
 	});
 
-	return { data: data?.data };
+	return { data: data?.data, refetch };
 }
 
 export function useCreateItinerary(onSuccess: () => void) {
@@ -86,4 +87,31 @@ export function useDeleteItinerary(onSuccess: () => void) {
 	const { mutate } = mutation;
 
 	return { doDeleteItinerary: mutate, ...mutation };
+}
+
+export function useBookItinerary(onSuccess: () => void) {
+	const { user } = useLoginStore();
+	const userId = user?._id ?? "";
+	const mutation = useMutation({
+		mutationFn: (id: string) => apiBookItinerary(id, userId),
+		onSuccess,
+	});
+
+	const { mutate } = mutation;
+
+	return { doBookItinerary: mutate, ...mutation };
+}
+
+export function useCancelItineraryBooking(onSuccess: () => void) {
+	const { user } = useLoginStore();
+	const userId = user?._id ?? "";
+
+	const mutation = useMutation({
+		mutationFn: (id: string) => apiBookItinerary(id, userId),
+		onSuccess,
+	});
+
+	const { mutate } = mutation;
+
+	return { doCancelItineraryBooking: mutate, ...mutation };
 }

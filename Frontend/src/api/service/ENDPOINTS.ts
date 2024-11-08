@@ -23,6 +23,8 @@ const ENDPOINTS = {
 		create: "api/activity/create",
 		update: (id: string) => `api/activity/update/${id}`,
 		delete: (id: string) => `api/activity/delete/${id}`,
+		book: (id: string) => `api/activity/book/${id}`,
+		cancelBooking: (id: string) => `api/activity/cancelBooking/${id}`,
 	},
 	changePassword: "/api/change-password",
 	login: "api/login",
@@ -99,6 +101,8 @@ const ENDPOINTS = {
 		create: "api/itinerary/create",
 		update: (id: string) => `api/itinerary/update/${id}`,
 		delete: (id: string) => `api/itinerary/delete/${id}`,
+		book: (id: string) => `api/itinerary/book/${id}`,
+		cancelBooking: (id: string) => `api/itinerary/cancelBooking/${id}`,
 	},
 	complaint: {
 		list: "api/complaint/list",

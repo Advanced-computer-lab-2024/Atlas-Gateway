@@ -44,6 +44,7 @@ const productFiltersMap: Record<string, PipelineStage> = {
 	tourist: {
 		$match: {
 			isArchived: false, // TODO: Add appropriate filter
+			isDeleted: false,
 		},
 	},
 	default: {

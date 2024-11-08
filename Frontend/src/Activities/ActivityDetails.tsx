@@ -2,17 +2,31 @@ import { formatDate } from "date-fns";
 import { ArrowLeft, DollarSign, MapPin, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-import { useActivity } from "@/api/data/useActivities";
+import {
+	useActivity,
+	useBookActivity,
+	useCancelActivityBooking,
+} from "@/api/data/useActivities";
 import Label from "@/components/ui/Label";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Flex } from "@/components/ui/flex";
 import useCurrency from "@/hooks/useCurrency";
+import { useLoginStore } from "@/store/loginStore";
+import { EAccountType } from "@/types/enums";
 
 export default function ActivityDetails() {
 	const navigate = useNavigate();
 	const convertCurrency = useCurrency();
-	const { data } = useActivity();
+	const { user } = useLoginStore();
+	const { data, refetch } = useActivity();
+	const { doBookActivity } = useBookActivity(() => {
+		refetch();
+	});
+	const { doCancelActivityBooking } = useCancelActivityBooking(() => {
+		refetch();
+	});
 	const {
 		name,
 		categories,
@@ -25,6 +39,7 @@ export default function ActivityDetails() {
 		minPrice,
 		avgRating,
 		tags,
+		tourists,
 	} = data || {};
 
 	return (
@@ -36,13 +51,40 @@ export default function ActivityDetails() {
 		>
 			<Card className="w-[80%] h-[500px] flex-col border-surface-secondary border-2 p-4">
 				<Flex isColumn gap="4">
-					<Flex gap="2" align="center">
-						<ArrowLeft
-							className="cursor-pointer"
-							onClick={() => navigate("/activities")}
-							size={32}
-						/>
-						<Label.Big600>{name}</Label.Big600>
+					<Flex justify="between" align="center">
+						<Flex gap="2" align="center">
+							<ArrowLeft
+								className="cursor-pointer"
+								onClick={() => navigate("/activities")}
+								size={32}
+							/>
+							<Label.Big600>{name}</Label.Big600>
+						</Flex>
+
+						{user?.type === EAccountType.Tourist &&
+							(tourists?.includes(user?._id) ? (
+								<Button
+									size="lg"
+									onClick={() => {
+										if (data?._id) {
+											doCancelActivityBooking(data?._id);
+										}
+									}}
+								>
+									Cancel
+								</Button>
+							) : (
+								<Button
+									size="lg"
+									onClick={() => {
+										if (data?._id) {
+											doBookActivity(data?._id);
+										}
+									}}
+								>
+									Book
+								</Button>
+							))}
 					</Flex>
 					<Flex gap="12">
 						<Flex isColumn justify="around">
