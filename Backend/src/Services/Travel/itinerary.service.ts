@@ -191,6 +191,7 @@ export const bookItinerary = async (itineraryId: string, touristId: string) => {
 	const tourist = await touristService.addBookedItinerary(
 		touristId,
 		itineraryId,
+		itinerary.price,
 	);
 
 	await itinerary.updateOne({
@@ -234,6 +235,7 @@ export const cancelBookingItinerary = async (
 	const tourist = await touristService.cancelItinerary(
 		touristId,
 		itineraryId,
+		itinerary.price,
 	);
 
 	return itinerary;

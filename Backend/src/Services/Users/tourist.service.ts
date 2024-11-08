@@ -102,6 +102,7 @@ export function isOlderThan18(dob: Date): boolean {
 export const addBookedItinerary = async (
 	touristId: string,
 	itineraryId: string,
+	itenraryPrice: number,
 ) => {
 	if (!Types.ObjectId.isValid(itineraryId)) {
 		throw new HttpError(400, "Itinerary id is not valid");
@@ -114,9 +115,16 @@ export const addBookedItinerary = async (
 	if (!isOlderThan18(tourist.dob)) {
 		throw new HttpError(400, "Tourist must be older than 18");
 	}
+
+	const newLoyaltyPoints =
+		tourist.loyaltyPoints + (tourist.level / 2) * itenraryPrice;
+	const newLevel =
+		newLoyaltyPoints <= 100000 ? 1 : newLoyaltyPoints <= 500000 ? 2 : 3;
 	await tourist.updateOne(
 		{
 			$push: { bookedItineraries: itineraryId },
+			loyaltyPoints: newLoyaltyPoints,
+			level: newLevel,
 		},
 		{ new: true },
 	);
@@ -153,6 +161,7 @@ export const addBookedTransportation = async (
 export const cancelItinerary = async (
 	touristId: string,
 	itineraryId: string,
+	itenraryPrice: number,
 ) => {
 	if (!Types.ObjectId.isValid(itineraryId)) {
 		throw new HttpError(400, "Itinerary id is not valid");
@@ -168,9 +177,14 @@ export const cancelItinerary = async (
 	if (!tourist.bookedItineraries.includes(new Types.ObjectId(itineraryId))) {
 		throw new HttpError(404, "Itinerary not found in the tourist's list");
 	}
-
+	const newLoyaltyPoints =
+		tourist.loyaltyPoints - (tourist.level / 2) * itenraryPrice;
+	const newLevel =
+		newLoyaltyPoints <= 100000 ? 1 : newLoyaltyPoints <= 500000 ? 2 : 3;
 	const removed = await tourist.updateOne({
 		$pull: { bookedItineraries: itineraryId },
+		loyaltyPoints: newLoyaltyPoints,
+		level: newLevel,
 	});
 
 	if (removed.modifiedCount === 0) {
