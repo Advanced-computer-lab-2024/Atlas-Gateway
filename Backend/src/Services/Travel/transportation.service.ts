@@ -7,11 +7,11 @@ import {
 } from "../../Models/Travel/transportation.model";
 import { Advertiser } from "../../Models/Users/advertiser.model";
 
-import { TransportationAdvertiser } from "@/Models/Users/transportation_advertiser.model";
-import { Tourist } from "@/Models/Users/tourist.model";
+import { TransportationAdvertiser } from "../../Models/Users/transportation_advertiser.model";
 
 import AggregateBuilder from "../Operations/aggregation.service";
 import { getAdvertiserById } from "../Users/advertiser.service";
+
 import { addBookedTransportation, cancelTransportation, getTouristById } from "../Users/tourist.service";
 import { getTransportationAdvertiserById } from "../Users/transportation_advertiser.service";
 

@@ -1,14 +1,14 @@
 import { Types } from "mongoose";
 
+
+
 import HttpError from "../../Errors/HttpError";
 import { Transportation } from "../../Models/Travel/transportation.model";
-import {
-	ITransportationAdvertiser,
-	TransportationAdvertiser,
-} from "../../Models/Users/transportation_advertiser.model";
+import { ITransportationAdvertiser, TransportationAdvertiser } from "../../Models/Users/transportation_advertiser.model";
 import { hashPassword } from "../Auth/password.service";
 import uniqueUsername from "../Auth/username.service";
 import * as adminService from "./admin.service";
+
 
 export const createTransportationAdvertiser = async (
 	username: string,
@@ -94,23 +94,18 @@ export const deleteTransportationAdvertiser = async (id: string) => {
 };
 
 export const addTransportation = async (
-	transportation_advertiserId: string,
+	TransportationAdvertiserId: string,
 	transportationId: string,
 ) => {
 	try {
-		if (!Types.ObjectId.isValid(transportation_advertiserId)) {
-			throw new HttpError(
-				400,
-				"TransportationAdvertiser id is not valid",
-			);
+		if (!Types.ObjectId.isValid(TransportationAdvertiserId)) {
+			throw new HttpError(400, "Transportation Advertiser id is not valid");
 		}
 
 		const transportation_advertiser =
-			await TransportationAdvertiser.findById(
-				transportation_advertiserId,
-			);
+			await TransportationAdvertiser.findById(TransportationAdvertiserId);
 		if (!transportation_advertiser) {
-			throw new HttpError(404, "TransportationAdvertiser not found");
+			throw new HttpError(404, "Transportation Advertiser not found");
 		}
 
 		const transportation = await Transportation.findById(transportationId);
@@ -136,23 +131,20 @@ export const addTransportation = async (
 };
 
 export const removeTransportation = async (
-	transportation_advertiserId: string,
+	TransportationAdvertiserId: string,
 	transportationId: string,
 ) => {
 	try {
-		if (!Types.ObjectId.isValid(transportation_advertiserId)) {
+		if (!Types.ObjectId.isValid(TransportationAdvertiserId)) {
 			throw new HttpError(
 				400,
-				"TransportationAdvertiser id is not valid",
+				"Transportation Advertiser id is not valid",
 			);
 		}
 
-		const transportation_advertiser =
-			await TransportationAdvertiser.findById(
-				transportation_advertiserId,
-			);
+		const transportation_advertiser = await TransportationAdvertiser.findById(TransportationAdvertiserId);
 		if (!transportation_advertiser) {
-			throw new HttpError(404, "TransportationAdvertiser not found");
+			throw new HttpError(404, "Transportation Advertiser not found");
 		}
 
 		const transportation = await Transportation.findById(transportationId);
@@ -167,7 +159,7 @@ export const removeTransportation = async (
 		) {
 			throw new HttpError(
 				404,
-				"Transportation not found in the transportation_advertiser's list",
+				"Transportation not found in the advertiser's list",
 			);
 		}
 
