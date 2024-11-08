@@ -93,36 +93,11 @@ export const softDeleteTourGuide = async (id: string) => {
 		throw new HttpError(404, "Tour Guide not found");
 	}
 
-	// Check if the tour guide has any upcoming itineraries
-	await tourGuide.populate("itinerary");
-
-	let tourGuideDeleted;
-
-	const upcomingItineraries = tourGuide.itinerary.filter(
-		(itineraries: any) => {
-			return (
-				itineraries.startDateTime > new Date() &&
-				itineraries.numberOfBookings > 0
-			);
-		},
-	);
-
-	if (upcomingItineraries.length > 0) {
-		tourGuideDeleted = await TourGuide.findByIdAndUpdate(
-			id,
-			{ isDeleted: true },
-			{ new: true },
-		);
-		tourGuide.itinerary.forEach(async (itinerary: any) => {
-			await itineraryService.softDeleteItinerary(itinerary._id);
-		});
-	} else {
-		// if the tour guide has no upcoming itineraries, delete the account
-		tourGuideDeleted = await deleteTourGuide(id);
-		tourGuide.itinerary.forEach(async (itinerary: any) => {
-			await itineraryService.deleteItinerary(itinerary._id);
-		});
+	for (const id of tourGuide.itinerary) {
+		await itineraryService.softDeleteItinerary(id.toString());
 	}
 
-	return tourGuideDeleted;
+	await tourGuide.updateOne({ isDeleted: true });
+
+	return tourGuide;
 };

@@ -196,30 +196,11 @@ export const softDeleteAdvertiser = async (id: string) => {
 		throw new HttpError(404, "Advertiser not Found");
 	}
 
-	await advertiser.populate("activities");
-
-	const upcomingBookedActivities = advertiser.activities.filter(
-		(activity: any) => {
-			return (
-				activity.dateTime > new Date() && activity.numberOfBookings > 0
-			);
-		},
-	);
-
-	// soft delete advertiser and activities if there is upcoming booked activities
-	if (upcomingBookedActivities.length > 0) {
-		await advertiser.updateOne({ isDeleted: true });
-		advertiser.activities.forEach(async (activity: any) => {
-			await activityService.softDeleteActivity(activity.id);
-		});
-		return advertiser;
+	for (const id of advertiser.activities) {
+		await activityService.softDeleteActivity(id.toString());
 	}
 
-	// hard delete advertiser and activities if there is no upcoming booked activities
-	for (const activity of advertiser.activities) {
-		await activityService.deleteActivity(activity.toString());
-	}
-	await advertiser.deleteOne();
+	await advertiser.updateOne({ isDeleted: true });
 
 	return advertiser;
 };

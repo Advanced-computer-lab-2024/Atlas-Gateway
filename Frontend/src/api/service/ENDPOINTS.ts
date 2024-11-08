@@ -46,24 +46,28 @@ const ENDPOINTS = {
 		show: (id: string) => `api/tourist/show/${id}`,
 		update: (id: string) => `api/tourist/update/${id}`,
 		delete: (id: string) => `api/tourist/delete/${id}`,
+		requestDelete: (id: string) => `api/tourist/requestDelete/${id}`,
 	},
 	seller: {
 		list: "api/seller/list",
 		show: (id: string) => `api/seller/show/${id}`,
 		update: (id: string) => `api/seller/update/${id}`,
 		delete: (id: string) => `api/seller/delete/${id}`,
+		requestDelete: (id: string) => `api/seller/requestDelete/${id}`,
 	},
 	tourGuide: {
 		list: "api/tourGuide/list",
 		show: (id: string) => `api/tourGuide/show/${id}`,
 		update: (id: string) => `api/tourGuide/update/${id}`,
 		delete: (id: string) => `api/tourGuide/delete/${id}`,
+		requestDelete: (id: string) => `api/tourGuide/requestDelete/${id}`,
 	},
 	advertiser: {
 		list: "api/advertiser/list",
 		show: (id: string) => `api/advertiser/show/${id}`,
 		update: (id: string) => `api/advertiser/update/${id}`,
 		delete: (id: string) => `api/advertiser/delete/${id}`,
+		requestDelete: (id: string) => `api/advertiser/requestDelete/${id}`,
 	},
 	category: {
 		list: "api/category/list",

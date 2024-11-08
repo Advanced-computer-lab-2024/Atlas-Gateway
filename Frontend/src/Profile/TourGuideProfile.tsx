@@ -1,14 +1,17 @@
+import { Camera, Image, Settings } from "lucide-react";
+import { useEffect, useState } from "react";
+
+import { useDownload } from "@/api/data/useMedia";
+import {
+	useRequestDeleteTourGuideProfile,
+	useTourGuideProfile,
+} from "@/api/data/useProfile";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuTrigger,
-} from "@radix-ui/react-dropdown-menu";
-import { Camera, Image, Settings } from "lucide-react";
-import { useEffect, useState } from "react";
-
-import { useDownload } from "@/api/data/useMedia";
-import { useTourGuideProfile } from "@/api/data/useProfile";
+} from "@/components/ui/dropdown-menu";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useLoginStore } from "@/store/loginStore";
 
@@ -25,11 +28,13 @@ export default function TourGuideProfile() {
 	const [isDrawerOpen3, setIsDrawerOpen3] = useState(false);
 	const [isDrawerOpen4, setIsDrawerOpen4] = useState(false);
 	const [profilePic, setProfilePic] = useState("");
+	const { doRequestDeleteTourGuideProfile } =
+		useRequestDeleteTourGuideProfile(() => {});
 	const { doDownload } = useDownload((response) => {
 		setProfilePic(response.data);
 	});
 	useEffect(() => {
-		doDownload(data?.imagePath!);
+		if (data?.imagePath) doDownload(data?.imagePath);
 	}, [data?.imagePath]);
 	return (
 		<div>
@@ -116,6 +121,17 @@ export default function TourGuideProfile() {
 							>
 								Upload certificate
 							</DropdownMenuItem>
+							<DropdownMenuItem
+								onClick={() => {
+									if (data?._id)
+										doRequestDeleteTourGuideProfile(
+											data._id,
+										);
+								}}
+								className="cursor-pointer"
+							>
+								Delete Account
+							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
 				</div>
@@ -184,7 +200,7 @@ export default function TourGuideProfile() {
 				setIsDrawerOpen={setIsDrawerOpen4}
 				onUploadSuccess={() => {
 					refetch();
-					doDownload(data?.imagePath!);
+					if (data?.imagePath) doDownload(data?.imagePath);
 				}}
 			/>
 		</div>

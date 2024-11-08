@@ -23,7 +23,7 @@ export function apiTourists() {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 
@@ -60,7 +60,7 @@ export function apiEditTouristProfile(_id: string, data: TTourist) {
 			userid: _id,
 		},
 		data,
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 
@@ -71,7 +71,18 @@ export function apiDeleteTouristProfile(_id: string) {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
+	});
+}
+
+export function apiRequestDeleteTouristProfile(_id: string) {
+	return axios({
+		method: "DELETE",
+		url: ENDPOINTS.tourist.requestDelete(_id),
+		headers: {
+			"Content-Type": "application/json",
+		},
+		baseURL: baseURL,
 	});
 }
 
@@ -82,7 +93,7 @@ export function apiSellers() {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 
@@ -94,7 +105,7 @@ export function apiSellerProfile(_id: string) {
 			"Content-Type": "application/json",
 			userid: _id,
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 export function apiEditSellerProfile(_id: string, data: Partial<TSeller>) {
@@ -106,7 +117,7 @@ export function apiEditSellerProfile(_id: string, data: Partial<TSeller>) {
 			userid: _id,
 		},
 		data,
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 
@@ -117,7 +128,18 @@ export function apiDeleteSeller(_id: string) {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
+	});
+}
+
+export function apiRequestDeleteSellerProfile(_id: string) {
+	return axios({
+		method: "DELETE",
+		url: ENDPOINTS.seller.requestDelete(_id),
+		headers: {
+			"Content-Type": "application/json",
+		},
+		baseURL: baseURL,
 	});
 }
 
@@ -128,7 +150,7 @@ export function apiAdvertisers() {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 
@@ -140,7 +162,7 @@ export function apiAdvertiserProfile(_id: string) {
 			"Content-Type": "application/json",
 			userid: _id,
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 
@@ -156,7 +178,7 @@ export function apiEditAdvertiserProfile(
 			userid: _id,
 		},
 		data,
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 
@@ -167,7 +189,18 @@ export function apiDeleteAdvertiserProfile(_id: string) {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
+	});
+}
+
+export function apiRequestDeleteAdvertiserProfile(_id: string) {
+	return axios({
+		method: "DELETE",
+		url: ENDPOINTS.advertiser.requestDelete(_id),
+		headers: {
+			"Content-Type": "application/json",
+		},
+		baseURL: baseURL,
 	});
 }
 
@@ -178,7 +211,7 @@ export function apiTourGuides() {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 
@@ -190,7 +223,7 @@ export function apiTourGuideProfile(_id: string) {
 			"Content-Type": "application/json",
 			userid: _id,
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 export function apiEditTourGuideProfile(
@@ -205,7 +238,7 @@ export function apiEditTourGuideProfile(
 			userid: _id,
 		},
 		data,
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 
@@ -216,6 +249,17 @@ export function apiDeleteTourGuideProfile(_id: string) {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
+	});
+}
+
+export function apiRequestDeleteTourGuideProfile(_id: string) {
+	return axios({
+		method: "DELETE",
+		url: ENDPOINTS.tourGuide.requestDelete(_id),
+		headers: {
+			"Content-Type": "application/json",
+		},
+		baseURL: baseURL,
 	});
 }

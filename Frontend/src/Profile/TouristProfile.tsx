@@ -1,7 +1,10 @@
 import { Camera, Settings } from "lucide-react";
 import { useState } from "react";
 
-import { useTouristProfile } from "@/api/data/useProfile";
+import {
+	useRequestDeleteTouristProfile,
+	useTouristProfile,
+} from "@/api/data/useProfile";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -17,6 +20,9 @@ import TouristSheet from "./TouristSheet";
 export default function TouristProfile() {
 	const { data } = useTouristProfile();
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+	const { doRequestDeleteTouristProfile } = useRequestDeleteTouristProfile(
+		() => {},
+	);
 
 	return (
 		<div>
@@ -74,6 +80,17 @@ export default function TouristProfile() {
 								className="cursor-pointer"
 							>
 								change password
+							</DropdownMenuItem>
+						</DropdownMenuContent>
+						<DropdownMenuContent>
+							<DropdownMenuItem
+								onClick={() => {
+									if (data?._id)
+										doRequestDeleteTouristProfile(data._id);
+								}}
+								className="cursor-pointer"
+							>
+								Delete Account
 							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>

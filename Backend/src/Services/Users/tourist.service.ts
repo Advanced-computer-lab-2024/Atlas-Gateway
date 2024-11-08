@@ -65,7 +65,10 @@ export const deleteTourist = async (id: string) => {
 	return tourist;
 };
 
-export const addBookedActivity = async (touristId: string, activityId: string) => {
+export const addBookedActivity = async (
+	touristId: string,
+	activityId: string,
+) => {
 	if (!Types.ObjectId.isValid(activityId)) {
 		throw new HttpError(400, "Activity id is not valid");
 	}
@@ -240,9 +243,7 @@ export const cancelTransportation = async (
 };
 
 /*
- * Soft delete tourist
-	 set isDeleted to true when there are no upcoming bookings
-	 else delete the account
+ * Soft delete tourist and unbook all activities, itineraries and transportation
  * @param id
  * @throws {HttpError}
  * @returns {Promise<ITourist>}
@@ -253,40 +254,20 @@ export const softDeleteTourist = async (id: string) => {
 	if (!tourist) {
 		throw new HttpError(404, "Tourist not found");
 	}
-	await tourist.populate([
-		"bookedActivities",
-		"bookedItineraries",
-		"bookedTransportations",
-	]);
-	const currentDate = new Date();
 
-	const upcomingActivities = tourist.bookedActivities.filter(
-		(activity: any) => activity.dateTime > currentDate,
-	);
-
-	const upcomingItineraries = tourist.bookedItineraries.filter(
-		(itinerary: any) => itinerary.startDateTime > currentDate,
-	);
-
-	const upcomingTransportations = tourist.bookedTransportations.filter(
-		(transportation: any) => transportation.dateTime > currentDate,
-	);
-
-	console.log(
-		upcomingActivities,
-		upcomingItineraries,
-		upcomingTransportations,
-	);
-
-	if (
-		upcomingActivities.length > 0 ||
-		upcomingItineraries.length > 0 ||
-		upcomingTransportations.length > 0
-	) {
-		await tourist.updateOne({ isDeleted: true });
-	} else {
-		await deleteTourist(id);
+	for (const id of tourist.bookedActivities) {
+		await cancelActivity(tourist.id.toString(), id.toString());
 	}
+
+	for (const id of tourist.bookedItineraries) {
+		await cancelItinerary(tourist.id.toString(), id.toString());
+	}
+
+	for (const id of tourist.bookedTransportations) {
+		await cancelTransportation(tourist.id.toString(), id.toString());
+	}
+
+	await tourist.updateOne({ isDeleted: true });
 
 	return tourist;
 };

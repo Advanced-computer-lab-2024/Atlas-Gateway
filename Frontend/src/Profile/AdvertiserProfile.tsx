@@ -1,14 +1,17 @@
+import { Camera, Image, Settings } from "lucide-react";
+import { useEffect, useState } from "react";
+
+import { useDownload } from "@/api/data/useMedia";
+import {
+	useAdvertiserProfile,
+	useRequestDeleteAdvertiserProfile,
+} from "@/api/data/useProfile";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuTrigger,
-} from "@radix-ui/react-dropdown-menu";
-import { Camera, Image, Settings } from "lucide-react";
-import { useEffect, useState } from "react";
-
-import { useDownload } from "@/api/data/useMedia";
-import { useAdvertiserProfile } from "@/api/data/useProfile";
+} from "@/components/ui/dropdown-menu";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useLoginStore } from "@/store/loginStore";
 
@@ -28,8 +31,10 @@ const General = () => {
 	const { doDownload } = useDownload((response) => {
 		setProfilePic(response.data);
 	});
+	const { doRequestDeleteAdvertiserProfile } =
+		useRequestDeleteAdvertiserProfile(() => {});
 	useEffect(() => {
-		doDownload(data?.imagePath!);
+		if (data?.imagePath) doDownload(data?.imagePath);
 	}, [data?.imagePath]);
 	return (
 		<div>
@@ -116,6 +121,17 @@ const General = () => {
 							>
 								Upload taxation card
 							</DropdownMenuItem>
+							<DropdownMenuItem
+								onClick={() => {
+									if (data?._id)
+										doRequestDeleteAdvertiserProfile(
+											data?._id,
+										);
+								}}
+								className="cursor-pointer"
+							>
+								Delete Account
+							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
 				</div>
@@ -161,7 +177,7 @@ const General = () => {
 				setIsDrawerOpen={setIsDrawerOpen4}
 				onUploadSuccess={() => {
 					refetch();
-					doDownload(data?.imagePath!);
+					if (data?.imagePath) doDownload(data?.imagePath);
 				}}
 			/>
 			<UploadForm

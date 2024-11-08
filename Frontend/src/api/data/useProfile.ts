@@ -21,6 +21,10 @@ import {
 	apiEditSellerProfile,
 	apiEditTourGuideProfile,
 	apiEditTouristProfile,
+	apiRequestDeleteAdvertiserProfile,
+	apiRequestDeleteSellerProfile,
+	apiRequestDeleteTourGuideProfile,
+	apiRequestDeleteTouristProfile,
 	apiSellerProfile,
 	apiSellers,
 	apiTourGuideProfile,
@@ -98,6 +102,15 @@ export function useDeleteTouristProfile(onSuccess: () => void) {
 	return { doDeleteTouristProfile: mutate, ...mutation };
 }
 
+export function useRequestDeleteTouristProfile(onSuccess: () => void) {
+	const mutation = useMutation({
+		mutationFn: (_id: string) => apiRequestDeleteTouristProfile(_id),
+		onSuccess,
+	});
+	const { mutate } = mutation;
+	return { doRequestDeleteTouristProfile: mutate, ...mutation };
+}
+
 export function useSellers() {
 	const { user } = useLoginStore();
 	const { data, refetch } = useQuery({
@@ -150,6 +163,15 @@ export function useDeleteSeller(onSuccess: () => void) {
 	});
 	const { mutate } = mutation;
 	return { doDeleteSeller: mutate, ...mutation };
+}
+
+export function useRequestDeleteSellerProfile(onSuccess: () => void) {
+	const mutation = useMutation({
+		mutationFn: (_id: string) => apiRequestDeleteSellerProfile(_id),
+		onSuccess,
+	});
+	const { mutate } = mutation;
+	return { doRequestDeleteSellerProfile: mutate, ...mutation };
 }
 
 export function useAdvertisers() {
@@ -206,6 +228,15 @@ export function useDeleteAdvertiserProfile(onSuccess: () => void) {
 	return { doDeleteAdvertiserProfile: mutate, ...mutation };
 }
 
+export function useRequestDeleteAdvertiserProfile(onSuccess: () => void) {
+	const mutation = useMutation({
+		mutationFn: (_id: string) => apiRequestDeleteAdvertiserProfile(_id),
+		onSuccess,
+	});
+	const { mutate } = mutation;
+	return { doRequestDeleteAdvertiserProfile: mutate, ...mutation };
+}
+
 export function useTourGuides() {
 	const { user } = useLoginStore();
 	const { data, refetch } = useQuery({
@@ -258,4 +289,13 @@ export function useDeleteTourGuideProfile(onSuccess: () => void) {
 	});
 	const { mutate } = mutation;
 	return { doDeleteTourGuideProfile: mutate, ...mutation };
+}
+
+export function useRequestDeleteTourGuideProfile(onSuccess: () => void) {
+	const mutation = useMutation({
+		mutationFn: (_id: string) => apiRequestDeleteTourGuideProfile(_id),
+		onSuccess,
+	});
+	const { mutate } = mutation;
+	return { doRequestDeleteTourGuideProfile: mutate, ...mutation };
 }
