@@ -188,7 +188,9 @@ export const bookItinerary = async (itineraryId: string, touristId: string) => {
 	if (itinerary.availability <= itinerary.numberOfBookings) {
 		throw new HttpError(500, "Itinerary is fully booked");
 	}
-
+	if (itinerary.startDateTime < new Date()) {
+		throw new HttpError(500, "Cannot book past itineraries");
+	}
 	const tourist = await touristService.addBookedItinerary(
 		touristId,
 		itineraryId,
