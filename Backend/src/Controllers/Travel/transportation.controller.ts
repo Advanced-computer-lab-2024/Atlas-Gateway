@@ -4,11 +4,7 @@ import mongoose, { PipelineStage, Types } from "mongoose";
 import { Transportation } from "../../Models/Travel/transportation.model";
 import { Tourist } from "../../Models/Users/tourist.model";
 import AggregateBuilder from "../../Services/Operations/aggregation.service";
-import {
-	bookTransportation,
-	cancelBookingTransportation,
-	getTransportationById,
-} from "../../Services/Travel/transportation.service";
+import * as transportationService from "../../Services/Travel/transportation.service";
 import {
 	addBookedTransportation,
 	cancelTransportation,
@@ -30,19 +26,18 @@ export const createTransportation = async (
 				.json({ message: "Transportation Advertiser ID is required" });
 		}
 
-		if (!Types.ObjectId.isValid(transportation_advertiserId.toString())) {
-			return res.status(400).json({ message: "Invalid Advertiser ID" });
+		const transportationData = req.body;
+
+		const transportationCreated= await transportationService.createTransportation(transportationData, transportation_advertiserId);
+
+		if(!transportationCreated){
+			return res
+				.status(400)
+				.json({ message: "Error creating Transportation" });
 		}
 
-		const transportationData = new Transportation({
-			...req.body,
-			createdBy: new Types.ObjectId(
-				transportation_advertiserId.toString(),
-			),
-		});
-
-		await transportationData.save();
-		res.status(200).send(transportationData);
+		await transportationCreated.save();
+		return res.status(200).send(transportationCreated);
 	} catch (error) {
 		next(error);
 	}
@@ -56,7 +51,7 @@ export const getTransportation = async (req: Request, res: Response) => {
 			res.status(400).json({ error: "Transportation ID is required" });
 		}
 
-		const transportation = await getTransportationById(id);
+		const transportation = await transportationService.getTransportationById(id);
 
 		if (!transportation) {
 			res.status(404).send("Transportation not found");
@@ -189,7 +184,7 @@ export const bookTransportationById = async (req: Request, res: Response) => {
 			return res.status(404).json({ message: "Tourist not found" });
 		}
 
-		const bookingResult = await bookTransportation(
+		const bookingResult = await transportationService.bookTransportation(
 			transportation.id,
 			tourist.id,
 		);
@@ -247,7 +242,7 @@ export const cancelBookingTransportationById = async (
 			return res.status(404).json({ error: "Tourist not found" });
 		}
 
-		const cancelBookingResult = await cancelBookingTransportation(
+		const cancelBookingResult = await transportationService.cancelBookingTransportation(
 			transportation.id,
 			tourist.id,
 		);
