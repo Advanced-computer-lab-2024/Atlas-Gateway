@@ -4,6 +4,9 @@ import HttpError from "../../Errors/HttpError";
 import { ITourist, Tourist } from "../../Models/Users/tourist.model";
 import { hashPassword } from "../Auth/password.service";
 import uniqueUsername from "../Auth/username.service";
+import * as activityService from "../Travel/activity.service";
+import * as itineraryService from "../Travel/itinerary.service";
+import * as transportationService from "../Travel/transportation.service";
 
 export const createTourist = async (
 	username: string,
@@ -256,15 +259,24 @@ export const softDeleteTourist = async (id: string) => {
 	}
 
 	for (const id of tourist.bookedActivities) {
-		await cancelActivity(tourist.id.toString(), id.toString());
+		await activityService.cancelBookingActivity(
+			id.toString(),
+			tourist.id.toString(),
+		);
 	}
 
 	for (const id of tourist.bookedItineraries) {
-		await cancelItinerary(tourist.id.toString(), id.toString());
+		await itineraryService.cancelBookingItinerary(
+			id.toString(),
+			tourist.id.toString(),
+		);
 	}
 
 	for (const id of tourist.bookedTransportations) {
-		await cancelTransportation(tourist.id.toString(), id.toString());
+		await transportationService.cancelBookingTransportation(
+			id.toString(),
+			tourist.id.toString(),
+		);
 	}
 
 	await tourist.updateOne({ isDeleted: true });
