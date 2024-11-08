@@ -28,6 +28,7 @@ import ProductForm from "./ProductForm";
 
 const Product = () => {
 	const { data: products, meta, refetch } = useProducts();
+	console.log(products);
 	const { doUpdateProduct } = useUpdateProduct(() => {
 		refetch();
 	});
@@ -157,7 +158,7 @@ const Product = () => {
 									Quantity: {prod?.quantity}
 								</h3>
 								<h3 className="text-sm">
-									Sales: {prod?.sales}
+									Sales: {prod?.sales ?? 0}
 								</h3>
 							</div>
 						</div>
