@@ -18,6 +18,7 @@ export function useRegister() {
 				_id,
 				type,
 				username,
+				currency: "EGP",
 			});
 			navigate("/");
 		},

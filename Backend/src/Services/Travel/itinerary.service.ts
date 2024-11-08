@@ -1,3 +1,4 @@
+import { Tourist } from "@/Models/Users/tourist.model";
 import mongoose, { PipelineStage, Types } from "mongoose";
 
 import HttpError from "../../Errors/HttpError";
@@ -187,10 +188,13 @@ export const bookItinerary = async (itineraryId: string, touristId: string) => {
 	if (itinerary.availability <= itinerary.numberOfBookings) {
 		throw new HttpError(500, "Itinerary is fully booked");
 	}
-
+	if (itinerary.startDateTime < new Date()) {
+		throw new HttpError(500, "Cannot book past itineraries");
+	}
 	const tourist = await touristService.addBookedItinerary(
 		touristId,
 		itineraryId,
+		itinerary.price,
 	);
 
 	await itinerary.updateOne({
@@ -234,6 +238,7 @@ export const cancelBookingItinerary = async (
 	const tourist = await touristService.cancelItinerary(
 		touristId,
 		itineraryId,
+		itinerary.price,
 	);
 
 	return itinerary;

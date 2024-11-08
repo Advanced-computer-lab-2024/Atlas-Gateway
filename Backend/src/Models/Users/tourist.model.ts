@@ -14,7 +14,8 @@ export interface ITourist extends Document {
 	occupation: string;
 	address?: string[];
 	currency?: string;
-	loyaltyPoints?: number;
+	loyaltyPoints: number;
+	level: number;
 	profile?: {
 		bio?: string;
 		location?: string;
@@ -40,6 +41,7 @@ const touristSchema = new Schema<ITourist>(
 		address: [{ type: String }],
 		currency: { type: String, default: "EGP" },
 		loyaltyPoints: { type: Number, default: 0 },
+		level: { type: Number, enum: [1, 2, 3], default: 1 },
 		profile: {
 			bio: { type: String },
 			location: { type: String },
