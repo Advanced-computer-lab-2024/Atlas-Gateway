@@ -70,6 +70,10 @@ export const getProducts = async (
 	try {
 		const usertype = req.headers.usertype as string;
 
+		if (!usertype) {
+			throw new HttpError(400, "User type is required");
+		}
+
 		const result = await productService.getProducts(usertype, req.query);
 		if (result[0].data.length === 0) {
 			return res

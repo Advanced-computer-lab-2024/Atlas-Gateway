@@ -8,6 +8,7 @@ import { TApiResponse } from "./types";
 export function apiItineraries(
 	_id: string | undefined,
 	filters: Record<string, string>,
+	userType: string,
 ) {
 	return axios<TApiResponse<TItinerary[]>>({
 		method: "GET",
@@ -15,6 +16,7 @@ export function apiItineraries(
 		headers: {
 			"Content-Type": "application/json",
 			userid: _id,
+			usertype: userType,
 		},
 		params: {
 			...filters,
@@ -26,6 +28,7 @@ export function apiItineraries(
 export function apiTourGuideItineraries(
 	_id: string | undefined,
 	filters: Record<string, string>,
+	userType: string,
 ) {
 	return axios<TApiResponse<TItinerary[]>>({
 		method: "GET",
@@ -33,6 +36,7 @@ export function apiTourGuideItineraries(
 		headers: {
 			"Content-Type": "application/json",
 			userid: _id,
+			usertype: userType,
 		},
 		params: {
 			...filters,

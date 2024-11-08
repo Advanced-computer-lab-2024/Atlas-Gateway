@@ -1,10 +1,22 @@
-import mongoose, { Types } from "mongoose";
+import mongoose, { PipelineStage, Types } from "mongoose";
 
 import HttpError from "../../Errors/HttpError";
 import { Activity, IActivity } from "../../Models/Travel/activity.model";
 import * as advertiserService from "../../Services/Users/advertiser.service";
 import AggregateBuilder from "../Operations/aggregation.service";
 import * as touristService from "../Users/tourist.service";
+
+const ActivityFiltersMap: Record<string, PipelineStage> = {
+	tourist: {
+		$match: {
+			isArchived: false, // TODO: Add appropriate filter
+			isDeleted: false,
+		},
+	},
+	default: {
+		$match: {},
+	},
+};
 
 export const createActivity = async (
 	activity: IActivity,
@@ -52,8 +64,12 @@ export const createActivity = async (
 	}
 };
 
-export const getActivities = async (query: any) => {
+export const getActivities = async (type: string, query: any) => {
+	const filter =
+		ActivityFiltersMap?.[type as keyof typeof ActivityFiltersMap] ||
+		ActivityFiltersMap.default;
 	const pipeline = [
+		filter,
 		//need to join the tags and category collections to get the name of the tags and category
 		{
 			$lookup: {

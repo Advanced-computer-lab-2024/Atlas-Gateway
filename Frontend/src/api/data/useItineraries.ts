@@ -23,8 +23,8 @@ export function useItineraries() {
 	const q = useQuery({
 		queryFn: () =>
 			user?.type === EAccountType.Guide
-				? apiTourGuideItineraries(_id, query)
-				: apiItineraries(_id, query),
+				? apiTourGuideItineraries(_id, query, EAccountType.Guide)
+				: apiItineraries(_id, query, EAccountType.Tourist),
 		queryKey: ["itinerary", _id, query],
 	});
 

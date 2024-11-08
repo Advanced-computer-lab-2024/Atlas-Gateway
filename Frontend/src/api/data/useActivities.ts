@@ -24,8 +24,8 @@ export function useActivities() {
 	const q = useQuery({
 		queryFn: () =>
 			user?.type === EAccountType.Advertiser
-				? apiAdvertisorActivities(_id, query)
-				: apiActivities(_id, query),
+				? apiAdvertisorActivities(_id, query, user?.type ?? "")
+				: apiActivities(_id, query, user?.type ?? ""),
 		queryKey: ["activities", _id, query],
 	});
 

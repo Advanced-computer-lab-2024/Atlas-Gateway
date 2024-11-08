@@ -8,6 +8,7 @@ import { TApiResponse } from "./types";
 export function apiActivities(
 	id: string | undefined,
 	filters: Record<string, string>,
+	userType: string,
 ) {
 	return axios<TApiResponse<TActivity[]>>({
 		method: "GET",
@@ -15,6 +16,7 @@ export function apiActivities(
 		headers: {
 			"Content-Type": "application/json",
 			userid: id,
+			usertype: userType,
 		},
 		params: {
 			id,
@@ -40,6 +42,7 @@ export function apiActivity(id: string | undefined) {
 export function apiAdvertisorActivities(
 	_id: string | undefined,
 	filters: Record<string, string>,
+	userType: string,
 ) {
 	return axios<TApiResponse<TActivity[]>>({
 		method: "GET",
@@ -47,6 +50,7 @@ export function apiAdvertisorActivities(
 		headers: {
 			"Content-Type": "application/json",
 			userid: _id,
+			usertype: userType,
 		},
 		params: {
 			...filters,
