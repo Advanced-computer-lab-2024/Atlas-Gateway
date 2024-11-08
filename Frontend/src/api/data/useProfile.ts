@@ -287,6 +287,8 @@ export function useRequestDeleteAdvertiserProfile(onSuccess: () => void) {
 	});
 	const { mutate } = mutation;
 	return { doRequestDeleteAdvertiserProfile: mutate, ...mutation };
+}
+
 export function useTransportationAdvertisers() {
 	const { user } = useLoginStore();
 	const { data, refetch } = useQuery({
@@ -403,3 +405,5 @@ export function useRequestDeleteTourGuideProfile(onSuccess: () => void) {
 	const { mutate } = mutation;
 	return { doRequestDeleteTourGuideProfile: mutate, ...mutation };
 }
+	
+	
