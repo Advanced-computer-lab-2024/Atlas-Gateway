@@ -15,10 +15,10 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useLoginStore } from "@/store/loginStore";
 
-import profile_background from "../assets/profile_background.jpg";
-import ChangePasswordSheet from "./ChangePasswordSheet";
+import profile_background from "../../assets/profile_background.jpg";
+import ChangePasswordSheet from "../ChangePasswordSheet";
+import UploadForm from "../UploadForm";
 import SellerSheet from "./SellerSheet";
-import UploadForm from "./UploadForm";
 
 const General = () => {
 	const { user } = useLoginStore();
@@ -34,9 +34,12 @@ const General = () => {
 	const { doDownload } = useDownload((response) => {
 		setProfilePic(response.data);
 	});
+
 	useEffect(() => {
-		if (data?.imagePath) doDownload(data?.imagePath);
-	}, [data?.imagePath]);
+		if (data?.imagePath) {
+			doDownload(data?.imagePath);
+		}
+	}, [data?.imagePath, doDownload]);
 	//May needed later:
 
 	// // Function to truncate description for display
@@ -184,7 +187,9 @@ const General = () => {
 				setIsDrawerOpen={setIsDrawerOpen4}
 				onUploadSuccess={() => {
 					refetch();
-					if (data?.imagePath) doDownload(data?.imagePath);
+					if (data?.imagePath) {
+						doDownload(data?.imagePath);
+					}
 				}}
 			/>
 			<UploadForm

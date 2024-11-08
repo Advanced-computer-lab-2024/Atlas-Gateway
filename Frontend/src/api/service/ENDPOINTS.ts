@@ -94,9 +94,9 @@ const ENDPOINTS = {
 	complaint: {
 		list: "api/complaint/list",
 		show: (id: string) => `api/complaint/show/${id}`,
+		listProfile: "api/complaint/list-profile",
 		create: "api/complaint/create",
-		updateByAdmin: (id: string) => `api/complaint/updatebyadmin/${id}`,
-		updateByTourist: (id: string) => `api/complaint/updatebytourist/${id}`,
+		update: (id: string) => `api/complaint/update/${id}`,
 	},
 };
 

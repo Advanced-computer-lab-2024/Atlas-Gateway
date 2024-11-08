@@ -1,10 +1,10 @@
 import { useLoginStore } from "@/store/loginStore";
 import { EAccountType } from "@/types/enums";
 
-import AdvertiserProfile from "./AdvertiserProfile";
-import SellerProfile from "./SellerProfile";
-import TourGuideProfile from "./TourGuideProfile";
-import TouristProfile from "./TouristProfile";
+import AdvertiserProfile from "./Adveritser/AdvertiserProfile";
+import SellerProfile from "./Seller/SellerProfile";
+import TourGuideProfile from "./TourGuide/TourGuideProfile";
+import TouristProfile from "./Tourist/TouristProfile";
 
 export default function Profile() {
 	const { user } = useLoginStore();

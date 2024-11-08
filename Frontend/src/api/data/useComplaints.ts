@@ -5,9 +5,10 @@ import { useLoginStore } from "@/store/loginStore";
 import { TComplaint } from "@/types/global";
 
 import {
+	apiAddComplaint,
 	apiComplaint,
 	apiComplaints,
-	apiComplaintsUpdateByAdmin,
+	apiUpdateComplaint,
 } from "../service/complaints";
 import { useQueryString } from "./useQueryString";
 
@@ -24,6 +25,33 @@ export function useComplaints() {
 	return { data: data?.data, refetch };
 }
 
+export function useProfileComplaints() {
+	const { user } = useLoginStore();
+	const { _id } = user || {};
+	const [query] = useQueryString();
+
+	const { data, refetch } = useQuery({
+		queryFn: () => apiComplaints(_id, query),
+		queryKey: ["profile-complaints", _id, query],
+	});
+
+	return { data: data?.data, refetch };
+}
+
+export function useAddComplaint(onSuccess: () => void) {
+	const { user } = useLoginStore();
+	const { _id } = user || { _id: "" };
+
+	const mutation = useMutation({
+		mutationFn: (data: TComplaint) => apiAddComplaint(_id, data),
+		onSuccess: onSuccess,
+	});
+
+	const { mutate } = mutation;
+
+	return { doAddComplaint: mutate, ...mutation };
+}
+
 export function useComplaint() {
 	const { id } = useParams<{
 		id: string;
@@ -37,14 +65,14 @@ export function useComplaint() {
 	return { data: data?.data, refetch };
 }
 
-export function useComplaintsUpdateByAdmin(onSuccess: () => void) {
+export function useUpdateComplaint(onSuccess: () => void) {
 	const { user } = useLoginStore();
 	const { id } = useParams<{ id: string }>();
 
 	const mutation = useMutation({
 		mutationFn: (data: Partial<TComplaint>) => {
 			const userid = user?._id;
-			return apiComplaintsUpdateByAdmin({ _id: id, ...data }, userid!);
+			return apiUpdateComplaint({ _id: id, ...data }, userid!);
 		},
 		onSuccess: onSuccess,
 	});

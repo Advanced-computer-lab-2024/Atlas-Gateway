@@ -149,6 +149,7 @@ export interface TComplaint {
 	body: string;
 	status: string;
 	createdBy: TUser;
+	date: string;
 	reply: string;
 	replyedBy: TUser;
 	createdAt: string;

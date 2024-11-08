@@ -5,7 +5,11 @@ import { Complaint } from "../../Models/Interactions/complaint.model";
 import { filterByComplaintStatus } from "../../Services/Operations/Filter/filterBuilder.service";
 
 //Creates a Complaint --Tourist Only
-export const createComplaint = async (req: Request, res: Response) => {
+export const createComplaint = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const { userid } = req.headers;
 		// TODO :: title, body are required fields, check if they are present
@@ -17,7 +21,7 @@ export const createComplaint = async (req: Request, res: Response) => {
 		});
 		res.status(201).json(newComplaint);
 	} catch (error) {
-		res.status(500).json({ message: "Internal Server Error" });
+		next(error);
 	}
 };
 
@@ -53,14 +57,18 @@ export const getAllComplaints = async (
 };
 
 //Reterive all Complaints by Tourist --Used by Tourist --list
-export const getAllComplaintsByTourist = async (
+export const getComplaintsByCreator = async (
 	req: Request,
 	res: Response,
 	next: NextFunction,
 ) => {
 	try {
 		const { userid } = req.headers;
-		const complaints = await Complaint.find({ createdBy: userid });
+
+		const complaints = await Complaint.find({ createdBy: userid })
+			.populate("createdBy")
+			.sort({ createdAt: 1 });
+
 		res.status(200).json(complaints);
 	} catch (error) {
 		next(error);
@@ -68,11 +76,14 @@ export const getAllComplaintsByTourist = async (
 };
 
 //Retrieve a Complaint by ID --Used by Admin --form
-export const getComplaintById = async (req: Request, res: Response) => {
+export const getComplaintById = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const { id } = req.params;
-		const complaintData = await Complaint
-			.findById(id)
+		const complaintData = await Complaint.findById(id)
 			.populate("createdBy")
 			.exec();
 		if (!complaintData) {
@@ -80,47 +91,26 @@ export const getComplaintById = async (req: Request, res: Response) => {
 		}
 		res.status(200).json(complaintData);
 	} catch (error) {
-		res.status(500).json({ message: "Internal Server Error" });
+		next(error);
 	}
 };
 
-export const updateComplaintByAdmin = async (req: Request, res: Response) => {
-	try {
-		const { userid } = req.headers;
-		const { id } = req.params;
-		const { status, reply } = req.body;
-		// Log incoming data
-
-		const updatedComplaint = await Complaint.findByIdAndUpdate(
-			id,
-			{ status, reply, replyedBy: userid },
-			{ new: true },
-		);
-
-		if (!updatedComplaint) {
-			return res.status(404).json({ message: "Complaint not found" });
-		}
-		console.log(updatedComplaint);
-		res.status(200).json(updatedComplaint);
-	} catch (error) {
-		res.status(500).json({ message: "Internal Server Error" });
-	}
-};
-
-//Update a Complaint --Used by Tourist --Tourist Reply Changed
-export const updateComplaintByTourist = async (
+export const updateComplaint = async (
 	req: Request,
 	res: Response,
 	next: NextFunction,
 ) => {
 	try {
 		const { id } = req.params;
-		const { reply } = req.body;
-		const updatedComplaint = await Complaint.findByIdAndUpdate(
-			id,
-			{ reply },
-			{ new: true },
-		);
+		const { userid } = req.headers;
+
+		const data = req?.body?.reply
+			? { ...req.body, replyedBy: userid }
+			: req.body;
+
+		const updatedComplaint = await Complaint.findByIdAndUpdate(id, data, {
+			new: true,
+		});
 		if (!updatedComplaint) {
 			return res.status(404).json({ message: "Complaint not found" });
 		}
@@ -131,7 +121,11 @@ export const updateComplaintByTourist = async (
 };
 
 //Delete a Complaint --Used by Admin --Delete
-export const deleteComplaint = async (req: Request, res: Response) => {
+export const deleteComplaint = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const { id } = req.params;
 		const complaintData = await Complaint.findByIdAndDelete(id);
@@ -140,6 +134,6 @@ export const deleteComplaint = async (req: Request, res: Response) => {
 		}
 		res.status(200).json({ message: "Complaint deleted successfully" });
 	} catch (error) {
-		res.status(500).json({ message: "Internal Server Error" });
+		next(error);
 	}
 };

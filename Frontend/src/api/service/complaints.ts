@@ -24,6 +24,26 @@ export function apiComplaints(
 	});
 }
 
+export function apiProfileComplaints(
+	_id: string | undefined,
+	filters: Record<string, string>,
+) {
+	return axios<TComplaint[]>({
+		method: "GET",
+		url: ENDPOINTS.complaint.listProfile,
+		headers: {
+			"Content-Type": "application/json",
+			userid: _id,
+		},
+		params: {
+			_id,
+			limit: 12,
+			...filters,
+		},
+		baseURL: "http://localhost:5000",
+	});
+}
+
 export function apiComplaint(id: string | undefined) {
 	return axios<TComplaint>({
 		method: "GET",
@@ -35,13 +55,10 @@ export function apiComplaint(id: string | undefined) {
 	});
 }
 
-export function apiComplaintsUpdateByAdmin(
-	payload: Partial<TComplaint>,
-	_id: string,
-) {
+export function apiUpdateComplaint(payload: Partial<TComplaint>, _id: string) {
 	return axios({
 		method: "PUT",
-		url: ENDPOINTS.complaint.updateByAdmin(payload._id ?? ""),
+		url: ENDPOINTS.complaint.update(payload._id ?? ""),
 		headers: {
 			"Content-Type": "application/json",
 			userid: _id,
@@ -51,12 +68,13 @@ export function apiComplaintsUpdateByAdmin(
 	});
 }
 
-export function apiComplaintsCreate(data: TComplaint) {
+export function apiAddComplaint(_id: string, data: TComplaint) {
 	return axios({
 		method: "POST",
 		url: ENDPOINTS.complaint.create,
 		headers: {
 			"Content-Type": "application/json",
+			userid: _id,
 		},
 		baseURL: "http://localhost:5000",
 		data: data,

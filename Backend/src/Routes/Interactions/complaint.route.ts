@@ -6,10 +6,11 @@ const complaintRouter = Router();
 
 complaintRouter.post("/create", ComplaintController.createComplaint);
 complaintRouter.get("/list", ComplaintController.getAllComplaints);
-complaintRouter.get("/show/:id", ComplaintController.getComplaintById);
-complaintRouter.put(
-	"/updatebyadmin/:id",
-	ComplaintController.updateComplaintByAdmin,
+complaintRouter.get(
+	"/list-profile",
+	ComplaintController.getComplaintsByCreator,
 );
+complaintRouter.get("/show/:id", ComplaintController.getComplaintById);
+complaintRouter.put("/update/:id", ComplaintController.updateComplaint);
 
 export default complaintRouter;

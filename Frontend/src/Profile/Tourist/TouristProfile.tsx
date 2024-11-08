@@ -11,11 +11,13 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Flex } from "@/components/ui/flex";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import profile_background from "../assets/profile_background.jpg";
-import ChangePasswordSheet from "./ChangePasswordSheet";
+import profile_background from "../../assets/profile_background.jpg";
+import ChangePasswordSheet from "../ChangePasswordSheet";
 import TouristSheet from "./TouristSheet";
+import Complaints from "./tabs/Complaints";
 
 export default function TouristProfile() {
 	const { data } = useTouristProfile();
@@ -48,14 +50,14 @@ export default function TouristProfile() {
 				</div>
 			</div>
 
-			<div className="flex justify-between ml-96 mt-8 pr-10">
+			<div className="flex justify-between ml-96 mt-2 pr-10">
 				<div>
-					<h1 className="text-xl">
-						{data?.name || "Name not found"}
-					</h1>
-					<h2 className="text-2xl">
-						#{data?.username || "username not found"}
-					</h2>
+					{data?.name && (
+						<h1 className="text-xl">
+							{data?.name || "Name not found"}
+						</h1>
+					)}
+					<h2 className="text-2xl">{data?.username}</h2>
 					<div className="flex gap-7">
 						<h2 className="text-2xl">
 							{data?.walletBalance} {data?.currency}
@@ -66,7 +68,7 @@ export default function TouristProfile() {
 						</h2>
 					</div>
 				</div>
-				<div className="mr-7">
+				<Flex className="mr-7" gap="2" align="center">
 					<TouristSheet />
 					<DropdownMenu modal={false}>
 						<DropdownMenuTrigger>
@@ -93,15 +95,15 @@ export default function TouristProfile() {
 							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
-				</div>
+				</Flex>
 			</div>
-
 			<div className="flex ml-10 mr-10 mt-10">
 				<Tabs defaultValue="account" className="w-full">
-					<TabsList className="grid w-full grid-cols-3">
+					<TabsList className="grid w-full grid-cols-4">
 						<TabsTrigger value="account">Account</TabsTrigger>
 						<TabsTrigger value="upcoming">Upcoming</TabsTrigger>
 						<TabsTrigger value="history">History</TabsTrigger>
+						<TabsTrigger value="complains">Complaints</TabsTrigger>
 					</TabsList>
 					<TabsContent
 						className="flex justify-between items-center"
@@ -119,8 +121,11 @@ export default function TouristProfile() {
 							</h3>
 						</div>
 					</TabsContent>
-					<TabsContent value="Upcoming"></TabsContent>
-					<TabsContent value="History"></TabsContent>
+					<TabsContent value="upcoming"></TabsContent>
+					<TabsContent value="history"></TabsContent>
+					<TabsContent value="complains">
+						<Complaints />
+					</TabsContent>
 				</Tabs>
 			</div>
 			<ChangePasswordSheet

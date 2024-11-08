@@ -1,4 +1,5 @@
 import { formatDate } from "date-fns";
+import { capitalize } from "lodash";
 import { RotateCw } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -24,7 +25,7 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 
-const Complaint = () => {
+const Complaints = () => {
 	const { data, refetch } = useComplaints();
 
 	const navigate = useNavigate();
@@ -131,7 +132,9 @@ const Complaint = () => {
 									"dd/MM/yyyy HH:mm:ss a",
 								)}
 							</TableCell>
-							<TableCell>{complaint.status}</TableCell>
+							<TableCell>
+								{capitalize(complaint.status)}
+							</TableCell>
 						</TableRow>
 					))}
 				</TableBody>
@@ -139,4 +142,4 @@ const Complaint = () => {
 		</div>
 	);
 };
-export default Complaint;
+export default Complaints;
