@@ -6,6 +6,7 @@ import {
 	TSeller,
 	TTourGuide,
 	TTourist,
+	TTransportationAdvetisor,
 	TUser,
 } from "@/types/global";
 
@@ -22,11 +23,21 @@ export type TAdminResponse = TAdmin & {
 	_id: string;
 };
 
+
+export type TGovernorProfileResponse = TGovernor & {
+	_id: string 
+};
+
 export type TGovernorResponse = TGovernor & {
 	_id: string;
 };
 
 export type TAdvertiserProfileResponse = TAdvetisor & {
+	_id: string;
+	isVerified?: boolean;
+};
+
+export type TTransportationAdvertiserProfileResponse = TTransportationAdvetisor & {
 	_id: string;
 	isVerified?: boolean;
 };

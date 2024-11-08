@@ -39,6 +39,8 @@ const ENDPOINTS = {
 	governor: {
 		list: "api/governor/list",
 		create: "api/governor/create",
+		showGoverner: (id: string) => `api/governor/showGoverner/${id}`,
+		update: (id: string) => `api/governor/update/${id}`,
 		delete: (id: string) => `api/governor/delete/${id}`,
 	},
 	tourist: {
@@ -68,6 +70,13 @@ const ENDPOINTS = {
 		update: (id: string) => `api/advertiser/update/${id}`,
 		delete: (id: string) => `api/advertiser/delete/${id}`,
 		requestDelete: (id: string) => `api/advertiser/requestDelete/${id}`,
+	},
+	transportation_advertiser: {
+		list: "api/transportation_advertiser/list",
+		show: (id: string) => `api/transportation_advertiser/show/${id}`,
+		update: (id: string) => `api/transportation_advertiser/update/${id}`,
+		delete: (id: string) =>
+			`api/api/transportation_advertiser/delete/${id}`,
 	},
 	category: {
 		list: "api/category/list",

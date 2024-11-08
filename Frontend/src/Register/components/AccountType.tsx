@@ -1,4 +1,4 @@
-import { Binoculars, HandCoins, Map, Megaphone } from "lucide-react";
+import { Binoculars, Bus, HandCoins, Map, Megaphone } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import { Link } from "react-router-dom";
 
@@ -17,6 +17,11 @@ const accountTypes = [
 		label: "Advertiser",
 		value: EAccountType.Advertiser,
 		icon: <Megaphone />,
+	},
+	{
+		label: "Transportation Advertiser",
+		value: EAccountType.TransportationAdvertiser,
+		icon: <Bus />,
 	},
 ];
 

@@ -5,6 +5,7 @@ import { createGovernor } from "../../Services/Users/governor.service";
 import { createSeller } from "../../Services/Users/seller.service";
 import { createTourGuide } from "../../Services/Users/tourGuide.service";
 import { createTourist } from "../../Services/Users/tourist.service";
+import { createTransportationAdvertiser } from "../../Services/Users/transportation_advertiser.service";
 
 export const register = async (
 	req: Request,
@@ -57,6 +58,13 @@ export const register = async (
 				break;
 			case "advertiser":
 				user = await createAdvertiser(username, email, password);
+				break;
+			case "transportation_advertiser":
+				user = await createTransportationAdvertiser(
+					username,
+					email,
+					password,
+				);
 				break;
 			default:
 				user = await createTourist(

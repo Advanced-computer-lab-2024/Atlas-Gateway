@@ -3,10 +3,12 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useLoginStore } from "@/store/loginStore";
 import {
 	TAdvetisor,
+	TGovernor,
 	TPassword,
 	TSeller,
 	TTourGuide,
 	TTourist,
+	TTransportationAdvetisor,
 } from "@/types/global";
 
 import {
@@ -14,10 +16,13 @@ import {
 	apiAdvertisers,
 	apiChangePassword,
 	apiDeleteAdvertiserProfile,
+	apiDeleteGovernor,
 	apiDeleteSeller,
 	apiDeleteTourGuideProfile,
 	apiDeleteTouristProfile,
+	apiDeleteTransportationAdvertiserProfile,
 	apiEditAdvertiserProfile,
+	apiEditGovernorProfile,
 	apiEditSellerProfile,
 	apiEditTourGuideProfile,
 	apiEditTouristProfile,
@@ -25,12 +30,16 @@ import {
 	apiRequestDeleteSellerProfile,
 	apiRequestDeleteTourGuideProfile,
 	apiRequestDeleteTouristProfile,
+	apiEditTransportationAdvertiserProfile,
+	apiGovernorProfile,
 	apiSellerProfile,
 	apiSellers,
 	apiTourGuideProfile,
 	apiTourGuides,
 	apiTouristProfile,
 	apiTourists,
+	apiTransportationAdvertiserProfile,
+	apiTransportationAdvertisers,
 } from "../service/profile";
 
 export function useTourists() {
@@ -137,7 +146,6 @@ export function useSellerProfile(sellerId?: string) {
 
 	return { data: data?.data, refetch };
 }
-
 export function useUpdateSellerProfile(onSuccess: () => void) {
 	const { user } = useLoginStore();
 
@@ -155,7 +163,6 @@ export function useUpdateSellerProfile(onSuccess: () => void) {
 
 	return { doEditSellerProfile: mutate, ...mutation };
 }
-
 export function useDeleteSeller(onSuccess: () => void) {
 	const mutation = useMutation({
 		mutationFn: (_id: string) => apiDeleteSeller(_id),
@@ -173,6 +180,51 @@ export function useRequestDeleteSellerProfile(onSuccess: () => void) {
 	const { mutate } = mutation;
 	return { doRequestDeleteSellerProfile: mutate, ...mutation };
 }
+
+export function useGovernorProfile() {
+	const { user } = useLoginStore();
+
+	const id = user?._id;
+
+	const { data, refetch } = useQuery({
+		queryFn: () => {
+			if (!id) {
+				throw new Error("User ID is undefined");
+			}
+			return apiGovernorProfile(id);
+		},
+		queryKey: ["profile", id],
+	});
+
+	return { data: data?.data, refetch };
+}
+
+export function useUpdateGovernorProfile(onSuccess: () => void) {
+	const { user } = useLoginStore();
+
+	const mutation = useMutation({
+		mutationFn: (data: Partial<TGovernor>) => {
+			if (!user?._id) {
+				throw new Error("User ID is undefined");
+			}
+			return apiEditGovernorProfile(user?._id, data);
+		},
+		onSuccess,
+	});
+
+	const { mutate } = mutation;
+
+	return { doEditGovernorProfile: mutate, ...mutation };
+}
+export function useDeleteGovernor(onSuccess: () => void) {
+	const mutation = useMutation({
+		mutationFn: (_id: string) => apiDeleteGovernor(_id),
+		onSuccess,
+	});
+	const { mutate } = mutation;
+	return { doDeleteGoverner: mutate, ...mutation };
+}
+
 
 export function useAdvertisers() {
 	const { user } = useLoginStore();
@@ -237,6 +289,60 @@ export function useRequestDeleteAdvertiserProfile(onSuccess: () => void) {
 	return { doRequestDeleteAdvertiserProfile: mutate, ...mutation };
 }
 
+export function useTransportationAdvertisers() {
+	const { user } = useLoginStore();
+	const { data, refetch } = useQuery({
+		queryFn: () => apiTransportationAdvertisers(),
+		queryKey: ["advertisers", user?._id],
+	});
+	return { data: data?.data, refetch };
+}
+
+export function useTransportationAdvertiserProfile() {
+	const { user } = useLoginStore();
+
+	const id = user?._id;
+
+	const { data, refetch } = useQuery({
+		queryFn: () => {
+			if (!id) {
+				throw new Error("User ID is undefined");
+			}
+			return apiTransportationAdvertiserProfile(id);
+		},
+		queryKey: ["profile", id],
+	});
+
+	return { data: data?.data, refetch };
+}
+
+export function useUpdateTransportationAdvertiserProfile(onSuccess: () => void) {
+	const { user } = useLoginStore();
+
+	const mutation = useMutation({
+		mutationFn: (data: Partial<TTransportationAdvetisor>) => {
+			if (!user?._id) {
+				throw new Error("User ID is undefined");
+			}
+			return apiEditTransportationAdvertiserProfile(user?._id, data);
+		},
+		onSuccess,
+	});
+
+	const { mutate } = mutation;
+
+	return { doEditTransportationAdvertiserProfile: mutate, ...mutation };
+}
+
+export function useDeleteTransportationAdvertiserProfile(onSuccess: () => void) {
+	const mutation = useMutation({
+		mutationFn: (_id: string) => apiDeleteTransportationAdvertiserProfile(_id),
+		onSuccess,
+	});
+	const { mutate } = mutation;
+	return { doDeleteTransportationAdvertiserProfile: mutate, ...mutation };
+}
+
 export function useTourGuides() {
 	const { user } = useLoginStore();
 	const { data, refetch } = useQuery({
@@ -299,3 +405,5 @@ export function useRequestDeleteTourGuideProfile(onSuccess: () => void) {
 	const { mutate } = mutation;
 	return { doRequestDeleteTourGuideProfile: mutate, ...mutation };
 }
+	
+	

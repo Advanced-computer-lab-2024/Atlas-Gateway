@@ -1,6 +1,7 @@
 import { Currency } from "./consts";
 import { EAccountType } from "./enums";
 
+
 export type TUser = {
 	_id: string;
 	username: string;
@@ -81,6 +82,8 @@ export type TActivity = {
 	avgRating: number;
 };
 
+
+
 export interface TAdmin extends TUser {
 	email: string;
 	password: string;
@@ -110,6 +113,17 @@ export interface TSeller extends TUser {
 }
 
 export interface TAdvetisor extends TUser {
+	email: string;
+	hotline: number;
+	website: string;
+	password: string;
+	description: string;
+	idPath: string;
+	taxCardPath: string;
+	imagePath: string;
+}
+
+export interface TTransportationAdvetisor extends TUser {
 	email: string;
 	hotline: number;
 	website: string;

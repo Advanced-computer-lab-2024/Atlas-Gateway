@@ -22,21 +22,23 @@ export const createTransportation = async (
 	next: NextFunction,
 ) => {
 	try {
-		const advertiserId = req.headers.userid;
+		const transportation_advertiserId = req.headers.userid;
 
-		if (!advertiserId) {
+		if (!transportation_advertiserId) {
 			return res
 				.status(400)
-				.json({ message: "Advertiser ID is required" });
+				.json({ message: "Transportation Advertiser ID is required" });
 		}
 
-		if (!Types.ObjectId.isValid(advertiserId.toString())) {
+		if (!Types.ObjectId.isValid(transportation_advertiserId.toString())) {
 			return res.status(400).json({ message: "Invalid Advertiser ID" });
 		}
 
 		const transportationData = new Transportation({
 			...req.body,
-			createdBy: new Types.ObjectId(advertiserId.toString()),
+			createdBy: new Types.ObjectId(
+				transportation_advertiserId.toString(),
+			),
 		});
 
 		await transportationData.save();
@@ -73,12 +75,14 @@ export const getTransportationByUserId = async (
 	const userId = req.params.userId;
 	try {
 		if (!Types.ObjectId.isValid(userId)) {
-			return res.status(400).json({ message: "Invalid Advertiser ID" });
+			return res
+				.status(400)
+				.json({ message: "Invalid Transportation Advertiser ID" });
 		}
 
-		const transportation = await Transportation.find({
-			createdBy: userId,
-		}).populate("createdBy");
+		const transportation = await Transportation.find({ createdBy: userId })
+			.populate("createdBy")
+			.populate("transportation_advertisers.transportation_advertiser");
 
 		return res.status(200).json(transportation);
 	} catch (error) {
@@ -88,9 +92,10 @@ export const getTransportationByUserId = async (
 
 export const getTransportations = async (req: Request, res: Response) => {
 	try {
-		const transportations = await Transportation.find();
-		//.populate("createdBy");
-		res.status(200).send(transportations);
+		const transportation = await Transportation.find()
+			.populate("createdBy")
+			.populate("transportation_advertisers.transportation_advertiser");
+		res.status(200).send(transportation);
 	} catch (error) {
 		res.status(500).send("Error getting Transportation");
 	}
@@ -120,7 +125,7 @@ export const updateTransportationById = async (req: Request, res: Response) => {
 	}
 };
 
-export const deleteTransportationById = async (req: Request, res: Response) => {
+export const deleteTransportation = async (req: Request, res: Response) => {
 	try {
 		const { id } = req.params;
 

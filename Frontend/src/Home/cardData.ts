@@ -51,4 +51,5 @@ export const cardsMap: Record<EAccountType, TCard[]> = {
 	],
 	[EAccountType.TourismGovernor]: [placesCard],
 	[EAccountType.Guest]: [placesCard, activitiesCard, itinerariesCard],
+	[EAccountType.TransportationAdvertiser]: [productsCard],
 };
