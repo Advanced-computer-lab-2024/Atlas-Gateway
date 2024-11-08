@@ -2,10 +2,7 @@ import { formatDate } from "date-fns";
 import { capitalize } from "lodash";
 import { useState } from "react";
 
-import {
-	useComplaint,
-	useComplaintsUpdateByAdmin,
-} from "@/api/data/useComplaints";
+import { useComplaint, useUpdateComplaint } from "@/api/data/useComplaints";
 import BackButton from "@/components/ui/BackButton";
 import Label from "@/components/ui/Label";
 import { Button } from "@/components/ui/button";
@@ -19,7 +16,7 @@ export default function ComplaintDetails() {
 	const { title, body, createdAt, updatedAt, status, reply, createdBy } =
 		data || {};
 
-	const { doUpdateComplaintByAdmin } = useComplaintsUpdateByAdmin(refetch);
+	const { doUpdateComplaintByAdmin } = useUpdateComplaint(refetch);
 
 	const [replyInput, setReplyInput] = useState(reply);
 

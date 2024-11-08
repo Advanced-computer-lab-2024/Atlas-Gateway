@@ -19,7 +19,7 @@ import Tourists from "./Admin/Accounts/Tourist";
 import Category from "./Admin/Activity/Category";
 import Tags from "./Admin/Activity/Tags";
 import AdminLayout from "./Admin/AdminLayout";
-import Complaint from "./Admin/Complaint/Complaint";
+import Complaints from "./Admin/Complaint/Complaints";
 import ComplaintDetails from "./Admin/Complaint/ComplaintDetails";
 import AdminProducts from "./Admin/Product/Product";
 import Home from "./Home/Home";
@@ -111,7 +111,7 @@ const router = createBrowserRouter([
 						children: [
 							{
 								index: true,
-								element: <Complaint />,
+								element: <Complaints />,
 							},
 							{
 								path: "/admin/complaints/:id",

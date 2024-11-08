@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 
 import { useDownload } from "@/api/data/useMedia";
 import {
-	useAdvertiserProfile,
-	useRequestDeleteAdvertiserProfile,
+	useRequestDeleteTourGuideProfile,
+	useTourGuideProfile,
 } from "@/api/data/useProfile";
 import {
 	DropdownMenu,
@@ -15,27 +15,30 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useLoginStore } from "@/store/loginStore";
 
-import profile_background from "../assets/profile_background.jpg";
-import AdvertiserSheet from "./AdvertiserSheet";
-import ChangePasswordSheet from "./ChangePasswordSheet";
-import UploadForm from "./UploadForm";
+import profile_background from "../../assets/profile_background.jpg";
+import ChangePasswordSheet from "../ChangePasswordSheet";
+import UploadForm from "../UploadForm";
+import TourGuideSheet from "./TourGuideSheet";
 
-const General = () => {
+export default function TourGuideProfile() {
 	const { user } = useLoginStore();
-	const { data, refetch } = useAdvertiserProfile();
+	const { data, refetch } = useTourGuideProfile();
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 	const [isDrawerOpen2, setIsDrawerOpen2] = useState(false);
 	const [isDrawerOpen3, setIsDrawerOpen3] = useState(false);
 	const [isDrawerOpen4, setIsDrawerOpen4] = useState(false);
 	const [profilePic, setProfilePic] = useState("");
+	const { doRequestDeleteTourGuideProfile } =
+		useRequestDeleteTourGuideProfile(() => {});
 	const { doDownload } = useDownload((response) => {
 		setProfilePic(response.data);
 	});
-	const { doRequestDeleteAdvertiserProfile } =
-		useRequestDeleteAdvertiserProfile(() => {});
 	useEffect(() => {
-		if (data?.imagePath) doDownload(data?.imagePath);
-	}, [data?.imagePath]);
+		if (data?.imagePath) {
+			doDownload(data?.imagePath);
+		}
+	}, [data?.imagePath, doDownload]);
+
 	return (
 		<div>
 			<div className="relative w-full">
@@ -79,17 +82,17 @@ const General = () => {
 
 			<div className="flex justify-between ml-96 mt-8 pr-10">
 				<div>
-					<h1 className="text-xl">
+					<h1 className="text-2xl">
 						{data?.name || "Name not found"}
 					</h1>
-					<h2 className="text-2xl">
+					<h2 className="text-xl">
 						#{data?.username || "username not found"}
 					</h2>
 				</div>
 				<div className="border-solid border-2 border-[rgb(44,44,44)] flex items-center mr-7 p-2 h-10">
 					{data?.isVerified && (
 						<div className="p-1">
-							<AdvertiserSheet />
+							<TourGuideSheet />
 						</div>
 					)}
 					<DropdownMenu modal={false}>
@@ -119,13 +122,13 @@ const General = () => {
 								}}
 								className="cursor-pointer"
 							>
-								Upload taxation card
+								Upload certificate
 							</DropdownMenuItem>
 							<DropdownMenuItem
 								onClick={() => {
 									if (data?._id)
-										doRequestDeleteAdvertiserProfile(
-											data?._id,
+										doRequestDeleteTourGuideProfile(
+											data._id,
 										);
 								}}
 								className="cursor-pointer"
@@ -139,8 +142,9 @@ const General = () => {
 
 			<div className="flex ml-10 mr-10 mt-10">
 				<Tabs defaultValue="account" className="w-full">
-					<TabsList className="grid w-full grid-cols-3">
+					<TabsList className="grid w-full grid-cols-4">
 						<TabsTrigger value="account">Account</TabsTrigger>
+						<TabsTrigger value="password">Password</TabsTrigger>
 						<TabsTrigger value="upcoming">Upcoming</TabsTrigger>
 						<TabsTrigger value="history">History</TabsTrigger>
 					</TabsList>
@@ -153,14 +157,22 @@ const General = () => {
 								{data?.email || "Email not found"}
 							</h2>
 							<h3 className="text-xl">
-								Hotline: {data?.hotline || "hotline not found"}
+								mobile: {data?.mobile || "mobile here"}
 							</h3>
 							<h3 className="text-xl">
-								Company Profile:{" "}
+								experience:{" "}
+								{data?.experience || "experience here"}
+							</h3>
+							<h3 className="text-xl">
+								Company description:{" "}
 								{data?.description || "Description here"}
+							</h3>
+							<h3 className="text-xl">
+								prevWork: {data?.prevWork || "prevWork here"}
 							</h3>
 						</div>
 					</TabsContent>
+					<TabsContent value="password"></TabsContent>
 					<TabsContent value="Upcoming"></TabsContent>
 					<TabsContent value="History"></TabsContent>
 				</Tabs>
@@ -172,17 +184,6 @@ const General = () => {
 			<UploadForm
 				userType={user?.type}
 				userId={user?._id}
-				fileType={"image"}
-				isDrawerOpen={isDrawerOpen4}
-				setIsDrawerOpen={setIsDrawerOpen4}
-				onUploadSuccess={() => {
-					refetch();
-					if (data?.imagePath) doDownload(data?.imagePath);
-				}}
-			/>
-			<UploadForm
-				userType={user?.type}
-				userId={user?._id}
 				fileType={"id"}
 				isDrawerOpen={isDrawerOpen2}
 				setIsDrawerOpen={setIsDrawerOpen2}
@@ -190,12 +191,23 @@ const General = () => {
 			<UploadForm
 				userType={user?.type}
 				userId={user?._id}
-				fileType={"taxCard"}
+				fileType={"certificate"}
 				isDrawerOpen={isDrawerOpen3}
 				setIsDrawerOpen={setIsDrawerOpen3}
 			/>
+			<UploadForm
+				userType={user?.type}
+				userId={user?._id}
+				fileType={"image"}
+				isDrawerOpen={isDrawerOpen4}
+				setIsDrawerOpen={setIsDrawerOpen4}
+				onUploadSuccess={() => {
+					refetch();
+					if (data?.imagePath) {
+						doDownload(data?.imagePath);
+					}
+				}}
+			/>
 		</div>
 	);
-};
-
-export default General;
+}

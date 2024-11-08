@@ -4,8 +4,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import {
-	useTourGuideProfile,
-	useUpdateTourGuideProfile,
+	useAdvertiserProfile,
+	useUpdateAdvertiserProfile,
 } from "@/api/data/useProfile";
 import {
 	Form,
@@ -16,11 +16,11 @@ import {
 	FormLabel,
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
-import { TTourGuide } from "@/types/global";
+import { TAdvetisor } from "@/types/global";
 
-import Label from "../components/ui/Label";
-import { Button } from "../components/ui/button";
-import { Input } from "../components/ui/input";
+import Label from "../../components/ui/Label";
+import { Button } from "../../components/ui/button";
+import { Input } from "../../components/ui/input";
 import {
 	Sheet,
 	SheetContent,
@@ -29,7 +29,7 @@ import {
 	SheetHeader,
 	SheetTitle,
 	SheetTrigger,
-} from "../components/ui/sheet";
+} from "../../components/ui/sheet";
 
 const formSchema = z.object({
 	name: z.string().min(2, {
@@ -38,24 +38,26 @@ const formSchema = z.object({
 	email: z.string().email({
 		message: "Please enter a valid email address.",
 	}),
-	mobile: z.string().min(11, {
-		message: "Mobile number must be at least 11 characters.",
+	hotline: z.string().min(4, {
+		message: "Hotline must be at least 4 characters.",
 	}),
-	experience: z.coerce.number(),
-	prevWork: z.string().min(2, {
-		message: "Previous work must be at least 2 characters.",
+	website: z.string().url({
+		message: "Please enter a valid URL.",
+	}),
+	description: z.string().min(2, {
+		message: "Description must be at least 2 characters.",
 	}),
 });
 
-export default function TourGuideSheet() {
+export default function AdvertiserSheet() {
 	const [open, setOpen] = useState(false);
-	const { data, refetch } = useTourGuideProfile();
-
-	const form = useForm<TTourGuide>({
+	const form = useForm<TAdvetisor>({
 		resolver: zodResolver(formSchema),
 		mode: "onChange",
 	});
+
 	const { reset, getValues, formState } = form;
+	const { data, refetch } = useAdvertiserProfile();
 
 	useEffect(() => {
 		if (data) {
@@ -63,14 +65,14 @@ export default function TourGuideSheet() {
 		}
 	}, [data, reset]);
 
-	const { doEditTourGuideProfile } = useUpdateTourGuideProfile(() => {
+	const { doEditAdvertiserProfile } = useUpdateAdvertiserProfile(() => {
 		refetch();
 		setOpen(false);
 	});
 
 	const onSubmit = () => {
 		const data = getValues();
-		doEditTourGuideProfile(data);
+		doEditAdvertiserProfile(data);
 	};
 
 	return (
@@ -95,6 +97,7 @@ export default function TourGuideSheet() {
 								when you're done.
 							</SheetDescription>
 						</SheetHeader>
+
 						<FormField
 							control={form.control}
 							name="name"
@@ -113,14 +116,13 @@ export default function TourGuideSheet() {
 								</FormItem>
 							)}
 						/>
-
 						{/* Email input */}
 						<FormField
 							control={form.control}
 							name="email"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel> Email</FormLabel>
+									<FormLabel>Email</FormLabel>
 									<FormControl>
 										<Input
 											placeholder="joedoe123@gamil.com"
@@ -134,15 +136,52 @@ export default function TourGuideSheet() {
 							)}
 						/>
 
-						{/* Mobile Number*/}
+						{/* Hotline input */}
 						<FormField
 							control={form.control}
-							name="mobile"
+							name="hotline"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Mobile Number</FormLabel>
+									<FormLabel> Hotline</FormLabel>
 									<FormControl>
-										<Input id="mobile" {...field} />
+										<Input placeholder="911" {...field} />
+									</FormControl>
+									<FormDescription>
+										This is your email.
+									</FormDescription>
+								</FormItem>
+							)}
+						/>
+
+						{/* Website input */}
+						<FormField
+							control={form.control}
+							name="website"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Website</FormLabel>
+									<FormControl>
+										<Input
+											placeholder="https://example.com"
+											{...field}
+										/>
+									</FormControl>
+									<FormDescription>
+										This is your email.
+									</FormDescription>
+								</FormItem>
+							)}
+						/>
+
+						{/* Company Profile input */}
+						<FormField
+							control={form.control}
+							name="description"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Company Profile</FormLabel>
+									<FormControl>
+										<Textarea id="description" {...field} />
 									</FormControl>
 									<FormDescription>
 										This is your Description
@@ -150,50 +189,12 @@ export default function TourGuideSheet() {
 								</FormItem>
 							)}
 						/>
-						{/* Years of Experience input */}
-						<FormField
-							control={form.control}
-							name="experience"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Year Of Experience</FormLabel>
-									<FormControl>
-										<Input
-											type="number"
-											id="experience"
-											{...field}
-										/>
-									</FormControl>
-									<FormDescription>
-										Update Your Years of Experience
-									</FormDescription>
-								</FormItem>
-							)}
-						/>
 
-						{/* Description input */}
-						<FormField
-							control={form.control}
-							name="prevWork"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Previous Work Experience
-									</FormLabel>
-									<FormControl>
-										<Textarea id="prevWork" {...field} />
-									</FormControl>
-									<FormDescription>
-										Update your Previous Work Experience
-									</FormDescription>
-								</FormItem>
-							)}
-						/>
 						<SheetFooter>
 							<Button
-								type="submit"
 								disabled={!formState.isValid}
 								onClick={onSubmit}
+								type="submit"
 							>
 								Save changes
 							</Button>

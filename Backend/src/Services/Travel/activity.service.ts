@@ -207,7 +207,10 @@ export const bookActivity = async (activityId: string, touristId: string) => {
 		throw new HttpError(404, "Activity not found");
 	}
 
-	const tourist = await touristService.addBookedActivity(touristId, activityId);
+	const tourist = await touristService.addBookedActivity(
+		touristId,
+		activityId,
+	);
 
 	await activity.updateOne({
 		$push: { tourists: tourist.id },

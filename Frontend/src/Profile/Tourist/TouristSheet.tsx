@@ -4,8 +4,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import {
-	useSellerProfile,
-	useUpdateSellerProfile,
+	useTouristProfile,
+	useUpdateTouristProfile,
 } from "@/api/data/useProfile";
 import {
 	Form,
@@ -15,12 +15,19 @@ import {
 	FormItem,
 	FormLabel,
 } from "@/components/ui/form";
-import { Textarea } from "@/components/ui/textarea";
-import { TSeller } from "@/types/global";
+import { currencyOptions } from "@/types/consts";
+import { TTourist } from "@/types/global";
 
-import Label from "../components/ui/Label";
-import { Button } from "../components/ui/button";
-import { Input } from "../components/ui/input";
+import Label from "../../components/ui/Label";
+import { Button } from "../../components/ui/button";
+import { Input } from "../../components/ui/input";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "../../components/ui/select";
 import {
 	Sheet,
 	SheetContent,
@@ -29,7 +36,9 @@ import {
 	SheetHeader,
 	SheetTitle,
 	SheetTrigger,
-} from "../components/ui/sheet";
+} from "../../components/ui/sheet";
+
+// Ensure all necessary components are imported
 
 const formSchema = z.object({
 	name: z.string().min(2, {
@@ -38,19 +47,21 @@ const formSchema = z.object({
 	email: z.string().email({
 		message: "Please enter a valid email address.",
 	}),
-	description: z.string().min(2, {
-		message: "Description must be at least 2 characters.",
+	mobile: z.string().min(8, {
+		message: "Mobile number must be at least 8 characters.",
 	}),
+	currency: z.string(), // Add currency to the schema
 });
 
-export default function SellerSheet() {
+export default function TouristSheet() {
 	const [open, setOpen] = useState(false);
-	const form = useForm<TSeller>({
+	const { data, refetch } = useTouristProfile();
+	const form = useForm<TTourist>({
 		resolver: zodResolver(formSchema),
+		mode: "onChange",
 	});
 
 	const { reset, getValues, formState } = form;
-	const { data, refetch } = useSellerProfile();
 
 	useEffect(() => {
 		if (data) {
@@ -58,30 +69,28 @@ export default function SellerSheet() {
 		}
 	}, [data, reset]);
 
-	const { doEditSellerProfile } = useUpdateSellerProfile(() => {
+	const { doEditTouristProfile } = useUpdateTouristProfile(() => {
 		refetch();
 		setOpen(false);
 	});
 
 	const onSubmit = () => {
 		const data = getValues();
-		doEditSellerProfile(data);
+		doEditTouristProfile(data);
 	};
 
 	return (
 		<Sheet open={open} onOpenChange={setOpen}>
 			<SheetTrigger asChild>
-				{data?.isVerified && (
-					<Button className="align p-6 justify-center">
-						<Label.Big400>Update Profile</Label.Big400>
-					</Button>
-				)}
+				<Button className="align p-4 justify-center">
+					<Label.Mid400>Update Profile</Label.Mid400>
+				</Button>
 			</SheetTrigger>
 			<SheetContent>
 				<Form {...form}>
 					<form
-						onSubmit={form.handleSubmit(onSubmit)}
 						className="space-y-8"
+						onSubmit={form.handleSubmit(onSubmit)}
 					>
 						<SheetHeader>
 							<SheetTitle>
@@ -92,7 +101,6 @@ export default function SellerSheet() {
 								when you're done.
 							</SheetDescription>
 						</SheetHeader>
-
 						<FormField
 							control={form.control}
 							name="name"
@@ -118,7 +126,7 @@ export default function SellerSheet() {
 							name="email"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Email</FormLabel>
+									<FormLabel> Email</FormLabel>
 									<FormControl>
 										<Input
 											placeholder="joedoe123@gamil.com"
@@ -132,15 +140,15 @@ export default function SellerSheet() {
 							)}
 						/>
 
-						{/* Description input */}
+						{/* Mobile Number input */}
 						<FormField
 							control={form.control}
-							name="description"
+							name="mobile"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Description</FormLabel>
+									<FormLabel>Mobile Number</FormLabel>
 									<FormControl>
-										<Textarea id="description" {...field} />
+										<Input id="mobile" {...field} />
 									</FormControl>
 									<FormDescription>
 										This is your Description
@@ -148,11 +156,49 @@ export default function SellerSheet() {
 								</FormItem>
 							)}
 						/>
+
+						<FormField
+							control={form.control}
+							name="currency"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Currency</FormLabel>
+									<FormControl>
+										<Select
+											onValueChange={field.onChange}
+											defaultValue={field.value}
+										>
+											<SelectTrigger>
+												<SelectValue placeholder="Select currency" />
+											</SelectTrigger>
+											<SelectContent>
+												{currencyOptions.map(
+													(currency) => (
+														<SelectItem
+															key={currency.value}
+															value={
+																currency.value
+															}
+														>
+															{currency.label}
+														</SelectItem>
+													),
+												)}
+											</SelectContent>
+										</Select>
+									</FormControl>
+									<FormDescription>
+										Select your preferred currency.
+									</FormDescription>
+								</FormItem>
+							)}
+						/>
+
 						<SheetFooter>
 							<Button
-								type="submit"
 								disabled={!formState.isValid}
 								onClick={onSubmit}
+								type="submit"
 							>
 								Save changes
 							</Button>

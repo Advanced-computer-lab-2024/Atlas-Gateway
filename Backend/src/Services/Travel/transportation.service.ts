@@ -1,15 +1,19 @@
+import mongoose, { PipelineStage, Types } from "mongoose";
+
+import HttpError from "../../Errors/HttpError";
 import {
 	ITransportation,
 	Transportation,
 } from "../../Models/Travel/transportation.model";
 import { Advertiser } from "../../Models/Users/advertiser.model";
 import { Tourist } from "../../Models/Users/tourist.model";
-import mongoose, { PipelineStage, Types } from "mongoose";
-
-import HttpError from "../../Errors/HttpError";
 import AggregateBuilder from "../Operations/aggregation.service";
 import { getAdvertiserById } from "../Users/advertiser.service";
-import { addBookedTransportation, cancelTransportation, getTouristById } from "../Users/tourist.service";
+import {
+	addBookedTransportation,
+	cancelTransportation,
+	getTouristById,
+} from "../Users/tourist.service";
 
 export const createTransportation = async (
 	transportation: ITransportation,
@@ -56,8 +60,8 @@ export const getTransportationById = async (id: string) => {
 		throw new HttpError(400, "Invalid Transportation ID");
 	}
 
-	const transportation = await Transportation.findById(id)
-		.populate("createdBy");
+	const transportation =
+		await Transportation.findById(id).populate("createdBy");
 
 	if (!transportation) {
 		throw new HttpError(404, "Transportation not Found");
@@ -157,7 +161,10 @@ export const bookTransportation = async (
 			throw new HttpError(400, "Already booked this Transportation");
 		}
 
-		const booked = await addBookedTransportation(tourist.id, transportation.id);
+		const booked = await addBookedTransportation(
+			tourist.id,
+			transportation.id,
+		);
 
 		if (!booked) {
 			throw new HttpError(400, "Couldn't book Transportation");
@@ -218,7 +225,7 @@ export const cancelBookingTransportation = async (
 
 		const removed = await transportation.updateOne({
 			$pull: { tourists: touristId },
-			$inc: {numberOfBookings: -1},
+			$inc: { numberOfBookings: -1 },
 		});
 
 		if (removed.modifiedCount === 0) {

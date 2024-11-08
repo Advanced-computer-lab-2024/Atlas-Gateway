@@ -4,8 +4,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import {
-	useTouristProfile,
-	useUpdateTouristProfile,
+	useSellerProfile,
+	useUpdateSellerProfile,
 } from "@/api/data/useProfile";
 import {
 	Form,
@@ -15,19 +15,12 @@ import {
 	FormItem,
 	FormLabel,
 } from "@/components/ui/form";
-import { currencyOptions } from "@/types/consts";
-import { TTourist } from "@/types/global";
+import { Textarea } from "@/components/ui/textarea";
+import { TSeller } from "@/types/global";
 
-import Label from "../components/ui/Label";
-import { Button } from "../components/ui/button";
-import { Input } from "../components/ui/input";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "../components/ui/select";
+import Label from "../../components/ui/Label";
+import { Button } from "../../components/ui/button";
+import { Input } from "../../components/ui/input";
 import {
 	Sheet,
 	SheetContent,
@@ -36,9 +29,7 @@ import {
 	SheetHeader,
 	SheetTitle,
 	SheetTrigger,
-} from "../components/ui/sheet";
-
-// Ensure all necessary components are imported
+} from "../../components/ui/sheet";
 
 const formSchema = z.object({
 	name: z.string().min(2, {
@@ -47,21 +38,19 @@ const formSchema = z.object({
 	email: z.string().email({
 		message: "Please enter a valid email address.",
 	}),
-	mobile: z.string().min(8, {
-		message: "Mobile number must be at least 8 characters.",
+	description: z.string().min(2, {
+		message: "Description must be at least 2 characters.",
 	}),
-	currency: z.string(), // Add currency to the schema
 });
 
-export default function TouristSheet() {
+export default function SellerSheet() {
 	const [open, setOpen] = useState(false);
-	const { data, refetch } = useTouristProfile();
-	const form = useForm<TTourist>({
+	const form = useForm<TSeller>({
 		resolver: zodResolver(formSchema),
-		mode: "onChange",
 	});
 
 	const { reset, getValues, formState } = form;
+	const { data, refetch } = useSellerProfile();
 
 	useEffect(() => {
 		if (data) {
@@ -69,28 +58,30 @@ export default function TouristSheet() {
 		}
 	}, [data, reset]);
 
-	const { doEditTouristProfile } = useUpdateTouristProfile(() => {
+	const { doEditSellerProfile } = useUpdateSellerProfile(() => {
 		refetch();
 		setOpen(false);
 	});
 
 	const onSubmit = () => {
 		const data = getValues();
-		doEditTouristProfile(data);
+		doEditSellerProfile(data);
 	};
 
 	return (
 		<Sheet open={open} onOpenChange={setOpen}>
 			<SheetTrigger asChild>
-				<Button className="align p-6 justify-center">
-					<Label.Big400>Update Profile</Label.Big400>
-				</Button>
+				{data?.isVerified && (
+					<Button className="align p-6 justify-center">
+						<Label.Big400>Update Profile</Label.Big400>
+					</Button>
+				)}
 			</SheetTrigger>
 			<SheetContent>
 				<Form {...form}>
 					<form
-						className="space-y-8"
 						onSubmit={form.handleSubmit(onSubmit)}
+						className="space-y-8"
 					>
 						<SheetHeader>
 							<SheetTitle>
@@ -101,6 +92,7 @@ export default function TouristSheet() {
 								when you're done.
 							</SheetDescription>
 						</SheetHeader>
+
 						<FormField
 							control={form.control}
 							name="name"
@@ -126,7 +118,7 @@ export default function TouristSheet() {
 							name="email"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel> Email</FormLabel>
+									<FormLabel>Email</FormLabel>
 									<FormControl>
 										<Input
 											placeholder="joedoe123@gamil.com"
@@ -140,15 +132,15 @@ export default function TouristSheet() {
 							)}
 						/>
 
-						{/* Mobile Number input */}
+						{/* Description input */}
 						<FormField
 							control={form.control}
-							name="mobile"
+							name="description"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Mobile Number</FormLabel>
+									<FormLabel>Description</FormLabel>
 									<FormControl>
-										<Input id="mobile" {...field} />
+										<Textarea id="description" {...field} />
 									</FormControl>
 									<FormDescription>
 										This is your Description
@@ -156,49 +148,11 @@ export default function TouristSheet() {
 								</FormItem>
 							)}
 						/>
-
-						<FormField
-							control={form.control}
-							name="currency"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Currency</FormLabel>
-									<FormControl>
-										<Select
-											onValueChange={field.onChange}
-											defaultValue={field.value}
-										>
-											<SelectTrigger>
-												<SelectValue placeholder="Select currency" />
-											</SelectTrigger>
-											<SelectContent>
-												{currencyOptions.map(
-													(currency) => (
-														<SelectItem
-															key={currency.value}
-															value={
-																currency.value
-															}
-														>
-															{currency.label}
-														</SelectItem>
-													),
-												)}
-											</SelectContent>
-										</Select>
-									</FormControl>
-									<FormDescription>
-										Select your preferred currency.
-									</FormDescription>
-								</FormItem>
-							)}
-						/>
-
 						<SheetFooter>
 							<Button
+								type="submit"
 								disabled={!formState.isValid}
 								onClick={onSubmit}
-								type="submit"
 							>
 								Save changes
 							</Button>

@@ -2,6 +2,7 @@
 
 import { add, format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
+import { Matcher } from "react-day-picker";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -17,9 +18,11 @@ import { TimePickerDemo } from "./time-picker-demo";
 export function DateTimePicker({
 	date,
 	setDate,
+	disabled,
 }: {
 	date: Date | undefined;
 	setDate: (date: Date | undefined) => void;
+	disabled?: Matcher[];
 }) {
 	/**
 	 * carry over the current time when a user clicks a new day
@@ -60,6 +63,7 @@ export function DateTimePicker({
 					mode="single"
 					selected={date}
 					onSelect={(d) => handleSelect(d)}
+					disabled={disabled}
 					initialFocus
 				/>
 				<div className="p-3 border-t border-border">

@@ -1,15 +1,19 @@
-import { Tourist } from "../../Models/Users/tourist.model";
-import {
-	addBookedTransportation,
-    cancelTransportation,
-	getTouristById,
-} from "../../Services/Users/tourist.service";
 import { NextFunction, Request, Response } from "express";
 import mongoose, { PipelineStage, Types } from "mongoose";
 
 import { Transportation } from "../../Models/Travel/transportation.model";
+import { Tourist } from "../../Models/Users/tourist.model";
 import AggregateBuilder from "../../Services/Operations/aggregation.service";
-import { bookTransportation, cancelBookingTransportation, getTransportationById } from "../../Services/Travel/transportation.service";
+import {
+	bookTransportation,
+	cancelBookingTransportation,
+	getTransportationById,
+} from "../../Services/Travel/transportation.service";
+import {
+	addBookedTransportation,
+	cancelTransportation,
+	getTouristById,
+} from "../../Services/Users/tourist.service";
 
 //Create a new product entry
 export const createTransportation = async (
@@ -72,8 +76,9 @@ export const getTransportationByUserId = async (
 			return res.status(400).json({ message: "Invalid Advertiser ID" });
 		}
 
-		const transportation = await Transportation.find({ createdBy: userId })
-			.populate("createdBy");
+		const transportation = await Transportation.find({
+			createdBy: userId,
+		}).populate("createdBy");
 
 		return res.status(200).json(transportation);
 	} catch (error) {
@@ -179,7 +184,10 @@ export const bookTransportationById = async (req: Request, res: Response) => {
 			return res.status(404).json({ message: "Tourist not found" });
 		}
 
-		const bookingResult = await bookTransportation(transportation.id, tourist.id);
+		const bookingResult = await bookTransportation(
+			transportation.id,
+			tourist.id,
+		);
 
 		const addBookingResult = await addBookedTransportation(
 			tourist.id,
@@ -196,9 +204,7 @@ export const bookTransportationById = async (req: Request, res: Response) => {
 			.status(201)
 			.json({ message: "Transportation booked successfully" });
 	} catch (error) {
-		return res
-			.status(500)
-			.json({ error: "Error booking Transportation" });
+		return res.status(500).json({ error: "Error booking Transportation" });
 	}
 };
 
@@ -221,17 +227,13 @@ export const cancelBookingTransportationById = async (
 		}
 
 		if (!Types.ObjectId.isValid(transportationId)) {
-			res
-				.status(400)
-				.json({ error: "Invalid Transportation ID" });
+			res.status(400).json({ error: "Invalid Transportation ID" });
 		}
 
 		const transportation = await Transportation.findById(transportationId);
 
 		if (!transportation) {
-			return res
-				.status(404)
-				.json({ error: "Transportation not found" });
+			return res.status(404).json({ error: "Transportation not found" });
 		}
 
 		const tourist = await getTouristById(touristId.toString());
