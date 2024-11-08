@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { PipelineStage, Types } from "mongoose";
 
-import { complaint } from "../../Models/Interactions/complaint.model";
+import { Complaint } from "../../Models/Interactions/complaint.model";
 import { filterByComplaintStatus } from "../../Services/Operations/Filter/filterBuilder.service";
 
 //Creates a Complaint --Tourist Only
@@ -11,7 +11,7 @@ export const createComplaint = async (req: Request, res: Response) => {
 		// TODO :: title, body are required fields, check if they are present
 		// TODO :: userid is required, check if it is present
 		// TODO :: update the array of complaints in the tourist model
-		const newComplaint = await complaint.create({
+		const newComplaint = await Complaint.create({
 			...req.body,
 			createdBy: userid,
 		});
@@ -45,7 +45,7 @@ export const getAllComplaints = async (
 			},
 		];
 		pipeline.push(...filterByComplaintStatus(req.query));
-		const complaints = await complaint.aggregate(pipeline);
+		const complaints = await Complaint.aggregate(pipeline);
 		res.status(200).json(complaints);
 	} catch (error) {
 		next(error);
@@ -60,7 +60,7 @@ export const getAllComplaintsByTourist = async (
 ) => {
 	try {
 		const { userid } = req.headers;
-		const complaints = await complaint.find({ createdBy: userid });
+		const complaints = await Complaint.find({ createdBy: userid });
 		res.status(200).json(complaints);
 	} catch (error) {
 		next(error);
@@ -71,7 +71,7 @@ export const getAllComplaintsByTourist = async (
 export const getComplaintById = async (req: Request, res: Response) => {
 	try {
 		const { id } = req.params;
-		const complaintData = await complaint
+		const complaintData = await Complaint
 			.findById(id)
 			.populate("createdBy")
 			.exec();
@@ -91,7 +91,7 @@ export const updateComplaintByAdmin = async (req: Request, res: Response) => {
 		const { status, reply } = req.body;
 		// Log incoming data
 
-		const updatedComplaint = await complaint.findByIdAndUpdate(
+		const updatedComplaint = await Complaint.findByIdAndUpdate(
 			id,
 			{ status, reply, replyedBy: userid },
 			{ new: true },
@@ -116,7 +116,7 @@ export const updateComplaintByTourist = async (
 	try {
 		const { id } = req.params;
 		const { reply } = req.body;
-		const updatedComplaint = await complaint.findByIdAndUpdate(
+		const updatedComplaint = await Complaint.findByIdAndUpdate(
 			id,
 			{ reply },
 			{ new: true },
@@ -134,7 +134,7 @@ export const updateComplaintByTourist = async (
 export const deleteComplaint = async (req: Request, res: Response) => {
 	try {
 		const { id } = req.params;
-		const complaintData = await complaint.findByIdAndDelete(id);
+		const complaintData = await Complaint.findByIdAndDelete(id);
 		if (!complaintData) {
 			return res.status(404).json({ message: "Complaint not found" });
 		}

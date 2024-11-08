@@ -29,4 +29,4 @@ const complaintSchema = new Schema<IComplaint>(
 	schemaConfig,
 );
 
-export const complaint = model<IComplaint>("complaint", complaintSchema);
+export const Complaint = model<IComplaint>("complaint", complaintSchema);
