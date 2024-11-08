@@ -65,7 +65,7 @@ export const deleteTourist = async (id: string) => {
 	return tourist;
 };
 
-export const bookActivity = async (touristId: string, activityId: string) => {
+export const addBookedActivity = async (touristId: string, activityId: string) => {
 	if (!Types.ObjectId.isValid(activityId)) {
 		throw new HttpError(400, "Activity id is not valid");
 	}

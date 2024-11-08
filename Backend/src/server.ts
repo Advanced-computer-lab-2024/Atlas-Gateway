@@ -11,6 +11,7 @@ import complaintRouter from "./Routes/Interactions/complaint.route";
 import mediaRouter from "./Routes/Media/media.route";
 import productRouter from "./Routes/Purchases/product.route";
 import itineraryRouter from "./Routes/Travel/Itinerary.route";
+import transportationRouter from "./Routes/Travel/transportation.route";
 import activityRouter from "./Routes/Travel/activity.route";
 import categoryRouter from "./Routes/Travel/category.route";
 import placesRouter from "./Routes/Travel/places.route";
@@ -48,6 +49,7 @@ async function startServer() {
 	app.use("/api/tourist", touristRouter);
 	app.use("/api/register", registerRouter);
 	app.use("/api/itinerary", itineraryRouter);
+	app.use("/api/transportation", transportationRouter);
 	app.use("/api/places", placesRouter);
 	app.use("/api/login", loginRouter);
 	app.use("/api/change-password", passwordRouter);

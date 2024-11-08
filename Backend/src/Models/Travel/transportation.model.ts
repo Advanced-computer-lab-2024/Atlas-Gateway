@@ -9,7 +9,7 @@ export interface ITransportation extends Document {
 	pickUpLocation: string;
 	dropOffLocation: string;
 	dateTime: Date;
-	timeTaken: number;
+	timeTakenInMins: number;
 	numberOfBookings: number;
 	tourists: Types.ObjectId[];
 	createdBy: Types.ObjectId;
@@ -23,7 +23,7 @@ const transportationSchema = new Schema<ITransportation>(
 		pickUpLocation: { type: String, required: true },
 		dropOffLocation: { type: String, required: true },
 		dateTime: { type: Date, required: true },
-		timeTaken: { type: Number, required: true },
+		timeTakenInMins: { type: Number, required: true },
 		numberOfBookings: { type: Number, default: 0 },
 		tourists: [{ type: Schema.Types.ObjectId, ref: "Tourist" }],
 		createdBy: { type: Schema.Types.ObjectId, ref: "Advertiser" },

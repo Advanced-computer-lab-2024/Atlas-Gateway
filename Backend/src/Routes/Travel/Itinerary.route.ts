@@ -20,6 +20,6 @@ router.get("/show/:id", getItineraryById);
 router.put("/update/:id", updateItinerary);
 router.delete("/delete/:id", deleteItinerary);
 router.post("/book/:id", bookItinerary);
-router.delete("/cancelBooking/:id", cancelBookingItinerary);
+router.post("/cancelBooking/:id", cancelBookingItinerary);
 
 export default router;
