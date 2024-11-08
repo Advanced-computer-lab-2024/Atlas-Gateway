@@ -178,16 +178,13 @@ export const rateItinerary = async (req: Request, res: Response) => {
 		const currentDate = new Date();
 		let interaction;
 		let newAverage;
-		for (let i = 0; i < itineraries.length; i++) {
-			const itinerary = await Itinerary.findById(itineraries[i]);
+		if (itineraries.includes(itineraryId)) {
+			const itinerary = await Itinerary.findById(itineraryId);
 			if (!itinerary) {
-				res.status(400).send("Itinerary not found booked by tourist");
+				res.status(400).send("the itinerary passed isnt found");
 				return;
 			}
-			if (
-				itinerary.id == itineraryId &&
-				itinerary.endDateTime < currentDate
-			) {
+			if (itinerary.endDateTime < currentDate) {
 				interaction = await ItineraryRate.findOneAndUpdate(
 					{ touristId, itineraryId },
 					{ $set: { value } },
@@ -200,19 +197,51 @@ export const rateItinerary = async (req: Request, res: Response) => {
 				} else {
 					newAverage = oldAverage * (oldCount - 1) + value / oldCount;
 				}
+				await Itinerary.findByIdAndUpdate(
+					itineraryId,
+					{
+						totalNumberOfRatings: oldCount,
+						avgRating: newAverage,
+					},
+					{ new: true },
+				);
+				res.status(201).send(interaction);
 			} else {
 				res.status(400).send("Event hasnt started yet");
 			}
-			await Itinerary.findByIdAndUpdate(
-				itineraryId,
-				{
-					totalNumberOfRatings: oldCount,
-					avgRating: newAverage,
-				},
-				{ new: true },
-			);
+		} else {
+			res.status(400).send("Event isnt booked by Tourist");
+			console.log(itineraries);
+			console.log(itineraryId);
 		}
-		res.status(201).send(interaction);
+
+		// for (let i = 0; i < itineraries.length; i++) {
+		// 	const itinerary = await Itinerary.findById(itineraries[i]);
+		// 	if (!itinerary) {
+		// 		res.status(400).send("Itinerary not found booked by tourist");
+		// 		return;
+		// 	}
+		// 	if (
+		// 		itinerary.id == itineraryId &&
+		// 		itinerary.endDateTime < currentDate
+		// 	) {
+		// 		interaction = await ItineraryRate.findOneAndUpdate(
+		// 			{ touristId, itineraryId },
+		// 			{ $set: { value } },
+		// 			{ upsert: true, new: true },
+		// 		);
+		// 		console.log(interaction);
+		// 		console.log("hello");
+		// 		if (interaction.isNew) {
+		// 			newAverage =
+		// 				(oldAverage * oldCount + value) / (oldCount + 1);
+		// 			oldCount = oldCount + 1;
+		// 		} else {
+		// 			newAverage = oldAverage * (oldCount - 1) + value / oldCount;
+		// 		}
+		// 	} else {
+		// 		res.status(400).send("Event hasnt started yet");
+		// 	}
 	} catch (error) {
 		res.status(500).send(error);
 	}
