@@ -22,7 +22,7 @@ export interface ITourGuide extends Document {
 	// };
 	avgRating: number;
 	totalNumberOfRatings: number;
-	itinerary: [Types.ObjectId];
+	itinerary: Types.ObjectId[];
 	isVerified: boolean;
 	acceptedTerms: boolean;
 	isDeleted?: boolean;

@@ -159,10 +159,10 @@ export const deleteItinerary = async (id: string) => {
 			throw new HttpError(404, "Tour Guide not found");
 		}
 
-		// Remove the itinerary ID from the tour guide's itineraries array
-		// tourGuide.itinerary = tourGuide.itinerary.filter(
-		// 	(itineraryId) => !itineraryId.equals(id),
-		// );
+		//Remove the itinerary ID from the tour guide's itineraries array
+		tourGuide.itinerary = tourGuide.itinerary.filter(
+			(itineraryId) => !itineraryId.equals(id),
+		);
 		await tourGuide.updateOne({ session });
 		// Delete the itinerary
 		await itinerary.deleteOne({ session });
