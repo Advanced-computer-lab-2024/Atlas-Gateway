@@ -101,6 +101,7 @@ export interface TTourist extends TUser {
 	loyaltyPoints: number;
 	walletBalance: number;
 	level: 1 | 2 | 3;
+	purchasedProducts: string[]; // TODO: Check array name
 }
 
 export interface TSeller extends TUser {
