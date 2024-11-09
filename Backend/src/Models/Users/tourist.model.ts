@@ -25,6 +25,7 @@ export interface ITourist extends Document {
 	bookedItineraries: Types.ObjectId[];
 	bookedActivities: Types.ObjectId[];
 	bookedTransportations: Types.ObjectId[];
+	purchaseProducts: Types.ObjectId[];
 	isDeleted?: boolean;
 }
 
@@ -55,6 +56,7 @@ const touristSchema = new Schema<ITourist>(
 			{ type: Schema.Types.ObjectId, ref: "Transportation" },
 			,
 		],
+		purchaseProducts: [{ type: Schema.Types.ObjectId, ref: "Product" }],
 		isDeleted: { type: Boolean, default: false },
 	},
 	schemaConfig,
