@@ -140,7 +140,11 @@ export default function TouristInfo() {
 							>
 								<Calendar
 									mode="single"
-									selected={field.value ? new Date(field.value) : undefined}
+									selected={
+										field.value
+											? new Date(field.value)
+											: undefined
+									}
 									onSelect={field.onChange}
 									disabled={(date) =>
 										date > new Date() ||

@@ -1,3 +1,4 @@
+import { Plus } from "lucide-react";
 import { useState } from "react";
 
 import { useActivities } from "@/api/data/useActivities";
@@ -54,22 +55,18 @@ export default function Activites() {
 	const [query, setQuery] = useQueryString();
 
 	return (
-		<Flex
-			isColumn
-			gap="4"
-			className="w-full h-full px-10 py-8 overflow-y-scroll"
-		>
+		<Flex isColumn gap="4" className="w-full h-full p-4 overflow-y-scroll">
 			<Label.Big600>
 				View a list of all the activities you can experience!
 			</Label.Big600>
 			<Flex
-				justify="center"
-				isColumn
+				justify="between"
 				gap="2"
-				className="bg-surface-secondary p-2 rounded-lg"
+				className="bg-surface-secondary p-2 rounded-lg border-2 border-solid border-black"
 			>
-				<Flex justify="between">
-					<Flex gap="1" align="center">
+				<Flex gap="5" align="center">
+					<Flex gap="2" align="center">
+						<Label.Mid400>Sort:</Label.Mid400>
 						<Select
 							onValueChange={(value) => {
 								if (value === "0") {
@@ -85,7 +82,7 @@ export default function Activites() {
 								}
 							}}
 						>
-							<SelectTrigger>
+							<SelectTrigger className="bg-white">
 								<SelectValue placeholder="Sort" />
 							</SelectTrigger>
 							<SelectContent>
@@ -104,6 +101,8 @@ export default function Activites() {
 								</SelectItem>
 							</SelectContent>
 						</Select>
+					</Flex>
+					<Flex gap="2" align="center">
 						<Searchbar />
 						<Filters
 							filters={{
@@ -140,17 +139,19 @@ export default function Activites() {
 							}}
 						/>
 					</Flex>
-					{user?.type === EAccountType.Advertiser && (
-						<Button
-							variant="ghost"
-							onClick={() => {
-								setOpen(true);
-							}}
-						>
-							Add Activity
-						</Button>
-					)}
 				</Flex>
+				{user?.type !== EAccountType.Advertiser && (
+					<Button
+						variant="default"
+						onClick={() => {
+							setOpen(true);
+						}}
+						className="flex gap-2"
+					>
+						Add Activity
+						<Plus />
+					</Button>
+				)}
 			</Flex>
 			<Flex
 				className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2"

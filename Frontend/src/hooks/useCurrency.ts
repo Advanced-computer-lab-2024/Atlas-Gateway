@@ -8,8 +8,10 @@ export default function useCurrency() {
 	const convertCurrency = (amount: number = 0) => {
 		return (
 			amount *
-			(exchangeRateResponse?.conversion_rates?.[currency] ??
-				exchangeRateResponse?.conversion_rates?.EGP)
+				(exchangeRateResponse?.conversion_rates?.[currency] ??
+					exchangeRateResponse?.conversion_rates?.EGP) +
+			" " +
+			currency
 		);
 	};
 

@@ -8,7 +8,7 @@ import {
 	TSeller,
 	TTourGuide,
 	TTourist,
-	TTransportationAdvetisor,
+	TTransportationAdvertiser,
 } from "@/types/global";
 
 import {
@@ -26,12 +26,12 @@ import {
 	apiEditSellerProfile,
 	apiEditTourGuideProfile,
 	apiEditTouristProfile,
+	apiEditTransportationAdvertiserProfile,
+	apiGovernorProfile,
 	apiRequestDeleteAdvertiserProfile,
 	apiRequestDeleteSellerProfile,
 	apiRequestDeleteTourGuideProfile,
 	apiRequestDeleteTouristProfile,
-	apiEditTransportationAdvertiserProfile,
-	apiGovernorProfile,
 	apiSellerProfile,
 	apiSellers,
 	apiTourGuideProfile,
@@ -225,7 +225,6 @@ export function useDeleteGovernor(onSuccess: () => void) {
 	return { doDeleteGoverner: mutate, ...mutation };
 }
 
-
 export function useAdvertisers() {
 	const { user } = useLoginStore();
 	const { data, refetch } = useQuery({
@@ -316,11 +315,13 @@ export function useTransportationAdvertiserProfile() {
 	return { data: data?.data, refetch };
 }
 
-export function useUpdateTransportationAdvertiserProfile(onSuccess: () => void) {
+export function useUpdateTransportationAdvertiserProfile(
+	onSuccess: () => void,
+) {
 	const { user } = useLoginStore();
 
 	const mutation = useMutation({
-		mutationFn: (data: Partial<TTransportationAdvetisor>) => {
+		mutationFn: (data: Partial<TTransportationAdvertiser>) => {
 			if (!user?._id) {
 				throw new Error("User ID is undefined");
 			}
@@ -334,9 +335,12 @@ export function useUpdateTransportationAdvertiserProfile(onSuccess: () => void) 
 	return { doEditTransportationAdvertiserProfile: mutate, ...mutation };
 }
 
-export function useDeleteTransportationAdvertiserProfile(onSuccess: () => void) {
+export function useDeleteTransportationAdvertiserProfile(
+	onSuccess: () => void,
+) {
 	const mutation = useMutation({
-		mutationFn: (_id: string) => apiDeleteTransportationAdvertiserProfile(_id),
+		mutationFn: (_id: string) =>
+			apiDeleteTransportationAdvertiserProfile(_id),
 		onSuccess,
 	});
 	const { mutate } = mutation;
@@ -405,5 +409,3 @@ export function useRequestDeleteTourGuideProfile(onSuccess: () => void) {
 	const { mutate } = mutation;
 	return { doRequestDeleteTourGuideProfile: mutate, ...mutation };
 }
-	
-	

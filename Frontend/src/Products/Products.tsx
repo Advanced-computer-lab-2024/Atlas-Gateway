@@ -48,51 +48,46 @@ export default function Products() {
 	};
 
 	return (
-		<Flex
-			isColumn
-			gap="4"
-			className="w-full h-full px-10 py-8 overflow-y-scroll"
-		>
+		<Flex isColumn gap="4" className="w-full h-full p-4 overflow-y-scroll">
 			<Label.Big600>View a list of products you can buy!</Label.Big600>
 			<Flex
-				justify="center"
-				isColumn
+				justify="between"
 				gap="2"
-				className="bg-surface-secondary p-2 rounded-lg"
+				className="bg-surface-secondary p-2 rounded-lg border-2 border-solid border-black"
 			>
-				<Flex justify="between">
-					<Flex gap="1" align="center">
-						<Flex gap="2" align="center">
-							<Label.Mid300>Sort:</Label.Mid300>
-							<Select
-								onValueChange={(value) => {
-									if (value === "0") {
-										setQuery({
-											...query,
-											sort: undefined,
-										});
-									} else {
-										setQuery({
-											...query,
-											sort: value,
-										});
-									}
-								}}
-							>
-								<SelectTrigger>
-									<SelectValue placeholder="Sort" />
-								</SelectTrigger>
-								<SelectContent>
-									<SelectItem value="0">None</SelectItem>
-									<SelectItem value="avgRating,1">
-										Ascending rating
-									</SelectItem>
-									<SelectItem value="avgRating,-1">
-										Descending rating
-									</SelectItem>
-								</SelectContent>
-							</Select>
-						</Flex>
+				<Flex gap="5" align="center">
+					<Flex gap="2" align="center">
+						<Label.Mid400>Sort:</Label.Mid400>
+						<Select
+							onValueChange={(value) => {
+								if (value === "0") {
+									setQuery({
+										...query,
+										sort: undefined,
+									});
+								} else {
+									setQuery({
+										...query,
+										sort: value,
+									});
+								}
+							}}
+						>
+							<SelectTrigger className="bg-white">
+								<SelectValue placeholder="Sort" />
+							</SelectTrigger>
+							<SelectContent>
+								<SelectItem value="0">None</SelectItem>
+								<SelectItem value="avgRating,1">
+									Ascending rating
+								</SelectItem>
+								<SelectItem value="avgRating,-1">
+									Descending rating
+								</SelectItem>
+							</SelectContent>
+						</Select>
+					</Flex>
+					<Flex gap="2" align="center">
 						<Searchbar />
 						<Filters
 							filters={{
@@ -104,12 +99,12 @@ export default function Products() {
 							}}
 						/>
 					</Flex>
-					{user?.type === EAccountType.Seller && (
-						<Button onClick={() => setIsProductFormOpen(true)}>
-							Add Product
-						</Button>
-					)}
 				</Flex>
+				{user?.type === EAccountType.Seller && (
+					<Button onClick={() => setIsProductFormOpen(true)}>
+						Add Product
+					</Button>
+				)}
 			</Flex>
 			<Flex
 				className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2"

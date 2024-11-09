@@ -1,3 +1,4 @@
+import { Plus } from "lucide-react";
 import { useState } from "react";
 
 import { useItineraries } from "@/api/data/useItineraries";
@@ -58,95 +59,92 @@ export default function Itineraries() {
 	const [query, setQuery] = useQueryString();
 
 	return (
-		<Flex
-			isColumn
-			gap="4"
-			className="w-full h-full px-10 py-8 overflow-y-scroll"
-		>
+		<Flex isColumn gap="4" className="w-full h-full p-4 overflow-y-scroll">
 			<Label.Big600>
 				View a list of itineraries you can follow!
 			</Label.Big600>
 			<Flex
-				justify="center"
-				isColumn
+				justify="between"
 				gap="2"
-				className="bg-surface-secondary p-2 rounded-lg"
+				className="bg-surface-secondary p-2 rounded-lg border-2 border-solid border-black"
 			>
-				<Flex justify="between">
-					<Flex gap="1" align="center">
-						<Select
-							onValueChange={(value) => {
-								if (value === "0") {
-									setQuery({
-										...query,
-										sort: undefined,
-									});
-								} else {
-									setQuery({
-										...query,
-										sort: value,
-									});
-								}
-							}}
-						>
-							<SelectTrigger>
-								<SelectValue placeholder="Sort" />
-							</SelectTrigger>
-							<SelectContent>
-								<SelectItem value="0">None</SelectItem>
-								<SelectItem value="avgRating,1">
-									Ascending rating
-								</SelectItem>
-								<SelectItem value="avgRating,-1">
-									Descending rating
-								</SelectItem>
-								<SelectItem value="price,1">
-									Ascending price
-								</SelectItem>
-								<SelectItem value="price,-1">
-									Descending price
-								</SelectItem>
-							</SelectContent>
-						</Select>
-						<Searchbar />
-						<Filters
-							filters={{
-								tags: {
-									filterName: "tags",
-									label: "Tags",
-									type: "checkbox",
-									options:
-										tags?.map((tag) => ({
-											label: tag.name,
-											value: tag._id,
-										})) || [],
-								},
-								date: {
-									// TODO: WIP
-									filterName: "date",
-									label: "Date",
-									type: "date",
-								},
-								price: {
-									filterName: "price",
-									label: "Price",
-									type: "range",
-								},
-								language: {
-									filterName: "language",
-									label: "Language",
-									type: "checkbox",
-									options: languageOptions,
-								},
-							}}
-						/>
-					</Flex>
-					{user?.type === EAccountType.Guide && (
-						<Button onClick={() => setOpen(true)} variant="ghost">
-							Add Itinerary
-						</Button>
-					)}
+				<Flex gap="1" align="center">
+					<Select
+						onValueChange={(value) => {
+							if (value === "0") {
+								setQuery({
+									...query,
+									sort: undefined,
+								});
+							} else {
+								setQuery({
+									...query,
+									sort: value,
+								});
+							}
+						}}
+					>
+						<SelectTrigger className="bg-white">
+							<SelectValue placeholder="Sort" />
+						</SelectTrigger>
+						<SelectContent>
+							<SelectItem value="0">None</SelectItem>
+							<SelectItem value="avgRating,1">
+								Ascending rating
+							</SelectItem>
+							<SelectItem value="avgRating,-1">
+								Descending rating
+							</SelectItem>
+							<SelectItem value="price,1">
+								Ascending price
+							</SelectItem>
+							<SelectItem value="price,-1">
+								Descending price
+							</SelectItem>
+						</SelectContent>
+					</Select>
+					<Searchbar />
+					<Filters
+						filters={{
+							tags: {
+								filterName: "tags",
+								label: "Tags",
+								type: "checkbox",
+								options:
+									tags?.map((tag) => ({
+										label: tag.name,
+										value: tag._id,
+									})) || [],
+							},
+							date: {
+								// TODO: WIP
+								filterName: "date",
+								label: "Date",
+								type: "date",
+							},
+							price: {
+								filterName: "price",
+								label: "Price",
+								type: "range",
+							},
+							language: {
+								filterName: "language",
+								label: "Language",
+								type: "checkbox",
+								options: languageOptions,
+							},
+						}}
+					/>
 				</Flex>
+				{user?.type !== EAccountType.Guide && (
+					<Button
+						onClick={() => setOpen(true)}
+						variant="default"
+						className="flex gap-2"
+					>
+						Add Itinerary <Plus />
+					</Button>
+				)}
 			</Flex>
 			<Flex
 				className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2"

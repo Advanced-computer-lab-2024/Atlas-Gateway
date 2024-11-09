@@ -80,6 +80,7 @@ export type TActivity = {
 	isOpen: boolean;
 	avgRating: number;
 	tourists: string[];
+	numberOfBookings: number;
 };
 
 export interface TAdmin extends TUser {
@@ -122,7 +123,7 @@ export interface TAdvetisor extends TUser {
 	imagePath: string;
 }
 
-export interface TTransportationAdvetisor extends TUser {
+export interface TTransportationAdvertiser extends TUser {
 	email: string;
 	hotline: number;
 	website: string;

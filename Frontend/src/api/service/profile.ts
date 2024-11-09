@@ -7,7 +7,7 @@ import {
 	TSeller,
 	TTourGuide,
 	TTourist,
-	TTransportationAdvetisor,
+	TTransportationAdvertiser,
 } from "@/types/global";
 
 import ENDPOINTS, { baseURL } from "./ENDPOINTS";
@@ -189,7 +189,6 @@ export function apiDeleteGovernor(_id: string) {
 	});
 }
 
-
 export function apiAdvertisers() {
 	return axios<TAdvertiserProfileResponse[]>({
 		method: "GET",
@@ -276,7 +275,7 @@ export function apiTransportationAdvertiserProfile(_id: string) {
 
 export function apiEditTransportationAdvertiserProfile(
 	_id: string,
-	data: Partial<TTransportationAdvetisor>,
+	data: Partial<TTransportationAdvertiser>,
 ) {
 	return axios<TTransportationAdvertiserProfileResponse>({
 		method: "PUT",

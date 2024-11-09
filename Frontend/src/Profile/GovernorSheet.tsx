@@ -64,9 +64,7 @@ export default function GovernorSheet() {
 	return (
 		<Sheet open={open} onOpenChange={setOpen}>
 			<SheetTrigger asChild>
-				{(
-					<button className="font-bold">Edit profile</button>
-				)}
+				{<button className="font-bold">Edit profile</button>}
 			</SheetTrigger>
 			<SheetContent>
 				<Form {...form}>
@@ -83,7 +81,6 @@ export default function GovernorSheet() {
 								when you're done.
 							</SheetDescription>
 						</SheetHeader>
-
 
 						{/* Email input */}
 						<FormField
@@ -105,7 +102,6 @@ export default function GovernorSheet() {
 							)}
 						/>
 
-						
 						<SheetFooter>
 							<Button
 								type="submit"

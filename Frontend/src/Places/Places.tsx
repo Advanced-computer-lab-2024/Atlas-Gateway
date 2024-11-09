@@ -1,3 +1,4 @@
+import { Plus } from "lucide-react";
 import { useState } from "react";
 
 import AddTags from "@/Tags/AddTags";
@@ -44,53 +45,46 @@ export default function Places() {
 	const { data: tags } = useTags();
 
 	return (
-		<Flex
-			isColumn
-			gap="4"
-			className="w-full h-full px-10 py-8 overflow-y-scroll"
-		>
+		<Flex isColumn gap="4" className="w-full h-full p-4 overflow-y-scroll">
 			<Label.Big600>
 				View a list of museums and historical locations you can visit!
 			</Label.Big600>
 			<Flex
-				justify="center"
-				isColumn
+				justify="between"
 				gap="2"
-				className="bg-surface-secondary p-2 rounded-lg"
+				className="bg-surface-secondary p-2 rounded-lg border-2 border-solid border-black"
 			>
-				<Flex align="center" justify="between">
-					<Flex gap="1" align="center">
-						<Searchbar />
-						<Filters
-							filters={{
-								tags: {
-									filterName: "tags",
-									label: "Tags",
-									type: "checkbox",
-									options:
-										tags?.map((tag) => ({
-											label: tag.name,
-											value: tag._id,
-										})) || [],
-								},
+				<Flex gap="2" align="center">
+					<Searchbar />
+					<Filters
+						filters={{
+							tags: {
+								filterName: "tags",
+								label: "Tags",
+								type: "checkbox",
+								options:
+									tags?.map((tag) => ({
+										label: tag.name,
+										value: tag._id,
+									})) || [],
+							},
+						}}
+					/>
+				</Flex>
+				<Flex gap="2" align="center">
+					{user?.type !== EAccountType.TourismGovernor && <AddTags />}
+					{user?.type !== EAccountType.TourismGovernor && (
+						<Button
+							variant="default"
+							onClick={() => {
+								setOpen(true);
 							}}
-						/>
-					</Flex>
-					<div className="flex gpa-2">
-						{user?.type === EAccountType.TourismGovernor && (
-							<AddTags />
-						)}
-						{user?.type === EAccountType.TourismGovernor && (
-							<Button
-								variant="ghost"
-								onClick={() => {
-									setOpen(true);
-								}}
-							>
-								Add Place
-							</Button>
-						)}
-					</div>
+							className="flex gap-2"
+						>
+							Add Place
+							<Plus />
+						</Button>
+					)}
 				</Flex>
 			</Flex>
 			<Flex

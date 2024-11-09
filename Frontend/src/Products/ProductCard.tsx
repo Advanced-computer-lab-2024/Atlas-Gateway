@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { useProducts, useUpdateProduct } from "@/api/data/useProducts";
 import { useSellerProfile } from "@/api/data/useProfile";
 import Label from "@/components/ui/Label";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -85,12 +85,12 @@ export default function ProductCard({
 	return (
 		<Card
 			key={_id}
-			className="w-full h-[370px] flex gap-2 flex-col border-surface-secondary border-2"
+			className="w-full h-[400px] flex gap-2 flex-col border-black border-2"
 		>
 			<Flex
 				align="center"
 				justify="center"
-				className="w-full h-40 bg-gray-200 rounded-xl"
+				className="bg-gray-200 rounded-t-xl w-full h-[200px]"
 			>
 				{!productPic ? (
 					<Package className="w-20 h-20" />
@@ -102,13 +102,12 @@ export default function ProductCard({
 					/>
 				)}
 			</Flex>
-			<hr />
-			<CardContent className="p-2">
-				<Flex isColumn gap="2" className="px-3">
+			<CardContent>
+				<Flex isColumn gap="2">
 					<Flex gap="2" align="center" justify="between">
 						<Label.Mid500>{name}</Label.Mid500>
 						<DropdownMenu modal={false}>
-							<DropdownMenuTrigger>
+							<DropdownMenuTrigger className="bg-transparent">
 								<EllipsisVertical className="cursor-pointer" />
 							</DropdownMenuTrigger>
 							<DropdownMenuContent>
@@ -151,43 +150,47 @@ export default function ProductCard({
 							</DropdownMenuContent>
 						</DropdownMenu>
 					</Flex>
-					<Label.Mid300>{description}</Label.Mid300>
-					{seller && (
-						<Flex gap="1" align="center">
-							<Label.Mid300 className="overflow-ellipsis">
-								Seller
-							</Label.Mid300>
-							<Label.Thin300 className="overflow-ellipsis">
-								{seller?.username}
-							</Label.Thin300>
-						</Flex>
-					)}
 					<Flex align="center" justify="between">
-						<Flex gap="2" align="center" justify="between">
+						<Flex gap="1" align="center">
 							<DollarSign size={20} />
-							<Label.Thin200 className="overflow-ellipsis">
+							<Label.Mid300 className="overflow-ellipsis">
 								{convertCurrency(price)}
-							</Label.Thin200>
+							</Label.Mid300>
 						</Flex>
 						<Flex gap="1" align="center">
 							<Star color="yellow" fill="yellow" size={20} />
-							<Label.Thin300 className="overflow-ellipsis">
+							<Label.Mid300 className="overflow-ellipsis">
 								{avgRating}
-							</Label.Thin300>
+							</Label.Mid300>
 						</Flex>
 					</Flex>
+					<Label.Mid300 className="break-words h-[4.5rem] w-full overflow-y-scroll">
+						{description}
+					</Label.Mid300>
+				</Flex>
+			</CardContent>
+			<CardFooter>
+				<Flex justify="between" align="center" className="w-full">
+					{seller && (
+						<Flex gap="1" align="center">
+							<Label.Thin300>Seller:</Label.Thin300>
+							<Label.Mid300 className="overflow-ellipsis">
+								{seller?.username}
+							</Label.Mid300>
+						</Flex>
+					)}
 					{isAdminOrCreator && (
 						<Flex gap="1" align="center">
-							<Label.Mid300 className="overflow-ellipsis">
+							<Label.Thin300 className="overflow-ellipsis">
 								Sales
-							</Label.Mid300>
-							<Label.Thin200 className="overflow-ellipsis">
+							</Label.Thin300>
+							<Label.Mid300 className="overflow-ellipsis">
 								{sales}
-							</Label.Thin200>
+							</Label.Mid300>
 						</Flex>
 					)}
 				</Flex>
-			</CardContent>
+			</CardFooter>
 		</Card>
 	);
 }

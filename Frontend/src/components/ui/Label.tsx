@@ -52,7 +52,7 @@ interface LabelProps extends React.HTMLAttributes<HTMLLabelElement> {
 }
 
 const BaseLabel = memo(
-	tw.div<LabelProps>`
+	tw.label<LabelProps>`
 		${({ size, variant, weight, className }) =>
 			twMerge(
 				labelVariants[variant ?? "default"],
