@@ -1,18 +1,30 @@
 import axios from "axios";
-import { ArrowLeft, Package } from "lucide-react";
+import { ArrowLeft, Currency, Package } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useProduct } from "@/api/data/useProducts";
 import { useTouristProfile } from "@/api/data/useProfile";
 import Label from "@/components/ui/Label";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { CommentsContainer } from "@/components/ui/comments";
+import {
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from "@/components/ui/dialog";
 import { Flex } from "@/components/ui/flex";
 import Rating, { ratingType } from "@/components/ui/rating";
 import ReviewOverlay from "@/components/ui/reviewOverlay";
 import useCurrency from "@/hooks/useCurrency";
 import { EAccountType } from "@/types/enums";
+import { TReview } from "@/types/global";
 
 export default function ProductDetails() {
 	const navigate = useNavigate();
@@ -29,11 +41,7 @@ export default function ProductDetails() {
 		sellerId,
 	} = data || {};
 
-	const [displayValue, setDisplayValue] = React.useState<number | undefined>(
-		0,
-	);
-
-	const [fetchedComments, setFetchedComments] = useState<string[]>([]);
+	const [fetchedComments, setFetchedComments] = useState<TReview[]>([]);
 
 	const { data: user } = useTouristProfile();
 
@@ -58,7 +66,7 @@ export default function ProductDetails() {
 		user?.type === EAccountType.Tourist &&
 		user.purchasedProducts.includes(data ? data._id : "");
 
-	const childRef = useRef<{ showOverlay: () => void }>(null);
+	const childRef = useRef<{ postReview: () => void }>(null);
 
 	const fetchComments = async () => {
 		const res = await axios.get(
@@ -81,12 +89,10 @@ export default function ProductDetails() {
 		} catch (error) {
 			console.error(error);
 		}
+	}, [fetchComments]);
 
-		setDisplayValue(avgRating || 0);
-	}, [avgRating, fetchComments]);
-
-	const showOverlay = () => {
-		if (childRef.current) childRef.current.showOverlay();
+	const saveReview = () => {
+		if (childRef.current) childRef.current.postReview();
 	};
 
 	useEffect(() => {
@@ -101,13 +107,8 @@ export default function ProductDetails() {
 			justify="center"
 			align="center"
 			className="p-4 overflow-y-scroll w-full h-full"
+			isColumn
 		>
-			<ReviewOverlay
-				reviewType="Product"
-				reviewedItemId={data?._id}
-				userId={user?._id}
-				ref={childRef}
-			/>
 			<Card className="w-[80%] border-black border-2">
 				<CardHeader>
 					<Flex gap="2" align="center">
@@ -149,21 +150,60 @@ export default function ProductDetails() {
 							<Flex gap="2" isColumn>
 								<Label.Thin300>Price:</Label.Thin300>
 								<Label.Mid500 className="overflow-ellipsis">
-									{avgRating}
+									{price}
 								</Label.Mid500>
+							</Flex>
+							<Flex gap="2" isColumn align="start">
+								<Label.Thin300>Rating:</Label.Thin300>
 								<Flex>
 									<Rating
-										value={displayValue}
+										value={avgRating}
 										ratingType={ratingType.DETAILS}
 										interactive={false}
 									/>
 									{canReview && (
-										<button
-											onClick={() => showOverlay()}
-											className="ml-6 px-3 rounded-md bg-surface-primary align-middle"
-										>
-											Review Product
-										</button>
+										<Dialog>
+											<DialogTrigger className="bg-surface-primary ml-4 px-3 rounded-md">
+												Review Product
+											</DialogTrigger>
+											<DialogContent>
+												<DialogHeader>
+													<DialogTitle>
+														Review this Product
+													</DialogTitle>
+													<DialogDescription>
+														<ReviewOverlay
+															reviewType="Product"
+															reviewedItemId={
+																data?._id
+															}
+															userId={user?._id}
+															ref={childRef}
+														/>
+													</DialogDescription>
+												</DialogHeader>
+												<DialogFooter className="sm:justify-center">
+													<Button
+														type="submit"
+														onClick={() =>
+															saveReview()
+														}
+														className="mr-2"
+													>
+														Save Review
+													</Button>
+													<DialogClose asChild>
+														<Button
+															type="button"
+															variant="secondary"
+															className="ml-2"
+														>
+															Close
+														</Button>
+													</DialogClose>
+												</DialogFooter>
+											</DialogContent>
+										</Dialog>
 									)}
 								</Flex>
 							</Flex>
@@ -186,7 +226,6 @@ export default function ProductDetails() {
 				</CardContent>
 			</Card>
 			<CommentsContainer
-				interactive={true}
 				comments={[
 					...[
 						{
@@ -194,17 +233,11 @@ export default function ProductDetails() {
 							user: {
 								username: "user1",
 								_id: "x1",
-								email: "mail",
-								mobile: "123",
-								address: "address",
-								currency: "USD",
-								loyaltyPoints: 0,
-								walletBalance: 0,
+								currency: "USD" as const,
 								type: EAccountType.Tourist,
-								purchasedProducts: [],
 							},
 							text: "This is a comment",
-							createdAt: "Yes",
+							rating: 3,
 						},
 					], // These are dummy comments, the actual comments will be fetched from the DB TODO: Remove later
 					...fetchedComments,

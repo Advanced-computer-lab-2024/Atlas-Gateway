@@ -1,25 +1,25 @@
 import React from "react";
 
-import { TComment } from "@/types/global";
+import { TReview } from "@/types/global";
 
+import { Card } from "./card";
 import { Flex } from "./flex";
+import Rating, { ratingType } from "./rating";
 
 interface commentsContainerProps {
-	interactive: boolean;
-	comments: TComment[]; // show more button loads more from the DB using the useState in the page itself
+	comments: TReview[]; // show more button loads more from the DB using the useState in the page itself
 }
 
 interface displayCommentsProps {
-	comments: TComment[];
+	comments: TReview[];
 }
 
 export const CommentsContainer: React.FC<commentsContainerProps> = ({
-	interactive,
 	comments,
 }) => {
 	//No-hierarchy comment section
 	return (
-		<Flex className="w-9/12">
+		<Flex className="w-9/12 mt-10" justify="center">
 			<div className="bg-gray-200 py-px px-2 w-10/12 rounded-md self-start">
 				<DisplayComments comments={comments} />
 			</div>
@@ -37,7 +37,10 @@ const DisplayComments: React.FC<displayCommentsProps> = ({ comments }) => {
 				>
 					<Flex justify="between" className="basis-full">
 						<p>{comment.user.username}</p>
-						<p>{comment.createdAt}</p>
+						<Rating
+							value={comment.rating}
+							ratingType={ratingType.REVIEW}
+						/>
 					</Flex>
 					<hr className="bg-gray-400 border-0 h-1 rounded-sm mt-2 mb-2" />
 					<p className="self-start">{comment.text}</p>
