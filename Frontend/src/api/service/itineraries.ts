@@ -115,3 +115,14 @@ export function apiCancelItineraryBooking(_id: string, _userId: string) {
 		baseURL: baseURL,
 	});
 }
+
+export function apiFlagItinerary(_id: string) {
+	return axios({
+		method: "PUT",
+		url: ENDPOINTS.itinerary.flag(_id),
+		headers: {
+			"Content-Type": "application/json",
+		},
+		baseURL: baseURL,
+	});
+}

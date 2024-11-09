@@ -38,7 +38,6 @@ export default function Itineraries() {
 	const { data, meta } = useItineraries();
 	const [open, setOpen] = useState(false);
 	const [itinerary, setItinerary] = useState<TItinerary>();
-
 	const { data: tags } = useTags();
 
 	const openEditDrawer = (itinerary: TItinerary) => {

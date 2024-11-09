@@ -230,3 +230,22 @@ export const cancelBookingItinerary = async (
 		next(error);
 	}
 };
+
+export const flagItinerary = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	try {
+		const itineraryId = req.params.id;
+
+		if (!itineraryId) {
+			throw new HttpError(400, "itinerary id is required");
+		}
+		const itinerary = await itineraryService.flagItinerary(itineraryId);
+
+		res.status(200).send(itinerary);
+	} catch (error) {
+		next(error);
+	}
+};

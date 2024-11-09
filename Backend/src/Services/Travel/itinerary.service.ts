@@ -224,6 +224,7 @@ export const bookItinerary = async (itineraryId: string, touristId: string) => {
 export const cancelBookingItinerary = async (
 	itineraryId: string,
 	touristId: string,
+	userType?: string,
 ) => {
 	const itinerary = await getItineraryById(itineraryId);
 	if (!itinerary) {
@@ -234,7 +235,7 @@ export const cancelBookingItinerary = async (
 	const millisecondsBeforeItinerary =
 		itinerary.startDateTime.getTime() - currentDate.getTime();
 	const hoursBeforeItinerary = millisecondsBeforeItinerary / (1000 * 3600);
-	if (hoursBeforeItinerary < 48) {
+	if (hoursBeforeItinerary < 48 && userType !== "admin") {
 		throw new HttpError(400, "Cannot cancel within 48 hours of itinerary.");
 	}
 
@@ -274,4 +275,26 @@ export const softDeleteItinerary = async (id: string) => {
 	);
 
 	return itineraryDeleted;
+};
+
+export const flagItinerary = async (itineraryId: string) => {
+	const itinerary = await getItineraryById(itineraryId);
+
+	if (!itinerary) {
+		throw new HttpError(404, "Itinerary not found");
+	}
+	const tourists = itinerary.tourists;
+	tourists.forEach(async (tourist) => {
+		await cancelBookingItinerary(
+			itineraryId,
+			tourist._id.toString(),
+			"admin",
+		);
+	});
+	const itineraryFlagged = await Itinerary.findByIdAndUpdate(
+		itineraryId,
+		{ isAppropriate: false },
+		{ new: true },
+	);
+	return itineraryFlagged;
 };
