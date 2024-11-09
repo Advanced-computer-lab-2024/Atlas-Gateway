@@ -10,6 +10,7 @@ import {
 	apiCancelItineraryBooking,
 	apiCreateItinerary,
 	apiDeleteItinerary,
+	apiFlagItinerary,
 	apiItineraries,
 	apiItinerary,
 	apiTourGuideItineraries,
@@ -115,4 +116,15 @@ export function useCancelItineraryBooking(onSuccess: () => void) {
 	const { mutate } = mutation;
 
 	return { doCancelItineraryBooking: mutate, ...mutation };
+}
+
+export function useFlagItinerary(onSuccess: () => void) {
+	const mutation = useMutation({
+		mutationFn: (id: string) => apiFlagItinerary(id),
+		onSuccess,
+	});
+
+	const { mutate } = mutation;
+
+	return { doFlagItinerary: mutate, ...mutation };
 }

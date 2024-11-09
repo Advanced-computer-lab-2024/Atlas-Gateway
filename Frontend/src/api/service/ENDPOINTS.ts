@@ -100,6 +100,7 @@ const ENDPOINTS = {
 		show: (id: string) => `api/itinerary/show/${id}`,
 		create: "api/itinerary/create",
 		update: (id: string) => `api/itinerary/update/${id}`,
+		flag: (id: string) => `api/itinerary/flag/${id}`,
 		delete: (id: string) => `api/itinerary/delete/${id}`,
 		book: (id: string) => `api/itinerary/book/${id}`,
 		cancelBooking: (id: string) => `api/itinerary/cancelBooking/${id}`,

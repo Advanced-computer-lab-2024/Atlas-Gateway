@@ -9,6 +9,7 @@ export interface IItinerary extends Document {
 	availability: number;
 	pickUpLocation: string;
 	dropOffLocation: string;
+	isAppropriate: boolean;
 	startDateTime: Date;
 	endDateTime: Date;
 	activities: {
@@ -41,6 +42,7 @@ const itinerarySchema = new Schema<IItinerary>(
 		availability: { type: Number, required: true },
 		pickUpLocation: { type: String, required: true },
 		dropOffLocation: { type: String, required: true },
+		isAppropriate: { type: Boolean, default: false },
 		startDateTime: { type: Date, required: true },
 		endDateTime: { type: Date, required: true },
 		activities: [
