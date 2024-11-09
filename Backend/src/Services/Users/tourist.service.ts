@@ -124,12 +124,19 @@ export const addBookedItinerary = async (
 
 	const newLoyaltyPoints =
 		tourist.loyaltyPoints + (tourist.level / 2) * itenraryPrice;
+	const newMaxCollectedLoyaltyPoints =
+		tourist.maxCollectedLoyaltyPoints + newLoyaltyPoints;
 	const newLevel =
-		newLoyaltyPoints <= 100000 ? 1 : newLoyaltyPoints <= 500000 ? 2 : 3;
+		newMaxCollectedLoyaltyPoints <= 100000
+			? 1
+			: newMaxCollectedLoyaltyPoints <= 500000
+				? 2
+				: 3;
 	await tourist.updateOne(
 		{
 			$push: { bookedItineraries: itineraryId },
 			loyaltyPoints: newLoyaltyPoints,
+			maxCollectedLoyaltyPoints: newMaxCollectedLoyaltyPoints,
 			level: newLevel,
 		},
 		{ new: true },
@@ -185,11 +192,18 @@ export const cancelItinerary = async (
 	}
 	const newLoyaltyPoints =
 		tourist.loyaltyPoints - (tourist.level / 2) * itenraryPrice;
+	const newMaxCollectedLoyaltyPoints =
+		tourist.maxCollectedLoyaltyPoints - newLoyaltyPoints;
 	const newLevel =
-		newLoyaltyPoints <= 100000 ? 1 : newLoyaltyPoints <= 500000 ? 2 : 3;
+		newMaxCollectedLoyaltyPoints <= 100000
+			? 1
+			: newMaxCollectedLoyaltyPoints <= 500000
+				? 2
+				: 3;
 	const removed = await tourist.updateOne({
 		$pull: { bookedItineraries: itineraryId },
 		loyaltyPoints: newLoyaltyPoints,
+		maxCollectedLoyaltyPoints: newMaxCollectedLoyaltyPoints,
 		level: newLevel,
 	});
 
