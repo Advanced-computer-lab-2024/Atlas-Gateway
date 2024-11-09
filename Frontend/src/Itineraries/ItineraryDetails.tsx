@@ -179,7 +179,7 @@ export default function ItineraryDetails() {
 												</DialogTitle>
 												<DialogDescription>
 													<ReviewOverlay
-														reviewType="Product"
+														reviewType="Itinerary"
 														reviewedItemId={
 															data?._id
 														}
