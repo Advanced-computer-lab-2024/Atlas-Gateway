@@ -13,10 +13,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useLoginStore } from "@/store/loginStore";
 
 import profile_background from "../assets/profile_background.jpg";
-
-import TransportationAdvertiserSheet from "./TransportationAdvertiserSheet";
-
 import ChangePasswordSheet from "./ChangePasswordSheet";
+import TransportationAdvertiserSheet from "./TransportationAdvertiserSheet";
 import UploadForm from "./UploadForm";
 
 const General = () => {

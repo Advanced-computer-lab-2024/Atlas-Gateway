@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
+import { Plus } from "lucide-react";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -43,64 +44,57 @@ const AddTags = () => {
 	};
 
 	return (
-		<div className="flex self-end pb-3">
-			<Sheet>
-				<SheetTrigger asChild>
-					<Button variant="outline">Add Tag</Button>
-				</SheetTrigger>
-				<SheetContent>
-					<SheetHeader>
-						<SheetTitle>Add Tag</SheetTitle>
-						<SheetDescription>
-							Add tag details here.
-						</SheetDescription>
-					</SheetHeader>
-					<FormProvider {...formMethods}>
-						<form onSubmit={handleSubmit(onSubmit)}>
-							<FormField
-								control={control}
-								name="name"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Tag name</FormLabel>
-										<FormControl>
-											<Input
-												{...field}
-												placeholder="name"
-											/>
-										</FormControl>
-										<FormDescription>
-											Enter tag name.
-										</FormDescription>
-									</FormItem>
-								)}
-							/>
-							<FormField
-								control={control}
-								name="type"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Type</FormLabel>
-										<FormControl>
-											<Input
-												{...field}
-												placeholder="type"
-											/>
-										</FormControl>
-										<FormDescription>
-											Enter a Type.
-										</FormDescription>
-									</FormItem>
-								)}
-							/>
-							<SheetFooter>
-								<Button type="submit">Save changes</Button>
-							</SheetFooter>
-						</form>
-					</FormProvider>
-				</SheetContent>
-			</Sheet>
-		</div>
+		<Sheet>
+			<SheetTrigger asChild>
+				<Button variant="default" className="flex gap-2">
+					Add Tag
+					<Plus />
+				</Button>
+			</SheetTrigger>
+			<SheetContent>
+				<SheetHeader>
+					<SheetTitle>Add Tag</SheetTitle>
+					<SheetDescription>Add tag details here.</SheetDescription>
+				</SheetHeader>
+				<FormProvider {...formMethods}>
+					<form onSubmit={handleSubmit(onSubmit)}>
+						<FormField
+							control={control}
+							name="name"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Tag name</FormLabel>
+									<FormControl>
+										<Input {...field} placeholder="name" />
+									</FormControl>
+									<FormDescription>
+										Enter tag name.
+									</FormDescription>
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={control}
+							name="type"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Type</FormLabel>
+									<FormControl>
+										<Input {...field} placeholder="type" />
+									</FormControl>
+									<FormDescription>
+										Enter a Type.
+									</FormDescription>
+								</FormItem>
+							)}
+						/>
+						<SheetFooter>
+							<Button type="submit">Save changes</Button>
+						</SheetFooter>
+					</form>
+				</FormProvider>
+			</SheetContent>
+		</Sheet>
 	);
 };
 

@@ -1,11 +1,11 @@
 import axios from "axios";
-import { ArrowLeft, DollarSign, Package, Star } from "lucide-react";
+import { ArrowLeft, Package, Star } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useProduct } from "@/api/data/useProducts";
 import Label from "@/components/ui/Label";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Flex } from "@/components/ui/flex";
 import useCurrency from "@/hooks/useCurrency";
 import { useLoginStore } from "@/store/loginStore";
@@ -53,13 +53,12 @@ export default function ProductDetails() {
 
 	return (
 		<Flex
-			isColumn
-			gap="4"
+			justify="center"
 			align="center"
-			className="px-4 py-4 overflow-y-scroll"
+			className="p-4 overflow-y-scroll w-full h-full"
 		>
-			<Card className="w-[80%] flex-col border-surface-secondary border-2 p-4">
-				<Flex isColumn gap="4">
+			<Card className="w-[80%] border-black border-2">
+				<CardHeader>
 					<Flex gap="2" align="center">
 						<ArrowLeft
 							className="cursor-pointer"
@@ -68,7 +67,9 @@ export default function ProductDetails() {
 						/>
 						<Label.Big600>{name}</Label.Big600>
 					</Flex>
-					<Flex gap="12">
+				</CardHeader>
+				<CardContent>
+					<Flex gap="8">
 						<Flex
 							align="center"
 							justify="center"
@@ -84,51 +85,52 @@ export default function ProductDetails() {
 								/>
 							)}
 						</Flex>
-						<Flex isColumn justify="around">
-							<Flex gap="2" align="center" justify="between">
-								<Label.Big600 className="w-40 text-left">
-									Description:{" "}
-								</Label.Big600>
-								<Label.Mid500>{description}</Label.Mid500>
+						<Flex gap="3" isColumn align="start">
+							<Label.Big500>Product info</Label.Big500>
+							<Flex gap="2" isColumn>
+								<Label.Thin300>
+									Quantity Available
+								</Label.Thin300>
+								<Label.Mid500 className="overflow-ellipsis">
+									{quantity}
+								</Label.Mid500>
 							</Flex>
-							<Flex gap="2" align="center">
-								<Label.Big600 className="w-40 text-left">
-									Quantity Available:{" "}
-								</Label.Big600>
-								<Label.Mid500>{quantity}</Label.Mid500>
-							</Flex>
-							<Flex gap="2" align="center">
-								<Label.Big600 className="w-40 text-left">
-									Price:{" "}
-								</Label.Big600>
-								<DollarSign size={32} />
+							<Flex gap="2" isColumn>
+								<Label.Thin300>Price:</Label.Thin300>
 								<Label.Mid500 className="overflow-ellipsis">
 									{convertCurrency(price)}
 								</Label.Mid500>
 							</Flex>
-							<Flex gap="2" align="center">
-								<Label.Big600 className="w-40 text-left">
-									Rating:{" "}
-								</Label.Big600>
-								<Star color="yellow" fill="yellow" size={32} />
-								<Label.Mid500 className="overflow-ellipsis">
-									{avgRating}
-								</Label.Mid500>
+							<Flex gap="2" isColumn>
+								<Label.Thin300>Rating:</Label.Thin300>
+								<Flex gap="2" align="center">
+									<Label.Mid500 className="overflow-ellipsis">
+										{avgRating ?? 0}
+									</Label.Mid500>
+									<Star
+										color="yellow"
+										fill="yellow"
+										size={24}
+									/>
+								</Flex>
 							</Flex>
 							{canViewSales && (
-								<Flex gap="2" align="center">
-									<Label.Big600 className="w-40 text-left">
-										Sales Made:{" "}
-									</Label.Big600>
-									<DollarSign size={32} />
+								<Flex gap="2" isColumn>
+									<Label.Thin300>Sales:</Label.Thin300>
 									<Label.Mid500 className="overflow-ellipsis">
 										{sales}
 									</Label.Mid500>
 								</Flex>
 							)}
+							<Flex isColumn gap="2" align="start">
+								<Label.Thin300 className="w-40 text-left">
+									Description:
+								</Label.Thin300>
+								<Label.Mid500>{description}</Label.Mid500>
+							</Flex>
 						</Flex>
 					</Flex>
-				</Flex>
+				</CardContent>
 			</Card>
 		</Flex>
 	);

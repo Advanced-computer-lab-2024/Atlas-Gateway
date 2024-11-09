@@ -16,7 +16,8 @@ import {
 	FormLabel,
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
-import { TTransportationAdvetisor } from "@/types/global";
+import { TTransportationAdvertiser } from "@/types/global";
+
 import Label from "../components/ui/Label";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -50,7 +51,7 @@ const formSchema = z.object({
 
 export default function AdvertiserSheet() {
 	const [open, setOpen] = useState(false);
-	const form = useForm<TTransportationAdvetisor>({
+	const form = useForm<TTransportationAdvertiser>({
 		resolver: zodResolver(formSchema),
 		mode: "onChange",
 	});

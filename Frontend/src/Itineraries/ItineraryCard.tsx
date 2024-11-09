@@ -1,5 +1,6 @@
 import { formatDate } from "date-fns";
 import {
+	CalendarClock,
 	Copy,
 	DollarSign,
 	Edit,
@@ -15,7 +16,12 @@ import { useNavigate } from "react-router-dom";
 import { useDeleteItinerary, useItineraries } from "@/api/data/useItineraries";
 import Label from "@/components/ui/Label";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import {
+	Card,
+	CardContent,
+	CardFooter,
+	CardHeader,
+} from "@/components/ui/card";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -71,134 +77,67 @@ export default function ItineraryCard({
 	return (
 		<Card
 			key={itinerary?._id}
-			className="w-full h-[350px] flex gap-1 flex-col border-surface-secondary border-2"
+			className="w-full h-[350px] flex gap-1 flex-col border-black border-2"
 		>
-			<CardContent className="p-2">
-				<Flex isColumn gap="4" align="center">
-					<Flex
-						gap="2"
-						align="center"
-						justify="center"
-						className="relative w-full"
-					>
-						<Label.Mid500 className="justify-self-center">
-							{itinerary?.title ?? "Title"}
-						</Label.Mid500>
-
-						<DropdownMenu modal={false}>
-							<DropdownMenuTrigger className="absolute right-0">
-								<EllipsisVertical className="cursor-pointer" />
-							</DropdownMenuTrigger>
-							<DropdownMenuContent>
-								<DropdownMenuItem
-									className="flex gap-2 cursor-pointer"
-									onClick={() => {
-										navigate(
-											`/itineraries/${itinerary?._id}`,
-										);
-									}}
-								>
-									<Eye />
-									View Details
-								</DropdownMenuItem>
-								<DropdownMenuItem
-									className="flex gap-2 cursor-pointer"
-									onClick={handleCopyLink}
-								>
-									<Copy />
-									Copy Link
-								</DropdownMenuItem>
-								<DropdownMenuItem
-									className="flex gap-2 cursor-pointer"
-									onClick={handleShareByEmail}
-								>
-									<Mail />
-									Share Via Email
-								</DropdownMenuItem>
-								{user?.type === EAccountType.Guide && (
-									<>
-										<DropdownMenuItem
-											className="flex gap-2 cursor-pointer"
-											onClick={() => {
-												openEditDrawer(itinerary);
-											}}
-										>
-											<Edit />
-											Edit
-										</DropdownMenuItem>
-										<DropdownMenuItem
-											className="flex gap-2 cursor-pointer"
-											onClick={() => {
-												doDeleteItinerary(
-													itinerary?._id,
-												);
-											}}
-										>
-											<Trash />
-											Delete
-										</DropdownMenuItem>
-									</>
-								)}
-							</DropdownMenuContent>
-						</DropdownMenu>
-					</Flex>
-					<Flex gap="2" isColumn align="center">
-						<Flex gap="2" align="center" justify="between">
-							<Label.Thin200>Pickup:</Label.Thin200>
-							<MapPin size={20} />
-							<Label.Thin200 className="overflow-ellipsis">
-								{itinerary?.pickUpLocation}
-							</Label.Thin200>
-						</Flex>
-						<Flex gap="2" align="center" justify="between">
-							<Label.Thin200>Dropoff:</Label.Thin200>
-							<MapPin size={20} />
-							<Label.Thin200 className="overflow-ellipsis">
-								{itinerary?.dropOffLocation}
-							</Label.Thin200>
-						</Flex>
-						<Flex gap="1" align="center" justify="between">
-							<Label.Thin200>
-								{itinerary?.startDateTime &&
-									formatDate(
-										new Date(itinerary?.startDateTime),
-										"dd/MM/yyyy HH:mm:ss a",
-									)}
-							</Label.Thin200>
-							<Label.Thin200>To</Label.Thin200>
-							<Label.Thin200 className="overflow-ellipsis">
-								{itinerary?.endDateTime &&
-									formatDate(
-										new Date(itinerary?.endDateTime),
-										"dd/MM/yyyy HH:mm:ss a",
-									)}
-							</Label.Thin200>
-						</Flex>
-						<Label.Mid200 className="overflow-ellipsis"></Label.Mid200>
-					</Flex>
-					<Flex className="w-full" align="center" justify="between">
-						<Flex gap="1" align="center">
-							<DollarSign size={20} />
-							<Label.Thin300 className="overflow-ellipsis">
-								{convertCurrency(itinerary?.price)}
-							</Label.Thin300>
-						</Flex>
-						<Flex gap="1" align="center">
-							<Star color="yellow" fill="yellow" size={20} />
-							<Label.Thin300 className="overflow-ellipsis">
-								{itinerary?.avgRating ?? "N/A"}
-							</Label.Thin300>
-						</Flex>
-					</Flex>
-					<Flex
-						gap="2"
-						align="center"
-						justify="start"
-						className="w-full"
-					>
-						<Label.Mid200 className="overflow-ellipsis w-[95px] text-left">
+			<CardHeader>
+				<Flex
+					gap="2"
+					align="center"
+					justify="center"
+					className="relative w-full"
+				>
+					<Label.Mid500>{itinerary?.title ?? "Title"}</Label.Mid500>
+					<DropdownMenu modal={false}>
+						<DropdownMenuTrigger className="absolute right-0">
+							<EllipsisVertical />
+						</DropdownMenuTrigger>
+						<DropdownMenuContent>
+							<DropdownMenuItem
+								onClick={() => {
+									navigate(`/itineraries/${itinerary?._id}`);
+								}}
+							>
+								<Eye />
+								View Details
+							</DropdownMenuItem>
+							<DropdownMenuItem onClick={handleCopyLink}>
+								<Copy />
+								Copy Link
+							</DropdownMenuItem>
+							<DropdownMenuItem onClick={handleShareByEmail}>
+								<Mail />
+								Share Via Email
+							</DropdownMenuItem>
+							{user?.type === EAccountType.Guide && (
+								<>
+									<DropdownMenuItem
+										onClick={() => {
+											openEditDrawer(itinerary);
+										}}
+									>
+										<Edit />
+										Edit
+									</DropdownMenuItem>
+									<DropdownMenuItem
+										onClick={() => {
+											doDeleteItinerary(itinerary?._id);
+										}}
+									>
+										<Trash />
+										Delete
+									</DropdownMenuItem>
+								</>
+							)}
+						</DropdownMenuContent>
+					</DropdownMenu>
+				</Flex>
+			</CardHeader>
+			<CardContent>
+				<Flex isColumn gap="2">
+					<Flex gap="2" align="center" className="w-full">
+						<Label.Thin300 className="overflow-ellipsis w-[85px] text-left">
 							Activities:
-						</Label.Mid200>
+						</Label.Thin300>
 						{itinerary?.activities?.length > 0 ? (
 							<Flex
 								gap="1"
@@ -219,15 +158,10 @@ export default function ItineraryCard({
 							"N/A"
 						)}
 					</Flex>
-					<Flex
-						gap="2"
-						align="center"
-						justify="start"
-						className="w-full"
-					>
-						<Label.Mid200 className="overflow-ellipsis w-[95px] text-left">
+					<Flex gap="2" align="center" className="w-full">
+						<Label.Thin300 className="overflow-ellipsis w-[85px] text-left">
 							Tags:
-						</Label.Mid200>
+						</Label.Thin300>
 						{itinerary?.tags?.length > 0 ? (
 							<Flex
 								gap="1"
@@ -248,19 +182,63 @@ export default function ItineraryCard({
 							"N/A"
 						)}
 					</Flex>
+					<Flex className="w-full" align="center" justify="between">
+						<Flex gap="1" align="center">
+							<DollarSign size={20} />
+							<Label.Thin300 className="overflow-ellipsis">
+								{convertCurrency(itinerary?.price)}
+							</Label.Thin300>
+						</Flex>
+						<Flex gap="1" align="center">
+							<Star color="yellow" fill="yellow" size={20} />
+							<Label.Thin300 className="overflow-ellipsis">
+								{itinerary?.avgRating ?? "N/A"}
+							</Label.Thin300>
+						</Flex>
+					</Flex>
+					<Flex gap="2" isColumn align="center">
+						<Flex
+							isColumn
+							gap="1"
+							align="center"
+							className="w-full"
+						>
+							<Label.Thin300>Pickup</Label.Thin300>
+							<Label.Mid300 className="break-words text-start  w-full">
+								{itinerary?.startDateTime &&
+									formatDate(
+										new Date(itinerary?.startDateTime),
+										"dd/MM/yyyy HH:mm:ss a",
+									)}{" "}
+								at {itinerary?.pickUpLocation}
+							</Label.Mid300>
+						</Flex>
+						<Flex isColumn align="center" className="w-full">
+							<Label.Thin300>Dropoff</Label.Thin300>
+							<Label.Mid300 className="break-words w-full text-start h-10 overflow-y-scroll">
+								{itinerary?.endDateTime &&
+									formatDate(
+										new Date(itinerary?.endDateTime),
+										"dd/MM/yyyy HH:mm:ss a",
+									)}{" "}
+								at {itinerary?.dropOffLocation}
+							</Label.Mid300>
+						</Flex>
+					</Flex>
 				</Flex>
 			</CardContent>
-			<CardFooter className="flex flex-col gap-2 items-center justify-center">
-				<Label.Mid300>
-					Language:{" "}
-					{languageOptions?.find(
-						(option) => option.value === itinerary?.language,
-					)?.label ?? itinerary?.language}
-				</Label.Mid300>
-				<Label.Mid300>
-					{itinerary?.numberOfBookings}/{itinerary?.availability}{" "}
-					Bookings Available
-				</Label.Mid300>
+			<CardFooter>
+				<Flex align="center" justify="between" className="w-full">
+					<Label.Mid300>
+						Language:{" "}
+						{languageOptions?.find(
+							(option) => option.value === itinerary?.language,
+						)?.label ?? itinerary?.language}
+					</Label.Mid300>
+					<Label.Mid300>
+						{itinerary?.availability} Spots left
+					</Label.Mid300>
+				</Flex>
 			</CardFooter>
 		</Card>
 	);

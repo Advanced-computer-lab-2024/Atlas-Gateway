@@ -43,12 +43,12 @@ export default function Navbar() {
 					<Label.Big700 variant="primary">Atlas Gateway</Label.Big700>
 				</Link>
 			</Flex>
-			<Flex gap="2">
+			<Flex gap="4">
 				{routes.map((route) => (
 					<Link
 						to={route.to}
 						key={route.to}
-						className="text-primary hover:no-underline hover:text-primary p-4"
+						className="text-primary p-2 hover:text-primary border-b-2 border-transparent hover:border-black hover:border-solid"
 					>
 						<Label.Mid500 variant="primary">
 							{route.name}

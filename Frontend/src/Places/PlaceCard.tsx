@@ -67,7 +67,7 @@ export default function PlaceCard({
 	return (
 		<Card
 			key={_id}
-			className="w-full h-[380px] flex gap-1 flex-col border-surface-secondary border-2"
+			className="w-full h-[380px] flex gap-1 flex-col border-black border-2"
 		>
 			<Flex
 				align="center"
@@ -97,17 +97,11 @@ export default function PlaceCard({
 									<Eye />
 									View Details
 								</DropdownMenuItem>
-								<DropdownMenuItem
-									className="flex gap-2 cursor-pointer"
-									onClick={handleCopyLink}
-								>
+								<DropdownMenuItem onClick={handleCopyLink}>
 									<Copy />
 									Copy Link
 								</DropdownMenuItem>
-								<DropdownMenuItem
-									className="flex gap-2 cursor-pointer"
-									onClick={handleShareByEmail}
-								>
+								<DropdownMenuItem onClick={handleShareByEmail}>
 									<Mail />
 									Share Via Email
 								</DropdownMenuItem>
@@ -115,7 +109,6 @@ export default function PlaceCard({
 									EAccountType.TourismGovernor && (
 									<>
 										<DropdownMenuItem
-											className="flex gap-2 cursor-pointer"
 											onClick={() => {
 												openEditDrawer(place);
 											}}
@@ -124,7 +117,6 @@ export default function PlaceCard({
 											Edit
 										</DropdownMenuItem>
 										<DropdownMenuItem
-											className="flex gap-2 cursor-pointer"
 											onClick={() => {
 												doDeletePlace(place?._id);
 											}}
@@ -137,17 +129,16 @@ export default function PlaceCard({
 							</DropdownMenuContent>
 						</DropdownMenu>
 					</Flex>
-					<Label.Mid300>{description}</Label.Mid300>
 					<Flex gap="2" align="center">
 						<MapPin size={20} />
-						<Label.Thin200 className="overflow-ellipsis">
+						<Label.Mid300 className="overflow-ellipsis">
 							{location}
-						</Label.Thin200>
+						</Label.Mid300>
 					</Flex>
 					<Flex gap="2" align="center">
-						<Label.Mid200 className="overflow-ellipsis w-[50px] text-left">
+						<Label.Thin300 className="overflow-ellipsis text-left">
 							Tags:
-						</Label.Mid200>
+						</Label.Thin300>
 						{tags?.length > 0 ? (
 							<Flex
 								gap="1"
@@ -165,9 +156,12 @@ export default function PlaceCard({
 								))}
 							</Flex>
 						) : (
-							"N/A"
+							"No tags"
 						)}
 					</Flex>
+					<Label.Mid300 className="break-words h-[4.5rem] w-full overflow-y-scroll">
+						{description}
+					</Label.Mid300>
 				</Flex>
 			</CardContent>
 		</Card>

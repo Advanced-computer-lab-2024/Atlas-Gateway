@@ -1,16 +1,16 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 
-
-
 import { useLoginStore } from "@/store/loginStore";
 import { TProduct } from "@/types/global";
 
-
-
-import { apiCreateProduct, apiProduct, apiProducts, apiUpdateProduct } from "../service/product";
+import {
+	apiCreateProduct,
+	apiProduct,
+	apiProducts,
+	apiUpdateProduct,
+} from "../service/product";
 import { useQueryString } from "./useQueryString";
-
 
 export function useProducts() {
 	const { user } = useLoginStore();

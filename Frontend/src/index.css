@@ -41,6 +41,7 @@ body {
 
 body {
 	margin: 0;
+	background: linear-gradient(180deg, rgb(83, 181, 179), #5e92db);
 }
 
 @media (prefers-color-scheme: light) {

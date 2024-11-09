@@ -10,7 +10,7 @@ import {
 import Label from "@/components/ui/Label";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Flex } from "@/components/ui/flex";
 import useCurrency from "@/hooks/useCurrency";
 import { useLoginStore } from "@/store/loginStore";
@@ -47,13 +47,12 @@ export default function ItineraryDetails() {
 
 	return (
 		<Flex
-			isColumn
-			gap="4"
+			justify="center"
 			align="center"
-			className="px-4 py-4 overflow-y-scroll"
+			className="p-4 overflow-y-scroll w-full h-full"
 		>
-			<Card className="w-[80%] h-[700px] flex-col border-surface-secondary border-2 p-4">
-				<Flex isColumn gap="4">
+			<Card className="w-[80%] border-black border-2">
+				<CardHeader>
 					<Flex justify="between" align="center">
 						<Flex gap="2" align="center">
 							<ArrowLeft
@@ -86,154 +85,137 @@ export default function ItineraryDetails() {
 								</Button>
 							))}
 					</Flex>
-					<Flex gap="2" align="center">
-						<Label.Mid600 className="w-60 text-left">
-							Pickup:
-						</Label.Mid600>
-						<MapPin size={20} />
-						<Label.Thin300 className="overflow-ellipsis">
-							{pickUpLocation}
-						</Label.Thin300>
-					</Flex>
-					<Flex gap="2" align="center">
-						<Label.Mid600 className="w-60 text-left">
-							Dropoff:
-						</Label.Mid600>
-						<MapPin size={20} />
-						<Label.Thin300 className="overflow-ellipsis">
-							{dropOffLocation}
-						</Label.Thin300>
-					</Flex>
-					<Flex gap="2" align="center">
-						<Label.Mid600 className="w-60 text-left">
-							Start time:
-						</Label.Mid600>
-						<MapPin size={20} />
-						<Label.Thin300 className="overflow-ellipsis">
-							{startDateTime &&
-								formatDate(
-									new Date(startDateTime),
-									"dd/MM/yyyy HH:mm:ss a",
-								)}
-						</Label.Thin300>
-					</Flex>
-					<Flex gap="2" align="center">
-						<Label.Mid600 className="w-60 text-left">
-							End time:
-						</Label.Mid600>
-						<MapPin size={20} />
-						<Label.Thin300 className="overflow-ellipsis">
-							{endDateTime &&
-								formatDate(
-									new Date(endDateTime),
-									"dd/MM/yyyy HH:mm:ss a",
-								)}
-						</Label.Thin300>
-					</Flex>
-					<Flex gap="1" align="center">
-						<Label.Mid600 className="overflow-ellipsis w-60 text-left">
-							Price:
-						</Label.Mid600>
-						<DollarSign size={20} />
-						<Label.Thin300 className="overflow-ellipsis">
-							{convertCurrency(price)}
-						</Label.Thin300>
-					</Flex>
-					<Flex gap="1" align="center">
-						<Label.Mid600 className="overflow-ellipsis w-60 text-left">
-							Rating:
-						</Label.Mid600>
-						<Star color="yellow" fill="yellow" size={20} />
-						<Label.Thin300 className="overflow-ellipsis">
-							{avgRating ?? "N/A"}
-						</Label.Thin300>
-					</Flex>
-					<Flex gap="1" align="center">
-						<Label.Mid600 className="overflow-ellipsis w-60 text-left">
-							Availablity:
-						</Label.Mid600>
-						<Star color="yellow" fill="yellow" size={20} />
-						<Label.Thin300 className="overflow-ellipsis">
-							{availability}
-						</Label.Thin300>
-					</Flex>
-					<Flex gap="1" align="center">
-						<Label.Mid600 className="overflow-ellipsis w-60 text-left">
-							Number of bookings:
-						</Label.Mid600>
-						<Label.Thin300 className="overflow-ellipsis">
-							{numberOfBookings}
-						</Label.Thin300>
-					</Flex>
-					<Flex gap="1" align="center">
-						<Label.Mid600 className="overflow-ellipsis w-60 text-left">
-							Language:
-						</Label.Mid600>
-						<Label.Thin300 className="overflow-ellipsis">
-							{languageOptions?.find(
-								(option) => option.value === language,
-							)?.label ?? language}
-						</Label.Thin300>
+				</CardHeader>
+				<CardContent className="grid grid-cols-2 w-full">
+					<Flex
+						isColumn
+						gap="3"
+						align="center"
+						className="w-full border-r border-solid pr-2"
+					>
+						<Flex gap="2" isColumn>
+							<Label.Thin300>Pickup:</Label.Thin300>
+							<Flex gap="2" align="center">
+								<MapPin size={20} />
+								<Label.Mid500>{pickUpLocation}</Label.Mid500>
+							</Flex>
+						</Flex>
+						<Flex gap="2" isColumn>
+							<Label.Thin300>Dropoff:</Label.Thin300>
+							<Flex gap="2" align="center">
+								<MapPin size={20} />
+								<Label.Mid500>{dropOffLocation}</Label.Mid500>
+							</Flex>
+						</Flex>
+						<Flex gap="2" isColumn>
+							<Label.Thin300>Start time:</Label.Thin300>
+							<Label.Mid500>
+								{startDateTime &&
+									formatDate(
+										new Date(startDateTime),
+										"dd/MM/yyyy HH:mm:ss a",
+									)}
+							</Label.Mid500>
+						</Flex>
+						<Flex gap="2" isColumn>
+							<Label.Thin300>End time:</Label.Thin300>
+							<Label.Mid500>
+								{endDateTime &&
+									formatDate(
+										new Date(endDateTime),
+										"dd/MM/yyyy HH:mm:ss a",
+									)}
+							</Label.Mid500>
+						</Flex>
+						<Flex gap="2" isColumn>
+							<Label.Thin300>Price:</Label.Thin300>
+							<Flex gap="2" align="center">
+								<DollarSign size={20} />
+								<Label.Mid500>
+									{convertCurrency(price)}
+								</Label.Mid500>
+							</Flex>
+						</Flex>
+						<Flex gap="2" isColumn>
+							<Label.Thin300>Rating:</Label.Thin300>
+							<Flex gap="2" align="center">
+								<Star color="yellow" fill="yellow" size={20} />
+								<Label.Mid500>
+									{avgRating ?? "N/A"}
+								</Label.Mid500>
+							</Flex>
+						</Flex>
 					</Flex>
 					<Flex
-						gap="2"
+						isColumn
+						gap="3"
 						align="center"
-						justify="start"
-						className="w-full"
+						className="w-full border-r border-solid pr-2"
 					>
-						<Label.Mid600 className="overflow-ellipsis w-60 text-left">
-							Activities:
-						</Label.Mid600>
-						{activities && activities?.length > 0 ? (
-							<Flex
-								gap="1"
-								align="center"
-								className="overflow-x-scroll w-full h-8"
-							>
-								{activities?.map((activity) => (
-									<Badge
-										key={activity?.title}
-										variant={"default"}
-										className="whitespace-nowrap"
-									>
-										{activity?.title}
-									</Badge>
-								))}
-							</Flex>
-						) : (
-							"N/A"
-						)}
+						<Flex gap="2" isColumn>
+							<Label.Thin300>Availablity:</Label.Thin300>
+							<Label.Mid500>{availability}</Label.Mid500>
+						</Flex>
+						<Flex gap="2" isColumn>
+							<Label.Thin300>Number of bookings:</Label.Thin300>
+							<Label.Mid500>{numberOfBookings}</Label.Mid500>
+						</Flex>
+						<Flex gap="2" isColumn>
+							<Label.Thin300>Language:</Label.Thin300>
+							<Label.Mid500>
+								{languageOptions?.find(
+									(option) => option.value === language,
+								)?.label ?? language}
+							</Label.Mid500>
+						</Flex>
+						<Flex gap="2" isColumn align="center">
+							<Label.Thin300>Activities:</Label.Thin300>
+							{activities && activities?.length > 0 ? (
+								<Flex
+									gap="1"
+									align="center"
+									justify="center"
+									className="overflow-x-scroll h-8 w-full"
+								>
+									{activities?.map((activity) => (
+										<Badge
+											key={activity?.title}
+											variant={"default"}
+											className="whitespace-nowrap"
+										>
+											{activity?.title}
+										</Badge>
+									))}
+								</Flex>
+							) : (
+								"N/A"
+							)}
+						</Flex>
+						<Flex gap="2" isColumn align="center">
+							<Label.Thin300>Tags:</Label.Thin300>
+							{tags && tags?.length > 0 ? (
+								<Flex
+									gap="1"
+									align="center"
+									justify="center"
+									className="overflow-x-scroll h-8 w-full"
+								>
+									{tags?.map((tag) => (
+										<Badge
+											key={tag?._id}
+											variant={"default"}
+											className="whitespace-nowrap"
+										>
+											{tag?.name}
+										</Badge>
+									))}
+								</Flex>
+							) : (
+								"No tags"
+							)}
+						</Flex>
 					</Flex>
-					<Flex
-						gap="2"
-						align="center"
-						justify="start"
-						className="w-full"
-					>
-						<Label.Mid600 className="w-60 text-left">
-							Tags:
-						</Label.Mid600>
-						{tags && tags?.length > 0 ? (
-							<Flex
-								gap="1"
-								align="center"
-								className="overflow-x-scroll w-full h-8"
-							>
-								{tags?.map((tag) => (
-									<Badge
-										key={tag?._id}
-										variant={"default"}
-										className="whitespace-nowrap"
-									>
-										{tag?.name}
-									</Badge>
-								))}
-							</Flex>
-						) : (
-							"N/A"
-						)}
-					</Flex>
-				</Flex>
+				</CardContent>
 			</Card>
 		</Flex>
 	);
