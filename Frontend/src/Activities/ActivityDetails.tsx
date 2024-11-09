@@ -1,5 +1,6 @@
 import { formatDate } from "date-fns";
 import { ArrowLeft, DollarSign, MapPin, Star } from "lucide-react";
+import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -7,19 +8,31 @@ import {
 	useBookActivity,
 	useCancelActivityBooking,
 } from "@/api/data/useActivities";
+import { useTouristProfile } from "@/api/data/useProfile";
 import Label from "@/components/ui/Label";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import {
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from "@/components/ui/dialog";
 import { Flex } from "@/components/ui/flex";
+import Rating, { ratingType } from "@/components/ui/rating";
+import ReviewOverlay from "@/components/ui/reviewOverlay";
 import useCurrency from "@/hooks/useCurrency";
-import { useLoginStore } from "@/store/loginStore";
 import { EAccountType } from "@/types/enums";
 
 export default function ActivityDetails() {
 	const navigate = useNavigate();
 	const convertCurrency = useCurrency();
-	const { user } = useLoginStore();
+	const { data: user } = useTouristProfile();
 	const { data, refetch } = useActivity();
 	const { doBookActivity } = useBookActivity(() => {
 		refetch();
@@ -27,6 +40,13 @@ export default function ActivityDetails() {
 	const { doCancelActivityBooking } = useCancelActivityBooking(() => {
 		refetch();
 	});
+
+	const canReview =
+		user?.type === EAccountType.Tourist &&
+		user.bookedActivities.includes(data ? data._id : ""); //TODO: Discuss how to adjust so the activities attended are the ones that can be reviewed, not any booked one
+
+	const childRef = useRef<{ postReview: () => void }>(null);
+
 	const {
 		name,
 		categories,
@@ -40,6 +60,10 @@ export default function ActivityDetails() {
 		tags,
 		tourists,
 	} = data || {};
+
+	const saveReview = () => {
+		if (childRef.current) childRef.current.postReview();
+	};
 
 	return (
 		<Flex
@@ -110,13 +134,56 @@ export default function ActivityDetails() {
 									)}
 							</Label.Mid500>
 						</Flex>
-						<Flex gap="2" isColumn>
-							<Label.Thin300>Rating</Label.Thin300>
-							<Flex gap="2" align="center">
-								<Label.Mid500 className="overflow-ellipsis">
-									{avgRating ?? 0}
-								</Label.Mid500>
-								<Star color="yellow" fill="yellow" size={24} />
+						<Flex gap="2" isColumn align="center">
+							<Label.Thin300>Rating:</Label.Thin300>
+							<Flex>
+								<Rating
+									value={avgRating}
+									ratingType={ratingType.DETAILS}
+									interactive={false}
+								/>
+								{canReview && (
+									<Dialog>
+										<DialogTrigger className="bg-surface-primary ml-4 px-3 rounded-md">
+											Review Product
+										</DialogTrigger>
+										<DialogContent>
+											<DialogHeader>
+												<DialogTitle>
+													Review this Product
+												</DialogTitle>
+												<DialogDescription>
+													<ReviewOverlay
+														reviewType="Activity"
+														reviewedItemId={
+															data?._id
+														}
+														userId={user?._id}
+														ref={childRef}
+													/>
+												</DialogDescription>
+											</DialogHeader>
+											<DialogFooter className="sm:justify-center">
+												<Button
+													type="submit"
+													onClick={() => saveReview()}
+													className="mr-2"
+												>
+													Save Review
+												</Button>
+												<DialogClose asChild>
+													<Button
+														type="button"
+														variant="secondary"
+														className="ml-2"
+													>
+														Close
+													</Button>
+												</DialogClose>
+											</DialogFooter>
+										</DialogContent>
+									</Dialog>
+								)}
 							</Flex>
 						</Flex>
 						<Flex gap="2" isColumn>

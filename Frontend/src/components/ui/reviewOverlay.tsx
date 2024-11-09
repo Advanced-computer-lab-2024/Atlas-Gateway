@@ -11,7 +11,7 @@ interface ReviewOverlayProps {
 }
 
 export interface ReviewOverlayHandle {
-	showOverlay: () => void;
+	postReview: () => void;
 }
 
 export const ReviewOverlay: React.FC<ReviewOverlayProps> = forwardRef<
@@ -19,7 +19,7 @@ export const ReviewOverlay: React.FC<ReviewOverlayProps> = forwardRef<
 	ReviewOverlayProps
 >(({ reviewType, reviewedItemId, userId }, ref) => {
 	const [rating, setRating] = React.useState<number>(0);
-	const [visible, setVisible] = React.useState<boolean>(false);
+	const [visible, setVisible] = React.useState<boolean>(true);
 
 	useEffect(() => {
 		//fetch this user's review from the server
@@ -55,9 +55,9 @@ export const ReviewOverlay: React.FC<ReviewOverlayProps> = forwardRef<
 	});
 
 	useImperativeHandle(ref, () => ({
-		showOverlay: () => {
-			console.log("showing overlay");
-			setVisible(true);
+		postReview: () => {
+			postReview();
+			console.log("Review Saved");
 		},
 	}));
 
@@ -78,57 +78,31 @@ export const ReviewOverlay: React.FC<ReviewOverlayProps> = forwardRef<
 			});
 
 			//Show "Review Saved" Prompt in frontend
-			await new Promise((resolve) => setTimeout(resolve, 0.5));
-			hideOverlay();
 		} catch (error) {
 			console.error(error);
 		}
 	};
 
-	const hideOverlay = () => {
-		//hide the overlay
-		setVisible(false);
-		console.log("hiding overlay");
-	};
-
 	return (
-		<Flex
-			className="z-50 fixed top-0 left-0 w-screen h-screen bg-slate-700 bg-opacity-45"
-			justify="center"
-			isColumn
-			align="center"
-		>
-			<Flex
-				className="p-12 w-4/12 h-2/6 bg-slate-700 bg-opacity-90 rounded-xl"
-				isColumn
-				align="center"
-				justify="center"
-			>
-				<Rating
-					ratingType={ratingType.REVIEW}
-					value={rating}
-					interactive={true}
-					onChange={(value) => setRating(value)}
-				/>
-				<textarea
-					className="w-11/12 bg-gray-400 rounded-md px-2 h-1/2 my-6 py-1"
-					id="commentInput"
-				></textarea>
-				<Flex className="w-8/12 self-center" justify="center">
-					<button
-						className="mx-10 bg-green-500 text-white rounded-md p-2"
-						onClick={() => postReview()}
-					>
-						Submit
-					</button>
-					<button
-						className="mx-10 bg-red-400 text-white rounded-md p-2"
-						onClick={() => hideOverlay()}
-					>
-						Cancel
-					</button>
-				</Flex>
-			</Flex>
+		<Flex className="" isColumn align="center" justify="center">
+			<Rating
+				ratingType={ratingType.DETAILS}
+				value={rating}
+				interactive={true}
+				onChange={(value) => setRating(value)}
+			/>
+			<textarea
+				className="w-11/12 bg-gray-400 rounded-md px-2 h-3/4 my-6 py-1"
+				id="commentInput"
+			></textarea>
+			{/* <Flex className="w-8/12 self-center" justify="center">
+				<button
+					className="mx-10 bg-green-500 text-white rounded-md p-2"
+					onClick={() => postReview()}
+				>
+					Submit
+				</button>
+			</Flex> */}
 		</Flex>
 	);
 });

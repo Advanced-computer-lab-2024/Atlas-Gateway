@@ -1,5 +1,6 @@
 import { formatDate } from "date-fns";
 import { ArrowLeft, DollarSign, MapPin, Star } from "lucide-react";
+import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -7,20 +8,32 @@ import {
 	useCancelItineraryBooking,
 	useItinerary,
 } from "@/api/data/useItineraries";
+import { useTouristProfile } from "@/api/data/useProfile";
 import Label from "@/components/ui/Label";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import {
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from "@/components/ui/dialog";
 import { Flex } from "@/components/ui/flex";
+import Rating, { ratingType } from "@/components/ui/rating";
+import ReviewOverlay from "@/components/ui/reviewOverlay";
 import useCurrency from "@/hooks/useCurrency";
-import { useLoginStore } from "@/store/loginStore";
 import { languageOptions } from "@/types/consts";
 import { EAccountType } from "@/types/enums";
 
 export default function ItineraryDetails() {
 	const navigate = useNavigate();
 	const convertCurrency = useCurrency();
-	const { user } = useLoginStore();
+	const { data: user } = useTouristProfile();
 
 	const { data, refetch } = useItinerary();
 	const {
@@ -44,6 +57,16 @@ export default function ItineraryDetails() {
 	const { doCancelItineraryBooking } = useCancelItineraryBooking(() => {
 		refetch();
 	});
+
+	const canReview =
+		user?.type === EAccountType.Tourist &&
+		user.bookedActivities.includes(data ? data._id : ""); //TODO: Discuss how to adjust so the itineraries attended are the ones that can be reviewed, not any booked one
+
+	const childRef = useRef<{ postReview: () => void }>(null);
+
+	const saveReview = () => {
+		if (childRef.current) childRef.current.postReview();
+	};
 
 	return (
 		<Flex
@@ -136,13 +159,56 @@ export default function ItineraryDetails() {
 								</Label.Mid500>
 							</Flex>
 						</Flex>
-						<Flex gap="2" isColumn>
+						<Flex gap="2" isColumn align="center">
 							<Label.Thin300>Rating:</Label.Thin300>
-							<Flex gap="2" align="center">
-								<Star color="yellow" fill="yellow" size={20} />
-								<Label.Mid500>
-									{avgRating ?? "N/A"}
-								</Label.Mid500>
+							<Flex>
+								<Rating
+									value={avgRating}
+									ratingType={ratingType.DETAILS}
+									interactive={false}
+								/>
+								{canReview && (
+									<Dialog>
+										<DialogTrigger className="bg-surface-primary ml-4 px-3 rounded-md">
+											Review Product
+										</DialogTrigger>
+										<DialogContent>
+											<DialogHeader>
+												<DialogTitle>
+													Review this Product
+												</DialogTitle>
+												<DialogDescription>
+													<ReviewOverlay
+														reviewType="Product"
+														reviewedItemId={
+															data?._id
+														}
+														userId={user?._id}
+														ref={childRef}
+													/>
+												</DialogDescription>
+											</DialogHeader>
+											<DialogFooter className="sm:justify-center">
+												<Button
+													type="submit"
+													onClick={() => saveReview()}
+													className="mr-2"
+												>
+													Save Review
+												</Button>
+												<DialogClose asChild>
+													<Button
+														type="button"
+														variant="secondary"
+														className="ml-2"
+													>
+														Close
+													</Button>
+												</DialogClose>
+											</DialogFooter>
+										</DialogContent>
+									</Dialog>
+								)}
 							</Flex>
 						</Flex>
 					</Flex>
