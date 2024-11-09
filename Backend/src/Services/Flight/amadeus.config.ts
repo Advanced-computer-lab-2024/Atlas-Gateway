@@ -1,5 +1,6 @@
-import Amadeus from "amadeus";
 import dotenv from "dotenv";
+
+const Amadeus = require("amadeus");
 
 dotenv.config();
 
