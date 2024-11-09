@@ -64,7 +64,7 @@ export default function ProductDetails() {
 
 	const canReview =
 		user?.type === EAccountType.Tourist &&
-		user.purchasedProducts.includes(data ? data._id : "");
+		user.purchaseProducts.includes(data ? data._id : "");
 
 	const childRef = useRef<{ postReview: () => void }>(null);
 
