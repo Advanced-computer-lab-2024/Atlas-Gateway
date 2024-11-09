@@ -135,7 +135,7 @@ export default function Itineraries() {
 						}}
 					/>
 				</Flex>
-				{user?.type !== EAccountType.Guide && (
+				{user?.type === EAccountType.Guide && (
 					<Button
 						onClick={() => setOpen(true)}
 						variant="default"

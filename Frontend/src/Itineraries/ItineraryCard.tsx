@@ -10,6 +10,8 @@ import {
 	Mail,
 	MapPin,
 	Star,
+	ToggleLeft,
+	ToggleRight,
 	Trash,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +20,7 @@ import {
 	useDeleteItinerary,
 	useFlagItinerary,
 	useItineraries,
-	useUpdateItinerary,
+	useToggleItineraryStatus,
 } from "@/api/data/useItineraries";
 import Label from "@/components/ui/Label";
 import { Badge } from "@/components/ui/badge";
@@ -55,6 +57,7 @@ export default function ItineraryCard({
 	const { refetch } = useItineraries();
 	const { doDeleteItinerary } = useDeleteItinerary(refetch);
 	const { doFlagItinerary } = useFlagItinerary(refetch);
+	const { doToggleItineraryStatus } = useToggleItineraryStatus(refetch);
 	// Function to copy the itinerary link to the clipboard
 	const handleCopyLink = () => {
 		const itineraryLink = `${window.location.origin}/itineraries/${itinerary?._id}`;
@@ -80,9 +83,7 @@ export default function ItineraryCard({
 		window.location.href = `mailto:?subject=${subject}&body=${body}`;
 	};
 
-	return !(
-		itinerary.isAppropriate === false && user?.type === EAccountType.Tourist
-	) ? (
+	return (
 		<Card
 			key={itinerary?._id}
 			className="w-full h-[370px] flex gap-1 flex-col border-black border-2"
@@ -145,6 +146,26 @@ export default function ItineraryCard({
 									>
 										<Flag />
 										Flag as Inappropriate
+									</DropdownMenuItem>
+								</>
+							)}
+							{user?.type === EAccountType.Guide && (
+								<>
+									<DropdownMenuItem
+										onClick={() => {
+											doToggleItineraryStatus(
+												itinerary?._id,
+											);
+										}}
+									>
+										{itinerary.isActive ? (
+											<ToggleLeft className="text-red-600" />
+										) : (
+											<ToggleRight className="text-green-600" />
+										)}
+										{itinerary.isActive
+											? "Deactivate"
+											: "Activate"}
 									</DropdownMenuItem>
 								</>
 							)}
@@ -266,5 +287,5 @@ export default function ItineraryCard({
 				</Flex>
 			</CardFooter>
 		</Card>
-	) : null;
+	);
 }

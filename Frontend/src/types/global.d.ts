@@ -182,6 +182,7 @@ export interface TItinerary {
 	availability: number;
 	pickUpLocation: string;
 	dropOffLocation: string;
+	isActive: boolean;
 	isAppropriate: boolean;
 	startDateTime: string;
 	endDateTime: string;

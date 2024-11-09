@@ -13,6 +13,7 @@ import {
 	apiFlagItinerary,
 	apiItineraries,
 	apiItinerary,
+	apiToggleItineraryStatus,
 	apiTourGuideItineraries,
 	apiUpdateItinerary,
 } from "../service/itineraries";
@@ -27,7 +28,9 @@ export function useItineraries() {
 		queryFn: () =>
 			user?.type === EAccountType.Guide
 				? apiTourGuideItineraries(_id, query, EAccountType.Guide)
-				: apiItineraries(_id, query, EAccountType.Tourist),
+				: user?.type === EAccountType.Tourist
+					? apiItineraries(_id, query, EAccountType.Tourist)
+					: apiItineraries(_id, query, EAccountType.Admin),
 		queryKey: ["itinerary", _id, query],
 	});
 
@@ -127,4 +130,15 @@ export function useFlagItinerary(onSuccess: () => void) {
 	const { mutate } = mutation;
 
 	return { doFlagItinerary: mutate, ...mutation };
+}
+
+export function useToggleItineraryStatus(onSuccess: () => void) {
+	const mutation = useMutation({
+		mutationFn: (id: string) => apiToggleItineraryStatus(id),
+		onSuccess,
+	});
+
+	const { mutate } = mutation;
+
+	return { doToggleItineraryStatus: mutate, ...mutation };
 }

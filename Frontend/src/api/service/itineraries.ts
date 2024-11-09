@@ -126,3 +126,14 @@ export function apiFlagItinerary(_id: string) {
 		baseURL: baseURL,
 	});
 }
+
+export function apiToggleItineraryStatus(_id: string) {
+	return axios({
+		method: "PUT",
+		url: ENDPOINTS.itinerary.toggleStatus(_id),
+		headers: {
+			"Content-Type": "application/json",
+		},
+		baseURL: baseURL,
+	});
+}
