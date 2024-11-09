@@ -7,6 +7,7 @@ import HttpError from "./Errors/HttpError";
 import passwordRouter from "./Routes/Auth/changePassword.route";
 import loginRouter from "./Routes/Auth/login.route";
 import registerRouter from "./Routes/Auth/register.route";
+import flightRouter from "./Routes/Flight/flight.route";
 import complaintRouter from "./Routes/Interactions/complaint.route";
 import mediaRouter from "./Routes/Media/media.route";
 import productRouter from "./Routes/Purchases/product.route";
@@ -57,7 +58,7 @@ async function startServer() {
 	app.use("/api/media", mediaRouter);
 	app.use("/api/complaint", complaintRouter);
 	app.use("/api/transportation_advertiser", transportation_advertiserRouter);
-
+	app.use("/api/flights", flightRouter);
 	// Error handling middleware
 	app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 		console.error(err.stack);
