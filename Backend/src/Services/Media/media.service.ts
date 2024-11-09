@@ -6,6 +6,7 @@ import * as productService from "../../Services/Purchases/product.service";
 import * as advertiserService from "../../Services/Users/advertiser.service";
 import * as sellerService from "../../Services/Users/seller.service";
 import * as tourGuideService from "../../Services/Users/tourGuide.service";
+import * as placeService from "../Travel/places.service";
 
 export const upload = async (
 	userType: string,
@@ -43,11 +44,10 @@ export const upload = async (
 			case "seller":
 				await sellerService.updateSeller(userId, userId, payload);
 			case "tour_guide":
-				const newGuide = await tourGuideService.updateTourGuide(
-					userId,
-					userId,
-					payload,
-				);
+				await tourGuideService.updateTourGuide(userId, userId, payload);
+			case "place":
+				const place = await placeService.getPlaceById(userId);
+				await place.updateOne({ $push: { imagesPath: filePath } });
 		}
 		return "uploaded";
 	} catch (error) {

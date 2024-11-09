@@ -7,7 +7,7 @@ export interface IPlaces extends Document {
 	governorId: Types.ObjectId;
 	name: string;
 	location: string;
-	pictures: string;
+	imagesPath: string[];
 	openingHours: {
 		sunday: {
 			open: string;
@@ -64,7 +64,7 @@ const placesSchema = new Schema<IPlaces>(
 		name: { type: String, required: true },
 		location: { type: String, required: true },
 		description: { type: String, required: true },
-		pictures: { type: String, required: false },
+		imagesPath: { type: [String] },
 		openingHours: {
 			sunday: {
 				open: { type: String },

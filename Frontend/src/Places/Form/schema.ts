@@ -10,6 +10,15 @@ export const formSchema = z
 			native: z.number().min(0, "Price must be positive"),
 			student: z.number().min(0, "Price must be positive"),
 		}),
+		files: z
+			.array(
+				z
+					.instanceof(File)
+					.refine((file) => file.size <= 5 * 1024 * 1024, {
+						message: "Each file size should be less than 5MB",
+					}),
+			)
+			.nonempty({ message: "Please upload at least one file" }),
 		openingHours: z.object({
 			sunday: z.object({
 				open: z.string().optional(),

@@ -46,7 +46,7 @@ export function usePlace() {
 	return { data: data?.data };
 }
 
-export function useCreatePlace(onSuccess: () => void) {
+export function useCreatePlace(onSuccess: (response: any) => void) {
 	const { user } = useLoginStore();
 
 	const mutation = useMutation({

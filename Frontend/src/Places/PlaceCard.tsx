@@ -1,3 +1,4 @@
+import axios from "axios";
 import {
 	Copy,
 	Edit,
@@ -8,8 +9,10 @@ import {
 	MapPin,
 	Trash,
 } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { useDownload } from "@/api/data/useMedia";
 import { useDeletePlace, usePlaces } from "@/api/data/usePlaces";
 import Label from "@/components/ui/Label";
 import { Badge } from "@/components/ui/badge";
@@ -35,12 +38,26 @@ export default function PlaceCard({
 	const navigate = useNavigate();
 	const { user } = useLoginStore();
 
-	const { _id, name, description, location, images, tags } = place;
-
+	const { _id, name, description, location, tags, imagesPath } = place;
+	const [placesPics, setPlacesPics] = useState<string[]>([]);
 	const { refetch } = usePlaces();
-
 	const { doDeletePlace } = useDeletePlace(refetch);
-
+	const { doDownload } = useDownload((res) => {
+		setPlacesPics((prevPics) => [...prevPics, res.data]);
+		console.log(res.data);
+	});
+	const handleDownload = async (filesPath: string[]) => {
+		try {
+			filesPath.forEach((filePath) => {
+				doDownload(filePath);
+			});
+		} catch (error) {
+			console.error(error);
+		}
+	};
+	useEffect(() => {
+		handleDownload(imagesPath);
+	}, [imagesPath]);
 	// Function to copy the place link to the clipboard
 	const handleCopyLink = () => {
 		const placeLink = `${window.location.origin}/places/${_id}`;
@@ -63,7 +80,6 @@ export default function PlaceCard({
 		);
 		window.location.href = `mailto:?subject=${subject}&body=${body}`;
 	};
-
 	return (
 		<Card
 			key={_id}
@@ -74,8 +90,8 @@ export default function PlaceCard({
 				justify="center"
 				className="w-full h-52 bg-gray-200 rounded-t-xl"
 			>
-				{images?.[0] ? (
-					<img src={images[0]} />
+				{placesPics?.[1] ? (
+					<img src={placesPics[1]} />
 				) : (
 					<LocateIcon className="w-full h-40" />
 				)}

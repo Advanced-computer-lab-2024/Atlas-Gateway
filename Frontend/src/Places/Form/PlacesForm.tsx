@@ -1,7 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
 
+import { useUpload } from "@/api/data/useMedia";
 import {
 	useCreatePlace,
 	usePlaces,
@@ -39,10 +41,15 @@ const PlaceForm = ({
 	open,
 	setOpen,
 	place,
+	onUploadSuccess,
 }: {
 	open: boolean;
 	setOpen: (open: boolean) => void;
 	place?: TPlace;
+	userType?: string;
+	userId?: string;
+	fileType?: string;
+	onUploadSuccess?: () => void;
 }) => {
 	const form = useForm<TPlace>({
 		resolver: zodResolver(formSchema),
@@ -87,13 +94,28 @@ const PlaceForm = ({
 			},
 		},
 	});
-
+	const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const filesArray = Array.from(e.target.files || []);
+		setSelectedFiles(filesArray);
+	};
+	const { doUpload } = useUpload(() => {
+		onUploadSuccess?.();
+	});
 	const { reset, watch } = form;
-
 	const { data: tags } = useTags();
-
 	const { refetch } = usePlaces();
-	const { doCreatePlace } = useCreatePlace(() => {
+	const { doCreatePlace } = useCreatePlace((response) => {
+		const createdPlaceId = response.data._id;
+		selectedFiles.forEach((file) => {
+			const payload = {
+				userType: "place",
+				userId: createdPlaceId,
+				fileType: "none",
+				file,
+			};
+			doUpload(payload);
+		});
 		refetch();
 		form.reset();
 	});
@@ -101,7 +123,6 @@ const PlaceForm = ({
 		refetch();
 		form.reset();
 	});
-
 	const handleSubmit = (values: TPlace) => {
 		if (place) {
 			doUpdatePlace({ ...place, ...values });
@@ -812,6 +833,34 @@ const PlaceForm = ({
 													}
 												/>
 											</FormControl>
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name="files"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Upload files</FormLabel>
+											<FormControl>
+												<input
+													type="file"
+													multiple
+													onChange={(e) => {
+														field.onChange(
+															Array.from(
+																e.target
+																	.files ||
+																	[],
+															),
+														);
+														handleFileChange(e);
+													}}
+												/>
+											</FormControl>
+											<FormDescription>
+												Upload your files here.
+											</FormDescription>
 										</FormItem>
 									)}
 								/>

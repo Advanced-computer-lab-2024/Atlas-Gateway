@@ -5,35 +5,44 @@ import { IPlaces, Places } from "../../Models/Travel/places.model";
 import AggregateBuilder from "../../Services/Operations/aggregation.service";
 import * as governorService from "../Users/governor.service";
 
-export const createPlace = async (createdBy: string, place: IPlaces) => {
+export const createPlace = async (
+	createdBy: string,
+	place: Partial<IPlaces>,
+) => {
 	const session = await mongoose.startSession();
 	try {
 		if (!Types.ObjectId.isValid(createdBy)) {
 			throw new HttpError(400, "Invalid Tour Guide ID");
 		}
-
 		session.startTransaction();
 
-		// Link itinerary ID to the tour guide's itinerary array
 		const governor = await governorService.getGovernorById(createdBy);
-
 		if (!governor) {
 			throw new HttpError(404, "Governor not found");
 		}
-
+		const {
+			name,
+			location,
+			description,
+			tags = [],
+			openingHours,
+			ticketPrices,
+		} = place;
 		const placeData = new Places({
-			place,
+			name,
+			location,
+			description,
+			tags,
+			openingHours,
+			ticketPrices,
 			governorId: new Types.ObjectId(createdBy),
 		});
-
-		await placeData.save({ session }); // Save to generate the ID
-
+		await placeData.save({ session });
 		await governor.updateOne(
 			{ $push: { places: placeData.id } },
 			{ session },
 		);
 		await session.commitTransaction();
-
 		return placeData;
 	} catch (error) {
 		await session.abortTransaction();
@@ -109,7 +118,7 @@ export const getPlaceById = async (id: string) => {
 	return place;
 };
 
-export const updatePlace = async (id: string, newplace: IPlaces) => {
+export const updatePlace = async (id: string, newplace: Partial<IPlaces>) => {
 	if (!Types.ObjectId.isValid(id)) {
 		throw new HttpError(400, "id is not valid");
 	}

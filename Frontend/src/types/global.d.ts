@@ -22,7 +22,7 @@ export type TPlace = {
 	description: string;
 	location: string;
 	avgRating: number;
-	images: string[];
+	imagesPath: string[];
 	categories: TCategory[];
 	openingHours: {
 		sunday: TOpeningHours;

@@ -14,12 +14,14 @@ export const createPlace = async (
 ) => {
 	try {
 		const governorId = req.headers.userid;
-
 		if (!governorId) {
 			throw new HttpError(400, "Governor id is required");
 		}
 
-		const place = placeService.createPlace(governorId.toString(), req.body);
+		const place = await placeService.createPlace(
+			governorId.toString(),
+			req.body,
+		);
 		res.status(200).send(place);
 	} catch (error) {
 		next(error);
