@@ -104,6 +104,7 @@ export interface TTourist extends TUser {
 	purchaseProducts: string[];
 	bookedActivities: string[];
 	bookedItineraries: Types.ObjectId[];
+	bookedTransportations: string[];
 }
 
 export interface TSeller extends TUser {
@@ -211,3 +212,19 @@ export interface TReview {
 	text: string;
 	rating: number;
 }
+
+export interface TTransportation {
+	_id: string;
+	name: string;
+	type: "Bus" | "Car" | "Train" | "Plane" | "Boat";
+	price: number;
+	availability: number;
+	pickUpLocation: string;
+	dropOffLocation: string;
+	timeTakenInMins: number;
+	pickUpTime: Date;
+	dropOffTime: Date;
+	numberOfBookings: number;
+	tourists: Types.ObjectId[];
+	createdBy: Types.ObjectId;
+};

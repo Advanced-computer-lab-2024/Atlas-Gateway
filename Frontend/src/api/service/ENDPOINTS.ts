@@ -112,6 +112,17 @@ const ENDPOINTS = {
 		create: "api/complaint/create",
 		update: (id: string) => `api/complaint/update/${id}`,
 	},
+
+	transportation: {
+		list: "api/transportation/list",
+		listAdvertisor: "api/transportation/listAdvertisor",
+		get: (id: string) => `api/transportation/get/${id}`,
+		create: "api/transportation/create",
+		update: (id: string) => `api/transportation/update/${id}`,
+		delete: (id: string) => `api/transportation/delete/${id}`,
+		book: (id: string) => `api/transportation/book/${id}`,
+		cancelBooking: (id: string) => `api/transportation/cancelBooking/${id}`,
+	},
 };
 
 export default ENDPOINTS;

@@ -15,8 +15,6 @@ export interface ITransportation extends Document {
 	timeTakenInMins: number;
 	pickUpTime: Date;
 	dropOffTime: Date;
-	dateTime : Date;
-	timeTaken: number;
 	numberOfBookings: number;
 	tourists: Types.ObjectId[];
 	createdBy: Types.ObjectId;
@@ -36,7 +34,6 @@ const transportationSchema = new Schema<ITransportation>(
 		dropOffLocation: { type: String, required: true },
 		pickUpTime: { type: Date, required: true },
 		dropOffTime: { type: Date, required: true },
-		dateTime: { type: Date, required: true },
 		timeTakenInMins: { type: Number, required: true },
 		numberOfBookings: { type: Number, default: 0 },
 		tourists: [{ type: Schema.Types.ObjectId, ref: "Tourist" }],

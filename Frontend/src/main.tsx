@@ -35,6 +35,8 @@ import Register from "./Register/Register";
 import { QueryStateProvider } from "./api/data/useQueryString";
 import "./index.css";
 import Layout from "./layout/Layout";
+import Transportations from "./Transportations/Transportations";
+import TransportationDetails from "./Transportations/TransportationDetails";
 
 const queryClient = new QueryClient();
 
@@ -206,6 +208,21 @@ const router = createBrowserRouter([
 					{
 						path: "/itineraries/:id",
 						element: <ItineraryDetails />,
+					},
+				],
+			},
+			{
+				path: "/transportations",
+				element: <Outlet />,
+				children: [
+					{
+						path: "/transportations",
+						index: true,
+						element: <Transportations />,
+					},
+					{
+						path: "/transportations/:id",
+						element: <TransportationDetails />,
 					},
 				],
 			},

@@ -13,7 +13,7 @@ import AggregateBuilder from "../Operations/aggregation.service";
 import { getAdvertiserById } from "../Users/advertiser.service";
 
 import { addBookedTransportation, cancelTransportation, getTouristById } from "../Users/tourist.service";
-import { getTransportationAdvertiserById } from "../Users/transportation_advertiser.service";
+import { addTransportation, getTransportationAdvertiserById } from "../Users/transportation_advertiser.service";
 
 export const createTransportation = async (
 	transportation: ITransportation,
@@ -37,12 +37,14 @@ export const createTransportation = async (
 
 		const transportationData = new Transportation({
 			transportation,
-			createdBy: new Types.ObjectId(createdBy),
+			createdBy: TransportationAdvertiser.id,
 		});
 
 		await transportationData.save({ session }); // Save to generate the ID
 
 		TransportationAdvertiser.transportations.push(transportationData.id);
+
+		await addTransportation(TransportationAdvertiser.id, transportationData.id);
 
 		await TransportationAdvertiser.updateOne({ session });
 		await session.commitTransaction();
@@ -205,7 +207,7 @@ export const cancelBookingTransportation = async (
 
 		const currentDate = new Date();
 		const millisecondsBeforeTransportation =
-			transportation.dateTime.getTime() - currentDate.getTime();
+			transportation.pickUpTime.getTime() - currentDate.getTime();
 		const hoursBeforeTransportation =
 			millisecondsBeforeTransportation / (1000 * 3600);
 		if (hoursBeforeTransportation < 48) {
