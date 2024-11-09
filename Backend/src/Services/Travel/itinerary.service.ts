@@ -8,18 +8,6 @@ import { cancelItinerary } from "../Users/tourist.service";
 import * as tourGuideService from "./../Users/tourGuide.service";
 import * as touristService from "./../Users/tourist.service";
 
-const ItineraryFiltersMap: Record<string, PipelineStage> = {
-	tourist: {
-		$match: {
-			isArchived: false, // TODO: Add appropriate filter
-			isDeleted: false,
-		},
-	},
-	default: {
-		$match: {},
-	},
-};
-
 export const createItinerary = async (
 	itinerary: IItinerary,
 	createdBy: string,
@@ -38,9 +26,8 @@ export const createItinerary = async (
 		if (!tourGuide) {
 			throw new HttpError(404, "Tour Guide not found");
 		}
-
 		const itineraryData = new Itinerary({
-			itinerary,
+			...itinerary,
 			createdBy: new Types.ObjectId(createdBy),
 		});
 
@@ -109,7 +96,30 @@ export const getItineraryByUserId = async (userId: string, query: any) => {
 	return result;
 };
 
-export const getItineraries = async (type: string, query: any) => {
+export const getItineraries = async (
+	type: string,
+	query: any,
+	userId: string,
+) => {
+	const ItineraryFiltersMap: Record<string, PipelineStage> = {
+		tourist: {
+			$match: {
+				$or: [
+					{
+						isDeleted: false,
+						isActive: true,
+						isAppropriate: true,
+					},
+					{
+						tourists: { $in: [userId] },
+					},
+				],
+			},
+		},
+		default: {
+			$match: {},
+		},
+	};
 	const filter =
 		ItineraryFiltersMap?.[type as keyof typeof ItineraryFiltersMap] ||
 		ItineraryFiltersMap.default;
@@ -226,39 +236,48 @@ export const cancelBookingItinerary = async (
 	touristId: string,
 	userType?: string,
 ) => {
-	const itinerary = await getItineraryById(itineraryId);
-	if (!itinerary) {
-		throw new HttpError(404, "Itinerary not found");
-	}
+	try {
+		const itinerary = await getItineraryById(itineraryId);
+		if (!itinerary) {
+			throw new HttpError(404, "Itinerary not found");
+		}
 
-	const currentDate = new Date();
-	const millisecondsBeforeItinerary =
-		itinerary.startDateTime.getTime() - currentDate.getTime();
-	const hoursBeforeItinerary = millisecondsBeforeItinerary / (1000 * 3600);
-	if (hoursBeforeItinerary < 48 && userType !== "admin") {
-		throw new HttpError(400, "Cannot cancel within 48 hours of itinerary.");
-	}
+		const currentDate = new Date();
+		const millisecondsBeforeItinerary =
+			itinerary.startDateTime.getTime() - currentDate.getTime();
+		const hoursBeforeItinerary =
+			millisecondsBeforeItinerary / (1000 * 3600);
+		if (hoursBeforeItinerary < 48 && userType !== "admin") {
+			throw new HttpError(
+				400,
+				"Cannot cancel within 48 hours of itinerary.",
+			);
+		}
 
-	if (!itinerary.tourists.includes(new Types.ObjectId(touristId))) {
-		throw new HttpError(404, "Itinerary not found in the tourist's list");
-	}
+		if (!itinerary.tourists.includes(new Types.ObjectId(touristId))) {
+			throw new HttpError(
+				404,
+				"Itinerary not found in the tourist's list",
+			);
+		}
 
-	const removed = await itinerary.updateOne({
-		$pull: { tourists: touristId },
-		$inc: { numberOfBookings: -1 },
-	});
+		const removed = await itinerary.updateOne({
+			$pull: { tourists: touristId },
+			$inc: { numberOfBookings: -1 },
+		});
 
-	if (removed.modifiedCount === 0) {
-		throw new HttpError(404, "Failed to cancel itinerary booking");
-	}
+		if (removed.modifiedCount === 0) {
+			throw new HttpError(404, "Failed to cancel itinerary booking");
+		}
 
-	const tourist = await touristService.cancelItinerary(
-		touristId,
-		itineraryId,
-		itinerary.price,
-	);
+		const tourist = await touristService.cancelItinerary(
+			touristId,
+			itineraryId,
+			itinerary.price,
+		);
 
-	return itinerary;
+		return itinerary;
+	} catch (error) {}
 };
 
 export const softDeleteItinerary = async (id: string) => {
@@ -297,4 +316,24 @@ export const flagItinerary = async (itineraryId: string) => {
 		{ new: true },
 	);
 	return itineraryFlagged;
+};
+
+export const toggleStatus = async (itineraryId: string) => {
+	const itinerary = await getItineraryById(itineraryId);
+
+	if (!itinerary) {
+		throw new HttpError(404, "Itinerary not found");
+	}
+
+	if (itinerary.numberOfBookings == 0) {
+		throw new HttpError(400, "Itinerary has not bookings yet");
+	}
+	console.log(!itinerary.isActive);
+	await itinerary.updateOne(
+		{
+			isActive: !itinerary.isActive,
+		},
+		{ new: true },
+	);
+	return itinerary;
 };
