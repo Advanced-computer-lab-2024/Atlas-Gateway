@@ -28,9 +28,13 @@ export const createTransportation = async (
 
 		const transportationData = req.body;
 
-		const transportationCreated= await transportationService.createTransportation(transportationData, transportation_advertiserId);
+		const transportationCreated =
+			await transportationService.createTransportation(
+				transportationData,
+				transportation_advertiserId.toString(),
+			);
 
-		if(!transportationCreated){
+		if (!transportationCreated) {
 			return res
 				.status(400)
 				.json({ message: "Error creating Transportation" });
@@ -51,7 +55,8 @@ export const getTransportation = async (req: Request, res: Response) => {
 			res.status(400).json({ error: "Transportation ID is required" });
 		}
 
-		const transportation = await transportationService.getTransportationById(id);
+		const transportation =
+			await transportationService.getTransportationById(id);
 
 		if (!transportation) {
 			res.status(404).send("Transportation not found");
@@ -242,10 +247,11 @@ export const cancelBookingTransportationById = async (
 			return res.status(404).json({ error: "Tourist not found" });
 		}
 
-		const cancelBookingResult = await transportationService.cancelBookingTransportation(
-			transportation.id,
-			tourist.id,
-		);
+		const cancelBookingResult =
+			await transportationService.cancelBookingTransportation(
+				transportation.id,
+				tourist.id,
+			);
 
 		if (!cancelBookingResult) {
 			return res
