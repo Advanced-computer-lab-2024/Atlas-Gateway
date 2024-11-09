@@ -19,12 +19,11 @@ export const CommentsContainer: React.FC<commentsContainerProps> = ({
 }) => {
 	//No-hierarchy comment section
 	return (
-		<div className="w-9/12">
+		<Flex className="w-9/12">
 			<div className="bg-gray-200 py-px px-2 w-10/12 rounded-md self-start">
-				{interactive && <WriteComment />}
 				<DisplayComments comments={comments} />
 			</div>
-		</div>
+		</Flex>
 	);
 };
 
@@ -46,8 +45,4 @@ const DisplayComments: React.FC<displayCommentsProps> = ({ comments }) => {
 			))}
 		</div>
 	); //The actual comment display, max height and show more button
-};
-
-const WriteComment = () => {
-	return <div></div>; // Input field and post button, similar to youtube comments
 };

@@ -3,6 +3,7 @@ import React from "react";
 
 export enum ratingType {
 	DETAILS = 40,
+	REVIEW = 50,
 	CARDS = 10,
 }
 

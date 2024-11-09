@@ -85,6 +85,7 @@ export interface TTourist extends TUser {
 	currency: string;
 	loyaltyPoints: number;
 	walletBalance: number;
+	purchasedProducts: string[]; // TODO: Check array name
 }
 
 export interface TSeller extends TUser {
