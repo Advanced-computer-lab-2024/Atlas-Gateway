@@ -70,7 +70,6 @@ const advertiserRoutes: NavbarRoute[] = [
 ];
 
 const transportationAdvertiserRoutes: NavbarRoute[] = [
-	productsRoute,
 	transportationRoute,
 ];
 
