@@ -8,6 +8,7 @@ import passwordRouter from "./Routes/Auth/changePassword.route";
 import loginRouter from "./Routes/Auth/login.route";
 import registerRouter from "./Routes/Auth/register.route";
 import flightRouter from "./Routes/Flight/flight.route";
+import hotelRouter from "./Routes/Hotel/hotel.route";
 import complaintRouter from "./Routes/Interactions/complaint.route";
 import reviewRouter from "./Routes/Interactions/review.route";
 import mediaRouter from "./Routes/Media/media.route";
@@ -60,6 +61,7 @@ async function startServer() {
 	app.use("/api/complaint", complaintRouter);
 	app.use("/api/transportation_advertiser", transportation_advertiserRouter);
 	app.use("/api/flights", flightRouter);
+	app.use("/api/hotels", hotelRouter);
 	app.use("/api/reviews", reviewRouter);
 	// Error handling middleware
 	app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
