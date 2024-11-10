@@ -1,14 +1,14 @@
 import { Router } from "express";
 
 import {
+	bookFlight,
 	deleteFlightController,
-	saveFlight,
 	searchFlights,
 } from "../../Controllers/Flight/flight.controller";
 
 const productRouter = Router();
 
-productRouter.post("/save", saveFlight);
+productRouter.post("/bookFlight", bookFlight);
 productRouter.post("/search", searchFlights);
 productRouter.delete("/delete/:id", deleteFlightController);
 

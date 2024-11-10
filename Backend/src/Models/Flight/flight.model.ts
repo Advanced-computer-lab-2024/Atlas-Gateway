@@ -26,6 +26,7 @@ export interface IFlight extends Document {
 	price: number;
 	travelClass: string;
 	bookedTickets: number;
+	touristID: Types.ObjectId;
 }
 
 const FlightSchema = new Schema<IFlight>(
@@ -59,6 +60,11 @@ const FlightSchema = new Schema<IFlight>(
 		price: { type: Number, required: true },
 		travelClass: { type: String, required: true },
 		bookedTickets: { type: Number, required: true },
+		touristID: {
+			type: Schema.Types.ObjectId,
+			required: true,
+			ref: "Tourist",
+		},
 	},
 	schemaConfig,
 );
