@@ -1,3 +1,4 @@
+import { DndContext } from "@dnd-kit/core";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
@@ -32,11 +33,11 @@ import ProductDetails from "./Products/ProductDetails";
 import Products from "./Products/Products";
 import Profile from "./Profile/Profile";
 import Register from "./Register/Register";
+import TransportationDetails from "./Transportations/TransportationDetails";
+import Transportations from "./Transportations/Transportations";
 import { QueryStateProvider } from "./api/data/useQueryString";
 import "./index.css";
 import Layout from "./layout/Layout";
-import Transportations from "./Transportations/Transportations";
-import TransportationDetails from "./Transportations/TransportationDetails";
 
 const queryClient = new QueryClient();
 

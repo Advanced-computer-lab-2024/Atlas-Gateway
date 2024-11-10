@@ -7,7 +7,7 @@ import {
 	TPassword,
 	TSeller,
 	TTourGuide,
-	TTourist,
+	TTouristApi,
 	TTransportationAdvertiser,
 } from "@/types/global";
 
@@ -85,7 +85,7 @@ export function useUpdateTouristProfile(onSuccess: () => void) {
 	const { user, setUser } = useLoginStore();
 
 	const mutation = useMutation({
-		mutationFn: (data: TTourist) => {
+		mutationFn: (data: Partial<TTouristApi>) => {
 			if (!user?._id) {
 				throw new Error("User ID is undefined");
 			}

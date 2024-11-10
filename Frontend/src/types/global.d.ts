@@ -103,8 +103,24 @@ export interface TTourist extends TUser {
 	level: 1 | 2 | 3;
 	purchaseProducts: string[];
 	bookedActivities: string[];
-	bookedItineraries: Types.ObjectId[];
+	bookedItineraries: string[];
 	bookedTransportations: string[];
+	preferredTags: TTag[];
+}
+
+export interface TTouristApi extends TUser {
+	email: string;
+	mobile: string;
+	address: string;
+	currency: Currency;
+	loyaltyPoints: number;
+	walletBalance: number;
+	level: 1 | 2 | 3;
+	purchaseProducts: string[];
+	bookedActivities: string[];
+	bookedItineraries: string[];
+	bookedTransportations: string[];
+	preferredTags: string[];
 }
 
 export interface TSeller extends TUser {
@@ -228,4 +244,4 @@ export interface TTransportation {
 	numberOfBookings: number;
 	tourists: Types.ObjectId[];
 	createdBy: Types.ObjectId;
-};
+}

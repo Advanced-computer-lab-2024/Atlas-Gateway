@@ -150,7 +150,7 @@ export default function ProductDetails() {
 							<Flex gap="2" isColumn>
 								<Label.Thin300>Price:</Label.Thin300>
 								<Label.Mid500 className="overflow-ellipsis">
-									{price}
+									{convertCurrency(price)}
 								</Label.Mid500>
 							</Flex>
 							<Flex gap="2" isColumn align="start">

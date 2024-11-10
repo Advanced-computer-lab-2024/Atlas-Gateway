@@ -6,7 +6,7 @@ import {
 	TPassword,
 	TSeller,
 	TTourGuide,
-	TTourist,
+	TTouristApi,
 	TTransportationAdvertiser,
 } from "@/types/global";
 
@@ -55,7 +55,7 @@ export function apiChangePassword(username: string, data: TPassword) {
 	});
 }
 
-export function apiEditTouristProfile(_id: string, data: TTourist) {
+export function apiEditTouristProfile(_id: string, data: Partial<TTouristApi>) {
 	return axios<TTouristProfileResponse>({
 		method: "PUT",
 		url: ENDPOINTS.tourist.update(_id),

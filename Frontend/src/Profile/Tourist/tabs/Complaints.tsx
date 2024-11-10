@@ -42,7 +42,7 @@ export default function Complaints() {
 				</Button>
 			</Flex>
 			<Table className="shadow-lg h-full">
-				<TableHeader className="bg-gray-100">
+				<TableHeader>
 					<TableRow>
 						<TableHead className="p-3">Complaint Title</TableHead>
 						<TableHead className="p-3">Complaint Date</TableHead>

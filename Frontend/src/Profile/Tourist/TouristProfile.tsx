@@ -19,6 +19,7 @@ import profile_background from "../../assets/profile_background.jpg";
 import ChangePasswordSheet from "../ChangePasswordSheet";
 import TouristBadge from "./TouristBadge";
 import TouristSheet from "./TouristSheet";
+import Account from "./tabs/Account";
 import Complaints from "./tabs/Complaints";
 
 export default function TouristProfile() {
@@ -75,7 +76,7 @@ export default function TouristProfile() {
 				<Flex className="mr-7" gap="2" align="center">
 					<TouristSheet />
 					<DropdownMenu modal={false}>
-						<DropdownMenuTrigger>
+						<DropdownMenuTrigger className="bg-transparent">
 							<Settings className="cursor-pointer" />
 						</DropdownMenuTrigger>
 						<DropdownMenuContent>
@@ -103,27 +104,14 @@ export default function TouristProfile() {
 			</div>
 			<div className="flex ml-10 mr-10 mt-10">
 				<Tabs defaultValue="account" className="w-full">
-					<TabsList className="grid w-full grid-cols-4">
+					<TabsList className="grid w-full grid-cols-4 border-2 border-black">
 						<TabsTrigger value="account">Account</TabsTrigger>
 						<TabsTrigger value="upcoming">Upcoming</TabsTrigger>
 						<TabsTrigger value="history">History</TabsTrigger>
 						<TabsTrigger value="complains">Complaints</TabsTrigger>
 					</TabsList>
-					<TabsContent
-						className="flex justify-between items-center"
-						value="account"
-					>
-						<div>
-							<h2 className="text-xl">
-								{data?.email || "Email not found"}
-							</h2>
-							<h3 className="text-xl">
-								{data?.mobile || "Mobile not found"}
-							</h3>
-							<h3 className="text-xl">
-								Address: {data?.address || "Address here"}
-							</h3>
-						</div>
+					<TabsContent value="account">
+						<Account />
 					</TabsContent>
 					<TabsContent value="upcoming"></TabsContent>
 					<TabsContent value="history"></TabsContent>

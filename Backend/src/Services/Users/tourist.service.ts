@@ -40,9 +40,10 @@ export const getTouristById = async (id: string) => {
 	if (!Types.ObjectId.isValid(id)) {
 		throw new HttpError(400, "id is invalid");
 	}
-	const tourist = await Tourist.findById(id);
+	const tourist = await Tourist.findById(id).populate(["bookedItineraries" , "bookedActivities" , "bookedTransportations" , "preferredTags"]);
 	return tourist;
 };
+
 export const getTourists = async () => {
 	const tourists = await Tourist.find();
 	return tourists;
