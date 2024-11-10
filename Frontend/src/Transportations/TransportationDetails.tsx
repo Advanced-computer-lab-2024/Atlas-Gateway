@@ -1,6 +1,5 @@
 import { formatDate } from "date-fns";
 import { ArrowLeft, DollarSign, MapPin } from "lucide-react";
-import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useTouristProfile } from "@/api/data/useProfile";
@@ -30,6 +29,17 @@ export default function TransportationDetails() {
 		},
 	);
 
+	const {
+		name,
+		type,
+		pickUpLocation,
+		dropOffLocation,
+		pickUpTime,
+		dropOffTime,
+		price,
+		tourists,
+	} = data || {};
+
 	return (
 		<Flex
 			justify="center"
@@ -45,10 +55,10 @@ export default function TransportationDetails() {
 								onClick={() => navigate("/transportations")}
 								size={32}
 							/>
-							<Label.Big600>{data?.name}</Label.Big600>
+							<Label.Big600>{name}</Label.Big600>
 						</Flex>
 						{user?.type === EAccountType.Tourist &&
-							(data?.tourists?.includes(user?._id) ? (
+							(tourists?.includes(user?._id) ? (
 								<Button
 									size="lg"
 									onClick={() => {
@@ -70,7 +80,7 @@ export default function TransportationDetails() {
 										}
 									}}
 								>
-									Book
+									Book Now
 								</Button>
 							))}
 					</Flex>
@@ -83,10 +93,16 @@ export default function TransportationDetails() {
 						className="w-full border-r border-solid pr-2"
 					>
 						<Flex gap="2" isColumn>
+							<Label.Thin300>Type</Label.Thin300>
+							<Label.Mid500 className="overflow-ellipsis">
+								{type}
+							</Label.Mid500>
+						</Flex>
+						<Flex gap="2" isColumn>
 							<Label.Thin300>Pick Up Location</Label.Thin300>
 							<Flex gap="2" align="center">
 								<Label.Mid500 className="overflow-ellipsis">
-									{data?.pickUpLocation}
+									{pickUpLocation}
 								</Label.Mid500>
 								<MapPin size={24} />
 							</Flex>
@@ -95,7 +111,7 @@ export default function TransportationDetails() {
 							<Label.Thin300>Drop Off Location</Label.Thin300>
 							<Flex gap="2" align="center">
 								<Label.Mid500 className="overflow-ellipsis">
-									{data?.dropOffLocation}
+									{dropOffLocation}
 								</Label.Mid500>
 								<MapPin size={24} />
 							</Flex>
@@ -103,30 +119,30 @@ export default function TransportationDetails() {
 						<Flex gap="2" isColumn>
 							<Label.Thin300>Pick Up Time</Label.Thin300>
 							<Label.Mid500 className="overflow-ellipsis">
-								{data?.pickUpTime &&
+								{pickUpTime &&
 									formatDate(
-										new Date(data?.pickUpTime),
-										"dd/MM/yyyy, HH:mm:ss a",
+										new Date(pickUpTime),
+										"dd/MM/yyyy HH:mm:ss a",
 									)}
+								
 							</Label.Mid500>
 						</Flex>
 						<Flex gap="2" isColumn>
 							<Label.Thin300>Drop Off Time</Label.Thin300>
 							<Label.Mid500 className="overflow-ellipsis">
-								{data?.dropOffTime &&
+								{dropOffTime &&
 									formatDate(
-										new Date(data?.dropOffTime),
-										"dd/MM/yyyy, HH:mm:ss a",
+										new Date(dropOffTime),
+										"dd/MM/yyyy HH:mm:ss a",
 									)}
 							</Label.Mid500>
 						</Flex>
-
 						<Flex gap="2" isColumn>
-							<Label.Thin300>Price</Label.Thin300>
+							<Label.Thin300>Price:</Label.Thin300>
 							<Flex gap="2" align="center">
 								<DollarSign size={20} />
-								<Label.Mid500 className="overflow-ellipsis">
-									{convertCurrency(data?.price)}
+								<Label.Mid500>
+									{convertCurrency(price)}
 								</Label.Mid500>
 							</Flex>
 						</Flex>

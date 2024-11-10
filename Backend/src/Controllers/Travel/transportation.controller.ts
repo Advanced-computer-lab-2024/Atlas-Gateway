@@ -105,6 +105,9 @@ export const getTransportations = async (
 			userId.toString(),
 			req.query,
 		);
+		if (result[0].data.length === 0 ){
+			throw new HttpError(404, "No Transportation	found");
+		}				
 		const response = {
 			data: result[0].data,
 			metaData: {

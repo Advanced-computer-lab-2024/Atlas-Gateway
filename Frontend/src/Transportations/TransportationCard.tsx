@@ -1,3 +1,4 @@
+import { formatDate } from "date-fns";
 import { Copy, Edit, EllipsisVertical, Eye, Mail } from "lucide-react";
 import { Trash } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -31,6 +32,14 @@ export default function TransportationCard({
 
 	const { refetch } = useTransportations();
 	const { doDeleteTransportation } = useDeleteTransportation(refetch);
+
+	if (!transportation) {
+		return (
+			<Card className="w-full h-[150px] flex items-center justify-center border-black border-2">
+				<Label.Mid500>No transportation data found</Label.Mid500>
+			</Card>
+		);
+	}
 
 	// Function to copy the transportation link to the clipboard
 	const handleCopyLink = () => {
@@ -147,18 +156,23 @@ export default function TransportationCard({
 					<Flex gap="2" align="center" justify="between">
 						<Label.Thin300>Departure Time:</Label.Thin300>
 						<Label.Mid300>
-							{new Date(
-								transportation?.pickUpTime,
-							).toLocaleString()}
+							{transportation?.pickUpTime
+								? formatDate(
+										new Date(transportation.pickUpTime),
+										"dd/MM/yyyy HH:mm:ss a",
+									)
+								: "N/A"}
 						</Label.Mid300>
 					</Flex>
 
 					<Flex gap="2" align="center" justify="between">
 						<Label.Thin300>Arrival Time:</Label.Thin300>
 						<Label.Mid300>
-							{new Date(
-								transportation?.dropOffTime,
-							).toLocaleString()}
+							{transportation?.dropOffTime &&
+								formatDate(
+									new Date(transportation?.dropOffTime),
+									"dd/MM/yyyy HH:mm:ss a",
+								)}
 						</Label.Mid300>
 					</Flex>
 					<Flex gap="2" align="center" justify="between">

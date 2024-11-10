@@ -39,24 +39,6 @@ export const transportationSchema = z
       .refine((val) => !isNaN(val.getTime()), {
         message: "dropOffTime must be a valid date",
       }),
-
-    timeTakenInMins: z
-      .number({ message: "timeTakenInMins is required" })
-      .min(0, { message: "timeTakenInMins must be at least 0" }),
-
-    numberOfBookings: z
-      .number({ message: "numberOfBookings cannot be negative" })
-      .min(0, { message: "numberOfBookings cannot be negative" })
-      .optional()
-      .default(0),
-
-    tourists: z.array(z.string())
-    .optional()
-    .default([]),
-
-    createdBy: z.string().min(1, { message: "createdBy is required" })
-    .optional(),
-
   })
   .refine((data) => data.dropOffTime > data.pickUpTime, {
     path: ["pickUpTime", "dropOffTime"],
