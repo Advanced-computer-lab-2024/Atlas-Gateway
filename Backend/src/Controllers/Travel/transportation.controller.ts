@@ -71,14 +71,14 @@ export const getTransportationByUserId = async (
 	res: Response,
 	next: NextFunction,
 ) => {
-	const userId = req.params.userId;
+	const userid = req.headers.userid;
 	try {
-		if (!userId) {
+		if (!userid) {
 			throw new HttpError(400, "User ID is required");
 		}
 
 		const transportation =
-			await transportationService.getTransportationByUserId(userId);
+			await transportationService.getTransportationByUserId(userid.toString());
 
 		return res.status(200).json(transportation);
 	} catch (error) {
@@ -97,7 +97,7 @@ export const getTransportations = async (
 		if (!userId) {
 			throw new HttpError(400, "User ID is required");
 		}
-		if (!type) {
+		if (type != 'transportation_advertiser') {
 			throw new HttpError(400, "User Type is required");
 		}
 		const result = await transportationService.getTransportations(

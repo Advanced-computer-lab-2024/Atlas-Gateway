@@ -238,10 +238,8 @@ export interface TTransportation {
 	availability: number;
 	pickUpLocation: string;
 	dropOffLocation: string;
-	timeTakenInMins: number;
 	pickUpTime: string;
 	dropOffTime: string;
 	numberOfBookings: number;
 	tourists: Types.ObjectId[];
-	createdBy: Types.ObjectId;
 }

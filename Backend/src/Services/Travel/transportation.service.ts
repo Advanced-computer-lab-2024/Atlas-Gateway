@@ -16,6 +16,7 @@ import {
 	addTransportation,
 	getTransportationAdvertiserById,
 } from "../Users/transportation_advertiser.service";
+import transportation_advertiserRouter from "@/Routes/Users/transportation_advertiser.route";
 
 const TransportationFiltersMap: Record<string, PipelineStage> = {
 	tourist: {
@@ -23,7 +24,7 @@ const TransportationFiltersMap: Record<string, PipelineStage> = {
 			isDeleted: false,
 		},
 	},
-	default: {
+	transportation_advertiser: {
 		$match: {},
 	},
 };
@@ -264,10 +265,6 @@ export const cancelBookingTransportation = async (
 };
 
 export const getTransportations = async (type: string) => {
-
-	if (type !== "tourist") {
-		return;
-	}
 
 	const filter =
 		TransportationFiltersMap?.[type as keyof typeof TransportationFiltersMap] ||

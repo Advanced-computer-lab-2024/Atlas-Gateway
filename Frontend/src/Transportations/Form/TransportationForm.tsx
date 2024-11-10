@@ -63,8 +63,8 @@ const TransportationForm = ({
 		}
 	}, [transportation, reset]);
 
-	const { refetch } = useTransportations();
-
+	const {refetch } = useTransportations();
+	
 	const { doCreateTransportation } = useCreateTransportation(() => {
 		refetch();
 		form.reset();

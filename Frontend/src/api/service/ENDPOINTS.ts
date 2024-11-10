@@ -78,8 +78,7 @@ const ENDPOINTS = {
 		list: "api/transportation_advertiser/list",
 		show: (id: string) => `api/transportation_advertiser/show/${id}`,
 		update: (id: string) => `api/transportation_advertiser/update/${id}`,
-		delete: (id: string) =>
-			`api/api/transportation_advertiser/delete/${id}`,
+		delete: (id: string) => `api/transportation_advertiser/delete/${id}`,
 	},
 	category: {
 		list: "api/category/list",
