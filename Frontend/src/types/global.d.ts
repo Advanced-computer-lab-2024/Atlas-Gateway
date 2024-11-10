@@ -101,10 +101,10 @@ export interface TTourist extends TUser {
 	loyaltyPoints: number;
 	walletBalance: number;
 	level: 1 | 2 | 3;
-	purchaseProducts: string[];
-	bookedActivities: string[];
-	bookedItineraries: string[];
-	bookedTransportations: string[];
+	purchaseProducts: TProduct[];
+	bookedActivities: TActivity[];
+	bookedItineraries: TItinerary[];
+	bookedTransportations: TTransportation[];
 	preferredTags: TTag[];
 }
 

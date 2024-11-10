@@ -21,7 +21,10 @@ import ChangePasswordSheet from "../ChangePasswordSheet";
 import TouristBadge from "./TouristBadge";
 import TouristSheet from "./TouristSheet";
 import Account from "./tabs/Account";
+import TouristActivities from "./tabs/Activities/TouristActivities";
 import Complaints from "./tabs/Complaints";
+import TouristItineraries from "./tabs/Itineraries/TouristItineraries";
+import TouristTransportations from "./tabs/Transporations/TouristTransporations";
 
 export default function TouristProfile() {
 	const { data, refetch } = useTouristProfile();
@@ -113,14 +116,28 @@ export default function TouristProfile() {
 			</div>
 			<div className="flex ml-10 mr-10 mt-10">
 				<Tabs defaultValue="account" className="w-full">
-					<TabsList className="grid w-full grid-cols-4 border-2 border-black">
+					<TabsList className="grid w-full grid-cols-5 border-2 border-black">
 						<TabsTrigger value="account">Account</TabsTrigger>
-						<TabsTrigger value="upcoming">Upcoming</TabsTrigger>
-						<TabsTrigger value="history">History</TabsTrigger>
+						<TabsTrigger value="activities">Activities</TabsTrigger>
+						<TabsTrigger value="itineraries">
+							Itineraries
+						</TabsTrigger>
+						<TabsTrigger value="transporations">
+							Transporations
+						</TabsTrigger>
 						<TabsTrigger value="complains">Complaints</TabsTrigger>
 					</TabsList>
 					<TabsContent value="account">
 						<Account />
+					</TabsContent>
+					<TabsContent value="activities">
+						<TouristActivities />
+					</TabsContent>
+					<TabsContent value="itineraries">
+						<TouristItineraries />
+					</TabsContent>
+					<TabsContent value="transporations">
+						<TouristTransportations />
 					</TabsContent>
 					<TabsContent value="upcoming"></TabsContent>
 					<TabsContent value="history"></TabsContent>
