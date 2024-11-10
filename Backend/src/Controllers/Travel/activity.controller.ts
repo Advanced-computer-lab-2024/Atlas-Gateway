@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
+import { Types } from "mongoose";
 
 import HttpError from "../../Errors/HttpError";
-import * as activityService from "../../Services/Travel/activity.service";
 import { Tourist } from "../../Models/Users/tourist.model";
-import { Types } from "mongoose";
+import * as activityService from "../../Services/Travel/activity.service";
 
 export const createActivities = async (
 	req: Request,
@@ -82,7 +82,6 @@ export const getActivitybyCreator = async (
 	}
 };
 
-
 export const getActivities = async (
 	req: Request,
 	res: Response,
@@ -96,10 +95,15 @@ export const getActivities = async (
 		}
 		let preferredTags: Types.ObjectId[] | undefined = undefined;
 		if (usertype === "tourist") {
-			preferredTags = (await Tourist?.findOne({ _id: req.headers.userid }))?.preferredTags;
+			preferredTags = (
+				await Tourist?.findOne({ _id: req.headers.userid })
+			)?.preferredTags;
 		}
 
-		const result = await activityService.getActivities(usertype, { ...req.query, preferredTags });
+		const result = await activityService.getActivities(usertype, {
+			...req.query,
+			preferredTags,
+		});
 
 		const response = {
 			data: result[0].data,
