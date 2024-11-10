@@ -17,9 +17,9 @@ import {
 } from "@/components/ui/form";
 import { TGovernor } from "@/types/global";
 
-import Label from "../components/ui/Label";
-import { Button } from "../components/ui/button";
-import { Input } from "../components/ui/input";
+import Label from "../../components/ui/Label";
+import { Button } from "../../components/ui/button";
+import { Input } from "../../components/ui/input";
 import {
 	Sheet,
 	SheetContent,
@@ -28,7 +28,7 @@ import {
 	SheetHeader,
 	SheetTitle,
 	SheetTrigger,
-} from "../components/ui/sheet";
+} from "../../components/ui/sheet";
 
 const formSchema = z.object({
 	email: z.string().email({

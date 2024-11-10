@@ -18,9 +18,9 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { TTransportationAdvertiser } from "@/types/global";
 
-import Label from "../components/ui/Label";
-import { Button } from "../components/ui/button";
-import { Input } from "../components/ui/input";
+import Label from "../../components/ui/Label";
+import { Button } from "../../components/ui/button";
+import { Input } from "../../components/ui/input";
 import {
 	Sheet,
 	SheetContent,
@@ -29,7 +29,7 @@ import {
 	SheetHeader,
 	SheetTitle,
 	SheetTrigger,
-} from "../components/ui/sheet";
+} from "../../components/ui/sheet";
 
 const formSchema = z.object({
 	name: z.string().min(2, {
