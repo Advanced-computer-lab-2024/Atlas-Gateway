@@ -1,5 +1,6 @@
 import { GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import crypto from "crypto";
 
 import s3 from "../../Config/s3Client";
 import * as productService from "../../Services/Purchases/product.service";
@@ -15,15 +16,25 @@ export const upload = async (
 	file: Express.Multer.File,
 ) => {
 	try {
-		const filePath = `${userType}/${userId}_${file?.originalname}`;
+		const randomName = (bytes = 16) =>
+			crypto.randomBytes(bytes).toString("hex");
+		const filePath = `${userType}/${randomName()}_${file.originalname}`;
 		const payload =
 			fileType === "image"
-				? { imagePath: filePath }
+				? {
+						imagePath: filePath,
+					}
 				: fileType === "id"
-					? { idPath: filePath }
+					? {
+							idPath: filePath,
+						}
 					: fileType === "taxCard"
-						? { taxCardPath: filePath }
-						: { certificatePath: filePath };
+						? {
+								taxCardPath: filePath,
+							}
+						: {
+								certificatePath: filePath,
+							};
 		const params = {
 			Bucket: process.env.AWS_BUCKET_NAME!,
 			Key: filePath,
@@ -61,6 +72,7 @@ export const download = async (filePath: string) => {
 			Bucket: process.env.AWS_BUCKET_NAME!,
 			Key: `${filePath}`,
 		});
+		console.log(filePath);
 		await s3.send(command);
 		return await getSignedUrl(s3, command, { expiresIn: 3600 });
 	} catch (error) {

@@ -1,7 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 import { useUpload } from "@/api/data/useMedia";
 import {
@@ -100,7 +99,7 @@ const PlaceForm = ({
 		setSelectedFiles(filesArray);
 	};
 	const { doUpload } = useUpload(() => {
-		onUploadSuccess?.();
+		refetch();
 	});
 	const { reset, watch } = form;
 	const { data: tags } = useTags();

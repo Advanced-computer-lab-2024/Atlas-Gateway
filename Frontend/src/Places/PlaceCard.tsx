@@ -1,4 +1,3 @@
-import axios from "axios";
 import {
 	Copy,
 	Edit,
@@ -12,6 +11,7 @@ import {
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import Slideshow from "@/Places/Form/Slideshow";
 import { useDownload } from "@/api/data/useMedia";
 import { useDeletePlace, usePlaces } from "@/api/data/usePlaces";
 import Label from "@/components/ui/Label";
@@ -37,14 +37,12 @@ export default function PlaceCard({
 }) {
 	const navigate = useNavigate();
 	const { user } = useLoginStore();
-
 	const { _id, name, description, location, tags, imagesPath } = place;
 	const [placesPics, setPlacesPics] = useState<string[]>([]);
 	const { refetch } = usePlaces();
 	const { doDeletePlace } = useDeletePlace(refetch);
 	const { doDownload } = useDownload((res) => {
 		setPlacesPics((prevPics) => [...prevPics, res.data]);
-		console.log(res.data);
 	});
 	const handleDownload = async (filesPath: string[]) => {
 		try {
@@ -85,17 +83,7 @@ export default function PlaceCard({
 			key={_id}
 			className="w-full h-[380px] flex gap-1 flex-col border-black border-2"
 		>
-			<Flex
-				align="center"
-				justify="center"
-				className="w-full h-52 bg-gray-200 rounded-t-xl"
-			>
-				{placesPics?.[1] ? (
-					<img src={placesPics[1]} />
-				) : (
-					<LocateIcon className="w-full h-40" />
-				)}
-			</Flex>
+			<Slideshow placesPics={placesPics} type="card" />
 			<CardContent className="p-2">
 				<Flex isColumn gap="2">
 					<Flex gap="2" align="center" justify="between">
