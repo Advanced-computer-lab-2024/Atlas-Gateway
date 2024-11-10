@@ -239,7 +239,7 @@ export const cancelBookingItinerary = async (
 	}
 
 	if (!itinerary.tourists.includes(new Types.ObjectId(touristId))) {
-		throw new HttpError(404, "Itinerary not found in the tourist's list");
+		throw new HttpError(404, "Tourist not found in itinerary's list");
 	}
 
 	const removed = await itinerary.updateOne({

@@ -94,7 +94,7 @@ export const getActivities = async (
 		if (!usertype) {
 			throw new HttpError(400, "User type is required");
 		}
-		const result = await activityService.getActivities(usertype,req.query);
+		const result = await activityService.getActivities(usertype, req.query);
 
 		const response = {
 			data: result[0].data,
@@ -174,6 +174,18 @@ export const bookActivity = async (
 
 		if (!bookingResult) {
 			return res.status(400).json({ message: "Cannot book Activity" });
+		}
+
+		const tourist = await Tourist.findById(touristId);
+		if (tourist) {
+			if (
+				!tourist.bookedActivities.includes(
+					new Types.ObjectId(activityId),
+				)
+			) {
+				tourist.bookedActivities.push(new Types.ObjectId(activityId));
+				tourist.save();
+			}
 		}
 
 		return res

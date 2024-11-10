@@ -29,6 +29,7 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Flex } from "@/components/ui/flex";
+import Rating, { ratingType } from "@/components/ui/rating";
 import useCurrency from "@/hooks/useCurrency";
 import { useLoginStore } from "@/store/loginStore";
 import { languageOptions } from "@/types/consts";
@@ -190,10 +191,11 @@ export default function ItineraryCard({
 							</Label.Thin300>
 						</Flex>
 						<Flex gap="1" align="center">
-							<Star color="yellow" fill="yellow" size={20} />
-							<Label.Thin300 className="overflow-ellipsis">
-								{itinerary?.avgRating ?? "N/A"}
-							</Label.Thin300>
+							<Rating
+								value={itinerary?.avgRating}
+								interactive={false}
+								ratingType={ratingType.CARDS}
+							/>
 						</Flex>
 					</Flex>
 					<Flex gap="2" isColumn align="center">

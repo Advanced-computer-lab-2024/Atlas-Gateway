@@ -23,6 +23,7 @@ import { Flex } from "@/components/ui/flex";
 import Rating, { ratingType } from "@/components/ui/rating";
 import ReviewOverlay from "@/components/ui/reviewOverlay";
 import useCurrency from "@/hooks/useCurrency";
+import { useLoginStore } from "@/store/loginStore";
 import { EAccountType } from "@/types/enums";
 import { TReview } from "@/types/global";
 
@@ -43,7 +44,9 @@ export default function ProductDetails() {
 
 	const [fetchedComments, setFetchedComments] = useState<TReview[]>([]);
 
-	const { data: user } = useTouristProfile();
+	const { user } = useLoginStore();
+	const { data: userProfile } = useTouristProfile();
+	console.log(userProfile);
 
 	const [productPic, setProductPic] = useState("");
 
@@ -64,32 +67,31 @@ export default function ProductDetails() {
 
 	const canReview =
 		user?.type === EAccountType.Tourist &&
-		user.purchaseProducts.includes(data ? data._id : "");
+		userProfile?.purchaseProducts.includes(data ? data._id : "");
 
 	const childRef = useRef<{ postReview: () => void }>(null);
 
-	const fetchComments = async () => {
-		const res = await axios.get(
-			"http://localhost:5000/api/products/getComments",
-			{
-				params: {
-					productId: data?._id,
-					skipCount: fetchedComments.length,
-				},
-			},
-		);
-
-		//concatenate the new comments with the old ones
-		setFetchedComments([...fetchedComments, ...res.data]);
-	};
-
 	useEffect(() => {
+		const fetchComments = async () => {
+			const res = await axios.get(
+				"http://localhost:5000/api/products/getComments",
+				{
+					params: {
+						productId: data?._id,
+						skipCount: fetchedComments.length,
+					},
+				},
+			);
+
+			//concatenate the new comments with the old ones
+			setFetchedComments([...fetchedComments, ...res.data]);
+		};
 		try {
 			fetchComments();
 		} catch (error) {
 			console.error(error);
 		}
-	}, [fetchComments]);
+	});
 
 	const saveReview = () => {
 		if (childRef.current) childRef.current.postReview();

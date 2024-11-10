@@ -101,9 +101,9 @@ export interface TTourist extends TUser {
 	loyaltyPoints: number;
 	walletBalance: number;
 	level: 1 | 2 | 3;
-	purchaseProducts: string[];
-	bookedActivities: string[];
-	bookedItineraries: Types.ObjectId[];
+	purchaseProducts: Types.ObjectId[];
+	bookedActivities: Types.ObjectId[];
+	bookedItineraries: TItinerary[];
 }
 
 export interface TSeller extends TUser {

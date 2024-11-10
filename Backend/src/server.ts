@@ -8,6 +8,7 @@ import passwordRouter from "./Routes/Auth/changePassword.route";
 import loginRouter from "./Routes/Auth/login.route";
 import registerRouter from "./Routes/Auth/register.route";
 import complaintRouter from "./Routes/Interactions/complaint.route";
+import reviewRouter from "./Routes/Interactions/review.route";
 import mediaRouter from "./Routes/Media/media.route";
 import productRouter from "./Routes/Purchases/product.route";
 import itineraryRouter from "./Routes/Travel/Itinerary.route";
@@ -57,6 +58,7 @@ async function startServer() {
 	app.use("/api/media", mediaRouter);
 	app.use("/api/complaint", complaintRouter);
 	app.use("/api/transportation_advertiser", transportation_advertiserRouter);
+	app.use("/api/reviews", reviewRouter);
 
 	// Error handling middleware
 	app.use((err: Error, req: Request, res: Response, next: NextFunction) => {

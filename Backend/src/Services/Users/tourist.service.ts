@@ -1,3 +1,4 @@
+import { IItinerary } from "@/Models/Travel/itinerary.model";
 import { Types } from "mongoose";
 
 import HttpError from "../../Errors/HttpError";
@@ -40,7 +41,7 @@ export const getTouristById = async (id: string) => {
 	if (!Types.ObjectId.isValid(id)) {
 		throw new HttpError(400, "id is invalid");
 	}
-	const tourist = await Tourist.findById(id);
+	const tourist = await Tourist.findById(id).populate("bookedItineraries");
 	return tourist;
 };
 export const getTourists = async () => {
@@ -187,7 +188,11 @@ export const cancelItinerary = async (
 		throw new HttpError(404, "Tourist not found");
 	}
 
-	if (!tourist.bookedItineraries.includes(new Types.ObjectId(itineraryId))) {
+	if (
+		!tourist.bookedItineraries.some((itinerary: any) =>
+			itinerary._id.equals(itineraryId),
+		)
+	) {
 		throw new HttpError(404, "Itinerary not found in the tourist's list");
 	}
 	const newLoyaltyPoints =

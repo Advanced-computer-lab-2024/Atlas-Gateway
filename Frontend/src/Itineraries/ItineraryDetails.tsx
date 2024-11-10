@@ -1,6 +1,6 @@
 import { formatDate } from "date-fns";
-import { ArrowLeft, DollarSign, MapPin, Star } from "lucide-react";
-import { useRef } from "react";
+import { ArrowLeft, DollarSign, MapPin } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -27,13 +27,17 @@ import { Flex } from "@/components/ui/flex";
 import Rating, { ratingType } from "@/components/ui/rating";
 import ReviewOverlay from "@/components/ui/reviewOverlay";
 import useCurrency from "@/hooks/useCurrency";
+import { useLoginStore } from "@/store/loginStore";
 import { languageOptions } from "@/types/consts";
 import { EAccountType } from "@/types/enums";
+import { TTourGuide, TTourist } from "@/types/global";
 
 export default function ItineraryDetails() {
 	const navigate = useNavigate();
 	const convertCurrency = useCurrency();
-	const { data: user } = useTouristProfile();
+	const { user } = useLoginStore();
+	const { data: userProfile, refetch: refetchUserProfile } =
+		useTouristProfile();
 
 	const { data, refetch } = useItinerary();
 	const {
@@ -53,14 +57,50 @@ export default function ItineraryDetails() {
 	} = data || {};
 	const { doBookItinerary } = useBookItinerary(() => {
 		refetch();
+		refetchUserProfile();
 	});
 	const { doCancelItineraryBooking } = useCancelItineraryBooking(() => {
 		refetch();
+		refetchUserProfile();
 	});
 
-	const canReview =
-		user?.type === EAccountType.Tourist &&
-		user.bookedActivities.includes(data ? data._id : ""); //TODO: Discuss how to adjust so the itineraries attended are the ones that can be reviewed, not any booked one
+	const tourGuideName = (data?.createdBy as unknown as TTourGuide)?.name
+		? (data?.createdBy as unknown as TTourGuide)?.name
+		: (data?.createdBy as unknown as TTourGuide)?.username;
+
+	useEffect(() => {
+		console.log("Guide From Profile:", userProfile);
+		console.log("Guide From Itinerary:", data);
+		setCanReviewItinerary(
+			!!(
+				user?.type === EAccountType.Tourist &&
+				data?.tourists?.includes(user?._id) &&
+				data?.endDateTime.localeCompare(new Date().toISOString()) === -1
+			),
+		);
+		setCanReviewGuide(
+			!!(
+				(
+					user?.type === EAccountType.Tourist &&
+					userProfile?.bookedItineraries?.some(
+						(bookedItinerary) =>
+							bookedItinerary.createdBy ===
+							(data?.createdBy as unknown as TTourGuide)?._id,
+					) &&
+					data?.endDateTime.localeCompare(
+						new Date().toISOString(),
+					) === -1
+				) // 1 if endDateTime is after now, -1 if endDateTime is before now, 0 if they are equal
+			),
+		);
+	}, [user, userProfile, data]);
+
+	console.log(data?.endDateTime);
+	console.log(new Date().toISOString());
+	console.log(data?.endDateTime.localeCompare(new Date().toISOString())); // 1 if endDateTime is after now, -1 if endDateTime is before now, 0 if they are equal
+	const [canReviewItinerary, setCanReviewItinerary] = useState(false);
+	const [canReviewGuide, setCanReviewGuide] = useState(false);
+	//TODO: Discuss how to adjust so the itineraries attended are the ones that can be reviewed, not any booked one
 
 	const childRef = useRef<{ postReview: () => void }>(null);
 
@@ -167,15 +207,15 @@ export default function ItineraryDetails() {
 									ratingType={ratingType.DETAILS}
 									interactive={false}
 								/>
-								{canReview && (
+								{canReviewItinerary && (
 									<Dialog>
 										<DialogTrigger className="bg-surface-primary ml-4 px-3 rounded-md">
-											Review Product
+											Review Itinerary
 										</DialogTrigger>
 										<DialogContent>
 											<DialogHeader>
 												<DialogTitle>
-													Review this Product
+													Review this Itinerary
 												</DialogTitle>
 												<DialogDescription>
 													<ReviewOverlay
@@ -275,6 +315,70 @@ export default function ItineraryDetails() {
 											{tag?.name}
 										</Badge>
 									))}
+								</Flex>
+							) : (
+								"No tags"
+							)}
+						</Flex>
+						<Flex gap="2" isColumn align="center">
+							<Label.Thin300>Tour Guide:</Label.Thin300>
+							{tags && tags?.length > 0 ? (
+								<Flex
+									gap="1"
+									align="center"
+									justify="center"
+									className="overflow-x-scroll h-8 w-full"
+								>
+									<Label.Mid500>{tourGuideName}</Label.Mid500>
+
+									{canReviewGuide && (
+										<Dialog>
+											<DialogTrigger className="bg-surface-primary ml-4 px-3 rounded-md">
+												Review Guide
+											</DialogTrigger>
+											<DialogContent>
+												<DialogHeader>
+													<DialogTitle>
+														Review this Itinerary's
+														Tour Guide:{" "}
+														{tourGuideName}
+													</DialogTitle>
+													<DialogDescription>
+														<ReviewOverlay
+															reviewType="TourGuide"
+															reviewedItemId={
+																(
+																	data?.createdBy as unknown as TTourGuide
+																)?._id
+															}
+															userId={user?._id}
+															ref={childRef}
+														/>
+													</DialogDescription>
+												</DialogHeader>
+												<DialogFooter className="sm:justify-center">
+													<Button
+														type="submit"
+														onClick={() =>
+															saveReview()
+														}
+														className="mr-2"
+													>
+														Save Review
+													</Button>
+													<DialogClose asChild>
+														<Button
+															type="button"
+															variant="secondary"
+															className="ml-2"
+														>
+															Close
+														</Button>
+													</DialogClose>
+												</DialogFooter>
+											</DialogContent>
+										</Dialog>
+									)}
 								</Flex>
 							) : (
 								"No tags"

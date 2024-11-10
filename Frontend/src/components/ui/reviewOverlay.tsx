@@ -19,7 +19,6 @@ export const ReviewOverlay: React.FC<ReviewOverlayProps> = forwardRef<
 	ReviewOverlayProps
 >(({ reviewType, reviewedItemId, userId }, ref) => {
 	const [rating, setRating] = React.useState<number>(0);
-	const [visible, setVisible] = React.useState<boolean>(true);
 
 	useEffect(() => {
 		//fetch this user's review from the server
@@ -61,20 +60,20 @@ export const ReviewOverlay: React.FC<ReviewOverlayProps> = forwardRef<
 		},
 	}));
 
-	if (!visible) {
-		return null;
-	}
-
 	const postReview = async () => {
 		//post review to the server
 		console.log("posting review");
 		try {
-			await axios.post("http://localhost:5000/api/reviews/addReview", {
+			await axios.post("http://localhost:5000/api/reviews/add", {
 				userId: userId,
-				reviewType: reviewType,
-				reviewedItemId: reviewedItemId,
+				itemType: reviewType,
+				reviewedItem: reviewedItemId,
 				rating: rating,
-				comment: document.getElementById("commentInput")?.innerText,
+				text: (
+					document.getElementById(
+						"commentInput",
+					) as HTMLTextAreaElement
+				)?.value,
 			});
 
 			//Show "Review Saved" Prompt in frontend

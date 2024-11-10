@@ -1,6 +1,7 @@
 import { formatDate } from "date-fns";
+import { set } from "lodash";
 import { ArrowLeft, DollarSign, MapPin, Star } from "lucide-react";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -27,12 +28,14 @@ import { Flex } from "@/components/ui/flex";
 import Rating, { ratingType } from "@/components/ui/rating";
 import ReviewOverlay from "@/components/ui/reviewOverlay";
 import useCurrency from "@/hooks/useCurrency";
+import { useLoginStore } from "@/store/loginStore";
 import { EAccountType } from "@/types/enums";
 
 export default function ActivityDetails() {
 	const navigate = useNavigate();
 	const convertCurrency = useCurrency();
-	const { data: user } = useTouristProfile();
+	const { user } = useLoginStore();
+	const { data: userProfile } = useTouristProfile();
 	const { data, refetch } = useActivity();
 	const { doBookActivity } = useBookActivity(() => {
 		refetch();
@@ -41,9 +44,18 @@ export default function ActivityDetails() {
 		refetch();
 	});
 
-	const canReview =
-		user?.type === EAccountType.Tourist &&
-		user.bookedActivities.includes(data ? data._id : ""); //TODO: Discuss how to adjust so the activities attended are the ones that can be reviewed, not any booked one
+	//TODO: Discuss how to adjust so the activities attended are the ones that can be reviewed, not any booked one
+
+	useEffect(() => {
+		setCanReview(
+			!!(
+				user?.type === EAccountType.Tourist &&
+				data?.tourists?.includes(user?._id)
+			),
+		);
+	}, [data, user]);
+
+	const [canReview, setCanReview] = useState(false);
 
 	const childRef = useRef<{ postReview: () => void }>(null);
 
@@ -145,12 +157,12 @@ export default function ActivityDetails() {
 								{canReview && (
 									<Dialog>
 										<DialogTrigger className="bg-surface-primary ml-4 px-3 rounded-md">
-											Review Product
+											Review Activity
 										</DialogTrigger>
 										<DialogContent>
 											<DialogHeader>
 												<DialogTitle>
-													Review this Product
+													Review this Activity
 												</DialogTitle>
 												<DialogDescription>
 													<ReviewOverlay
