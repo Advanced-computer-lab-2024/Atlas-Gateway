@@ -99,7 +99,7 @@ export default function TransportationDetails() {
 							</Label.Mid500>
 						</Flex>
 						<Flex gap="2" isColumn>
-							<Label.Thin300>Pick Up Location</Label.Thin300>
+							<Label.Thin300>Pick Up</Label.Thin300>
 							<Flex gap="2" align="center">
 								<Label.Mid500 className="overflow-ellipsis">
 									{pickUpLocation}

@@ -239,8 +239,8 @@ export interface TTransportation {
 	pickUpLocation: string;
 	dropOffLocation: string;
 	timeTakenInMins: number;
-	pickUpTime: Date;
-	dropOffTime: Date;
+	pickUpTime: string;
+	dropOffTime: string;
 	numberOfBookings: number;
 	tourists: Types.ObjectId[];
 	createdBy: Types.ObjectId;

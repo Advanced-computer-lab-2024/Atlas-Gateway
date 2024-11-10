@@ -230,14 +230,24 @@ const TransportationForm = ({
 										<FormLabel>Pick-Up Time</FormLabel>
 										<FormControl>
 											<DateTimePicker
-												date={new Date(field.value)}
+												date={
+													field?.value
+														? new Date(field?.value)
+														: undefined
+												}
 												setDate={(date) =>
 													field.onChange(
 														date?.toString(),
 													)
 												}
+												disabled={[
+													{
+														after: new Date(),
+													},
+												]}
 											/>
 										</FormControl>
+
 										<FormDescription>
 											Enter pick-up time.
 										</FormDescription>
@@ -253,12 +263,21 @@ const TransportationForm = ({
 										<FormLabel>Drop-Off Time</FormLabel>
 										<FormControl>
 											<DateTimePicker
-												date={new Date(field.value)}
+												date={
+													field?.value
+														? new Date(field?.value)
+														: undefined
+												}
 												setDate={(date) =>
 													field.onChange(
 														date?.toString(),
 													)
 												}
+												disabled={[
+													{
+														after: new Date(),
+													},
+												]}
 											/>
 										</FormControl>
 										<FormDescription>

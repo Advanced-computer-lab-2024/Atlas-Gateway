@@ -157,11 +157,10 @@ export default function TransportationCard({
 						<Label.Thin300>Departure Time:</Label.Thin300>
 						<Label.Mid300>
 							{transportation?.pickUpTime
-								? formatDate(
-										new Date(transportation.pickUpTime),
+								&& formatDate(
+										new Date(transportation?.pickUpTime),
 										"dd/MM/yyyy HH:mm:ss a",
-									)
-								: "N/A"}
+									)}{" "}
 						</Label.Mid300>
 					</Flex>
 
@@ -172,7 +171,7 @@ export default function TransportationCard({
 								formatDate(
 									new Date(transportation?.dropOffTime),
 									"dd/MM/yyyy HH:mm:ss a",
-								)}
+								)}{" "}
 						</Label.Mid300>
 					</Flex>
 					<Flex gap="2" align="center" justify="between">
