@@ -24,7 +24,7 @@ import {
 	DialogTrigger,
 } from "@/components/ui/dialog";
 import { Flex } from "@/components/ui/flex";
-import Rating, { ratingType } from "@/components/ui/rating";
+import Rating, { ERatingType } from "@/components/ui/rating";
 import ReviewOverlay from "@/components/ui/reviewOverlay";
 import useCurrency from "@/hooks/useCurrency";
 import { languageOptions } from "@/types/consts";
@@ -164,7 +164,7 @@ export default function ItineraryDetails() {
 							<Flex>
 								<Rating
 									value={avgRating}
-									ratingType={ratingType.DETAILS}
+									ratingType={ERatingType.DETAILS}
 									interactive={false}
 								/>
 								{canReview && (
