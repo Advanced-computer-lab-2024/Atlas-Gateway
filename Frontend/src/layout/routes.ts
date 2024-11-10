@@ -25,11 +25,17 @@ const intinerariesRoute: NavbarRoute = {
 	to: "/itineraries",
 };
 
+const transportationRoute: NavbarRoute = {
+	name: "Transportation",
+	to: "/transportations",
+};
+
 const touristRoutes: NavbarRoute[] = [
 	placesRoute,
 	productsRoute,
 	activitiesRoute,
 	intinerariesRoute,
+	transportationRoute,
 ];
 
 const sellerRoutes: NavbarRoute[] = [productsRoute];
@@ -63,7 +69,10 @@ const advertiserRoutes: NavbarRoute[] = [
 	placesRoute,
 ];
 
-const transportationAdvertiserRoutes: NavbarRoute[] = [productsRoute];
+const transportationAdvertiserRoutes: NavbarRoute[] = [
+	productsRoute,
+	transportationRoute,
+];
 
 const guestRoutes: NavbarRoute[] = [
 	placesRoute,

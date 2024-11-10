@@ -33,12 +33,20 @@ const placesCard = {
 	href: "/places",
 };
 
+const transportationCard = {
+	title: "Transportation",
+	description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+	Text: "View Transportation",
+	href: "/transportations",
+};
+
 export const cardsMap: Record<EAccountType, TCard[]> = {
 	[EAccountType.Tourist]: [
 		placesCard,
 		productsCard,
 		activitiesCard,
 		itinerariesCard,
+		transportationCard,
 	],
 	[EAccountType.Guide]: [placesCard, activitiesCard, itinerariesCard],
 	[EAccountType.Seller]: [productsCard],
@@ -51,5 +59,5 @@ export const cardsMap: Record<EAccountType, TCard[]> = {
 	],
 	[EAccountType.TourismGovernor]: [placesCard],
 	[EAccountType.Guest]: [placesCard, activitiesCard, itinerariesCard],
-	[EAccountType.TransportationAdvertiser]: [productsCard],
+	[EAccountType.TransportationAdvertiser]: [productsCard, transportationCard],
 };
