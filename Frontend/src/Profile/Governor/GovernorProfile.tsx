@@ -12,9 +12,9 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useLoginStore } from "@/store/loginStore";
 
+import profile_background from "../../assets/profile_background.jpg";
 import ChangePasswordSheet from "../ChangePasswordSheet";
 import UploadForm from "../UploadForm";
-import profile_background from "../assets/profile_background.jpg";
 import GovernorSheet from "./GovernorSheet";
 
 const General = () => {

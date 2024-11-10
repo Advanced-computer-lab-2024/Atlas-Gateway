@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { useUpdatePassword } from "@/api/data/useProfile";
+import { Button } from "@/components/ui/button";
 import {
 	Form,
 	FormControl,
@@ -11,10 +12,7 @@ import {
 	FormItem,
 	FormLabel,
 } from "@/components/ui/form";
-import { TPassword } from "@/types/global";
-
-import { Button } from "../components/ui/button";
-import { Input } from "../components/ui/input";
+import { Input } from "@/components/ui/input";
 import {
 	Sheet,
 	SheetContent,
@@ -22,7 +20,8 @@ import {
 	SheetFooter,
 	SheetHeader,
 	SheetTitle,
-} from "../components/ui/sheet";
+} from "@/components/ui/sheet";
+import { TPassword } from "@/types/global";
 
 const formSchema = z
 	.object({
