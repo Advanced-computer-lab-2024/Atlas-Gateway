@@ -1,8 +1,8 @@
 import mongoose, { Types } from "mongoose";
 
+import amadeus from "../../Config/amadeus.config";
 import HttpError from "../../Errors/HttpError";
 import { Flight } from "../../Models/Flight/flight.model";
-import amadeus from "./amadeus.config";
 
 interface FlightSearchParams {
 	originLocationCode: string;
