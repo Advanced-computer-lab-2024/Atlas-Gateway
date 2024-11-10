@@ -359,3 +359,14 @@ export function apiRequestDeleteTourGuideProfile(_id: string) {
 		baseURL: baseURL,
 	});
 }
+
+export function apiRedeemTouristLoyaltyPoints(_id: string) {
+	return axios({
+		method: "PUT",
+		url: ENDPOINTS.tourist.redeem(_id),
+		headers: {
+			"Content-Type": "application/json",
+		},
+		baseURL: baseURL,
+	});
+}

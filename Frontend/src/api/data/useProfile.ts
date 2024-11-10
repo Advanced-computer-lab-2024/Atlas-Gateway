@@ -28,6 +28,7 @@ import {
 	apiEditTouristProfile,
 	apiEditTransportationAdvertiserProfile,
 	apiGovernorProfile,
+	apiRedeemTouristLoyaltyPoints,
 	apiRequestDeleteAdvertiserProfile,
 	apiRequestDeleteSellerProfile,
 	apiRequestDeleteTourGuideProfile,
@@ -408,4 +409,13 @@ export function useRequestDeleteTourGuideProfile(onSuccess: () => void) {
 	});
 	const { mutate } = mutation;
 	return { doRequestDeleteTourGuideProfile: mutate, ...mutation };
+}
+
+export function useRedeemTouristLoyaltyPoints(onSuccess: () => void) {
+	const mutation = useMutation({
+		mutationFn: (_id: string) => apiRedeemTouristLoyaltyPoints(_id),
+		onSuccess,
+	});
+	const { mutate } = mutation;
+	return { doRedeemTouristLoyaltyPoints: mutate, ...mutation };
 }
