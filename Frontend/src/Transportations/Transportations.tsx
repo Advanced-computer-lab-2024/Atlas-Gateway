@@ -52,7 +52,7 @@ export default function Transportations() {
 				gap="2"
 				className="bg-surface-secondary p-2 rounded-lg border-2 border-solid border-black"
 			>
-				{user?.type !== EAccountType.Guide && (
+				{user?.type === EAccountType.TransportationAdvertiser && (
 					<Button
 						onClick={() => setOpen(true)}
 						variant="default"
