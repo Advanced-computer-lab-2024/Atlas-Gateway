@@ -1,7 +1,8 @@
-import { Camera, Settings } from "lucide-react";
+import { Camera, Settings, TicketCheck } from "lucide-react";
 import { useState } from "react";
 
 import {
+	useRedeemTouristLoyaltyPoints,
 	useRequestDeleteTouristProfile,
 	useTouristProfile,
 } from "@/api/data/useProfile";
@@ -23,12 +24,13 @@ import Account from "./tabs/Account";
 import Complaints from "./tabs/Complaints";
 
 export default function TouristProfile() {
-	const { data } = useTouristProfile();
+	const { data, refetch } = useTouristProfile();
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 	const { doRequestDeleteTouristProfile } = useRequestDeleteTouristProfile(
 		() => {},
 	);
-
+	const { doRedeemTouristLoyaltyPoints } =
+		useRedeemTouristLoyaltyPoints(refetch);
 	return (
 		<div>
 			<div className="relative w-full">
@@ -71,6 +73,13 @@ export default function TouristProfile() {
 							{data?.loyaltyPoints}
 							{" Points"}
 						</h2>
+						<button
+							onClick={() => {
+								doRedeemTouristLoyaltyPoints(data?._id!);
+							}}
+						>
+							<TicketCheck />
+						</button>
 					</div>
 				</div>
 				<Flex className="mr-7" gap="2" align="center">

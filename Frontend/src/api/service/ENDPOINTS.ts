@@ -49,6 +49,7 @@ const ENDPOINTS = {
 		list: "api/tourist/list",
 		show: (id: string) => `api/tourist/show/${id}`,
 		update: (id: string) => `api/tourist/update/${id}`,
+		redeem: (id: string) => `api/tourist/redeem/${id}`,
 		delete: (id: string) => `api/tourist/delete/${id}`,
 		requestDelete: (id: string) => `api/tourist/requestDelete/${id}`,
 	},

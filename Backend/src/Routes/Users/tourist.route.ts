@@ -22,11 +22,6 @@ import {
 
 const touristRouter = Router();
 touristRouter.post("/create", createTourist);
-touristRouter.get("/show/:id", getTourist);
-touristRouter.get("/list", getTourists);
-touristRouter.put("/update/:id", updateTourist);
-touristRouter.put("/redeem/:id", redeemPoints);
-touristRouter.delete("/delete/:id", deleteTourist);
 touristRouter.post("/rateTourGuide", rateTourGuide);
 touristRouter.post("/commentTourGuide", commentTourGuide);
 touristRouter.post("/rateProduct", rateProduct);
@@ -35,6 +30,11 @@ touristRouter.post("/rateItinerary", rateItinerary);
 touristRouter.post("/commentItinerary", commentItinerary);
 touristRouter.post("/rateActivity", rateActivity);
 touristRouter.post("/commentActivty", commentActivity);
+touristRouter.get("/show/:id", getTourist);
+touristRouter.get("/list", getTourists);
+touristRouter.put("/update/:id", updateTourist);
+touristRouter.put("/redeem/:id", redeemPoints);
+touristRouter.delete("/delete/:id", deleteTourist);
 touristRouter.delete("/requestDelete/:id", softDeleteTourist);
 export default touristRouter;
 Router;

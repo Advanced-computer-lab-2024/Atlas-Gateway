@@ -68,31 +68,52 @@ export const getActivities = async (type: string, query: any) => {
 	const filter =
 		ActivityFiltersMap?.[type as keyof typeof ActivityFiltersMap] ||
 		ActivityFiltersMap.default;
-	
-	const groupBy: PipelineStage[] = query?.preferredTags ? [
-		{
-			$addFields: {
-				tagPosition: {
-					$reduce: {
-						input: "$tags",
-						initialValue: 999,
-						in: {
-							$cond: {
-								if: { $gte: [{ $indexOfArray: [query.preferredTags, "$$this._id"] }, 0] },
-								then: { $min: ["$$value", { $indexOfArray: [query.preferredTags, "$$this._id"] }] },
-								else: "$$value"
-							}
-						}
-					}
-				}
-			}
-		},
-		{
-			$sort: { tagPosition: 1 }
-		},
-	] : [];
 
-	
+	const groupBy: PipelineStage[] = query?.preferredTags
+		? [
+				{
+					$addFields: {
+						tagPosition: {
+							$reduce: {
+								input: "$tags",
+								initialValue: 999,
+								in: {
+									$cond: {
+										if: {
+											$gte: [
+												{
+													$indexOfArray: [
+														query.preferredTags,
+														"$$this._id",
+													],
+												},
+												0,
+											],
+										},
+										then: {
+											$min: [
+												"$$value",
+												{
+													$indexOfArray: [
+														query.preferredTags,
+														"$$this._id",
+													],
+												},
+											],
+										},
+										else: "$$value",
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					$sort: { tagPosition: 1 },
+				},
+			]
+		: [];
+
 	const pipeline = [
 		filter,
 		//need to join the tags and category collections to get the name of the tags and category
@@ -252,6 +273,8 @@ export const bookActivity = async (activityId: string, touristId: string) => {
 	const tourist = await touristService.addBookedActivity(
 		touristId,
 		activityId,
+		activity.minPrice,
+		activity.maxPrice,
 	);
 
 	await activity.updateOne({
@@ -291,7 +314,12 @@ export const cancelBookingActivity = async (
 		throw new HttpError(404, "Failed to cancel activity booking");
 	}
 
-	await touristService.cancelActivity(touristId, activityId);
+	await touristService.cancelActivity(
+		touristId,
+		activityId,
+		activity.minPrice,
+		activity.maxPrice,
+	);
 
 	return removedActivity;
 };
