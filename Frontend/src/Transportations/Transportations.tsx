@@ -25,7 +25,8 @@ export default function Transportations() {
 	const { user } = useLoginStore();
 	const { data, meta } = useTransportations();
 	const [open, setOpen] = useState(false);
-	const [transportation, setTransportation] = useState<TTransportation>();
+	const [selectedTransportation, setTransportation] =
+		useState<TTransportation>();
 
 	const openEditDrawer = (transportation: TTransportation) => {
 		setOpen(true);
@@ -100,7 +101,7 @@ export default function Transportations() {
 				</Pagination>
 			)}
 			<TransportationForm
-				transportation={transportation}
+				transportation={selectedTransportation}
 				open={open}
 				setOpen={closeEditDrawer}
 			/>

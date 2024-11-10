@@ -5,15 +5,17 @@ import {
 	ITransportation,
 	Transportation,
 } from "../../Models/Travel/transportation.model";
-import { Advertiser } from "../../Models/Users/advertiser.model";
-
 import { TransportationAdvertiser } from "../../Models/Users/transportation_advertiser.model";
-
 import AggregateBuilder from "../Operations/aggregation.service";
-import { getAdvertiserById } from "../Users/advertiser.service";
-
-import { addBookedTransportation, cancelTransportation, getTouristById } from "../Users/tourist.service";
-import { addTransportation, getTransportationAdvertiserById } from "../Users/transportation_advertiser.service";
+import {
+	addBookedTransportation,
+	cancelTransportation,
+	getTouristById,
+} from "../Users/tourist.service";
+import {
+	addTransportation,
+	getTransportationAdvertiserById,
+} from "../Users/transportation_advertiser.service";
 
 export const createTransportation = async (
 	transportation: ITransportation,
@@ -44,7 +46,10 @@ export const createTransportation = async (
 
 		TransportationAdvertiser.transportations.push(transportationData.id);
 
-		await addTransportation(TransportationAdvertiser.id, transportationData.id);
+		await addTransportation(
+			TransportationAdvertiser.id,
+			transportationData.id,
+		);
 
 		await TransportationAdvertiser.updateOne({ session });
 		await session.commitTransaction();
@@ -146,126 +151,148 @@ export const bookTransportation = async (
 	transportationId: string,
 	touristId: string,
 ) => {
-	try {
-		const transportation = await Transportation.findById(transportationId);
-		if (!transportation) {
-			throw new HttpError(404, "Transportation not found");
-		}
-
-		if (transportation.availability <= transportation.numberOfBookings) {
-			throw new HttpError(500, "Transportation is fully booked");
-		}
-
-		const tourist = await getTouristById(touristId);
-		if (!tourist) {
-			throw new HttpError(404, "Tourist not found");
-		}
-
-		const alreadyBooked = transportation.tourists.includes(tourist.id);
-
-		if (alreadyBooked) {
-			throw new HttpError(400, "Already booked this Transportation");
-		}
-
-		const booked = await addBookedTransportation(
-			tourist.id,
-			transportation.id,
-		);
-
-		if (!booked) {
-			throw new HttpError(400, "Couldn't book Transportation");
-		}
-
-		transportation.tourists.push(tourist.id);
-
-		transportation.numberOfBookings++;
-
-		const result = await transportation.save();
-		return result;
-	} catch (error) {
-		if (error instanceof HttpError) {
-			throw error;
-		} else {
-			console.error("Unexpected error in bookTransportation:", error);
-			throw new HttpError(
-				500,
-				"An unexpected error occurred while booking the transportation",
-			);
-		}
+	const transportation = await Transportation.findById(transportationId);
+	if (!transportation) {
+		throw new HttpError(404, "Transportation not found");
 	}
+
+	if (transportation.availability <= transportation.numberOfBookings) {
+		throw new HttpError(500, "Transportation is fully booked");
+	}
+
+	const tourist = await getTouristById(touristId);
+	if (!tourist) {
+		throw new HttpError(404, "Tourist not found");
+	}
+
+	const alreadyBooked = transportation.tourists.includes(tourist.id);
+
+	if (alreadyBooked) {
+		throw new HttpError(400, "Already booked this Transportation");
+	}
+
+	const booked = await addBookedTransportation(tourist.id, transportation.id);
+
+	if (!booked) {
+		throw new HttpError(400, "Couldn't book Transportation");
+	}
+
+	transportation.tourists.push(tourist.id);
+
+	transportation.numberOfBookings++;
+
+	const result = await transportation.save();
+	return result;
 };
 
 export const cancelBookingTransportation = async (
 	transportationId: string,
 	touristId: string,
 ) => {
-	try {
-		const transportation = await Transportation.findById(transportationId);
-		if (!transportation) {
-			throw new HttpError(404, "Transportation not found");
-		}
-
-		const currentDate = new Date();
-		const millisecondsBeforeTransportation =
-			transportation.pickUpTime.getTime() - currentDate.getTime();
-		const hoursBeforeTransportation =
-			millisecondsBeforeTransportation / (1000 * 3600);
-		if (hoursBeforeTransportation < 48) {
-			throw new HttpError(
-				400,
-				"Cannot cancel within 48 hours of transportation.",
-			);
-		}
-
-		const tourist = await getTouristById(touristId);
-		if (!tourist) {
-			throw new HttpError(404, "Tourist not found");
-		}
-
-		if (!transportation.tourists.includes(tourist.id)) {
-			throw new HttpError(
-				404,
-				"Transportation not found in the tourist's list",
-			);
-		}
-
-		const removed = await transportation.updateOne({
-			$pull: { tourists: touristId },
-			$inc: { numberOfBookings: -1 },
-		});
-
-		if (removed.modifiedCount === 0) {
-			throw new HttpError(404, "Failed to cancel transportation booking");
-		}
-
-		let touristResult;
-		try {
-			touristResult = await cancelTransportation(
-				touristId,
-				transportation.id,
-			);
-		} catch (error) {
-			throw new HttpError(500, "Failed to cancel tourist booking.");
-		}
-
-		if (!touristResult) {
-			throw new HttpError(404, "Tourist not found in the system");
-		}
-
-		const result = await transportation.save();
-		return result;
-	} catch (error) {
-		if (error instanceof HttpError) {
-			throw error;
-		} else {
-			console.error(
-				"Unexpected error in cancelBookingTransportation:",
-				error,
-			);
-			throw new HttpError(
-				500,
-				"An unexpected error occurred while canceling the transportation booking",
-			);
-		}
+	if (
+		!Types.ObjectId.isValid(transportationId) ||
+		!Types.ObjectId.isValid(touristId)
+	) {
+		throw new HttpError(400, "Invalid Transportation or Tourist ID");
 	}
+
+	const transportation = await Transportation.findById(transportationId);
+	if (!transportation) {
+		throw new HttpError(404, "Transportation not found");
+	}
+
+	const currentDate = new Date();
+	const millisecondsBeforeTransportation =
+		transportation.pickUpTime.getTime() - currentDate.getTime();
+	const hoursBeforeTransportation =
+		millisecondsBeforeTransportation / (1000 * 3600);
+	if (hoursBeforeTransportation < 48) {
+		throw new HttpError(
+			400,
+			"Cannot cancel within 48 hours of transportation.",
+		);
+	}
+
+	const tourist = await getTouristById(touristId);
+	if (!tourist) {
+		throw new HttpError(404, "Tourist not found");
+	}
+
+	if (!transportation.tourists.includes(tourist.id)) {
+		throw new HttpError(
+			404,
+			"Transportation not found in the tourist's list",
+		);
+	}
+
+	const removed = await transportation.updateOne({
+		$pull: { tourists: touristId },
+		$inc: { numberOfBookings: -1 },
+	});
+
+	if (removed.modifiedCount === 0) {
+		throw new HttpError(404, "Failed to cancel transportation booking");
+	}
+
+	let touristResult;
+	try {
+		touristResult = await cancelTransportation(
+			touristId,
+			transportation.id,
+		);
+	} catch (error) {
+		throw new HttpError(500, "Failed to cancel tourist booking.");
+	}
+
+	if (!touristResult) {
+		throw new HttpError(404, "Tourist not found in the system");
+	}
+
+	const result = await transportation.save();
+	return result;
+};
+
+export const getTransportations = async (
+	type: string,
+	userId: string,
+	query: any,
+) => {
+	// const ItineraryFiltersMap: Record<string, PipelineStage> = {
+	// 	tourist: {
+	// 		$match: {
+	// 			$or: [
+	// 				{
+	// 					tourists: { $in: [userId] },
+	// 				},
+	// 			],
+	// 		},
+	// 	},
+	// 	default: {
+	// 		$match: {},
+	// 	},
+	// };
+	// const filter =
+	// 	ItineraryFiltersMap?.[type as keyof typeof ItineraryFiltersMap] ||
+	// 	ItineraryFiltersMap.default;
+	const PipelineStage: PipelineStage[] = [
+		...AggregateBuilder(
+			query,
+			[], // Search fields
+		),
+	];
+	const result = await Transportation.aggregate(PipelineStage);
+
+	return result;
+};
+
+export const getTransportationByUserId = async (userId: string) => {
+	if (!Types.ObjectId.isValid(userId)) {
+		throw new HttpError(400, "Invalid Transportation Advertiser ID");
+	}
+
+	const transportations = await Transportation.find({
+		createdBy: userId,
+	}).populate("createdBy");
+
+	return transportations;
 };
