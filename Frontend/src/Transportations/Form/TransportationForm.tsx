@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import {
@@ -46,12 +46,15 @@ const TransportationForm = ({
 }: {
 	open: boolean;
 	setOpen: (open: boolean) => void;
-	transportation?: Partial<TTransportation>;
+	transportation?: TTransportation;
 }) => {
 	const form = useForm<TTransportation>({
 		resolver: zodResolver(transportationSchema),
 	});
 	const { control, reset } = form;
+
+	// Initialize local state for select value
+	const [selectedType, setSelectedType] = useState(transportation?.type || "");
 
 	useEffect(() => {
 		if (transportation) {
@@ -126,8 +129,11 @@ const TransportationForm = ({
 										<FormLabel>Type</FormLabel>
 										<FormControl>
 											<Select
-												onValueChange={field.onChange}
-												value={field.value}
+												onValueChange={(value) => {
+													field.onChange(value);
+													setSelectedType(value); // Update local state
+												}}
+												value={selectedType}
 											>
 												<SelectTrigger className="w-[180px]">
 													<SelectValue placeholder="Select a type">
@@ -188,10 +194,17 @@ const TransportationForm = ({
 										<FormLabel>Price</FormLabel>
 										<FormControl>
 											<Input
+												placeholder="Enter the price"
 												type="number"
 												{...field}
-												placeholder="Price"
-												min={0}
+												onChange={(e) =>
+													field.onChange(
+														parseInt(
+															e.target.value,
+														),
+													)
+												}
+												className="border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
 											/>
 										</FormControl>
 										<FormDescription>
@@ -200,7 +213,8 @@ const TransportationForm = ({
 									</FormItem>
 								)}
 							/>
-
+							
+							{/* Availability Field */}
 							<FormField
 								control={control}
 								name="availability"
@@ -209,10 +223,17 @@ const TransportationForm = ({
 										<FormLabel>Availability</FormLabel>
 										<FormControl>
 											<Input
+												placeholder="Enter the availablity"
 												type="number"
 												{...field}
-												placeholder="Availability"
-												min={0}
+												onChange={(e) =>
+													field.onChange(
+														parseInt(
+															e.target.value,
+														),
+													)
+												}
+												className="border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
 											/>
 										</FormControl>
 										<FormDescription>
@@ -240,11 +261,7 @@ const TransportationForm = ({
 														date?.toString(),
 													)
 												}
-												disabled={[
-													{
-														after: new Date(),
-													},
-												]}
+												
 											/>
 										</FormControl>
 
@@ -273,11 +290,7 @@ const TransportationForm = ({
 														date?.toString(),
 													)
 												}
-												disabled={[
-													{
-														after: new Date(),
-													},
-												]}
+												
 											/>
 										</FormControl>
 										<FormDescription>
