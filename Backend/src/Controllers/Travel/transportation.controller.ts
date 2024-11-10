@@ -102,11 +102,9 @@ export const getTransportations = async (
 		}
 		const result = await transportationService.getTransportations(
 			type.toString(),
-			userId.toString(),
-			req.query,
 		);
-		if (result[0].data.length === 0 ){
-			throw new HttpError(404, "No Transportation	found");
+		if (!result){
+			return res.status(404).send("No Transportations found");
 		}				
 		const response = {
 			data: result[0].data,

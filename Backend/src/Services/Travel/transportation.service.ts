@@ -17,6 +17,17 @@ import {
 	getTransportationAdvertiserById,
 } from "../Users/transportation_advertiser.service";
 
+const TransportationFiltersMap: Record<string, PipelineStage> = {
+	tourist: {
+		$match: {
+			isDeleted: false,
+		},
+	},
+	default: {
+		$match: {},
+	},
+};
+
 export const createTransportation = async (
 	transportation: ITransportation,
 	createdBy: string,
@@ -46,10 +57,10 @@ export const createTransportation = async (
 
 		TransportationAdvertiser.transportations.push(transportationData.id);
 
-		await addTransportation(
-			TransportationAdvertiser.id,
-			transportationData.id,
-		);
+		// await addTransportation(
+		// 	TransportationAdvertiser.id,
+		// 	transportationData.id,
+		// );
 
 		await TransportationAdvertiser.updateOne({ session });
 		await session.commitTransaction();
@@ -252,35 +263,23 @@ export const cancelBookingTransportation = async (
 	return result;
 };
 
-export const getTransportations = async (
-	type: string,
-	userId: string,
-	query: any,
-) => {
-	// const ItineraryFiltersMap: Record<string, PipelineStage> = {
-	// 	tourist: {
-	// 		$match: {
-	// 			$or: [
-	// 				{
-	// 					tourists: { $in: [userId] },
-	// 				},
-	// 			],
-	// 		},
-	// 	},
-	// 	default: {
-	// 		$match: {},
-	// 	},
-	// };
-	// const filter =
-	// 	ItineraryFiltersMap?.[type as keyof typeof ItineraryFiltersMap] ||
-	// 	ItineraryFiltersMap.default;
-	const PipelineStage: PipelineStage[] = [
-		...AggregateBuilder(
-			query,
-			[], // Search fields
-		),
-	];
-	const result = await Transportation.aggregate(PipelineStage);
+export const getTransportations = async (type: string) => {
+
+	if (type !== "tourist") {
+		return;
+	}
+
+	const filter =
+		TransportationFiltersMap?.[type as keyof typeof TransportationFiltersMap] ||
+		TransportationFiltersMap.default;
+
+	const pipeline = [filter];
+
+	const result = await Transportation.aggregate(pipeline);
+
+	if (result[0].data.length === 0) {
+		throw new HttpError(404, "No Transportations Found");
+	}
 
 	return result;
 };
