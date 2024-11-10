@@ -3,10 +3,19 @@ import { useParams } from "react-router-dom";
 
 import { useLoginStore } from "@/store/loginStore";
 import { EAccountType } from "@/types/enums";
-import { TTransportation } from "../../types/global";
 
+import { TTransportation } from "../../types/global";
+import {
+	apiAdvertisorTransportations,
+	apiBookTransportation,
+	apiCancelTransportationBooking,
+	apiCreateTransportation,
+	apiDeleteTransportation,
+	apiTransportation,
+	apiTransportations,
+	apiUpdateTransportation,
+} from "../service/transportations";
 import { useQueryString } from "./useQueryString";
-import { apiAdvertisorTransportations, apiBookTransportation, apiCancelTransportationBooking, apiCreateTransportation, apiDeleteTransportation, apiTransportation, apiTransportations, apiUpdateTransportation } from "../service/transportations";
 
 export function useTransportations() {
 	const { user } = useLoginStore();
@@ -17,8 +26,11 @@ export function useTransportations() {
 	const q = useQuery({
 		queryFn: () =>
 			user?.type === EAccountType.Advertiser
-				? apiAdvertisorTransportations(_id, user?.type ?? "")
-				: apiTransportations(_id, user?.type ?? ""),
+				? apiAdvertisorTransportations(
+						_id,
+						user?.type ?? EAccountType.Guest,
+					)
+				: apiTransportations(_id, user?.type ?? EAccountType.Guest),
 		queryKey: ["transportations", _id, query],
 	});
 
@@ -103,7 +115,8 @@ export function useCancelTransportationBooking(onSuccess: () => void) {
 		throw new Error("User ID is undefined");
 	}
 	const mutation = useMutation({
-		mutationFn: (_id: string) => apiCancelTransportationBooking(_id, user?._id),
+		mutationFn: (_id: string) =>
+			apiCancelTransportationBooking(_id, user?._id),
 		onSuccess,
 	});
 

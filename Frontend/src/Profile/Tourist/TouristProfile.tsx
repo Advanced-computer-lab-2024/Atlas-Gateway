@@ -76,13 +76,15 @@ export default function TouristProfile() {
 							{data?.loyaltyPoints}
 							{" Points"}
 						</h2>
-						<button
+						<Button
+							variant="ghost"
+							size="icon"
 							onClick={() => {
 								doRedeemTouristLoyaltyPoints(data?._id!);
 							}}
 						>
 							<TicketCheck />
-						</button>
+						</Button>
 					</div>
 				</div>
 				<Flex className="mr-7" gap="2" align="center">

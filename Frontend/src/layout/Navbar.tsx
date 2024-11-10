@@ -18,7 +18,8 @@ export default function Navbar() {
 	const closeTermsDialog = () => setIsTermsDialogOpen(false);
 
 	const isLoggedIn = user?._id;
-	const routes = accountRoutes[(user?.type ?? "guest") as EAccountType];
+	const routes =
+		accountRoutes[(user?.type ?? EAccountType.Guest) as EAccountType];
 
 	useEffect(() => {
 		if (
