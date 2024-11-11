@@ -22,11 +22,6 @@ export interface IItinerary extends Document {
 	tags: Types.ObjectId[];
 	createdBy: Types.ObjectId;
 	numberOfBookings: number;
-	reviews: {
-		userId: Types.ObjectId;
-		review: string;
-		rating: number;
-	};
 	avgRating: number;
 	totalNumberOfRatings: number;
 	accessibility: string;
@@ -58,11 +53,6 @@ const itinerarySchema = new Schema<IItinerary>(
 		tags: [{ type: Schema.Types.ObjectId, ref: "Tag" }],
 		createdBy: { type: Schema.Types.ObjectId, ref: "TourGuide" },
 		numberOfBookings: { type: Number, default: 0 },
-		reviews: {
-			userId: { type: Schema.Types.ObjectId, required: false },
-			review: { type: String, required: false },
-			rating: { type: Number, min: 0, max: 5 },
-		},
 		avgRating: { type: Number, min: 0, max: 5, default: 0 },
 		totalNumberOfRatings: { type: Number, default: 0 },
 		accessibility: { type: String, required: true },

@@ -3,8 +3,7 @@ import React from "react";
 
 export enum ERatingType {
 	DETAILS = 40,
-	REVIEW = 20,
-	CARDS = 10,
+	CARDS = 20,
 }
 
 interface RatingProps {
@@ -15,8 +14,10 @@ interface RatingProps {
 }
 
 const Rating: React.FC<RatingProps> = ({
+
 	value = 0,
 	ratingType = ERatingType.CARDS,
+
 	interactive: interactive = false,
 	onChange,
 }) => {

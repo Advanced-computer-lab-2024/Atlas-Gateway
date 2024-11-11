@@ -23,6 +23,7 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Flex } from "@/components/ui/flex";
+import Rating, { ratingType } from "@/components/ui/rating";
 import useCurrency from "@/hooks/useCurrency";
 import { useLoginStore } from "@/store/loginStore";
 import { EAccountType } from "@/types/enums";
@@ -158,10 +159,11 @@ export default function ProductCard({
 							</Label.Mid300>
 						</Flex>
 						<Flex gap="1" align="center">
-							<Star color="yellow" fill="yellow" size={20} />
-							<Label.Mid300 className="overflow-ellipsis">
-								{avgRating}
-							</Label.Mid300>
+							<Rating
+								value={avgRating}
+								ratingType={ratingType.CARDS}
+								interactive={false}
+							/>
 						</Flex>
 					</Flex>
 					<Label.Mid300 className="break-words h-[4.5rem] w-full overflow-y-scroll">

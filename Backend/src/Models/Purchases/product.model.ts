@@ -11,11 +11,6 @@ export interface IProduct extends Document {
 	quantity: number;
 	isArchived: boolean;
 	sales: number;
-	reviews: {
-		userId: Types.ObjectId;
-		review: string;
-		rating: number;
-	};
 	avgRating: number;
 	totalNumberOfRatings: number;
 	isDeleted?: boolean;
@@ -35,11 +30,6 @@ const productSchema = new Schema<IProduct>(
 		quantity: { type: Number, required: true },
 		isArchived: { type: Boolean, default: false },
 		sales: { type: Number, default: 0 },
-		reviews: {
-			userId: { type: Schema.Types.ObjectId, required: false },
-			review: { type: String, required: false },
-			rating: { type: Number, min: 0, max: 5 },
-		},
 		avgRating: { type: Number, min: 0, max: 5, default: 0 },
 		totalNumberOfRatings: { type: Number, default: 0 },
 		isDeleted: { type: Boolean, default: false },

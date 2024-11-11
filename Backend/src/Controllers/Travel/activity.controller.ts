@@ -93,6 +93,7 @@ export const getActivities = async (
 		if (!usertype) {
 			throw new HttpError(400, "User type is required");
 		}
+
 		let preferredTags: Types.ObjectId[] | undefined = undefined;
 		if (usertype === "tourist") {
 			preferredTags = (
@@ -183,6 +184,18 @@ export const bookActivity = async (
 
 		if (!bookingResult) {
 			return res.status(400).json({ message: "Cannot book Activity" });
+		}
+
+		const tourist = await Tourist.findById(touristId);
+		if (tourist) {
+			if (
+				!tourist.bookedActivities.includes(
+					new Types.ObjectId(activityId),
+				)
+			) {
+				tourist.bookedActivities.push(new Types.ObjectId(activityId));
+				tourist.save();
+			}
 		}
 
 		return res

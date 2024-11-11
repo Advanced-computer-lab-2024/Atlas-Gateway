@@ -225,7 +225,7 @@ export interface TItinerary {
 
 export interface TReview {
 	_id: string;
-	user: TUser;
+	tourist: TTourist;
 	text: string;
 	rating: number;
 }
