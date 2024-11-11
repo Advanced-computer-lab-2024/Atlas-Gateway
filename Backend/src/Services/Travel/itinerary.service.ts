@@ -111,6 +111,7 @@ export const getItineraries = async (
 						isAppropriate: true,
 					},
 					{
+						isDeleted: false,
 						tourists: { $in: [userId] },
 					},
 				],
@@ -254,10 +255,9 @@ export const cancelBookingItinerary = async (
 			);
 		}
 
-
-	if (!itinerary.tourists.includes(new Types.ObjectId(touristId))) {
-		throw new HttpError(404, "Tourist not found in itinerary's list");
-	}
+		if (!itinerary.tourists.includes(new Types.ObjectId(touristId))) {
+			throw new HttpError(404, "Tourist not found in itinerary's list");
+		}
 
 		const removed = await itinerary.updateOne({
 			$pull: { tourists: touristId },

@@ -68,6 +68,7 @@ export default function Itineraries() {
 				className="bg-surface-secondary p-2 rounded-lg border-2 border-solid border-black"
 			>
 				<Flex gap="1" align="center">
+					<Label.Mid400>Sort:</Label.Mid400>
 					<Select
 						onValueChange={(value) => {
 							if (value === "0") {
