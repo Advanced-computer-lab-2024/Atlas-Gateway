@@ -38,7 +38,6 @@ export default function ActivityDetails() {
 	const navigate = useNavigate();
 	const convertCurrency = useCurrency();
 	const { user } = useLoginStore();
-	const { data: userProfile } = useTouristProfile();
 	const { data, refetch } = useActivity();
 	const { doBookActivity } = useBookActivity(() => {
 		refetch();

@@ -2,7 +2,6 @@ import { formatDate } from "date-fns";
 import { ArrowLeft, DollarSign, MapPin } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-import { useTouristProfile } from "@/api/data/useProfile";
 import {
 	useBookTransportation,
 	useCancelTransportationBooking,
@@ -13,12 +12,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Flex } from "@/components/ui/flex";
 import useCurrency from "@/hooks/useCurrency";
+import { useLoginStore } from "@/store/loginStore";
 import { EAccountType } from "@/types/enums";
 
 export default function TransportationDetails() {
 	const navigate = useNavigate();
 	const convertCurrency = useCurrency();
-	const { data: user } = useTouristProfile();
+	const { user } = useLoginStore();
 	const { data, refetch } = useTransportation();
 	const { doBookTransportation } = useBookTransportation(() => {
 		refetch();
@@ -124,7 +124,6 @@ export default function TransportationDetails() {
 										new Date(pickUpTime),
 										"dd/MM/yyyy HH:mm:ss a",
 									)}
-								
 							</Label.Mid500>
 						</Flex>
 						<Flex gap="2" isColumn>
