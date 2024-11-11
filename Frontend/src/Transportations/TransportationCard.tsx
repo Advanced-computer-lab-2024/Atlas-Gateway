@@ -86,6 +86,31 @@ export default function TransportationCard({
 							<EllipsisVertical className="cursor-pointer" />
 						</DropdownMenuTrigger>
 						<DropdownMenuContent>
+							{user?.type ===
+								EAccountType.TransportationAdvertiser && (
+								<>
+									<DropdownMenuItem
+										className="flex gap-2 cursor-pointer"
+										onClick={() => {
+											openEditDrawer(transportation);
+										}}
+									>
+										<Edit />
+										Edit
+									</DropdownMenuItem>
+									<DropdownMenuItem
+										className="flex gap-2 cursor-pointer"
+										onClick={() => {
+											doDeleteTransportation(
+												transportation?._id,
+											);
+										}}
+									>
+										<Trash />
+										Delete
+									</DropdownMenuItem>
+								</>
+							)}
 							<DropdownMenuItem
 								className="flex gap-2 cursor-pointer"
 								onClick={() => {
@@ -111,30 +136,6 @@ export default function TransportationCard({
 								<Mail />
 								Share Via Email
 							</DropdownMenuItem>
-							{user?.type === EAccountType.Advertiser && (
-								<>
-									<DropdownMenuItem
-										className="flex gap-2 cursor-pointer"
-										onClick={() => {
-											openEditDrawer(transportation);
-										}}
-									>
-										<Edit />
-										Edit
-									</DropdownMenuItem>
-									<DropdownMenuItem
-										className="flex gap-2 cursor-pointer"
-										onClick={() => {
-											doDeleteTransportation(
-												transportation?._id,
-											);
-										}}
-									>
-										<Trash />
-										Delete
-									</DropdownMenuItem>
-								</>
-							)}
 						</DropdownMenuContent>
 					</DropdownMenu>
 				</Flex>
@@ -156,11 +157,11 @@ export default function TransportationCard({
 					<Flex gap="2" align="center" justify="between">
 						<Label.Thin300>Departure Time:</Label.Thin300>
 						<Label.Mid300>
-							{transportation?.pickUpTime
-								&& formatDate(
-										new Date(transportation?.pickUpTime),
-										"dd/MM/yyyy HH:mm:ss a",
-									)}{" "}
+							{transportation?.pickUpTime &&
+								formatDate(
+									new Date(transportation?.pickUpTime),
+									"dd/MM/yyyy HH:mm:ss a",
+								)}{" "}
 						</Label.Mid300>
 					</Flex>
 

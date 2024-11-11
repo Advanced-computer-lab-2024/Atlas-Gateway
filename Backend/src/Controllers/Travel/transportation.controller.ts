@@ -180,6 +180,10 @@ export const deleteTransportation = async (
 		const transportation =
 			await transportationService.deleteTransportation(id);
 
+		if (!transportation) {
+			return res.status(404).send("Transportation not found");
+		}
+
 		res.status(200).send("Transportation deleted Successfully");
 	} catch (error) {
 		next(error);

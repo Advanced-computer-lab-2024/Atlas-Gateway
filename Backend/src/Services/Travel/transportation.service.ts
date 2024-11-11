@@ -1,4 +1,3 @@
-import transportation_advertiserRouter from "@/Routes/Users/transportation_advertiser.route";
 import mongoose, { PipelineStage, Types } from "mongoose";
 
 import HttpError from "../../Errors/HttpError";
@@ -13,10 +12,7 @@ import {
 	cancelTransportation,
 	getTouristById,
 } from "../Users/tourist.service";
-import {
-	addTransportation,
-	getTransportationAdvertiserById,
-} from "../Users/transportation_advertiser.service";
+import { getTransportationAdvertiserById } from "../Users/transportation_advertiser.service";
 
 const TransportationFiltersMap: Record<string, PipelineStage> = {
 	tourist: {
@@ -136,11 +132,13 @@ export const deleteTransportation = async (id: string) => {
 		}
 
 		// Remove the transportation ID from the Advertiser's itineraries array
-		transportation_advertiser.transportations =
-			transportation_advertiser.transportations.filter(
-				(transportationId) => !transportationId.equals(id),
-			);
-		await TransportationAdvertiser.updateOne({ session });
+
+		await transportation_advertiser.updateOne(
+			{
+				$pull: { transportations: id },
+			},
+			{ session },
+		);
 		// Delete the transportation
 		await transportation.deleteOne({ session });
 
@@ -286,14 +284,6 @@ export const getTransportationByUserId = async (userId: string, query: any) => {
 		{
 			$match: {
 				createdBy: new Types.ObjectId(userId),
-			},
-		},
-		{
-			$lookup: {
-				from: "transportation advertisers",
-				localField: "createdBy",
-				foreignField: "_id",
-				as: "createdBy",
 			},
 		},
 		...AggregateBuilder(query, []),
