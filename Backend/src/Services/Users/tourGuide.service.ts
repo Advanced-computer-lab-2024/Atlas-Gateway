@@ -94,7 +94,7 @@ export const softDeleteTourGuide = async (id: string) => {
 	}
 
 	tourGuide.itinerary.forEach(async (itinerary: any) => {
-		itineraryService.softDeleteItinerary(itinerary._id);
+		await itineraryService.softDeleteItinerary(itinerary._id);
 	});
 
 	await tourGuide.updateOne({ isDeleted: true });
