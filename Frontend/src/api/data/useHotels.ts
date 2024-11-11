@@ -1,18 +1,13 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { type } from "os";
 
 import { useLoginStore } from "@/store/loginStore";
-import { THotels } from "@/types/global";
+import { THotel } from "@/types/global";
 
 import { IHotelBooking } from "../../../../Backend/src/Models/Hotel/hotel.model";
-import { apiBookHotels, apiListHotels } from "../service/hotels";
-import { apiProducts } from "../service/product";
+import { apiBookHotels, apiListHotels, apiShowHotel } from "../service/hotels";
 import { useQueryString } from "./useQueryString";
 
-export function useHotels(
-	cityCode: string,
-	onSuccess: (response: any) => void,
-) {
+export function useHotels(cityCode: string) {
 	const [query] = useQueryString();
 
 	const { data, refetch } = useQuery({
@@ -20,20 +15,17 @@ export function useHotels(
 		queryKey: ["hotels", cityCode, query],
 		enabled: !!cityCode,
 	});
-	console.log(data);
-	return { data: data?.data as THotels[], refetch };
+	return { data: data?.data as THotel[], refetch };
 }
 
-// export function useSearchHotels(onSuccess: (response: any) => void) {
-// 	const mutation = useMutation({
-// 		mutationFn: apiSearchHotels,
-// 		onSuccess,
-// 	});
-
-// 	const { mutate, isPending } = mutation;
-
-// 	return { doSearchHotels: mutate, ...mutation, isPending };
-// }
+export function useHotelDetails(iataCode: string | null) {
+	const { data, refetch } = useQuery({
+		queryFn: () => apiShowHotel(iataCode),
+		queryKey: ["hotel", iataCode],
+		enabled: !!iataCode,
+	});
+	return { data: data?.data as THotel, refetch };
+}
 
 export function useBookhotel(onSuccess: () => void) {
 	const { user } = useLoginStore();

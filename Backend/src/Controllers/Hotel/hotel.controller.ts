@@ -22,6 +22,26 @@ export const getHotelsByCity = async (
 	}
 };
 
+export const showHotelDetails = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	try {
+		const { id } = req.params;
+		if (!mongoose.Types.ObjectId.isValid(id)) {
+			throw new HttpError(400, "Invalid hotel id");
+		}
+		const hotel = await hotelService.showHotelDetails(id);
+		if (!hotel) {
+			throw new HttpError(404, "Hotel not found");
+		}
+		res.status(200).json(hotel);
+	} catch (error) {
+		next(error);
+	}
+};
+
 export const searchHotelOffersController = async (
 	req: Request,
 	res: Response,

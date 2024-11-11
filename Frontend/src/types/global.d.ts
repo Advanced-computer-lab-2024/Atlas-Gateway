@@ -235,11 +235,7 @@ export interface TFlights {
 	travelClass: string;
 }
 
-export interface THotels {
-	// cityCode: string;
-	// checkInDate: Date;
-	// checkOutDate: Date;
-	// adults: number;
+export interface THotel {
 	chainCode: string;
 	iataCode: string;
 	dupeId: number;

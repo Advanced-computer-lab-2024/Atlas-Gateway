@@ -1,14 +1,25 @@
 import axios from "axios";
 
-import { THotels } from "@/types/global";
+import { THotel } from "@/types/global";
 
 import { IHotelBooking } from "../../../../Backend/src/Models/Hotel/hotel.model";
 import ENDPOINTS, { baseURL } from "./ENDPOINTS";
 
 export function apiListHotels(cityCode: string) {
-	return axios<THotels[]>({
+	return axios<THotel[]>({
 		method: "GET",
 		url: ENDPOINTS.hotels.list(cityCode),
+		headers: {
+			"Content-Type": "application/json",
+		},
+		baseURL: baseURL,
+	});
+}
+
+export function apiShowHotel(iataCode: string | null) {
+	return axios<THotel>({
+		method: "GET",
+		url: ENDPOINTS.hotels.show(iataCode ?? ""),
 		headers: {
 			"Content-Type": "application/json",
 		},

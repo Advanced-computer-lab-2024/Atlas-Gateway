@@ -4,13 +4,14 @@ import {
 	bookHotelroom,
 	deleteBooking,
 	getHotelsByCity,
-	getMyHotelBooking,
+	getMyHotelBooking,showHotelDetails,
 	searchHotelOffersController,
 } from "../../Controllers/Hotel/hotel.controller";
 
 const hotelRouter = Router();
 
 hotelRouter.get("/list/:cityCode", getHotelsByCity);
+hotelRouter.get("/show/:id", showHotelDetails);
 hotelRouter.post("/search", searchHotelOffersController);
 hotelRouter.post("/bookRoom", bookHotelroom);
 hotelRouter.get("/myBookings", getMyHotelBooking);

@@ -114,6 +114,7 @@ const ENDPOINTS = {
 	},
 	hotels: {
 		list: (cityCode: string) => `api/hotels/list/${cityCode}`,
+		show: (id: string) => `api/hotels/show/${id}`,
 		bookRoom: "api/hotels/bookRoom",
 		myBookings: "api/hotels/myBookings",
 		delete: (id: string) => `api/hotels/delete/${id}`,

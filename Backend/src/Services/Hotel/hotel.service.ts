@@ -18,6 +18,17 @@ export async function getHotelsByCity(cityCode: string) {
 	});
 	return response.data;
 }
+
+export async function showHotelDetails(id: string) {
+	const response = await amadeus.shopping.hotelOffersSearch.get({
+      	hotelIds: 'ACPAR245',
+		checkInDate: "2025-03-01",
+		checkOutDate: "2025-03-02",
+		adults: 1,
+    })
+	return response.data;
+}
+
 export async function searchHotelOffers(params: HotelSearchParams) {
 	const hotels = await getHotelsByCity(params.cityCode);
 	const hotelsPerPage = 5;
