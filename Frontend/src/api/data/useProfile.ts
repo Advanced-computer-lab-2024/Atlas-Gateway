@@ -56,7 +56,7 @@ export function useTouristProfile() {
 
 	const id = user?._id;
 
-	const { data, refetch } = useQuery({
+	const { data, refetch, isFetched } = useQuery({
 		queryFn: () => {
 			if (!id) {
 				throw new Error("User ID is undefined");
@@ -66,7 +66,7 @@ export function useTouristProfile() {
 		queryKey: ["profile", id],
 	});
 
-	return { data: data?.data, refetch };
+	return { data: data?.data, refetch, isFetched };
 }
 
 export function useUpdatePassword(onSuccess: () => void) {
