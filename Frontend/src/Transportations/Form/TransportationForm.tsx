@@ -1,7 +1,24 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
+import {
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectLabel,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
+import Map from "@/components/ui/map";
+
+import { transportationSchema } from "../../Transportations/Form/schema";
+import {
+	useCreateTransportation,
+	useTransportations,
+	useUpdateTransportation,
+} from "../../api/data/useTransportations";
 import { Button } from "../../components/ui/button";
 import { DateTimePicker } from "../../components/ui/date-time-picker";
 import { Flex } from "../../components/ui/flex";
@@ -14,10 +31,14 @@ import {
 	FormLabel,
 } from "../../components/ui/form";
 import { Input } from "../../components/ui/input";
-import { transportationSchema } from "../../Transportations/Form/schema";
-import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle } from "../../components/ui/sheet";
+import {
+	Sheet,
+	SheetContent,
+	SheetFooter,
+	SheetHeader,
+	SheetTitle,
+} from "../../components/ui/sheet";
 import { TTransportation } from "../../types/global";
-import { useCreateTransportation, useTransportations, useUpdateTransportation } from "../../api/data/useTransportations";
 
 const TransportationForm = ({
 	open,
@@ -26,35 +47,24 @@ const TransportationForm = ({
 }: {
 	open: boolean;
 	setOpen: (open: boolean) => void;
-	transportation?: any;
+	transportation?: TTransportation;
 }) => {
-	const form = useForm({
+	const form = useForm<TTransportation>({
 		resolver: zodResolver(transportationSchema),
-		defaultValues: {
-			name: "",
-			type: "Bus",
-			price: 0,
-			availability: 0,
-			pickUpLocation: "",
-			dropOffLocation: "",
-			pickUpTime: new Date().toString(),
-			dropOffTime: new Date().toString(),
-			timeTakenInMins: 0,
-			numberOfBookings: 0,
-			tourists: [],
-			createdBy: "",
-		},
 	});
 	const { control, reset } = form;
 
+	// Initialize local state for select value
+	const [selectedType, setSelectedType] = useState(transportation?.type || "");
+
 	useEffect(() => {
 		if (transportation) {
-			reset({...transportation});
+			reset({ ...transportation });
 		}
 	}, [transportation, reset]);
 
-	const { refetch } = useTransportations();
-
+	const {refetch } = useTransportations();
+	
 	const { doCreateTransportation } = useCreateTransportation(() => {
 		refetch();
 		form.reset();
@@ -78,7 +88,9 @@ const TransportationForm = ({
 			<SheetContent className="sm:max-w-[600px]">
 				<SheetHeader>
 					<SheetTitle>
-						{transportation ? "Edit Transportation" : "Add Transportation"}
+						{transportation
+							? "Edit Transportation"
+							: "Add Transportation"}
 					</SheetTitle>
 				</SheetHeader>
 				<Form {...form}>
@@ -86,7 +98,11 @@ const TransportationForm = ({
 						onSubmit={form.handleSubmit(handleSubmit)}
 						className="flex flex-col gap-4"
 					>
-						<Flex isColumn gap="4" className="overflow-y-scroll h-[84vh]">
+						<Flex
+							isColumn
+							gap="4"
+							className="overflow-y-scroll h-[84vh]"
+						>
 							<FormField
 								control={control}
 								name="name"
@@ -94,9 +110,14 @@ const TransportationForm = ({
 									<FormItem>
 										<FormLabel>Name</FormLabel>
 										<FormControl>
-											<Input {...field} placeholder="Transportation name" />
+											<Input
+												{...field}
+												placeholder="Transportation name"
+											/>
 										</FormControl>
-										<FormDescription>Enter transportation name.</FormDescription>
+										<FormDescription>
+											Enter transportation name.
+										</FormDescription>
 									</FormItem>
 								)}
 							/>
@@ -108,9 +129,59 @@ const TransportationForm = ({
 									<FormItem>
 										<FormLabel>Type</FormLabel>
 										<FormControl>
-											<Input {...field} placeholder="Bus, Car, Train, etc." />
+											<Select
+												onValueChange={(value) => {
+													field.onChange(value);
+													setSelectedType(value); // Update local state
+												}}
+												value={selectedType}
+											>
+												<SelectTrigger className="w-[180px]">
+													<SelectValue placeholder="Select a type">
+														{field.value}
+													</SelectValue>
+												</SelectTrigger>
+												<SelectContent>
+													<SelectGroup>
+														<SelectItem
+															value={"Bus"}
+														>
+															<SelectLabel>
+																Bus
+															</SelectLabel>
+														</SelectItem>
+														<SelectItem
+															value={"Car"}
+														>
+															<SelectLabel>
+																Car
+															</SelectLabel>
+														</SelectItem>
+														<SelectItem
+															value={"Train"}
+														>
+															<SelectLabel>
+																Train
+															</SelectLabel>
+														</SelectItem>
+														<SelectItem
+															value={"Plane"}
+														>
+															<SelectLabel>
+																Plane
+															</SelectLabel>
+														</SelectItem>
+														<SelectItem
+															value={"Boat"}
+														>
+															<SelectLabel>
+																Boat
+															</SelectLabel>
+														</SelectItem>
+													</SelectGroup>
+												</SelectContent>
+											</Select>
 										</FormControl>
-										<FormDescription>Enter type of transportation.</FormDescription>
 									</FormItem>
 								)}
 							/>
@@ -124,17 +195,27 @@ const TransportationForm = ({
 										<FormLabel>Price</FormLabel>
 										<FormControl>
 											<Input
+												placeholder="Enter the price"
 												type="number"
 												{...field}
-												placeholder="Price"
-												min={0}
+												onChange={(e) =>
+													field.onChange(
+														parseInt(
+															e.target.value,
+														),
+													)
+												}
+												className="border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
 											/>
 										</FormControl>
-										<FormDescription>Enter transportation price.</FormDescription>
+										<FormDescription>
+											Enter transportation price.
+										</FormDescription>
 									</FormItem>
 								)}
 							/>
-
+							
+							{/* Availability Field */}
 							<FormField
 								control={control}
 								name="availability"
@@ -143,13 +224,22 @@ const TransportationForm = ({
 										<FormLabel>Availability</FormLabel>
 										<FormControl>
 											<Input
+												placeholder="Enter the availablity"
 												type="number"
 												{...field}
-												placeholder="Availability"
-												min={0}
+												onChange={(e) =>
+													field.onChange(
+														parseInt(
+															e.target.value,
+														),
+													)
+												}
+												className="border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
 											/>
 										</FormControl>
-										<FormDescription>Enter transportation availability.</FormDescription>
+										<FormDescription>
+											Enter transportation availability.
+										</FormDescription>
 									</FormItem>
 								)}
 							/>
@@ -162,11 +252,23 @@ const TransportationForm = ({
 										<FormLabel>Pick-Up Time</FormLabel>
 										<FormControl>
 											<DateTimePicker
-												date={new Date(field.value)}
-												setDate={(date) => field.onChange(date?.toString())}
+												date={
+													field?.value
+														? new Date(field?.value)
+														: undefined
+												}
+												setDate={(date) =>
+													field.onChange(
+														date?.toString(),
+													)
+												}
+												
 											/>
 										</FormControl>
-										<FormDescription>Enter pick-up time.</FormDescription>
+
+										<FormDescription>
+											Enter pick-up time.
+										</FormDescription>
 									</FormItem>
 								)}
 							/>
@@ -179,94 +281,77 @@ const TransportationForm = ({
 										<FormLabel>Drop-Off Time</FormLabel>
 										<FormControl>
 											<DateTimePicker
-												date={new Date(field.value)}
-												setDate={(date) => field.onChange(date?.toString())}
+												date={
+													field?.value
+														? new Date(field?.value)
+														: undefined
+												}
+												setDate={(date) =>
+													field.onChange(
+														date?.toString(),
+													)
+												}
+												
 											/>
 										</FormControl>
-										<FormDescription>Enter drop-off time.</FormDescription>
+										<FormDescription>
+											Enter drop-off time.
+										</FormDescription>
 									</FormItem>
 								)}
 							/>
-
+							<Map
+								setLocation={(location: string) => {
+									form.setValue("pickUpLocation", location);
+								}}
+							/>
 							<FormField
 								control={control}
-								name="timeTakenInMins"
+								name="pickUpLocation"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Time Taken (in minutes)</FormLabel>
+										<FormLabel>Pick Up Location</FormLabel>
 										<FormControl>
 											<Input
-												type="number"
 												{...field}
-												placeholder="Time Taken"
-												min={0}
+												placeholder="pickUpLocation"
 											/>
 										</FormControl>
-										<FormDescription>Enter time taken (in minutes).</FormDescription>
+										<FormDescription>
+											Enter pick up location.
+										</FormDescription>
 									</FormItem>
 								)}
 							/>
-
+							<Map
+								setLocation={(location: string) => {
+									form.setValue("dropOffLocation", location);
+								}}
+							/>
 							<FormField
 								control={control}
-								name="numberOfBookings"
+								name="dropOffLocation"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Number of Bookings</FormLabel>
+										<FormLabel>Drop Off Location</FormLabel>
 										<FormControl>
 											<Input
-												type="number"
 												{...field}
-												placeholder="Number of bookings"
-												min={0}
+												placeholder="dropOffLocation"
 											/>
 										</FormControl>
-										<FormDescription>Enter the number of bookings.</FormDescription>
+										<FormDescription>
+											Enter drop off location.
+										</FormDescription>
 									</FormItem>
 								)}
 							/>
-
-							<FormField
-								control={control}
-								name="tourists"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Tourists</FormLabel>
-										<FormControl>
-											<Input
-												type="text"
-												{...field}
-												placeholder="Tourists (comma separated)"
-											/>
-										</FormControl>
-										<FormDescription>Enter tourists ids (optional).</FormDescription>
-									</FormItem>
-								)}
-							/>
-
-							<FormField
-								control={control}
-								name="createdBy"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Created By</FormLabel>
-										<FormControl>
-											<Input
-												type="text"
-												{...field}
-												placeholder="Creator ID (optional)"
-											/>
-										</FormControl>
-										<FormDescription>Enter creator ID (optional).</FormDescription>
-									</FormItem>
-								)}
-							/>
-
 						</Flex>
 
 						<SheetFooter>
 							<Button type="submit" className="w-40 h-10">
-								{transportation ? "Update" : "Create"} Transportation
+								{transportation ? "Update" : "Create"}{" "}
+								Transportation
 							</Button>
 						</SheetFooter>
 					</form>

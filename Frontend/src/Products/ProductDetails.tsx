@@ -1,8 +1,11 @@
 import axios from "axios";
+import { delay, set } from "lodash";
 import { ArrowLeft, Currency, Package } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { promise } from "zod";
 
+import Product from "@/Admin/Product/Product";
 import { useProduct } from "@/api/data/useProducts";
 import { useTouristProfile } from "@/api/data/useProfile";
 import Label from "@/components/ui/Label";
@@ -20,9 +23,10 @@ import {
 	DialogTrigger,
 } from "@/components/ui/dialog";
 import { Flex } from "@/components/ui/flex";
-import Rating, { ratingType } from "@/components/ui/rating";
+import Rating, { ERatingType } from "@/components/ui/rating";
 import ReviewOverlay from "@/components/ui/reviewOverlay";
 import useCurrency from "@/hooks/useCurrency";
+import { useLoginStore } from "@/store/loginStore";
 import { EAccountType } from "@/types/enums";
 import { TReview } from "@/types/global";
 
@@ -42,8 +46,12 @@ export default function ProductDetails() {
 	} = data || {};
 
 	const [fetchedComments, setFetchedComments] = useState<TReview[]>([]);
+	const [moreCommentsAvailable, setMoreCommentsAvailable] = useState(true);
+	const [toggleToGetComments, setToggleToGetComments] = useState(false);
 
-	const { data: user } = useTouristProfile();
+	const { user } = useLoginStore();
+	const { data: userProfile } = useTouristProfile();
+	//console.log(userProfile);
 
 	const [productPic, setProductPic] = useState("");
 
@@ -64,35 +72,65 @@ export default function ProductDetails() {
 
 	const canReview =
 		user?.type === EAccountType.Tourist &&
-		user.purchaseProducts.includes(data ? data._id : "");
+		userProfile?.purchaseProducts.includes(data ? data._id : "");
 
 	const childRef = useRef<{ postReview: () => void }>(null);
 
-	const fetchComments = async () => {
-		const res = await axios.get(
-			"http://localhost:5000/api/products/getComments",
-			{
-				params: {
-					productId: data?._id,
-					skipCount: fetchedComments.length,
-				},
-			},
-		);
-
-		//concatenate the new comments with the old ones
-		setFetchedComments([...fetchedComments, ...res.data]);
+	const callUseEffect = () => {
+		setToggleToGetComments(!toggleToGetComments);
 	};
 
 	useEffect(() => {
+		const fetchComments = async () => {
+			const res = await axios.get(
+				"http://localhost:5000/api/reviews/list",
+				{
+					params: {
+						productId: data?._id,
+						skipCount: fetchedComments.length,
+					},
+				},
+			);
+
+			//concatenate the new comments with the old ones
+			setFetchedComments([...fetchedComments, ...res.data]);
+
+			if (res.data.length < 10) {
+				setMoreCommentsAvailable(false);
+			}
+		};
 		try {
 			fetchComments();
 		} catch (error) {
 			console.error(error);
 		}
-	}, [fetchComments]);
+	}, [data, toggleToGetComments]);
 
-	const saveReview = () => {
-		if (childRef.current) childRef.current.postReview();
+	const saveReview = async () => {
+		const saveResult = document.getElementById("saveResult");
+		if (saveResult) {
+			saveResult.innerText = "Saving...";
+			saveResult.hidden = false;
+		}
+		if (childRef.current) {
+			childRef.current.postReview();
+		}
+		delay(() => {
+			callUseEffect();
+			if (saveResult) {
+				saveResult.classList.remove("bg-blue-400");
+				saveResult.classList.add("bg-green-400");
+				saveResult.innerText = "Done!";
+			}
+		}, 1500);
+
+		delay(() => {
+			if (saveResult) {
+				saveResult.classList.remove("bg-green-400");
+				saveResult.classList.add("bg-blue-400");
+				saveResult.hidden = true;
+			}
+		}, 3000);
 	};
 
 	useEffect(() => {
@@ -150,7 +188,7 @@ export default function ProductDetails() {
 							<Flex gap="2" isColumn>
 								<Label.Thin300>Price:</Label.Thin300>
 								<Label.Mid500 className="overflow-ellipsis">
-									{price}
+									{convertCurrency(price)}
 								</Label.Mid500>
 							</Flex>
 							<Flex gap="2" isColumn align="start">
@@ -158,7 +196,7 @@ export default function ProductDetails() {
 								<Flex>
 									<Rating
 										value={avgRating}
-										ratingType={ratingType.DETAILS}
+										ratingType={ERatingType.DETAILS}
 										interactive={false}
 									/>
 									{canReview && (
@@ -183,15 +221,17 @@ export default function ProductDetails() {
 													</DialogDescription>
 												</DialogHeader>
 												<DialogFooter className="sm:justify-center">
-													<Button
-														type="submit"
-														onClick={() =>
-															saveReview()
-														}
-														className="mr-2"
-													>
-														Save Review
-													</Button>
+													<DialogClose asChild>
+														<Button
+															type="submit"
+															onClick={() =>
+																saveReview()
+															}
+															className="mr-2"
+														>
+															Save Review
+														</Button>
+													</DialogClose>
 													<DialogClose asChild>
 														<Button
 															type="button"
@@ -205,6 +245,13 @@ export default function ProductDetails() {
 											</DialogContent>
 										</Dialog>
 									)}
+									<p
+										id="saveResult"
+										hidden={true}
+										className="ml-5 rounded-md p-2 bg-blue-400"
+									>
+										Saving...
+									</p>
 								</Flex>
 							</Flex>
 							{canViewSales && (
@@ -226,22 +273,9 @@ export default function ProductDetails() {
 				</CardContent>
 			</Card>
 			<CommentsContainer
-				comments={[
-					...[
-						{
-							_id: "x",
-							user: {
-								username: "user1",
-								_id: "x1",
-								currency: "USD" as const,
-								type: EAccountType.Tourist,
-							},
-							text: "This is a comment",
-							rating: 3,
-						},
-					], // These are dummy comments, the actual comments will be fetched from the DB TODO: Remove later
-					...fetchedComments,
-				]}
+				comments={fetchedComments}
+				moreAvailable={moreCommentsAvailable}
+				showMore={() => callUseEffect()}
 			/>
 		</Flex>
 	);

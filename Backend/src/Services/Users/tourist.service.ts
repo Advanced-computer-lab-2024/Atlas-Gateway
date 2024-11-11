@@ -1,3 +1,4 @@
+import { IItinerary } from "@/Models/Travel/itinerary.model";
 import { Types } from "mongoose";
 
 import HttpError from "../../Errors/HttpError";
@@ -40,9 +41,17 @@ export const getTouristById = async (id: string) => {
 	if (!Types.ObjectId.isValid(id)) {
 		throw new HttpError(400, "id is invalid");
 	}
-	const tourist = await Tourist.findById(id);
+
+	const tourist = await Tourist.findById(id).populate([
+		"bookedItineraries",
+		"bookedActivities",
+		"bookedTransportations",
+		"preferredTags",
+	]);
+
 	return tourist;
 };
+
 export const getTourists = async () => {
 	const tourists = await Tourist.find();
 	return tourists;
@@ -71,6 +80,8 @@ export const deleteTourist = async (id: string) => {
 export const addBookedActivity = async (
 	touristId: string,
 	activityId: string,
+	minPrice: number,
+	maxPrice: number,
 ) => {
 	if (!Types.ObjectId.isValid(activityId)) {
 		throw new HttpError(400, "Activity id is not valid");
@@ -84,8 +95,22 @@ export const addBookedActivity = async (
 		throw new HttpError(400, "Tourist must be older than 18");
 	}
 
+	const newLoyaltyPoints =
+		tourist.loyaltyPoints +
+		((tourist.level / 2) * (minPrice + maxPrice)) / 2;
+	const newMaxCollectedLoyaltyPoints =
+		tourist.maxCollectedLoyaltyPoints + newLoyaltyPoints;
+	const newLevel =
+		newMaxCollectedLoyaltyPoints <= 100000
+			? 1
+			: newMaxCollectedLoyaltyPoints <= 500000
+				? 2
+				: 3;
 	await tourist.updateOne({
 		$push: { bookedActivities: activityId },
+		loyaltyPoints: newLoyaltyPoints,
+		maxCollectedLoyaltyPoints: newMaxCollectedLoyaltyPoints,
+		level: newLevel,
 	});
 
 	return tourist;
@@ -187,7 +212,12 @@ export const cancelItinerary = async (
 		throw new HttpError(404, "Tourist not found");
 	}
 
-	if (!tourist.bookedItineraries.includes(new Types.ObjectId(itineraryId))) {
+	if (
+		!tourist.bookedItineraries.some((itinerary: any) =>
+			itinerary._id.equals(itineraryId),
+		)
+	) {
+
 		throw new HttpError(404, "Itinerary not found in the tourist's list");
 	}
 	const newLoyaltyPoints =
@@ -214,22 +244,39 @@ export const cancelItinerary = async (
 	return tourist;
 };
 
-export const cancelActivity = async (touristId: string, activityId: string) => {
+export const cancelActivity = async (
+	touristId: string,
+	activityId: string,
+	minPrice: number,
+	maxPrice: number,
+) => {
 	if (!Types.ObjectId.isValid(activityId)) {
 		throw new HttpError(400, "Activity id is not valid");
 	}
 
-	const tourist = await getTouristById(touristId);
+	const tourist = await Tourist.findById(touristId);
 	if (!tourist) {
 		throw new HttpError(404, "Tourist not found");
 	}
-
 	if (!tourist.bookedActivities.includes(new Types.ObjectId(activityId))) {
 		throw new HttpError(404, "Activity not found in the tourist's list");
 	}
-
+	const newLoyaltyPoints =
+		tourist.loyaltyPoints -
+		((tourist.level / 2) * (minPrice + maxPrice)) / 2;
+	const newMaxCollectedLoyaltyPoints =
+		tourist.maxCollectedLoyaltyPoints - newLoyaltyPoints;
+	const newLevel =
+		newMaxCollectedLoyaltyPoints <= 100000
+			? 1
+			: newMaxCollectedLoyaltyPoints <= 500000
+				? 2
+				: 3;
 	const removed = await tourist.updateOne({
 		$pull: { bookedActivities: activityId },
+		loyaltyPoints: newLoyaltyPoints,
+		maxCollectedLoyaltyPoints: newMaxCollectedLoyaltyPoints,
+		level: newLevel,
 	});
 
 	if (removed.modifiedCount === 0) {

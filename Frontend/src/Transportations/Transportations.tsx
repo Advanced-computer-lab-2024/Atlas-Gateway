@@ -1,13 +1,9 @@
 import { Plus } from "lucide-react";
 import { useState } from "react";
 
-import { useTransportations } from "@/api/data/useTransportations";
 import { usePagination } from "@/api/data/usePagination";
-import { useQueryString } from "@/api/data/useQueryString";
-import { useTags } from "@/api/data/useTags";
-import Filters from "@/components/Filters/Filters";
+import { useTransportations } from "@/api/data/useTransportations";
 import Label from "@/components/ui/Label";
-import { Searchbar } from "@/components/ui/Searchbar";
 import { Button } from "@/components/ui/button";
 import { Flex } from "@/components/ui/flex";
 import {
@@ -18,15 +14,7 @@ import {
 	PaginationNext,
 	PaginationPrevious,
 } from "@/components/ui/pagination";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
 import { useLoginStore } from "@/store/loginStore";
-import { languageOptions } from "@/types/consts";
 import { EAccountType } from "@/types/enums";
 import { TTransportation } from "@/types/global";
 
@@ -37,7 +25,8 @@ export default function Transportations() {
 	const { user } = useLoginStore();
 	const { data, meta } = useTransportations();
 	const [open, setOpen] = useState(false);
-	const [transportation, setTransportation] = useState<TTransportation>();
+	const [selectedTransportation, setTransportation] =
+		useState<TTransportation>();
 
 	const openEditDrawer = (transportation: TTransportation) => {
 		setOpen(true);
@@ -64,7 +53,7 @@ export default function Transportations() {
 				gap="2"
 				className="bg-surface-secondary p-2 rounded-lg border-2 border-solid border-black"
 			>
-				{user?.type !== EAccountType.Guide && (
+				{user?.type === EAccountType.TransportationAdvertiser && (
 					<Button
 						onClick={() => setOpen(true)}
 						variant="default"
@@ -112,7 +101,7 @@ export default function Transportations() {
 				</Pagination>
 			)}
 			<TransportationForm
-				transportation={transportation}
+				transportation={selectedTransportation}
 				open={open}
 				setOpen={closeEditDrawer}
 			/>

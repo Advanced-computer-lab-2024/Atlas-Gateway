@@ -1,6 +1,8 @@
+import axios from "axios";
 import { formatDate } from "date-fns";
-import { ArrowLeft, DollarSign, MapPin, Star } from "lucide-react";
-import { useRef } from "react";
+import { delay } from "lodash";
+import { ArrowLeft, DollarSign, MapPin } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -13,6 +15,7 @@ import Label from "@/components/ui/Label";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { CommentsContainer } from "@/components/ui/comments";
 import {
 	Dialog,
 	DialogClose,
@@ -24,16 +27,20 @@ import {
 	DialogTrigger,
 } from "@/components/ui/dialog";
 import { Flex } from "@/components/ui/flex";
-import Rating, { ratingType } from "@/components/ui/rating";
+import Rating, { ERatingType } from "@/components/ui/rating";
 import ReviewOverlay from "@/components/ui/reviewOverlay";
 import useCurrency from "@/hooks/useCurrency";
+import { useLoginStore } from "@/store/loginStore";
 import { languageOptions } from "@/types/consts";
 import { EAccountType } from "@/types/enums";
+import { TReview, TTourGuide } from "@/types/global";
 
 export default function ItineraryDetails() {
 	const navigate = useNavigate();
 	const convertCurrency = useCurrency();
-	const { data: user } = useTouristProfile();
+	const { user } = useLoginStore();
+	const { data: userProfile, refetch: refetchUserProfile } =
+		useTouristProfile();
 
 	const { data, refetch } = useItinerary();
 	const {
@@ -53,25 +60,116 @@ export default function ItineraryDetails() {
 	} = data || {};
 	const { doBookItinerary } = useBookItinerary(() => {
 		refetch();
+		refetchUserProfile();
 	});
 	const { doCancelItineraryBooking } = useCancelItineraryBooking(() => {
 		refetch();
+		refetchUserProfile();
 	});
 
-	const canReview =
-		user?.type === EAccountType.Tourist &&
-		user.bookedActivities.includes(data ? data._id : ""); //TODO: Discuss how to adjust so the itineraries attended are the ones that can be reviewed, not any booked one
+	const [canReviewItinerary, setCanReviewItinerary] = useState(false);
+	const [canReviewGuide, setCanReviewGuide] = useState(false);
+	const [fetchedComments, setFetchedComments] = useState<TReview[]>([]);
+	const [moreCommentsAvailable, setMoreCommentsAvailable] = useState(true);
+	const [toggleToGetComments, setToggleToGetComments] = useState(false);
+
+	const tourGuideName = (data?.createdBy as unknown as TTourGuide)?.name
+		? (data?.createdBy as unknown as TTourGuide)?.name
+		: (data?.createdBy as unknown as TTourGuide)?.username;
+
+	useEffect(() => {
+		console.log("Guide From Profile:", userProfile);
+		console.log("Guide From Itinerary:", data);
+		setCanReviewItinerary(
+			!!(
+				user?.type === EAccountType.Tourist &&
+				data?.tourists?.includes(user?._id) &&
+				data?.endDateTime.localeCompare(new Date().toISOString()) === -1
+			),
+		);
+		setCanReviewGuide(
+			!!(
+				(
+					user?.type === EAccountType.Tourist &&
+					userProfile?.bookedItineraries?.some(
+						(bookedItinerary) =>
+							bookedItinerary.createdBy ===
+							(data?.createdBy as unknown as TTourGuide)?._id,
+					) &&
+					data?.endDateTime.localeCompare(
+						new Date().toISOString(),
+					) === -1
+				) // 1 if endDateTime is after now, -1 if endDateTime is before now, 0 if they are equal
+			),
+		);
+
+		const fetchComments = async () => {
+			const res = await axios.get(
+				"http://localhost:5000/api/reviews/list",
+				{
+					params: {
+						itineraryId: data?._id,
+						skipCount: fetchedComments.length,
+					},
+				},
+			);
+
+			//concatenate the new comments with the old ones
+			setFetchedComments([...fetchedComments, ...res.data]);
+
+			if (res.data.length < 10) {
+				setMoreCommentsAvailable(false);
+			}
+		};
+		try {
+			fetchComments();
+		} catch (error) {
+			console.error(error);
+		}
+	}, [user, userProfile, data, toggleToGetComments]);
+
+	const callUseEffect = () => {
+		setToggleToGetComments(!toggleToGetComments);
+	};
+
+	//TODO: Discuss how to adjust so the itineraries attended are the ones that can be reviewed, not any booked one
 
 	const childRef = useRef<{ postReview: () => void }>(null);
 
-	const saveReview = () => {
-		if (childRef.current) childRef.current.postReview();
+	const saveReview = async (callSource) => {
+		const componentId =
+			callSource === 0 ? "saveResultItinerary" : "saveResultGuide";
+		const saveResult = document.getElementById(componentId);
+		if (saveResult) {
+			saveResult.innerText = "Saving...";
+			saveResult.hidden = false;
+		}
+		if (childRef.current) {
+			childRef.current.postReview();
+		}
+		delay(() => {
+			callUseEffect();
+			if (saveResult) {
+				saveResult.classList.remove("bg-blue-400");
+				saveResult.classList.add("bg-green-400");
+				saveResult.innerText = "Done!";
+			}
+		}, 1500);
+
+		delay(() => {
+			if (saveResult) {
+				saveResult.classList.remove("bg-green-400");
+				saveResult.classList.add("bg-blue-400");
+				saveResult.hidden = true;
+			}
+		}, 3000);
 	};
 
 	return (
 		<Flex
 			justify="center"
 			align="center"
+			isColumn
 			className="p-4 overflow-y-scroll w-full h-full"
 		>
 			<Card className="w-[80%] border-black border-2">
@@ -164,22 +262,22 @@ export default function ItineraryDetails() {
 							<Flex>
 								<Rating
 									value={avgRating}
-									ratingType={ratingType.DETAILS}
+									ratingType={ERatingType.DETAILS}
 									interactive={false}
 								/>
-								{canReview && (
+								{canReviewItinerary && (
 									<Dialog>
 										<DialogTrigger className="bg-surface-primary ml-4 px-3 rounded-md">
-											Review Product
+											Review Itinerary
 										</DialogTrigger>
 										<DialogContent>
 											<DialogHeader>
 												<DialogTitle>
-													Review this Product
+													Review this Itinerary
 												</DialogTitle>
 												<DialogDescription>
 													<ReviewOverlay
-														reviewType="Product"
+														reviewType="Itinerary"
 														reviewedItemId={
 															data?._id
 														}
@@ -189,13 +287,17 @@ export default function ItineraryDetails() {
 												</DialogDescription>
 											</DialogHeader>
 											<DialogFooter className="sm:justify-center">
-												<Button
-													type="submit"
-													onClick={() => saveReview()}
-													className="mr-2"
-												>
-													Save Review
-												</Button>
+												<DialogClose asChild>
+													<Button
+														type="submit"
+														onClick={() =>
+															saveReview(0)
+														}
+														className="mr-2"
+													>
+														Save Review
+													</Button>
+												</DialogClose>
 												<DialogClose asChild>
 													<Button
 														type="button"
@@ -209,6 +311,13 @@ export default function ItineraryDetails() {
 										</DialogContent>
 									</Dialog>
 								)}
+								<p
+									id="saveResultItinerary"
+									hidden={true}
+									className="ml-5 rounded-md p-2 bg-blue-400"
+								>
+									Saving...
+								</p>
 							</Flex>
 						</Flex>
 					</Flex>
@@ -280,9 +389,87 @@ export default function ItineraryDetails() {
 								"No tags"
 							)}
 						</Flex>
+						<Flex gap="2" isColumn align="center">
+							<Label.Thin300>Tour Guide:</Label.Thin300>
+							{tags && tags?.length > 0 ? (
+								<Flex
+									gap="1"
+									align="center"
+									justify="center"
+									className="overflow-x-scroll h-8 w-full"
+								>
+									<Label.Mid500>{tourGuideName}</Label.Mid500>
+
+									{canReviewGuide && (
+										<Dialog>
+											<DialogTrigger className="bg-surface-primary ml-4 px-3 rounded-md">
+												Review Guide
+											</DialogTrigger>
+											<DialogContent>
+												<DialogHeader>
+													<DialogTitle>
+														Review this Itinerary's
+														Tour Guide:{" "}
+														{tourGuideName}
+													</DialogTitle>
+													<DialogDescription>
+														<ReviewOverlay
+															reviewType="TourGuide"
+															reviewedItemId={
+																(
+																	data?.createdBy as unknown as TTourGuide
+																)?._id
+															}
+															userId={user?._id}
+															ref={childRef}
+														/>
+													</DialogDescription>
+												</DialogHeader>
+												<DialogFooter className="sm:justify-center">
+													<DialogClose asChild>
+														<Button
+															type="submit"
+															onClick={() =>
+																saveReview(1)
+															}
+															className="mr-2"
+														>
+															Save Review
+														</Button>
+													</DialogClose>
+													<DialogClose asChild>
+														<Button
+															type="button"
+															variant="secondary"
+															className="ml-2"
+														>
+															Close
+														</Button>
+													</DialogClose>
+												</DialogFooter>
+											</DialogContent>
+										</Dialog>
+									)}
+									<p
+										className="ml-5 rounded-md p-2 bg-blue-400"
+										id="saveResultGuide"
+										hidden={true}
+									>
+										Saving...
+									</p>
+								</Flex>
+							) : (
+								"No tags"
+							)}
+						</Flex>
 					</Flex>
 				</CardContent>
 			</Card>
+			<CommentsContainer
+				comments={fetchedComments}
+				moreAvailable={moreCommentsAvailable}
+				showMore={() => callUseEffect()}
+			/>
 		</Flex>
 	);
 }

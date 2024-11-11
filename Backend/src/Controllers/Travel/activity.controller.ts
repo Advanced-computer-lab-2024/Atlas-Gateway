@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import { Types } from "mongoose";
 
 import HttpError from "../../Errors/HttpError";
-import { Activity } from "../../Models/Travel/activity.model";
 import { Tourist } from "../../Models/Users/tourist.model";
 import * as activityService from "../../Services/Travel/activity.service";
 
@@ -48,22 +47,22 @@ export const getActivityById = async (
 	}
 };
 
-export const getActivitybyUserId = async (
+export const getActivitybyCreator = async (
 	req: Request,
 	res: Response,
 	next: NextFunction,
 ) => {
 	try {
-		const tourGuideId = req.headers.userid;
+		const userId = req.headers.userid;
 
-		if (!tourGuideId) {
+		if (!userId) {
 			return res
 				.status(400)
 				.json({ message: "Advertisor ID is required" });
 		}
 
 		const result = await activityService.getActivitybyUserId(
-			tourGuideId.toString(),
+			userId.toString(),
 			req.body,
 		);
 
@@ -94,7 +93,18 @@ export const getActivities = async (
 		if (!usertype) {
 			throw new HttpError(400, "User type is required");
 		}
-		const result = await activityService.getActivities(usertype,req.query);
+
+		let preferredTags: Types.ObjectId[] | undefined = undefined;
+		if (usertype === "tourist") {
+			preferredTags = (
+				await Tourist?.findOne({ _id: req.headers.userid })
+			)?.preferredTags;
+		}
+
+		const result = await activityService.getActivities(usertype, {
+			...req.query,
+			preferredTags,
+		});
 
 		const response = {
 			data: result[0].data,
@@ -174,6 +184,18 @@ export const bookActivity = async (
 
 		if (!bookingResult) {
 			return res.status(400).json({ message: "Cannot book Activity" });
+		}
+
+		const tourist = await Tourist.findById(touristId);
+		if (tourist) {
+			if (
+				!tourist.bookedActivities.includes(
+					new Types.ObjectId(activityId),
+				)
+			) {
+				tourist.bookedActivities.push(new Types.ObjectId(activityId));
+				tourist.save();
+			}
 		}
 
 		return res

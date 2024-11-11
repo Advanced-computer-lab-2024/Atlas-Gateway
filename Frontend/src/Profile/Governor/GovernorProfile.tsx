@@ -1,25 +1,25 @@
+import { Camera, Image, Settings } from "lucide-react";
+import { useState } from "react";
+
+import { useDownload } from "@/api/data/useMedia";
+import { useGovernorProfile } from "@/api/data/useProfile";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuTrigger,
-} from "@radix-ui/react-dropdown-menu";
-import { Camera, Image, Settings } from "lucide-react";
-import { useEffect, useState } from "react";
-
-import { useDownload } from "@/api/data/useMedia";
-import { useTransportationAdvertiserProfile } from "@/api/data/useProfile";
+} from "@/components/ui/dropdown-menu";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useLoginStore } from "@/store/loginStore";
 
-import profile_background from "../assets/profile_background.jpg";
-import ChangePasswordSheet from "./ChangePasswordSheet";
-import TransportationAdvertiserSheet from "./TransportationAdvertiserSheet";
-import UploadForm from "./UploadForm";
+import profile_background from "../../assets/profile_background.jpg";
+import ChangePasswordSheet from "../ChangePasswordSheet";
+import UploadForm from "../UploadForm";
+import GovernorSheet from "./GovernorSheet";
 
 const General = () => {
 	const { user } = useLoginStore();
-	const { data, refetch } = useTransportationAdvertiserProfile();
+	const { data, refetch } = useGovernorProfile();
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 	const [isDrawerOpen2, setIsDrawerOpen2] = useState(false);
 	const [isDrawerOpen3, setIsDrawerOpen3] = useState(false);
@@ -28,11 +28,16 @@ const General = () => {
 	const { doDownload } = useDownload((response) => {
 		setProfilePic(response.data);
 	});
-	useEffect(() => {
-		if (data?.imagePath) {
-			doDownload(data.imagePath);
-		}
-	}, [data?.imagePath, doDownload]);
+
+	//May needed later:
+
+	// // Function to truncate description for display
+	// const truncateDescription = (text: string, maxLength: number) => {
+	// 	if (text.length > maxLength) {
+	// 		return text.slice(0, maxLength) + "...";
+	// 	}
+	// 	return text;
+	// };
 	return (
 		<div>
 			<div className="relative w-full">
@@ -76,19 +81,16 @@ const General = () => {
 
 			<div className="flex justify-between ml-96 mt-8 pr-10">
 				<div>
-					<h1 className="text-xl">
-						{data?.name || "Name not found"}
-					</h1>
 					<h2 className="text-2xl">
 						#{data?.username || "username not found"}
 					</h2>
 				</div>
 				<div className="border-solid border-2 border-[rgb(44,44,44)] flex items-center mr-7 p-2 h-10">
-					{data?.isVerified && (
+					{
 						<div className="p-1">
-							<TransportationAdvertiserSheet />
+							<GovernorSheet />
 						</div>
-					)}
+					}
 					<DropdownMenu modal={false}>
 						<DropdownMenuTrigger>
 							<Settings className="cursor-pointer" />
@@ -102,22 +104,6 @@ const General = () => {
 							>
 								change password
 							</DropdownMenuItem>
-							<DropdownMenuItem
-								onClick={() => {
-									setIsDrawerOpen2(true);
-								}}
-								className="cursor-pointer"
-							>
-								Upload Id
-							</DropdownMenuItem>
-							<DropdownMenuItem
-								onClick={() => {
-									setIsDrawerOpen3(true);
-								}}
-								className="cursor-pointer"
-							>
-								Upload taxation card
-							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
 				</div>
@@ -127,6 +113,7 @@ const General = () => {
 				<Tabs defaultValue="account" className="w-full">
 					<TabsList className="grid w-full grid-cols-3">
 						<TabsTrigger value="account">Account</TabsTrigger>
+
 						<TabsTrigger value="upcoming">Upcoming</TabsTrigger>
 						<TabsTrigger value="history">History</TabsTrigger>
 					</TabsList>
@@ -138,15 +125,9 @@ const General = () => {
 							<h2 className="text-xl">
 								{data?.email || "Email not found"}
 							</h2>
-							<h3 className="text-xl">
-								Hotline: {data?.hotline || "hotline not found"}
-							</h3>
-							<h3 className="text-xl">
-								Company Profile:{" "}
-								{data?.description || "Description here"}
-							</h3>
 						</div>
 					</TabsContent>
+
 					<TabsContent value="Upcoming"></TabsContent>
 					<TabsContent value="History"></TabsContent>
 				</Tabs>
@@ -163,9 +144,7 @@ const General = () => {
 				setIsDrawerOpen={setIsDrawerOpen4}
 				onUploadSuccess={() => {
 					refetch();
-					if (data?.imagePath) {
-						doDownload(data.imagePath);
-					}
+					doDownload("profile");
 				}}
 			/>
 			<UploadForm

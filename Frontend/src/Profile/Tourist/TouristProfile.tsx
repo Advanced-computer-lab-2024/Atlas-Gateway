@@ -1,7 +1,8 @@
-import { Camera, Settings } from "lucide-react";
+import { Camera, Settings, TicketCheck } from "lucide-react";
 import { useState } from "react";
 
 import {
+	useRedeemTouristLoyaltyPoints,
 	useRequestDeleteTouristProfile,
 	useTouristProfile,
 } from "@/api/data/useProfile";
@@ -19,15 +20,20 @@ import profile_background from "../../assets/profile_background.jpg";
 import ChangePasswordSheet from "../ChangePasswordSheet";
 import TouristBadge from "./TouristBadge";
 import TouristSheet from "./TouristSheet";
+import Account from "./tabs/Account";
+import TouristActivities from "./tabs/Activities/TouristActivities";
 import Complaints from "./tabs/Complaints";
+import TouristItineraries from "./tabs/Itineraries/TouristItineraries";
+import TouristTransportations from "./tabs/Transporations/TouristTransporations";
 
 export default function TouristProfile() {
-	const { data } = useTouristProfile();
+	const { data, refetch } = useTouristProfile();
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 	const { doRequestDeleteTouristProfile } = useRequestDeleteTouristProfile(
 		() => {},
 	);
-
+	const { doRedeemTouristLoyaltyPoints } =
+		useRedeemTouristLoyaltyPoints(refetch);
 	return (
 		<div>
 			<div className="relative w-full">
@@ -70,12 +76,21 @@ export default function TouristProfile() {
 							{data?.loyaltyPoints}
 							{" Points"}
 						</h2>
+						<Button
+							variant="ghost"
+							size="icon"
+							onClick={() => {
+								doRedeemTouristLoyaltyPoints(data?._id!);
+							}}
+						>
+							<TicketCheck />
+						</Button>
 					</div>
 				</div>
 				<Flex className="mr-7" gap="2" align="center">
 					<TouristSheet />
 					<DropdownMenu modal={false}>
-						<DropdownMenuTrigger>
+						<DropdownMenuTrigger className="bg-transparent">
 							<Settings className="cursor-pointer" />
 						</DropdownMenuTrigger>
 						<DropdownMenuContent>
@@ -103,27 +118,28 @@ export default function TouristProfile() {
 			</div>
 			<div className="flex ml-10 mr-10 mt-10">
 				<Tabs defaultValue="account" className="w-full">
-					<TabsList className="grid w-full grid-cols-4">
+					<TabsList className="grid w-full grid-cols-5 border-2 border-black">
 						<TabsTrigger value="account">Account</TabsTrigger>
-						<TabsTrigger value="upcoming">Upcoming</TabsTrigger>
-						<TabsTrigger value="history">History</TabsTrigger>
+						<TabsTrigger value="activities">Activities</TabsTrigger>
+						<TabsTrigger value="itineraries">
+							Itineraries
+						</TabsTrigger>
+						<TabsTrigger value="transporations">
+							Transporations
+						</TabsTrigger>
 						<TabsTrigger value="complains">Complaints</TabsTrigger>
 					</TabsList>
-					<TabsContent
-						className="flex justify-between items-center"
-						value="account"
-					>
-						<div>
-							<h2 className="text-xl">
-								{data?.email || "Email not found"}
-							</h2>
-							<h3 className="text-xl">
-								{data?.mobile || "Mobile not found"}
-							</h3>
-							<h3 className="text-xl">
-								Address: {data?.address || "Address here"}
-							</h3>
-						</div>
+					<TabsContent value="account">
+						<Account />
+					</TabsContent>
+					<TabsContent value="activities">
+						<TouristActivities />
+					</TabsContent>
+					<TabsContent value="itineraries">
+						<TouristItineraries />
+					</TabsContent>
+					<TabsContent value="transporations">
+						<TouristTransportations />
 					</TabsContent>
 					<TabsContent value="upcoming"></TabsContent>
 					<TabsContent value="history"></TabsContent>

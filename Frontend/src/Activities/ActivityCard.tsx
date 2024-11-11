@@ -7,7 +7,6 @@ import {
 	Eye,
 	Mail,
 	MapPin,
-	Star,
 } from "lucide-react";
 import { Trash } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -28,6 +27,7 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Flex } from "@/components/ui/flex";
+import Rating, { ERatingType } from "@/components/ui/rating";
 import useCurrency from "@/hooks/useCurrency";
 import { useLoginStore } from "@/store/loginStore";
 import { EAccountType } from "@/types/enums";
@@ -85,7 +85,7 @@ export default function ActivityCard({
 					className="relative w-full"
 				>
 					<Label.Mid500 className="justify-self-center">
-						{activity?.name}
+						{activity?.name ?? "-"}
 					</Label.Mid500>
 					<DropdownMenu modal={false}>
 						<DropdownMenuTrigger className="absolute right-0">
@@ -152,10 +152,11 @@ export default function ActivityCard({
 							</Label.Thin300>
 						</Flex>
 						<Flex gap="1" align="center">
-							<Star color="yellow" fill="yellow" size={20} />
-							<Label.Thin300>
-								{activity?.avgRating ?? 0}
-							</Label.Thin300>
+							<Rating
+								value={activity?.avgRating ?? 0}
+								interactive={false}
+								ratingType={ERatingType.CARDS}
+							/>
 						</Flex>
 					</Flex>
 					<Flex gap="2" align="center">

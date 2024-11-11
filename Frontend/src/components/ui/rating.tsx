@@ -1,22 +1,23 @@
 import { Star } from "lucide-react";
 import React from "react";
 
-export enum ratingType {
+export enum ERatingType {
 	DETAILS = 40,
-	REVIEW = 20,
-	CARDS = 10,
+	CARDS = 20,
 }
 
 interface RatingProps {
-	value: number;
+	value?: number;
 	onChange?: (value: number) => void;
-	ratingType?: ratingType;
+	ratingType?: ERatingType;
 	interactive?: boolean;
 }
 
 const Rating: React.FC<RatingProps> = ({
-	value,
-	ratingType = ratingType.CARDS,
+
+	value = 0,
+	ratingType = ERatingType.CARDS,
+
 	interactive: interactive = false,
 	onChange,
 }) => {

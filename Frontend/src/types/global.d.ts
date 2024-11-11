@@ -101,10 +101,26 @@ export interface TTourist extends TUser {
 	loyaltyPoints: number;
 	walletBalance: number;
 	level: 1 | 2 | 3;
+	purchaseProducts: TProduct[];
+	bookedActivities: TActivity[];
+	bookedItineraries: TItinerary[];
+	bookedTransportations: TTransportation[];
+	preferredTags: TTag[];
+}
+
+export interface TTouristApi extends TUser {
+	email: string;
+	mobile: string;
+	address: string;
+	currency: Currency;
+	loyaltyPoints: number;
+	walletBalance: number;
+	level: 1 | 2 | 3;
 	purchaseProducts: string[];
 	bookedActivities: string[];
-	bookedItineraries: Types.ObjectId[];
+	bookedItineraries: string[];
 	bookedTransportations: string[];
+	preferredTags: string[];
 }
 
 export interface TSeller extends TUser {
@@ -209,7 +225,7 @@ export interface TItinerary {
 
 export interface TReview {
 	_id: string;
-	user: TUser;
+	tourist: TTourist;
 	text: string;
 	rating: number;
 }
@@ -222,10 +238,8 @@ export interface TTransportation {
 	availability: number;
 	pickUpLocation: string;
 	dropOffLocation: string;
-	timeTakenInMins: number;
-	pickUpTime: Date;
-	dropOffTime: Date;
+	pickUpTime: string;
+	dropOffTime: string;
 	numberOfBookings: number;
 	tourists: Types.ObjectId[];
-	createdBy: Types.ObjectId;
-};
+}
