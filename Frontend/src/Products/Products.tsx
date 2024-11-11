@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import { usePagination } from "@/api/data/usePagination";
 import { useProducts } from "@/api/data/useProducts";
+import { useSellerProfile } from "@/api/data/useProfile";
 import { useQueryString } from "@/api/data/useQueryString";
 import Filters from "@/components/Filters/Filters";
 import Label from "@/components/ui/Label";
@@ -32,6 +33,7 @@ import ProductForm from "./ProductForm";
 
 export default function Products() {
 	const { user } = useLoginStore();
+	const { data: seller } = useSellerProfile();
 	const { data, meta } = useProducts();
 	const [query, setQuery] = useQueryString();
 	const { page, onPageChange, pagesCount } = usePagination({
@@ -100,11 +102,13 @@ export default function Products() {
 						/>
 					</Flex>
 				</Flex>
-				{user?.type === EAccountType.Seller && (
-					<Button onClick={() => setIsProductFormOpen(true)}>
-						Add Product
-					</Button>
-				)}
+				{user?.type === EAccountType.Seller &&
+					seller?.isVerified &&
+					seller?.acceptedTerms && (
+						<Button onClick={() => setIsProductFormOpen(true)}>
+							Add Product
+						</Button>
+					)}
 			</Flex>
 			<Flex
 				className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2"
