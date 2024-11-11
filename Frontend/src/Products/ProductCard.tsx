@@ -45,8 +45,8 @@ export default function ProductCard({
 	const handleArchive = (isArchived: boolean, id: string) => {
 		doUpdateProduct({ isArchived: !isArchived, _id: id });
 	};
-
-	const { data: seller } = useSellerProfile(product.sellerId); //TODO: Join product with seller instead of this garbage
+	//TODO: Join product with seller instead of this garbage
+	const { data: seller } = useSellerProfile(product.sellerId);
 	const {
 		_id,
 		name,
