@@ -7,10 +7,10 @@ import {
 	searchHotelOffersController,
 } from "../../Controllers/Hotel/hotel.controller";
 
-const router = Router();
+const hotelRouter = Router();
 
-router.post("/list", searchHotelOffersController);
-router.post("/bookRoom", bookHotelroom);
-router.get("/myBookings", getMyHotelBooking);
-router.delete("/delete/:id", deleteBooking);
-export default router;
+hotelRouter.post("/list", searchHotelOffersController);
+hotelRouter.post("/bookRoom", bookHotelroom);
+hotelRouter.get("/myBookings", getMyHotelBooking);
+hotelRouter.delete("/delete/:id", deleteBooking);
+export default hotelRouter;
