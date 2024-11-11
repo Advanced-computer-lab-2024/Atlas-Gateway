@@ -80,8 +80,8 @@ export const getTransportationByUserId = async (
 			req.query,
 		);
 
-		if (!result) {
-			return res.status(404).send("No Transportation found");
+		if (result[0].data.length === 0) {
+			throw new HttpError(404, "No Transportations found");
 		}
 
 		const response = {
