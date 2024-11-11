@@ -2,6 +2,7 @@ import { IFlight } from "../../../Backend/src/Models/Flight/flight.model";
 import { Currency } from "./consts";
 import { EAccountType } from "./enums";
 
+
 export type TUser = {
 	_id: string;
 	username: string;
@@ -235,14 +236,11 @@ export interface TFlights {
 	travelClass: string;
 }
 
-export interface TFlights {
-	originLocationCode: string;
-	destinationLocationCode: string;
-	departureDate: string;
-	returnDate?: string;
+export interface THotels {
+	cityCode: string;
+	checkInDate: Date;
+	checkOutDate: Date;
 	adults: number;
-	directFlightsOnly: boolean;
-	travelClass: string;
 }
 
 export interface TReview {

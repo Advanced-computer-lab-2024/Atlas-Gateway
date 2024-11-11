@@ -32,7 +32,7 @@ export async function searchHotelOffers(params: HotelSearchParams) {
 		const startIndex = (params.page - 1) * hotelsPerPage;
 		const endIndex = startIndex + hotelsPerPage;
 		if (startIndex >= hotels.length) {
-			return { message: "No more hotels available" };
+			throw new HttpError(404, "No more hotels to show");
 		}
 		const paginatedHotels = hotels.slice(startIndex, endIndex);
 

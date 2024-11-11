@@ -9,7 +9,7 @@ import {
 
 const hotelRouter = Router();
 
-hotelRouter.post("/list", searchHotelOffersController);
+hotelRouter.post("/search", searchHotelOffersController);
 hotelRouter.post("/bookRoom", bookHotelroom);
 hotelRouter.get("/myBookings", getMyHotelBooking);
 hotelRouter.delete("/delete/:id", deleteBooking);

@@ -1,6 +1,9 @@
 import { Document, Schema, Types, model } from "mongoose";
 
+
+
 import { schemaConfig } from "../../Config/schemaConfig";
+
 
 export interface IHotelBooking extends Document {
 	touristID: Types.ObjectId;
@@ -14,8 +17,8 @@ export interface IHotelBooking extends Document {
 		longitude: number;
 	};
 	offer: {
-		checkInDate: string;
-		checkOutDate: string;
+		checkInDate: Date;
+		checkOutDate: Date;
 		room: {
 			type: string;
 			typeEstimated: {

@@ -1,13 +1,9 @@
-import { DndContext } from "@dnd-kit/core";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import {
-	Navigate,
-	Outlet,
-	RouterProvider,
-	createBrowserRouter,
-} from "react-router-dom";
+import { Navigate, Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
+
+
 
 import Activites from "./Activities/Activites";
 import ActivityDetails from "./Activities/ActivityDetails";
@@ -39,6 +35,8 @@ import Transportations from "./Transportations/Transportations";
 import { QueryStateProvider } from "./api/data/useQueryString";
 import "./index.css";
 import Layout from "./layout/Layout";
+import Hotels from "./Hotels/Hotels";
+
 
 const queryClient = new QueryClient();
 
@@ -222,6 +220,10 @@ const router = createBrowserRouter([
 						element: <Flights />,
 					},
 				],
+			},
+			{
+				path: "/hotels",
+				element: <Hotels />,
 			},
 			{
 				path: "/transportations",

@@ -1,5 +1,6 @@
 import { EAccountType } from "@/types/enums";
 
+
 type TCard = {
 	title: string;
 	description: string;
@@ -40,6 +41,13 @@ const flightsCard = {
 	href: "/flights",
 };
 
+const hotelsCard = {
+	title: "Hotels",
+	description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+	Text: "View Hotels",
+	href: "/hotels",
+};
+
 const transportationCard = {
 	title: "Transportation",
 	description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
@@ -55,6 +63,7 @@ export const cardsMap: Record<EAccountType, TCard[]> = {
 		itinerariesCard,
 		transportationCard,
 		flightsCard,
+		hotelsCard,
 	],
 	[EAccountType.Guide]: [placesCard, activitiesCard, itinerariesCard],
 	[EAccountType.Seller]: [productsCard],

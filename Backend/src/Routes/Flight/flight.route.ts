@@ -10,7 +10,6 @@ const flightRouter = Router();
 
 flightRouter.post("/book", bookFlight);
 flightRouter.post("/search", searchFlights);
-flightRouter.get("/touristFlights", searchFlights);
 flightRouter.delete("/delete/:id", deleteFlightController);
 
 export default flightRouter;

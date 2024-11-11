@@ -110,6 +110,12 @@ const ENDPOINTS = {
 		search: "api/flights/search",
 		book: "api/flights/book",
 	},
+	hotels: {
+		search: "api/hotels/search",
+		bookRoom: "api/hotels/bookRoom",
+		myBookings: "api/hotels/myBookings",
+		delete: (id: string) => `api/hotels/delete/${id}`,
+	},
 	complaint: {
 		list: "api/complaint/list",
 		show: (id: string) => `api/complaint/show/${id}`,
