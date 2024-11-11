@@ -29,7 +29,7 @@ export function useActivities() {
 				? apiAdvertisorActivities(
 						_id,
 						query,
-						user?.type ?? EAccountType.Guest,
+						user?.type ?? EAccountType.Advertiser,
 					)
 				: apiActivities(_id, query, user?.type ?? EAccountType.Guest),
 		queryKey: ["activities", _id, query],
@@ -97,11 +97,11 @@ export function useDeleteActivity(onSuccess: () => void) {
 
 export function useBookActivity(onSuccess: () => void) {
 	const { user } = useLoginStore();
-	if (!user?._id) {
-		throw new Error("User ID is undefined");
-	}
+
+	const { _id } = user || {};
+
 	const mutation = useMutation({
-		mutationFn: (_id: string) => apiBookActivity(_id, user?._id),
+		mutationFn: (id: string) => apiBookActivity(id, _id ?? ""),
 		onSuccess,
 	});
 
@@ -112,11 +112,9 @@ export function useBookActivity(onSuccess: () => void) {
 
 export function useCancelActivityBooking(onSuccess: () => void) {
 	const { user } = useLoginStore();
-	if (!user?._id) {
-		throw new Error("User ID is undefined");
-	}
+	const { _id } = user || {};
 	const mutation = useMutation({
-		mutationFn: (_id: string) => apiCancelActivityBooking(_id, user?._id),
+		mutationFn: (id: string) => apiCancelActivityBooking(id, _id ?? ""),
 		onSuccess,
 	});
 
