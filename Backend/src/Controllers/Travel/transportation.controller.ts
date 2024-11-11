@@ -20,11 +20,9 @@ export const createTransportation = async (
 				.json({ message: "Transportation Advertiser ID is required" });
 		}
 
-		const transportationData = req.body;
-
 		const transportationCreated =
 			await transportationService.createTransportation(
-				transportationData,
+				req.body,
 				transportation_advertiserId.toString(),
 			);
 
@@ -78,7 +76,9 @@ export const getTransportationByUserId = async (
 		}
 
 		const transportation =
-			await transportationService.getTransportationByUserId(userid.toString());
+			await transportationService.getTransportationByUserId(
+				userid.toString(),
+			);
 
 		return res.status(200).json(transportation);
 	} catch (error) {
@@ -97,15 +97,15 @@ export const getTransportations = async (
 		if (!userId) {
 			throw new HttpError(400, "User ID is required");
 		}
-		if (type != 'transportation_advertiser') {
+		if (type != "transportation_advertiser") {
 			throw new HttpError(400, "User Type is required");
 		}
 		const result = await transportationService.getTransportations(
 			type.toString(),
 		);
-		if (!result){
+		if (!result) {
 			return res.status(404).send("No Transportations found");
-		}				
+		}
 		const response = {
 			data: result[0].data,
 			metaData: {

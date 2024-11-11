@@ -1,3 +1,4 @@
+import transportation_advertiserRouter from "@/Routes/Users/transportation_advertiser.route";
 import mongoose, { PipelineStage, Types } from "mongoose";
 
 import HttpError from "../../Errors/HttpError";
@@ -16,7 +17,6 @@ import {
 	addTransportation,
 	getTransportationAdvertiserById,
 } from "../Users/transportation_advertiser.service";
-import transportation_advertiserRouter from "@/Routes/Users/transportation_advertiser.route";
 
 const TransportationFiltersMap: Record<string, PipelineStage> = {
 	tourist: {
@@ -50,20 +50,18 @@ export const createTransportation = async (
 		}
 
 		const transportationData = new Transportation({
-			transportation,
+			...transportation,
 			createdBy: TransportationAdvertiser.id,
 		});
 
 		await transportationData.save({ session }); // Save to generate the ID
 
-		TransportationAdvertiser.transportations.push(transportationData.id);
-
-		// await addTransportation(
-		// 	TransportationAdvertiser.id,
-		// 	transportationData.id,
-		// );
-
-		await TransportationAdvertiser.updateOne({ session });
+		await TransportationAdvertiser.updateOne(
+			{
+				$push: { transportations: transportationData.id },
+			},
+			{ session },
+		);
 		await session.commitTransaction();
 
 		return transportationData;
@@ -265,10 +263,10 @@ export const cancelBookingTransportation = async (
 };
 
 export const getTransportations = async (type: string) => {
-
 	const filter =
-		TransportationFiltersMap?.[type as keyof typeof TransportationFiltersMap] ||
-		TransportationFiltersMap.default;
+		TransportationFiltersMap?.[
+			type as keyof typeof TransportationFiltersMap
+		] || TransportationFiltersMap.default;
 
 	const pipeline = [filter];
 
