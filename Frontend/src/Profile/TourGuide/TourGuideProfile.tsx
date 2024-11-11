@@ -1,3 +1,4 @@
+import axios from "axios";
 import { Camera, Image, Settings } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -6,6 +7,7 @@ import {
 	useRequestDeleteTourGuideProfile,
 	useTourGuideProfile,
 } from "@/api/data/useProfile";
+import { CommentsContainer } from "@/components/ui/comments";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -14,6 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useLoginStore } from "@/store/loginStore";
+import { TReview } from "@/types/global";
 
 import profile_background from "../../assets/profile_background.jpg";
 import ChangePasswordSheet from "../ChangePasswordSheet";
@@ -38,6 +41,29 @@ export default function TourGuideProfile() {
 			doDownload(data?.imagePath);
 		}
 	}, [data?.imagePath, doDownload]);
+
+	const [fetchedReviews, setFetchedReviews] = useState<TReview[]>([]);
+	const [moreCommentsAvailable, setMoreCommentsAvailable] = useState(true);
+
+	const fetchReviews = async () => {
+		await axios
+			.get("http://localhost:5000/api/reviews/list", {
+				params: {
+					tourGuideId: data?._id,
+					skipCount: fetchedReviews.length,
+				},
+			})
+			.then((res) => {
+				setFetchedReviews([...fetchedReviews, ...res.data]);
+				if (res.data.length < 10) {
+					setMoreCommentsAvailable(false);
+				}
+			});
+	};
+
+	useEffect(() => {
+		fetchReviews();
+	}, []);
 
 	return (
 		<div>
@@ -142,11 +168,12 @@ export default function TourGuideProfile() {
 
 			<div className="flex ml-10 mr-10 mt-10">
 				<Tabs defaultValue="account" className="w-full">
-					<TabsList className="grid w-full grid-cols-4">
+					<TabsList className="grid w-full grid-cols-5">
 						<TabsTrigger value="account">Account</TabsTrigger>
 						<TabsTrigger value="password">Password</TabsTrigger>
 						<TabsTrigger value="upcoming">Upcoming</TabsTrigger>
 						<TabsTrigger value="history">History</TabsTrigger>
+						<TabsTrigger value="reviews">Reviews</TabsTrigger>
 					</TabsList>
 					<TabsContent
 						className="flex justify-between items-center"
@@ -173,8 +200,15 @@ export default function TourGuideProfile() {
 						</div>
 					</TabsContent>
 					<TabsContent value="password"></TabsContent>
-					<TabsContent value="Upcoming"></TabsContent>
-					<TabsContent value="History"></TabsContent>
+					<TabsContent value="upcoming"></TabsContent>
+					<TabsContent value="history"></TabsContent>
+					<TabsContent value="reviews">
+						<CommentsContainer
+							comments={fetchedReviews}
+							showMore={() => fetchReviews()}
+							moreAvailable={moreCommentsAvailable}
+						/>
+					</TabsContent>
 				</Tabs>
 			</div>
 			<ChangePasswordSheet

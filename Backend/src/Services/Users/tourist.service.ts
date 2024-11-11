@@ -46,6 +46,7 @@ export const getTouristById = async (id: string) => {
 		"bookedItineraries",
 		"bookedActivities",
 		"bookedTransportations",
+		"purchaseProducts",
 		"preferredTags",
 		"bookedFlights",
 	]);
