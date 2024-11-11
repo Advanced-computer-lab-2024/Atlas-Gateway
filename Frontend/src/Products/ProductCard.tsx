@@ -7,7 +7,6 @@ import {
 	EllipsisVertical,
 	Eye,
 	Package,
-	Star,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -130,6 +129,15 @@ export default function ProductCard({
 										)}
 									</DropdownMenuItem>
 								)}
+								{isAdminOrCreator && (
+									<DropdownMenuItem
+										className="flex gap-2 cursor-pointer"
+										onClick={() => openEditDrawer(product)}
+									>
+										<Edit />
+										Edit
+									</DropdownMenuItem>
+								)}
 								<DropdownMenuItem
 									className="flex gap-2 cursor-pointer"
 									onClick={() => {
@@ -138,15 +146,6 @@ export default function ProductCard({
 								>
 									<Eye />
 									View Details
-								</DropdownMenuItem>
-								<DropdownMenuItem
-									className="flex gap-2 cursor-pointer"
-									onClick={() => {
-										openEditDrawer(product);
-									}}
-								>
-									<Edit />
-									Edit
 								</DropdownMenuItem>
 							</DropdownMenuContent>
 						</DropdownMenu>

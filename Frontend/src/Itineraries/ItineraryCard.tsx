@@ -1,6 +1,5 @@
 import { formatDate } from "date-fns";
 import {
-	CalendarClock,
 	Copy,
 	DollarSign,
 	Edit,
@@ -8,8 +7,6 @@ import {
 	Eye,
 	Flag,
 	Mail,
-	MapPin,
-	Star,
 	ToggleLeft,
 	ToggleRight,
 	Trash,
