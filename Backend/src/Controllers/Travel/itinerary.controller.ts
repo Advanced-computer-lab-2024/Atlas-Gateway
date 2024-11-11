@@ -191,18 +191,6 @@ export const bookItinerary = async (
 			return res.status(400).json({ message: "Cannot book Itinerary" });
 		}
 
-		const tourist = await Tourist.findById(touristId);
-		if (tourist) {
-			if (
-				!tourist.bookedItineraries.includes(
-					new Types.ObjectId(itineraryId),
-				)
-			) {
-				tourist.bookedItineraries.push(new Types.ObjectId(itineraryId));
-				tourist.save();
-			}
-		}
-
 		return res
 			.status(201)
 			.json({ message: "Itinerary booked successfully" });

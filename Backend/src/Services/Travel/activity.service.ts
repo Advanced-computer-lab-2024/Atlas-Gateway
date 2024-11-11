@@ -277,6 +277,10 @@ export const bookActivity = async (activityId: string, touristId: string) => {
 		activity.maxPrice,
 	);
 
+	if (!tourist) {
+		throw new HttpError(404, "Could not book activity for tourist");
+	}
+
 	await activity.updateOne({
 		$push: { tourists: tourist.id },
 		$inc: { numberOfBookings: 1 },

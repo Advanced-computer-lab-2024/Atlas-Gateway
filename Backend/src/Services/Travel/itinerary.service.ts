@@ -112,7 +112,7 @@ export const getItineraries = async (
 					},
 					{
 						isDeleted: false,
-						tourists: { $in: [userId] },
+						tourists: { $in: [new Types.ObjectId(userId)] },
 					},
 				],
 			},
@@ -224,6 +224,10 @@ export const bookItinerary = async (itineraryId: string, touristId: string) => {
 		itinerary.price,
 	);
 
+	if (!tourist) {
+		throw new HttpError(404, "Couldn't book itinerary in Tourist");
+	}
+
 	await itinerary.updateOne({
 		$push: { tourists: touristId },
 		$inc: { numberOfBookings: 1 },
@@ -237,45 +241,43 @@ export const cancelBookingItinerary = async (
 	touristId: string,
 	userType?: string,
 ) => {
-	try {
-		const itinerary = await getItineraryById(itineraryId);
-		if (!itinerary) {
-			throw new HttpError(404, "Itinerary not found");
-		}
+	const itinerary = await getItineraryById(itineraryId);
+	if (!itinerary) {
+		throw new HttpError(404, "Itinerary not found");
+	}
 
-		const currentDate = new Date();
-		const millisecondsBeforeItinerary =
-			itinerary.startDateTime.getTime() - currentDate.getTime();
-		const hoursBeforeItinerary =
-			millisecondsBeforeItinerary / (1000 * 3600);
-		if (hoursBeforeItinerary < 48 && userType !== "admin") {
-			throw new HttpError(
-				400,
-				"Cannot cancel within 48 hours of itinerary.",
-			);
-		}
+	const currentDate = new Date();
+	const millisecondsBeforeItinerary =
+		itinerary.startDateTime.getTime() - currentDate.getTime();
+	const hoursBeforeItinerary = millisecondsBeforeItinerary / (1000 * 3600);
+	if (hoursBeforeItinerary < 48 && userType !== "admin") {
+		throw new HttpError(400, "Cannot cancel within 48 hours of itinerary.");
+	}
 
-		if (!itinerary.tourists.includes(new Types.ObjectId(touristId))) {
-			throw new HttpError(404, "Tourist not found in itinerary's list");
-		}
+	if (!itinerary.tourists.includes(new Types.ObjectId(touristId))) {
+		throw new HttpError(404, "Tourist not found in itinerary's list");
+	}
 
-		const removed = await itinerary.updateOne({
-			$pull: { tourists: touristId },
-			$inc: { numberOfBookings: -1 },
-		});
+	const removed = await itinerary.updateOne({
+		$pull: { tourists: touristId },
+		$inc: { numberOfBookings: -1 },
+	});
 
-		if (removed.modifiedCount === 0) {
-			throw new HttpError(404, "Failed to cancel itinerary booking");
-		}
+	if (removed.modifiedCount === 0) {
+		throw new HttpError(404, "Failed to cancel itinerary booking");
+	}
 
-		const tourist = await touristService.cancelItinerary(
-			touristId,
-			itineraryId,
-			itinerary.price,
-		);
+	const tourist = await touristService.cancelItinerary(
+		touristId,
+		itineraryId,
+		itinerary.price,
+	);
 
-		return itinerary;
-	} catch (error) {}
+	if (!tourist) {
+		throw new HttpError(404, "Failed to cancel itinerary booking");
+	}
+
+	return itinerary;
 };
 
 export const softDeleteItinerary = async (id: string) => {
