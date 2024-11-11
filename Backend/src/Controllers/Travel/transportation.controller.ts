@@ -66,61 +66,79 @@ export const getTransportation = async (
 	}
 };
 
-export const getTransportationByUserId = async (
+export const getTransportationsByUserId = async (
 	req: Request,
 	res: Response,
 	next: NextFunction,
 ) => {
 	const userid = req.headers.userid;
+	const usertype = req.headers.usertype;
 	try {
 		if (!userid) {
 			throw new HttpError(400, "User ID is required");
 		}
 
-		const transportation =
-			await transportationService.getTransportationByUserId(userid.toString());
-
-		return res.status(200).json(transportation);
-	} catch (error) {
-		next(error);
-	}
-};
-
-export const getTransportations = async (
-	req: Request,
-	res: Response,
-	next: NextFunction,
-) => {
-	try {
-		const userId = req.headers.userid;
-		const type = req.headers.usertype;
-		if (!userId) {
-			throw new HttpError(400, "User ID is required");
-		}
-		if (type != 'transportation_advertiser') {
+		if (!usertype) {
 			throw new HttpError(400, "User Type is required");
 		}
-		const result = await transportationService.getTransportations(
-			type.toString(),
-		);
-		if (!result){
-			return res.status(404).send("No Transportations found");
-		}				
-		const response = {
-			data: result[0].data,
-			metaData: {
-				page: req.query.page || 1,
-				total: result[0].total[0].count,
-				pages: Math.ceil(
-					result[0].total[0].count / (Number(req.query.limit) || 10),
-				),
-			},
-		};
-		res.status(200).send(response);
+
+		let transportations;
+
+		if (usertype === "tourist") {
+			transportations =
+			await transportationService.getTransportations();
+		}
+
+		if (usertype === "transportation_advertiser") {
+			transportations =
+			await transportationService.getTransportationsByUserId(userid.toString());
+		}
+
+		if (!transportations) {
+			return res.status(404).json("Transportation error");
+		}
+
+		return res.status(200).json(transportations);
 	} catch (error) {
 		next(error);
 	}
 };
+
+// export const getTransportations = async (
+// 	req: Request,
+// 	res: Response,
+// 	next: NextFunction,
+// ) => {
+// 	try {
+// 		const userId = req.headers.userid;
+// 		const type = req.headers.usertype;
+// 		if (!userId) {
+// 			throw new HttpError(400, "User ID is required");
+// 		}
+// 		if (type != 'transportation_advertiser') {
+// 			throw new HttpError(400, "User Type is required");
+// 		}
+// 		const result = await transportationService.getTransportations(
+// 			type.toString(),
+// 		);
+// 		if (!result){
+// 			return res.status(404).send("No Transportations found");
+// 		}				
+// 		const response = {
+// 			data: result[0].data,
+// 			metaData: {
+// 				page: req.query.page || 1,
+// 				total: result[0].total[0].count,
+// 				pages: Math.ceil(
+// 					result[0].total[0].count / (Number(req.query.limit) || 10),
+// 				),
+// 			},
+// 		};
+// 		res.status(200).send(response);
+// 	} catch (error) {
+// 		next(error);
+// 	}
+// };
 
 export const updateTransportationById = async (
 	req: Request,

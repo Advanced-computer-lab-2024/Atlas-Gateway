@@ -75,6 +75,7 @@ const TransportationForm = ({
 	});
 
 	const handleSubmit = (values: TTransportation) => {
+		console.log(values);
 		if (transportation) {
 			doUpdateTransportation({ ...transportation, ...values });
 		} else {

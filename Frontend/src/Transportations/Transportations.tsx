@@ -23,7 +23,7 @@ import TransportationCard from "./TransportationCard";
 
 export default function Transportations() {
 	const { user } = useLoginStore();
-	const { data, meta } = useTransportations();
+	const { data, meta} = useTransportations();
 	const [open, setOpen] = useState(false);
 	const [selectedTransportation, setTransportation] =
 		useState<TTransportation>();
@@ -69,8 +69,8 @@ export default function Transportations() {
 			>
 				{data?.map((transportation) => (
 					<TransportationCard
-						transportation={transportation}
-						openEditDrawer={openEditDrawer}
+						transportation= { transportation }
+						openEditDrawer={ openEditDrawer }
 					/>
 				))}
 			</Flex>

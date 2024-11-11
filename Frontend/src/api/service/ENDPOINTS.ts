@@ -115,8 +115,8 @@ const ENDPOINTS = {
 	},
 
 	transportation: {
-		list: "api/transportation/list",
-		listAdvertisor: "api/transportation/listAdvertisor",
+		// list: "api/transportation/list",
+		listTransportations: "api/transportation/listTransportations",
 		get: (id: string) => `api/transportation/get/${id}`,
 		create: "api/transportation/create",
 		update: (id: string) => `api/transportation/update/${id}`,

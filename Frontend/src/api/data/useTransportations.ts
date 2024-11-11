@@ -1,41 +1,43 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 
-
-
 import { useLoginStore } from "@/store/loginStore";
-import { EAccountType } from "@/types/enums";
-
-
-
 import { TTransportation } from "../../types/global";
-import { apiAdvertisorTransportations, apiBookTransportation, apiCancelTransportationBooking, apiCreateTransportation, apiDeleteTransportation, apiTransportation, apiTransportations, apiUpdateTransportation } from "../service/transportations";
-import { useQueryString } from "./useQueryString";
+import { apiBookTransportation, apiCancelTransportationBooking, apiCreateTransportation, apiDeleteTransportation, apiTransportation, apiTransportations, apiUpdateTransportation } from "../service/transportations";
 
+// export function useTransportations() {
+// 	const { user } = useLoginStore();
+// 	const { _id } = user || {};
+// 	const [query] = useQueryString();
+
+// 	const { data, refetch } = useQuery({
+// 		queryFn: () =>
+// 			user?.type === EAccountType.TransportationAdvertiser
+// 				? apiAdvertisorTransportations(
+// 						_id,
+// 						user?.type ?? EAccountType.TransportationAdvertiser,
+// 					)
+// 				: apiTransportations(
+// 					_id,
+// 					user?.type ?? EAccountType.Tourist),
+// 		queryKey: ["transportations", _id, query],
+// 	});
+
+// 	return { data: data?.data, refetch };
+// }
 
 export function useTransportations() {
 	const { user } = useLoginStore();
 	const { _id } = user || {};
-
-	const [query] = useQueryString();
-
-	const q = useQuery({
-		queryFn: () =>
-			user?.type === EAccountType.TransportationAdvertiser
-				? apiAdvertisorTransportations(
-						_id,
-						user?.type ?? EAccountType.TransportationAdvertiser,
-					)
-				: apiTransportations(
-					_id,
-					user?.type ?? EAccountType.Tourist),
-		queryKey: ["transportations", _id, query],
+	const type = user?.type.toString() || ""; 
+  
+	const { data, refetch } = useQuery({
+	  queryFn: () => apiTransportations(_id, type), 
+	  queryKey: ["transportation", _id, type], 
 	});
-
-	const { data } = q;
-
-	return { ...q, data: data?.data?.data, meta: data?.data?.metaData };
-}
+	
+	return { data: data?.data, refetch};
+}  
 
 export function useTransportation() {
 	const { id } = useParams<{
