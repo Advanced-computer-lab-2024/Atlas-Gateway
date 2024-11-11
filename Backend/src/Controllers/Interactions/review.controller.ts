@@ -45,7 +45,10 @@ export const postReview = async (req: Request, res: Response) => {
 				return;
 			}
 			if (
-				!reviewedItemEntry.tourists.includes(new Types.ObjectId(userId))
+				!reviewedItemEntry.tourists.includes(
+					new Types.ObjectId(userId),
+				) ||
+				reviewedItemEntry.dateTime > new Date()
 			) {
 				res.status(400).send(
 					"Cannot rate an activity you have not attended",

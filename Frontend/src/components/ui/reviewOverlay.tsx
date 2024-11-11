@@ -91,7 +91,7 @@ export const ReviewOverlay: React.FC<ReviewOverlayProps> = forwardRef<
 				onChange={(value) => setRating(value)}
 			/>
 			<textarea
-				className="w-11/12 bg-gray-400 rounded-md px-2 h-3/4 my-6 py-1 resize-none text-auto"
+				className="w-11/12 bg-gray-50 rounded-md px-2 h-3/4 my-6 py-1 resize-none text-auto"
 				id="commentInput"
 			/>
 			{/* <Flex className="w-8/12 self-center" justify="center">

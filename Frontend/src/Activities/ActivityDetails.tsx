@@ -1,7 +1,7 @@
 import axios from "axios";
 import { formatDate } from "date-fns";
-import { delay, set } from "lodash";
-import { ArrowLeft, DollarSign, MapPin, Star } from "lucide-react";
+import { delay } from "lodash";
+import { ArrowLeft, DollarSign, MapPin } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -10,7 +10,6 @@ import {
 	useBookActivity,
 	useCancelActivityBooking,
 } from "@/api/data/useActivities";
-import { useTouristProfile } from "@/api/data/useProfile";
 import Label from "@/components/ui/Label";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -69,7 +68,8 @@ export default function ActivityDetails() {
 		setCanReview(
 			!!(
 				user?.type === EAccountType.Tourist &&
-				data?.tourists?.includes(user?._id)
+				data?.tourists?.includes(user?._id) &&
+				data?.dateTime.localeCompare(new Date().toISOString()) === -1
 			),
 		);
 
