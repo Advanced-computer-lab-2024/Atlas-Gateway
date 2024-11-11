@@ -59,8 +59,7 @@ export const bookHotelroom = async (
 		const hotelBooking = await saveHotelOffer(offerjson, userid as string);
 		return res.status(201).json(hotelBooking);
 	} catch (error) {
-		console.error("Error in bookHotelroom:", error);
-		return res.status(500).json({ error: "Internal Server Error" });
+		next(error);
 	}
 };
 export const getMyHotelBooking = async (
@@ -77,7 +76,7 @@ export const getMyHotelBooking = async (
 		const hotelBookings = await HotelBooking.find({ touristID: userid });
 		return res.status(201).json(hotelBookings);
 	} catch (error) {
-		return res.status(500).json({ error: "Internal Server Error" });
+		next(error);
 	}
 };
 export const deleteBooking = async (
@@ -97,7 +96,6 @@ export const deleteBooking = async (
 
 		res.status(200).send("Hotel Booking deleted successfully");
 	} catch (error) {
-		console.error("Error in bookHotelroom:", error);
-		return res.status(500).json({ error: "Internal Server Error" });
+		next(error);
 	}
 };
