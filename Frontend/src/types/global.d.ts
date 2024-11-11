@@ -241,4 +241,5 @@ export interface TTransportation {
 	pickUpTime: string;
 	dropOffTime: string;
 	numberOfBookings: number;
+	tourists: Types.ObjectId[];
 }

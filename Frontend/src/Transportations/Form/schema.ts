@@ -6,8 +6,15 @@ export const transportationSchema = z
 			.string({ message: "name is required" })
 			.min(1, { message: "name must be at least 1 character long" }),
 
-		type: z.enum(["Bus", "Car", "Train", "Plane", "Boat"]
-			, { message: "Invalid type selected" }),
+		type: z
+			.string({ message: "type is required" })
+			.refine(
+				(val) => ["Bus", "Car", "Train", "Plane", "Boat"].includes(val),
+				{
+					message:
+						"type must be one of: Bus, Car, Train, Plane, Boat",
+				},
+			),
 		price: z
 			.number({
 				message: "Price must be a number",
@@ -33,7 +40,7 @@ export const transportationSchema = z
 			.min(1, {
 				message: "dropOffLocation must be at least 1 character long",
 			}),
-		pickUpTime: z.string().min(1, "Start Date is required"),
+		pickUpTime: z.string().min(1, "End Date is required"),
 
 		dropOffTime: z.string().min(1, "End Date is required"),
 	})

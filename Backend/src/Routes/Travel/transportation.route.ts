@@ -3,8 +3,8 @@ import express from "express";
 import {
     createTransportation,
     getTransportation,
-    getTransportationsByUserId,
-    // getTransportations,
+    getTransportationByUserId,
+    getTransportations,
     updateTransportationById,
     deleteTransportation,
     bookTransportationById,
@@ -15,8 +15,8 @@ const router = express.Router();
 
 router.post("/create", createTransportation);
 router.get("/get/:id", getTransportation);
-router.get("/listTransportations", getTransportationsByUserId);
-//router.get("/list", getTransportations);
+router.get("/listAdvertisor", getTransportationByUserId);
+router.get("/list", getTransportations);
 router.put("/update/:id", updateTransportationById);
 router.delete("/delete/:id", deleteTransportation);
 router.post("/book/:id", bookTransportationById);

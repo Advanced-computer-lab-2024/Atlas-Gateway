@@ -15,7 +15,7 @@ const router = express.Router();
 
 router.post("/create", createActivities);
 router.get("/show/:id", getActivityById);
-router.get("/listTransportations", getActivitybyCreator);
+router.get("/listAdvertisor", getActivitybyCreator);
 router.get("/list", getActivities);
 router.put("/update/:id", updateActivityById);
 router.delete("/delete/:id", deleteActivityById);

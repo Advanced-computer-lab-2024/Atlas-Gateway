@@ -18,42 +18,16 @@ import {
 } from "../Users/transportation_advertiser.service";
 import transportation_advertiserRouter from "@/Routes/Users/transportation_advertiser.route";
 
-// const TransportationFiltersMap = (userid: string): Record<string, PipelineStage> => ({
-//   tourist: {
-//     $match: {
-//       isDeleted: false, 
-//     },
-//   },
-//   transportation_advertiser: {
-//     $match: {
-//       id: userid, 
-//     },
-//   },
-//   default: {
-//     $match: {}, 
-//   },
-// });
-
-// export const getTransportationsByUserId = async (userid: string, usertype: string) => {
-//   const filter =
-//     TransportationFiltersMap(userid)[usertype] || TransportationFiltersMap(userid).default;
-
-//   const pipeline = [filter]; 
-
-//   try {
-//     const result = await Transportation.aggregate(pipeline); 
-
-//     if (!result || result.length === 0) {
-//       throw new HttpError(404, "No matching Transportations Found");
-//     }
-
-//     return result; 
-
-//   } catch (error) {
-//     console.error(error);
-//     throw new HttpError(500, "Internal Server Error");
-//   }
-// };
+const TransportationFiltersMap: Record<string, PipelineStage> = {
+	tourist: {
+		$match: {
+			isDeleted: false,
+		},
+	},
+	transportation_advertiser: {
+		$match: {},
+	},
+};
 
 export const createTransportation = async (
 	transportation: ITransportation,
@@ -92,8 +66,6 @@ export const createTransportation = async (
 		await TransportationAdvertiser.updateOne({ session });
 		await session.commitTransaction();
 
-		console.log(transportationData);
-		
 		return transportationData;
 	} catch (error) {
 		await session.abortTransaction();
@@ -292,26 +264,31 @@ export const cancelBookingTransportation = async (
 	return result;
 };
 
-export const getTransportationsByUserId = async (userid: string) => {
-	if (!Types.ObjectId.isValid(userid)) {
+export const getTransportations = async (type: string) => {
+
+	const filter =
+		TransportationFiltersMap?.[type as keyof typeof TransportationFiltersMap] ||
+		TransportationFiltersMap.default;
+
+	const pipeline = [filter];
+
+	const result = await Transportation.aggregate(pipeline);
+
+	if (result[0].data.length === 0) {
+		throw new HttpError(404, "No Transportations Found");
+	}
+
+	return result;
+};
+
+export const getTransportationByUserId = async (userId: string) => {
+	if (!Types.ObjectId.isValid(userId)) {
 		throw new HttpError(400, "Invalid Transportation Advertiser ID");
 	}
 
-	const transportations = await Transportation.find({ createdBy: userid, }).populate("createdBy");
-
-	if (!transportations) {
-		throw new HttpError(404, "Error getting Transportations for Advertiser");
-	}
+	const transportations = await Transportation.find({
+		createdBy: userId,
+	}).populate("createdBy");
 
 	return transportations;
 };
-
-export const getTransportations = async () => {
-	const transportations = await Transportation.find();
-
-	if (!transportations) {
-		throw new HttpError(404, "Error getting Transportations");
-	}
-
-	return transportations;
-}

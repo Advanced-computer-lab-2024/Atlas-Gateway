@@ -41,6 +41,31 @@ export default function TransportationCard({
 		);
 	}
 
+	// Function to copy the transportation link to the clipboard
+	const handleCopyLink = () => {
+		const transportationLink = `${window.location.origin}/transportations/${transportation._id}`;
+		navigator.clipboard
+			.writeText(transportationLink)
+			.then(() => {
+				alert("Link copied to clipboard!");
+			})
+			.catch((err) => {
+				console.error("Failed to copy link:", err);
+			});
+	};
+
+	// Function to create a mailto link for sharing via email
+	const handleShareByEmail = () => {
+		const transportationLink = `${window.location.origin}/transportations/${transportation._id}`;
+		const subject = encodeURIComponent(
+			`Check out this transportation: ${transportation.name}`,
+		);
+		const body = encodeURIComponent(
+			`Hey, I found this transportation and thought you might like it!\n\n${transportationLink}`,
+		);
+		window.location.href = `mailto:?subject=${subject}&body=${body}`;
+	};
+
 	return (
 		<Card
 			key={transportation?._id}
@@ -72,7 +97,21 @@ export default function TransportationCard({
 								<Eye />
 								View Details
 							</DropdownMenuItem>
-							{user?.type === EAccountType.TransportationAdvertiser && (
+							<DropdownMenuItem
+								className="flex gap-2 cursor-pointer"
+								onClick={handleCopyLink}
+							>
+								<Copy />
+								Copy Link
+							</DropdownMenuItem>
+							<DropdownMenuItem
+								className="flex gap-2 cursor-pointer"
+								onClick={handleShareByEmail}
+							>
+								<Mail />
+								Share Via Email
+							</DropdownMenuItem>
+							{user?.type === EAccountType.Advertiser && (
 								<>
 									<DropdownMenuItem
 										className="flex gap-2 cursor-pointer"
@@ -147,9 +186,9 @@ export default function TransportationCard({
 
 					<Flex className="w-full" align="center" justify="between">
 						<Flex gap="2" align="center">
-							<Label.Thin300>Availability:</Label.Thin300>
+							<Label.Thin300>Number of bookings:</Label.Thin300>
 							<Label.Mid300>
-								{transportation?.availability}
+								{transportation?.numberOfBookings}
 							</Label.Mid300>
 						</Flex>
 					</Flex>

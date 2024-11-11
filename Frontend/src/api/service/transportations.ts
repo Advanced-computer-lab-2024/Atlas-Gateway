@@ -11,7 +11,7 @@ export function apiTransportations(
 ) {
 	return axios<TApiResponse<TTransportation[]>>({
 		method: "GET",
-		url: ENDPOINTS.transportation.listTransportations,
+		url: ENDPOINTS.transportation.list,
 		headers: {
 			"Content-Type": "application/json",
 			userid: id,
@@ -32,21 +32,21 @@ export function apiTransportation(id: string | undefined) {
 	});
 }
 
-// export function apiAdvertisorTransportations(
-// 	_id: string | undefined,
-// 	userType: string,
-// ) {
-// 	return axios<TApiResponse<TTransportation[]>>({
-// 		method: "GET",
-// 		url: ENDPOINTS.transportation.listTransportations,
-// 		headers: {
-// 			"Content-Type": "application/json",
-// 			userid: _id,
-// 			usertype: userType,
-// 		},
-// 		baseURL: baseURL,
-// 	});
-// }
+export function apiAdvertisorTransportations(
+	_id: string | undefined,
+	userType: string,
+) {
+	return axios<TApiResponse<TTransportation[]>>({
+		method: "GET",
+		url: ENDPOINTS.transportation.listAdvertisor,
+		headers: {
+			"Content-Type": "application/json",
+			userid: _id,
+			usertype: userType,
+		},
+		baseURL: baseURL,
+	});
+}
 
 export function apiCreateTransportation(payload: TTransportation, _id: string) {
 	return axios({
