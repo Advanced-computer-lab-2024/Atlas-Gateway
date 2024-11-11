@@ -58,7 +58,7 @@ export default function PreferredTags() {
 
 	useEffect(() => {
 		setPreferredTags(
-			data?.preferredTags.map((tag) => ({
+			data?.preferredTags?.map((tag) => ({
 				id: tag._id!,
 				tag,
 			})) || [],
