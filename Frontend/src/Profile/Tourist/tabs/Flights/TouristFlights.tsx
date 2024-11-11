@@ -11,10 +11,12 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import useCurrency from "@/hooks/useCurrency";
+import { useLoginStore } from "@/store/loginStore";
 import { locations } from "@/types/consts";
 
 const TouristFlights = () => {
 	const { data, refetch } = useTouristProfile();
+	const { user } = useLoginStore();
 	const convertCurrency = useCurrency();
 	const getLocationLabel = (value: string): string => {
 		const location = locations.find((location) => location.value === value);
@@ -94,7 +96,10 @@ const TouristFlights = () => {
 						</TableCell>
 						<TableCell>{flight.departure.airLine}</TableCell>
 						<TableCell>{flight.departure.flightNumber}</TableCell>
-						<TableCell>{convertCurrency(flight.price)}</TableCell>
+						<TableCell>
+							{parseInt(convertCurrency(flight.price)).toFixed(2)}{" "}
+							{user?.currency}
+						</TableCell>
 					</TableRow>
 				))}
 			</TableBody>

@@ -6,12 +6,16 @@ import { useBookFlight } from "@/api/data/useFlights";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Flex } from "@/components/ui/flex";
+import useCurrency from "@/hooks/useCurrency";
+import { useLoginStore } from "@/store/loginStore";
 import { locations } from "@/types/consts";
 
 import { IFlight } from "../../../Backend/src/Models/Flight/flight.model";
 
 const FlightsCard = (flight: IFlight) => {
+	const { user } = useLoginStore();
 	const { doBookFlight } = useBookFlight(() => {});
+	const convertCurrency = useCurrency();
 	const getLocationLabel = (value: string): string => {
 		const location = locations.find((location) => location.value === value);
 		return location ? location.label : "Not Found";
@@ -146,7 +150,10 @@ const FlightsCard = (flight: IFlight) => {
 						justify="center"
 						className="mt-5"
 					>
-						<h2>{flight.price} EGP</h2>
+						<h2>
+							{parseInt(convertCurrency(flight.price)).toFixed(2)}{" "}
+							{user?.currency}
+						</h2>
 					</Flex>
 				</Flex>
 				<Flex className="mt-3">
