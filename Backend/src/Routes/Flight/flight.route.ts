@@ -6,10 +6,10 @@ import {
 	searchFlights,
 } from "../../Controllers/Flight/flight.controller";
 
-const productRouter = Router();
+const flightRouter = Router();
 
-productRouter.post("/book", bookFlight);
-productRouter.post("/search", searchFlights);
-productRouter.delete("/delete/:id", deleteFlightController);
+flightRouter.post("/book", bookFlight);
+flightRouter.post("/search", searchFlights);
+flightRouter.delete("/delete/:id", deleteFlightController);
 
-export default productRouter;
+export default flightRouter;
