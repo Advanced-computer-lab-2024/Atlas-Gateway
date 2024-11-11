@@ -9,7 +9,13 @@ import { TourGuide } from "../../Models/Users/tourGuide.model";
 import { Tourist } from "../../Models/Users/tourist.model";
 
 export const postReview = async (req: Request, res: Response) => {
-	const { rating, text, reviewedItem, itemType, userId } = req.body;
+	const { text, reviewedItem, itemType, userId } = req.body;
+
+	let { rating } = req.body;
+
+	if (!rating) {
+		rating = 0;
+	}
 
 	const tourist = await Tourist.findById(userId).populate<{
 		bookedItineraries: IItinerary[];
@@ -23,7 +29,7 @@ export const postReview = async (req: Request, res: Response) => {
 		return;
 	}
 
-	if (!rating || !reviewedItem || !itemType) {
+	if (!reviewedItem || !itemType) {
 		res.status(400).send("Missing required fields");
 		return;
 	}
@@ -135,7 +141,11 @@ export const postReview = async (req: Request, res: Response) => {
 
 		reviewedItemEntry.avgRating = newAvgRating;
 		reviewEntry.rating = rating;
-		reviewEntry.text = text;
+		if (text) {
+			reviewEntry.text = text;
+		} else {
+			reviewEntry.text = "";
+		}
 
 		await reviewedItemEntry.save();
 		await reviewEntry.save();
@@ -166,5 +176,76 @@ export const postReview = async (req: Request, res: Response) => {
 			Review: reviewEntry,
 			"Reviewed Item": reviewedItemEntry,
 		});
+	}
+};
+
+export const listReviews = async (req: Request, res: Response) => {
+	const { productId, activityId, itineraryId, tourGuideId, skipCount } =
+		req.query;
+
+	let reviews;
+
+	console.log("Query: ", req.query);
+
+	try {
+		if (productId) {
+			//Get product reviews
+			reviews = await Review.find({
+				reviewedItem: productId,
+				itemType: "Product",
+				text: { $ne: "" },
+			})
+				.populate("tourist")
+				.skip(parseInt(skipCount as string) || 0)
+				.limit(10);
+		}
+
+		if (activityId) {
+			//Get activity reviews
+			reviews = await Review.find({
+				reviewedItem: activityId,
+				itemType: "Activity",
+				text: { $ne: "" },
+			})
+				.populate("tourist")
+				.skip(parseInt(skipCount as string) || 0)
+				.limit(10);
+		}
+
+		if (itineraryId) {
+			//Get itinerary reviews
+			reviews = await Review.find({
+				reviewedItem: itineraryId,
+				itemType: "Itinerary",
+				text: { $ne: "" },
+			})
+				.populate("tourist")
+				.skip(parseInt(skipCount as string) || 0)
+				.limit(10);
+		}
+
+		if (tourGuideId) {
+			//Get tour guide reviews
+			reviews = await Review.find({
+				reviewedItem: tourGuideId,
+				itemType: "TourGuide",
+				text: { $ne: "" },
+			})
+				.populate("tourist")
+				.skip(parseInt(skipCount as string) || 0)
+				.limit(10);
+		}
+
+		console.log("reviews: ", reviews);
+
+		if (!reviews) {
+			res.status(404).send("No reviews found");
+			return;
+		}
+
+		res.status(200).send(reviews);
+	} catch (error) {
+		res.status(500).send("Internal Server Error");
+		return;
 	}
 };

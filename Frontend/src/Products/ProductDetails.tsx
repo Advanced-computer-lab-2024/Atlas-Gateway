@@ -1,8 +1,11 @@
 import axios from "axios";
+import { delay, set } from "lodash";
 import { ArrowLeft, Currency, Package } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { promise } from "zod";
 
+import Product from "@/Admin/Product/Product";
 import { useProduct } from "@/api/data/useProducts";
 import { useTouristProfile } from "@/api/data/useProfile";
 import Label from "@/components/ui/Label";
@@ -43,10 +46,12 @@ export default function ProductDetails() {
 	} = data || {};
 
 	const [fetchedComments, setFetchedComments] = useState<TReview[]>([]);
+	const [moreCommentsAvailable, setMoreCommentsAvailable] = useState(true);
+	const [toggleToGetComments, setToggleToGetComments] = useState(false);
 
 	const { user } = useLoginStore();
 	const { data: userProfile } = useTouristProfile();
-	console.log(userProfile);
+	//console.log(userProfile);
 
 	const [productPic, setProductPic] = useState("");
 
@@ -71,10 +76,14 @@ export default function ProductDetails() {
 
 	const childRef = useRef<{ postReview: () => void }>(null);
 
+	const callUseEffect = () => {
+		setToggleToGetComments(!toggleToGetComments);
+	};
+
 	useEffect(() => {
 		const fetchComments = async () => {
 			const res = await axios.get(
-				"http://localhost:5000/api/products/getComments",
+				"http://localhost:5000/api/reviews/list",
 				{
 					params: {
 						productId: data?._id,
@@ -85,16 +94,43 @@ export default function ProductDetails() {
 
 			//concatenate the new comments with the old ones
 			setFetchedComments([...fetchedComments, ...res.data]);
+
+			if (res.data.length < 10) {
+				setMoreCommentsAvailable(false);
+			}
 		};
 		try {
 			fetchComments();
 		} catch (error) {
 			console.error(error);
 		}
-	});
+	}, [data, toggleToGetComments]);
 
-	const saveReview = () => {
-		if (childRef.current) childRef.current.postReview();
+	const saveReview = async () => {
+		const saveResult = document.getElementById("saveResult");
+		if (saveResult) {
+			saveResult.innerText = "Saving...";
+			saveResult.hidden = false;
+		}
+		if (childRef.current) {
+			childRef.current.postReview();
+		}
+		delay(() => {
+			callUseEffect();
+			if (saveResult) {
+				saveResult.classList.remove("bg-blue-400");
+				saveResult.classList.add("bg-green-400");
+				saveResult.innerText = "Done!";
+			}
+		}, 1500);
+
+		delay(() => {
+			if (saveResult) {
+				saveResult.classList.remove("bg-green-400");
+				saveResult.classList.add("bg-blue-400");
+				saveResult.hidden = true;
+			}
+		}, 3000);
 	};
 
 	useEffect(() => {
@@ -185,15 +221,17 @@ export default function ProductDetails() {
 													</DialogDescription>
 												</DialogHeader>
 												<DialogFooter className="sm:justify-center">
-													<Button
-														type="submit"
-														onClick={() =>
-															saveReview()
-														}
-														className="mr-2"
-													>
-														Save Review
-													</Button>
+													<DialogClose asChild>
+														<Button
+															type="submit"
+															onClick={() =>
+																saveReview()
+															}
+															className="mr-2"
+														>
+															Save Review
+														</Button>
+													</DialogClose>
 													<DialogClose asChild>
 														<Button
 															type="button"
@@ -207,6 +245,13 @@ export default function ProductDetails() {
 											</DialogContent>
 										</Dialog>
 									)}
+									<p
+										id="saveResult"
+										hidden={true}
+										className="ml-5 rounded-md p-2 bg-blue-400"
+									>
+										Saving...
+									</p>
 								</Flex>
 							</Flex>
 							{canViewSales && (
@@ -228,22 +273,9 @@ export default function ProductDetails() {
 				</CardContent>
 			</Card>
 			<CommentsContainer
-				comments={[
-					...[
-						{
-							_id: "x",
-							user: {
-								username: "user1",
-								_id: "x1",
-								currency: "USD" as const,
-								type: EAccountType.Tourist,
-							},
-							text: "This is a comment",
-							rating: 3,
-						},
-					], // These are dummy comments, the actual comments will be fetched from the DB TODO: Remove later
-					...fetchedComments,
-				]}
+				comments={fetchedComments}
+				moreAvailable={moreCommentsAvailable}
+				showMore={() => callUseEffect()}
 			/>
 		</Flex>
 	);

@@ -5,5 +5,6 @@ import * as reviewController from "../../Controllers/Interactions/review.control
 const reviewRouter = Router();
 
 reviewRouter.post("/add", reviewController.postReview);
+reviewRouter.get("/list", reviewController.listReviews);
 
 export default reviewRouter;

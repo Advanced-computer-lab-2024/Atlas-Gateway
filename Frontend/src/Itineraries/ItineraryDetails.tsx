@@ -1,4 +1,6 @@
+import axios from "axios";
 import { formatDate } from "date-fns";
+import { delay } from "lodash";
 import { ArrowLeft, DollarSign, MapPin } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -13,6 +15,7 @@ import Label from "@/components/ui/Label";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { CommentsContainer } from "@/components/ui/comments";
 import {
 	Dialog,
 	DialogClose,
@@ -30,7 +33,7 @@ import useCurrency from "@/hooks/useCurrency";
 import { useLoginStore } from "@/store/loginStore";
 import { languageOptions } from "@/types/consts";
 import { EAccountType } from "@/types/enums";
-import { TTourGuide, TTourist } from "@/types/global";
+import { TReview, TTourGuide } from "@/types/global";
 
 export default function ItineraryDetails() {
 	const navigate = useNavigate();
@@ -64,6 +67,12 @@ export default function ItineraryDetails() {
 		refetchUserProfile();
 	});
 
+	const [canReviewItinerary, setCanReviewItinerary] = useState(false);
+	const [canReviewGuide, setCanReviewGuide] = useState(false);
+	const [fetchedComments, setFetchedComments] = useState<TReview[]>([]);
+	const [moreCommentsAvailable, setMoreCommentsAvailable] = useState(true);
+	const [toggleToGetComments, setToggleToGetComments] = useState(false);
+
 	const tourGuideName = (data?.createdBy as unknown as TTourGuide)?.name
 		? (data?.createdBy as unknown as TTourGuide)?.name
 		: (data?.createdBy as unknown as TTourGuide)?.username;
@@ -93,25 +102,74 @@ export default function ItineraryDetails() {
 				) // 1 if endDateTime is after now, -1 if endDateTime is before now, 0 if they are equal
 			),
 		);
-	}, [user, userProfile, data]);
 
-	console.log(data?.endDateTime);
-	console.log(new Date().toISOString());
-	console.log(data?.endDateTime.localeCompare(new Date().toISOString())); // 1 if endDateTime is after now, -1 if endDateTime is before now, 0 if they are equal
-	const [canReviewItinerary, setCanReviewItinerary] = useState(false);
-	const [canReviewGuide, setCanReviewGuide] = useState(false);
+		const fetchComments = async () => {
+			const res = await axios.get(
+				"http://localhost:5000/api/reviews/list",
+				{
+					params: {
+						itineraryId: data?._id,
+						skipCount: fetchedComments.length,
+					},
+				},
+			);
+
+			//concatenate the new comments with the old ones
+			setFetchedComments([...fetchedComments, ...res.data]);
+
+			if (res.data.length < 10) {
+				setMoreCommentsAvailable(false);
+			}
+		};
+		try {
+			fetchComments();
+		} catch (error) {
+			console.error(error);
+		}
+	}, [user, userProfile, data, toggleToGetComments]);
+
+	const callUseEffect = () => {
+		setToggleToGetComments(!toggleToGetComments);
+	};
+
 	//TODO: Discuss how to adjust so the itineraries attended are the ones that can be reviewed, not any booked one
 
 	const childRef = useRef<{ postReview: () => void }>(null);
 
-	const saveReview = () => {
-		if (childRef.current) childRef.current.postReview();
+	const saveReview = async (callSource) => {
+		const componentId =
+			callSource === 0 ? "saveResultItinerary" : "saveResultGuide";
+		const saveResult = document.getElementById(componentId);
+		if (saveResult) {
+			saveResult.innerText = "Saving...";
+			saveResult.hidden = false;
+		}
+		if (childRef.current) {
+			childRef.current.postReview();
+		}
+		delay(() => {
+			callUseEffect();
+			if (saveResult) {
+				saveResult.classList.remove("bg-blue-400");
+				saveResult.classList.add("bg-green-400");
+				saveResult.innerText = "Done!";
+			}
+		}, 1500);
+
+		delay(() => {
+			if (saveResult) {
+				saveResult.classList.remove("bg-green-400");
+				saveResult.classList.add("bg-blue-400");
+				saveResult.hidden = true;
+			}
+		}, 3000);
 	};
 
 	return (
 		<Flex
 			justify="center"
 			align="center"
+			isColumn
 			className="p-4 overflow-y-scroll w-full h-full"
 		>
 			<Card className="w-[80%] border-black border-2">
@@ -229,13 +287,17 @@ export default function ItineraryDetails() {
 												</DialogDescription>
 											</DialogHeader>
 											<DialogFooter className="sm:justify-center">
-												<Button
-													type="submit"
-													onClick={() => saveReview()}
-													className="mr-2"
-												>
-													Save Review
-												</Button>
+												<DialogClose asChild>
+													<Button
+														type="submit"
+														onClick={() =>
+															saveReview(0)
+														}
+														className="mr-2"
+													>
+														Save Review
+													</Button>
+												</DialogClose>
 												<DialogClose asChild>
 													<Button
 														type="button"
@@ -249,6 +311,13 @@ export default function ItineraryDetails() {
 										</DialogContent>
 									</Dialog>
 								)}
+								<p
+									id="saveResultItinerary"
+									hidden={true}
+									className="ml-5 rounded-md p-2 bg-blue-400"
+								>
+									Saving...
+								</p>
 							</Flex>
 						</Flex>
 					</Flex>
@@ -357,15 +426,17 @@ export default function ItineraryDetails() {
 													</DialogDescription>
 												</DialogHeader>
 												<DialogFooter className="sm:justify-center">
-													<Button
-														type="submit"
-														onClick={() =>
-															saveReview()
-														}
-														className="mr-2"
-													>
-														Save Review
-													</Button>
+													<DialogClose asChild>
+														<Button
+															type="submit"
+															onClick={() =>
+																saveReview(1)
+															}
+															className="mr-2"
+														>
+															Save Review
+														</Button>
+													</DialogClose>
 													<DialogClose asChild>
 														<Button
 															type="button"
@@ -379,6 +450,13 @@ export default function ItineraryDetails() {
 											</DialogContent>
 										</Dialog>
 									)}
+									<p
+										className="ml-5 rounded-md p-2 bg-blue-400"
+										id="saveResultGuide"
+										hidden={true}
+									>
+										Saving...
+									</p>
 								</Flex>
 							) : (
 								"No tags"
@@ -387,6 +465,11 @@ export default function ItineraryDetails() {
 					</Flex>
 				</CardContent>
 			</Card>
+			<CommentsContainer
+				comments={fetchedComments}
+				moreAvailable={moreCommentsAvailable}
+				showMore={() => callUseEffect()}
+			/>
 		</Flex>
 	);
 }

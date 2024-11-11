@@ -20,38 +20,38 @@ export const ReviewOverlay: React.FC<ReviewOverlayProps> = forwardRef<
 >(({ reviewType, reviewedItemId, userId }, ref) => {
 	const [rating, setRating] = React.useState<number>(0);
 
-	useEffect(() => {
-		//fetch this user's review from the server
+	// useEffect(() => {
+	// 	//fetch this user's review from the server
 
-		const fetchReview = async () => {
-			if (!reviewedItemId || !userId) return;
-			try {
-				const res = await axios.get(
-					"http://localhost:5000/api/reviews/showReview", //TODO: change this to the actual endpoint
-					{
-						params: {
-							userId: userId,
-							reviewType: reviewType,
-							reviewedItemId: reviewedItemId,
-						},
-					},
-				);
+	// 	const fetchReview = async () => {
+	// 		if (!reviewedItemId || !userId) return;
+	// 		try {
+	// 			const res = await axios.get(
+	// 				"http://localhost:5000/api/reviews/showReview", //TODO: change this to the actual endpoint
+	// 				{
+	// 					params: {
+	// 						userId: userId,
+	// 						reviewType: reviewType,
+	// 						reviewedItemId: reviewedItemId,
+	// 					},
+	// 				},
+	// 			);
 
-				setRating(res.data.rating);
-				const comment = document.getElementById("commentInput");
-				if (comment) {
-					comment.innerText = res.data.comment;
-				}
-			} catch (error) {
-				console.error(error);
-			}
-		};
-		try {
-			fetchReview();
-		} catch (error) {
-			console.error(error);
-		}
-	});
+	// 			setRating(res.data.rating);
+	// 			const comment = document.getElementById("commentInput");
+	// 			if (comment) {
+	// 				comment.innerText = res.data.comment;
+	// 			}
+	// 		} catch (error) {
+	// 			console.error(error);
+	// 		}
+	// 	};
+	// 	try {
+	// 		fetchReview();
+	// 	} catch (error) {
+	// 		console.error(error);
+	// 	}
+	// });
 
 	useImperativeHandle(ref, () => ({
 		postReview: () => {

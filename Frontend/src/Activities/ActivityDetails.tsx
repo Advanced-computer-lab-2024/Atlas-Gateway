@@ -1,5 +1,6 @@
+import axios from "axios";
 import { formatDate } from "date-fns";
-import { set } from "lodash";
+import { delay, set } from "lodash";
 import { ArrowLeft, DollarSign, MapPin, Star } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -14,6 +15,7 @@ import Label from "@/components/ui/Label";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { CommentsContainer } from "@/components/ui/comments";
 import {
 	Dialog,
 	DialogClose,
@@ -30,6 +32,7 @@ import ReviewOverlay from "@/components/ui/reviewOverlay";
 import useCurrency from "@/hooks/useCurrency";
 import { useLoginStore } from "@/store/loginStore";
 import { EAccountType } from "@/types/enums";
+import { TReview } from "@/types/global";
 
 export default function ActivityDetails() {
 	const navigate = useNavigate();
@@ -43,21 +46,6 @@ export default function ActivityDetails() {
 	const { doCancelActivityBooking } = useCancelActivityBooking(() => {
 		refetch();
 	});
-
-	//TODO: Discuss how to adjust so the activities attended are the ones that can be reviewed, not any booked one
-
-	useEffect(() => {
-		setCanReview(
-			!!(
-				user?.type === EAccountType.Tourist &&
-				data?.tourists?.includes(user?._id)
-			),
-		);
-	}, [data, user]);
-
-	const [canReview, setCanReview] = useState(false);
-
-	const childRef = useRef<{ postReview: () => void }>(null);
 
 	const {
 		name,
@@ -73,14 +61,82 @@ export default function ActivityDetails() {
 		tourists,
 	} = data || {};
 
-	const saveReview = () => {
-		if (childRef.current) childRef.current.postReview();
+	const [canReview, setCanReview] = useState(false);
+	const [fetchedComments, setFetchedComments] = useState<TReview[]>([]);
+	const [moreCommentsAvailable, setMoreCommentsAvailable] = useState(true);
+	const [toggleToGetComments, setToggleToGetComments] = useState(false);
+
+	useEffect(() => {
+		setCanReview(
+			!!(
+				user?.type === EAccountType.Tourist &&
+				data?.tourists?.includes(user?._id)
+			),
+		);
+
+		const fetchComments = async () => {
+			const res = await axios.get(
+				"http://localhost:5000/api/reviews/list",
+				{
+					params: {
+						activityId: data?._id,
+						skipCount: fetchedComments.length,
+					},
+				},
+			);
+
+			//concatenate the new comments with the old ones
+			setFetchedComments([...fetchedComments, ...res.data]);
+
+			if (res.data.length < 10) {
+				setMoreCommentsAvailable(false);
+			}
+		};
+		try {
+			fetchComments();
+		} catch (error) {
+			console.error(error);
+		}
+	}, [data, user, toggleToGetComments]);
+
+	const childRef = useRef<{ postReview: () => void }>(null);
+
+	const callUseEffect = () => {
+		setToggleToGetComments(!toggleToGetComments);
+	};
+
+	const saveReview = async () => {
+		const saveResult = document.getElementById("saveResult");
+		if (saveResult) {
+			saveResult.innerText = "Saving...";
+			saveResult.hidden = false;
+		}
+		if (childRef.current) {
+			childRef.current.postReview();
+		}
+		delay(() => {
+			callUseEffect();
+			if (saveResult) {
+				saveResult.classList.remove("bg-blue-400");
+				saveResult.classList.add("bg-green-400");
+				saveResult.innerText = "Done!";
+			}
+		}, 1500);
+
+		delay(() => {
+			if (saveResult) {
+				saveResult.classList.remove("bg-green-400");
+				saveResult.classList.add("bg-blue-400");
+				saveResult.hidden = true;
+			}
+		}, 3000);
 	};
 
 	return (
 		<Flex
 			justify="center"
 			align="center"
+			isColumn
 			className="p-4 overflow-y-scroll w-full h-full"
 		>
 			<Card className="w-[80%] border-black border-2">
@@ -176,13 +232,17 @@ export default function ActivityDetails() {
 												</DialogDescription>
 											</DialogHeader>
 											<DialogFooter className="sm:justify-center">
-												<Button
-													type="submit"
-													onClick={() => saveReview()}
-													className="mr-2"
-												>
-													Save Review
-												</Button>
+												<DialogClose asChild>
+													<Button
+														type="submit"
+														onClick={() =>
+															saveReview()
+														}
+														className="mr-2"
+													>
+														Save Review
+													</Button>
+												</DialogClose>
 												<DialogClose asChild>
 													<Button
 														type="button"
@@ -196,6 +256,13 @@ export default function ActivityDetails() {
 										</DialogContent>
 									</Dialog>
 								)}
+								<p
+									id="saveResult"
+									hidden={true}
+									className="ml-5 rounded-md p-2 bg-blue-400"
+								>
+									Saving...
+								</p>
 							</Flex>
 						</Flex>
 						<Flex gap="2" isColumn>
@@ -275,6 +342,11 @@ export default function ActivityDetails() {
 					</Flex>
 				</CardContent>
 			</Card>
+			<CommentsContainer
+				comments={fetchedComments}
+				moreAvailable={moreCommentsAvailable}
+				showMore={() => callUseEffect()}
+			/>
 		</Flex>
 	);
 }
