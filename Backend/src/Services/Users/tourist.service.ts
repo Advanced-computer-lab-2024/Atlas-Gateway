@@ -113,6 +113,8 @@ export const addBookedActivity = async (
 		level: newLevel,
 	});
 
+	await tourist.validate();
+
 	return tourist;
 };
 export function isOlderThan18(dob: Date): boolean {
@@ -217,7 +219,6 @@ export const cancelItinerary = async (
 			itinerary._id.equals(itineraryId),
 		)
 	) {
-
 		throw new HttpError(404, "Itinerary not found in the tourist's list");
 	}
 	const newLoyaltyPoints =

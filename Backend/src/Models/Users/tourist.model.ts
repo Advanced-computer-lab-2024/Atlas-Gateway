@@ -44,8 +44,35 @@ const touristSchema = new Schema<ITourist>(
 		occupation: { type: String, required: true },
 		address: [{ type: String }],
 		currency: { type: String, default: "EGP" },
-		loyaltyPoints: { type: Number, default: 0 },
-		maxCollectedLoyaltyPoints: { type: Number, default: 0 },
+		loyaltyPoints: {
+			type: Number,
+			default: 0,
+			validate: {
+				validator: function (value) {
+					if (value < 0) {
+						this.loyaltyPoints = 0;
+						return false;
+					}
+					return value >= 0;
+				},
+				message: "Loyalty Points can't be negative",
+			},
+		},
+		maxCollectedLoyaltyPoints: {
+			type: Number,
+			default: 0,
+			validate: {
+				validator: function (value) {
+					if (value < 0) {
+						this.maxCollectedLoyaltyPoints = 0;
+						return false;
+					}
+					return value >= this.loyaltyPoints;
+				},
+				message:
+					"Max Collected Loyalty Points can't be negative or smaller than Loyalty Points",
+			},
+		},
 		level: { type: Number, enum: [1, 2, 3], default: 1 },
 		profile: {
 			bio: { type: String },
@@ -61,7 +88,9 @@ const touristSchema = new Schema<ITourist>(
 		bookedFlights: [{ type: Schema.Types.ObjectId, ref: "Flight" }],
 		purchaseProducts: [{ type: Schema.Types.ObjectId, ref: "Product" }],
 		isDeleted: { type: Boolean, default: false },
-		preferredTags: [{ type: Schema.Types.ObjectId, ref: "Tag", required: true }]
+		preferredTags: [
+			{ type: Schema.Types.ObjectId, ref: "Tag", required: true },
+		],
 	},
 	schemaConfig,
 );

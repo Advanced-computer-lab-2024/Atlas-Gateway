@@ -51,11 +51,32 @@ const activitySchema = new Schema<IActivity>(
 		},
 		specialDiscounts: { type: Number, required: true, min: 0, max: 100 },
 		isOpen: { type: Boolean, required: true },
-		avgRating: { type: Number, min: 0, max: 5, default: 0 },
+		avgRating: {
+			type: Number,
+			min: 0,
+			max: 5,
+			default: 0,
+			validate: {
+				validator: function (value) {
+					return value >= 0 && value <= 5;
+				},
+				message: "Rating must be between 0 and 5",
+			},
+		},
 		isArchived: { type: Boolean, default: false },
 		isDeleted: { type: Boolean, default: false },
 		totalNumberOfRatings: { type: Number, default: 0 },
-		numberOfBookings: { type: Number, default: 0 },
+		numberOfBookings: {
+			type: Number,
+			default: 0,
+			validate: {
+				validator: function (value) {
+					return value >= 0;
+				},
+				message: "Number of bookings can't be negative",
+			},
+		},
+
 		tourists: [{ type: Schema.Types.ObjectId, ref: "Tourist" }],
 	},
 	schemaConfig,
