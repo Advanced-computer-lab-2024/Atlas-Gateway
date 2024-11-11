@@ -3,6 +3,7 @@ import { useState } from "react";
 
 import { useItineraries } from "@/api/data/useItineraries";
 import { usePagination } from "@/api/data/usePagination";
+import { useTourGuideProfile } from "@/api/data/useProfile";
 import { useQueryString } from "@/api/data/useQueryString";
 import { useTags } from "@/api/data/useTags";
 import Filters from "@/components/Filters/Filters";
@@ -39,6 +40,7 @@ export default function Itineraries() {
 	const [open, setOpen] = useState(false);
 	const [itinerary, setItinerary] = useState<TItinerary>();
 	const { data: tags } = useTags();
+	const { data: guide } = useTourGuideProfile();
 
 	const openEditDrawer = (itinerary: TItinerary) => {
 		setOpen(true);
@@ -136,15 +138,17 @@ export default function Itineraries() {
 						}}
 					/>
 				</Flex>
-				{user?.type === EAccountType.Guide && (
-					<Button
-						onClick={() => setOpen(true)}
-						variant="default"
-						className="flex gap-2"
-					>
-						Add Itinerary <Plus />
-					</Button>
-				)}
+				{user?.type === EAccountType.Guide &&
+					guide?.isVerified &&
+					guide?.acceptedTerms && (
+						<Button
+							onClick={() => setOpen(true)}
+							variant="default"
+							className="flex gap-2"
+						>
+							Add Itinerary <Plus />
+						</Button>
+					)}
 			</Flex>
 			<Flex
 				className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2"
