@@ -75,12 +75,27 @@ export const getTransportationByUserId = async (
 			throw new HttpError(400, "User ID is required");
 		}
 
-		const transportation =
-			await transportationService.getTransportationByUserId(
-				userid.toString(),
-			);
+		const result = await transportationService.getTransportationByUserId(
+			userid.toString(),
+			req.query,
+		);
 
-		return res.status(200).json(transportation);
+		if (!result) {
+			return res.status(404).send("No Transportation found");
+		}
+
+		const response = {
+			data: result[0].data,
+			metaData: {
+				page: req.query.page || 1,
+				total: result[0].total[0].count,
+				pages: Math.ceil(
+					result[0].total[0].count / (Number(req.query.limit) || 10),
+				),
+			},
+		};
+
+		return res.status(200).json(response);
 	} catch (error) {
 		next(error);
 	}
@@ -102,6 +117,7 @@ export const getTransportations = async (
 		}
 		const result = await transportationService.getTransportations(
 			type.toString(),
+			req.query,
 		);
 		if (!result) {
 			return res.status(404).send("No Transportations found");

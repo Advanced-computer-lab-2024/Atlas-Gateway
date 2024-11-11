@@ -262,13 +262,13 @@ export const cancelBookingTransportation = async (
 	return result;
 };
 
-export const getTransportations = async (type: string) => {
+export const getTransportations = async (type: string, query: any) => {
 	const filter =
 		TransportationFiltersMap?.[
 			type as keyof typeof TransportationFiltersMap
 		] || TransportationFiltersMap.default;
 
-	const pipeline = [filter];
+	const pipeline: PipelineStage[] = [filter, ...AggregateBuilder(query, [])];
 
 	const result = await Transportation.aggregate(pipeline);
 
@@ -279,14 +279,29 @@ export const getTransportations = async (type: string) => {
 	return result;
 };
 
-export const getTransportationByUserId = async (userId: string) => {
+export const getTransportationByUserId = async (userId: string, query: any) => {
 	if (!Types.ObjectId.isValid(userId)) {
 		throw new HttpError(400, "Invalid Transportation Advertiser ID");
 	}
 
-	const transportations = await Transportation.find({
-		createdBy: userId,
-	}).populate("createdBy");
+	const pipeline: PipelineStage[] = [
+		{
+			$match: {
+				createdBy: new Types.ObjectId(userId),
+			},
+		},
+		{
+			$lookup: {
+				from: "transportation advertisers",
+				localField: "createdBy",
+				foreignField: "_id",
+				as: "createdBy",
+			},
+		},
+		...AggregateBuilder(query, []),
+	];
+
+	const transportations = await Transportation.aggregate(pipeline);
 
 	return transportations;
 };
