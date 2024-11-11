@@ -4,6 +4,7 @@ import { act, useState } from "react";
 import { useActivities } from "@/api/data/useActivities";
 import { useCategories } from "@/api/data/useCategories";
 import { usePagination } from "@/api/data/usePagination";
+import { useAdvertiserProfile } from "@/api/data/useProfile";
 import { useQueryString } from "@/api/data/useQueryString";
 import { useTags } from "@/api/data/useTags";
 import Filters from "@/components/Filters/Filters";
@@ -43,6 +44,8 @@ export default function Activites() {
 
 	const [open, setOpen] = useState(false);
 	const [activity, setActivity] = useState<TActivity>();
+
+	const { data: advertiser } = useAdvertiserProfile();
 
 	const openEditDrawer = (itinerary: TActivity) => {
 		setOpen(true);
@@ -140,18 +143,20 @@ export default function Activites() {
 						/>
 					</Flex>
 				</Flex>
-				{user?.type === EAccountType.Advertiser && (
-					<Button
-						variant="default"
-						onClick={() => {
-							setOpen(true);
-						}}
-						className="flex gap-2"
-					>
-						Add Activity
-						<Plus />
-					</Button>
-				)}
+				{user?.type === EAccountType.Advertiser &&
+					advertiser?.isVerified &&
+					advertiser?.acceptedTerms && (
+						<Button
+							variant="default"
+							onClick={() => {
+								setOpen(true);
+							}}
+							className="flex gap-2"
+						>
+							Add Activity
+							<Plus />
+						</Button>
+					)}
 			</Flex>
 			<Flex
 				className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2"
