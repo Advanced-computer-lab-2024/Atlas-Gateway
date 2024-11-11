@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Flex } from "@/components/ui/flex";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import useCurrency from "@/hooks/useCurrency";
 
 import profile_background from "../../assets/profile_background.jpg";
 import ChangePasswordSheet from "../ChangePasswordSheet";
@@ -28,12 +29,14 @@ import TouristTransportations from "./tabs/Transporations/TouristTransporations"
 
 export default function TouristProfile() {
 	const { data, refetch } = useTouristProfile();
+	const convertCurrency = useCurrency();
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 	const { doRequestDeleteTouristProfile } = useRequestDeleteTouristProfile(
 		() => {},
 	);
 	const { doRedeemTouristLoyaltyPoints } =
 		useRedeemTouristLoyaltyPoints(refetch);
+
 	return (
 		<div>
 			<div className="relative w-full">
@@ -70,7 +73,7 @@ export default function TouristProfile() {
 					<h2 className="text-2xl">{data?.username}</h2>
 					<div className="flex gap-7">
 						<h2 className="text-2xl">
-							{data?.walletBalance} {data?.currency}
+							{convertCurrency(data?.walletBalance)}
 						</h2>
 						<h2 className="text-2xl text-yellow-400">
 							{data?.loyaltyPoints}
@@ -80,7 +83,8 @@ export default function TouristProfile() {
 							variant="ghost"
 							size="icon"
 							onClick={() => {
-								doRedeemTouristLoyaltyPoints(data?._id!);
+								if (data?._id)
+									doRedeemTouristLoyaltyPoints(data?._id);
 							}}
 						>
 							<TicketCheck />

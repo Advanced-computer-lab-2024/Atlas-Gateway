@@ -7,7 +7,6 @@ import {
 	useUpdateTouristProfile,
 } from "@/api/data/useProfile";
 import { useTags } from "@/api/data/useTags";
-import Label from "@/components/ui/Label";
 import { Button } from "@/components/ui/button";
 import { Flex } from "@/components/ui/flex";
 import {

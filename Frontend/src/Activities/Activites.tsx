@@ -1,5 +1,5 @@
 import { Plus } from "lucide-react";
-import { act, useState } from "react";
+import { useState } from "react";
 
 import { useActivities } from "@/api/data/useActivities";
 import { useCategories } from "@/api/data/useCategories";
@@ -37,6 +37,7 @@ import ActivityForm from "./Form/ActivityForm";
 export default function Activites() {
 	const { user } = useLoginStore();
 	const { data, meta } = useActivities();
+
 	const { page, onPageChange, pagesCount } = usePagination({
 		pageNum: meta?.pages || 1,
 		pagesCount: meta?.pages || 1,
