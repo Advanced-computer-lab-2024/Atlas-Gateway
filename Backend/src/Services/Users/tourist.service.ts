@@ -47,6 +47,7 @@ export const getTouristById = async (id: string) => {
 		"bookedActivities",
 		"bookedTransportations",
 		"preferredTags",
+		"bookedFlights",
 	]);
 
 	return tourist;

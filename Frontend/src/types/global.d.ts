@@ -1,3 +1,4 @@
+import { IFlight } from "../../../Backend/src/Models/Flight/flight.model";
 import { Currency } from "./consts";
 import { EAccountType } from "./enums";
 
@@ -105,6 +106,7 @@ export interface TTourist extends TUser {
 	bookedActivities: TActivity[];
 	bookedItineraries: TItinerary[];
 	bookedTransportations: TTransportation[];
+	bookedFlights: IFlight[]; // will be changed later
 	preferredTags: TTag[];
 }
 

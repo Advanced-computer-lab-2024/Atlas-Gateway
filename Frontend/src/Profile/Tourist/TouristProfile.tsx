@@ -24,6 +24,7 @@ import TouristSheet from "./TouristSheet";
 import Account from "./tabs/Account";
 import TouristActivities from "./tabs/Activities/TouristActivities";
 import Complaints from "./tabs/Complaints";
+import TouristFlights from "./tabs/Flights/TouristFlights";
 import TouristItineraries from "./tabs/Itineraries/TouristItineraries";
 import TouristTransportations from "./tabs/Transporations/TouristTransporations";
 
@@ -122,12 +123,13 @@ export default function TouristProfile() {
 			</div>
 			<div className="flex ml-10 mr-10 mt-10">
 				<Tabs defaultValue="account" className="w-full">
-					<TabsList className="grid w-full grid-cols-5 border-2 border-black">
+					<TabsList className="grid w-full grid-cols-6 border-2 border-black">
 						<TabsTrigger value="account">Account</TabsTrigger>
 						<TabsTrigger value="activities">Activities</TabsTrigger>
 						<TabsTrigger value="itineraries">
 							Itineraries
 						</TabsTrigger>
+						<TabsTrigger value="flights">Flights</TabsTrigger>
 						<TabsTrigger value="transporations">
 							Transporations
 						</TabsTrigger>
@@ -141,6 +143,9 @@ export default function TouristProfile() {
 					</TabsContent>
 					<TabsContent value="itineraries">
 						<TouristItineraries />
+					</TabsContent>
+					<TabsContent value="flights">
+						<TouristFlights />
 					</TabsContent>
 					<TabsContent value="transporations">
 						<TouristTransportations />
