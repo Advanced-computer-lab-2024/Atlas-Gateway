@@ -1,5 +1,5 @@
 import { Plus } from "lucide-react";
-import { useState } from "react";
+import { act, useState } from "react";
 
 import { useActivities } from "@/api/data/useActivities";
 import { useCategories } from "@/api/data/useCategories";
@@ -157,12 +157,26 @@ export default function Activites() {
 				className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2"
 				gap="4"
 			>
-				{data?.map((activity) => (
-					<ActivityCard
-						activity={activity}
-						openEditDrawer={openEditDrawer}
-					/>
-				))}
+				{data
+					?.filter((activity: TActivity) => {
+						if (user?.type === EAccountType.Tourist) {
+							const currentDate = new Date();
+
+							if (activity.dateTime) {
+								const activityDate = new Date(
+									activity.dateTime,
+								);
+								return activityDate > currentDate;
+							}
+						}
+						return true;
+					})
+					.map((activity) => (
+						<ActivityCard
+							activity={activity}
+							openEditDrawer={openEditDrawer}
+						/>
+					))}
 			</Flex>
 			{pagesCount > 1 && (
 				<Pagination>

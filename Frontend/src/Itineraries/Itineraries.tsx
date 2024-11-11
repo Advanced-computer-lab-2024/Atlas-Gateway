@@ -150,12 +150,26 @@ export default function Itineraries() {
 				className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2"
 				gap="4"
 			>
-				{data?.map((itinerary) => (
-					<ItineraryCard
-						itinerary={itinerary}
-						openEditDrawer={openEditDrawer}
-					/>
-				))}
+				{data
+					?.filter((itinarary: TItinerary) => {
+						if (user?.type === EAccountType.Tourist) {
+							const currentDate = new Date();
+
+							if (itinarary.startDateTime) {
+								const activityDate = new Date(
+									itinarary.startDateTime,
+								);
+								return activityDate > currentDate;
+							}
+						}
+						return true;
+					})
+					.map((itinerary) => (
+						<ItineraryCard
+							itinerary={itinerary}
+							openEditDrawer={openEditDrawer}
+						/>
+					))}
 			</Flex>
 			{pagesCount > 1 && (
 				<Pagination>
