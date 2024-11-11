@@ -223,6 +223,16 @@ export interface TItinerary {
 	tourists: string[];
 }
 
+export interface TFlights {
+	originLocationCode: string;
+	destinationLocationCode: string;
+	departureDate: string;
+	returnDate?: string;
+	adults: number;
+	directFlightsOnly: boolean;
+	travelClass: string;
+}
+
 export interface TReview {
 	_id: string;
 	tourist: TTourist;

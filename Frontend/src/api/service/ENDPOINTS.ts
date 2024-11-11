@@ -106,6 +106,10 @@ const ENDPOINTS = {
 		book: (id: string) => `api/itinerary/book/${id}`,
 		cancelBooking: (id: string) => `api/itinerary/cancelBooking/${id}`,
 	},
+	flights: {
+		search: "api/flights/search",
+		book: "api/flights/book",
+	},
 	complaint: {
 		list: "api/complaint/list",
 		show: (id: string) => `api/complaint/show/${id}`,
