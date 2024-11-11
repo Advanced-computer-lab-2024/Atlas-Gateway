@@ -35,10 +35,12 @@ import { formSchema } from "./schema";
 
 interface props {
 	addFlight: (flight: IFlight) => void;
+	removeFlights: () => void;
 }
 
-const SearchForm = ({ addFlight }: props) => {
+const SearchForm = ({ addFlight, removeFlights }: props) => {
 	const { doSearchFlights, isPending } = useSearchFlights((flights) => {
+		removeFlights();
 		flights.data.forEach((flight: any) => {
 			addFlight(flight);
 		});
@@ -48,10 +50,14 @@ const SearchForm = ({ addFlight }: props) => {
 	});
 	const { handleSubmit, control } = form;
 	const onSubmit = (data: z.infer<typeof formSchema>) => {
-		data.returnDate = new Date(data.returnDate).toISOString().split("T")[0];
-		data.departureDate = new Date(data.departureDate)
-			.toISOString()
-			.split("T")[0];
+		if (data.returnDate) {
+			data.returnDate = new Date(data.returnDate).toLocaleDateString(
+				"en-CA",
+			);
+		}
+		data.departureDate = new Date(data.departureDate).toLocaleDateString(
+			"en-CA",
+		);
 		doSearchFlights({ ...data, directFlightsOnly: true });
 	};
 

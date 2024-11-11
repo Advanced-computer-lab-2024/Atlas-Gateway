@@ -1,13 +1,9 @@
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-	Label,
-} from "@radix-ui/react-dropdown-menu";
+import { Label } from "@radix-ui/react-dropdown-menu";
 import { formatDate } from "date-fns";
-import { ArrowRight, Calendar, EllipsisVertical, Timer } from "lucide-react";
+import { ArrowRight, Calendar, Timer } from "lucide-react";
 
+import { useBookFlight } from "@/api/data/useFlights";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Flex } from "@/components/ui/flex";
 import { locations } from "@/types/consts";
@@ -15,15 +11,20 @@ import { locations } from "@/types/consts";
 import { IFlight } from "../../../Backend/src/Models/Flight/flight.model";
 
 const FlightsCard = (flight: IFlight) => {
+	const { doBookFlight } = useBookFlight(() => {});
 	const getLocationLabel = (value: string): string => {
 		const location = locations.find((location) => location.value === value);
 		return location ? location.label : "Not Found";
 	};
+	const bookFlight = () => {
+		doBookFlight(flight);
+	};
 	return (
-		<Card className="w-full h-[400px] flex gap-2 flex-col border-black border-2 font-bold text-xl">
-			<Flex gap="4" align="center" justify="center" className="mt-5">
+		<Card className="w-full h-fit flex gap-2 flex-col border-black border-2 font-bold text-xl">
+			<Flex align="center" justify="center" className="mt-3">
 				<h2>{flight.ticketType.toUpperCase()}</h2>
 			</Flex>
+
 			<CardContent>
 				<Flex isColumn gap="2">
 					<Flex
@@ -86,7 +87,7 @@ const FlightsCard = (flight: IFlight) => {
 							<h2>
 								{getLocationLabel(flight.returnTrip.from)}
 								{" - "}
-								{flight.departure.from}
+								{flight.returnTrip.from}
 							</h2>
 							<ArrowRight />
 							<h2>
@@ -129,7 +130,7 @@ const FlightsCard = (flight: IFlight) => {
 					</Flex>
 				)}
 			</CardContent>
-			<CardFooter>
+			<CardFooter className="flex flex-col">
 				<Flex justify="between" align="center" className="w-full">
 					<Flex
 						gap="5"
@@ -147,6 +148,14 @@ const FlightsCard = (flight: IFlight) => {
 					>
 						<h2>{flight.price} EGP</h2>
 					</Flex>
+				</Flex>
+				<Flex className="mt-3">
+					<Button
+						onClick={() => bookFlight()}
+						className="bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-blue-700 active:bg-blue-800 transition duration-200 ease-in-out"
+					>
+						Book Flight
+					</Button>
 				</Flex>
 			</CardFooter>
 		</Card>

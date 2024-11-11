@@ -7,7 +7,7 @@ export interface IFlight extends Document {
 	departure: {
 		departureTime: Date;
 		arrivalTime: Date;
-		duration: number;
+		duration: string;
 		from: string;
 		to: string;
 		airLine: string;
@@ -16,7 +16,7 @@ export interface IFlight extends Document {
 	returnTrip?: {
 		departureTime: Date;
 		arrivalTime: Date;
-		duration: number;
+		duration: string;
 		from: string;
 		to: string;
 		airLine: string;
@@ -46,7 +46,7 @@ const FlightSchema = new Schema<IFlight>(
 			// location: { type: String, required: true },
 			departureTime: { type: Date, required: true },
 			arrivalTime: { type: Date, required: true },
-			duration: { type: Number, required: true },
+			duration: { type: String, required: true },
 			from: { type: String, required: true },
 			to: { type: String, required: true },
 			airLine: { type: String, required: true },
@@ -55,7 +55,7 @@ const FlightSchema = new Schema<IFlight>(
 		returnTrip: {
 			departureTime: { type: Date },
 			arrivalTime: { type: Date },
-			duration: { type: Number },
+			duration: { type: String },
 			from: { type: String },
 			to: { type: String },
 			airLine: { type: String },
@@ -75,7 +75,7 @@ const FlightSchema = new Schema<IFlight>(
 		bookedTickets: { type: Number, required: true },
 		touristID: {
 			type: Schema.Types.ObjectId,
-			required: true,
+			// required: true,
 			ref: "Tourist",
 		},
 	},

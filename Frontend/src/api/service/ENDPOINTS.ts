@@ -108,6 +108,7 @@ const ENDPOINTS = {
 	},
 	flights: {
 		search: "api/flights/search",
+		book: "api/flights/book",
 	},
 	complaint: {
 		list: "api/complaint/list",

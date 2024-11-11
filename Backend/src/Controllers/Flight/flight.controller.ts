@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
-import { Flight } from "../../Models/Flight/flight.model";
+import HttpError from "../../Errors/HttpError";
+import { Flight, IFlight } from "../../Models/Flight/flight.model";
 import {
 	FirstFlight,
 	Itinerary,
@@ -10,26 +11,28 @@ import {
 	searchFlightsApi,
 } from "../../Services/Flight/flight.service";
 
-export const bookFlight = async (req: Request, res: Response) => {
+export const bookFlight = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
-		const firstFlight: FirstFlight = req.body;
+		const flight: IFlight = req.body;
 		const userid = req.headers.userid;
 		if (!userid) {
-			return res.status(500).json({ error: "Tourist ID is required" });
+			throw new HttpError(400, "Tourist ID is required");
+			// res.status(500).json({ error: "Tourist ID is required" });
 		}
+		const bookedFlight = await bookFlightService(flight, userid.toString());
 
-		const newFlight = await bookFlightService(
-			firstFlight,
-			userid.toString(),
-		);
+		// // Save the flight to the database
+		// const savedFlight = await bookedFlight.save();
+		// console.log("First flight saved:", savedFlight);
 
-		// Save the flight to the database
-		const savedFlight = await newFlight.save();
-		console.log("First flight saved:", savedFlight);
-
-		return res.status(201).json(savedFlight);
+		res.status(201).json(bookedFlight);
 	} catch (error) {
-		return res.status(500).json({ error: "Internal Server Error" });
+		// return res.status(500).json({ error: "Internal Server Error" });
+		next(error);
 	}
 };
 

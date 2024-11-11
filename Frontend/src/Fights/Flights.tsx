@@ -12,11 +12,16 @@ const Flights = () => {
 	const addFlight = (newFlight: IFlight) => {
 		setFlights((prevFlights) => [...prevFlights, newFlight]);
 	};
-
+	const removeFlights = () => {
+		setFlights([]);
+	};
 	return (
 		<Flex isColumn gap="4" className="w-full h-full p-4 overflow-y-scroll">
 			<div className="self-center">
-				<SearchForm addFlight={addFlight} />
+				<SearchForm
+					addFlight={addFlight}
+					removeFlights={removeFlights}
+				/>
 			</div>
 			<Flex
 				className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2"

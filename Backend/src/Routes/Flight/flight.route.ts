@@ -8,7 +8,7 @@ import {
 
 const productRouter = Router();
 
-productRouter.post("/bookFlight", bookFlight);
+productRouter.post("/book", bookFlight);
 productRouter.post("/search", searchFlights);
 productRouter.delete("/delete/:id", deleteFlightController);
 
