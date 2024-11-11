@@ -1,58 +1,49 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
-
 import { CalendarIcon } from "lucide-react";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
-
-
-import { useSearchHotels } from "@/api/data/useHotels";
+import { useHotels, useSearchHotels } from "@/api/data/useHotels";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import {
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { citycodes } from "@/types/consts";
 
-
-
 import { IHotelBooking } from "../../../../Backend/src/Models/Hotel/hotel.model";
 import { formSchema } from "./schema";
-
 
 interface props {
 	addHotels: (hotel: IHotelBooking) => void;
 	removeHotels: () => void;
 }
 
-const SearchForm = ({ addHotels, removeHotels }: props) => {
-	const { doSearchHotels, isPending } = useSearchHotels((hotels) => {
-		removeHotels();
-		hotels.data.forEach((hotel: any) => {
-			addHotels(hotel);
-		});
-	});
+const SearchForm = () => {
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 	});
-	const { handleSubmit, control } = form;
-	const onSubmit = (data: z.infer<typeof formSchema>) => {
-		if (data.checkOutDate) {
-			data.checkOutDate = new Date(data.checkOutDate).toLocaleDateString(
-				"en-CA",
-			);
-		}
+	const { handleSubmit, control, getValues } = form;
 
-		data.checkInDate = new Date(data.checkInDate).toLocaleDateString(
-			"en-CA",
-		);
-		doSearchHotels(data);
-	
-
-	};
+	const onSubmit = (data: z.infer<typeof formSchema>) => {};
 
 	return (
 		<FormProvider {...form}>
@@ -235,9 +226,8 @@ const SearchForm = ({ addHotels, removeHotels }: props) => {
 				<Button
 					className="text-black w-28 self-center rounded-2xl mt-5 bg-green-600 hover:bg-green-700 hover:text-white"
 					type="submit"
-					disabled={isPending}
 				>
-					{isPending ? "Searching..." : "Search Hotels"}
+					Search
 				</Button>
 			</form>
 		</FormProvider>

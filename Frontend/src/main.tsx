@@ -1,9 +1,12 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { Navigate, Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
-
-
+import {
+	Navigate,
+	Outlet,
+	RouterProvider,
+	createBrowserRouter,
+} from "react-router-dom";
 
 import Activites from "./Activities/Activites";
 import ActivityDetails from "./Activities/ActivityDetails";
@@ -21,6 +24,7 @@ import Complaints from "./Admin/Complaint/Complaints";
 import AdminProducts from "./Admin/Product/Product";
 import Flights from "./Fights/Flights";
 import Home from "./Home/Home";
+import Hotels from "./Hotels/Hotels";
 import Itineraries from "./Itineraries/Itineraries";
 import ItineraryDetails from "./Itineraries/ItineraryDetails";
 import Login from "./Login/Login";
@@ -35,8 +39,6 @@ import Transportations from "./Transportations/Transportations";
 import { QueryStateProvider } from "./api/data/useQueryString";
 import "./index.css";
 import Layout from "./layout/Layout";
-import Hotels from "./Hotels/Hotels";
-
 
 const queryClient = new QueryClient();
 
@@ -245,9 +247,9 @@ const router = createBrowserRouter([
 ]);
 
 createRoot(document.getElementById("root")!).render(
-	<StrictMode>
-		<QueryClientProvider client={queryClient}>
-			<RouterProvider router={router} />
-		</QueryClientProvider>
-	</StrictMode>,
+	// <StrictMode>
+	<QueryClientProvider client={queryClient}>
+		<RouterProvider router={router} />
+	</QueryClientProvider>,
+	// </StrictMode>,
 );

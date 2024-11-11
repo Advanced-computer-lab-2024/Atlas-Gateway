@@ -1,3 +1,5 @@
+import { citycodes } from "@/types/consts";
+
 export const baseURL = "http://localhost:5000";
 
 const ENDPOINTS = {
@@ -111,7 +113,7 @@ const ENDPOINTS = {
 		book: "api/flights/book",
 	},
 	hotels: {
-		search: "api/hotels/search",
+		list: (cityCode: string) => `api/hotels/list/${cityCode}`,
 		bookRoom: "api/hotels/bookRoom",
 		myBookings: "api/hotels/myBookings",
 		delete: (id: string) => `api/hotels/delete/${id}`,

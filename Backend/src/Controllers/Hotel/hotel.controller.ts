@@ -1,12 +1,26 @@
 import { NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
 
+import HttpError from "../../Errors/HttpError";
 import { HotelBooking } from "../../Models/Hotel/hotel.model";
-import {
-	deleteHotelBooking,
-	saveHotelOffer,
-	searchHotelOffers,
-} from "../../Services/Hotel/hotel.service";
+import * as hotelService from "../../Services/Hotel/hotel.service";
+
+export const getHotelsByCity = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	try {
+		const { cityCode } = req.params;
+		const hotels = await hotelService.getHotelsByCity(cityCode);
+		if (!hotels) {
+			throw new HttpError(404, "No hotels found for the given city");
+		}
+		res.status(200).json(hotels);
+	} catch (error) {
+		next(error);
+	}
+};
 
 export const searchHotelOffersController = async (
 	req: Request,
@@ -32,7 +46,7 @@ export const searchHotelOffersController = async (
 			return res.status(400).json({ error: "Invalid page number" });
 		}
 
-		const offers = await searchHotelOffers({
+		const offers = await hotelService.searchHotelOffers({
 			cityCode: cityCode as string,
 			checkInDate: checkInDate as string,
 			checkOutDate: checkOutDate as string,
@@ -56,7 +70,10 @@ export const bookHotelroom = async (
 		return res.status(400).json({ error: "Missing required parameters" });
 	}
 	try {
-		const hotelBooking = await saveHotelOffer(offerjson, userid as string);
+		const hotelBooking = await hotelService.saveHotelOffer(
+			offerjson,
+			userid as string,
+		);
 		return res.status(201).json(hotelBooking);
 	} catch (error) {
 		next(error);
@@ -92,7 +109,7 @@ export const deleteBooking = async (
 				.status(400)
 				.json({ error: "Missing required parameters" });
 		}
-		await deleteHotelBooking(id, userid);
+		await hotelService.deleteHotelBooking(id, userid);
 
 		res.status(200).send("Hotel Booking deleted successfully");
 	} catch (error) {
