@@ -11,6 +11,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import Map from "@/components/ui/map";
 
 import { transportationSchema } from "../../Transportations/Form/schema";
 import {
@@ -62,8 +63,8 @@ const TransportationForm = ({
 		}
 	}, [transportation, reset]);
 
-	const { refetch } = useTransportations();
-
+	const {refetch } = useTransportations();
+	
 	const { doCreateTransportation } = useCreateTransportation(() => {
 		refetch();
 		form.reset();
@@ -295,6 +296,52 @@ const TransportationForm = ({
 										</FormControl>
 										<FormDescription>
 											Enter drop-off time.
+										</FormDescription>
+									</FormItem>
+								)}
+							/>
+							<Map
+								setLocation={(location: string) => {
+									form.setValue("pickUpLocation", location);
+								}}
+							/>
+							<FormField
+								control={control}
+								name="pickUpLocation"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Pick Up Location</FormLabel>
+										<FormControl>
+											<Input
+												{...field}
+												placeholder="pickUpLocation"
+											/>
+										</FormControl>
+										<FormDescription>
+											Enter pick up location.
+										</FormDescription>
+									</FormItem>
+								)}
+							/>
+							<Map
+								setLocation={(location: string) => {
+									form.setValue("dropOffLocation", location);
+								}}
+							/>
+							<FormField
+								control={control}
+								name="dropOffLocation"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Drop Off Location</FormLabel>
+										<FormControl>
+											<Input
+												{...field}
+												placeholder="dropOffLocation"
+											/>
+										</FormControl>
+										<FormDescription>
+											Enter drop off location.
 										</FormDescription>
 									</FormItem>
 								)}

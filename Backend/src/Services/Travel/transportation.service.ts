@@ -12,10 +12,16 @@ import {
 	cancelTransportation,
 	getTouristById,
 } from "../Users/tourist.service";
-import {
-	addTransportation,
-	getTransportationAdvertiserById,
-} from "../Users/transportation_advertiser.service";
+import { getTransportationAdvertiserById } from "../Users/transportation_advertiser.service";
+
+const TransportationFiltersMap: Record<string, PipelineStage> = {
+	tourist: {
+		$match: {},
+	},
+	default: {
+		$match: {},
+	},
+};
 
 export const createTransportation = async (
 	transportation: ITransportation,
@@ -38,20 +44,18 @@ export const createTransportation = async (
 		}
 
 		const transportationData = new Transportation({
-			transportation,
+			...transportation,
 			createdBy: TransportationAdvertiser.id,
 		});
 
 		await transportationData.save({ session }); // Save to generate the ID
 
-		TransportationAdvertiser.transportations.push(transportationData.id);
-
-		await addTransportation(
-			TransportationAdvertiser.id,
-			transportationData.id,
+		await TransportationAdvertiser.updateOne(
+			{
+				$push: { transportations: transportationData.id },
+			},
+			{ session },
 		);
-
-		await TransportationAdvertiser.updateOne({ session });
 		await session.commitTransaction();
 
 		return transportationData;
@@ -128,11 +132,13 @@ export const deleteTransportation = async (id: string) => {
 		}
 
 		// Remove the transportation ID from the Advertiser's itineraries array
-		transportation_advertiser.transportations =
-			transportation_advertiser.transportations.filter(
-				(transportationId) => !transportationId.equals(id),
-			);
-		await TransportationAdvertiser.updateOne({ session });
+
+		await transportation_advertiser.updateOne(
+			{
+				$pull: { transportations: id },
+			},
+			{ session },
+		);
 		// Delete the transportation
 		await transportation.deleteOne({ session });
 
@@ -252,47 +258,38 @@ export const cancelBookingTransportation = async (
 	return result;
 };
 
-export const getTransportations = async (
-	type: string,
-	userId: string,
-	query: any,
-) => {
-	// const ItineraryFiltersMap: Record<string, PipelineStage> = {
-	// 	tourist: {
-	// 		$match: {
-	// 			$or: [
-	// 				{
-	// 					tourists: { $in: [userId] },
-	// 				},
-	// 			],
-	// 		},
-	// 	},
-	// 	default: {
-	// 		$match: {},
-	// 	},
-	// };
-	// const filter =
-	// 	ItineraryFiltersMap?.[type as keyof typeof ItineraryFiltersMap] ||
-	// 	ItineraryFiltersMap.default;
-	const PipelineStage: PipelineStage[] = [
-		...AggregateBuilder(
-			query,
-			[], // Search fields
-		),
-	];
-	const result = await Transportation.aggregate(PipelineStage);
+export const getTransportations = async (type: string, query: any) => {
+	const filter =
+		TransportationFiltersMap?.[
+			type as keyof typeof TransportationFiltersMap
+		] || TransportationFiltersMap.default;
+
+	const pipeline: PipelineStage[] = [filter, ...AggregateBuilder(query, [])];
+
+	const result = await Transportation.aggregate(pipeline);
+
+	if (result[0].data.length === 0) {
+		throw new HttpError(404, "No Transportations Found");
+	}
 
 	return result;
 };
 
-export const getTransportationByUserId = async (userId: string) => {
+export const getTransportationByUserId = async (userId: string, query: any) => {
 	if (!Types.ObjectId.isValid(userId)) {
 		throw new HttpError(400, "Invalid Transportation Advertiser ID");
 	}
 
-	const transportations = await Transportation.find({
-		createdBy: userId,
-	}).populate("createdBy");
+	const pipeline: PipelineStage[] = [
+		{
+			$match: {
+				createdBy: new Types.ObjectId(userId),
+			},
+		},
+		...AggregateBuilder(query, []),
+	];
+
+	const transportations = await Transportation.aggregate(pipeline);
 
 	return transportations;
 };

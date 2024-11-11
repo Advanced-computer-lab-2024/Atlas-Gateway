@@ -20,11 +20,9 @@ export const createTransportation = async (
 				.json({ message: "Transportation Advertiser ID is required" });
 		}
 
-		const transportationData = req.body;
-
 		const transportationCreated =
 			await transportationService.createTransportation(
-				transportationData,
+				req.body,
 				transportation_advertiserId.toString(),
 			);
 
@@ -71,16 +69,33 @@ export const getTransportationByUserId = async (
 	res: Response,
 	next: NextFunction,
 ) => {
-	const userId = req.params.userId;
+	const userid = req.headers.userid;
 	try {
-		if (!userId) {
+		if (!userid) {
 			throw new HttpError(400, "User ID is required");
 		}
 
-		const transportation =
-			await transportationService.getTransportationByUserId(userId);
+		const result = await transportationService.getTransportationByUserId(
+			userid.toString(),
+			req.query,
+		);
 
-		return res.status(200).json(transportation);
+		if (!result) {
+			return res.status(404).send("No Transportation found");
+		}
+
+		const response = {
+			data: result[0].data,
+			metaData: {
+				page: req.query.page || 1,
+				total: result[0].total[0].count,
+				pages: Math.ceil(
+					result[0].total[0].count / (Number(req.query.limit) || 10),
+				),
+			},
+		};
+
+		return res.status(200).json(response);
 	} catch (error) {
 		next(error);
 	}
@@ -102,12 +117,11 @@ export const getTransportations = async (
 		}
 		const result = await transportationService.getTransportations(
 			type.toString(),
-			userId.toString(),
 			req.query,
 		);
-		if (result[0].data.length === 0 ){
-			throw new HttpError(404, "No Transportation	found");
-		}				
+		if (!result) {
+			return res.status(404).send("No Transportations found");
+		}
 		const response = {
 			data: result[0].data,
 			metaData: {
@@ -165,6 +179,10 @@ export const deleteTransportation = async (
 
 		const transportation =
 			await transportationService.deleteTransportation(id);
+
+		if (!transportation) {
+			return res.status(404).send("Transportation not found");
+		}
 
 		res.status(200).send("Transportation deleted Successfully");
 	} catch (error) {
