@@ -37,7 +37,7 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Flex } from "@/components/ui/flex";
-import Rating, { ratingType } from "@/components/ui/rating";
+import Rating, { ERatingType } from "@/components/ui/rating";
 import useCurrency from "@/hooks/useCurrency";
 import { useLoginStore } from "@/store/loginStore";
 import { languageOptions } from "@/types/consts";
@@ -235,7 +235,7 @@ export default function ItineraryCard({
 							<Rating
 								value={itinerary?.avgRating}
 								interactive={false}
-								ratingType={ratingType.CARDS}
+								ratingType={ERatingType.CARDS}
 							/>
 						</Flex>
 					</Flex>
