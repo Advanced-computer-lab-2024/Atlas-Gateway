@@ -22,6 +22,7 @@ import AdminLayout from "./Admin/AdminLayout";
 import ComplaintDetails from "./Admin/Complaint/ComplaintDetails";
 import Complaints from "./Admin/Complaint/Complaints";
 import AdminProducts from "./Admin/Product/Product";
+import Flights from "./Fights/Flights";
 import Home from "./Home/Home";
 import Itineraries from "./Itineraries/Itineraries";
 import ItineraryDetails from "./Itineraries/ItineraryDetails";
@@ -32,11 +33,11 @@ import ProductDetails from "./Products/ProductDetails";
 import Products from "./Products/Products";
 import Profile from "./Profile/Profile";
 import Register from "./Register/Register";
+import TransportationDetails from "./Transportations/TransportationDetails";
+import Transportations from "./Transportations/Transportations";
 import { QueryStateProvider } from "./api/data/useQueryString";
 import "./index.css";
 import Layout from "./layout/Layout";
-import Transportations from "./Transportations/Transportations";
-import TransportationDetails from "./Transportations/TransportationDetails";
 
 const queryClient = new QueryClient();
 
@@ -208,6 +209,16 @@ const router = createBrowserRouter([
 					{
 						path: "/itineraries/:id",
 						element: <ItineraryDetails />,
+					},
+				],
+			},
+			{
+				path: "/flights",
+				element: <Outlet />,
+				children: [
+					{
+						path: "/flights",
+						element: <Flights />,
 					},
 				],
 			},

@@ -207,6 +207,16 @@ export interface TItinerary {
 	tourists: string[];
 }
 
+export interface TFlights {
+	originLocationCode: string;
+	destinationLocationCode: string;
+	departureDate: string;
+	returnDate: string;
+	adults: number;
+	directFlightsOnly: boolean;
+	travelClass: string;
+}
+
 export interface TReview {
 	_id: string;
 	user: TUser;
@@ -228,4 +238,4 @@ export interface TTransportation {
 	numberOfBookings: number;
 	tourists: Types.ObjectId[];
 	createdBy: Types.ObjectId;
-};
+}

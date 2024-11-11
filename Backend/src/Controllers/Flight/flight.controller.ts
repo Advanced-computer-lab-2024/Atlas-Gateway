@@ -35,6 +35,7 @@ export const bookFlight = async (req: Request, res: Response) => {
 
 export const searchFlights = async (req: Request, res: Response) => {
 	try {
+		console.log(req.body);
 		const flights = await searchFlightsApi(req.body);
 		//console.log("Flights found:", flights);
 		return res.status(200).json(flights);

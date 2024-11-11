@@ -32,6 +32,34 @@ export const languageOptions = [
 	{ value: "hr", label: "Hrvatski" },
 ];
 
+export const locations = [
+	{ value: "JFK", label: "New York" },
+	{ value: "LAX", label: "Los Angeles" },
+	{ value: "LHR", label: "London" },
+	{ value: "CDG", label: "Paris" },
+	{ value: "FRA", label: "Frankfurt" },
+	{ value: "NRT", label: "Tokyo" },
+	{ value: "PEK", label: "Beijing" },
+	{ value: "DXB", label: "Dubai" },
+	{ value: "SYD", label: "Sydney" },
+	{ value: "GRU", label: "São Paulo" },
+	{ value: "CPT", label: "Cape Town" },
+	{ value: "CAI", label: "Cairo" },
+	{ value: "BOM", label: "Mumbai" },
+	{ value: "SIN", label: "Singapore" },
+	{ value: "AMS", label: "Amsterdam" },
+	{ value: "YYZ", label: "Toronto" },
+	{ value: "HND", label: "Tokyo" },
+	{ value: "MAD", label: "Madrid" },
+	{ value: "MEX", label: "Mexico City" },
+];
+
+export const classes = [
+	{ value: "ECONOMY", label: "Economy" },
+	{ value: "BUSINESS", label: "Business" },
+	{ value: "FIRST", label: "First" },
+];
+
 export const exchangeRateResponse = {
 	result: "success",
 	documentation: "https://www.exchangerate-api.com/docs",

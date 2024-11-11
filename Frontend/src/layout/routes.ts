@@ -25,11 +25,17 @@ const intinerariesRoute: NavbarRoute = {
 	to: "/itineraries",
 };
 
+const flightsRoute: NavbarRoute = {
+	name: "Flights",
+	to: "/flights",
+};
+
 const touristRoutes: NavbarRoute[] = [
 	placesRoute,
 	productsRoute,
 	activitiesRoute,
 	intinerariesRoute,
+	flightsRoute,
 ];
 
 const sellerRoutes: NavbarRoute[] = [productsRoute];
