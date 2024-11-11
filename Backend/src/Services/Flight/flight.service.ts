@@ -68,15 +68,12 @@ export async function searchFlightsApi(params: FlightSearchParams) {
 			adults: params.adults.toString(),
 			currencyCode: "EGP",
 		};
-
 		if (params.returnDate) {
 			searchParams.returnDate = params.returnDate;
 		}
-
 		if (params.children) {
 			searchParams.children = params.children.toString();
 		}
-
 		if (params.directFlightsOnly) {
 			searchParams.nonStop = true;
 		}
@@ -85,7 +82,47 @@ export async function searchFlightsApi(params: FlightSearchParams) {
 		}
 		const response =
 			await amadeus.shopping.flightOffersSearch.get(searchParams);
-		return response.data;
+		const flights: IFlight[] = response.data.map((flight: any) => {
+			const newFlight = {
+				ticketType:
+					flight.itineraries.length > 1 ? "round-trip" : "one-way",
+				departure: {
+					departureTime:
+						flight.itineraries[0].segments[0].departure.at,
+					arrivalTime: flight.itineraries[0].segments[0].arrival.at,
+					duration: flight.itineraries[0].duration,
+					from: flight.itineraries[0].segments[0].departure.iataCode,
+					to: flight.itineraries[0].segments[0].arrival.iataCode,
+					airLine: flight.validatingAirlineCodes[0],
+					flightNumber: flight.itineraries[0].segments[0].number,
+				},
+				returnTrip:
+					flight.itineraries.length > 1
+						? {
+								departureTime:
+									flight.itineraries[1].segments[0].departure
+										.at,
+								arrivalTime:
+									flight.itineraries[1].segments[0].arrival
+										.at,
+								duration: flight.itineraries[1].duration,
+								from: flight.itineraries[1].segments[0]
+									.departure.iataCode,
+								to: flight.itineraries[1].segments[0].arrival
+									.iataCode,
+								airLine: flight.validatingAirlineCodes[0],
+								flightNumber:
+									flight.itineraries[1].segments[0].number,
+							}
+						: null,
+				price: flight.price.total,
+				travelClass:
+					flight.travelerPricings[0].fareDetailsBySegment[0].cabin,
+				bookedTickets: flight.travelerPricings.length,
+			};
+			return newFlight;
+		});
+		return flights;
 	} catch (error) {
 		console.error("Error in searchFlightsApi:", error);
 		throw error;

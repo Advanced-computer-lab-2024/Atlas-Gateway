@@ -23,6 +23,7 @@ import AdminLayout from "./Admin/AdminLayout";
 import ComplaintDetails from "./Admin/Complaint/ComplaintDetails";
 import Complaints from "./Admin/Complaint/Complaints";
 import AdminProducts from "./Admin/Product/Product";
+import Flights from "./Fights/Flights";
 import Home from "./Home/Home";
 import Itineraries from "./Itineraries/Itineraries";
 import ItineraryDetails from "./Itineraries/ItineraryDetails";
@@ -209,6 +210,16 @@ const router = createBrowserRouter([
 					{
 						path: "/itineraries/:id",
 						element: <ItineraryDetails />,
+					},
+				],
+			},
+			{
+				path: "/flights",
+				element: <Outlet />,
+				children: [
+					{
+						path: "/flights",
+						element: <Flights />,
 					},
 				],
 			},
