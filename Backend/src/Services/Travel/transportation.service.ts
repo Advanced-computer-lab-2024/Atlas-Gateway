@@ -20,11 +20,9 @@ import {
 
 const TransportationFiltersMap: Record<string, PipelineStage> = {
 	tourist: {
-		$match: {
-			isDeleted: false,
-		},
+		$match: {},
 	},
-	transportation_advertiser: {
+	default: {
 		$match: {},
 	},
 };

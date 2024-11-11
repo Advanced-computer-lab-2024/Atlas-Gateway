@@ -112,7 +112,7 @@ export const getTransportations = async (
 		if (!userId) {
 			throw new HttpError(400, "User ID is required");
 		}
-		if (type != "transportation_advertiser") {
+		if (!type) {
 			throw new HttpError(400, "User Type is required");
 		}
 		const result = await transportationService.getTransportations(
