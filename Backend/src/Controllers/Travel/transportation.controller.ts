@@ -1,15 +1,9 @@
+import { th } from "date-fns/locale";
 import { NextFunction, Request, Response } from "express";
-import mongoose, { PipelineStage, Types } from "mongoose";
+import { Types } from "mongoose";
 
-import { Transportation } from "../../Models/Travel/transportation.model";
-import { Tourist } from "../../Models/Users/tourist.model";
-import AggregateBuilder from "../../Services/Operations/aggregation.service";
+import HttpError from "../../Errors/HttpError";
 import * as transportationService from "../../Services/Travel/transportation.service";
-import {
-	addBookedTransportation,
-	cancelTransportation,
-	getTouristById,
-} from "../../Services/Users/tourist.service";
 
 //Create a new product entry
 export const createTransportation = async (
@@ -26,11 +20,9 @@ export const createTransportation = async (
 				.json({ message: "Transportation Advertiser ID is required" });
 		}
 
-		const transportationData = req.body;
-
 		const transportationCreated =
 			await transportationService.createTransportation(
-				transportationData,
+				req.body,
 				transportation_advertiserId.toString(),
 			);
 
@@ -47,7 +39,11 @@ export const createTransportation = async (
 	}
 };
 
-export const getTransportation = async (req: Request, res: Response) => {
+export const getTransportation = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const id = req.params.id;
 
@@ -64,44 +60,89 @@ export const getTransportation = async (req: Request, res: Response) => {
 
 		res.status(200).send(transportation);
 	} catch (error) {
-		res.status(500).send("Error getting Transportation by id");
+		next(error);
 	}
 };
 
 export const getTransportationByUserId = async (
 	req: Request,
 	res: Response,
+	next: NextFunction,
 ) => {
-	const userId = req.params.userId;
+	const userid = req.headers.userid;
 	try {
-		if (!Types.ObjectId.isValid(userId)) {
-			return res
-				.status(400)
-				.json({ message: "Invalid Transportation Advertiser ID" });
+		if (!userid) {
+			throw new HttpError(400, "User ID is required");
 		}
 
-		const transportation = await Transportation.find({ createdBy: userId })
-			.populate("createdBy")
-			.populate("transportation_advertisers.transportation_advertiser");
+		const result = await transportationService.getTransportationByUserId(
+			userid.toString(),
+			req.query,
+		);
 
-		return res.status(200).json(transportation);
+		if (!result) {
+			return res.status(404).send("No Transportation found");
+		}
+
+		const response = {
+			data: result[0].data,
+			metaData: {
+				page: req.query.page || 1,
+				total: result[0].total[0].count,
+				pages: Math.ceil(
+					result[0].total[0].count / (Number(req.query.limit) || 10),
+				),
+			},
+		};
+
+		return res.status(200).json(response);
 	} catch (error) {
-		res.status(500).send("Error getting Transportation by id");
+		next(error);
 	}
 };
 
-export const getTransportations = async (req: Request, res: Response) => {
+export const getTransportations = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
-		const transportation = await Transportation.find()
-			.populate("createdBy")
-			.populate("transportation_advertisers.transportation_advertiser");
-		res.status(200).send(transportation);
+		const userId = req.headers.userid;
+		const type = req.headers.usertype;
+		if (!userId) {
+			throw new HttpError(400, "User ID is required");
+		}
+		if (!type) {
+			throw new HttpError(400, "User Type is required");
+		}
+		const result = await transportationService.getTransportations(
+			type.toString(),
+			req.query,
+		);
+		if (!result) {
+			return res.status(404).send("No Transportations found");
+		}
+		const response = {
+			data: result[0].data,
+			metaData: {
+				page: req.query.page || 1,
+				total: result[0].total[0].count,
+				pages: Math.ceil(
+					result[0].total[0].count / (Number(req.query.limit) || 10),
+				),
+			},
+		};
+		res.status(200).send(response);
 	} catch (error) {
-		res.status(500).send("Error getting Transportation");
+		next(error);
 	}
 };
 
-export const updateTransportationById = async (req: Request, res: Response) => {
+export const updateTransportationById = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const transportationId = req.params.id;
 
@@ -111,21 +152,22 @@ export const updateTransportationById = async (req: Request, res: Response) => {
 				.json({ message: "Invalid Transportation ID" });
 		}
 
-		const transportation = await Transportation.findByIdAndUpdate(
+		const transportation = await transportationService.updateTransportation(
 			transportationId,
-			{
-				$set: req.body,
-			},
-			{ new: true },
+			req.body,
 		);
 
 		res.status(200).send(transportation);
 	} catch (error) {
-		res.status(500).json({ message: "Internal Server Error" });
+		next(error);
 	}
 };
 
-export const deleteTransportation = async (req: Request, res: Response) => {
+export const deleteTransportation = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const { id } = req.params;
 
@@ -135,136 +177,83 @@ export const deleteTransportation = async (req: Request, res: Response) => {
 				.json({ message: "Invalid Transportation ID" });
 		}
 
-		const transportation = await Transportation.findById(id);
+		const transportation =
+			await transportationService.deleteTransportation(id);
+
 		if (!transportation) {
-			return res
-				.status(404)
-				.json({ message: "Transportation not found" });
+			return res.status(404).send("Transportation not found");
 		}
 
-		if (transportation?.numberOfBookings > 0) {
-			return res
-				.status(404)
-				.json({ message: "Transportation is already booked" });
-		}
-		await Transportation.findByIdAndDelete(id);
 		res.status(200).send("Transportation deleted Successfully");
 	} catch (error) {
-		res.status(500).send("Error deleting Transportation");
+		next(error);
 	}
 };
 
-export const bookTransportationById = async (req: Request, res: Response) => {
-	try {
-		const transportationId = req.params.id;
-		const touristId = req.headers.userid;
-
-		if (!touristId) {
-			return res.status(400).json({ message: "User ID is required" });
-		}
-
-		if (!transportationId) {
-			return res
-				.status(400)
-				.json({ message: "Transportation ID is required" });
-		}
-
-		if (!Types.ObjectId.isValid(transportationId)) {
-			return res
-				.status(400)
-				.json({ message: "Invalid Transportation ID" });
-		}
-
-		const transportation = await Transportation.findById(transportationId);
-
-		if (!transportation) {
-			return res
-				.status(404)
-				.json({ message: "Transportation not found" });
-		}
-
-		const tourist = await getTouristById(touristId.toString());
-
-		if (!tourist) {
-			return res.status(404).json({ message: "Tourist not found" });
-		}
-
-		const bookingResult = await transportationService.bookTransportation(
-			transportation.id,
-			tourist.id,
-		);
-
-		const addBookingResult = await addBookedTransportation(
-			tourist.id,
-			transportation.id,
-		);
-
-		if (!(bookingResult || addBookingResult)) {
-			return res
-				.status(400)
-				.json({ message: "Cannot book Transportation" });
-		}
-
-		return res
-			.status(201)
-			.json({ message: "Transportation booked successfully" });
-	} catch (error) {
-		return res.status(500).json({ error: "Error booking Transportation" });
-	}
-};
-
-export const cancelBookingTransportationById = async (
+export const bookTransportationById = async (
 	req: Request,
 	res: Response,
+	next: NextFunction,
 ) => {
 	try {
 		const transportationId = req.params.id;
 		const touristId = req.headers.userid;
 
 		if (!touristId) {
-			return res.status(400).json({ error: "User ID is required" });
+			throw new HttpError(400, "Tourist ID is required");
 		}
 
 		if (!transportationId) {
-			return res
-				.status(400)
-				.json({ error: "Transportation ID is required" });
+			throw new HttpError(400, "Transportation ID is required");
 		}
 
-		if (!Types.ObjectId.isValid(transportationId)) {
-			res.status(400).json({ error: "Invalid Transportation ID" });
-		}
-
-		const transportation = await Transportation.findById(transportationId);
+		const transportation = await transportationService.bookTransportation(
+			transportationId,
+			touristId.toString(),
+		);
 
 		if (!transportation) {
-			return res.status(404).json({ error: "Transportation not found" });
+			throw new HttpError(500, "Cannot book Transportation");
 		}
 
-		const tourist = await getTouristById(touristId.toString());
+		return res
+			.status(201)
+			.json({ message: "Transportation booked successfully" });
+	} catch (error) {
+		next(error);
+	}
+};
 
-		if (!tourist) {
-			return res.status(404).json({ error: "Tourist not found" });
+export const cancelBookingTransportationById = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	try {
+		const transportationId = req.params.id;
+		const touristId = req.headers.userid;
+
+		if (!touristId) {
+			throw new HttpError(400, "Tourist ID is required");
 		}
 
+		if (!transportationId) {
+			throw new HttpError(400, "Transportation ID is required");
+		}
 		const cancelBookingResult =
 			await transportationService.cancelBookingTransportation(
-				transportation.id,
-				tourist.id,
+				transportationId,
+				touristId.toString(),
 			);
 
 		if (!cancelBookingResult) {
-			return res
-				.status(400)
-				.json({ error: "Cannot cancel booking Transportation" });
+			throw new HttpError(500, "Cannot cancel booking");
 		}
 
 		return res
 			.status(201)
 			.json({ message: "Transportation booking canceled successfully" });
 	} catch (error) {
-		return res
-			.status(500)
-			.json({ error: "Error cancelling Transportation booking" });
+		next(error);
 	}
 };

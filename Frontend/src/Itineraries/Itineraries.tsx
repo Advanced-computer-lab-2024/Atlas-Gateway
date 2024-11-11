@@ -38,7 +38,6 @@ export default function Itineraries() {
 	const { data, meta } = useItineraries();
 	const [open, setOpen] = useState(false);
 	const [itinerary, setItinerary] = useState<TItinerary>();
-
 	const { data: tags } = useTags();
 
 	const openEditDrawer = (itinerary: TItinerary) => {
@@ -136,7 +135,7 @@ export default function Itineraries() {
 						}}
 					/>
 				</Flex>
-				{user?.type !== EAccountType.Guide && (
+				{user?.type === EAccountType.Guide && (
 					<Button
 						onClick={() => setOpen(true)}
 						variant="default"

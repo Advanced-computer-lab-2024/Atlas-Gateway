@@ -1,6 +1,8 @@
 import { ArrowLeft, LocateIcon, MapPin } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { useDownload } from "@/api/data/useMedia";
 import { usePlace } from "@/api/data/usePlaces";
 import Label from "@/components/ui/Label";
 import { Badge } from "@/components/ui/badge";
@@ -8,21 +10,37 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Flex } from "@/components/ui/flex";
 import useCurrency from "@/hooks/useCurrency";
 
+import Slideshow from "./Form/Slideshow";
+
 export default function PlaceDetails() {
 	const navigate = useNavigate();
 	const { data } = usePlace();
-	const convertCurrency = useCurrency();
-
 	const {
 		name,
 		description,
 		location,
-		images,
+		imagesPath,
 		tags,
 		openingHours,
 		ticketPrices,
 	} = data || {};
-
+	const convertCurrency = useCurrency();
+	const [placesPics, setPlacesPics] = useState<string[]>([]);
+	const { doDownload } = useDownload((res) => {
+		setPlacesPics((prevPics) => [...prevPics, res.data]);
+	});
+	const handleDownload = async (filesPath: string[]) => {
+		try {
+			filesPath.forEach((filePath) => {
+				doDownload(filePath);
+			});
+		} catch (error) {
+			console.error(error);
+		}
+	};
+	useEffect(() => {
+		handleDownload(imagesPath!);
+	}, [imagesPath!]);
 	return (
 		<Flex
 			justify="center"
@@ -43,17 +61,7 @@ export default function PlaceDetails() {
 				<CardContent>
 					<Flex isColumn gap="4">
 						<Flex gap="6">
-							<Flex
-								align="center"
-								justify="center"
-								className="w-[600px] h-[400px] bg-gray-200 rounded-xl"
-							>
-								{images?.[0] ? (
-									<img src={images[0]} />
-								) : (
-									<LocateIcon className="w-full h-40" />
-								)}
-							</Flex>
+							<Slideshow placesPics={placesPics} type="details" />
 							<Flex gap="3" isColumn align="start">
 								<Label.Big500>Place info</Label.Big500>
 								<Flex gap="2" isColumn>

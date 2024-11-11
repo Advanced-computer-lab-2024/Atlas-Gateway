@@ -140,7 +140,7 @@ export default function Activites() {
 						/>
 					</Flex>
 				</Flex>
-				{user?.type !== EAccountType.Advertiser && (
+				{user?.type === EAccountType.Advertiser && (
 					<Button
 						variant="default"
 						onClick={() => {

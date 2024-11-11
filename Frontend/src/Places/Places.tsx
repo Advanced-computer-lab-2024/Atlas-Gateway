@@ -72,8 +72,8 @@ export default function Places() {
 					/>
 				</Flex>
 				<Flex gap="2" align="center">
-					{user?.type !== EAccountType.TourismGovernor && <AddTags />}
-					{user?.type !== EAccountType.TourismGovernor && (
+					{user?.type === EAccountType.TourismGovernor && <AddTags />}
+					{user?.type === EAccountType.TourismGovernor && (
 						<Button
 							variant="default"
 							onClick={() => {

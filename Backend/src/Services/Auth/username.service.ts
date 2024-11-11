@@ -49,7 +49,7 @@ export const findUserByUsername = async (username: string) => {
 	user = await TransportationAdvertiser.findOne({
 		username,
 	});
-	if (user) return { user, type: "advertiser" };
+	if (user) return { user, type: "transportation_advertiser" };
 
 	return null;
 };

@@ -9,6 +9,8 @@ export interface IItinerary extends Document {
 	availability: number;
 	pickUpLocation: string;
 	dropOffLocation: string;
+	isAppropriate: boolean;
+	isActive: boolean;
 	startDateTime: Date;
 	endDateTime: Date;
 	activities: {
@@ -25,7 +27,7 @@ export interface IItinerary extends Document {
 	accessibility: string;
 	timeline: string;
 	tourists: Types.ObjectId[];
-	isDeleted?: boolean;
+	isDeleted: boolean;
 }
 
 const itinerarySchema = new Schema<IItinerary>(
@@ -36,6 +38,8 @@ const itinerarySchema = new Schema<IItinerary>(
 		availability: { type: Number, required: true },
 		pickUpLocation: { type: String, required: true },
 		dropOffLocation: { type: String, required: true },
+		isAppropriate: { type: Boolean, default: true },
+		isActive: { type: Boolean, default: true },
 		startDateTime: { type: Date, required: true },
 		endDateTime: { type: Date, required: true },
 		activities: [
@@ -54,6 +58,7 @@ const itinerarySchema = new Schema<IItinerary>(
 		accessibility: { type: String, required: true },
 		timeline: { type: String, required: true },
 		tourists: [{ type: Schema.Types.ObjectId, ref: "Tourist" }],
+		isDeleted: { type: Boolean, default: false },
 	},
 	schemaConfig,
 );

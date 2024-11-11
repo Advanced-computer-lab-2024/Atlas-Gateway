@@ -6,14 +6,22 @@ import {
 	Edit,
 	EllipsisVertical,
 	Eye,
+	Flag,
 	Mail,
 	MapPin,
 	Star,
+	ToggleLeft,
+	ToggleRight,
 	Trash,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-import { useDeleteItinerary, useItineraries } from "@/api/data/useItineraries";
+import {
+	useDeleteItinerary,
+	useFlagItinerary,
+	useItineraries,
+	useToggleItineraryStatus,
+} from "@/api/data/useItineraries";
 import Label from "@/components/ui/Label";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -49,7 +57,8 @@ export default function ItineraryCard({
 
 	const { refetch } = useItineraries();
 	const { doDeleteItinerary } = useDeleteItinerary(refetch);
-
+	const { doFlagItinerary } = useFlagItinerary(refetch);
+	const { doToggleItineraryStatus } = useToggleItineraryStatus(refetch);
 	// Function to copy the itinerary link to the clipboard
 	const handleCopyLink = () => {
 		const itineraryLink = `${window.location.origin}/itineraries/${itinerary?._id}`;
@@ -78,7 +87,7 @@ export default function ItineraryCard({
 	return (
 		<Card
 			key={itinerary?._id}
-			className="w-full h-[350px] flex gap-1 flex-col border-black border-2"
+			className="w-full h-[370px] flex gap-1 flex-col border-black border-2"
 		>
 			<CardHeader>
 				<Flex
@@ -126,6 +135,38 @@ export default function ItineraryCard({
 									>
 										<Trash />
 										Delete
+									</DropdownMenuItem>
+								</>
+							)}
+							{user?.type === EAccountType.Admin && (
+								<>
+									<DropdownMenuItem
+										onClick={() => {
+											doFlagItinerary(itinerary?._id);
+										}}
+									>
+										<Flag />
+										Flag as Inappropriate
+									</DropdownMenuItem>
+								</>
+							)}
+							{user?.type === EAccountType.Guide && (
+								<>
+									<DropdownMenuItem
+										onClick={() => {
+											doToggleItineraryStatus(
+												itinerary?._id,
+											);
+										}}
+									>
+										{itinerary.isActive ? (
+											<ToggleLeft className="text-red-600" />
+										) : (
+											<ToggleRight className="text-green-600" />
+										)}
+										{itinerary.isActive
+											? "Deactivate"
+											: "Activate"}
 									</DropdownMenuItem>
 								</>
 							)}
@@ -206,7 +247,7 @@ export default function ItineraryCard({
 							className="w-full"
 						>
 							<Label.Thin300>Pickup</Label.Thin300>
-							<Label.Mid300 className="break-words text-start  w-full">
+							<Label.Mid300 className="break-words text-center w-full ">
 								{itinerary?.startDateTime &&
 									formatDate(
 										new Date(itinerary?.startDateTime),
@@ -217,7 +258,7 @@ export default function ItineraryCard({
 						</Flex>
 						<Flex isColumn align="center" className="w-full">
 							<Label.Thin300>Dropoff</Label.Thin300>
-							<Label.Mid300 className="break-words w-full text-start h-10 overflow-y-scroll">
+							<Label.Mid300 className="break-words w-full text-center h-10 overflow-y-scroll">
 								{itinerary?.endDateTime &&
 									formatDate(
 										new Date(itinerary?.endDateTime),
@@ -228,8 +269,6 @@ export default function ItineraryCard({
 						</Flex>
 					</Flex>
 				</Flex>
-			</CardContent>
-			<CardFooter>
 				<Flex align="center" justify="between" className="w-full">
 					<Label.Mid300>
 						Language:{" "}
@@ -239,6 +278,13 @@ export default function ItineraryCard({
 					</Label.Mid300>
 					<Label.Mid300>
 						{itinerary?.availability} Spots left
+					</Label.Mid300>
+				</Flex>
+			</CardContent>
+			<CardFooter>
+				<Flex align="center" justify="center" className="w-full">
+					<Label.Mid300>
+						isAppropriate: {itinerary?.isAppropriate ? "Yes" : "No"}
 					</Label.Mid300>
 				</Flex>
 			</CardFooter>

@@ -7,7 +7,7 @@ import {
 	deleteActivityById,
 	getActivities,
 	getActivityById,
-	getActivitybyUserId,
+	getActivitybyCreator,
 	updateActivityById,
 } from "../../Controllers/Travel/activity.controller";
 
@@ -15,7 +15,7 @@ const router = express.Router();
 
 router.post("/create", createActivities);
 router.get("/show/:id", getActivityById);
-router.get("/listAdvertisor", getActivitybyUserId);
+router.get("/listAdvertisor", getActivitybyCreator);
 router.get("/list", getActivities);
 router.put("/update/:id", updateActivityById);
 router.delete("/delete/:id", deleteActivityById);

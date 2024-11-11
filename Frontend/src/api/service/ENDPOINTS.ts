@@ -49,6 +49,7 @@ const ENDPOINTS = {
 		list: "api/tourist/list",
 		show: (id: string) => `api/tourist/show/${id}`,
 		update: (id: string) => `api/tourist/update/${id}`,
+		redeem: (id: string) => `api/tourist/redeem/${id}`,
 		delete: (id: string) => `api/tourist/delete/${id}`,
 		requestDelete: (id: string) => `api/tourist/requestDelete/${id}`,
 	},
@@ -77,8 +78,7 @@ const ENDPOINTS = {
 		list: "api/transportation_advertiser/list",
 		show: (id: string) => `api/transportation_advertiser/show/${id}`,
 		update: (id: string) => `api/transportation_advertiser/update/${id}`,
-		delete: (id: string) =>
-			`api/api/transportation_advertiser/delete/${id}`,
+		delete: (id: string) => `api/transportation_advertiser/delete/${id}`,
 	},
 	category: {
 		list: "api/category/list",
@@ -100,6 +100,8 @@ const ENDPOINTS = {
 		show: (id: string) => `api/itinerary/show/${id}`,
 		create: "api/itinerary/create",
 		update: (id: string) => `api/itinerary/update/${id}`,
+		flag: (id: string) => `api/itinerary/flag/${id}`,
+		toggleStatus: (id: string) => `api/itinerary/toggleStatus/${id}`,
 		delete: (id: string) => `api/itinerary/delete/${id}`,
 		book: (id: string) => `api/itinerary/book/${id}`,
 		cancelBooking: (id: string) => `api/itinerary/cancelBooking/${id}`,
@@ -110,6 +112,17 @@ const ENDPOINTS = {
 		listProfile: "api/complaint/list-profile",
 		create: "api/complaint/create",
 		update: (id: string) => `api/complaint/update/${id}`,
+	},
+
+	transportation: {
+		list: "api/transportation/list",
+		listAdvertisor: "api/transportation/listAdvertisor",
+		get: (id: string) => `api/transportation/get/${id}`,
+		create: "api/transportation/create",
+		update: (id: string) => `api/transportation/update/${id}`,
+		delete: (id: string) => `api/transportation/delete/${id}`,
+		book: (id: string) => `api/transportation/book/${id}`,
+		cancelBooking: (id: string) => `api/transportation/cancelBooking/${id}`,
 	},
 };
 

@@ -86,7 +86,7 @@ export default function ActivityCard({
 					className="relative w-full"
 				>
 					<Label.Mid500 className="justify-self-center">
-						{activity?.name}
+						{activity?.name ?? "-"}
 					</Label.Mid500>
 					<DropdownMenu modal={false}>
 						<DropdownMenuTrigger className="absolute right-0">

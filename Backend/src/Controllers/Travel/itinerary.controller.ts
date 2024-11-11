@@ -90,13 +90,17 @@ export const getItineraries = async (
 ) => {
 	try {
 		const usertype = req.headers.usertype as string;
-
+		const userId = req.headers.userid as string;
 		if (!usertype) {
 			throw new HttpError(400, "User type is required");
+		}
+		if (!userId) {
+			throw new HttpError(400, "User ID is required");
 		}
 		const result = await itineraryService.getItineraries(
 			usertype,
 			req.query,
+			userId,
 		);
 		const response = {
 			data: result?.[0]?.data,
@@ -238,6 +242,44 @@ export const cancelBookingItinerary = async (
 		return res
 			.status(201)
 			.json({ message: "Itinerary booking cancelled successfully" });
+	} catch (error) {
+		next(error);
+	}
+};
+
+export const flagItinerary = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	try {
+		const itineraryId = req.params.id;
+
+		if (!itineraryId) {
+			throw new HttpError(400, "itinerary id is required");
+		}
+		const itinerary = await itineraryService.flagItinerary(itineraryId);
+
+		res.status(200).send(itinerary);
+	} catch (error) {
+		next(error);
+	}
+};
+
+export const toggleStatus = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	try {
+		const itineraryId = req.params.id;
+
+		if (!itineraryId) {
+			throw new HttpError(400, "itinerary id is required");
+		}
+		const itinerary = await itineraryService.toggleStatus(itineraryId);
+
+		res.status(200).send(itinerary);
 	} catch (error) {
 		next(error);
 	}

@@ -10,7 +10,7 @@ import { cardsMap } from "./cardData";
 export default function Home() {
 	const { user } = useLoginStore();
 
-	const cards = cardsMap[(user?.type ?? "tourist") as EAccountType];
+	const cards = cardsMap[(user?.type ?? EAccountType.Guest) as EAccountType];
 
 	return (
 		<Flex

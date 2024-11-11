@@ -23,7 +23,7 @@ import {
 	DialogTrigger,
 } from "@/components/ui/dialog";
 import { Flex } from "@/components/ui/flex";
-import Rating, { ratingType } from "@/components/ui/rating";
+import Rating, { ERatingType } from "@/components/ui/rating";
 import ReviewOverlay from "@/components/ui/reviewOverlay";
 import useCurrency from "@/hooks/useCurrency";
 import { useLoginStore } from "@/store/loginStore";
@@ -188,7 +188,7 @@ export default function ProductDetails() {
 							<Flex gap="2" isColumn>
 								<Label.Thin300>Price:</Label.Thin300>
 								<Label.Mid500 className="overflow-ellipsis">
-									{price}
+									{convertCurrency(price)}
 								</Label.Mid500>
 							</Flex>
 							<Flex gap="2" isColumn align="start">
@@ -196,7 +196,7 @@ export default function ProductDetails() {
 								<Flex>
 									<Rating
 										value={avgRating}
-										ratingType={ratingType.DETAILS}
+										ratingType={ERatingType.DETAILS}
 										interactive={false}
 									/>
 									{canReview && (

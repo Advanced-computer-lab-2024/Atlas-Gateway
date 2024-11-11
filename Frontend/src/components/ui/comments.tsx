@@ -4,7 +4,7 @@ import Label from "@/components/ui/Label";
 import { TReview } from "@/types/global";
 
 import { Flex } from "./flex";
-import Rating, { ratingType } from "./rating";
+import Rating, { ERatingType } from "./rating";
 
 interface commentsContainerProps {
 	comments: TReview[]; // show more button loads more from the DB using the useState in the page itself
@@ -54,7 +54,7 @@ const DisplayComments: React.FC<displayCommentsProps> = ({ comments }) => {
 						<p>{comment.tourist.username}</p>
 						<Rating
 							value={comment.rating}
-							ratingType={ratingType.CARDS}
+							ratingType={ERatingType.CARDS}
 						/>
 					</Flex>
 					<hr className="bg-gray-400 border-0 h-1 rounded-sm mt-2 mb-2" />

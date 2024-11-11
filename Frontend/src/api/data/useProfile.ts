@@ -7,7 +7,7 @@ import {
 	TPassword,
 	TSeller,
 	TTourGuide,
-	TTourist,
+	TTouristApi,
 	TTransportationAdvertiser,
 } from "@/types/global";
 
@@ -28,6 +28,7 @@ import {
 	apiEditTouristProfile,
 	apiEditTransportationAdvertiserProfile,
 	apiGovernorProfile,
+	apiRedeemTouristLoyaltyPoints,
 	apiRequestDeleteAdvertiserProfile,
 	apiRequestDeleteSellerProfile,
 	apiRequestDeleteTourGuideProfile,
@@ -85,7 +86,7 @@ export function useUpdateTouristProfile(onSuccess: () => void) {
 	const { user, setUser } = useLoginStore();
 
 	const mutation = useMutation({
-		mutationFn: (data: TTourist) => {
+		mutationFn: (data: Partial<TTouristApi>) => {
 			if (!user?._id) {
 				throw new Error("User ID is undefined");
 			}
@@ -408,4 +409,13 @@ export function useRequestDeleteTourGuideProfile(onSuccess: () => void) {
 	});
 	const { mutate } = mutation;
 	return { doRequestDeleteTourGuideProfile: mutate, ...mutation };
+}
+
+export function useRedeemTouristLoyaltyPoints(onSuccess: () => void) {
+	const mutation = useMutation({
+		mutationFn: (_id: string) => apiRedeemTouristLoyaltyPoints(_id),
+		onSuccess,
+	});
+	const { mutate } = mutation;
+	return { doRedeemTouristLoyaltyPoints: mutate, ...mutation };
 }
