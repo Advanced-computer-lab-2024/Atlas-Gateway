@@ -13,92 +13,92 @@ interface HotelSearchParams {
 }
 
 export async function getHotelsByCity(cityCode: string) {
-	try {
-		const response =
-			await amadeus.referenceData.locations.hotels.byCity.get({
-				cityCode: cityCode,
-			});
-		return response.data;
-	} catch (error) {
-		console.error("Error in getHotelsByCity:", error);
-		throw error;
-	}
+	const response = await amadeus.referenceData.locations.hotels.byCity.get({
+		cityCode: cityCode,
+	});
+	return response.data;
 }
 export async function searchHotelOffers(params: HotelSearchParams) {
-	try {
-		const hotels = await getHotelsByCity(params.cityCode);
-
-		const hotelsPerPage = 5;
-		const startIndex = (params.page - 1) * hotelsPerPage;
-		const endIndex = startIndex + hotelsPerPage;
-		if (startIndex >= hotels.length) {
-			throw new HttpError(404, "No more hotels to show");
-		}
-		const paginatedHotels = hotels.slice(startIndex, endIndex);
-
-		const hotelIds = paginatedHotels
-			.map((hotel: any) => hotel.hotelId)
-			.join(",");
-
+	const hotels = await getHotelsByCity(params.cityCode);
+	const hotelsPerPage = 5;
+	const startIndex = (params.page - 1) * hotelsPerPage;
+	const endIndex = startIndex + hotelsPerPage;
+	if (startIndex >= hotels.length) {
+		throw new HttpError(404, "No more hotels to show");
+	}
+	const paginatedHotels = hotels.slice(startIndex, endIndex);
+	const response: any = [];
+	const hotelIds = paginatedHotels.map((hotel: any) => hotel.hotelId);
+	hotelIds.forEach(async (id: string) => {
 		const searchParams: any = {
-			hotelIds: hotelIds,
+			hotelIds: id,
 			checkInDate: params.checkInDate,
 			checkOutDate: params.checkOutDate,
 			adults: params.adults,
 		};
+		try {
+			const hotel =
+				await amadeus.shopping.hotelOffersSearch.get(searchParams);
+			if (hotel) {
+				response.push(hotel);
+			}
+		} catch (error) {
+			console.error("Error in searchHotelOffers:", error);
+		}
+	});
+	console.log(response);
 
-		const response =
-			await amadeus.shopping.hotelOffersSearch.get(searchParams);
-		const data = response.data;
-		const hotelBookingData = data.map((item: any) => ({
-			hotel: {
-				type: item.hotel.type,
-				hotelId: item.hotel.hotelId,
-				chainCode: item.hotel.chainCode,
-				name: item.hotel.name,
-				cityCode: item.hotel.cityCode,
-				latitude: item.hotel.latitude,
-				longitude: item.hotel.longitude,
+	// if (response.length === 0) {
+	// 	throw new HttpError(
+	// 		404,
+	// 		"No offers found for the given search parameters",
+	// 	);
+	// }
+	const hotelBookingData = response.map((item: any) => ({
+		hotel: {
+			type: item.hotel.type,
+			hotelId: item.hotel.hotelId,
+			chainCode: item.hotel.chainCode,
+			name: item.hotel.name,
+			cityCode: item.hotel.cityCode,
+			latitude: item.hotel.latitude,
+			longitude: item.hotel.longitude,
+		},
+		offer: item.offers.map((offer: any) => ({
+			checkInDate: offer.checkInDate,
+			checkOutDate: offer.checkOutDate,
+			room: {
+				type: offer.room.type,
+				typeEstimated: {
+					category: offer.room.typeEstimated.category,
+					beds: offer.room.typeEstimated.beds || 0,
+					bedType: offer.room.typeEstimated.bedType || "Unknown",
+				},
+				description: {
+					text: offer.room.description.text,
+					lang: offer.room.description.lang,
+				},
 			},
-			offer: item.offers.map((offer: any) => ({
-				checkInDate: offer.checkInDate,
-				checkOutDate: offer.checkOutDate,
-				room: {
-					type: offer.room.type,
-					typeEstimated: {
-						category: offer.room.typeEstimated.category,
-						beds: offer.room.typeEstimated.beds || 0,
-						bedType: offer.room.typeEstimated.bedType || "Unknown",
-					},
-					description: {
-						text: offer.room.description.text,
-						lang: offer.room.description.lang,
-					},
-				},
-				guests: offer.guests.adults,
-				price: {
-					currency: offer.price.currency,
-					base: offer.price.base,
-					total: offer.price.total,
-				},
-				policies: {
-					cancellations: offer.policies.cancellations.map(
-						(cancellation: any) => ({
-							description: {
-								text: cancellation.description.text,
-							},
-							type: cancellation.type,
-						}),
-					),
-					paymentType: offer.policies.paymentType,
-				},
-			})),
-		}));
-		return hotelBookingData;
-	} catch (error) {
-		console.error("Error in searchHotelOffers:", error);
-		throw error;
-	}
+			guests: offer.guests.adults,
+			price: {
+				currency: offer.price.currency,
+				base: offer.price.base,
+				total: offer.price.total,
+			},
+			policies: {
+				cancellations: offer.policies.cancellations.map(
+					(cancellation: any) => ({
+						description: {
+							text: cancellation.description.text,
+						},
+						type: cancellation.type,
+					}),
+				),
+				paymentType: offer.policies.paymentType,
+			},
+		})),
+	}));
+	return hotelBookingData;
 }
 
 export async function saveHotelOffer(data: any, userid: string) {
