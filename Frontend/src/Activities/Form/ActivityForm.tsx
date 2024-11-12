@@ -239,7 +239,7 @@ const ActivityForm = ({
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel className="font-normal">
-											Select Categories
+											Select category
 										</FormLabel>
 										<FormControl>
 											<MultiSelect
@@ -261,7 +261,7 @@ const ActivityForm = ({
 											/>
 										</FormControl>
 										<FormDescription>
-											Select activity categories.
+											Select activity category.
 										</FormDescription>
 									</FormItem>
 								)}
