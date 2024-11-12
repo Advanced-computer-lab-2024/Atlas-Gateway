@@ -5,26 +5,15 @@ import { ArrowLeft, DollarSign, MapPin } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import {
-	useActivity,
-	useBookActivity,
-	useCancelActivityBooking,
-} from "@/api/data/useActivities";
+
+
+import { useActivity, useBookActivity, useCancelActivityBooking } from "@/api/data/useActivities";
 import Label from "@/components/ui/Label";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { CommentsContainer } from "@/components/ui/comments";
-import {
-	Dialog,
-	DialogClose,
-	DialogContent,
-	DialogDescription,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Flex } from "@/components/ui/flex";
 import Rating, { ERatingType } from "@/components/ui/rating";
 import ReviewOverlay from "@/components/ui/reviewOverlay";
@@ -32,6 +21,7 @@ import useCurrency from "@/hooks/useCurrency";
 import { useLoginStore } from "@/store/loginStore";
 import { EAccountType } from "@/types/enums";
 import { TReview } from "@/types/global";
+
 
 export default function ActivityDetails() {
 	const navigate = useNavigate();
@@ -287,27 +277,21 @@ export default function ActivityDetails() {
 							</Label.Mid500>
 						</Flex>
 						<Flex gap="2" isColumn align="center">
-							<Label.Thin300>Categories:</Label.Thin300>
-							{categories && categories.length > 0 ? (
-								<Flex
-									gap="1"
-									align="center"
-									justify="center"
-									className="overflow-x-scroll h-8 w-full"
+							<Label.Thin300>Category:</Label.Thin300>
+							<Flex
+								gap="1"
+								align="center"
+								justify="center"
+								className="overflow-x-scroll h-8 w-full"
+							>
+								<Badge
+									key={categories?.[0]?._id}
+									variant={"default"}
+									className="whitespace-nowrap"
 								>
-									{categories?.map((category) => (
-										<Badge
-											key={category?._id}
-											variant={"default"}
-											className="whitespace-nowrap"
-										>
-											{category?.name}
-										</Badge>
-									))}
-								</Flex>
-							) : (
-								"No categories"
-							)}
+									{categories?.[0]?.name}
+								</Badge>
+							</Flex>
 						</Flex>
 						<Flex gap="2" isColumn align="center">
 							<Label.Thin300>Tags:</Label.Thin300>

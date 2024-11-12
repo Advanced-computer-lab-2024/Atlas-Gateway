@@ -117,7 +117,7 @@ export default function Activites() {
 									options:
 										tags?.map((tag) => ({
 											label: tag.name,
-											value: tag._id,
+											value: tag._id!,
 										})) || [],
 								},
 								categories: {
@@ -127,7 +127,7 @@ export default function Activites() {
 									options:
 										categories?.map((category) => ({
 											label: category.name,
-											value: category._id,
+											value: category._id!,
 										})) || [],
 								},
 								avgRating: {

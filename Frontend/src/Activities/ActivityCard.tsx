@@ -187,27 +187,21 @@ export default function ActivityCard({
 						className="w-full"
 					>
 						<Label.Thin300 className="overflow-ellipsis w-[85px] text-left">
-							Categories:
+							Category:
 						</Label.Thin300>
-						{activity?.categories?.length > 0 ? (
-							<Flex
-								gap="1"
-								align="center"
-								className="overflow-x-scroll w-full"
+						<Flex
+							gap="1"
+							align="center"
+							className="overflow-x-scroll w-full"
+						>
+							<Badge
+								key={activity?.categories?.[0]?._id}
+								variant={"default"}
+								className="whitespace-nowrap"
 							>
-								{activity?.categories?.map((category) => (
-									<Badge
-										key={category?._id}
-										variant={"default"}
-										className="whitespace-nowrap"
-									>
-										{category?.name}
-									</Badge>
-								))}
-							</Flex>
-						) : (
-							"No categories"
-						)}
+								{activity?.categories?.[0]?.name}
+							</Badge>
+						</Flex>
 					</Flex>
 					<Flex
 						gap="2"

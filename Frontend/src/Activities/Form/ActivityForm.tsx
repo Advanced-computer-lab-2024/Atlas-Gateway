@@ -64,7 +64,7 @@ const ActivityForm = ({
 				// @ts-expect-error Add unique types for form later
 				tags: activity.tags.map((tag) => tag._id),
 				// @ts-expect-error Add unique types for form later
-				categories: activity.categories.map((category) => category._id),
+				categories: [activity?.categories?.[0]?._id],
 			});
 		}
 	}, [activity, reset]);
@@ -257,6 +257,7 @@ const ActivityForm = ({
 												onValueChange={(values) =>
 													field.onChange(values)
 												}
+												maxCount={1}
 											/>
 										</FormControl>
 										<FormDescription>

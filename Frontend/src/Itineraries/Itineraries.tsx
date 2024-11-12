@@ -115,7 +115,7 @@ export default function Itineraries() {
 								options:
 									tags?.map((tag) => ({
 										label: tag.name,
-										value: tag._id,
+										value: tag._id!,
 									})) || [],
 							},
 							date: {
