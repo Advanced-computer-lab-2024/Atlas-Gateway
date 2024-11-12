@@ -26,6 +26,7 @@ export interface ITourist extends Document {
 	bookedActivities: Types.ObjectId[];
 	bookedTransportations: Types.ObjectId[];
 	bookedFlights: Types.ObjectId[];
+	bookedHotelOffers: Types.ObjectId[];
 	purchaseProducts: Types.ObjectId[];
 	isDeleted?: boolean;
 	preferredTags?: Types.ObjectId[];
@@ -87,6 +88,9 @@ const touristSchema = new Schema<ITourist>(
 		],
 		bookedFlights: [{ type: Schema.Types.ObjectId, ref: "Flight" }],
 		purchaseProducts: [{ type: Schema.Types.ObjectId, ref: "Product" }],
+		bookedHotelOffers: [
+			{ type: Schema.Types.ObjectId, ref: "HotelBooking" },
+		],
 		isDeleted: { type: Boolean, default: false },
 		preferredTags: [
 			{ type: Schema.Types.ObjectId, ref: "Tag", required: true },

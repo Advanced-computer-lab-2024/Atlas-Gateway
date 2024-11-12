@@ -1,28 +1,26 @@
 import { Document, Schema, Types, model } from "mongoose";
 
-
-
 import { schemaConfig } from "../../Config/schemaConfig";
 
-
 export interface IHotelBooking extends Document {
-	touristID: Types.ObjectId;
 	hotel: {
-		type: string;
 		hotelId: string;
 		chainCode: string;
 		name: string;
 		cityCode: string;
-		latitude: number;
-		longitude: number;
 	};
 	offer: {
-		checkInDate: Date;
-		checkOutDate: Date;
+		id: string;
+		checkInDate: string;
+		checkOutDate: string;
+		rateCode: string;
+		rateFamilyEstimated: {
+			code: string;
+			type: string;
+		};
 		room: {
 			type: string;
 			typeEstimated: {
-				category: string;
 				beds: number;
 				bedType: string;
 			};
@@ -31,75 +29,70 @@ export interface IHotelBooking extends Document {
 				lang: string;
 			};
 		};
-		guests: number;
+		guests: {
+			adults: number;
+		};
 		price: {
 			currency: string;
 			base: string;
 			total: string;
+			variations: {
+				average: {
+					base: string;
+				};
+				changes: [
+					{
+						startDate: string;
+						endDate: string;
+						base: string;
+					},
+				];
+			};
 		};
 		policies: {
-			cancellations: {
-				description: {
-					text: string;
-				};
-				type: string;
-			}[];
+			cancellations: [
+				{
+					deadline: string;
+					amount: string;
+				},
+			];
 			paymentType: string;
 		};
-	}[];
+		self: string;
+	};
 }
 
 const HotelBookingSchema = new Schema<IHotelBooking>(
 	{
-		touristID: {
-			type: Schema.Types.ObjectId,
-			required: true,
-			ref: "Tourist",
-		},
 		hotel: {
-			type: { type: String, required: true },
-			hotelId: { type: String, required: true },
-			chainCode: { type: String, required: true },
-			name: { type: String, required: true },
-			cityCode: { type: String, required: true },
-			latitude: { type: Number, required: true },
-			longitude: { type: Number, required: true },
+			hotelId: { type: String, required: false },
+			chainCode: { type: String, required: false },
+			name: { type: String, required: false },
+			cityCode: { type: String, required: false },
 		},
-		offer: [
-			{
-				checkInDate: { type: String, required: true },
-				checkOutDate: { type: String, required: true },
-				room: {
-					type: { type: String, required: true },
-					typeEstimated: {
-						category: { type: String, required: true },
-						beds: { type: Number, required: true },
-						bedType: { type: String, required: true },
-					},
-					description: {
-						text: { type: String, required: true },
-						lang: { type: String, required: true },
-					},
+		offer: {
+			checkInDate: { type: String, required: false },
+			checkOutDate: { type: String, required: false },
+			room: {
+				type: { type: String, required: false },
+				typeEstimated: {
+					beds: { type: Number, required: false },
+					bedType: { type: String, required: false },
 				},
-				guests: { type: Number, required: true },
-				price: {
-					currency: { type: String, required: true },
-					base: { type: String, required: true },
-					total: { type: String, required: true },
-				},
-				policies: {
-					cancellations: [
-						{
-							description: {
-								text: { type: String, required: true },
-							},
-							type: { type: String, required: true },
-						},
-					],
-					paymentType: { type: String, required: true },
+				description: {
+					text: { type: String, required: false },
+					lang: { type: String, required: false },
 				},
 			},
-		],
+			guests: {
+				adults: { type: Number, required: false },
+			},
+			price: {
+				currency: { type: String, required: false },
+				base: { type: String, required: false },
+				total: { type: String, required: false },
+			},
+		},
 	},
 	schemaConfig,
 );

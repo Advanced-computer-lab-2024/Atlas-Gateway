@@ -98,7 +98,6 @@ export const viewActivities = async (id: string) => {
 	return activities.activities;
 };
 
-
 /*"an account will be deleted only
  if no events or activities or itenararies are upcoming 
  and have bookings that are paid for.

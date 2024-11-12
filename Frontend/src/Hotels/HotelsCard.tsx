@@ -16,7 +16,7 @@ const HotelsCard = ({
 	openEditDrawer,
 }: {
 	hotel: THotel;
-	openEditDrawer: (hotel: string) => void;
+	openEditDrawer: (hotel: THotel) => void;
 }) => {
 	return (
 		<Card className="w-full h-[280px] flex gap-2 flex-col border-black border-2 font-bold text-xl">
@@ -31,7 +31,7 @@ const HotelsCard = ({
 							<DropdownMenuItem
 								className="flex gap-2 cursor-pointer"
 								onClick={() => {
-									openEditDrawer(hotel.hotelId);
+									openEditDrawer(hotel);
 								}}
 							>
 								<Eye />

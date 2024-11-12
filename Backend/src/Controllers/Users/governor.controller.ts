@@ -1,10 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
-
-
 import HttpError from "../../Errors/HttpError";
 import * as governorService from "../../Services/Users/governor.service";
-
 
 export const createGovernor = async (
 	req: Request,
@@ -45,7 +42,6 @@ export const getGovernors = async (
 	}
 };
 
-
 export const getGovernor = async (
 	req: Request,
 	res: Response,
@@ -70,7 +66,7 @@ export const getGovernor = async (
 	}
 };
 
-// update governer 
+// update governer
 export const updateGovernor = async (
 	req: Request,
 	res: Response,

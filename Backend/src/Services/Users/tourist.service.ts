@@ -49,6 +49,7 @@ export const getTouristById = async (id: string) => {
 		"purchaseProducts",
 		"preferredTags",
 		"bookedFlights",
+		"bookedHotelOffers",
 	]);
 
 	return tourist;
@@ -193,6 +194,32 @@ export const addBookedTransportation = async (
 	await tourist.updateOne(
 		{
 			$push: { bookedTransportations: transportationId },
+		},
+		{ new: true },
+	);
+
+	return tourist;
+};
+
+export const addBookedHotelOffer = async (
+	touristId: string,
+	hotelOfferId: string,
+) => {
+	if (!Types.ObjectId.isValid(hotelOfferId)) {
+		throw new HttpError(400, "Hotel Offer id is not valid");
+	}
+
+	const tourist = await getTouristById(touristId);
+	if (!tourist) {
+		throw new HttpError(404, "Tourist not found");
+	}
+	if (!isOlderThan18(tourist.dob)) {
+		throw new HttpError(400, "Tourist must be older than 18");
+	}
+
+	await tourist.updateOne(
+		{
+			$push: { bookedHotelOffers: hotelOfferId },
 		},
 		{ new: true },
 	);

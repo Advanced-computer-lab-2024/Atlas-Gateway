@@ -1,14 +1,14 @@
 import express from "express";
 
 import {
-    createTransportation,
-    getTransportation,
-    getTransportationByUserId,
-    getTransportations,
-    updateTransportationById,
-    deleteTransportation,
-    bookTransportationById,
-    cancelBookingTransportationById,
+	bookTransportationById,
+	cancelBookingTransportationById,
+	createTransportation,
+	deleteTransportation,
+	getTransportation,
+	getTransportationByUserId,
+	getTransportations,
+	updateTransportationById,
 } from "../../Controllers/Travel/transportation.controller";
 
 const router = express.Router();

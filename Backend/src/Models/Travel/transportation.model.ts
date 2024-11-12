@@ -1,9 +1,6 @@
 import { Document, Schema, Types, model } from "mongoose";
 
-
-
 import { schemaConfig } from "../../Config/schemaConfig";
-
 
 export interface ITransportation extends Document {
 	name: string;

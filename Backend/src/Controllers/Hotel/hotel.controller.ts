@@ -12,9 +12,21 @@ export const getHotelsByCity = async (
 ) => {
 	try {
 		const { cityCode } = req.params;
-		const hotels = await hotelService.getHotelsByCity(cityCode);
+		const { search } = req.query as { search: string };
+		const hotels = await hotelService // horrible
+			.getHotelsByCity(cityCode)
+			.then((data) =>
+				search
+					? data.filter((hotel: any) => {
+							return hotel.name
+								.toLowerCase()
+								.includes(search.toLowerCase());
+						})
+					: data,
+			);
+
 		if (!hotels) {
-			throw new HttpError(404, "No hotels found for the given city");
+			res.status(200).json(hotels);
 		}
 		res.status(200).json(hotels);
 	} catch (error) {
@@ -42,43 +54,6 @@ export const showHotelDetails = async (
 	}
 };
 
-export const searchHotelOffersController = async (
-	req: Request,
-	res: Response,
-	next: NextFunction,
-) => {
-	try {
-		const { cityCode, checkInDate, checkOutDate, adults, page } = req.body;
-
-		if (!cityCode || !checkInDate || !checkOutDate || !adults) {
-			return res
-				.status(400)
-				.json({ error: "Missing required parameters" });
-		}
-
-		const adultsNumber = parseInt(adults as string, 10);
-		if (isNaN(adults) || adultsNumber <= 0) {
-			return res.status(400).json({ error: "Invalid number of adults" });
-		}
-
-		const pageNumber = page ? parseInt(page as string, 10) : 1;
-		if (isNaN(pageNumber) || pageNumber <= 0) {
-			return res.status(400).json({ error: "Invalid page number" });
-		}
-
-		const offers = await hotelService.searchHotelOffers({
-			cityCode: cityCode as string,
-			checkInDate: checkInDate as string,
-			checkOutDate: checkOutDate as string,
-			adults: adults,
-			page: pageNumber,
-		});
-
-		return res.status(200).json(offers);
-	} catch (error) {
-		next(error);
-	}
-};
 export const bookHotelroom = async (
 	req: Request,
 	res: Response,

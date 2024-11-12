@@ -2,6 +2,7 @@ import { IFlight } from "../../../Backend/src/Models/Flight/flight.model";
 import { Currency } from "./consts";
 import { EAccountType } from "./enums";
 
+
 export type TUser = {
 	_id: string;
 	username: string;
@@ -108,6 +109,7 @@ export interface TTourist extends TUser {
 	bookedTransportations: TTransportation[];
 	bookedFlights: IFlight[]; // will be changed later
 	preferredTags: TTag[];
+	bookedHotelOffers: IHotelBooking[];
 }
 
 export interface TTouristApi extends TUser {
@@ -251,6 +253,98 @@ export interface THotel {
 	lastUpdate: string;
 }
 
+export interface THotelRating {
+	type: string;
+	numberOfReviews: number;
+	numberOfRatings: number;
+	hotelId: string;
+	overallRating: number;
+	sentiments: {
+		sleepQuality: number;
+		service: number;
+		facilities: number;
+		roomComforts: number;
+		valueForMoney: number;
+		catering: number;
+		location: number;
+		pointsOfInterest: number;
+		staff: number;
+	};
+}
+
+export interface THotelOffer {
+	id: string;
+	checkInDate: string;
+	checkOutDate: string;
+	rateCode: string;
+	rateFamilyEstimated: {
+		code: string;
+		type: string;
+	};
+	room: {
+		type: string;
+		typeEstimated: {
+			beds: number;
+			bedType: string;
+		};
+		description: {
+			text: string;
+			lang: string;
+		};
+	};
+	guests: {
+		adults: number;
+	};
+	price: {
+		currency: string;
+		base: string;
+		total: string;
+		variations: {
+			average: {
+				base: string;
+			};
+			changes: [
+				{
+					startDate: string;
+					endDate: string;
+					base: string;
+				},
+			];
+		};
+	};
+	policies: {
+		cancellations: [
+			{
+				deadline: string;
+				amount: string;
+			},
+		];
+		paymentType: string;
+	};
+	self: string;
+}
+
+export interface THotelOffers {
+	data: [
+		{
+			type: string;
+			hotel: {
+				type: string;
+				hotelId: string;
+				chainCode: string;
+				dupeId: string;
+				name: string;
+				cityCode: string;
+				latitude: number;
+				longitude: number;
+			};
+			available: boolean;
+			offers: THotelOffer[];
+			self: string;
+		},
+	];
+}
+
 export interface TReview {
 	_id: string;
 	tourist: TTourist;
@@ -270,4 +364,15 @@ export interface TTransportation {
 	dropOffTime: string;
 	numberOfBookings: number;
 	tourists: Types.ObjectId[];
+}
+
+export interface IHotelBooking {
+	touristID: Types.ObjectId;
+	hotel: {
+		hotelId: string;
+		chainCode: string;
+		name: string;
+		cityCode: string;
+	};
+	offer: THotelOffer;
 }

@@ -1,6 +1,8 @@
-import { formatDate } from "date-fns";
-
-import { useHotelDetails } from "@/api/data/useHotels";
+import {
+	useBookhotel,
+	useHotelOffers,
+	useHotelRatings,
+} from "@/api/data/useHotels";
 import Label from "@/components/ui/Label";
 import { Flex } from "@/components/ui/flex";
 import Rating, { ERatingType } from "@/components/ui/rating";
@@ -11,73 +13,94 @@ import {
 	SheetHeader,
 	SheetTitle,
 } from "@/components/ui/sheet";
+import { useLoginStore } from "@/store/loginStore";
+import { THotel, THotelOffer } from "@/types/global";
+
+import BookingCard from "./BookingCard";
 
 export default function HotelDetailsSheet({
 	open,
-	setOpen,
-	id,
+	hotel,
+	cityCode,
+	handleClose,
 }: {
 	open: boolean;
-	setOpen: (open: boolean) => void;
-	id: string | null;
+	hotel: THotel | null;
+	cityCode: string;
+	handleClose: () => void;
 }) {
-	const { data } = useHotelDetails(id);
+	const { user } = useLoginStore();
+	const { data: offers } = useHotelOffers(hotel?.hotelId || null);
+	const { data: rating } = useHotelRatings(hotel?.hotelId || null);
+
+	const { doBookHotel } = useBookhotel(() => {});
+
+	const onBookOffer = (offer: THotelOffer) => {
+		doBookHotel({
+			touristID: user?._id || "",
+			hotel: {
+				hotelId: hotel?.hotelId || "",
+				chainCode: hotel?.chainCode || "",
+				cityCode: cityCode || "",
+				name: hotel?.name || "",
+			},
+			offer,
+		});
+	};
 
 	return (
-		<Sheet open={open} onOpenChange={setOpen}>
-			<SheetContent>
+		<Sheet
+			open={open}
+			onOpenChange={() => {
+				handleClose();
+			}}
+		>
+			<SheetContent className="sm:max-w-[700px] flex gap-5 flex-col">
 				<SheetHeader>
 					<SheetTitle>Hotel Details</SheetTitle>
-					<SheetDescription>{data?.name}</SheetDescription>
+					<SheetDescription>{hotel?.name}</SheetDescription>
 				</SheetHeader>
 				<Flex isColumn gap="4">
-					{/* <Flex isColumn gap="2" align="start">
-						<Label.Thin300>Language</Label.Thin300>
-						<Label.Mid500>{itinerary.language}</Label.Mid500>
+					{rating?.numberOfRatings ? (
+						<>
+							<Flex justify="between">
+								<Flex isColumn gap="2" align="start">
+									<Label.Thin300>
+										Number of ratings
+									</Label.Thin300>
+									<Label.Mid500>
+										{rating?.numberOfRatings}
+									</Label.Mid500>
+								</Flex>
+								<Flex isColumn gap="2" align="start">
+									<Label.Thin300>Availability</Label.Thin300>
+									<Label.Mid500>
+										{rating?.numberOfReviews}
+									</Label.Mid500>
+								</Flex>
+							</Flex>
+							<Flex isColumn gap="2" align="start">
+								<Label.Thin300>Rating</Label.Thin300>
+								<Rating
+									value={(rating?.overallRating || 1) / 100}
+									ratingType={ERatingType.DETAILS}
+								/>
+							</Flex>{" "}
+						</>
+					) : null}
+					<Flex isColumn gap="2" className="overflow-y-scroll">
+						{offers?.[0].offers.map((offer) => (
+							<BookingCard
+								key={offer.id}
+								offer={offer}
+								onBookOffer={onBookOffer}
+							/>
+						)) || (
+							<Label.Mid500>
+								No offers available for this hotel
+							</Label.Mid500>
+						)}
 					</Flex>
-					<Flex isColumn gap="2" align="start">
-						<Label.Thin300>Availability</Label.Thin300>
-						<Label.Mid500>{itinerary.availability}</Label.Mid500>
-					</Flex>
-					<Flex isColumn gap="2" align="start">
-						<Label.Thin300>Rating</Label.Thin300>
-						<Rating
-							value={itinerary.avgRating}
-							ratingType={ERatingType.DETAILS}
-						/>
-					</Flex>
-					<Flex isColumn gap="2" align="start">
-						<Label.Thin300>Start Date</Label.Thin300>
-						<Label.Mid500>
-							{formatDate(
-								new Date(itinerary.startDateTime || "0"),
-								"dd/MM/yyyy HH:mm:ss a",
-							)}
-						</Label.Mid500>
-					</Flex>
-					<Flex isColumn gap="2" align="start">
-						<Label.Thin300>Ebd Date</Label.Thin300>
-						<Label.Mid500>
-							{formatDate(
-								new Date(itinerary.endDateTime || "0"),
-								"dd/MM/yyyy HH:mm:ss a",
-							)}
-						</Label.Mid500>
-					</Flex>
-					<Flex isColumn gap="2" align="start">
-						<Label.Thin300>Number of bookings</Label.Thin300>
-						<Label.Mid500>
-							{itinerary.numberOfBookings}
-						</Label.Mid500>
-					</Flex>
-					<Flex isColumn gap="2" align="start">
-						<Label.Thin300>Pickup location</Label.Thin300>
-						<Label.Mid500>{itinerary.pickUpLocation}</Label.Mid500>
-					</Flex>
-					<Flex isColumn gap="2" align="start">
-						<Label.Thin300>Timeline</Label.Thin300>
-						<Label.Mid500>{itinerary.timeline}</Label.Mid500>
-					</Flex> */}
 				</Flex>
 			</SheetContent>
 		</Sheet>

@@ -1,14 +1,14 @@
 import { Types } from "mongoose";
 
-
-
 import HttpError from "../../Errors/HttpError";
 import { Transportation } from "../../Models/Travel/transportation.model";
-import { ITransportationAdvertiser, TransportationAdvertiser } from "../../Models/Users/transportation_advertiser.model";
+import {
+	ITransportationAdvertiser,
+	TransportationAdvertiser,
+} from "../../Models/Users/transportation_advertiser.model";
 import { hashPassword } from "../Auth/password.service";
 import uniqueUsername from "../Auth/username.service";
 import * as adminService from "./admin.service";
-
 
 export const createTransportationAdvertiser = async (
 	username: string,
@@ -99,7 +99,10 @@ export const addTransportation = async (
 ) => {
 	try {
 		if (!Types.ObjectId.isValid(TransportationAdvertiserId)) {
-			throw new HttpError(400, "Transportation Advertiser id is not valid");
+			throw new HttpError(
+				400,
+				"Transportation Advertiser id is not valid",
+			);
 		}
 
 		const transportation_advertiser =
@@ -142,7 +145,8 @@ export const removeTransportation = async (
 			);
 		}
 
-		const transportation_advertiser = await TransportationAdvertiser.findById(TransportationAdvertiserId);
+		const transportation_advertiser =
+			await TransportationAdvertiser.findById(TransportationAdvertiserId);
 		if (!transportation_advertiser) {
 			throw new HttpError(404, "Transportation Advertiser not found");
 		}

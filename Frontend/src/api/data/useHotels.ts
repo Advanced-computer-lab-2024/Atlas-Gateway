@@ -1,30 +1,47 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-import { useLoginStore } from "@/store/loginStore";
-import { THotel } from "@/types/global";
 
-import { IHotelBooking } from "../../../../Backend/src/Models/Hotel/hotel.model";
-import { apiBookHotels, apiListHotels, apiShowHotel } from "../service/hotels";
+
+import { useAmadeusToken } from "@/Hotels/AmadeusContext";
+import { useLoginStore } from "@/store/loginStore";
+import { IHotelBooking, THotel } from "@/types/global";
+
+
+
+import { apiBookHotels, apiListHotels, apiShowHotelOffers, apiShowHotelRatings } from "../service/hotels";
 import { useQueryString } from "./useQueryString";
+
 
 export function useHotels(cityCode: string) {
 	const [query] = useQueryString();
 
 	const { data, refetch } = useQuery({
-		queryFn: () => apiListHotels(cityCode),
+		queryFn: () => apiListHotels(cityCode, query),
 		queryKey: ["hotels", cityCode, query],
 		enabled: !!cityCode,
 	});
 	return { data: data?.data as THotel[], refetch };
 }
 
-export function useHotelDetails(iataCode: string | null) {
+export function useHotelRatings(id: string | null) {
+	const token = useAmadeusToken();
 	const { data, refetch } = useQuery({
-		queryFn: () => apiShowHotel(iataCode),
-		queryKey: ["hotel", iataCode],
-		enabled: !!iataCode,
+		queryFn: () => apiShowHotelRatings(id, token),
+		queryKey: ["hotel-rating", id],
+		enabled: !!id && !!token,
 	});
-	return { data: data?.data as THotel, refetch };
+	return { data: data?.data, refetch };
+}
+
+export function useHotelOffers(id: string | null) {
+	const [query] = useQueryString();
+	const token = useAmadeusToken();
+	const { data, refetch } = useQuery({
+		queryFn: () => apiShowHotelOffers(id, token, query),
+		queryKey: ["hotel", id],
+		enabled: !!id && !!token,
+	});
+	return { data: data?.data.data, refetch };
 }
 
 export function useBookhotel(onSuccess: () => void) {
