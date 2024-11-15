@@ -80,7 +80,8 @@ export default function ProductCard({
 	}, [imagePath]);
 
 	const isAdminOrCreator =
-		user?.type === sellerId || user?.type === EAccountType.Admin;
+		(user?.type === EAccountType.Seller && sellerId == user._id) ||
+		user?.type === EAccountType.Admin;
 
 	return (
 		<Card
