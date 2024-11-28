@@ -18,6 +18,7 @@ export interface IAdvertiser extends Document {
 	isVerified: boolean;
 	acceptedTerms: boolean;
 	isDeleted: boolean;
+	notifications: Types.ObjectId[];
 }
 
 const advertiserSchema = new Schema<IAdvertiser>(
@@ -43,6 +44,7 @@ const advertiserSchema = new Schema<IAdvertiser>(
 		// },
 		acceptedTerms: { type: Boolean, default: false },
 		isDeleted: { type: Boolean, default: false },
+		notifications: [{ type: Schema.Types.ObjectId, ref: "Notification" }],
 	},
 	schemaConfig,
 );

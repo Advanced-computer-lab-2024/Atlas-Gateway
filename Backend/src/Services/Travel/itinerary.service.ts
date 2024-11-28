@@ -1,9 +1,11 @@
-import { IBooking } from "@/Models/Purchases/booking.model";
-import { Tourist } from "@/Models/Users/tourist.model";
 import mongoose, { PipelineStage, Types } from "mongoose";
 
 import HttpError from "../../Errors/HttpError";
+import { Notification } from "../../Models/Interactions/notification.model";
+import { IBooking } from "../../Models/Purchases/booking.model";
 import { IItinerary, Itinerary } from "../../Models/Travel/itinerary.model";
+import { Tourist } from "../../Models/Users/tourist.model";
+import * as notificationService from "../../Services/Interactions/notification.service";
 import AggregateBuilder from "../Operations/aggregation.service";
 import { confirmPayment } from "../Payment/payment.service";
 import { cancelItinerary } from "../Users/tourist.service";
@@ -431,6 +433,21 @@ export const flagItinerary = async (itineraryId: string) => {
 		{ isAppropriate: false },
 		{ new: true },
 	);
+
+	if (!itineraryFlagged) throw new HttpError(401, "Itinerary not flagged");
+
+	const tourGuideId = itineraryFlagged?.createdBy;
+
+	const tourGuide = await tourGuideService.getTourGuideById(
+		tourGuideId.toString(),
+	);
+
+	if (!tourGuide) throw new HttpError(404, "TourGuide not found");
+
+	await tourGuide.save();
+
+	await itineraryFlagged.save();
+
 	return itineraryFlagged;
 };
 

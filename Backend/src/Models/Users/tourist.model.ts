@@ -52,6 +52,7 @@ export interface ITourist extends Document {
 			event: Types.ObjectId;
 		},
 	];
+	notifications: Types.ObjectId[];
 }
 
 const touristSchema = new Schema<ITourist>(
@@ -138,6 +139,7 @@ const touristSchema = new Schema<ITourist>(
 				quantity: { type: Number, required: true },
 			},
 		],
+		notifications: [{ type: Schema.Types.ObjectId, ref: "Notification" }],
 	},
 	schemaConfig,
 );

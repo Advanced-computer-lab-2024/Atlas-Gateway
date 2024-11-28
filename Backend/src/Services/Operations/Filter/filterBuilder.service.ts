@@ -237,3 +237,17 @@ export function filterByComplaintStatus(query: any): PipelineStage[] {
 
 	return pipeline;
 }
+
+export function filterByNotificationReadStatus(query: any): PipelineStage[]{
+	const pipeline: PipelineStage[] = [];
+
+	if (query.read) {
+		pipeline.push({
+			$match: {
+				read: query.read,
+			},
+		});
+	}
+
+	return pipeline;
+}
