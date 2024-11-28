@@ -11,6 +11,7 @@ import flightRouter from "./Routes/Flight/flight.route";
 import hotelRouter from "./Routes/Hotel/hotel.route";
 import complaintRouter from "./Routes/Interactions/complaint.route";
 import reviewRouter from "./Routes/Interactions/review.route";
+import notificationRouter from "./Routes/Interactions/notification.route";
 import mediaRouter from "./Routes/Media/media.route";
 import productRouter from "./Routes/Purchases/product.route";
 import itineraryRouter from "./Routes/Travel/Itinerary.route";
@@ -63,6 +64,7 @@ async function startServer() {
 	app.use("/api/flights", flightRouter);
 	app.use("/api/hotels", hotelRouter);
 	app.use("/api/reviews", reviewRouter);
+	app.use("/api/notification", notificationRouter);
 	// Error handling middleware
 	app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 		console.error(err.stack);

@@ -30,6 +30,7 @@ export interface ITourist extends Document {
 	purchaseProducts: Types.ObjectId[];
 	isDeleted?: boolean;
 	preferredTags?: Types.ObjectId[];
+	notifications: Types.ObjectId[];
 }
 
 const touristSchema = new Schema<ITourist>(
@@ -95,6 +96,7 @@ const touristSchema = new Schema<ITourist>(
 		preferredTags: [
 			{ type: Schema.Types.ObjectId, ref: "Tag", required: true },
 		],
+		notifications: [{ type: Schema.Types.ObjectId, ref: "Notification" }],
 	},
 	schemaConfig,
 );

@@ -36,7 +36,7 @@ export const upload = async (
 								certificatePath: filePath,
 							};
 		const params = {
-			Bucket: process.env.AWS_BUCKET_NAME!,
+			Bucket: process.env.AWS_BUCKET_NAME ?? "atlasgateway",
 			Key: filePath,
 			Body: file?.buffer,
 			contentType: file?.mimetype,
@@ -69,7 +69,7 @@ export const upload = async (
 export const download = async (filePath: string) => {
 	try {
 		const command = new GetObjectCommand({
-			Bucket: process.env.AWS_BUCKET_NAME!,
+			Bucket: process.env.AWS_BUCKET_NAME ?? "atlasgateway",
 			Key: `${filePath}`,
 		});
 		console.log(filePath);
