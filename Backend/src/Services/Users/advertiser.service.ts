@@ -118,3 +118,7 @@ export const softDeleteAdvertiser = async (id: string) => {
 
 	return advertiser;
 };
+
+export const salesReport = async (query: any) => {};
+
+export const bookingsReport = async (month: Date) => {};

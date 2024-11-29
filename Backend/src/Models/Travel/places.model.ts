@@ -1,6 +1,7 @@
 import { Document, Schema, Types, model } from "mongoose";
 
 import { schemaConfig } from "../../Config/schemaConfig";
+import { ITag } from "./tag.model";
 
 export interface IPlaces extends Document {
 	//description, pictures, location, opening hours, ticket prices
@@ -51,7 +52,7 @@ export interface IPlaces extends Document {
 		native: number;
 		student: number;
 	};
-	tags: Types.ObjectId[];
+	tags: Types.ObjectId[] | ITag[];
 }
 
 const placesSchema = new Schema<IPlaces>(

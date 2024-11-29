@@ -1,6 +1,13 @@
 import { Document, Schema, Types, model } from "mongoose";
 
 import { schemaConfig } from "../../Config/schemaConfig";
+import { IFlight } from "../Flight/flight.model";
+import { IHotelBooking } from "../Hotel/hotel.model";
+import { IProduct } from "../Purchases/product.model";
+import { IActivity } from "../Travel/activity.model";
+import { IItinerary } from "../Travel/itinerary.model";
+import { ITag } from "../Travel/tag.model";
+import { ITransportation } from "../Travel/transportation.model";
 
 export interface ITourist extends Document {
 	name: string;
@@ -22,16 +29,16 @@ export interface ITourist extends Document {
 		location?: string;
 		image?: string;
 	};
-	bookedItineraries: Types.ObjectId[];
-	bookedActivities: Types.ObjectId[];
-	bookedTransportations: Types.ObjectId[];
-	bookedFlights: Types.ObjectId[];
-	bookedHotelOffers: Types.ObjectId[];
+	bookedItineraries: Types.ObjectId[] | IItinerary[];
+	bookedActivities: Types.ObjectId[] | IActivity[];
+	bookedTransportations: Types.ObjectId[] | ITransportation[];
+	bookedFlights: Types.ObjectId[] | IFlight[];
+	bookedHotelOffers: Types.ObjectId[] | IHotelBooking[];
 	canceledItineraries: Types.ObjectId[];
 	canceledActivities: Types.ObjectId[];
-	purchaseProducts: Types.ObjectId[];
+	purchaseProducts: Types.ObjectId[] | IProduct[];
 	isDeleted?: boolean;
-	preferredTags?: Types.ObjectId[];
+	preferredTags?: Types.ObjectId[] | ITag[];
 }
 
 const touristSchema = new Schema<ITourist>(

@@ -45,3 +45,5 @@ export const deleteAdmin = async (id: string) => {
 	}
 	return admin;
 };
+
+export const salesReport = async () => {};

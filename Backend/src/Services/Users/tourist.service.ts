@@ -3,12 +3,10 @@ import { Types, now } from "mongoose";
 import HttpError from "../../Errors/HttpError";
 import { Activity } from "../../Models/Travel/activity.model";
 import { IItinerary, Itinerary } from "../../Models/Travel/itinerary.model";
+import { ITransportation } from "../../Models/Travel/transportation.model";
 import { ITourist, Tourist } from "../../Models/Users/tourist.model";
 import { hashPassword } from "../Auth/password.service";
 import uniqueUsername from "../Auth/username.service";
-import * as activityService from "../Travel/activity.service";
-import * as itineraryService from "../Travel/itinerary.service";
-import * as transportationService from "../Travel/transportation.service";
 
 export const createTourist = async (
 	username: string,
@@ -289,7 +287,11 @@ export const cancelActivity = async (
 	if (!tourist) {
 		throw new HttpError(404, "Tourist not found");
 	}
-	if (!tourist.bookedActivities.includes(new Types.ObjectId(activityId))) {
+	if (
+		!(tourist.bookedActivities as Types.ObjectId[]).includes(
+			new Types.ObjectId(activityId),
+		)
+	) {
 		throw new HttpError(404, "Activity not found in the tourist's list");
 	}
 	const newLoyaltyPoints =
@@ -329,11 +331,13 @@ export const cancelTransportation = async (
 		throw new HttpError(404, "Tourist not found");
 	}
 
-	if (
-		!tourist.bookedTransportations.includes(
-			new Types.ObjectId(transportationId),
-		)
-	) {
+	const transportation = (
+		tourist.bookedTransportations as ITransportation[]
+	).some((transportation: Partial<ITransportation>) => {
+		return transportation.id.equals(transportationId);
+	});
+
+	if (!transportation) {
 		throw new HttpError(
 			404,
 			"Transportation not found in the tourist's list",

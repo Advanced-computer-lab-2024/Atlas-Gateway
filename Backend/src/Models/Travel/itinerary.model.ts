@@ -1,6 +1,9 @@
 import { Document, Schema, Types, model } from "mongoose";
 
 import { schemaConfig } from "../../Config/schemaConfig";
+import { IBooking } from "../Purchases/booking.model";
+import { ITourist } from "../Users/tourist.model";
+import { ITag } from "./tag.model";
 
 export interface IItinerary extends Document {
 	title: string;
@@ -19,16 +22,18 @@ export interface IItinerary extends Document {
 		dateTime: string;
 		durationM: number;
 	}[];
-	tags: Types.ObjectId[];
+	tags: Types.ObjectId[] | ITag[];
 	createdBy: Types.ObjectId;
 	numberOfBookings: number;
 	avgRating: number;
 	totalNumberOfRatings: number;
 	accessibility: string;
 	timeline: string;
-	tourists: Types.ObjectId[];
+	tourists: Types.ObjectId[] | ITourist[];
 	isDeleted: boolean;
 	notificationRequested: Types.ObjectId[];
+
+	bookings?: Types.ObjectId[] | IBooking[];
 }
 
 const itinerarySchema = new Schema<IItinerary>(
@@ -63,6 +68,8 @@ const itinerarySchema = new Schema<IItinerary>(
 		notificationRequested: [
 			{ type: Schema.Types.ObjectId, ref: "Tourist" },
 		],
+
+		bookings: [{ type: Schema.Types.ObjectId, ref: "Booking" }],
 	},
 	schemaConfig,
 );

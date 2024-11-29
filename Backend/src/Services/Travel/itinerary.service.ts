@@ -1,3 +1,4 @@
+import { IBooking } from "@/Models/Purchases/booking.model";
 import { Tourist } from "@/Models/Users/tourist.model";
 import mongoose, { PipelineStage, Types } from "mongoose";
 
@@ -5,6 +6,7 @@ import HttpError from "../../Errors/HttpError";
 import { IItinerary, Itinerary } from "../../Models/Travel/itinerary.model";
 import AggregateBuilder from "../Operations/aggregation.service";
 import { cancelItinerary } from "../Users/tourist.service";
+import * as bookingService from "./../Purchases/booking.service";
 import * as tourGuideService from "./../Users/tourGuide.service";
 import * as touristService from "./../Users/tourist.service";
 
@@ -186,12 +188,12 @@ export const deleteItinerary = async (id: string) => {
 		if (!tourGuide) {
 			throw new HttpError(404, "Tour Guide not found");
 		}
-
-		//Remove the itinerary ID from the tour guide's itineraries array
-		tourGuide.itinerary = tourGuide.itinerary.filter(
-			(itineraryId) => !itineraryId.equals(id),
+		await tourGuide.updateOne(
+			{
+				$pull: { itinerary: id },
+			},
+			{ session },
 		);
-		await tourGuide.updateOne({ session });
 		// Delete the itinerary
 		await itinerary.deleteOne({ session });
 
@@ -218,6 +220,12 @@ export const bookItinerary = async (itineraryId: string, touristId: string) => {
 	if (itinerary.startDateTime < new Date()) {
 		throw new HttpError(500, "Cannot book past itineraries");
 	}
+
+	const booking = await bookingService.createBooking(
+		touristId,
+		itinerary.price,
+		{ itineraryId },
+	);
 	const tourist = await touristService.addBookedItinerary(
 		touristId,
 		itineraryId,
@@ -229,7 +237,10 @@ export const bookItinerary = async (itineraryId: string, touristId: string) => {
 	}
 
 	await itinerary.updateOne({
-		$push: { tourists: touristId },
+		$push: {
+			tourists: touristId,
+			bookings: booking.id,
+		},
 		$inc: { numberOfBookings: 1 },
 	});
 
@@ -254,12 +265,29 @@ export const cancelBookingItinerary = async (
 		throw new HttpError(400, "Cannot cancel within 48 hours of itinerary.");
 	}
 
-	if (!itinerary.tourists.includes(new Types.ObjectId(touristId))) {
+	if (
+		!(itinerary.tourists as Types.ObjectId[]).includes(
+			new Types.ObjectId(touristId),
+		)
+	) {
 		throw new HttpError(404, "Tourist not found in itinerary's list");
 	}
 
+	itinerary.populate("bookings");
+
+	const booking = (itinerary.bookings as IBooking[]).find(
+		(booking: IBooking) => booking.touristId.toString() === touristId,
+	);
+
+	if (!booking) {
+		throw new HttpError(404, "Booking not found");
+	}
+
 	const removed = await itinerary.updateOne({
-		$pull: { tourists: touristId },
+		$pull: {
+			tourists: touristId,
+			bookings: booking.id,
+		},
 		$inc: { numberOfBookings: -1 },
 	});
 
@@ -306,7 +334,7 @@ export const flagItinerary = async (itineraryId: string) => {
 	tourists.forEach(async (tourist) => {
 		await cancelBookingItinerary(
 			itineraryId,
-			tourist._id.toString(),
+			tourist.id.toString(),
 			"admin",
 		);
 	});

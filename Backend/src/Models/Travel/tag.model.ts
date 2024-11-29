@@ -2,7 +2,7 @@ import { Document, ObjectId, Schema, Types, model } from "mongoose";
 
 import { schemaConfig } from "../../Config/schemaConfig";
 
-interface ITag extends Document {
+export interface ITag extends Document {
 	name: string;
 	//description: string;
 	type: string;

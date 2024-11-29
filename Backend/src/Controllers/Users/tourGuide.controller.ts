@@ -116,3 +116,31 @@ export const softDeleteTourGuide = async (
 		next(error);
 	}
 };
+
+export const salesReport = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	try {
+		const userid = req.params.id;
+		if (!userid) {
+			throw new HttpError(400, "User Id is required");
+		}
+
+		const sales = await tourGuideService.salesReport(
+			userid,
+			req.query.id?.toString(),
+			req.query.date?.toString(),
+		);
+
+		if (!sales) {
+			throw new HttpError(404, "No Sales Found");
+		}
+		res.status(200).send({
+			sales: sales,
+		});
+	} catch (error) {
+		next(error);
+	}
+};

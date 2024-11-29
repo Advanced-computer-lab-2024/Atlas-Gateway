@@ -203,10 +203,12 @@ export const deleteActivity = async (id: string) => {
 		}
 
 		// Remove the activity ID from the advertiser's activities array
-		advertiser.activities = advertiser.activities.filter(
-			(activityId) => !activityId.equals(id),
+		await advertiser.updateOne(
+			{
+				$pull: { activities: activity.id },
+			},
+			{ session },
 		);
-		await advertiser.updateOne({ session });
 		// Delete the activity
 		await activity.deleteOne({ session });
 
@@ -297,7 +299,11 @@ export const cancelBookingActivity = async (
 	if (!activity) {
 		throw new HttpError(404, "Activity not found");
 	}
-	if (!activity.tourists.includes(new Types.ObjectId(touristId))) {
+	if (
+		!(activity.tourists as Types.ObjectId[]).includes(
+			new Types.ObjectId(touristId),
+		)
+	) {
 		throw new HttpError(404, "Tourist not found in the activity's list");
 	}
 

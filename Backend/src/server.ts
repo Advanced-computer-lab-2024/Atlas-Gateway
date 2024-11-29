@@ -23,7 +23,7 @@ import adminRouter from "./Routes/Users/admin.route";
 import advertiserRouter from "./Routes/Users/advertiser.route";
 import governorRouter from "./Routes/Users/governor.route";
 import sellerRouter from "./Routes/Users/seller.route";
-import tourGuideRouter from "./Routes/Users/tourGuide.route";
+import router from "./Routes/Users/tourGuide.route";
 import touristRouter from "./Routes/Users/tourist.route";
 import transportation_advertiserRouter from "./Routes/Users/transportation_advertiser.route";
 
@@ -47,7 +47,7 @@ async function startServer() {
 	app.use("/api/activity", activityRouter);
 	app.use("/api/advertiser", advertiserRouter);
 	app.use("/api/seller", sellerRouter);
-	app.use("/api/tourGuide", tourGuideRouter);
+	app.use("/api/tourGuide", router);
 	app.use("/api/category", categoryRouter);
 	app.use("/api/tags", tagRouter);
 	app.use("/api/tourist", touristRouter);

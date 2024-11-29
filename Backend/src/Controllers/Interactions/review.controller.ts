@@ -45,7 +45,7 @@ export const postReview = async (req: Request, res: Response) => {
 				return;
 			}
 			if (
-				!reviewedItemEntry.tourists.includes(
+				!(reviewedItemEntry.tourists as Types.ObjectId[]).includes(
 					new Types.ObjectId(userId),
 				) ||
 				reviewedItemEntry.dateTime > new Date()
@@ -92,7 +92,7 @@ export const postReview = async (req: Request, res: Response) => {
 			}
 
 			if (
-				!tourist.purchaseProducts.includes(
+				!(tourist.purchaseProducts as Types.ObjectId[]).includes(
 					new Types.ObjectId(reviewedItem),
 				)
 			) {
@@ -112,7 +112,7 @@ export const postReview = async (req: Request, res: Response) => {
 			if (
 				!(
 					reviewedItemEntry.endDateTime < new Date() &&
-					reviewedItemEntry.tourists.includes(
+					(reviewedItemEntry.tourists as Types.ObjectId[]).includes(
 						new Types.ObjectId(userId),
 					)
 				)

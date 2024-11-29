@@ -1,3 +1,5 @@
+import { IBooking } from "@/Models/Purchases/booking.model";
+import { IItinerary } from "@/Models/Travel/itinerary.model";
 import { Types } from "mongoose";
 
 import HttpError from "../../Errors/HttpError";
@@ -101,3 +103,62 @@ export const softDeleteTourGuide = async (id: string) => {
 
 	return tourGuide;
 };
+
+export const salesReport = async (
+	id: string,
+	itineraryId?: string,
+	date?: string,
+) => {
+	const tourGuide = await getTourGuideById(id);
+
+	if (!tourGuide) {
+		throw new HttpError(404, "Tour Guide not Found");
+	}
+
+	await tourGuide.populate({
+		path: "itinerary",
+		populate: { path: "bookings" },
+	});
+
+	let itineraries: IItinerary[] = tourGuide.itinerary as IItinerary[];
+
+	// if itineraryId is provided, filter the bookings by itineraryId
+	if (itineraryId) {
+		itineraries = itineraries.filter(
+			(itinerary: IItinerary) => itinerary.id == itineraryId,
+		);
+	}
+
+	// if date is provided, filter the bookings by date
+	if (date) {
+		const [startDateStr, endDateStr] = date.split(",");
+
+		// if no date is provided, set the start date the lowest possible date and the end date to today
+		let startDate =
+			new Date(startDateStr) || new Date("1970-01-01T00:00:00.000Z");
+		let endDate = endDateStr !== "null" ? new Date(endDateStr) : new Date();
+
+		if (startDate > endDate) {
+			throw new HttpError(400, "Invalid Date Range");
+		}
+		itineraries.forEach((itinerary: IItinerary) => {
+			itinerary.bookings = (itinerary.bookings as IBooking[]).filter(
+				(booking: IBooking) =>
+					booking.createdAt >= new Date(startDate) &&
+					booking.createdAt <= new Date(endDate),
+			);
+		});
+	}
+
+	let sales = 0;
+
+	itineraries.forEach((itinerary: IItinerary) => {
+		(itinerary.bookings as IBooking[]).forEach((booking: IBooking) => {
+			sales += booking.totalPrice;
+		});
+	});
+
+	return sales;
+};
+
+export const bookingsReport = async (month?: Date) => {};

@@ -1,15 +1,18 @@
 import { Document, Schema, Types, model } from "mongoose";
 
 import { schemaConfig } from "../../Config/schemaConfig";
+import { ITourist } from "../Users/tourist.model";
+import { ICategory } from "./category.model";
+import { ITag } from "./tag.model";
 
 export interface IActivity extends Document {
 	name: string;
 	description: string;
 	dateTime: Date;
 	location: string;
-	tags: Types.ObjectId[];
+	tags: Types.ObjectId[] | ITag[];
 	createdBy: Types.ObjectId;
-	categories: Types.ObjectId[];
+	categories: Types.ObjectId[] | ICategory[];
 	minPrice: number;
 	maxPrice: number;
 	specialDiscounts: number;
@@ -17,10 +20,12 @@ export interface IActivity extends Document {
 	avgRating: number;
 	totalNumberOfRatings: number;
 	numberOfBookings: number;
-	tourists: Types.ObjectId[];
+	tourists: Types.ObjectId[] | ITourist[];
 	isDeleted?: boolean;
 	isArchived?: boolean;
 	notificationRequested: Types.ObjectId[];
+
+	bookings?: Types.ObjectId[];
 }
 
 const activitySchema = new Schema<IActivity>(
@@ -82,6 +87,8 @@ const activitySchema = new Schema<IActivity>(
 		notificationRequested: [
 			{ type: Schema.Types.ObjectId, ref: "Tourist" },
 		],
+
+		bookings: [{ type: Schema.Types.ObjectId, ref: "Booking" }],
 	},
 	schemaConfig,
 );

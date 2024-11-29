@@ -104,3 +104,5 @@ export const softDeleteSeller = async (id: string) => {
 
 	return seller;
 };
+
+export const salesReport = async (query: any) => {};
