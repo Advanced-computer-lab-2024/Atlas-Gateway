@@ -66,3 +66,7 @@ export type TLoginResponse = {
 	user: TUser;
 	type: EAccountType;
 };
+export type TUserStatisticsResponse = {
+	total: number; // Total number of users
+	newTotal: number; // Number of new users last month
+  };

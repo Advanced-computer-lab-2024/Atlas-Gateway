@@ -137,6 +137,9 @@ const ENDPOINTS = {
 		book: (id: string) => `api/transportation/book/${id}`,
 		cancelBooking: (id: string) => `api/transportation/cancelBooking/${id}`,
 	},
+	userStatistics: {
+		list: "api/user-statistics/list",
+	  },
 };
 
 export default ENDPOINTS;
