@@ -1,5 +1,5 @@
 import { formatDate } from "date-fns";
-import { RotateCw } from "lucide-react";
+import { Eye, EyeOff, RotateCw } from "lucide-react";
 
 import { useTouristProfile } from "@/api/data/useProfile";
 import {
@@ -22,8 +22,7 @@ export default function TouristActivities() {
 				<TableRow>
 					<TableHead className="p-3">Description</TableHead>
 					<TableHead className="p-3">Price</TableHead>
-					<TableHead className="p-3">Date</TableHead>
-					<TableHead className="p-3">End Date</TableHead>
+					<TableHead className="p-3">Date & Time</TableHead>
 					<TableHead className="p-3">Location</TableHead>
 					<TableHead className="cursor-pointer hover:text-[#2b58ed] w-1">
 						<RotateCw onClick={() => refetch()} />
@@ -34,7 +33,9 @@ export default function TouristActivities() {
 				{data?.bookedActivities?.map((activity) => (
 					<TableRow key={activity._id} className="cursor-pointer">
 						<TableCell>
-							{activity.description?.substring(0, 100)}
+							{activity.description
+								? activity.description.substring(0, 100)
+								: "N/A"}
 						</TableCell>
 						<TableCell>
 							{convertCurrency(activity?.minPrice)}-
@@ -47,6 +48,18 @@ export default function TouristActivities() {
 							)}
 						</TableCell>
 						<TableCell>{activity?.location}</TableCell>
+						<TableCell>
+							{activity._id ? ( //TODO: Adjust conditions
+								<Eye
+									onClick={() => {
+										window.location.href = `/activities/${activity._id}`;
+									}}
+									className="cursor-pointer hover:text-[#2b58ed]"
+								/>
+							) : (
+								<EyeOff />
+							)}
+						</TableCell>
 					</TableRow>
 				))}
 			</TableBody>
