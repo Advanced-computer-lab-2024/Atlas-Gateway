@@ -110,30 +110,9 @@ export default function ProductDetails() {
 	}, [data, toggleToGetComments]);
 
 	const saveReview = async () => {
-		const saveResult = document.getElementById("saveResult");
-		if (saveResult) {
-			saveResult.innerText = "Saving...";
-			saveResult.hidden = false;
-		}
 		if (childRef.current) {
 			childRef.current.postReview();
 		}
-		delay(() => {
-			callUseEffect();
-			if (saveResult) {
-				saveResult.classList.remove("bg-blue-400");
-				saveResult.classList.add("bg-green-400");
-				saveResult.innerText = "Done!";
-			}
-		}, 1500);
-
-		delay(() => {
-			if (saveResult) {
-				saveResult.classList.remove("bg-green-400");
-				saveResult.classList.add("bg-blue-400");
-				saveResult.hidden = true;
-			}
-		}, 3000);
 	};
 
 	useEffect(() => {

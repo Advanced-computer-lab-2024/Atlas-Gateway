@@ -1,4 +1,5 @@
 import axios from "axios";
+import { delay } from "lodash";
 import React, { forwardRef, useEffect, useImperativeHandle } from "react";
 
 import { Flex } from "./flex";
@@ -64,17 +65,60 @@ export const ReviewOverlay: React.FC<ReviewOverlayProps> = forwardRef<
 		//post review to the server
 		console.log("posting review");
 		try {
-			await axios.post("http://localhost:5000/api/reviews/add", {
-				userId: userId,
-				itemType: reviewType,
-				reviewedItem: reviewedItemId,
-				rating: rating,
-				text: (
-					document.getElementById(
-						"commentInput",
-					) as HTMLTextAreaElement
-				)?.value,
-			});
+			let saveResult;
+			if (reviewType === "TourGuide")
+				saveResult = document.getElementById("saveResultItinerary");
+			else if (reviewType === "Itinerary")
+				saveResult = document.getElementById("saveResultTourGuide");
+			else saveResult = document.getElementById("saveResult");
+
+			if (saveResult) {
+				saveResult.innerText = "Saving...";
+				saveResult.hidden = false;
+			}
+
+			await axios
+				.post("http://localhost:5000/api/reviews/add", {
+					userId: userId,
+					itemType: reviewType,
+					reviewedItem: reviewedItemId,
+					rating: rating,
+					text: (
+						document.getElementById(
+							"commentInput",
+						) as HTMLTextAreaElement
+					)?.value,
+				})
+				.then(() => {
+					if (saveResult) {
+						saveResult.classList.remove("bg-blue-400");
+						saveResult.classList.add("bg-green-400");
+						saveResult.innerText = "Done!";
+					}
+
+					delay(() => {
+						if (saveResult) {
+							saveResult.classList.remove("bg-green-400");
+							saveResult.classList.add("bg-blue-400");
+							saveResult.hidden = true;
+						}
+					}, 1500);
+				})
+				.catch(() => {
+					if (saveResult) {
+						saveResult.classList.remove("bg-blue-400");
+						saveResult.classList.add("bg-red-400");
+						saveResult.innerText = "Failed!";
+					}
+
+					delay(() => {
+						if (saveResult) {
+							saveResult.classList.remove("bg-red-400");
+							saveResult.classList.add("bg-blue-400");
+							saveResult.hidden = true;
+						}
+					}, 1500);
+				});
 
 			//Show "Review Saved" Prompt in frontend
 		} catch (error) {
