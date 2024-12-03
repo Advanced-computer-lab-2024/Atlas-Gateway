@@ -66,10 +66,11 @@ export const ReviewOverlay: React.FC<ReviewOverlayProps> = forwardRef<
 		console.log("posting review");
 		try {
 			let saveResult;
+			console.log(reviewType);
 			if (reviewType === "TourGuide")
-				saveResult = document.getElementById("saveResultItinerary");
+				saveResult = document.getElementById("saveResultGuide");
 			else if (reviewType === "Itinerary")
-				saveResult = document.getElementById("saveResultTourGuide");
+				saveResult = document.getElementById("saveResultItinerary");
 			else saveResult = document.getElementById("saveResult");
 
 			if (saveResult) {
