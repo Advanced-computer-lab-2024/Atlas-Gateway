@@ -64,7 +64,7 @@ export const createActivity = async (
 	}
 };
 
-export const getActivities = async (type: string, query: any) => {
+export const getActivities = async (type: string, query?: any) => {
 	const filter =
 		ActivityFiltersMap?.[type as keyof typeof ActivityFiltersMap] ||
 		ActivityFiltersMap.default;

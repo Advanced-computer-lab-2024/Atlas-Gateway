@@ -1,7 +1,10 @@
 import { Types } from "mongoose";
 
 import HttpError from "../../Errors/HttpError";
-import { Transportation } from "../../Models/Travel/transportation.model";
+import {
+	ITransportation,
+	Transportation,
+} from "../../Models/Travel/transportation.model";
 import {
 	ITransportationAdvertiser,
 	TransportationAdvertiser,
@@ -189,4 +192,79 @@ export const removeTransportation = async (
 			);
 		}
 	}
+};
+
+export const report = async (
+	id: string,
+	options: { date?: string; ActivityId?: string } = {},
+) => {
+	const advertiser = await getTransportationAdvertiserById(id);
+
+	if (!advertiser) {
+		throw new HttpError(404, "Advertiser not Found");
+	}
+
+	await advertiser.populate("transportations");
+
+	let transportations: ITransportation[] =
+		advertiser.transportations as ITransportation[];
+
+	// if itineraryId is provided, filter the bookings by itineraryId
+	if (options.ActivityId) {
+		transportations = transportations.filter(
+			(transportation: ITransportation) =>
+				transportation.id == options.ActivityId,
+		);
+	}
+
+	// if date is provided, filter the bookings by date
+	if (options.date) {
+		const [startDateStr, endDateStr] = options.date.split(",");
+
+		// if no date is provided, set the start date the lowest possible date and the end date to today
+		let startDate =
+			new Date(`${startDateStr}T00:00:00.000+00:00`) ||
+			new Date("1970-01-01T00:00:00.000+00:00");
+		let endDate =
+			endDateStr !== "null"
+				? new Date(`${endDateStr}T23:59:59.000+00:00`)
+				: new Date();
+
+		if (startDate > endDate) {
+			throw new HttpError(400, "Invalid Date Range");
+		}
+
+		transportations = transportations.filter(
+			(transportation: ITransportation) => {
+				const start = new Date(transportation.pickUpTime);
+				console.log(start, startDate, endDate);
+				return start >= startDate && start <= endDate;
+			},
+		);
+	}
+
+	console.log(transportations);
+
+	let totalSales = 0;
+	let totalBookings = 0;
+
+	let sales = transportations.map((transportation: ITransportation) => {
+		totalSales += transportation.numberOfBookings * transportation.price;
+
+		totalBookings += transportation.numberOfBookings;
+		return {
+			ActivityId: transportation.id,
+			ActivityName: transportation.name,
+			numberOfBookings: transportation.numberOfBookings,
+			totalSales: transportation.numberOfBookings * transportation.price,
+		};
+	});
+
+	return {
+		data: sales,
+		metaData: {
+			totalSales: totalSales,
+			totalBookings: totalBookings,
+		},
+	};
 };

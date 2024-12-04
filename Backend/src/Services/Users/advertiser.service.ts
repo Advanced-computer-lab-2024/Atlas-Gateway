@@ -127,7 +127,7 @@ export const report = async (
 	const advertiser = await getAdvertiserById(id);
 
 	if (!advertiser) {
-		throw new HttpError(404, "Tour Guide not Found");
+		throw new HttpError(404, "Advertiser not Found");
 	}
 
 	await advertiser.populate("activities");

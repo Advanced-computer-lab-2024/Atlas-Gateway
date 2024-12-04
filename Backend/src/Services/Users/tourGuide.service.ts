@@ -172,11 +172,3 @@ export const report = async (
 		},
 	};
 };
-
-export const bookingsReport = async (id: string, monthstr?: string) => {
-	const tourGuide = await getTourGuideById(id);
-
-	if (!tourGuide) {
-		throw new HttpError(404, "Tour Guide not Found");
-	}
-};

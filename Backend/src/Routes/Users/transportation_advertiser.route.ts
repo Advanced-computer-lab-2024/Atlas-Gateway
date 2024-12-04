@@ -5,6 +5,8 @@ import {
 	deleteTransportationAdvertiser,
 	getTransportationAdvertiser,
 	getTransportationAdvertisers,
+	salesReport,
+	touristReport,
 	updateTransportationAdvertiser,
 } from "../../Controllers/Users/transportation_advertiser.controller";
 
@@ -20,4 +22,6 @@ transportation_advertiserRouter.delete(
 	"/delete/:id",
 	deleteTransportationAdvertiser,
 );
+transportation_advertiserRouter.get("/sales/:id", salesReport);
+transportation_advertiserRouter.get("/bookings/:id", touristReport);
 export default transportation_advertiserRouter;

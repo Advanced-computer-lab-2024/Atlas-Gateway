@@ -100,8 +100,8 @@ export const getItineraryByUserId = async (userId: string, query: any) => {
 
 export const getItineraries = async (
 	type: string,
-	query: any,
 	userId: string,
+	query?: any,
 ) => {
 	const ItineraryFiltersMap: Record<string, PipelineStage> = {
 		tourist: {
