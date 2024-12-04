@@ -1,5 +1,5 @@
 import { formatDate } from "date-fns";
-import { RotateCw } from "lucide-react";
+import { Eye, EyeOff, RotateCw } from "lucide-react";
 
 import { useTouristProfile } from "@/api/data/useProfile";
 import {
@@ -50,6 +50,18 @@ export default function TouristItineraries() {
 							)}
 						</TableCell>
 						<TableCell>{itinerary.avgRating}</TableCell>
+						<TableCell>
+							{itinerary._id ? ( //TODO: Adjust conditions
+								<Eye
+									onClick={() => {
+										window.location.href = `/itineraries/${itinerary._id}`;
+									}}
+									className="cursor-pointer hover:text-[#2b58ed]"
+								/>
+							) : (
+								<EyeOff />
+							)}
+						</TableCell>
 					</TableRow>
 				))}
 			</TableBody>

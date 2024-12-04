@@ -5,15 +5,26 @@ import { ArrowLeft, DollarSign, MapPin } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-
-
-import { useActivity, useBookActivity, useCancelActivityBooking } from "@/api/data/useActivities";
+import {
+	useActivity,
+	useBookActivity,
+	useCancelActivityBooking,
+} from "@/api/data/useActivities";
 import Label from "@/components/ui/Label";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { CommentsContainer } from "@/components/ui/comments";
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from "@/components/ui/dialog";
 import { Flex } from "@/components/ui/flex";
 import Rating, { ERatingType } from "@/components/ui/rating";
 import ReviewOverlay from "@/components/ui/reviewOverlay";
@@ -21,7 +32,6 @@ import useCurrency from "@/hooks/useCurrency";
 import { useLoginStore } from "@/store/loginStore";
 import { EAccountType } from "@/types/enums";
 import { TReview } from "@/types/global";
-
 
 export default function ActivityDetails() {
 	const navigate = useNavigate();
@@ -95,30 +105,9 @@ export default function ActivityDetails() {
 	};
 
 	const saveReview = async () => {
-		const saveResult = document.getElementById("saveResult");
-		if (saveResult) {
-			saveResult.innerText = "Saving...";
-			saveResult.hidden = false;
-		}
 		if (childRef.current) {
 			childRef.current.postReview();
 		}
-		delay(() => {
-			callUseEffect();
-			if (saveResult) {
-				saveResult.classList.remove("bg-blue-400");
-				saveResult.classList.add("bg-green-400");
-				saveResult.innerText = "Done!";
-			}
-		}, 1500);
-
-		delay(() => {
-			if (saveResult) {
-				saveResult.classList.remove("bg-green-400");
-				saveResult.classList.add("bg-blue-400");
-				saveResult.hidden = true;
-			}
-		}, 3000);
 	};
 
 	return (

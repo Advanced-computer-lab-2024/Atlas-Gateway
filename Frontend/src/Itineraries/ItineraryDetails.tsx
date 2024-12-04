@@ -136,33 +136,10 @@ export default function ItineraryDetails() {
 
 	const childRef = useRef<{ postReview: () => void }>(null);
 
-	const saveReview = async (callSource) => {
-		const componentId =
-			callSource === 0 ? "saveResultItinerary" : "saveResultGuide";
-		const saveResult = document.getElementById(componentId);
-		if (saveResult) {
-			saveResult.innerText = "Saving...";
-			saveResult.hidden = false;
-		}
+	const saveReview = async () => {
 		if (childRef.current) {
 			childRef.current.postReview();
 		}
-		delay(() => {
-			callUseEffect();
-			if (saveResult) {
-				saveResult.classList.remove("bg-blue-400");
-				saveResult.classList.add("bg-green-400");
-				saveResult.innerText = "Done!";
-			}
-		}, 1500);
-
-		delay(() => {
-			if (saveResult) {
-				saveResult.classList.remove("bg-green-400");
-				saveResult.classList.add("bg-blue-400");
-				saveResult.hidden = true;
-			}
-		}, 3000);
 	};
 
 	return (
@@ -291,7 +268,7 @@ export default function ItineraryDetails() {
 													<Button
 														type="submit"
 														onClick={() =>
-															saveReview(0)
+															saveReview()
 														}
 														className="mr-2"
 													>
@@ -430,7 +407,7 @@ export default function ItineraryDetails() {
 														<Button
 															type="submit"
 															onClick={() =>
-																saveReview(1)
+																saveReview()
 															}
 															className="mr-2"
 														>
