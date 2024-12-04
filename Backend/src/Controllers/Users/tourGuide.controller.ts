@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
 import HttpError from "../../Errors/HttpError";
+import * as itineraryService from "../../Services/Travel/itinerary.service";
 import * as tourGuideService from "../../Services/Users/tourGuide.service";
 
 export const createTourGuide = async (
@@ -128,18 +129,40 @@ export const salesReport = async (
 			throw new HttpError(400, "User Id is required");
 		}
 
-		const sales = await tourGuideService.salesReport(
-			userid,
-			req.query.id?.toString(),
-			req.query.date?.toString(),
-		);
+		const salesReport = await tourGuideService.report(userid, {
+			date: req.query.date?.toString(),
+			itineraryId: req.query.itineraryId?.toString(),
+		});
 
-		if (!sales) {
+		if (salesReport.data.length == 0) {
 			throw new HttpError(404, "No Sales Found");
 		}
-		res.status(200).send({
-			sales: sales,
+		res.status(200).send(salesReport);
+	} catch (error) {
+		next(error);
+	}
+};
+
+export const touristReport = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	try {
+		const userId = req.params.id;
+
+		if (!userId) {
+			throw new HttpError(400, "Itinerary Id is required");
+		}
+
+		const tourists = await tourGuideService.report(userId, {
+			date: req.query.date?.toString(),
 		});
+
+		if (tourists.data.length == 0) {
+			throw new HttpError(404, "No Tourists Found");
+		}
+		res.status(200).send(tourists);
 	} catch (error) {
 		next(error);
 	}

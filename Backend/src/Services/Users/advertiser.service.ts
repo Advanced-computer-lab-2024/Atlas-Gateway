@@ -1,3 +1,4 @@
+import { IActivity } from "@/Models/Travel/activity.model";
 import { fi } from "date-fns/locale";
 import { Types } from "mongoose";
 
@@ -119,6 +120,77 @@ export const softDeleteAdvertiser = async (id: string) => {
 	return advertiser;
 };
 
-export const salesReport = async (query: any) => {};
+export const report = async (
+	id: string,
+	options: { date?: string; ActivityId?: string } = {},
+) => {
+	const advertiser = await getAdvertiserById(id);
 
-export const bookingsReport = async (month: Date) => {};
+	if (!advertiser) {
+		throw new HttpError(404, "Tour Guide not Found");
+	}
+
+	await advertiser.populate("activities");
+
+	let activities: IActivity[] = advertiser.activities as IActivity[];
+
+	// if itineraryId is provided, filter the bookings by itineraryId
+	if (options.ActivityId) {
+		activities = activities.filter(
+			(activity: IActivity) => activity.id == options.ActivityId,
+		);
+	}
+
+	// if date is provided, filter the bookings by date
+	if (options.date) {
+		const [startDateStr, endDateStr] = options.date.split(",");
+
+		// if no date is provided, set the start date the lowest possible date and the end date to today
+		let startDate =
+			new Date(`${startDateStr}T00:00:00.000+00:00`) ||
+			new Date("1970-01-01T00:00:00.000+00:00");
+		let endDate =
+			endDateStr !== "null"
+				? new Date(`${endDateStr}T23:59:59.000+00:00`)
+				: new Date();
+
+		if (startDate > endDate) {
+			throw new HttpError(400, "Invalid Date Range");
+		}
+
+		activities = activities.filter((activity: IActivity) => {
+			const start = new Date(activity.dateTime);
+			console.log(start, startDate, endDate);
+			return start >= startDate && start <= endDate;
+		});
+	}
+
+	console.log(activities);
+
+	let totalSales = 0;
+	let totalBookings = 0;
+
+	let sales = activities.map((activity: IActivity) => {
+		totalSales +=
+			activity.numberOfBookings *
+			((activity.minPrice + activity.maxPrice) / 2);
+
+		totalBookings += activity.numberOfBookings;
+		return {
+			ActivityId: activity.id,
+			ActivityName: activity.name,
+			numberOfBookings: activity.numberOfBookings,
+			totalSales:
+				activity.numberOfBookings *
+				((activity.minPrice + activity.maxPrice) / 2),
+		};
+	});
+
+	return {
+		data: sales,
+		metaData: {
+			totalSales: totalSales,
+			totalBookings: totalBookings,
+		},
+	};
+};

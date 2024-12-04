@@ -1,5 +1,6 @@
 import { IBooking } from "@/Models/Purchases/booking.model";
 import { IItinerary } from "@/Models/Travel/itinerary.model";
+import { id } from "date-fns/locale";
 import { Types } from "mongoose";
 
 import HttpError from "../../Errors/HttpError";
@@ -104,10 +105,9 @@ export const softDeleteTourGuide = async (id: string) => {
 	return tourGuide;
 };
 
-export const salesReport = async (
+export const report = async (
 	id: string,
-	itineraryId?: string,
-	date?: string,
+	options: { date?: string; itineraryId?: string } = {},
 ) => {
 	const tourGuide = await getTourGuideById(id);
 
@@ -115,50 +115,68 @@ export const salesReport = async (
 		throw new HttpError(404, "Tour Guide not Found");
 	}
 
-	await tourGuide.populate({
-		path: "itinerary",
-		populate: { path: "bookings" },
-	});
-
 	let itineraries: IItinerary[] = tourGuide.itinerary as IItinerary[];
 
 	// if itineraryId is provided, filter the bookings by itineraryId
-	if (itineraryId) {
+	if (options.itineraryId) {
 		itineraries = itineraries.filter(
-			(itinerary: IItinerary) => itinerary.id == itineraryId,
+			(itinerary: IItinerary) => itinerary.id == options.itineraryId,
 		);
 	}
 
 	// if date is provided, filter the bookings by date
-	if (date) {
-		const [startDateStr, endDateStr] = date.split(",");
+	if (options.date) {
+		const [startDateStr, endDateStr] = options.date.split(",");
 
 		// if no date is provided, set the start date the lowest possible date and the end date to today
 		let startDate =
-			new Date(startDateStr) || new Date("1970-01-01T00:00:00.000Z");
-		let endDate = endDateStr !== "null" ? new Date(endDateStr) : new Date();
+			new Date(`${startDateStr}T00:00:00.000+00:00`) ||
+			new Date("1970-01-01T00:00:00.000+00:00");
+		let endDate =
+			endDateStr !== "null"
+				? new Date(`${endDateStr}T23:59:59.000+00:00`)
+				: new Date();
 
 		if (startDate > endDate) {
 			throw new HttpError(400, "Invalid Date Range");
 		}
-		itineraries.forEach((itinerary: IItinerary) => {
-			itinerary.bookings = (itinerary.bookings as IBooking[]).filter(
-				(booking: IBooking) =>
-					booking.createdAt >= new Date(startDate) &&
-					booking.createdAt <= new Date(endDate),
-			);
+
+		itineraries = itineraries.filter((itinerary: IItinerary) => {
+			const start = new Date(itinerary.startDateTime);
+			console.log(start, startDate, endDate);
+			return start >= startDate && start <= endDate;
 		});
 	}
 
-	let sales = 0;
+	console.log(itineraries);
 
-	itineraries.forEach((itinerary: IItinerary) => {
-		(itinerary.bookings as IBooking[]).forEach((booking: IBooking) => {
-			sales += booking.totalPrice;
-		});
+	let totalSales = 0;
+	let totalBookings = 0;
+
+	let sales = itineraries.map((itinerary: IItinerary) => {
+		totalSales += itinerary.numberOfBookings * itinerary.price;
+		totalBookings += itinerary.numberOfBookings;
+		return {
+			itineraryId: itinerary.id,
+			itineraryName: itinerary.title,
+			numberOfBookings: itinerary.numberOfBookings,
+			totalSales: itinerary.numberOfBookings * itinerary.price,
+		};
 	});
 
-	return sales;
+	return {
+		data: sales,
+		metaData: {
+			totalSales: totalSales,
+			totalBookings: totalBookings,
+		},
+	};
 };
 
-export const bookingsReport = async (month?: Date) => {};
+export const bookingsReport = async (id: string, monthstr?: string) => {
+	const tourGuide = await getTourGuideById(id);
+
+	if (!tourGuide) {
+		throw new HttpError(404, "Tour Guide not Found");
+	}
+};

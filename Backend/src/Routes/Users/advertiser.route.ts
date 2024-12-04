@@ -5,7 +5,9 @@ import {
 	deleteAdvertiser,
 	getAdvertiser,
 	getAdvertisers,
+	salesReport,
 	softDeleteAdvertiser,
+	touristReport,
 	updateAdvertiser,
 	viewActivities,
 } from "../../Controllers/Users/advertiser.controller";
@@ -18,4 +20,7 @@ advertiserRouter.put("/update/:id", updateAdvertiser);
 advertiserRouter.delete("/delete/:id", deleteAdvertiser);
 advertiserRouter.get("/list/:id", viewActivities);
 advertiserRouter.delete("/requestDelete/:id", softDeleteAdvertiser);
+advertiserRouter.get("/sales/:id", salesReport);
+advertiserRouter.get("/bookings/:id", touristReport);
+
 export default advertiserRouter;
