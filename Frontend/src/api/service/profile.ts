@@ -152,7 +152,7 @@ export function apiGovernors() {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 export function apiGovernorProfile(_id: string) {
@@ -163,7 +163,7 @@ export function apiGovernorProfile(_id: string) {
 			"Content-Type": "application/json",
 			userid: _id,
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 export function apiEditGovernorProfile(_id: string, data: Partial<TGovernor>) {
@@ -175,7 +175,7 @@ export function apiEditGovernorProfile(_id: string, data: Partial<TGovernor>) {
 			userid: _id,
 		},
 		data,
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 export function apiDeleteGovernor(_id: string) {
@@ -185,7 +185,7 @@ export function apiDeleteGovernor(_id: string) {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 
@@ -257,7 +257,7 @@ export function apiTransportationAdvertisers() {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 
@@ -269,7 +269,7 @@ export function apiTransportationAdvertiserProfile(_id: string) {
 			"Content-Type": "application/json",
 			userid: _id,
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 
@@ -285,7 +285,7 @@ export function apiEditTransportationAdvertiserProfile(
 			userid: _id,
 		},
 		data,
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 
@@ -296,7 +296,7 @@ export function apiDeleteTransportationAdvertiserProfile(_id: string) {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 
@@ -366,6 +366,137 @@ export function apiRedeemTouristLoyaltyPoints(_id: string) {
 		url: ENDPOINTS.tourist.redeem(_id),
 		headers: {
 			"Content-Type": "application/json",
+		},
+		baseURL: baseURL,
+	});
+}
+
+export function apiAdminSalesReport() {
+	return axios({
+		method: "GET",
+		url: ENDPOINTS.admin.report,
+		headers: {
+			"Content-Type": "application/json",
+		},
+		baseURL: baseURL,
+	});
+}
+
+export function apiTourGuideSalesReport(
+	_id: string,
+	filters: Record<string, string>,
+) {
+	return axios({
+		method: "GET",
+		url: ENDPOINTS.tourGuide.salesReport(_id),
+		headers: {
+			"Content-Type": "application/json",
+		},
+		params: {
+			...filters,
+		},
+		baseURL: baseURL,
+	});
+}
+
+export function apiAdvertiserSalesReport(
+	_id: string,
+	filters: Record<string, string>,
+) {
+	return axios({
+		method: "GET",
+		url: ENDPOINTS.advertiser.salesReport(_id),
+		headers: {
+			"Content-Type": "application/json",
+		},
+		params: {
+			...filters,
+		},
+		baseURL: baseURL,
+	});
+}
+
+export function apiTransportationAdvertiserSalesReport(
+	_id: string,
+	filters: Record<string, string>,
+) {
+	return axios({
+		method: "GET",
+		url: ENDPOINTS.transportation_advertiser.salesReport(_id),
+		headers: {
+			"Content-Type": "application/json",
+		},
+		params: {
+			...filters,
+		},
+
+		baseURL: baseURL,
+	});
+}
+
+export function apiSellerSalesReport(
+	_id: string,
+	filters: Record<string, string>,
+) {
+	return axios({
+		method: "GET",
+		url: ENDPOINTS.seller.salesReport(_id),
+		headers: {
+			"Content-Type": "application/json",
+		},
+		params: {
+			...filters,
+		},
+		baseURL: baseURL,
+	});
+}
+
+export function apiTourGuideBookingReport(
+	_id: string,
+	filters: Record<string, string>,
+) {
+	return axios({
+		method: "GET",
+		url: ENDPOINTS.tourGuide.bookingReport(_id),
+		headers: {
+			"Content-Type": "application/json",
+		},
+		params: {
+			...filters,
+		},
+		baseURL: baseURL,
+	});
+}
+
+export function apiAdvertiserBookingReport(
+	_id: string,
+	filters: Record<string, string>,
+) {
+	return axios({
+		method: "GET",
+		url: ENDPOINTS.advertiser.bookingReport(_id),
+		headers: {
+			"Content-Type": "application/json",
+		},
+		params: {
+			...filters,
+		},
+		baseURL: baseURL,
+	});
+}
+
+export function apiTransportationAdvertiserBookingReport(
+	_id: string,
+	filters: Record<string, string>,
+) {
+	return axios({
+		method: "GET",
+		url: ENDPOINTS.transportation_advertiser.bookingReport(_id),
+		headers: {
+			"Content-Type": "application/json",
+		},
+		params: {
+			...filters,
 		},
 		baseURL: baseURL,
 	});

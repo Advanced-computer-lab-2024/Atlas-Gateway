@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { useLoginStore } from "@/store/loginStore";
+import { EAccountType } from "@/types/enums";
 import {
 	TAdvetisor,
 	TGovernor,
@@ -12,7 +13,10 @@ import {
 } from "@/types/global";
 
 import {
+	apiAdminSalesReport,
+	apiAdvertiserBookingReport,
 	apiAdvertiserProfile,
+	apiAdvertiserSalesReport,
 	apiAdvertisers,
 	apiChangePassword,
 	apiDeleteAdvertiserProfile,
@@ -34,14 +38,20 @@ import {
 	apiRequestDeleteTourGuideProfile,
 	apiRequestDeleteTouristProfile,
 	apiSellerProfile,
+	apiSellerSalesReport,
 	apiSellers,
+	apiTourGuideBookingReport,
 	apiTourGuideProfile,
+	apiTourGuideSalesReport,
 	apiTourGuides,
 	apiTouristProfile,
 	apiTourists,
+	apiTransportationAdvertiserBookingReport,
 	apiTransportationAdvertiserProfile,
+	apiTransportationAdvertiserSalesReport,
 	apiTransportationAdvertisers,
 } from "../service/profile";
+import { useQueryString } from "./useQueryString";
 
 export function useTourists() {
 	const { data, refetch } = useQuery({
@@ -418,4 +428,52 @@ export function useRedeemTouristLoyaltyPoints(onSuccess: () => void) {
 	});
 	const { mutate } = mutation;
 	return { doRedeemTouristLoyaltyPoints: mutate, ...mutation };
+}
+
+export function useSalesReport() {
+	const { user } = useLoginStore();
+	const [query] = useQueryString();
+	const { data, refetch } = useQuery({
+		queryFn: () => {
+			switch (user?.type) {
+				case EAccountType.Seller:
+					return apiSellerSalesReport(user._id, query);
+				case EAccountType.Advertiser:
+					return apiAdvertiserSalesReport(user._id, query);
+				case EAccountType.Guide:
+					return apiTourGuideSalesReport(user._id, query);
+				case EAccountType.TransportationAdvertiser:
+					return apiTransportationAdvertiserSalesReport(
+						user._id,
+						query,
+					);
+				case EAccountType.Admin:
+					return apiAdminSalesReport();
+			}
+		},
+		queryKey: ["salesReport", user?._id],
+	});
+	return { data: data?.data?.data, meta: data?.data?.metaData, refetch };
+}
+
+export function useBookingReport() {
+	const { user } = useLoginStore();
+	const [query] = useQueryString();
+	const { data, refetch } = useQuery({
+		queryFn: () => {
+			switch (user?.type) {
+				case EAccountType.Advertiser:
+					return apiAdvertiserBookingReport(user._id, query);
+				case EAccountType.Guide:
+					return apiTourGuideBookingReport(user._id, query);
+				case EAccountType.TransportationAdvertiser:
+					return apiTransportationAdvertiserBookingReport(
+						user._id,
+						query,
+					);
+			}
+		},
+		queryKey: ["bookingsReport", user?._id],
+	});
+	return { data: data?.data?.data, meta: data?.data?.metaData, refetch };
 }
