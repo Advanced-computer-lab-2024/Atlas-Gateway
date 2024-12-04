@@ -52,6 +52,12 @@ const productFiltersMap: Record<string, PipelineStage> = {
 	},
 };
 
+export const getAllProducts = async () => {
+	const products = await Product.find();
+
+	return products;
+};
+
 export const getProducts = async (type: string, query?: any) => {
 	const filter =
 		productFiltersMap?.[type as keyof typeof productFiltersMap] ||

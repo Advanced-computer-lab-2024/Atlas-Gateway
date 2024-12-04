@@ -98,6 +98,12 @@ export const getItineraryByUserId = async (userId: string, query: any) => {
 	return result;
 };
 
+export const getAllItineraries = async () => {
+	const itineraries = await Itinerary.find();
+
+	return itineraries;
+};
+
 export const getItineraries = async (
 	type: string,
 	userId: string,

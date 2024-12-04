@@ -104,9 +104,8 @@ export const productsReport = async (
 
 	// populate the products of the seller and the orders of the products
 
-	const data = await productService.getProducts("");
-	console.log(data);
-	let products: IProduct[] = data[0].data as IProduct[];
+	const data = await productService.getAllProducts();
+	let products: IProduct[] = data as IProduct[];
 
 	// filter the products by the admins
 
@@ -176,9 +175,9 @@ export const productsReport = async (
 export const activityReport = async (
 	options: { date?: string; ActivityId?: string } = {},
 ) => {
-	const data = await activityService.getActivities("");
+	const data = await activityService.getAllActivities();
 
-	let activities: IActivity[] = data[0].data;
+	let activities: IActivity[] = data;
 	// if itineraryId is provided, filter the bookings by itineraryId
 	if (options.ActivityId) {
 		activities = activities.filter(
@@ -205,7 +204,6 @@ export const activityReport = async (
 
 		activities = activities.filter((activity: IActivity) => {
 			const start = new Date(activity.dateTime);
-			console.log(start, startDate, endDate);
 			return start >= startDate && start <= endDate;
 		});
 	}
@@ -241,9 +239,9 @@ export const activityReport = async (
 export const itineraryReport = async (
 	options: { date?: string; itineraryId?: string } = {},
 ) => {
-	const data = await itineraryService.getItineraries("", "");
+	const data = await itineraryService.getAllItineraries();
 
-	let itineraries: IItinerary[] = data[0].data;
+	let itineraries: IItinerary[] = data;
 
 	// if itineraryId is provided, filter the bookings by itineraryId
 	if (options.itineraryId) {
@@ -271,7 +269,6 @@ export const itineraryReport = async (
 
 		itineraries = itineraries.filter((itinerary: IItinerary) => {
 			const start = new Date(itinerary.startDateTime);
-			console.log(start, startDate, endDate);
 			return start >= startDate && start <= endDate;
 		});
 	}

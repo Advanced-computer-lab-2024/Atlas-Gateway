@@ -64,6 +64,12 @@ export const createActivity = async (
 	}
 };
 
+export const getAllActivities = async () => {
+	const activities = await Activity.find();
+
+	return activities;
+};
+
 export const getActivities = async (type: string, query?: any) => {
 	const filter =
 		ActivityFiltersMap?.[type as keyof typeof ActivityFiltersMap] ||
