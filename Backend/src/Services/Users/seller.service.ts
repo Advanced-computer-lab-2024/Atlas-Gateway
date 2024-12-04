@@ -166,8 +166,8 @@ export const report = async (
 		// 	((product.minPrice + product.maxPrice) / 2);
 
 		return {
-			ActivityId: product.id,
-			ActivityName: product.name,
+			ProductId: product.id,
+			ProductName: product.name,
 			// totalSales:
 			// 	product.numberOfBookings *
 			// 	((product.minPrice + product.maxPrice) / 2),

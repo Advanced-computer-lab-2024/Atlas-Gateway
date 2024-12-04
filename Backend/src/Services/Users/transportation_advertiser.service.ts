@@ -196,7 +196,7 @@ export const removeTransportation = async (
 
 export const report = async (
 	id: string,
-	options: { date?: string; ActivityId?: string } = {},
+	options: { date?: string; TransportationId?: string } = {},
 ) => {
 	const advertiser = await getTransportationAdvertiserById(id);
 
@@ -210,10 +210,10 @@ export const report = async (
 		advertiser.transportations as ITransportation[];
 
 	// if itineraryId is provided, filter the bookings by itineraryId
-	if (options.ActivityId) {
+	if (options.TransportationId) {
 		transportations = transportations.filter(
 			(transportation: ITransportation) =>
-				transportation.id == options.ActivityId,
+				transportation.id == options.TransportationId,
 		);
 	}
 
@@ -253,8 +253,8 @@ export const report = async (
 
 		totalBookings += transportation.numberOfBookings;
 		return {
-			ActivityId: transportation.id,
-			ActivityName: transportation.name,
+			TransportationId: transportation.id,
+			TransportationName: transportation.name,
 			numberOfBookings: transportation.numberOfBookings,
 			totalSales: transportation.numberOfBookings * transportation.price,
 		};

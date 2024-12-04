@@ -126,7 +126,7 @@ export const salesReport = async (
 			userid,
 			{
 				date: req.query.date?.toString(),
-				ActivityId: req.query.activityId?.toString(),
+				TransportationId: req.query.transportationId?.toString(),
 			},
 		);
 
