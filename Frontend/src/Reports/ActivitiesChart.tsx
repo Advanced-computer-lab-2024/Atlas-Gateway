@@ -35,7 +35,13 @@ export default function ActivitiesChart(
 
 	return (
 		<div>
-			<ReactECharts option={activitiesChart} style={{}} />
+			<ReactECharts
+				option={activitiesChart}
+				style={{
+					height: "500px",
+					width: "100%",
+				}}
+			/>
 		</div>
 	);
 }

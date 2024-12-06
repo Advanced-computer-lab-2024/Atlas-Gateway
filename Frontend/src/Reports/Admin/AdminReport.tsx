@@ -11,7 +11,7 @@ export default function AdminReport() {
 	const { data, meta } = useSalesReport();
 
 	return (
-		<Flex>
+		<Flex className="w-full " isColumn>
 			<Flex>
 				<Label>Admin Report</Label>
 				<Label>Total Sales:{meta?.totalSales}</Label>
@@ -28,6 +28,7 @@ export default function AdminReport() {
 					},
 				}}
 			/>
+
 			<ItinerariesChart itineraries={data?.itineraries} />
 			<ProductsChart products={data?.products} />
 			<ActivitiesChart activities={data?.activities} />

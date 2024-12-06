@@ -5,6 +5,8 @@ import { TItineraryReportResponse, TReportRespone } from "@/api/service/types";
 export default function ItinerariesChart(
 	itineraries: TReportRespone<TItineraryReportResponse> | undefined,
 ) {
+	console.log(itineraries);
+	console.log(itineraries?.itineraries?.data);
 	const itinerariesChart = {
 		title: {
 			text: "Itinerary Sales",
@@ -14,18 +16,22 @@ export default function ItinerariesChart(
 			data: ["Sales"],
 		},
 		xAxis: {
-			data: itineraries?.data?.map(
-				(d: TItineraryReportResponse) => d.ItineraryName,
+			type: "category",
+			data: itineraries?.itineraries?.data?.map(
+				(d: TItineraryReportResponse) => d.itineraryName,
 			),
 		},
 		yAxis: {
 			type: "value",
+			data: itineraries?.itineraries?.data?.map(
+				(d: TItineraryReportResponse) => d.totalSales,
+			),
 		},
 		series: [
 			{
 				name: "Sales",
 				type: "bar",
-				data: itineraries?.data?.map(
+				data: itineraries?.itineraries?.data?.map(
 					(d: TItineraryReportResponse) => d.totalSales,
 				),
 			},
@@ -33,8 +39,12 @@ export default function ItinerariesChart(
 	};
 
 	return (
-		<div>
-			<ReactECharts option={itinerariesChart} style={{}} />
-		</div>
+		<ReactECharts
+			option={itinerariesChart}
+			style={{
+				height: "500px",
+				width: "500px",
+			}}
+		/>
 	);
 }

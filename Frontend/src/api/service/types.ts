@@ -79,8 +79,8 @@ export type TActivityReportResponse = {
 };
 
 export type TItineraryReportResponse = {
-	ItineraryId: string;
-	ItineraryName: string;
+	itineraryId: string;
+	itineraryName: string;
 	numberOfBookings: number;
 	totalSales: number;
 };

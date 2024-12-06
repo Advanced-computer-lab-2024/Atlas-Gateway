@@ -33,8 +33,12 @@ export default function ProductsChart(
 	};
 
 	return (
-		<div>
-			<ReactECharts option={productsChart} style={{}} />
-		</div>
+		<ReactECharts
+			option={productsChart}
+			style={{
+				height: "500px",
+				width: "500px",
+			}}
+		/>
 	);
 }
