@@ -35,14 +35,18 @@ export function useSalesReport() {
 					);
 				case EAccountType.Admin:
 					return apiAdminSalesReport();
+				default:
+					return apiAdminSalesReport();
 			}
 		},
 		queryKey: ["salesReport", user?._id, query],
 	});
 
+	console.log(q);
+
 	const { data } = q;
 
-	return { ...q, data: data?.data?.data, meta: data?.data?.metaData };
+	return { ...q, data: data?.data, meta: data?.data?.metaData };
 }
 
 export function useBookingReport() {

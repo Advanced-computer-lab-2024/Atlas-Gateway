@@ -8,14 +8,14 @@ import ItinerariesChart from "../ItitnerariesChart";
 import ProductsChart from "../ProductsChart";
 
 export default function AdminReport() {
-	const [data, meta] = useSalesReport();
+	const { data, meta } = useSalesReport();
 
 	return (
 		<Flex>
 			<Flex>
 				<Label>Admin Report</Label>
-				<Label>Total Sales:{meta.totalSales}</Label>
-				<Label>Total Bookings:{meta.totalBookings}</Label>
+				<Label>Total Sales:{meta?.totalSales}</Label>
+				<Label>Total Bookings:{meta?.totalBookings}</Label>
 			</Flex>
 
 			<Filters
@@ -28,9 +28,9 @@ export default function AdminReport() {
 					},
 				}}
 			/>
-			<ItinerariesChart itineraries={data.itineraries} />
-			<ProductsChart products={data.products} />
-			<ActivitiesChart activities={data.activities} />
+			<ItinerariesChart itineraries={data?.itineraries} />
+			<ProductsChart products={data?.products} />
+			<ActivitiesChart activities={data?.activities} />
 		</Flex>
 	);
 }

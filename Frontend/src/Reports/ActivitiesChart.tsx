@@ -5,6 +5,7 @@ import { TActivityReportResponse } from "@/api/service/types";
 export default function ActivitiesChart(
 	activities: TActivityReportResponse[] | undefined,
 ) {
+	console.log(activities);
 	const activitiesChart = {
 		title: {
 			text: "Activity Sales",
