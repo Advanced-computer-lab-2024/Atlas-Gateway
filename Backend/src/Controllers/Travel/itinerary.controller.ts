@@ -199,6 +199,35 @@ export const bookItinerary = async (
 	}
 };
 
+export const bookmarkItinerary = async(
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	try {
+		const itineraryId = req.params.id;
+		const touristId = req.headers.userid;
+
+		if (!touristId) {
+			return res.status(400).json({ message: "User ID is required" });
+		}
+		if (!itineraryId) {
+			return res.status(400).json({ message: "Itinerary ID is required" });
+		}
+		const bookmarkResult = await itineraryService.bookmarkItinerary(
+			itineraryId,
+			touristId.toString(),
+			
+		);
+		if (!bookmarkResult) {
+			return res.status(400).json({ message: "Cannot bookmark Itinerary" });
+		}
+		return res.status(201).json({ message: "Itinerary bookmarked successfully" });
+	} catch (error) {
+		next(error);
+	}
+}
+
 export const cancelBookingItinerary = async (
 	req: Request,
 	res: Response,
@@ -234,6 +263,43 @@ export const cancelBookingItinerary = async (
 		next(error);
 	}
 };
+
+export const removeBookmarkItinerary = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	try {
+		const itineraryId = req.params.id;
+		const touristId = req.headers.userid;
+
+		if (!touristId) {
+			return res.status(400).json({ message: "User ID is required" });
+		}
+
+		if (!itineraryId) {
+			return res
+				.status(400)
+				.json({ message: "Itinerary ID is required" });
+		}
+
+		const removeBookmarkResult =
+			await itineraryService.removeBookmarkItinerary(
+				itineraryId,
+				touristId.toString(),
+			);
+		if (!removeBookmarkResult) {
+			return res.status(400).json({ message: "Cannot remove bookmark" });
+		}
+
+		return res
+			.status(201)
+			.json({ message: "Itinerary bookmark removed successfully" });
+	} catch (error) {
+		next(error);
+	}
+};
+
 
 export const flagItinerary = async (
 	req: Request,

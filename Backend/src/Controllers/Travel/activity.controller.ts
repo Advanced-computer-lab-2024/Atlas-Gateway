@@ -194,6 +194,35 @@ export const bookActivity = async (
 	}
 };
 
+export const bookmarkActivity = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	try {
+		const activityId = req.params.id;
+		const touristId = req.headers.userid;
+		
+		if (!touristId) {
+			throw new HttpError(400, "User ID is required");
+		}
+		if (!activityId) {
+			throw new HttpError(400, "Activity ID is required");
+		}
+		const bookmarkResult = await activityService.bookmarkActivity(
+			activityId,
+			touristId.toString(),
+			
+		);
+		if (!bookmarkResult) {
+			throw new HttpError(400, "Cannot bookmark Activity");
+		}
+		return res.status(201).json({ message: "Activity Bookmarked" });
+	} catch (error) {
+		next(error);
+	}
+};
+
 export const cancelBookingActivity = async (
 	req: Request,
 	res: Response,
@@ -221,6 +250,34 @@ export const cancelBookingActivity = async (
 		}
 
 		return res.status(201).json({ message: " Activity Cancelled" });
+	} catch (error) {
+		next(error);
+	}
+};
+
+export const removeBookmarkActivity = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	try {
+		const activityId = req.params.id;
+		const touristId = req.headers.userid;
+
+		if (!touristId) {
+			throw new HttpError(400, "User ID is required");
+		}
+		if (!activityId) {
+			throw new HttpError(400, "Activity ID is required");
+		}
+		const removeBookmarkResult = await activityService.removeBookmarkActivity(
+			activityId,
+			touristId.toString(),
+		);
+		if (!removeBookmarkResult) {
+			throw new HttpError(400, "Cannot remove bookmarked Activity");
+		}
+		return res.status(201).json({ message: "Activity removed from bookmarks" });
 	} catch (error) {
 		next(error);
 	}
