@@ -34,6 +34,7 @@ import ProductDetails from "./Products/ProductDetails";
 import Products from "./Products/Products";
 import Profile from "./Profile/Profile";
 import Register from "./Register/Register";
+import AdminReport from "./Reports/Admin/AdminReport";
 import TransportationDetails from "./Transportations/TransportationDetails";
 import Transportations from "./Transportations/Transportations";
 import { QueryStateProvider } from "./api/data/useQueryString";
@@ -122,6 +123,10 @@ const router = createBrowserRouter([
 								element: <ComplaintDetails />,
 							},
 						],
+					},
+					{
+						path: "/admin/report",
+						element: <AdminReport />,
 					},
 				],
 			},

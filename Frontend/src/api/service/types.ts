@@ -69,4 +69,41 @@ export type TLoginResponse = {
 export type TUserStatisticsResponse = {
 	total: number; // Total number of users
 	newTotal: number; // Number of new users last month
-  };
+};
+
+export type TActivityReportResponse = {
+	ActivityId: string;
+	ActivityName: string;
+	numberOfBookings: number;
+	totalSales: number;
+};
+
+export type TItineraryReportResponse = {
+	ItineraryId: string;
+	ItineraryName: string;
+	numberOfBookings: number;
+	totalSales: number;
+};
+
+export type TProductReportResponse = {
+	ProductId: string;
+	ProductName: string;
+};
+
+export type TAdminReportResponse = {
+	products: TReportRespone<TProductReportResponse>;
+	activities: TReportRespone<TActivityReportResponse>;
+	itineraries: TReportRespone<TItineraryReportResponse>;
+	metaData: {
+		totalSales: number;
+		totalBookings: number;
+	};
+};
+
+export type TReportRespone<T> = {
+	data: [T];
+	metaData: {
+		totalSales: number;
+		totalBookings: number;
+	};
+};
