@@ -29,14 +29,20 @@ export interface ITourist extends Document {
 		location?: string;
 		image?: string;
 	};
-	bookedItineraries: Types.ObjectId[] | IItinerary[];
-	bookedActivities: Types.ObjectId[] | IActivity[];
-	bookedTransportations: Types.ObjectId[] | ITransportation[];
+	bookedItineraries: Types.ObjectId[];
+	bookmarkedItineraries: Types.ObjectId[];
+
+	bookedActivities: Types.ObjectId[];
+	bookmarkedActivities: Types.ObjectId[];
+
+	bookedTransportations: Types.ObjectId[];
 	bookedFlights: Types.ObjectId[] | IFlight[];
-	bookedHotelOffers: Types.ObjectId[] | IHotelBooking[];
+	bookedHotelOffers: Types.ObjectId[];
 	canceledItineraries: Types.ObjectId[];
 	canceledActivities: Types.ObjectId[];
-	purchaseProducts: Types.ObjectId[] | IProduct[];
+
+	purchaseProducts: Types.ObjectId[];
+	wishlistproducts: Types.ObjectId[];
 	isDeleted?: boolean;
 	preferredTags?: Types.ObjectId[] | ITag[];
 }
@@ -90,7 +96,15 @@ const touristSchema = new Schema<ITourist>(
 			image: { type: String },
 		},
 		bookedItineraries: [{ type: Schema.Types.ObjectId, ref: "Itinerary" }],
+		bookmarkedItineraries: [
+			{ type: Schema.Types.ObjectId, ref: "Itinerary" },
+		],
+
 		bookedActivities: [{ type: Schema.Types.ObjectId, ref: "Activity" }],
+		bookmarkedActivities: [
+			{ type: Schema.Types.ObjectId, ref: "Activity" },
+		],
+
 		bookedTransportations: [
 			{ type: Schema.Types.ObjectId, ref: "Transportation" },
 			,
@@ -100,7 +114,10 @@ const touristSchema = new Schema<ITourist>(
 		// 	{ type: Schema.Types.ObjectId, ref: "Itinerary" },
 		// ],
 		// canceledActivities: [{ types: Schema.Types.ObjectId, ref: "Activity" }],
+
 		purchaseProducts: [{ type: Schema.Types.ObjectId, ref: "Product" }],
+		wishlistproducts: [{ type: Schema.Types.ObjectId, ref: "Product" }],
+
 		bookedHotelOffers: [
 			{ type: Schema.Types.ObjectId, ref: "HotelBooking" },
 		],

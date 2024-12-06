@@ -2,6 +2,8 @@ import { IBooking } from "@/Models/Purchases/booking.model";
 import { Tourist } from "@/Models/Users/tourist.model";
 import mongoose, { PipelineStage, Types } from "mongoose";
 
+
+
 import HttpError from "../../Errors/HttpError";
 import { IItinerary, Itinerary } from "../../Models/Travel/itinerary.model";
 import AggregateBuilder from "../Operations/aggregation.service";
@@ -9,6 +11,7 @@ import { cancelItinerary } from "../Users/tourist.service";
 import * as bookingService from "./../Purchases/booking.service";
 import * as tourGuideService from "./../Users/tourGuide.service";
 import * as touristService from "./../Users/tourist.service";
+
 
 export const createItinerary = async (
 	itinerary: IItinerary,
@@ -253,6 +256,21 @@ export const bookItinerary = async (itineraryId: string, touristId: string) => {
 	return itinerary;
 };
 
+export const bookmarkItinerary = async (itineraryId: string, touristId: string) => {
+	const itinerary = await getItineraryById(itineraryId);
+	if (!itinerary) {
+		throw new HttpError(404, "Itinerary not found");
+	}
+	const tourist = await touristService.addBookmarkItenerary(
+		touristId,
+		itineraryId,
+	);
+	if (!tourist) {
+		throw new HttpError(404, "Couldn't bookmark itinerary in Tourist");
+	}
+	return itinerary;
+};
+
 export const cancelBookingItinerary = async (
 	itineraryId: string,
 	touristId: string,
@@ -311,6 +329,30 @@ export const cancelBookingItinerary = async (
 		throw new HttpError(404, "Failed to cancel itinerary booking");
 	}
 
+	return itinerary;
+};
+
+export const removeBookmarkItinerary = async (
+	itineraryId: string,
+	touristId: string,
+) => {
+	const itinerary = await getItineraryById(itineraryId);
+	if (!itinerary) {
+		throw new HttpError(404, "Itinerary not found");
+	}
+	const removed = await itinerary.updateOne({
+		$pull: { tourists: touristId },
+	});
+	if (removed.modifiedCount === 0) {
+		throw new HttpError(404, "Failed to remove bookmarked itinerary");
+	}
+	const tourist = await touristService.removeBookmarkItinerary(
+		touristId,
+		itineraryId,
+	);
+	if (!tourist) {
+		throw new HttpError(404, "Failed to remove bookmarked itinerary");
+	}
 	return itinerary;
 };
 

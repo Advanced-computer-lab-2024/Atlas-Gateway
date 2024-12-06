@@ -297,6 +297,21 @@ export const bookActivity = async (activityId: string, touristId: string) => {
 	return activity;
 };
 
+export const bookmarkActivity = async (activityId: string, touristId: string) => {
+	const activity = await getActivityById(activityId);
+	if (!activity) {
+		throw new HttpError(404, "Activity not found");
+	}
+	const tourist = await touristService.addBookmarkedActivity(
+		touristId,
+		activityId,
+	);
+	if (!tourist) {
+		throw new HttpError(404, "Could not bookmark activity for tourist");
+	}
+	return activity;
+}
+
 export const cancelBookingActivity = async (
 	activityId: string,
 	touristId: string,
@@ -339,6 +354,24 @@ export const cancelBookingActivity = async (
 
 	return removedActivity;
 };
+
+export const removeBookmarkActivity = async(
+	activityId: string,
+	touristId: string,
+) => {
+	const activity = await getActivityById(activityId);
+	if (!activity) {
+		throw new HttpError(404, "Activity not found");
+	}
+	const tourist = await touristService.removeBookmarkedActivity(
+		touristId,
+		activityId,
+	);
+	if (!tourist) {
+		throw new HttpError(404, "Could not remove bookmarked activity for tourist");
+	}
+	return activity;
+}
 
 export const softDeleteActivity = async (id: string) => {
 	const activity = await getActivityById(id);

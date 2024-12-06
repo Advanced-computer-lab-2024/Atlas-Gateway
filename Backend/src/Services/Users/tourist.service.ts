@@ -43,9 +43,12 @@ export const getTouristById = async (id: string) => {
 
 	const tourist = await Tourist.findById(id).populate([
 		"bookedItineraries",
+		"bookmarkedItineraries",
 		"bookedActivities",
+		"bookmarkedActivities",
 		"bookedTransportations",
 		"purchaseProducts",
+		"wishlistproducts",
 		"preferredTags",
 		"bookedFlights",
 		"bookedHotelOffers",
@@ -119,6 +122,46 @@ export const addBookedActivity = async (
 
 	return tourist;
 };
+
+export const addBookmarkedActivity = async (
+	touristId: string,
+	activityId: string,
+) => {
+	if (!Types.ObjectId.isValid(activityId)) {
+		throw new HttpError(400, "Activity id is not valid");
+	}
+	const tourist = await getTouristById(touristId);
+	if (!tourist) {
+		throw new HttpError(404, "Tourist not found");
+	}
+	await tourist.updateOne({
+		$push: { bookmarkedActivities: activityId },
+	});
+	return tourist;
+};
+
+export const removeBookmarkedActivity = async (
+	touristId: string,
+	activityId: string,
+) => {
+	if (!Types.ObjectId.isValid(activityId)) {
+		throw new HttpError(400, "Activity id is not valid");
+	}
+	const tourist = await getTouristById(touristId);
+	if (!tourist) {
+		throw new HttpError(404, "Tourist not found");
+	}
+	const removed = await tourist.updateOne({
+		$pull: { bookmarkedActivities: activityId },
+	});
+
+	if (removed.modifiedCount === 0) {
+		throw new HttpError(404, "Failed to remove bookmarked activity");
+	}
+
+	return tourist;
+};
+
 export function isOlderThan18(dob: Date): boolean {
 	const today = new Date();
 
@@ -171,6 +214,43 @@ export const addBookedItinerary = async (
 		{ new: true },
 	);
 
+	return tourist;
+};
+
+export const addBookmarkItenerary = async (
+	touristId: string,
+	itineraryId: string,
+) => {
+	if (!Types.ObjectId.isValid(itineraryId)) {
+		throw new HttpError(400, "Itinerary id is not valid");
+	}
+	const tourist = await getTouristById(touristId);
+	if (!tourist) {
+		throw new HttpError(404, "Tourist not found");
+	}
+	await tourist.updateOne({
+		$push: { bookmarkedItineraries: itineraryId },
+	});
+	return tourist;
+};
+
+export const removeBookmarkItinerary = async (
+	touristId: string,
+	itineraryId: string,
+) => {
+	if (!Types.ObjectId.isValid(itineraryId)) {
+		throw new HttpError(400, "Itinerary id is not valid");
+	}
+	const tourist = await getTouristById(touristId);
+	if (!tourist) {
+		throw new HttpError(404, "Tourist not found");
+	}
+	const removed = await tourist.updateOne({
+		$pull: { bookmarkedItineraries: itineraryId },
+	});
+	if (removed.modifiedCount === 0) {
+		throw new HttpError(404, "Itinerary not found in bookmarks");
+	}
 	return tourist;
 };
 
@@ -352,6 +432,43 @@ export const cancelTransportation = async (
 		throw new HttpError(404, "Failed to cancel Transportation booking");
 	}
 
+	return tourist;
+};
+
+export const addwishlistProduct = async (
+	touristId: string,
+	productId: string,
+) => {
+	if (!Types.ObjectId.isValid(productId)) {
+		throw new HttpError(400, "Product id is not valid");
+	}
+	const tourist = await getTouristById(touristId);
+	if (!tourist) {
+		throw new HttpError(404, "Tourist not found");
+	}
+	await tourist.updateOne({
+		$push: { wishlistproducts: productId },
+	});
+	return tourist;
+};
+
+export const removeWishlistProduct = async (
+	touristId: string,
+	productId: string,
+) => {
+	if (!Types.ObjectId.isValid(productId)) {
+		throw new HttpError(400, "Product id is not valid");
+	}
+	const tourist = await getTouristById(touristId);
+	if (!tourist) {
+		throw new HttpError(404, "Tourist not found");
+	}
+	const removed = await tourist.updateOne({
+		$pull: { wishlistproducts: productId },
+	});
+	if (removed.modifiedCount === 0) {
+		throw new HttpError(404, "Product not found in wishlist");
+	}
 	return tourist;
 };
 

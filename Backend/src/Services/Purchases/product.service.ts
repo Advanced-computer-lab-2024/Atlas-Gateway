@@ -1,10 +1,14 @@
 import { PipelineStage, Types } from "mongoose";
 
+
+
 import HttpError from "../../Errors/HttpError";
 import { IProduct, Product } from "../../Models/Purchases/product.model";
 import AggregateBuilder from "../Operations/aggregation.service";
 import * as adminService from "../Users/admin.service";
 import * as sellerService from "../Users/seller.service";
+import * as touristService from "../Users/tourist.service";
+
 
 export const createProduct = async (
 	userId: string,
@@ -119,6 +123,40 @@ export const deleteProduct = async (id: string) => {
 
 	return product;
 };
+
+export const addwhishlistProduct = async (
+	touristId: string,
+	productId: string,
+) => {
+	if (!Types.ObjectId.isValid(productId)) {
+		throw new HttpError(400, "Invalid product ID");
+	}
+	const product = await await touristService.addwishlistProduct(
+		touristId,
+		productId,
+	);
+	if (!product) {
+		throw new HttpError(404, "Could not add product to wishlist");
+	}
+	return product;
+};
+
+export const removeWishlistProduct = async(
+	touristId: string,
+	productId: string,
+) => {
+	if (!Types.ObjectId.isValid(productId)) {
+		throw new HttpError(400, "Invalid product ID");
+	}
+	const product = await touristService.removeWishlistProduct(
+		touristId,
+		productId,
+	);
+	if (!product) {
+		throw new HttpError(404, "Could not remove product from wishlist");
+	}
+	return product;
+}
 
 export const softDeleteProduct = async (id: string) => {
 	const product = await getProductById(id);
