@@ -1,9 +1,9 @@
 import ReactECharts from "echarts-for-react";
 
-import { TActivityReportResponse } from "@/api/service/types";
+import { TActivityReportResponse, TReportRespone } from "@/api/service/types";
 
 export default function ActivitiesChart(
-	activities: TActivityReportResponse[] | undefined,
+	activities: TReportRespone<TActivityReportResponse> | undefined,
 ) {
 	console.log(activities);
 	const activitiesChart = {
@@ -15,7 +15,7 @@ export default function ActivitiesChart(
 			data: ["Sales"],
 		},
 		xAxis: {
-			data: activities?.map(
+			data: activities?.data?.map(
 				(d: TActivityReportResponse) => d.ActivityName,
 			),
 		},
@@ -26,7 +26,7 @@ export default function ActivitiesChart(
 			{
 				name: "Sales",
 				type: "bar",
-				data: activities?.map(
+				data: activities?.data?.map(
 					(d: TActivityReportResponse) => d.totalSales,
 				),
 			},

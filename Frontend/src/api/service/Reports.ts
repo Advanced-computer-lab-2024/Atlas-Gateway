@@ -6,6 +6,7 @@ import {
 	TAdminReportResponse,
 	TItineraryReportResponse,
 	TProductReportResponse,
+	TReportRespone,
 } from "./types";
 
 export function apiAdminSalesReport() {
@@ -23,7 +24,7 @@ export function apiTourGuideSalesReport(
 	_id: string,
 	filters: Record<string, string>,
 ) {
-	return axios<TItineraryReportResponse>({
+	return axios<TReportRespone<TItineraryReportResponse>>({
 		method: "GET",
 		url: ENDPOINTS.tourGuide.salesReport(_id),
 		headers: {
@@ -40,7 +41,7 @@ export function apiAdvertiserSalesReport(
 	_id: string,
 	filters: Record<string, string>,
 ) {
-	return axios<TActivityReportResponse>({
+	return axios<TReportRespone<TActivityReportResponse>>({
 		method: "GET",
 		url: ENDPOINTS.advertiser.salesReport(_id),
 		headers: {
@@ -75,7 +76,7 @@ export function apiSellerSalesReport(
 	_id: string,
 	filters: Record<string, string>,
 ) {
-	return axios<TProductReportResponse>({
+	return axios<TReportRespone<TProductReportResponse>>({
 		method: "GET",
 		url: ENDPOINTS.seller.salesReport(_id),
 		headers: {

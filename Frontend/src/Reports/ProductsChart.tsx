@@ -1,9 +1,9 @@
 import ReactECharts from "echarts-for-react";
 
-import { TProductReportResponse } from "@/api/service/types";
+import { TProductReportResponse, TReportRespone } from "@/api/service/types";
 
 export default function ProductsChart(
-	products: TProductReportResponse[] | undefined,
+	products: TReportRespone<TProductReportResponse> | undefined,
 ) {
 	const productsChart = {
 		title: {
@@ -14,7 +14,9 @@ export default function ProductsChart(
 			data: ["Sales"],
 		},
 		xAxis: {
-			data: products?.map((d: TProductReportResponse) => d.ProductName),
+			data: products?.data?.map(
+				(d: TProductReportResponse) => d.ProductName,
+			),
 		},
 		yAxis: {
 			type: "value",
@@ -23,7 +25,9 @@ export default function ProductsChart(
 			{
 				name: "Sales",
 				type: "bar",
-				data: products?.map((d: TProductReportResponse) => d.ProductId),
+				data: products?.data?.map(
+					(d: TProductReportResponse) => d.ProductId,
+				),
 			},
 		],
 	};

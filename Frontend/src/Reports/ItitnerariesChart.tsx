@@ -1,9 +1,9 @@
 import ReactECharts from "echarts-for-react";
 
-import { TItineraryReportResponse } from "@/api/service/types";
+import { TItineraryReportResponse, TReportRespone } from "@/api/service/types";
 
 export default function ItinerariesChart(
-	itineraries: TItineraryReportResponse[] | undefined,
+	itineraries: TReportRespone<TItineraryReportResponse> | undefined,
 ) {
 	const itinerariesChart = {
 		title: {
@@ -14,7 +14,7 @@ export default function ItinerariesChart(
 			data: ["Sales"],
 		},
 		xAxis: {
-			data: itineraries?.map(
+			data: itineraries?.data?.map(
 				(d: TItineraryReportResponse) => d.ItineraryName,
 			),
 		},
@@ -25,7 +25,7 @@ export default function ItinerariesChart(
 			{
 				name: "Sales",
 				type: "bar",
-				data: itineraries?.map(
+				data: itineraries?.data?.map(
 					(d: TItineraryReportResponse) => d.totalSales,
 				),
 			},

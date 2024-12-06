@@ -46,7 +46,7 @@ export function useSalesReport() {
 
 	const { data } = q;
 
-	return { ...q, data: data?.data, meta: data?.data?.metaData };
+	return { ...q, data: data?.data?.data, meta: data?.data?.metaData };
 }
 
 export function useBookingReport() {
