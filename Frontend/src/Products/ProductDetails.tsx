@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ArrowLeft, Package, Sparkles } from "lucide-react";
+import { ArrowLeft, Package, Sparkles, Star } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -151,7 +151,7 @@ export default function ProductDetails() {
 						<Label.Big600>{name}</Label.Big600>
 						{user?.type === EAccountType.Tourist &&
 							(touristWishlist?.includes(user?._id) ? (
-								<Sparkles
+								<Star
 									fill="yellow"
 									onClick={() => {
 										if (data?._id) {
@@ -160,7 +160,7 @@ export default function ProductDetails() {
 									}}
 								/>
 							) : (
-								<Sparkles
+								<Star
 									onClick={() => {
 										if (data?._id) {
 											doAddWishlist(data?._id);

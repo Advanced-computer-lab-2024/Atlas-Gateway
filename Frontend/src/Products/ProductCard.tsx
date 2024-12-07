@@ -2,15 +2,12 @@ import axios from "axios";
 import {
 	Archive,
 	ArchiveRestore,
-	Bookmark,
-	Cake,
 	DollarSign,
 	Edit,
 	EllipsisVertical,
 	Eye,
 	Package,
-	ShoppingBasket,
-	Sparkles,
+	Star,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -126,7 +123,7 @@ export default function ProductCard({
 					<Flex align="center" justify="between">
 						{user?.type === EAccountType.Tourist &&
 							(touristWishlist?.includes(user?._id) ? (
-								<Sparkles
+								<Star
 									fill="yellow"
 									onClick={() => {
 										if (product?._id) {
@@ -135,7 +132,7 @@ export default function ProductCard({
 									}}
 								/>
 							) : (
-								<Sparkles
+								<Star
 									onClick={() => {
 										if (product?._id) {
 											doAddWishlist(product?._id);
