@@ -1,5 +1,10 @@
+import { IProduct } from "@/Models/Purchases/product.model";
 import { Types } from "mongoose";
 
+import {
+	IProductDTO,
+	IProductReportResponse,
+} from "../../DTOS/Report/ProductReportResponse";
 import HttpError from "../../Errors/HttpError";
 import { ISeller, Seller } from "../../Models/Users/seller.model";
 import { hashPassword } from "../Auth/password.service";
@@ -103,4 +108,80 @@ export const softDeleteSeller = async (id: string) => {
 	await seller.updateOne({ isDeleted: true });
 
 	return seller;
+};
+
+// TODO: Implement the report function waiting on the orders of the products
+export const report = async (
+	id: string,
+	options: { date?: string; ProductId?: string } = {},
+): Promise<IProductReportResponse> => {
+	const seller = await getSellerById(id);
+
+	if (!seller) {
+		throw new HttpError(404, "Tour Guide not Found");
+	}
+
+	// populate the products of the seller and the orders of the products
+
+	await seller.populate("Products");
+
+	let products: IProduct[] = seller.Products as IProduct[];
+
+	// if itineraryId is provided, filter the bookings by itineraryId
+	if (options.ProductId) {
+		products = products.filter(
+			(activity: IProduct) => activity.id == options.ProductId,
+		);
+	}
+
+	// if date is provided, filter the bookings by date
+	if (options.date) {
+		const [startDateStr, endDateStr] = options.date.split(",");
+
+		// if no date is provided, set the start date the lowest possible date and the end date to today
+		let startDate =
+			new Date(`${startDateStr}T00:00:00.000+00:00`) ||
+			new Date("1970-01-01T00:00:00.000+00:00");
+		let endDate =
+			endDateStr !== "null"
+				? new Date(`${endDateStr}T23:59:59.000+00:00`)
+				: new Date();
+
+		if (startDate > endDate) {
+			throw new HttpError(400, "Invalid Date Range");
+		}
+
+		// TODO: Filter on the orders of the products by date
+
+		// products = products.filter((product: IProduct) => {
+		// 	const start = new Date(product);
+		// 	console.log(start, startDate, endDate);
+		// 	return start >= startDate && start <= endDate;
+		// });
+	}
+
+	console.log(products);
+
+	let totalSales = 0;
+
+	let sales = products.map((product: IProduct) => {
+		// totalSales +=
+		// 	product.numberOfBookings *
+		// 	((product.minPrice + product.maxPrice) / 2);
+
+		return {
+			ProductId: product.id,
+			ProductName: product.name,
+			// totalSales:
+			// 	product.numberOfBookings *
+			// 	((product.minPrice + product.maxPrice) / 2),
+		} as IProductDTO;
+	});
+
+	return {
+		data: sales,
+		metaData: {
+			totalSales: totalSales,
+		},
+	} as IProductReportResponse;
 };

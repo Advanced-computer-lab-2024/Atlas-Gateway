@@ -136,3 +136,28 @@ export const softDeleteAdvertiser = async (
 		next(error);
 	}
 };
+
+export const Report = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	try {
+		const userid = req.params.id;
+		if (!userid) {
+			throw new HttpError(400, "User Id is required");
+		}
+
+		const salesReport = await advertiserService.report(userid, {
+			date: req.query.date?.toString(),
+			ActivityId: req.query.activityId?.toString(),
+		});
+
+		if (salesReport.data.length == 0) {
+			throw new HttpError(404, "No Sales Found");
+		}
+		res.status(200).send(salesReport);
+	} catch (error) {
+		next(error);
+	}
+};

@@ -1,12 +1,13 @@
 import { Document, Schema, Types, model } from "mongoose";
 
 import { schemaConfig } from "../../Config/schemaConfig";
+import { IPlaces } from "../Travel/places.model";
 
 export interface IGovernor extends Document {
 	username: string;
 	email: string;
 	password: string;
-	places: Types.ObjectId[];
+	places: Types.ObjectId[] | IPlaces[];
 }
 
 const governorSchema = new Schema<IGovernor>(

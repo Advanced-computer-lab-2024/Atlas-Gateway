@@ -2,12 +2,13 @@ import { Express } from "express";
 import { Document, Schema, Types, model } from "mongoose";
 
 import { schemaConfig } from "../../Config/schemaConfig";
+import { ITourist } from "../Users/tourist.model";
 
 export interface IReview extends Document {
 	rating: number;
 	text: string;
 
-	tourist: Types.ObjectId;
+	tourist: Types.ObjectId | ITourist;
 	reviewedItem: Types.ObjectId;
 	itemType: string;
 }

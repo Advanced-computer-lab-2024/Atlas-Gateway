@@ -157,11 +157,12 @@ export const deletePlace = async (id: string) => {
 			throw new HttpError(404, "Governor not found");
 		}
 
-		governor.places = governor.places.filter(
-			(placesId) => !placesId.equals(id),
+		await governor.updateOne(
+			{
+				$pull: { places: place.id },
+			},
+			{ session },
 		);
-
-		await governor.updateOne({ session });
 		// Delete the place
 		await place.deleteOne({ session });
 

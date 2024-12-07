@@ -2,7 +2,7 @@ import axios from "axios";
 
 import { TAdmin } from "@/types/global";
 
-import ENDPOINTS from "./ENDPOINTS";
+import ENDPOINTS, { baseURL } from "./ENDPOINTS";
 import { TAdminResponse } from "./types";
 
 export function apiCreateAdmin(payload: TAdmin) {
@@ -12,7 +12,7 @@ export function apiCreateAdmin(payload: TAdmin) {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 		data: payload,
 	});
 }
@@ -24,7 +24,7 @@ export function apiAdmins() {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 
@@ -35,6 +35,17 @@ export function apiDeleteAdmin(_id: string) {
 		headers: {
 			"content-type": "application/json",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
+	});
+}
+
+export function apiSalesReport() {
+	return axios({
+		method: "GET",
+		url: ENDPOINTS.admin.report,
+		headers: {
+			"content-type": "application/json",
+		},
+		baseURL: baseURL,
 	});
 }

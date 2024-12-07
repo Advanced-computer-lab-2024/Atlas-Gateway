@@ -1,6 +1,7 @@
 import { Document, Schema, Types, model } from "mongoose";
 
 import { schemaConfig } from "../../Config/schemaConfig";
+import { IItinerary } from "../Travel/itinerary.model";
 
 export interface ITourGuide extends Document {
 	username: string;
@@ -22,7 +23,7 @@ export interface ITourGuide extends Document {
 	// };
 	avgRating: number;
 	totalNumberOfRatings: number;
-	itinerary: Types.ObjectId[];
+	itinerary: Types.ObjectId[] | IItinerary[];
 	isVerified: boolean;
 	acceptedTerms: boolean;
 	isDeleted?: boolean;

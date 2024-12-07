@@ -1,6 +1,7 @@
 import { Express, Router } from "express";
 
 import {
+	Report,
 	createTransportationAdvertiser,
 	deleteTransportationAdvertiser,
 	getTransportationAdvertiser,
@@ -20,4 +21,5 @@ transportation_advertiserRouter.delete(
 	"/delete/:id",
 	deleteTransportationAdvertiser,
 );
+transportation_advertiserRouter.get("/report/:id", Report);
 export default transportation_advertiserRouter;

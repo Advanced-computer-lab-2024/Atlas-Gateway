@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { Types } from "mongoose";
 
 import HttpError from "../../Errors/HttpError";
+import { ITag } from "../../Models/Travel/tag.model";
 import { Tourist } from "../../Models/Users/tourist.model";
 import * as activityService from "../../Services/Travel/activity.service";
 
@@ -96,9 +97,8 @@ export const getActivities = async (
 
 		let preferredTags: Types.ObjectId[] | undefined = undefined;
 		if (usertype === "tourist") {
-			preferredTags = (
-				await Tourist?.findOne({ _id: req.headers.userid })
-			)?.preferredTags;
+			preferredTags = (await Tourist.findOne({ _id: req.headers.userid }))
+				?.preferredTags as Types.ObjectId[];
 		}
 
 		const result = await activityService.getActivities(usertype, {

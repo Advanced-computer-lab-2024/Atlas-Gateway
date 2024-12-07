@@ -75,3 +75,21 @@ export const deleteAdmin = async (
 		next(error);
 	}
 };
+
+export const Report = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	try {
+		const result = await adminService.report({
+			date: req.query.date as string,
+			ProductId: req.query.productId as string,
+			activityId: req.query.activityId as string,
+			itinararyId: req.query.itinararyId as string,
+		});
+		res.status(200).json(result);
+	} catch (error) {
+		next(error);
+	}
+};

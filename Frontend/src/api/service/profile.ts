@@ -152,7 +152,7 @@ export function apiGovernors() {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 export function apiGovernorProfile(_id: string) {
@@ -163,7 +163,7 @@ export function apiGovernorProfile(_id: string) {
 			"Content-Type": "application/json",
 			userid: _id,
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 export function apiEditGovernorProfile(_id: string, data: Partial<TGovernor>) {
@@ -175,7 +175,7 @@ export function apiEditGovernorProfile(_id: string, data: Partial<TGovernor>) {
 			userid: _id,
 		},
 		data,
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 export function apiDeleteGovernor(_id: string) {
@@ -185,7 +185,7 @@ export function apiDeleteGovernor(_id: string) {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 
@@ -257,7 +257,7 @@ export function apiTransportationAdvertisers() {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 
@@ -269,7 +269,7 @@ export function apiTransportationAdvertiserProfile(_id: string) {
 			"Content-Type": "application/json",
 			userid: _id,
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 
@@ -285,7 +285,7 @@ export function apiEditTransportationAdvertiserProfile(
 			userid: _id,
 		},
 		data,
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 
@@ -296,7 +296,7 @@ export function apiDeleteTransportationAdvertiserProfile(_id: string) {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 

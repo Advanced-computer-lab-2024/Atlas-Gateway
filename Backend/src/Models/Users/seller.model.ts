@@ -1,6 +1,7 @@
 import { Document, Schema, Types, model } from "mongoose";
 
 import { schemaConfig } from "../../Config/schemaConfig";
+import { IProduct } from "../Purchases/product.model";
 
 export interface ISeller extends Document {
 	username: string;
@@ -14,6 +15,7 @@ export interface ISeller extends Document {
 	isDeleted: boolean;
 	isVerified: { type: Boolean; default: false };
 	acceptedTerms: { type: Boolean; default: false };
+	Products: Types.ObjectId[] | IProduct[];
 }
 
 const sellerSchema = new Schema<ISeller>(
@@ -29,6 +31,7 @@ const sellerSchema = new Schema<ISeller>(
 		isVerified: { type: Boolean, default: false },
 		acceptedTerms: { type: Boolean, default: false },
 		isDeleted: { type: Boolean, default: false },
+		Products: [{ type: Schema.Types.ObjectId, ref: "Product" }],
 	},
 	schemaConfig,
 );

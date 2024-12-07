@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
 import HttpError from "../../Errors/HttpError";
+import * as itineraryService from "../../Services/Travel/itinerary.service";
 import * as tourGuideService from "../../Services/Users/tourGuide.service";
 
 export const createTourGuide = async (
@@ -112,6 +113,31 @@ export const softDeleteTourGuide = async (
 		}
 		await tourGuideService.softDeleteTourGuide(id);
 		res.status(200).send("tourGuide deleted successfully");
+	} catch (error) {
+		next(error);
+	}
+};
+
+export const Report = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	try {
+		const userid = req.params.id;
+		if (!userid) {
+			throw new HttpError(400, "User Id is required");
+		}
+
+		const salesReport = await tourGuideService.report(userid, {
+			date: req.query.date?.toString(),
+			itineraryId: req.query.itineraryId?.toString(),
+		});
+
+		if (salesReport.data.length == 0) {
+			throw new HttpError(404, "No Sales Found");
+		}
+		res.status(200).send(salesReport);
 	} catch (error) {
 		next(error);
 	}

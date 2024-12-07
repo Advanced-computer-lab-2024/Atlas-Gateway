@@ -1,6 +1,7 @@
 import { Express, Router } from "express";
 
 import {
+	Report,
 	createTourGuide,
 	deleteTourGuide,
 	getTourGuide,
@@ -16,5 +17,6 @@ tourGuideRouter.get("/list", getTourGuides);
 tourGuideRouter.put("/update/:id", updateTourGuide);
 tourGuideRouter.delete("/delete/:id", deleteTourGuide);
 tourGuideRouter.delete("/requestDelete/:id", softDeleteTourGuide);
+tourGuideRouter.get("/report/:id", Report);
 
 export default tourGuideRouter;

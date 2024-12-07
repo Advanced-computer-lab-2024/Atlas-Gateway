@@ -1,6 +1,7 @@
 import { Document, Schema, Types, model } from "mongoose";
 
 import { schemaConfig } from "../../Config/schemaConfig";
+import { IAdmin } from "../Users/admin.model";
 
 interface IComplaint extends Document {
 	title: string;
@@ -8,7 +9,7 @@ interface IComplaint extends Document {
 	status: string;
 	reply: string;
 	date: Date;
-	replyedBy: Types.ObjectId;
+	replyedBy: Types.ObjectId | IAdmin;
 	createdBy: Types.ObjectId;
 }
 

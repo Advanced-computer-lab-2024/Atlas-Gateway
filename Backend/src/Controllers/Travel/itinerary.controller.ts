@@ -99,8 +99,8 @@ export const getItineraries = async (
 		}
 		const result = await itineraryService.getItineraries(
 			usertype,
-			req.query,
 			userId,
+			req.query,
 		);
 		const response = {
 			data: result?.[0]?.data,

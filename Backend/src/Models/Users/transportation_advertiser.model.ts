@@ -1,6 +1,7 @@
 import { Document, Schema, Types, model } from "mongoose";
 
 import { schemaConfig } from "../../Config/schemaConfig";
+import { ITransportation } from "../Travel/transportation.model";
 
 export interface ITransportationAdvertiser extends Document {
 	name: string;
@@ -13,7 +14,7 @@ export interface ITransportationAdvertiser extends Document {
 	idPath: string;
 	taxCardPath: string;
 	imagePath: string;
-	transportations: Types.ObjectId[];
+	transportations: Types.ObjectId[] | ITransportation[];
 	isVerified: boolean;
 	acceptedTerms: boolean;
 }

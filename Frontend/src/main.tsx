@@ -1,5 +1,4 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import {
 	Navigate,
@@ -34,6 +33,7 @@ import ProductDetails from "./Products/ProductDetails";
 import Products from "./Products/Products";
 import Profile from "./Profile/Profile";
 import Register from "./Register/Register";
+import AdminReport from "./Reports/Admin/AdminReport";
 import TransportationDetails from "./Transportations/TransportationDetails";
 import Transportations from "./Transportations/Transportations";
 import { QueryStateProvider } from "./api/data/useQueryString";
@@ -122,6 +122,10 @@ const router = createBrowserRouter([
 								element: <ComplaintDetails />,
 							},
 						],
+					},
+					{
+						path: "/admin/reports",
+						element: <AdminReport />,
 					},
 				],
 			},

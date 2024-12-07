@@ -1,6 +1,7 @@
 import { Document, Schema, Types, model } from "mongoose";
 
 import { schemaConfig } from "../../Config/schemaConfig";
+import { IActivity } from "../Travel/activity.model";
 
 export interface IAdvertiser extends Document {
 	name: string;
@@ -13,7 +14,7 @@ export interface IAdvertiser extends Document {
 	idPath: string;
 	taxCardPath: string;
 	imagePath: string;
-	activities: Types.ObjectId[];
+	activities: Types.ObjectId[] | IActivity[];
 	isVerified: boolean;
 	acceptedTerms: boolean;
 	isDeleted: boolean;

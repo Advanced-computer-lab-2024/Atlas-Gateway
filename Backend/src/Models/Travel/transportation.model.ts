@@ -1,6 +1,7 @@
 import { Document, Schema, Types, model } from "mongoose";
 
 import { schemaConfig } from "../../Config/schemaConfig";
+import { ITourist } from "../Users/tourist.model";
 
 export interface ITransportation extends Document {
 	name: string;
@@ -12,7 +13,7 @@ export interface ITransportation extends Document {
 	pickUpTime: Date;
 	dropOffTime: Date;
 	numberOfBookings: number;
-	tourists: Types.ObjectId[];
+	tourists: Types.ObjectId[] | ITourist[];
 	createdBy: Types.ObjectId;
 }
 

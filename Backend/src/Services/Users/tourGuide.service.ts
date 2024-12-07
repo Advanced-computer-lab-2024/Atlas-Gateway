@@ -1,5 +1,12 @@
+import { IBooking } from "@/Models/Purchases/booking.model";
+import { IItinerary } from "@/Models/Travel/itinerary.model";
+import { id } from "date-fns/locale";
 import { Types } from "mongoose";
 
+import {
+	IItineraryDTO,
+	IItineraryReportResponse,
+} from "../../DTOS/Report/ItineraryReportResponse";
 import HttpError from "../../Errors/HttpError";
 import { ITourGuide, TourGuide } from "../../Models/Users/tourGuide.model";
 import { hashPassword } from "../Auth/password.service";
@@ -100,4 +107,73 @@ export const softDeleteTourGuide = async (id: string) => {
 	await tourGuide.updateOne({ isDeleted: true });
 
 	return tourGuide;
+};
+
+export const report = async (
+	id: string,
+	options: { date?: string; itineraryId?: string } = {},
+): Promise<IItineraryReportResponse> => {
+	const tourGuide = await getTourGuideById(id);
+
+	if (!tourGuide) {
+		throw new HttpError(404, "Tour Guide not Found");
+	}
+
+	let itineraries: IItinerary[] = tourGuide.itinerary as IItinerary[];
+
+	// if itineraryId is provided, filter the bookings by itineraryId
+	if (options.itineraryId) {
+		itineraries = itineraries.filter(
+			(itinerary: IItinerary) => itinerary.id == options.itineraryId,
+		);
+	}
+
+	// if date is provided, filter the bookings by date
+	if (options.date) {
+		const [startDateStr, endDateStr] = options.date.split(",");
+
+		// if no date is provided, set the start date the lowest possible date and the end date to today
+		let startDate =
+			new Date(`${startDateStr}T00:00:00.000+00:00`) ||
+			new Date("1970-01-01T00:00:00.000+00:00");
+		let endDate =
+			endDateStr !== "null"
+				? new Date(`${endDateStr}T23:59:59.000+00:00`)
+				: new Date();
+
+		if (startDate > endDate) {
+			throw new HttpError(400, "Invalid Date Range");
+		}
+
+		itineraries = itineraries.filter((itinerary: IItinerary) => {
+			const start = new Date(itinerary.startDateTime);
+			console.log(start, startDate, endDate);
+			return start >= startDate && start <= endDate;
+		});
+	}
+
+	let totalSales = 0;
+	let totalBookings = 0;
+
+	let sales: IItineraryDTO[] = itineraries.map((itinerary: IItinerary) => {
+		const adminProfit = itinerary.numberOfBookings * itinerary.price * 0.1;
+		totalSales +=
+			itinerary.numberOfBookings * itinerary.price - adminProfit;
+		totalBookings += itinerary.numberOfBookings;
+		return {
+			itineraryId: itinerary.id,
+			itineraryName: itinerary.title,
+			numberOfBookings: itinerary.numberOfBookings,
+			totalSales:
+				itinerary.numberOfBookings * itinerary.price - adminProfit,
+		} as IItineraryDTO;
+	});
+
+	return {
+		data: sales,
+		metaData: {
+			totalSales: totalSales,
+			totalBookings: totalBookings,
+		},
+	} as IItineraryReportResponse;
 };
