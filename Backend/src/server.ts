@@ -19,7 +19,6 @@ import categoryRouter from "./Routes/Travel/category.route";
 import placesRouter from "./Routes/Travel/places.route";
 import tagRouter from "./Routes/Travel/tag.route";
 import transportationRouter from "./Routes/Travel/transportation.route";
-import userStatiticsRouter from "./Routes/UserStatistics/userStatistics.route";
 import adminRouter from "./Routes/Users/admin.route";
 import advertiserRouter from "./Routes/Users/advertiser.route";
 import governorRouter from "./Routes/Users/governor.route";
@@ -64,7 +63,6 @@ async function startServer() {
 	app.use("/api/flights", flightRouter);
 	app.use("/api/hotels", hotelRouter);
 	app.use("/api/reviews", reviewRouter);
-	app.use("/api/statistics", userStatiticsRouter);
 	// Error handling middleware
 	app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 		console.error(err.stack);

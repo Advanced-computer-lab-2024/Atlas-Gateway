@@ -20,6 +20,7 @@ export interface IActivity extends Document {
 	tourists: Types.ObjectId[];
 	isDeleted?: boolean;
 	isArchived?: boolean;
+	notificationRequested: Types.ObjectId[];
 }
 
 const activitySchema = new Schema<IActivity>(
@@ -78,6 +79,9 @@ const activitySchema = new Schema<IActivity>(
 		},
 
 		tourists: [{ type: Schema.Types.ObjectId, ref: "Tourist" }],
+		notificationRequested: [
+			{ type: Schema.Types.ObjectId, ref: "Tourist" },
+		],
 	},
 	schemaConfig,
 );

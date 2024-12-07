@@ -1,7 +1,8 @@
-import { IItinerary } from "@/Models/Travel/itinerary.model";
-import { Types } from "mongoose";
+import { Types, now } from "mongoose";
 
 import HttpError from "../../Errors/HttpError";
+import { Activity } from "../../Models/Travel/activity.model";
+import { IItinerary, Itinerary } from "../../Models/Travel/itinerary.model";
 import { ITourist, Tourist } from "../../Models/Users/tourist.model";
 import { hashPassword } from "../Auth/password.service";
 import uniqueUsername from "../Auth/username.service";
@@ -385,4 +386,97 @@ export const redeemPoints = async (id: string) => {
 		},
 		{ new: true },
 	);
+};
+export const viewWallet = async (touristId: String) => {
+	const tourist = await Tourist.findById(touristId);
+	if (!tourist) {
+		throw new HttpError(404, "tourist not found");
+	}
+	return tourist?.walletBalance;
+};
+export const viewUpcomingActivities = async (touristId: String) => {
+	const now = new Date();
+	const tourist = await Tourist.findById(touristId).populate({
+		path: "bookedActivities",
+		match: { dateTime: { $gt: now } },
+	});
+	if (!tourist) {
+		throw new HttpError(404, "tourist not found");
+	}
+
+	console.log(tourist.bookedActivities);
+	return tourist.bookedActivities;
+};
+
+export const viewPastActivities = async (touristId: String) => {
+	const now = new Date();
+	const tourist = await Tourist.findById(touristId).populate({
+		path: "bookedActivities",
+		match: { dateTime: { $lt: now } },
+	});
+	if (!tourist) {
+		throw new HttpError(404, "tourist not found");
+	}
+
+	console.log(tourist.bookedActivities);
+	return tourist.bookedActivities;
+};
+export const viewUpcomingIitneraries = async (touristId: String) => {
+	const now = new Date();
+	const tourist = await Tourist.findById(touristId).populate({
+		path: "bookedItineraries",
+		match: { startDateTime: { $gt: now } },
+	});
+	if (!tourist) {
+		throw new HttpError(404, "tourist not found");
+	}
+
+	console.log(tourist.bookedItineraries);
+	return tourist.bookedItineraries;
+};
+export const viewPastIitneraries = async (touristId: String) => {
+	const now = new Date();
+	const tourist = await Tourist.findById(touristId).populate({
+		path: "bookedItineraries",
+		match: { endDateTime: { $lt: now } },
+	});
+	if (!tourist) {
+		throw new HttpError(404, "tourist not found");
+	}
+
+	console.log(tourist.bookedItineraries);
+	return tourist.bookedItineraries;
+};
+export const requestActivityNotification = async (
+	activityId: String,
+	touristId: String,
+) => {
+	const activity = await Activity.findById(activityId);
+	const tourist = await Tourist.findById(touristId);
+	if (!activity) {
+		throw new HttpError(404, "no activity found with this id");
+	}
+	if (!tourist) {
+		throw new HttpError(404, "no tourist found with this id");
+	}
+	activity.notificationRequested.push(tourist?.id);
+	console.log(activity.notificationRequested);
+	await activity.save();
+	return "saved";
+};
+export const requestItineraryNotification = async (
+	itineraryId: String,
+	touristId: String,
+) => {
+	const itinerary = await Itinerary.findById(itineraryId);
+	const tourist = await Tourist.findById(touristId);
+	if (!itinerary) {
+		throw new HttpError(404, "no activity found with this id");
+	}
+	if (!tourist) {
+		throw new HttpError(404, "no tourist found with this id");
+	}
+	itinerary.notificationRequested.push(tourist?.id);
+	await itinerary.save();
+	return;
 };
