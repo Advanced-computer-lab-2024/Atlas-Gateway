@@ -1,8 +1,11 @@
 import { Document, Schema, Types, model } from "mongoose";
 
+
+
 import { schemaConfig } from "../../Config/schemaConfig";
 import { IAdmin } from "../Users/admin.model";
 import { ISeller } from "../Users/seller.model";
+
 
 export interface IProduct extends Document {
 	sellerId: Types.ObjectId | ISeller;
@@ -15,6 +18,7 @@ export interface IProduct extends Document {
 	sales: number;
 	avgRating: number;
 	totalNumberOfRatings: number;
+	touristWishlist: Types.ObjectId[];
 	isDeleted?: boolean;
 }
 
@@ -34,6 +38,7 @@ const productSchema = new Schema<IProduct>(
 		sales: { type: Number, default: 0 },
 		avgRating: { type: Number, min: 0, max: 5, default: 0 },
 		totalNumberOfRatings: { type: Number, default: 0 },
+		touristWishlist: [{ type: Schema.Types.ObjectId, ref: "Tourist" }],
 		isDeleted: { type: Boolean, default: false },
 	},
 	schemaConfig,

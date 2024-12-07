@@ -99,7 +99,7 @@ export default function Products() {
 									type: "range",
 								},
 							}}
-						/>
+						/>		
 					</Flex>
 				</Flex>
 				{user?.type === EAccountType.Seller &&

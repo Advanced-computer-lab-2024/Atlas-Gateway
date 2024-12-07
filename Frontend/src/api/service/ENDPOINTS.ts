@@ -15,6 +15,9 @@ const ENDPOINTS = {
 		create: "api/products/create",
 		update: (id: string) => `api/products/update/${id}`,
 		delete: (id: string) => `api/products/delete/${id}`,
+		addWishlist: (id: string) => `api/products/wishlist/${id}`,
+		removeWishlist: (id: string) =>
+			`api/products/removewishlist/${id}`,
 	},
 	activity: {
 		list: "api/activity/list",

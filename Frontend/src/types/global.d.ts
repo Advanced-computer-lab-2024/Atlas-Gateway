@@ -62,7 +62,7 @@ export type TProduct = {
 	isArchived: boolean;
 	quantity: number;
 	sales: number;
-
+	touristWishlist: string[];
 	reviews: string[];
 	avgRating: number;
 	isArchived: boolean;

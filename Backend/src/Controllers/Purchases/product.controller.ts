@@ -143,7 +143,7 @@ export const addwishlistProduct = async(
 			throw new HttpError(400, "Product id is required");
 		}
 
-		const product = await productService.addwhishlistProduct(
+		const product = await productService.addwhishlist(
 			userId.toString(),
 			productId,
 		);
@@ -167,7 +167,7 @@ export const removeWishlistProduct = async(
 		if (!productId) {
 			throw new HttpError(400, "Product id is required");
 		}
-		const product = await productService.removeWishlistProduct(
+		const product = await productService.removeWishlist(
 			userId.toString(),
 			productId,
 		);

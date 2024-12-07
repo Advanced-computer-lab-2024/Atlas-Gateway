@@ -447,7 +447,7 @@ export const addwishlistProduct = async (
 		throw new HttpError(404, "Tourist not found");
 	}
 	await tourist.updateOne({
-		$push: { wishlistproducts: productId },
+		$push: { wishlistproducts: productId }
 	});
 	return tourist;
 };

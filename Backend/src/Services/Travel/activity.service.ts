@@ -1,13 +1,10 @@
 import mongoose, { PipelineStage, Types } from "mongoose";
 
-
-
 import HttpError from "../../Errors/HttpError";
 import { Activity, IActivity } from "../../Models/Travel/activity.model";
 import * as advertiserService from "../../Services/Users/advertiser.service";
 import AggregateBuilder from "../Operations/aggregation.service";
 import * as touristService from "../Users/tourist.service";
-
 
 const ActivityFiltersMap: Record<string, PipelineStage> = {
 	tourist: {
@@ -300,24 +297,39 @@ export const bookActivity = async (activityId: string, touristId: string) => {
 	return activity;
 };
 
-export const bookmarkActivity = async (activityId: string, touristId: string) => {
-	const activity = await getActivityById(activityId);
-	if (!activity) {
-		throw new HttpError(404, "Activity not found");
+export const bookmarkActivity = async (
+	activityId: string,
+	touristId: string,
+) => {
+	const session = await mongoose.startSession();
+	try {
+		session.startTransaction();
+		const activity = await getActivityById(activityId);
+		if (!activity) {
+			throw new HttpError(404, "Activity not found");
+		}
+		const tourist = await touristService.addBookmarkedActivity(
+			touristId,
+			activityId,
+		);
+		if (!tourist) {
+			throw new HttpError(404, "Could not bookmark activity for tourist");
+		}
+		await activity.updateOne(
+			{
+				$push: { touristBookmarks: tourist.id },
+			},
+			{ session },
+		);
+		await session.commitTransaction();
+		return activity;
+	} catch (error) {
+		await session.abortTransaction();
+		throw error;
+	} finally {
+		session.endSession();
 	}
-	const tourist = await touristService.addBookmarkedActivity(
-		touristId,
-		activityId,
-	);
-	if (!tourist) {
-		throw new HttpError(404, "Could not bookmark activity for tourist");
-	}
-	await activity.updateOne({
-		$push: { touristBookmarks: tourist.id },
-	});
-
-	return activity;
-}
+};
 
 export const cancelBookingActivity = async (
 	activityId: string,
@@ -362,26 +374,41 @@ export const cancelBookingActivity = async (
 	return removedActivity;
 };
 
-export const removeBookmarkActivity = async(
+export const removeBookmarkActivity = async (
 	activityId: string,
 	touristId: string,
 ) => {
-	const activity = await getActivityById(activityId);
-	if (!activity) {
-		throw new HttpError(404, "Activity not found");
+	const session = await mongoose.startSession();
+
+	try {
+		session.startTransaction();
+
+		const activity = await getActivityById(activityId);
+		if (!activity) {
+			throw new HttpError(404, "Activity not found");
+		}
+		const tourist = await touristService.removeBookmarkedActivity(
+			touristId,
+			activityId,
+		);
+		if (!tourist) {
+			throw new HttpError(
+				404,
+				"Could not remove bookmarked activity for tourist",
+			);
+		}
+		await activity.updateOne({
+			$pull: { touristBookmarks: tourist.id },
+		});
+		await session.commitTransaction();
+		return activity;
+	} catch (error) {
+		await session.abortTransaction();
+		throw error;
+	} finally {
+		session.endSession();
 	}
-	const tourist = await touristService.removeBookmarkedActivity(
-		touristId,
-		activityId,
-	);
-	if (!tourist) {
-		throw new HttpError(404, "Could not remove bookmarked activity for tourist");
-	}
-	await activity.updateOne({
-		$pull: { touristBookmarks: tourist.id },
-	});
-	return activity;
-}
+};
 
 export const softDeleteActivity = async (id: string) => {
 	const activity = await getActivityById(id);

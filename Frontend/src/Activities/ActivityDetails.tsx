@@ -136,6 +136,31 @@ export default function ActivityDetails() {
 								size={32}
 							/>
 							<Label.Big600>{name}</Label.Big600>
+							<Flex>
+								{user?.type === EAccountType.Tourist &&
+									(touristBookmarks?.includes(user?._id) ? (
+										<Bookmark
+											fill="black"
+											onClick={() => {
+												if (data?._id) {
+													doRemoveBookmarkActivity(
+														data?._id,
+													);
+												}
+											}}
+										/>
+									) : (
+										<Bookmark
+											onClick={() => {
+												if (data?._id) {
+													doBookmarkActivity(
+														data?._id,
+													);
+												}
+											}}
+										/>
+									))}
+							</Flex>
 						</Flex>
 						<Flex>
 							{user?.type === EAccountType.Tourist &&
@@ -325,27 +350,6 @@ export default function ActivityDetails() {
 								{isOpen ? "Yes" : "No"}
 							</Label.Thin300>
 						</Flex>
-					</Flex>
-					<Flex>
-						{user?.type === EAccountType.Tourist &&
-							(touristBookmarks?.includes(user?._id) ? (
-								<Bookmark
-									fill="black"
-									onClick={() => {
-										if (data?._id) {
-											doRemoveBookmarkActivity(data?._id);
-										}
-									}}
-								/>
-							) : (
-								<Bookmark
-									onClick={() => {
-										if (data?._id) {
-											doBookmarkActivity(data?._id);
-										}
-									}}
-								/>
-							))}
 					</Flex>
 				</CardContent>
 			</Card>
