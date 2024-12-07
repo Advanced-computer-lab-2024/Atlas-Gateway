@@ -35,7 +35,7 @@ export interface ITourist extends Document {
 	bookedActivities: Types.ObjectId[];
 	bookmarkedActivities: Types.ObjectId[];
 
-	bookedTransportations: Types.ObjectId[];
+	bookedTransportations: Types.ObjectId[] | ITransportation[];
 	bookedFlights: Types.ObjectId[] | IFlight[];
 	bookedHotelOffers: Types.ObjectId[];
 	canceledItineraries: Types.ObjectId[];

@@ -8,7 +8,8 @@ export default function ItinerariesChart(
 	const { data, metaData } = props || {};
 	const itinerariesChart = {
 		title: {
-			text: `Itinerary Sales and Bookings\nTotal Sales: ${metaData?.totalSales ?? 0}, Total Bookings: ${metaData?.totalBookings ?? 0}`,
+			text: `Itinerary Sales and Bookings \n
+			Total Sales: ${metaData?.totalSales ?? 0}, Total Bookings: ${metaData?.totalBookings ?? 0}`,
 			left: "center",
 			textStyle: {
 				fontSize: 14,
