@@ -1,6 +1,5 @@
 import { EAccountType } from "@/types/enums";
 
-
 type TCard = {
 	title: string;
 	description: string;

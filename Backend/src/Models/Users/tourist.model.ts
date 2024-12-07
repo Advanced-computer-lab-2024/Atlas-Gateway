@@ -45,6 +45,10 @@ export interface ITourist extends Document {
 	wishlistproducts: Types.ObjectId[];
 	isDeleted?: boolean;
 	preferredTags?: Types.ObjectId[] | ITag[];
+	cart: {
+		product: Types.ObjectId;
+		quantity: number;
+	}[];
 }
 
 const touristSchema = new Schema<ITourist>(
@@ -107,7 +111,6 @@ const touristSchema = new Schema<ITourist>(
 
 		bookedTransportations: [
 			{ type: Schema.Types.ObjectId, ref: "Transportation" },
-			,
 		],
 		bookedFlights: [{ type: Schema.Types.ObjectId, ref: "Flight" }],
 		// canceledItineraries: [
@@ -124,6 +127,12 @@ const touristSchema = new Schema<ITourist>(
 		isDeleted: { type: Boolean, default: false },
 		preferredTags: [
 			{ type: Schema.Types.ObjectId, ref: "Tag", required: true },
+		],
+		cart: [
+			{
+				product: { type: Schema.Types.ObjectId, ref: "Product" },
+				quantity: { type: Number, required: true },
+			},
 		],
 	},
 	schemaConfig,

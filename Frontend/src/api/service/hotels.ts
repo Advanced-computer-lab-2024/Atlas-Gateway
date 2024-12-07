@@ -1,13 +1,13 @@
 import axios from "axios";
 
-
-
-import { IHotelBooking, THotel, THotelOffers, THotelRating } from "@/types/global";
-
-
+import {
+	IHotelBooking,
+	THotel,
+	THotelOffers,
+	THotelRating,
+} from "@/types/global";
 
 import ENDPOINTS, { baseURL } from "./ENDPOINTS";
-
 
 export function apiListHotels(
 	cityCode: string,

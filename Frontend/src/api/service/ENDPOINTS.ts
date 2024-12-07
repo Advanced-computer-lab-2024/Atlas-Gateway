@@ -18,6 +18,9 @@ const ENDPOINTS = {
 		addWishlist: (id: string) => `api/products/wishlist/${id}`,
 		removeWishlist: (id: string) =>
 			`api/products/removewishlist/${id}`,
+		addToCart: (id: string) => `api/tourist/cart/add/${id}`,
+		removeFromCart: (id: string) => `api/tourist/cart/remove/${id}`,
+		updateProductQuantity: (id: string) => `api/tourist/cart/update/${id}`,
 	},
 	activity: {
 		list: "api/activity/list",

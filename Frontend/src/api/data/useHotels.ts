@@ -1,16 +1,16 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-
-
 import { useAmadeusToken } from "@/Hotels/AmadeusContext";
 import { useLoginStore } from "@/store/loginStore";
 import { IHotelBooking, THotel } from "@/types/global";
 
-
-
-import { apiBookHotels, apiListHotels, apiShowHotelOffers, apiShowHotelRatings } from "../service/hotels";
+import {
+	apiBookHotels,
+	apiListHotels,
+	apiShowHotelOffers,
+	apiShowHotelRatings,
+} from "../service/hotels";
 import { useQueryString } from "./useQueryString";
-
 
 export function useHotels(cityCode: string) {
 	const [query] = useQueryString();

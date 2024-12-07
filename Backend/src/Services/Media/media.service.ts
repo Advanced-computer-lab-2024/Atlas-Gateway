@@ -72,7 +72,6 @@ export const download = async (filePath: string) => {
 			Bucket: process.env.AWS_BUCKET_NAME!,
 			Key: `${filePath}`,
 		});
-		console.log(filePath);
 		await s3.send(command);
 		return await getSignedUrl(s3, command, { expiresIn: 3600 });
 	} catch (error) {

@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
+import Map from "@/components/ui/map";
 import {
 	Select,
 	SelectContent,
@@ -11,7 +12,6 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import Map from "@/components/ui/map";
 
 import { transportationSchema } from "../../Transportations/Form/schema";
 import {
@@ -55,7 +55,9 @@ const TransportationForm = ({
 	const { control, reset } = form;
 
 	// Initialize local state for select value
-	const [selectedType, setSelectedType] = useState(transportation?.type || "");
+	const [selectedType, setSelectedType] = useState(
+		transportation?.type || "",
+	);
 
 	useEffect(() => {
 		if (transportation) {
@@ -63,8 +65,8 @@ const TransportationForm = ({
 		}
 	}, [transportation, reset]);
 
-	const {refetch } = useTransportations();
-	
+	const { refetch } = useTransportations();
+
 	const { doCreateTransportation } = useCreateTransportation(() => {
 		refetch();
 		form.reset();
@@ -214,7 +216,7 @@ const TransportationForm = ({
 									</FormItem>
 								)}
 							/>
-							
+
 							{/* Availability Field */}
 							<FormField
 								control={control}
@@ -262,7 +264,6 @@ const TransportationForm = ({
 														date?.toString(),
 													)
 												}
-												
 											/>
 										</FormControl>
 
@@ -291,7 +292,6 @@ const TransportationForm = ({
 														date?.toString(),
 													)
 												}
-												
 											/>
 										</FormControl>
 										<FormDescription>

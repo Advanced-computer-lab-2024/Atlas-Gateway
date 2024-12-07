@@ -29,6 +29,7 @@ import ItineraryDetails from "./Itineraries/ItineraryDetails";
 import Login from "./Login/Login";
 import PlaceDetails from "./Places/PlaceDetails";
 import Places from "./Places/Places";
+import Cart from "./Products/Cart";
 import ProductDetails from "./Products/ProductDetails";
 import Products from "./Products/Products";
 import Profile from "./Profile/Profile";
@@ -185,6 +186,10 @@ const router = createBrowserRouter([
 						path: "/products/:id",
 						element: <ProductDetails />,
 					},
+					{
+						path: "/products/cart",
+						element: <Cart />,
+					},
 				],
 			},
 			{
@@ -251,9 +256,9 @@ const router = createBrowserRouter([
 ]);
 
 createRoot(document.getElementById("root")!).render(
-	// <StrictMode>
-	<QueryClientProvider client={queryClient}>
-		<RouterProvider router={router} />
-	</QueryClientProvider>,
-	// </StrictMode>,
+	<StrictMode>
+		<QueryClientProvider client={queryClient}>
+			<RouterProvider router={router} />
+		</QueryClientProvider>
+	</StrictMode>,
 );

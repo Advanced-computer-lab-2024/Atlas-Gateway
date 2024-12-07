@@ -76,7 +76,6 @@ export const citycodes = [
 	{ value: "MEX", label: "Mexico City" },
 ];
 
-
 export const classes = [
 	{ value: "ECONOMY", label: "Economy" },
 	{ value: "BUSINESS", label: "Business" },
