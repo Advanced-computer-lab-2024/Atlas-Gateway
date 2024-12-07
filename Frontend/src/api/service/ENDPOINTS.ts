@@ -137,6 +137,11 @@ const ENDPOINTS = {
 		book: (id: string) => `api/transportation/book/${id}`,
 		cancelBooking: (id: string) => `api/transportation/cancelBooking/${id}`,
 	},
+	notification: {
+		get: "api/notification/get",
+		read: (id: string) => `api/notification/read/${id}`,
+		delete: (id: string) => `api/notification/delete/${id}`,
+	},
 };
 
 export default ENDPOINTS;

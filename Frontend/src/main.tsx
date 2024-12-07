@@ -36,9 +36,12 @@ import Profile from "./Profile/Profile";
 import Register from "./Register/Register";
 import TransportationDetails from "./Transportations/TransportationDetails";
 import Transportations from "./Transportations/Transportations";
+import Notifications from "./Notifications/Notifications";
 import { QueryStateProvider } from "./api/data/useQueryString";
 import "./index.css";
 import Layout from "./layout/Layout";
+import NotificationCard from "./Notifications/NotificationCard";
+import NotificationCardCopy from "./Notifications/NotificationCard copy";
 
 const queryClient = new QueryClient();
 
@@ -241,6 +244,10 @@ const router = createBrowserRouter([
 						element: <TransportationDetails />,
 					},
 				],
+			},
+			{
+				path: "/notifications",
+				element: <Notifications />,
 			},
 		],
 	},

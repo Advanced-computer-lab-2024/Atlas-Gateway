@@ -76,21 +76,18 @@ export const getNotificationsByUserId = async (userId: string) => {
     return result;
 };
 
-//TODO: Add atlasGateway email and password
 const transporter = nodemailer.createTransport({
     service: 'gmail', // or any other email service (e.g., SendGrid, SES)
     auth: {
-        user: 'your-email@gmail.com',
-        pass: 'your-email-password',
+        user: 'atlasgateway9@gmail.com',
+        pass: 'atlasGate9',
     },
 });
 
-//TODO: Add atlasGateway email
 export const sendEmailNotification = async (userEmail: string, emailSubject: string, emailBody: string) => {
-    // Send the email
     try {
         await transporter.sendMail({
-            from: 'your-email@gmail.com',
+            from: 'atlasgateway9@gmail.com',
             to: userEmail,
             subject: emailSubject,
             html: emailBody, // Email body in HTML format
@@ -129,7 +126,7 @@ export const notifyOfFlaggedItinerary = async (userId: string, userType: string,
         message: `Itinerary "${itinerary.title}" has been flagged as inapproriate by the admin`,
         notifiedTo: userId,
         userType: userType,
-        read: false,
+        isRead: false,
         createdAt: new Date(),
     });
 
@@ -169,7 +166,7 @@ export const notifyOfFlaggedActivity = async (userId: string, userType: string, 
         message: `Activity "${activity.name}" has been flagged as inapproriate by the admin`,
         notifiedTo: userId,
         userType: userType,
-        read: false,
+        isRead: false,
         createdAt: new Date(),
     });
 
@@ -209,7 +206,7 @@ export const notifyOfProductOutOfStock = async (userId: string, userType: string
         message: `Product "${product.name}" is out of stock`,
         notifiedTo: userId,
         userType: userType,
-        read: false,
+        isRead: false,
         createdAt: new Date(),
     });
 
@@ -227,7 +224,7 @@ const cron = require('node-cron');
 const moment = require('moment');
 //Notify of upcoming Booked Itineraries
 export const notifyOfUpComingBookedItineraries = async (userId: string, userType: string) => {
-    if (userType == 'Tourist') {
+    if (userType == 'tourist') {
         if (!Types.ObjectId.isValid(userId)) {
             throw new HttpError(400, "Invalid User ID");
         }
@@ -250,7 +247,7 @@ export const notifyOfUpComingBookedItineraries = async (userId: string, userType
                 message: message,
                 notifiedTo: userId,
                 UserType: userType,
-                read: false,
+                isRead: false,
                 createdAt: new Date(),
             });
 
@@ -320,7 +317,7 @@ export const notifyOfUpComingPaidItineraries = async (userId: string, userType: 
                 message: message,
                 notifiedTo: userId,
                 UserType: userType,
-                read: false,
+                isRead: false,
                 createdAt: new Date(),
             });
 
@@ -372,7 +369,7 @@ export const markNotificationAsRead = async (id: string) => {
     if (!notifi)
         throw new HttpError(404, "Notification not found");
 
-    notifi.read = true;
+    notifi.isRead = true;
 
     const saved = await notifi.save();
 

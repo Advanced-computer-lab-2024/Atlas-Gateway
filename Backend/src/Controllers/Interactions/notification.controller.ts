@@ -52,11 +52,9 @@ export const getNotificationsByUserId = async (
         const userId = req.headers.userid;
 
         if (!userId)
-            return res
-                .status(400)
-                .json({ message: "User ID is required" });
+            return res.status(400).json({ message: "User ID is required" });
 
-                const notifications = await notificationService.getNotificationsByUserId(userId.toString());
+        const notifications = await notificationService.getNotificationsByUserId(userId.toString());
 
         if (!notifications)
             return res.status(401).json("No Notifications found");
@@ -75,6 +73,10 @@ export const getNotificationById = async (
 ) => {
     try {
         const { id } = req.params;
+
+        if (!id)
+            res.status(400).json({ error: "Notification id is required" });
+
         const notificationData = await Notification.findById(id)
             .populate("notifiedTo");
 
@@ -94,10 +96,14 @@ export const markNotificationAsRead = async (
     next: NextFunction,
 ) => {
     try {
-        const id= req.params.id;
+        const id = req.params.id;
+
+        if (!id)
+            res.status(400).json({ error: "Notification id is required" });
+
         const result = await notificationService.markNotificationAsRead(id);
         if (!result)
-            res.status(401).json("Couldn't mark Notification as read");
+            res.status(401).json("Couldn't mark Notification as Read");
 
         res.status(201).json(result);
     } catch (error) {
@@ -113,6 +119,9 @@ export const updateNotificationById = async (
 ) => {
     try {
         const notificationId = req.params.id;
+
+        if (!notificationId)
+            res.status(400).json({ error: "Notification id is required" });
 
         if (!Types.ObjectId.isValid(notificationId)) {
             return res
@@ -139,6 +148,18 @@ export const deleteNotification = async (
 ) => {
     try {
         const { id } = req.params;
+        const userid = req.headers.userid;
+        const usertype = req.headers.usertype as string;
+
+		if (!usertype)
+            res.status(400).json({ error: "User type is required" });
+        
+        if (!userid)
+            res.status(400).json({ error: "User id is required" });
+
+        if (!id)
+            res.status(400).json({ error: "Notification id is required" });
+        
         const notificationData = await Notification.findByIdAndDelete(id);
         if (!notificationData) {
             return res.status(404).json({ message: "Notification not found" });

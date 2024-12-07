@@ -241,10 +241,10 @@ export function filterByComplaintStatus(query: any): PipelineStage[] {
 export function filterByNotificationReadStatus(query: any): PipelineStage[]{
 	const pipeline: PipelineStage[] = [];
 
-	if (query.read) {
+	if (query.isRead) {
 		pipeline.push({
 			$match: {
-				read: query.read,
+				isRead: query.isRead,
 			},
 		});
 	}
