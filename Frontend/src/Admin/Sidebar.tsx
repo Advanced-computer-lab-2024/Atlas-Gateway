@@ -1,5 +1,6 @@
 import {
 	ActivityIcon,
+	ChartNoAxesCombined,
 	MessageCircleWarning,
 	Package,
 	TagIcon,
@@ -62,6 +63,7 @@ const Sidebar = () => {
 					"Activity Category",
 					"Tags",
 					"Complaints",
+					"Reports",
 				].map((category) => (
 					<div
 						key={category}
@@ -103,6 +105,13 @@ const Sidebar = () => {
 						)}
 						{category === "Complaints" && (
 							<MessageCircleWarning
+								className="text-white p-1 rounded-full"
+								width={50}
+								height={50}
+							/>
+						)}
+						{category === "Reports" && (
+							<ChartNoAxesCombined
 								className="text-white p-1 rounded-full"
 								width={50}
 								height={50}
