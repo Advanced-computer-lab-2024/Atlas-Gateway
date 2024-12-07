@@ -1,7 +1,44 @@
+import { useTransportationAdvertiserSalesReport } from "@/api/data/useReport";
+import Filters from "@/components/Filters/Filters";
+import { Flex } from "@/components/ui/flex";
+import { Label } from "@/components/ui/shadcnlabel";
+
+import ActivitiesChart from "../ActivitiesChart";
+
 export default function TransportationAdvertiserReport() {
+	const { data, meta } = useTransportationAdvertiserSalesReport();
+
 	return (
-		<div>
-			<h1>Transportation Advertiser Report</h1>
-		</div>
+		<Flex
+			className="w-full h-full items-center overflow-y-scroll "
+			isColumn
+		>
+			<Flex>
+				<Label>Advertiser Report</Label>
+				<Label>Total Sales:{meta?.totalSales}</Label>
+				<Label>Total Bookings:{meta?.totalBookings}</Label>
+			</Flex>
+
+			<Filters
+				filters={{
+					date: {
+						// TODO: WIP
+						filterName: "date",
+						label: "Date",
+						type: "date",
+					},
+				}}
+			/>
+
+			<ActivitiesChart
+				data={data ?? []}
+				metaData={
+					meta ?? {
+						totalSales: 0,
+						totalBookings: 0,
+					}
+				}
+			/>
+		</Flex>
 	);
 }
