@@ -3,37 +3,53 @@ import ReactECharts from "echarts-for-react";
 import { TItineraryReportResponse, TReportRespone } from "@/api/service/types";
 
 export default function ItinerariesChart(
-	itineraries: TReportRespone<TItineraryReportResponse> | undefined,
+	props: TReportRespone<TItineraryReportResponse> | undefined,
 ) {
-	console.log(itineraries);
-	console.log(itineraries?.itineraries?.data);
+	const { data, metaData } = props || {};
 	const itinerariesChart = {
 		title: {
-			text: "Itinerary Sales",
+			text: `Itinerary Sales and Bookings\nTotal Sales: ${metaData?.totalSales ?? 0}, Total Bookings: ${metaData?.totalBookings ?? 0}`,
+			left: "center",
+			textStyle: {
+				fontSize: 14,
+			},
 		},
-		tooltip: {},
+		tooltip: {
+			trigger: "axis",
+		},
 		legend: {
-			data: ["Sales"],
+			data: ["Sales", "Bookings"],
+			top: "10%",
 		},
 		xAxis: {
 			type: "category",
-			data: itineraries?.itineraries?.data?.map(
-				(d: TItineraryReportResponse) => d.itineraryName,
-			),
+			data: data?.map((d: TItineraryReportResponse) => d.itineraryName),
 		},
 		yAxis: {
 			type: "value",
-			data: itineraries?.itineraries?.data?.map(
-				(d: TItineraryReportResponse) => d.totalSales,
-			),
 		},
 		series: [
 			{
 				name: "Sales",
 				type: "bar",
-				data: itineraries?.itineraries?.data?.map(
-					(d: TItineraryReportResponse) => d.totalSales,
+				data: data?.map((d: TItineraryReportResponse) => d.totalSales),
+				label: {
+					show: true,
+					position: "top",
+					formatter: "{c}",
+				},
+			},
+			{
+				name: "Bookings",
+				type: "bar",
+				data: data?.map(
+					(d: TItineraryReportResponse) => d.numberOfBookings,
 				),
+				label: {
+					show: true,
+					position: "top",
+					formatter: "{c}",
+				},
 			},
 		],
 	};
@@ -43,7 +59,7 @@ export default function ItinerariesChart(
 			option={itinerariesChart}
 			style={{
 				height: "500px",
-				width: "500px",
+				width: "80%",
 			}}
 		/>
 	);

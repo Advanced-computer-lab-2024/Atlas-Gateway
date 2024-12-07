@@ -1,9 +1,11 @@
-import { IActivity } from "@/Models/Travel/activity.model";
-import { fi } from "date-fns/locale";
 import { Types } from "mongoose";
 
+import {
+	IActivityDTO,
+	IActivityReportResponse,
+} from "../../DTOS/Report/ActivityReportResponse";
 import HttpError from "../../Errors/HttpError";
-import { Transportation } from "../../Models/Travel/transportation.model";
+import { IActivity } from "../../Models/Travel/activity.model";
 import { Advertiser, IAdvertiser } from "../../Models/Users/advertiser.model";
 import { hashPassword } from "../Auth/password.service";
 import uniqueUsername from "../Auth/username.service";
@@ -123,7 +125,7 @@ export const softDeleteAdvertiser = async (id: string) => {
 export const report = async (
 	id: string,
 	options: { date?: string; ActivityId?: string } = {},
-) => {
+): Promise<IActivityReportResponse> => {
 	const advertiser = await getAdvertiserById(id);
 
 	if (!advertiser) {
@@ -183,7 +185,7 @@ export const report = async (
 			totalSales:
 				activity.numberOfBookings *
 				((activity.minPrice + activity.maxPrice) / 2),
-		};
+		} as IActivityDTO;
 	});
 
 	return {
@@ -192,5 +194,5 @@ export const report = async (
 			totalSales: totalSales,
 			totalBookings: totalBookings,
 		},
-	};
+	} as IActivityReportResponse;
 };

@@ -3,20 +3,27 @@ import ReactECharts from "echarts-for-react";
 import { TProductReportResponse, TReportRespone } from "@/api/service/types";
 
 export default function ProductsChart(
-	products: TReportRespone<TProductReportResponse> | undefined,
+	props: TReportRespone<TProductReportResponse> | undefined,
 ) {
+	const { data, metaData } = props || {};
 	const productsChart = {
 		title: {
-			text: "Product Sales",
+			text: `Products Sales\nTotal Sales: ${metaData?.totalSales ?? 0}`,
+			left: "center",
+			textStyle: {
+				fontSize: 14,
+			},
 		},
-		tooltip: {},
+		tooltip: {
+			trigger: "axis",
+		},
 		legend: {
 			data: ["Sales"],
+			top: "10%",
 		},
 		xAxis: {
-			data: products?.data?.map(
-				(d: TProductReportResponse) => d.ProductName,
-			),
+			type: "category",
+			data: data?.map((d: TProductReportResponse) => d.ProductName),
 		},
 		yAxis: {
 			type: "value",
@@ -25,9 +32,12 @@ export default function ProductsChart(
 			{
 				name: "Sales",
 				type: "bar",
-				data: products?.data?.map(
-					(d: TProductReportResponse) => d.ProductId,
-				),
+				data: data?.map((d: TProductReportResponse) => d.ProductId),
+				label: {
+					show: true,
+					position: "top",
+					formatter: "{c}",
+				},
 			},
 		],
 	};
@@ -37,7 +47,7 @@ export default function ProductsChart(
 			option={productsChart}
 			style={{
 				height: "500px",
-				width: "500px",
+				width: "80%",
 			}}
 		/>
 	);

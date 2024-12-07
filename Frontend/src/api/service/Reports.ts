@@ -93,7 +93,7 @@ export function apiTourGuideBookingReport(
 	_id: string,
 	filters: Record<string, string>,
 ) {
-	return axios<TItineraryReportResponse>({
+	return axios<TReportRespone<TItineraryReportResponse>>({
 		method: "GET",
 		url: ENDPOINTS.tourGuide.bookingReport(_id),
 		headers: {
@@ -110,7 +110,7 @@ export function apiAdvertiserBookingReport(
 	_id: string,
 	filters: Record<string, string>,
 ) {
-	return axios<TActivityReportResponse>({
+	return axios<TReportRespone<TActivityReportResponse>>({
 		method: "GET",
 		url: ENDPOINTS.advertiser.bookingReport(_id),
 		headers: {

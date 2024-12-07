@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { useLoginStore } from "@/store/loginStore";
-import { EAccountType } from "@/types/enums";
 
 import {
 	apiAdminSalesReport,
@@ -15,60 +14,135 @@ import {
 } from "../service/Reports";
 import { useQueryString } from "./useQueryString";
 
-export function useSalesReport() {
+export function useAdminSalesReport() {
 	const { user } = useLoginStore();
 	const [query] = useQueryString();
 
 	const q = useQuery({
 		queryFn: () => {
-			switch (user?.type) {
-				case EAccountType.Seller:
-					return apiSellerSalesReport(user._id, query);
-				case EAccountType.Advertiser:
-					return apiAdvertiserSalesReport(user._id, query);
-				case EAccountType.Guide:
-					return apiTourGuideSalesReport(user._id, query);
-				case EAccountType.TransportationAdvertiser:
-					return apiTransportationAdvertiserSalesReport(
-						user._id,
-						query,
-					);
-				case EAccountType.Admin:
-					return apiAdminSalesReport();
-				default:
-					return apiAdminSalesReport();
-			}
+			return apiAdminSalesReport();
 		},
 		queryKey: ["salesReport", user?._id, query],
 	});
-
-	console.log(q);
-
 	const { data } = q;
 
 	return { ...q, data: data?.data?.data, meta: data?.data?.metaData };
 }
 
-export function useBookingReport() {
+export function useAdvertiserSalesReport() {
 	const { user } = useLoginStore();
 	const [query] = useQueryString();
 	const q = useQuery({
 		queryFn: () => {
-			switch (user?.type) {
-				case EAccountType.Advertiser:
-					return apiAdvertiserBookingReport(user._id, query);
-				case EAccountType.Guide:
-					return apiTourGuideBookingReport(user._id, query);
-				case EAccountType.TransportationAdvertiser:
-					return apiTransportationAdvertiserBookingReport(
-						user._id,
-						query,
-					);
+			if (!user?._id) {
+				return; // idk how to handle this
 			}
+			return apiAdvertiserSalesReport(user._id, query);
+		},
+		queryKey: ["salesReport", user?._id, query],
+	});
+	const { data } = q;
+
+	return { ...q, data: data?.data?.data, meta: data?.data?.metaData };
+}
+
+export function useTourGuideSalesReport() {
+	const { user } = useLoginStore();
+	const [query] = useQueryString();
+	const q = useQuery({
+		queryFn: () => {
+			if (!user?._id) {
+				return; // idk how to handle this
+			}
+			return apiTourGuideSalesReport(user._id, query);
+		},
+		queryKey: ["salesReport", user?._id, query],
+	});
+	const { data } = q;
+
+	return { ...q, data: data?.data?.data, meta: data?.data?.metaData };
+}
+
+export function useTransportationAdvertiserSalesReport() {
+	const { user } = useLoginStore();
+	const [query] = useQueryString();
+	const q = useQuery({
+		queryFn: () => {
+			if (!user?._id) {
+				return; // idk how to handle this
+			}
+			return apiTransportationAdvertiserSalesReport(user._id, query);
+		},
+		queryKey: ["salesReport", user?._id, query],
+	});
+	const { data } = q;
+
+	return { ...q, data: data?.data?.data, meta: data?.data?.metaData };
+}
+
+export function useSellerSalesReport() {
+	const { user } = useLoginStore();
+	const [query] = useQueryString();
+	const q = useQuery({
+		queryFn: () => {
+			if (!user?._id) {
+				return; // idk how to handle this
+			}
+			return apiSellerSalesReport(user._id, query);
+		},
+		queryKey: ["salesReport", user?._id, query],
+	});
+	const { data } = q;
+
+	return { ...q, data: data?.data?.data, meta: data?.data?.metaData };
+}
+
+export function useAdvertiserBookingReport() {
+	const { user } = useLoginStore();
+	const [query] = useQueryString();
+	const q = useQuery({
+		queryFn: () => {
+			if (!user?._id) {
+				return; // idk how to handle this
+			}
+			return apiAdvertiserBookingReport(user._id, query);
 		},
 		queryKey: ["bookingsReport", user?._id, query],
 	});
+	const { data } = q;
 
+	return { ...q, data: data?.data?.data, meta: data?.data?.metaData };
+}
+
+export function useTourGuideBookingReport() {
+	const { user } = useLoginStore();
+	const [query] = useQueryString();
+	const q = useQuery({
+		queryFn: () => {
+			if (!user?._id) {
+				return; // idk how to handle this
+			}
+			return apiTourGuideBookingReport(user._id, query);
+		},
+		queryKey: ["bookingsReport", user?._id, query],
+	});
+	const { data } = q;
+
+	return { ...q, data: data?.data?.data, meta: data?.data?.metaData };
+}
+
+export function useTransportationAdvertiserBookingReport() {
+	const { user } = useLoginStore();
+	const [query] = useQueryString();
+	const q = useQuery({
+		queryFn: () => {
+			if (!user?._id) {
+				return; // idk how to handle this
+			}
+			return apiTransportationAdvertiserBookingReport(user._id, query);
+		},
+		queryKey: ["bookingsReport", user?._id, query],
+	});
 	const { data } = q;
 
 	return { ...q, data: data?.data?.data, meta: data?.data?.metaData };

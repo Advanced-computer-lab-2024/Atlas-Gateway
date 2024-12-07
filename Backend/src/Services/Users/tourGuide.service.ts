@@ -3,6 +3,10 @@ import { IItinerary } from "@/Models/Travel/itinerary.model";
 import { id } from "date-fns/locale";
 import { Types } from "mongoose";
 
+import {
+	IItineraryDTO,
+	IItineraryReportResponse,
+} from "../../DTOS/Report/ItineraryReportResponse";
 import HttpError from "../../Errors/HttpError";
 import { ITourGuide, TourGuide } from "../../Models/Users/tourGuide.model";
 import { hashPassword } from "../Auth/password.service";
@@ -108,7 +112,7 @@ export const softDeleteTourGuide = async (id: string) => {
 export const report = async (
 	id: string,
 	options: { date?: string; itineraryId?: string } = {},
-) => {
+): Promise<IItineraryReportResponse> => {
 	const tourGuide = await getTourGuideById(id);
 
 	if (!tourGuide) {
@@ -148,12 +152,10 @@ export const report = async (
 		});
 	}
 
-	console.log(itineraries);
-
 	let totalSales = 0;
 	let totalBookings = 0;
 
-	let sales = itineraries.map((itinerary: IItinerary) => {
+	let sales: IItineraryDTO[] = itineraries.map((itinerary: IItinerary) => {
 		totalSales += itinerary.numberOfBookings * itinerary.price;
 		totalBookings += itinerary.numberOfBookings;
 		return {
@@ -161,7 +163,7 @@ export const report = async (
 			itineraryName: itinerary.title,
 			numberOfBookings: itinerary.numberOfBookings,
 			totalSales: itinerary.numberOfBookings * itinerary.price,
-		};
+		} as IItineraryDTO;
 	});
 
 	return {
@@ -170,5 +172,5 @@ export const report = async (
 			totalSales: totalSales,
 			totalBookings: totalBookings,
 		},
-	};
+	} as IItineraryReportResponse;
 };

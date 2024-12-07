@@ -1,6 +1,10 @@
 import { IProduct } from "@/Models/Purchases/product.model";
 import { Types } from "mongoose";
 
+import {
+	IProductDTO,
+	IProductReportResponse,
+} from "../../DTOS/Report/ProductReportResponse";
 import HttpError from "../../Errors/HttpError";
 import { ISeller, Seller } from "../../Models/Users/seller.model";
 import { hashPassword } from "../Auth/password.service";
@@ -110,7 +114,7 @@ export const softDeleteSeller = async (id: string) => {
 export const report = async (
 	id: string,
 	options: { date?: string; ProductId?: string } = {},
-) => {
+): Promise<IProductReportResponse> => {
 	const seller = await getSellerById(id);
 
 	if (!seller) {
@@ -171,7 +175,7 @@ export const report = async (
 			// totalSales:
 			// 	product.numberOfBookings *
 			// 	((product.minPrice + product.maxPrice) / 2),
-		};
+		} as IProductDTO;
 	});
 
 	return {
@@ -179,5 +183,5 @@ export const report = async (
 		metaData: {
 			totalSales: totalSales,
 		},
-	};
+	} as IProductReportResponse;
 };

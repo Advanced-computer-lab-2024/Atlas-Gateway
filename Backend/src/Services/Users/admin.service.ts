@@ -1,7 +1,19 @@
 import bcrypt from "bcryptjs";
 import { Types } from "mongoose";
-import { it } from "node:test";
 
+import {
+	IActivityDTO,
+	IActivityReportResponse,
+} from "../../DTOS/Report/ActivityReportResponse";
+import { IAdminReportResponse } from "../../DTOS/Report/AdminReportResponse";
+import {
+	IItineraryDTO,
+	IItineraryReportResponse,
+} from "../../DTOS/Report/ItineraryReportResponse";
+import {
+	IProductDTO,
+	IProductReportResponse,
+} from "../../DTOS/Report/ProductReportResponse";
 import HttpError from "../../Errors/HttpError";
 import { IProduct } from "../../Models/Purchases/product.model";
 import { IActivity } from "../../Models/Travel/activity.model";
@@ -89,13 +101,13 @@ export const report = async (
 				itineraries.metaData.totalBookings +
 				activities.metaData.totalBookings,
 		},
-	};
+	} as IAdminReportResponse;
 };
 
 // TODO: Implement the report function waiting on the orders of the products
 export const productsReport = async (
 	options: { date?: string; ProductId?: string } = {},
-) => {
+): Promise<IProductReportResponse> => {
 	const admins = await getAllAdmins();
 
 	if (!admins) {
@@ -156,12 +168,12 @@ export const productsReport = async (
 		// 	((product.minPrice + product.maxPrice) / 2);
 
 		return {
-			ActivityId: product.id,
-			ActivityName: product.name,
+			ProductId: product.id,
+			ProductName: product.name,
 			// totalSales:
 			// 	product.numberOfBookings *
 			// 	((product.minPrice + product.maxPrice) / 2),
-		};
+		} as IProductDTO;
 	});
 
 	return {
@@ -169,12 +181,12 @@ export const productsReport = async (
 		metaData: {
 			totalSales: totalSales,
 		},
-	};
+	} as IProductReportResponse;
 };
 
 export const activityReport = async (
 	options: { date?: string; ActivityId?: string } = {},
-) => {
+): Promise<IActivityReportResponse> => {
 	const data = await activityService.getAllActivities();
 
 	let activities: IActivity[] = data;
@@ -224,7 +236,7 @@ export const activityReport = async (
 			totalSales:
 				activity.numberOfBookings *
 				((activity.minPrice + activity.maxPrice) / 2),
-		};
+		} as IActivityDTO;
 	});
 
 	return {
@@ -233,12 +245,12 @@ export const activityReport = async (
 			totalSales: totalSales,
 			totalBookings: totalBookings,
 		},
-	};
+	} as IActivityReportResponse;
 };
 
 export const itineraryReport = async (
 	options: { date?: string; itineraryId?: string } = {},
-) => {
+): Promise<IItineraryReportResponse> => {
 	const data = await itineraryService.getAllItineraries();
 
 	let itineraries: IItinerary[] = data;
@@ -284,7 +296,7 @@ export const itineraryReport = async (
 			itineraryName: itinerary.title,
 			numberOfBookings: itinerary.numberOfBookings,
 			totalSales: itinerary.numberOfBookings * itinerary.price,
-		};
+		} as IItineraryDTO;
 	});
 
 	return {
@@ -293,5 +305,5 @@ export const itineraryReport = async (
 			totalSales: totalSales,
 			totalBookings: totalBookings,
 		},
-	};
+	} as IItineraryReportResponse;
 };

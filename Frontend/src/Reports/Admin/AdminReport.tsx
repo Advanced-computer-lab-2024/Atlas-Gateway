@@ -1,4 +1,4 @@
-import { useSalesReport } from "@/api/data/useReport";
+import { useAdminSalesReport } from "@/api/data/useReport";
 import Filters from "@/components/Filters/Filters";
 import { Flex } from "@/components/ui/flex";
 import { Label } from "@/components/ui/shadcnlabel";
@@ -8,10 +8,12 @@ import ItinerariesChart from "../ItitnerariesChart";
 import ProductsChart from "../ProductsChart";
 
 export default function AdminReport() {
-	const { data, meta } = useSalesReport();
+	const { data, meta } = useAdminSalesReport();
+
+	console.log(data, meta);
 
 	return (
-		<Flex className="w-full " isColumn>
+		<Flex className="w-full" isColumn isWrapped>
 			<Flex>
 				<Label>Admin Report</Label>
 				<Label>Total Sales:{meta?.totalSales}</Label>
@@ -29,9 +31,33 @@ export default function AdminReport() {
 				}}
 			/>
 
-			<ItinerariesChart itineraries={data?.itineraries} />
-			<ProductsChart products={data?.products} />
-			<ActivitiesChart activities={data?.activities} />
+			<ItinerariesChart
+				data={data?.itineraries.data ?? []}
+				metaData={
+					data?.itineraries.metaData ?? {
+						totalSales: 0,
+						totalBookings: 0,
+					}
+				}
+			/>
+			<ProductsChart
+				data={data?.products.data ?? []}
+				metaData={
+					data?.products.metaData ?? {
+						totalSales: 0,
+						totalBookings: 0,
+					}
+				}
+			/>
+			<ActivitiesChart
+				data={data?.activities.data ?? []}
+				metaData={
+					data?.activities.metaData ?? {
+						totalSales: 0,
+						totalBookings: 0,
+					}
+				}
+			/>
 		</Flex>
 	);
 }
