@@ -1,3 +1,4 @@
+import { request } from "axios";
 import { NextFunction, Request, Response } from "express";
 
 import HttpError from "../../Errors/HttpError";
@@ -123,5 +124,83 @@ export const redeemPoints = async (
 		res.status(200).send("Points redeemed successfully");
 	} catch (error) {
 		next(error);
+	}
+};
+export const viewWallet = async (req: Request, res: Response) => {
+	try {
+		const { touristId } = req.body;
+		res.status(200).json(touristService.viewWallet(touristId));
+	} catch (error) {
+		res.status(500).send(error);
+	}
+};
+export const viewUpcomingActivities = async (req: Request, res: Response) => {
+	try {
+		const { touristId } = req.body;
+		const activity = await touristService.viewUpcomingActivities(touristId);
+		res.status(200).send(activity);
+	} catch (error) {
+		res.status(500).send(error);
+	}
+};
+export const viewpastActivities = async (req: Request, res: Response) => {
+	try {
+		const { touristId } = req.body;
+		const activity = await touristService.viewPastActivities(touristId);
+		res.status(200).send(activity);
+	} catch (error) {
+		res.status(500).send(error);
+	}
+};
+export const viewUpcomingItineraries = async (req: Request, res: Response) => {
+	try {
+		const { touristId } = req.body;
+		const activity =
+			await touristService.viewUpcomingIitneraries(touristId);
+		res.status(200).send(activity);
+	} catch (error) {
+		res.status(500).send(error);
+	}
+};
+export const viewpastItineraries = async (req: Request, res: Response) => {
+	try {
+		const { touristId } = req.body;
+		const activity = await touristService.viewPastIitneraries(touristId);
+		res.status(200).send(activity);
+	} catch (error) {
+		res.status(500).send(error);
+	}
+};
+export const requestActivityNotification = async (
+	next: NextFunction,
+	req: Request,
+	res: Response,
+) => {
+	try {
+		const { touristId, activityId } = req.body;
+		const request = await touristService.requestActivityNotification(
+			activityId,
+			touristId,
+		);
+		res.status(200).send(request);
+	} catch (error) {
+		res.status(500).send(error);
+	}
+};
+export const requestItineraryNotification = async (
+	next: NextFunction,
+	req: Request,
+	res: Response,
+) => {
+	try {
+		const { touristId, itinerary } = req.body;
+		res.status(200).send(
+			await touristService.requestItineraryNotification(
+				itinerary,
+				touristId,
+			),
+		);
+	} catch (error) {
+		res.status(500).send(error);
 	}
 };
