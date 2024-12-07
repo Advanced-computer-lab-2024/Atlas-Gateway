@@ -1,6 +1,7 @@
 import { Camera, Image, Settings } from "lucide-react";
 import { useEffect, useState } from "react";
 
+import SellerReport from "@/Reports/Seller/SellerReport";
 import { useDownload } from "@/api/data/useMedia";
 import {
 	useRequestDeleteSellerProfile,
@@ -50,7 +51,7 @@ const General = () => {
 	// 	return text;
 	// };
 	return (
-		<div>
+		<div className="overflow-y-auto">
 			<div className="relative w-full">
 				<div
 					className="w-full h-48 md:h-64 bg-cover bg-center"
@@ -152,7 +153,7 @@ const General = () => {
 				<Tabs defaultValue="account" className="w-full">
 					<TabsList className="grid w-full grid-cols-4">
 						<TabsTrigger value="account">Account</TabsTrigger>
-						<TabsTrigger value="password">Password</TabsTrigger>
+						<TabsTrigger value="reports">Report</TabsTrigger>
 						<TabsTrigger value="upcoming">Upcoming</TabsTrigger>
 						<TabsTrigger value="history">History</TabsTrigger>
 					</TabsList>
@@ -170,7 +171,9 @@ const General = () => {
 							</h3>
 						</div>
 					</TabsContent>
-					<TabsContent value="password"></TabsContent>
+					<TabsContent value="reports">
+						<SellerReport />
+					</TabsContent>
 					<TabsContent value="Upcoming"></TabsContent>
 					<TabsContent value="History"></TabsContent>
 				</Tabs>

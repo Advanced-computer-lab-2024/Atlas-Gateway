@@ -1,6 +1,7 @@
 import { Camera, Image, Settings } from "lucide-react";
 import { useEffect, useState } from "react";
 
+import TransportationAdvertiserReport from "@/Reports/Transportation/TransportationReport";
 import { useDownload } from "@/api/data/useMedia";
 import { useTransportationAdvertiserProfile } from "@/api/data/useProfile";
 import {
@@ -34,7 +35,7 @@ const General = () => {
 		}
 	}, [data?.imagePath, doDownload]);
 	return (
-		<div>
+		<div className="overflow-y-auto">
 			<div className="relative w-full">
 				<div
 					className="w-full h-48 md:h-64 bg-cover bg-center"
@@ -127,7 +128,7 @@ const General = () => {
 				<Tabs defaultValue="account" className="w-full">
 					<TabsList className="grid w-full grid-cols-3">
 						<TabsTrigger value="account">Account</TabsTrigger>
-						<TabsTrigger value="upcoming">Upcoming</TabsTrigger>
+						<TabsTrigger value="reports">Report</TabsTrigger>
 						<TabsTrigger value="history">History</TabsTrigger>
 					</TabsList>
 					<TabsContent
@@ -147,7 +148,9 @@ const General = () => {
 							</h3>
 						</div>
 					</TabsContent>
-					<TabsContent value="Upcoming"></TabsContent>
+					<TabsContent value="report">
+						<TransportationAdvertiserReport />
+					</TabsContent>
 					<TabsContent value="History"></TabsContent>
 				</Tabs>
 			</div>

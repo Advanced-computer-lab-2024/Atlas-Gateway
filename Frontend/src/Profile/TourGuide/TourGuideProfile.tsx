@@ -2,6 +2,7 @@ import axios from "axios";
 import { Camera, Image, Settings } from "lucide-react";
 import { useEffect, useState } from "react";
 
+import TourGuideReport from "@/Reports/Tour Guide/TourGuideReport";
 import { useDownload } from "@/api/data/useMedia";
 import {
 	useRequestDeleteTourGuideProfile,
@@ -66,7 +67,7 @@ export default function TourGuideProfile() {
 	}, []);
 
 	return (
-		<div>
+		<div className="overflow-y-auto">
 			<div className="relative w-full">
 				<div
 					className="w-full h-48 md:h-64 bg-cover bg-center"
@@ -170,7 +171,7 @@ export default function TourGuideProfile() {
 				<Tabs defaultValue="account" className="w-full">
 					<TabsList className="grid w-full grid-cols-5">
 						<TabsTrigger value="account">Account</TabsTrigger>
-						<TabsTrigger value="password">Password</TabsTrigger>
+						<TabsTrigger value="reports">Report</TabsTrigger>
 						<TabsTrigger value="upcoming">Upcoming</TabsTrigger>
 						<TabsTrigger value="history">History</TabsTrigger>
 						<TabsTrigger value="reviews">Reviews</TabsTrigger>
@@ -199,7 +200,9 @@ export default function TourGuideProfile() {
 							</h3>
 						</div>
 					</TabsContent>
-					<TabsContent value="password"></TabsContent>
+					<TabsContent value="reports">
+						<TourGuideReport />
+					</TabsContent>
 					<TabsContent value="upcoming"></TabsContent>
 					<TabsContent value="history"></TabsContent>
 					<TabsContent value="reviews">
