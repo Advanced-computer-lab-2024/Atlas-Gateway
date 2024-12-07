@@ -416,3 +416,11 @@ export interface TOrder {
 	address: string;
 	paymentMethod: string;
 }
+
+export interface TNotification {
+	_id: string;
+	type: "reminder" | "info" | "warning" | "error";
+	message: string;
+	isRead: boolean;
+	createdAt: Date;
+}

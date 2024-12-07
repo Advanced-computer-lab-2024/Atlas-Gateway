@@ -7,7 +7,7 @@ export interface INotification extends Document {
 	message: string;
     notifiedTo: Types.ObjectId;
     userType: string;
-    read: boolean;
+    isRead: boolean;
 	createdAt: Date;
 }
 
@@ -17,7 +17,7 @@ const notificationSchema = new Schema<INotification>(
         message: { type: String, required: true },
         notifiedTo: { type: Schema.Types.ObjectId, refPath: 'userType', required: true },
         userType: { type: String, enum: ['Admin', 'Tourist', 'Advertiser', 'Seller', 'TourGuide'], required: true },
-        read: { type: Boolean, default: false },
+        isRead: { type: Boolean, default: false },
         createdAt: { type: Date, default: Date.now },
 	},
 	schemaConfig,
