@@ -1,7 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 
+
+
 import HttpError from "../../Errors/HttpError";
 import * as productService from "../../Services/Purchases/product.service";
+
 
 //Create a new product entry
 export const createProduct = async (
@@ -122,3 +125,54 @@ export const updateProduct = async (
 		next(error);
 	}
 };
+
+export const addwishlistProduct = async(
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	try {
+		const userId = req.headers.userid;
+		const productId = req.params.id;
+
+		if (!userId) {
+			throw new HttpError(400, "Logged in User id is required");
+		}
+
+		if (!productId) {
+			throw new HttpError(400, "Product id is required");
+		}
+
+		const product = await productService.addwhishlist(
+			userId.toString(),
+			productId,
+		);
+		res.status(200).send(product);
+	} catch (error) {
+		next(error);
+	}
+}
+
+export const removeWishlistProduct = async(
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	try {
+		const userId = req.headers.userid;
+		const productId = req.params.id;
+		if (!userId) {
+			throw new HttpError(400, "Logged in User id is required");
+		}
+		if (!productId) {
+			throw new HttpError(400, "Product id is required");
+		}
+		const product = await productService.removeWishlist(
+			userId.toString(),
+			productId,
+		);
+		res.status(200).send(product);
+	} catch (error) {
+		next(error);
+	}
+}

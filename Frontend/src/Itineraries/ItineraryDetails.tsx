@@ -1,14 +1,15 @@
 import axios from "axios";
 import { formatDate } from "date-fns";
-import { delay } from "lodash";
-import { ArrowLeft, DollarSign, MapPin } from "lucide-react";
+import { ArrowLeft, Bookmark, DollarSign, MapPin } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
 	useBookItinerary,
+	useBookmarkItinerary,
 	useCancelItineraryBooking,
 	useItinerary,
+	useRemoveBookmarkItinerary,
 } from "@/api/data/useItineraries";
 import { useTouristProfile } from "@/api/data/useProfile";
 import Label from "@/components/ui/Label";
@@ -57,6 +58,7 @@ export default function ItineraryDetails() {
 		language,
 		title,
 		tourists,
+		touristBookmarks,
 	} = data || {};
 	const { doBookItinerary } = useBookItinerary(() => {
 		refetch();
@@ -66,6 +68,9 @@ export default function ItineraryDetails() {
 		refetch();
 		refetchUserProfile();
 	});
+
+	const { doBookmarkItinerary } = useBookmarkItinerary(refetch);
+	const { doRemoveBookmarkItinerary } = useRemoveBookmarkItinerary(refetch);
 
 	const [canReviewItinerary, setCanReviewItinerary] = useState(false);
 	const [canReviewGuide, setCanReviewGuide] = useState(false);
@@ -159,29 +164,60 @@ export default function ItineraryDetails() {
 								size={32}
 							/>
 							<Label.Big600>{title}</Label.Big600>
+							<Flex>
+								{user?.type === EAccountType.Tourist &&
+									(touristBookmarks?.includes(user?._id) ? (
+										<Bookmark
+											fill="black"
+											onClick={() => {
+												if (data?._id) {
+													doRemoveBookmarkItinerary(
+														data?._id,
+													);
+												}
+											}}
+										/>
+									) : (
+										<Bookmark
+											onClick={() => {
+												if (data?._id) {
+													doBookmarkItinerary(
+														data?._id,
+													);
+												}
+											}}
+										/>
+									))}
+							</Flex>
 						</Flex>
-						{user?.type === EAccountType.Tourist &&
-							(tourists?.includes(user?._id) ? (
-								<Button
-									size="lg"
-									onClick={() => {
-										if (data?._id)
-											doCancelItineraryBooking(data?._id);
-									}}
-								>
-									Cancel
-								</Button>
-							) : (
-								<Button
-									size="lg"
-									onClick={() => {
-										if (data?._id)
-											doBookItinerary(data?._id);
-									}}
-								>
-									Book
-								</Button>
-							))}
+						<Flex>
+							<Flex>
+								{user?.type === EAccountType.Tourist &&
+									(tourists?.includes(user?._id) ? (
+										<Button
+											size="lg"
+											onClick={() => {
+												if (data?._id)
+													doCancelItineraryBooking(
+														data?._id,
+													);
+											}}
+										>
+											Cancel
+										</Button>
+									) : (
+										<Button
+											size="lg"
+											onClick={() => {
+												if (data?._id)
+													doBookItinerary(data?._id);
+											}}
+										>
+											Book
+										</Button>
+									))}
+							</Flex>
+						</Flex>
 					</Flex>
 				</CardHeader>
 				<CardContent className="grid grid-cols-2 w-full">

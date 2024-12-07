@@ -1,12 +1,14 @@
 import axios from "axios";
-import { delay, set } from "lodash";
-import { ArrowLeft, Currency, Package } from "lucide-react";
-import React, { useEffect, useRef, useState } from "react";
+import { ArrowLeft, Package, Sparkles, Star } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { promise } from "zod";
 
-import Product from "@/Admin/Product/Product";
-import { useProduct } from "@/api/data/useProducts";
+import {
+	useAddWishlist,
+	useProduct,
+	useProducts,
+	useRemoveWishlist,
+} from "@/api/data/useProducts";
 import { useTouristProfile } from "@/api/data/useProfile";
 import Label from "@/components/ui/Label";
 import { Button } from "@/components/ui/button";
@@ -33,6 +35,7 @@ import { TReview } from "@/types/global";
 export default function ProductDetails() {
 	const navigate = useNavigate();
 	const { data } = useProduct();
+	const { refetch } = useProducts();
 	const convertCurrency = useCurrency();
 	const {
 		name,
@@ -43,7 +46,15 @@ export default function ProductDetails() {
 		quantity,
 		sales,
 		sellerId,
+		touristWishlist,
 	} = data || {};
+
+	const { doAddWishlist } = useAddWishlist(() => {
+		refetch();
+	});
+	const { doRemoveWishlist } = useRemoveWishlist(() => {
+		refetch();
+	});
 
 	const [fetchedComments, setFetchedComments] = useState<TReview[]>([]);
 	const [moreCommentsAvailable, setMoreCommentsAvailable] = useState(true);
@@ -138,6 +149,25 @@ export default function ProductDetails() {
 							size={32}
 						/>
 						<Label.Big600>{name}</Label.Big600>
+						{user?.type === EAccountType.Tourist &&
+							(touristWishlist?.includes(user?._id) ? (
+								<Star
+									fill="yellow"
+									onClick={() => {
+										if (data?._id) {
+											doRemoveWishlist(data?._id);
+										}
+									}}
+								/>
+							) : (
+								<Star
+									onClick={() => {
+										if (data?._id) {
+											doAddWishlist(data?._id);
+										}
+									}}
+								/>
+							))}
 					</Flex>
 				</CardHeader>
 				<CardContent>

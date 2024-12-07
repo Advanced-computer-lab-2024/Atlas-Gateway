@@ -1,10 +1,11 @@
-import { PipelineStage, Types } from "mongoose";
+import mongoose, { PipelineStage, Types } from "mongoose";
 
 import HttpError from "../../Errors/HttpError";
 import { IProduct, Product } from "../../Models/Purchases/product.model";
 import AggregateBuilder from "../Operations/aggregation.service";
 import * as adminService from "../Users/admin.service";
 import * as sellerService from "../Users/seller.service";
+import * as touristService from "../Users/tourist.service";
 
 export const createProduct = async (
 	userId: string,
@@ -118,6 +119,63 @@ export const deleteProduct = async (id: string) => {
 	const product = await Product.findByIdAndDelete(id);
 
 	return product;
+};
+
+export const addwhishlist = async (touristId: string, productId: string) => {
+	const session = await mongoose.startSession();
+	try {
+		session.startTransaction();
+		const product = await getProductById(productId);
+		if (!product) {
+			throw new HttpError(404, "Product not found");
+		}
+		const tourist = await touristService.addwishlistProduct(
+			touristId,
+			productId,
+		);
+		if (!tourist) {
+			throw new HttpError(404, "Could not add product to wishlist");
+		}
+		await product.updateOne({
+			$push: { touristWishlist: touristId },
+		});
+		await session.commitTransaction();
+		return product;
+	} catch (err) {
+		await session.abortTransaction();
+		throw err;
+	} finally {
+		session.endSession();
+	}
+};
+
+export const removeWishlist = async (touristId: string, productId: string) => {
+	const session = await mongoose.startSession();
+
+	try {
+		session.startTransaction();
+		const product = await getProductById(productId);
+		if (!product) {
+			throw new HttpError(404, "Product not found");
+		}
+		const tourist = await touristService.removeWishlistProduct(
+			touristId,
+			productId,
+		);
+		if (!tourist) {
+			throw new HttpError(404, "Could not remove product from wishlist");
+		}
+		await product.updateOne({
+			$pull: { touristWishlist: touristId },
+		});
+		await session.commitTransaction();
+		return product;
+	} catch (err) {
+		await session.abortTransaction();
+		throw err;
+	} finally {
+		session.endSession();
+	}
 };
 
 export const softDeleteProduct = async (id: string) => {

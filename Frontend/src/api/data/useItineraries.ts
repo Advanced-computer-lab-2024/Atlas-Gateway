@@ -7,12 +7,14 @@ import { TItinerary } from "@/types/global";
 
 import {
 	apiBookItinerary,
+	apiBookmarkItinerary,
 	apiCancelItineraryBooking,
 	apiCreateItinerary,
 	apiDeleteItinerary,
 	apiFlagItinerary,
 	apiItineraries,
 	apiItinerary,
+	apiRemoveBookmarkItinerary,
 	apiToggleItineraryStatus,
 	apiTourGuideItineraries,
 	apiUpdateItinerary,
@@ -107,6 +109,17 @@ export function useBookItinerary(onSuccess: () => void) {
 	return { doBookItinerary: mutate, ...mutation };
 }
 
+export function useBookmarkItinerary(onSuccess: () => void) {
+	const { user } = useLoginStore();
+	const userId = user?._id ?? "";
+	const mutation = useMutation({
+		mutationFn: (id: string) => apiBookmarkItinerary(id, userId),
+		onSuccess,
+	});
+	const { mutate } = mutation;
+	return { doBookmarkItinerary: mutate, ...mutation };
+}
+
 export function useCancelItineraryBooking(onSuccess: () => void) {
 	const { user } = useLoginStore();
 	const userId = user?._id ?? "";
@@ -119,6 +132,19 @@ export function useCancelItineraryBooking(onSuccess: () => void) {
 	const { mutate } = mutation;
 
 	return { doCancelItineraryBooking: mutate, ...mutation };
+}
+
+export function useRemoveBookmarkItinerary(onSuccess: () => void) {
+	const { user } = useLoginStore();
+	const { _id } = user || {};
+	const mutation = useMutation({
+		mutationFn: (id: string) => apiRemoveBookmarkItinerary(id, _id ?? ""),
+		onSuccess,
+	});
+
+	const { mutate } = mutation;
+
+	return { doRemoveBookmarkItinerary: mutate, ...mutation };
 }
 
 export function useFlagItinerary(onSuccess: () => void) {

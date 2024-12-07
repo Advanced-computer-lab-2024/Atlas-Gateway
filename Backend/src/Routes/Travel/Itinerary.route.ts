@@ -2,6 +2,7 @@ import express from "express";
 
 import {
 	bookItinerary,
+	bookmarkItinerary,
 	cancelBookingItinerary,
 	createItinerary,
 	deleteItinerary,
@@ -9,6 +10,7 @@ import {
 	getItineraries,
 	getItineraryById,
 	getItineraryByUserId,
+	removeBookmarkItinerary,
 	toggleStatus,
 	updateItinerary,
 } from "../../Controllers/Travel/itinerary.controller";
@@ -25,5 +27,6 @@ router.put("/toggleStatus/:id", toggleStatus);
 router.delete("/delete/:id", deleteItinerary);
 router.post("/book/:id", bookItinerary);
 router.post("/cancelBooking/:id", cancelBookingItinerary);
-
+router.post("/bookmark/:id", bookmarkItinerary);
+router.post("/removeBookmark/:id", removeBookmarkItinerary);
 export default router;

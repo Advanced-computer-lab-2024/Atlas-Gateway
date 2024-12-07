@@ -107,10 +107,34 @@ export function apiBookActivity(_id: string, userid: string) {
 	});
 }
 
+export function apiBookmarkActivity(_id: string, userid: string) {
+	return axios({
+		method: "POST",
+		url: ENDPOINTS.activity.bookmark(_id),
+		headers: {
+			"Content-Type": "application/json",
+			userid: userid,
+		},
+		baseURL: baseURL,
+	});
+}
+
 export function apiCancelActivityBooking(_id: string, userid: string) {
 	return axios({
 		method: "POST",
 		url: ENDPOINTS.activity.cancelBooking(_id),
+		headers: {
+			"Content-Type": "application/json",
+			userid: userid,
+		},
+		baseURL: baseURL,
+	});
+}
+
+export function apiRemoveBookmarkActivity(_id: string, userid: string) {
+	return axios({
+		method: "POST",
+		url: ENDPOINTS.activity.removeBookmark(_id),
 		headers: {
 			"Content-Type": "application/json",
 			userid: userid,

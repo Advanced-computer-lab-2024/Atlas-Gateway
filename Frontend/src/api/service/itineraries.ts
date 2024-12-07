@@ -104,10 +104,34 @@ export function apiBookItinerary(_id: string, _userId: string) {
 	});
 }
 
+export function apiBookmarkItinerary(_id: string, _userId: string) {
+	return axios({
+		method: "POST",
+		url: ENDPOINTS.itinerary.bookmark(_id),
+		headers: {
+			"Content-Type": "application/json",
+			userid: _userId,
+		},
+		baseURL: baseURL,
+	});
+}
+
 export function apiCancelItineraryBooking(_id: string, _userId: string) {
 	return axios({
 		method: "POST",
 		url: ENDPOINTS.itinerary.cancelBooking(_id),
+		headers: {
+			"Content-Type": "application/json",
+			userid: _userId,
+		},
+		baseURL: baseURL,
+	});
+}
+
+export function apiRemoveBookmarkItinerary(_id: string, _userId: string) {
+	return axios({
+		method: "POST",
+		url: ENDPOINTS.itinerary.removeBookmark(_id),
 		headers: {
 			"Content-Type": "application/json",
 			userid: _userId,

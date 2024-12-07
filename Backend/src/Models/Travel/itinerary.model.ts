@@ -30,6 +30,7 @@ export interface IItinerary extends Document {
 	accessibility: string;
 	timeline: string;
 	tourists: Types.ObjectId[] | ITourist[];
+	touristBookmarks: Types.ObjectId[];
 	isDeleted: boolean;
 	notificationRequested: Types.ObjectId[];
 
@@ -64,6 +65,7 @@ const itinerarySchema = new Schema<IItinerary>(
 		accessibility: { type: String, required: true },
 		timeline: { type: String, required: true },
 		tourists: [{ type: Schema.Types.ObjectId, ref: "Tourist" }],
+		touristBookmarks: [{ type: Schema.Types.ObjectId, ref: "Tourist" }],
 		isDeleted: { type: Boolean, default: false },
 		notificationRequested: [
 			{ type: Schema.Types.ObjectId, ref: "Tourist" },

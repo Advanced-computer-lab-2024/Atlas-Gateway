@@ -62,7 +62,7 @@ export type TProduct = {
 	isArchived: boolean;
 	quantity: number;
 	sales: number;
-
+	touristWishlist: string[];
 	reviews: string[];
 	avgRating: number;
 	isArchived: boolean;
@@ -82,6 +82,7 @@ export type TActivity = {
 	isOpen: boolean;
 	avgRating: number;
 	tourists: string[];
+	touristBookmarks: string[];
 	numberOfBookings: number;
 };
 
@@ -104,8 +105,11 @@ export interface TTourist extends TUser {
 	walletBalance: number;
 	level: 1 | 2 | 3;
 	purchaseProducts: TProduct[];
+	wishlistproducts: TProduct[];
 	bookedActivities: TActivity[];
+	bookmarkedActivities: TActivity[];
 	bookedItineraries: TItinerary[];
+	bookmarkedItineraries: TItinerary[];
 	bookedTransportations: TTransportation[];
 	bookedFlights: IFlight[]; // will be changed later
 	preferredTags: TTag[];
@@ -121,8 +125,11 @@ export interface TTouristApi extends TUser {
 	walletBalance: number;
 	level: 1 | 2 | 3;
 	purchaseProducts: string[];
+	wishlistproducts: string[];
 	bookedActivities: string[];
+	bookmarkedActivities: string[];
 	bookedItineraries: string[];
+	bookmarkedItineraries: string[];
 	bookedTransportations: string[];
 	preferredTags: string[];
 }
@@ -225,6 +232,7 @@ export interface TItinerary {
 	accessibility: string;
 	timeline: string;
 	tourists: string[];
+	touristBookmarks: string[];
 }
 
 export interface TFlights {

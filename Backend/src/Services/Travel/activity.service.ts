@@ -297,6 +297,40 @@ export const bookActivity = async (activityId: string, touristId: string) => {
 	return activity;
 };
 
+export const bookmarkActivity = async (
+	activityId: string,
+	touristId: string,
+) => {
+	const session = await mongoose.startSession();
+	try {
+		session.startTransaction();
+		const activity = await getActivityById(activityId);
+		if (!activity) {
+			throw new HttpError(404, "Activity not found");
+		}
+		const tourist = await touristService.addBookmarkedActivity(
+			touristId,
+			activityId,
+		);
+		if (!tourist) {
+			throw new HttpError(404, "Could not bookmark activity for tourist");
+		}
+		await activity.updateOne(
+			{
+				$push: { touristBookmarks: tourist.id },
+			},
+			{ session },
+		);
+		await session.commitTransaction();
+		return activity;
+	} catch (error) {
+		await session.abortTransaction();
+		throw error;
+	} finally {
+		session.endSession();
+	}
+};
+
 export const cancelBookingActivity = async (
 	activityId: string,
 	touristId: string,
@@ -338,6 +372,42 @@ export const cancelBookingActivity = async (
 	);
 
 	return removedActivity;
+};
+
+export const removeBookmarkActivity = async (
+	activityId: string,
+	touristId: string,
+) => {
+	const session = await mongoose.startSession();
+
+	try {
+		session.startTransaction();
+
+		const activity = await getActivityById(activityId);
+		if (!activity) {
+			throw new HttpError(404, "Activity not found");
+		}
+		const tourist = await touristService.removeBookmarkedActivity(
+			touristId,
+			activityId,
+		);
+		if (!tourist) {
+			throw new HttpError(
+				404,
+				"Could not remove bookmarked activity for tourist",
+			);
+		}
+		await activity.updateOne({
+			$pull: { touristBookmarks: tourist.id },
+		});
+		await session.commitTransaction();
+		return activity;
+	} catch (error) {
+		await session.abortTransaction();
+		throw error;
+	} finally {
+		session.endSession();
+	}
 };
 
 export const softDeleteActivity = async (id: string) => {

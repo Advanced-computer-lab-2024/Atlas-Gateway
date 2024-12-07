@@ -7,11 +7,17 @@ import {
 	EllipsisVertical,
 	Eye,
 	Package,
+	Star,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { useProducts, useUpdateProduct } from "@/api/data/useProducts";
+import {
+	useAddWishlist,
+	useProducts,
+	useRemoveWishlist,
+	useUpdateProduct,
+} from "@/api/data/useProducts";
 import { useSellerProfile } from "@/api/data/useProfile";
 import Label from "@/components/ui/Label";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -42,6 +48,14 @@ export default function ProductCard({
 	const { doUpdateProduct } = useUpdateProduct(() => {
 		refetch();
 	});
+
+	const { doAddWishlist } = useAddWishlist(() => {
+		refetch();
+	});
+	const { doRemoveWishlist } = useRemoveWishlist(() => {
+		refetch();
+	});
+
 	const handleArchive = (isArchived: boolean, id: string) => {
 		doUpdateProduct({ isArchived: !isArchived, _id: id });
 	};
@@ -57,6 +71,7 @@ export default function ProductCard({
 		sellerId,
 		sales,
 		isArchived,
+		touristWishlist,
 	} = product;
 
 	const convertCurrency = useCurrency();
@@ -105,7 +120,26 @@ export default function ProductCard({
 			</Flex>
 			<CardContent>
 				<Flex isColumn gap="2">
-					<Flex gap="2" align="center" justify="between">
+					<Flex align="center" justify="between">
+						{user?.type === EAccountType.Tourist &&
+							(touristWishlist?.includes(user?._id) ? (
+								<Star
+									fill="yellow"
+									onClick={() => {
+										if (product?._id) {
+											doRemoveWishlist(product?._id);
+										}
+									}}
+								/>
+							) : (
+								<Star
+									onClick={() => {
+										if (product?._id) {
+											doAddWishlist(product?._id);
+										}
+									}}
+								/>
+							))}
 						<Label.Mid500>{name}</Label.Mid500>
 						<DropdownMenu modal={false}>
 							<DropdownMenuTrigger className="bg-transparent">
@@ -151,6 +185,7 @@ export default function ProductCard({
 							</DropdownMenuContent>
 						</DropdownMenu>
 					</Flex>
+
 					<Flex align="center" justify="between">
 						<Flex gap="1" align="center">
 							<DollarSign size={20} />

@@ -1,16 +1,16 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 
+
+
 import { useLoginStore } from "@/store/loginStore";
 import { TProduct } from "@/types/global";
 
-import {
-	apiCreateProduct,
-	apiProduct,
-	apiProducts,
-	apiUpdateProduct,
-} from "../service/product";
+
+
+import { apiAddWishlistProduct, apiCreateProduct, apiProduct, apiProducts, apiRemoveWishlistProduct, apiUpdateProduct } from "../service/product";
 import { useQueryString } from "./useQueryString";
+
 
 export function useProducts() {
 	const { user } = useLoginStore();
@@ -71,4 +71,38 @@ export function useUpdateProduct(onSuccess: () => void) {
 	const { mutate } = mutation;
 
 	return { doUpdateProduct: mutate, ...mutation };
+}
+
+export function useAddWishlist(onSuccess: () => void) {
+	const { user } = useLoginStore();
+	const mutation = useMutation({
+		mutationFn: (productId: string) => {
+			if (!user) {
+				throw new Error("User is not defined");
+			}
+			return apiAddWishlistProduct(productId, user._id);
+		},
+		onSuccess,
+	});
+
+	const { mutate } = mutation;
+
+	return { doAddWishlist: mutate, ...mutation };
+}
+
+export function useRemoveWishlist(onSuccess: () => void) {
+	const { user } = useLoginStore();
+	const mutation = useMutation({
+		mutationFn: (productId: string) => {
+			if (!user) {
+				throw new Error("User is not defined");
+			}
+			return apiRemoveWishlistProduct(productId, user._id);
+		},
+		onSuccess,
+	});
+
+	const { mutate } = mutation;
+
+	return { doRemoveWishlist: mutate, ...mutation };
 }

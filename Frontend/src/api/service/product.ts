@@ -75,3 +75,27 @@ export function apiUpdateProduct(payload: Partial<TProduct>, _id: string) {
 		data: payload,
 	});
 }
+
+export function apiAddWishlistProduct(_id: string, userId: string) {
+	return axios({
+		method: "POST",
+		url: ENDPOINTS.products.addWishlist(_id),
+		headers: {
+			"Content-Type": "application/json",
+			userid: userId,
+		},
+		baseURL: baseURL,
+	});
+}
+
+export function apiRemoveWishlistProduct(_id: string, userId: string) {
+	return axios({
+		method: "POST",
+		url: ENDPOINTS.products.removeWishlist(_id),
+		headers: {
+			"Content-Type": "application/json",
+			userid: userId,
+		},
+		baseURL: baseURL,
+	});
+}
