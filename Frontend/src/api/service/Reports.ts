@@ -9,12 +9,15 @@ import {
 	TReportRespone,
 } from "./types";
 
-export function apiAdminSalesReport() {
+export function apiAdminSalesReport(filter: Record<string, string>) {
 	return axios<TAdminReportResponse>({
 		method: "GET",
 		url: ENDPOINTS.admin.report,
 		headers: {
 			"Content-Type": "application/json",
+		},
+		params: {
+			...filter,
 		},
 		baseURL: baseURL,
 	});

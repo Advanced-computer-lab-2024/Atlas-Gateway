@@ -20,7 +20,7 @@ export function useAdminSalesReport() {
 
 	const q = useQuery({
 		queryFn: () => {
-			return apiAdminSalesReport();
+			return apiAdminSalesReport(query);
 		},
 		queryKey: ["salesReport", user?._id, query],
 	});
