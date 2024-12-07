@@ -44,6 +44,8 @@ export default function Products() {
 	const [isProductFormOpen, setIsProductFormOpen] = useState(false);
 	const [product, setProduct] = useState<TProduct | undefined>(undefined);
 
+	const [wishlist, setWishlist] = useState(false);
+
 	const openEditDrawer = (product: TProduct) => {
 		setIsProductFormOpen(true);
 		setProduct(product);
@@ -99,9 +101,19 @@ export default function Products() {
 									type: "range",
 								},
 							}}
-						/>		
+						/>
+					</Flex>
+					<Flex>
+						<Button
+							onClick={() => {
+								setWishlist(!wishlist);
+							}}
+						>
+							{wishlist ? "View All" : "My Wishlist"}
+						</Button>
 					</Flex>
 				</Flex>
+
 				{user?.type === EAccountType.Seller &&
 					seller?.isVerified &&
 					seller?.acceptedTerms && (
@@ -114,12 +126,24 @@ export default function Products() {
 				className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2"
 				gap="4"
 			>
-				{data?.map((product) => (
-					<ProductCard
-						product={product}
-						openEditDrawer={openEditDrawer}
-					/>
-				))}
+				{!wishlist
+					? data?.map((product) => (
+							<ProductCard
+								product={product}
+								openEditDrawer={openEditDrawer}
+							/>
+						))
+					: data?.filter((product) => {
+								return product.touristWishlist.includes(
+									user?._id ?? "",
+								);
+							})
+							.map((product) => (
+								<ProductCard
+									product={product}
+									openEditDrawer={openEditDrawer}
+								/>
+							))}
 			</Flex>
 			{pagesCount > 1 && (
 				<Pagination>
