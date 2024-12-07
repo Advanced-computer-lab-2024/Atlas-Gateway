@@ -1,13 +1,12 @@
 import { Express, Router } from "express";
 
 import {
+	Report,
 	createAdvertiser,
 	deleteAdvertiser,
 	getAdvertiser,
 	getAdvertisers,
-	salesReport,
 	softDeleteAdvertiser,
-	touristReport,
 	updateAdvertiser,
 	viewActivities,
 } from "../../Controllers/Users/advertiser.controller";
@@ -20,7 +19,6 @@ advertiserRouter.put("/update/:id", updateAdvertiser);
 advertiserRouter.delete("/delete/:id", deleteAdvertiser);
 advertiserRouter.get("/list/:id", viewActivities);
 advertiserRouter.delete("/requestDelete/:id", softDeleteAdvertiser);
-advertiserRouter.get("/sales/:id", salesReport);
-advertiserRouter.get("/bookings/:id", touristReport);
+advertiserRouter.get("/report/:id", Report);
 
 export default advertiserRouter;

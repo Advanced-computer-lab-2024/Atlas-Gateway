@@ -9,7 +9,7 @@ import {
 	TReportRespone,
 } from "./types";
 
-export function apiAdminSalesReport(filter: Record<string, string>) {
+export function apiAdminReport(filter: Record<string, string>) {
 	return axios<TAdminReportResponse>({
 		method: "GET",
 		url: ENDPOINTS.admin.report,
@@ -23,13 +23,13 @@ export function apiAdminSalesReport(filter: Record<string, string>) {
 	});
 }
 
-export function apiTourGuideSalesReport(
+export function apiTourGuideReport(
 	_id: string,
 	filters: Record<string, string>,
 ) {
 	return axios<TReportRespone<TItineraryReportResponse>>({
 		method: "GET",
-		url: ENDPOINTS.tourGuide.salesReport(_id),
+		url: ENDPOINTS.tourGuide.report(_id),
 		headers: {
 			"Content-Type": "application/json",
 		},
@@ -40,13 +40,13 @@ export function apiTourGuideSalesReport(
 	});
 }
 
-export function apiAdvertiserSalesReport(
+export function apiAdvertiserReport(
 	_id: string,
 	filters: Record<string, string>,
 ) {
 	return axios<TReportRespone<TActivityReportResponse>>({
 		method: "GET",
-		url: ENDPOINTS.advertiser.salesReport(_id),
+		url: ENDPOINTS.advertiser.report(_id),
 		headers: {
 			"Content-Type": "application/json",
 		},
@@ -57,13 +57,13 @@ export function apiAdvertiserSalesReport(
 	});
 }
 
-export function apiTransportationAdvertiserSalesReport(
+export function apiTransportationAdvertiserReport(
 	_id: string,
 	filters: Record<string, string>,
 ) {
 	return axios({
 		method: "GET",
-		url: ENDPOINTS.transportation_advertiser.salesReport(_id),
+		url: ENDPOINTS.transportation_advertiser.report(_id),
 		headers: {
 			"Content-Type": "application/json",
 		},
@@ -82,57 +82,6 @@ export function apiSellerSalesReport(
 	return axios<TReportRespone<TProductReportResponse>>({
 		method: "GET",
 		url: ENDPOINTS.seller.salesReport(_id),
-		headers: {
-			"Content-Type": "application/json",
-		},
-		params: {
-			...filters,
-		},
-		baseURL: baseURL,
-	});
-}
-
-export function apiTourGuideBookingReport(
-	_id: string,
-	filters: Record<string, string>,
-) {
-	return axios<TReportRespone<TItineraryReportResponse>>({
-		method: "GET",
-		url: ENDPOINTS.tourGuide.bookingReport(_id),
-		headers: {
-			"Content-Type": "application/json",
-		},
-		params: {
-			...filters,
-		},
-		baseURL: baseURL,
-	});
-}
-
-export function apiAdvertiserBookingReport(
-	_id: string,
-	filters: Record<string, string>,
-) {
-	return axios<TReportRespone<TActivityReportResponse>>({
-		method: "GET",
-		url: ENDPOINTS.advertiser.bookingReport(_id),
-		headers: {
-			"Content-Type": "application/json",
-		},
-		params: {
-			...filters,
-		},
-		baseURL: baseURL,
-	});
-}
-
-export function apiTransportationAdvertiserBookingReport(
-	_id: string,
-	filters: Record<string, string>,
-) {
-	return axios({
-		method: "GET",
-		url: ENDPOINTS.transportation_advertiser.bookingReport(_id),
 		headers: {
 			"Content-Type": "application/json",
 		},

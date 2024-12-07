@@ -1,13 +1,12 @@
 import { Express, Router } from "express";
 
 import {
+	Report,
 	createTourGuide,
 	deleteTourGuide,
 	getTourGuide,
 	getTourGuides,
-	salesReport,
 	softDeleteTourGuide,
-	touristReport,
 	updateTourGuide,
 } from "../../Controllers/Users/tourGuide.controller";
 
@@ -18,7 +17,6 @@ tourGuideRouter.get("/list", getTourGuides);
 tourGuideRouter.put("/update/:id", updateTourGuide);
 tourGuideRouter.delete("/delete/:id", deleteTourGuide);
 tourGuideRouter.delete("/requestDelete/:id", softDeleteTourGuide);
-tourGuideRouter.get("/sales/:id", salesReport);
-tourGuideRouter.get("/bookings/:id", touristReport);
+tourGuideRouter.get("/report/:id", Report);
 
 export default tourGuideRouter;

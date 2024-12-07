@@ -1,4 +1,4 @@
-import { useAdvertiserSalesReport } from "@/api/data/useReport";
+import { useAdvertiserReport } from "@/api/data/useReport";
 import Filters from "@/components/Filters/Filters";
 import { Flex } from "@/components/ui/flex";
 import { Label } from "@/components/ui/shadcnlabel";
@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/shadcnlabel";
 import ActivitiesChart from "../ActivitiesChart";
 
 export default function AdvertiserReport() {
-	const { data, meta } = useAdvertiserSalesReport();
+	const { data, meta } = useAdvertiserReport();
 
 	return (
 		<Flex

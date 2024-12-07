@@ -3,24 +3,21 @@ import { useQuery } from "@tanstack/react-query";
 import { useLoginStore } from "@/store/loginStore";
 
 import {
-	apiAdminSalesReport,
-	apiAdvertiserBookingReport,
-	apiAdvertiserSalesReport,
+	apiAdminReport,
+	apiAdvertiserReport,
 	apiSellerSalesReport,
-	apiTourGuideBookingReport,
-	apiTourGuideSalesReport,
-	apiTransportationAdvertiserBookingReport,
-	apiTransportationAdvertiserSalesReport,
+	apiTourGuideReport,
+	apiTransportationAdvertiserReport,
 } from "../service/Reports";
 import { useQueryString } from "./useQueryString";
 
-export function useAdminSalesReport() {
+export function useAdminReport() {
 	const { user } = useLoginStore();
 	const [query] = useQueryString();
 
 	const q = useQuery({
 		queryFn: () => {
-			return apiAdminSalesReport(query);
+			return apiAdminReport(query);
 		},
 		queryKey: ["salesReport", user?._id, query],
 	});
@@ -29,7 +26,7 @@ export function useAdminSalesReport() {
 	return { ...q, data: data?.data?.data, meta: data?.data?.metaData };
 }
 
-export function useAdvertiserSalesReport() {
+export function useAdvertiserReport() {
 	const { user } = useLoginStore();
 	const [query] = useQueryString();
 	const q = useQuery({
@@ -37,7 +34,7 @@ export function useAdvertiserSalesReport() {
 			if (!user?._id) {
 				return; // idk how to handle this
 			}
-			return apiAdvertiserSalesReport(user._id, query);
+			return apiAdvertiserReport(user._id, query);
 		},
 		queryKey: ["salesReport", user?._id, query],
 	});
@@ -46,7 +43,7 @@ export function useAdvertiserSalesReport() {
 	return { ...q, data: data?.data?.data, meta: data?.data?.metaData };
 }
 
-export function useTourGuideSalesReport() {
+export function useTourGuideReport() {
 	const { user } = useLoginStore();
 	const [query] = useQueryString();
 	const q = useQuery({
@@ -54,7 +51,7 @@ export function useTourGuideSalesReport() {
 			if (!user?._id) {
 				return; // idk how to handle this
 			}
-			return apiTourGuideSalesReport(user._id, query);
+			return apiTourGuideReport(user._id, query);
 		},
 		queryKey: ["salesReport", user?._id, query],
 	});
@@ -63,7 +60,7 @@ export function useTourGuideSalesReport() {
 	return { ...q, data: data?.data?.data, meta: data?.data?.metaData };
 }
 
-export function useTransportationAdvertiserSalesReport() {
+export function useTransportationAdvertiserReport() {
 	const { user } = useLoginStore();
 	const [query] = useQueryString();
 	const q = useQuery({
@@ -71,7 +68,7 @@ export function useTransportationAdvertiserSalesReport() {
 			if (!user?._id) {
 				return; // idk how to handle this
 			}
-			return apiTransportationAdvertiserSalesReport(user._id, query);
+			return apiTransportationAdvertiserReport(user._id, query);
 		},
 		queryKey: ["salesReport", user?._id, query],
 	});
@@ -91,57 +88,6 @@ export function useSellerSalesReport() {
 			return apiSellerSalesReport(user._id, query);
 		},
 		queryKey: ["salesReport", user?._id, query],
-	});
-	const { data } = q;
-
-	return { ...q, data: data?.data?.data, meta: data?.data?.metaData };
-}
-
-export function useAdvertiserBookingReport() {
-	const { user } = useLoginStore();
-	const [query] = useQueryString();
-	const q = useQuery({
-		queryFn: () => {
-			if (!user?._id) {
-				return; // idk how to handle this
-			}
-			return apiAdvertiserBookingReport(user._id, query);
-		},
-		queryKey: ["bookingsReport", user?._id, query],
-	});
-	const { data } = q;
-
-	return { ...q, data: data?.data?.data, meta: data?.data?.metaData };
-}
-
-export function useTourGuideBookingReport() {
-	const { user } = useLoginStore();
-	const [query] = useQueryString();
-	const q = useQuery({
-		queryFn: () => {
-			if (!user?._id) {
-				return; // idk how to handle this
-			}
-			return apiTourGuideBookingReport(user._id, query);
-		},
-		queryKey: ["bookingsReport", user?._id, query],
-	});
-	const { data } = q;
-
-	return { ...q, data: data?.data?.data, meta: data?.data?.metaData };
-}
-
-export function useTransportationAdvertiserBookingReport() {
-	const { user } = useLoginStore();
-	const [query] = useQueryString();
-	const q = useQuery({
-		queryFn: () => {
-			if (!user?._id) {
-				return; // idk how to handle this
-			}
-			return apiTransportationAdvertiserBookingReport(user._id, query);
-		},
-		queryKey: ["bookingsReport", user?._id, query],
 	});
 	const { data } = q;
 

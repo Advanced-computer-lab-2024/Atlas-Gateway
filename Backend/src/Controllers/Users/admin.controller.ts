@@ -76,7 +76,7 @@ export const deleteAdmin = async (
 	}
 };
 
-export const salesReport = async (
+export const Report = async (
 	req: Request,
 	res: Response,
 	next: NextFunction,

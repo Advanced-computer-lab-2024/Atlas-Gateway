@@ -1,4 +1,4 @@
-import { useAdminSalesReport } from "@/api/data/useReport";
+import { useAdminReport } from "@/api/data/useReport";
 import Filters from "@/components/Filters/Filters";
 import { Flex } from "@/components/ui/flex";
 import { Label } from "@/components/ui/shadcnlabel";
@@ -8,7 +8,7 @@ import ItinerariesChart from "../ItitnerariesChart";
 import ProductsChart from "../ProductsChart";
 
 export default function AdminReport() {
-	const { data, meta } = useAdminSalesReport();
+	const { data, meta } = useAdminReport();
 
 	console.log(data, meta);
 

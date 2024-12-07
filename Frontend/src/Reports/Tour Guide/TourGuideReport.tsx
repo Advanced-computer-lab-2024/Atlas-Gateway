@@ -1,4 +1,4 @@
-import { useTourGuideSalesReport } from "@/api/data/useReport";
+import { useTourGuideReport } from "@/api/data/useReport";
 import Filters from "@/components/Filters/Filters";
 import { Flex } from "@/components/ui/flex";
 import { Label } from "@/components/ui/shadcnlabel";
@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/shadcnlabel";
 import ItinerariesChart from "../ItitnerariesChart";
 
 export default function TourGuideReport() {
-	const { data, meta } = useTourGuideSalesReport();
+	const { data, meta } = useTourGuideReport();
 
 	return (
 		<Flex

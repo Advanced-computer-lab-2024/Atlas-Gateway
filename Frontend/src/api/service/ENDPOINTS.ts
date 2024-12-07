@@ -68,8 +68,7 @@ const ENDPOINTS = {
 		update: (id: string) => `api/tourGuide/update/${id}`,
 		delete: (id: string) => `api/tourGuide/delete/${id}`,
 		requestDelete: (id: string) => `api/tourGuide/requestDelete/${id}`,
-		salesReport: (id: string) => `api/tourGuide/sales/${id}`,
-		bookingReport: (id: string) => `api/tourGuide/bookings/${id}`,
+		report: (id: string) => `api/tourGuide/report/${id}`,
 	},
 	advertiser: {
 		list: "api/advertiser/list",
@@ -77,18 +76,14 @@ const ENDPOINTS = {
 		update: (id: string) => `api/advertiser/update/${id}`,
 		delete: (id: string) => `api/advertiser/delete/${id}`,
 		requestDelete: (id: string) => `api/advertiser/requestDelete/${id}`,
-		salesReport: (id: string) => `api/advertiser/sales/${id}`,
-		bookingReport: (id: string) => `api/advertiser/bookings/${id}`,
+		report: (id: string) => `api/advertiser/report/${id}`,
 	},
 	transportation_advertiser: {
 		list: "api/transportation_advertiser/list",
 		show: (id: string) => `api/transportation_advertiser/show/${id}`,
 		update: (id: string) => `api/transportation_advertiser/update/${id}`,
 		delete: (id: string) => `api/transportation_advertiser/delete/${id}`,
-		salesReport: (id: string) =>
-			`api/transportation_advertiser/sales/${id}`,
-		bookingReport: (id: string) =>
-			`api/transportation_advertiser/bookings/${id}`,
+		report: (id: string) => `api/transportation_advertiser/report/${id}`,
 	},
 	category: {
 		list: "api/category/list",

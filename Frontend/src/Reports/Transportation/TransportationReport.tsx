@@ -1,4 +1,4 @@
-import { useTransportationAdvertiserSalesReport } from "@/api/data/useReport";
+import { useTransportationAdvertiserReport } from "@/api/data/useReport";
 import Filters from "@/components/Filters/Filters";
 import { Flex } from "@/components/ui/flex";
 import { Label } from "@/components/ui/shadcnlabel";
@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/shadcnlabel";
 import ActivitiesChart from "../ActivitiesChart";
 
 export default function TransportationAdvertiserReport() {
-	const { data, meta } = useTransportationAdvertiserSalesReport();
+	const { data, meta } = useTransportationAdvertiserReport();
 
 	return (
 		<Flex

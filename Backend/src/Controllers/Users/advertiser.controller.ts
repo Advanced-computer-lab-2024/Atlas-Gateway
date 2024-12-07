@@ -137,7 +137,7 @@ export const softDeleteAdvertiser = async (
 	}
 };
 
-export const salesReport = async (
+export const Report = async (
 	req: Request,
 	res: Response,
 	next: NextFunction,
@@ -157,31 +157,6 @@ export const salesReport = async (
 			throw new HttpError(404, "No Sales Found");
 		}
 		res.status(200).send(salesReport);
-	} catch (error) {
-		next(error);
-	}
-};
-
-export const touristReport = async (
-	req: Request,
-	res: Response,
-	next: NextFunction,
-) => {
-	try {
-		const userId = req.params.id;
-
-		if (!userId) {
-			throw new HttpError(400, "Itinerary Id is required");
-		}
-
-		const tourists = await advertiserService.report(userId, {
-			date: req.query.date?.toString(),
-		});
-
-		if (tourists.data.length == 0) {
-			throw new HttpError(404, "No Tourists Found");
-		}
-		res.status(200).send(tourists);
 	} catch (error) {
 		next(error);
 	}
