@@ -3,6 +3,7 @@ import { PipelineStage, Types } from "mongoose";
 
 import { Complaint } from "../../Models/Interactions/complaint.model";
 import { filterByComplaintStatus } from "../../Services/Operations/Filter/filterBuilder.service";
+import buildSortCriteria from "../../Services/Operations/Sort/sortBuilder.service";
 
 //Creates a Complaint --Tourist Only
 export const createComplaint = async (
@@ -48,7 +49,10 @@ export const getAllComplaints = async (
 				},
 			},
 		];
-		pipeline.push(...filterByComplaintStatus(req.query));
+		pipeline.push(
+			...filterByComplaintStatus(req.query),
+			...buildSortCriteria(req.query),
+		);
 		const complaints = await Complaint.aggregate(pipeline);
 		res.status(200).json(complaints);
 	} catch (error) {
@@ -83,9 +87,9 @@ export const getComplaintById = async (
 ) => {
 	try {
 		const { id } = req.params;
-		const complaintData = await Complaint.findById(id)
-			.populate("createdBy")
-			.exec();
+		const complaintData =
+			await Complaint.findById(id).populate("createdBy");
+
 		if (!complaintData) {
 			return res.status(404).json({ message: "Complaint not found" });
 		}
