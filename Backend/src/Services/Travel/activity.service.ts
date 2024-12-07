@@ -1,10 +1,13 @@
 import mongoose, { PipelineStage, Types } from "mongoose";
 
+
+
 import HttpError from "../../Errors/HttpError";
 import { Activity, IActivity } from "../../Models/Travel/activity.model";
 import * as advertiserService from "../../Services/Users/advertiser.service";
 import AggregateBuilder from "../Operations/aggregation.service";
 import * as touristService from "../Users/tourist.service";
+
 
 const ActivityFiltersMap: Record<string, PipelineStage> = {
 	tourist: {
@@ -309,6 +312,10 @@ export const bookmarkActivity = async (activityId: string, touristId: string) =>
 	if (!tourist) {
 		throw new HttpError(404, "Could not bookmark activity for tourist");
 	}
+	await activity.updateOne({
+		$push: { touristBookmarks: tourist.id },
+	});
+
 	return activity;
 }
 
@@ -370,6 +377,9 @@ export const removeBookmarkActivity = async(
 	if (!tourist) {
 		throw new HttpError(404, "Could not remove bookmarked activity for tourist");
 	}
+	await activity.updateOne({
+		$pull: { touristBookmarks: tourist.id },
+	});
 	return activity;
 }
 

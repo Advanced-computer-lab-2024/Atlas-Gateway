@@ -1,5 +1,6 @@
 import { formatDate } from "date-fns";
 import {
+	Bookmark,
 	Copy,
 	DollarSign,
 	Edit,
@@ -14,9 +15,11 @@ import {
 import { useNavigate } from "react-router-dom";
 
 import {
+	useBookmarkItinerary,
 	useDeleteItinerary,
 	useFlagItinerary,
 	useItineraries,
+	useRemoveBookmarkItinerary,
 	useToggleItineraryStatus,
 } from "@/api/data/useItineraries";
 import Label from "@/components/ui/Label";
@@ -53,6 +56,8 @@ export default function ItineraryCard({
 	const convertCurrency = useCurrency();
 
 	const { refetch } = useItineraries();
+	const { doBookmarkItinerary } = useBookmarkItinerary(refetch);
+	const { doRemoveBookmarkItinerary } = useRemoveBookmarkItinerary(refetch);
 	const { doDeleteItinerary } = useDeleteItinerary(refetch);
 	const { doFlagItinerary } = useFlagItinerary(refetch);
 	const { doToggleItineraryStatus } = useToggleItineraryStatus(refetch);
@@ -93,6 +98,29 @@ export default function ItineraryCard({
 					justify="center"
 					className="relative w-full"
 				>
+					{user?.type === EAccountType.Tourist &&
+						(itinerary?.touristBookmarks?.includes(user?._id) ? (
+							<Bookmark
+								fill="black"
+								className="absolute left-0"
+								onClick={() => {
+									if (itinerary?._id) {
+										doRemoveBookmarkItinerary(
+											itinerary?._id,
+										);
+									}
+								}}
+							/>
+						) : (
+							<Bookmark
+								className="absolute left-0"
+								onClick={() => {
+									if (itinerary?._id) {
+										doBookmarkItinerary(itinerary?._id);
+									}
+								}}
+							/>
+						))}
 					<Label.Mid500>{itinerary?.title ?? "Title"}</Label.Mid500>
 					<DropdownMenu modal={false}>
 						<DropdownMenuTrigger className="absolute right-0">

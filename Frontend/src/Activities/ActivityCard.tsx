@@ -1,5 +1,6 @@
 import { formatDate } from "date-fns";
 import {
+	Bookmark,
 	Copy,
 	DollarSign,
 	Edit,
@@ -11,7 +12,12 @@ import {
 import { Trash } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-import { useActivities, useDeleteActivity } from "@/api/data/useActivities";
+import {
+	useActivities,
+	useBookmarkActivity,
+	useDeleteActivity,
+	useRemoveBookmarkActivity,
+} from "@/api/data/useActivities";
 import Label from "@/components/ui/Label";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -46,6 +52,13 @@ export default function ActivityCard({
 
 	const { refetch } = useActivities();
 	const { doDeleteActivity } = useDeleteActivity(refetch);
+
+	const { doBookmarkActivity } = useBookmarkActivity(() => {
+		refetch();
+	});
+	const { doRemoveBookmarkActivity } = useRemoveBookmarkActivity(() => {
+		refetch();
+	});
 
 	// Function to copy the activity link to the clipboard
 	const handleCopyLink = () => {
@@ -84,6 +97,27 @@ export default function ActivityCard({
 					justify="center"
 					className="relative w-full"
 				>
+					{user?.type === EAccountType.Tourist &&
+						(activity?.touristBookmarks?.includes(user?._id) ? (
+							<Bookmark
+								fill="black"
+								className="absolute left-0"
+								onClick={() => {
+									if (activity?._id) {
+										doRemoveBookmarkActivity(activity?._id);
+									}
+								}}
+							/>
+						) : (
+							<Bookmark
+								className="absolute left-0"
+								onClick={() => {
+									if (activity?._id) {
+										doBookmarkActivity(activity?._id);
+									}
+								}}
+							/>
+						))}
 					<Label.Mid500 className="justify-self-center">
 						{activity?.name ?? "-"}
 					</Label.Mid500>

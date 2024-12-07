@@ -268,6 +268,10 @@ export const bookmarkItinerary = async (itineraryId: string, touristId: string) 
 	if (!tourist) {
 		throw new HttpError(404, "Couldn't bookmark itinerary in Tourist");
 	}
+	await itinerary.updateOne({
+		$push: { touristBookmarks: touristId },
+	});
+
 	return itinerary;
 };
 
@@ -353,6 +357,9 @@ export const removeBookmarkItinerary = async (
 	if (!tourist) {
 		throw new HttpError(404, "Failed to remove bookmarked itinerary");
 	}
+	await itinerary.updateOne({
+		$pull: { touristBookmarks: touristId },
+	});
 	return itinerary;
 };
 

@@ -28,6 +28,7 @@ import TouristFlights from "./tabs/Flights/TouristFlights";
 import TouristItineraries from "./tabs/Itineraries/TouristItineraries";
 import TouristTransportations from "./tabs/Transporations/TouristTransporations";
 import TouristHotels from "./tabs/Hotels/TouristHotels";
+import BookmarkedEvents from "./tabs/Bookmarked/BookmarkedEvents";
 
 export default function TouristProfile() {
 	const { data, refetch } = useTouristProfile();
@@ -124,7 +125,7 @@ export default function TouristProfile() {
 			</div>
 			<div className="flex ml-10 mr-10 mt-10">
 				<Tabs defaultValue="account" className="w-full">
-					<TabsList className="grid w-full grid-cols-7 border-2 border-black">
+					<TabsList className="grid w-full grid-cols-8 border-2 border-black">
 						<TabsTrigger value="account">Account</TabsTrigger>
 						<TabsTrigger value="activities">Activities</TabsTrigger>
 						<TabsTrigger value="itineraries">
@@ -136,6 +137,7 @@ export default function TouristProfile() {
 							Transporations
 						</TabsTrigger>
 						<TabsTrigger value="complaints">Complaints</TabsTrigger>
+						<TabsTrigger value="bookmarked">Bookmarked</TabsTrigger>
 					</TabsList>
 					<TabsContent value="account">
 						<Account />
@@ -159,6 +161,9 @@ export default function TouristProfile() {
 					<TabsContent value="history"></TabsContent>
 					<TabsContent value="complaints">
 						<Complaints />
+					</TabsContent>
+					<TabsContent value="bookmarked">
+						<BookmarkedEvents/>
 					</TabsContent>
 				</Tabs>
 			</div>

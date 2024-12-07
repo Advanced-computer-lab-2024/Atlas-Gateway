@@ -1,9 +1,12 @@
 import { Document, Schema, Types, model } from "mongoose";
 
+
+
 import { schemaConfig } from "../../Config/schemaConfig";
 import { ITourist } from "../Users/tourist.model";
 import { ICategory } from "./category.model";
 import { ITag } from "./tag.model";
+
 
 export interface IActivity extends Document {
 	name: string;
@@ -21,6 +24,7 @@ export interface IActivity extends Document {
 	totalNumberOfRatings: number;
 	numberOfBookings: number;
 	tourists: Types.ObjectId[] | ITourist[];
+	touristBookmarks: Types.ObjectId[];
 	isDeleted?: boolean;
 	isArchived?: boolean;
 	notificationRequested: Types.ObjectId[];
@@ -89,6 +93,7 @@ const activitySchema = new Schema<IActivity>(
 		],
 
 		bookings: [{ type: Schema.Types.ObjectId, ref: "Booking" }],
+		touristBookmarks: [{ type: Schema.Types.ObjectId, ref: "Tourist" }],
 	},
 	schemaConfig,
 );

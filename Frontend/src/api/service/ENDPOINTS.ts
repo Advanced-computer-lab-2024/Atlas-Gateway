@@ -25,6 +25,8 @@ const ENDPOINTS = {
 		delete: (id: string) => `api/activity/delete/${id}`,
 		book: (id: string) => `api/activity/book/${id}`,
 		cancelBooking: (id: string) => `api/activity/cancelBooking/${id}`,
+		bookmark: (id: string) => `api/activity/bookmark/${id}`,
+		removeBookmark: (id: string) => `api/activity/removeBookmark/${id}`,
 	},
 	changePassword: "/api/change-password",
 	login: "api/login",
@@ -110,6 +112,8 @@ const ENDPOINTS = {
 		delete: (id: string) => `api/itinerary/delete/${id}`,
 		book: (id: string) => `api/itinerary/book/${id}`,
 		cancelBooking: (id: string) => `api/itinerary/cancelBooking/${id}`,
+		bookmark: (id: string) => `api/itinerary/bookmark/${id}`,
+		removeBookmark: (id: string) => `api/itinerary/removeBookmark/${id}`,
 	},
 	flights: {
 		search: "api/flights/search",
@@ -142,7 +146,7 @@ const ENDPOINTS = {
 	},
 	userStatistics: {
 		list: "api/user-statistics/list",
-	  },
+	},
 };
 
 export default ENDPOINTS;

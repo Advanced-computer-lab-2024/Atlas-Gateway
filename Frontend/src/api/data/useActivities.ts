@@ -10,9 +10,11 @@ import {
 	apiActivity,
 	apiAdvertisorActivities,
 	apiBookActivity,
+	apiBookmarkActivity,
 	apiCancelActivityBooking,
 	apiCreateActivity,
 	apiDeleteActivity,
+	apiRemoveBookmarkActivity,
 	apiUpdateActivity,
 } from "../service/activities";
 import { useQueryString } from "./useQueryString";
@@ -110,6 +112,20 @@ export function useBookActivity(onSuccess: () => void) {
 	return { doBookActivity: mutate, ...mutation };
 }
 
+export function useBookmarkActivity(onSuccess: () => void) {
+	const { user } = useLoginStore();
+
+	const { _id } = user || {};
+	
+	const mutation = useMutation({
+		mutationFn: (id: string) => apiBookmarkActivity(id, _id ?? ""),
+		onSuccess,
+	});
+	const { mutate } = mutation;
+
+	return { doBookmarkActivity: mutate, ...mutation };
+}
+
 export function useCancelActivityBooking(onSuccess: () => void) {
 	const { user } = useLoginStore();
 	const { _id } = user || {};
@@ -121,4 +137,17 @@ export function useCancelActivityBooking(onSuccess: () => void) {
 	const { mutate } = mutation;
 
 	return { doCancelActivityBooking: mutate, ...mutation };
+}
+
+export function useRemoveBookmarkActivity(onSuccess: () => void) {
+	const { user } = useLoginStore();
+	const { _id } = user || {};
+	const mutation = useMutation({
+		mutationFn: (id: string) => apiRemoveBookmarkActivity(id, _id ?? ""),
+		onSuccess,
+	});
+
+	const { mutate } = mutation;
+
+	return { doRemoveBookmarkActivity: mutate, ...mutation };
 }

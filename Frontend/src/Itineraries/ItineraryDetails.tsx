@@ -1,31 +1,19 @@
 import axios from "axios";
 import { formatDate } from "date-fns";
-import { delay } from "lodash";
-import { ArrowLeft, DollarSign, MapPin } from "lucide-react";
+import { ArrowLeft, Bookmark, DollarSign, MapPin } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import {
-	useBookItinerary,
-	useCancelItineraryBooking,
-	useItinerary,
-} from "@/api/data/useItineraries";
+
+
+import { useBookItinerary, useBookmarkItinerary, useCancelItineraryBooking, useItinerary, useRemoveBookmarkItinerary } from "@/api/data/useItineraries";
 import { useTouristProfile } from "@/api/data/useProfile";
 import Label from "@/components/ui/Label";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { CommentsContainer } from "@/components/ui/comments";
-import {
-	Dialog,
-	DialogClose,
-	DialogContent,
-	DialogDescription,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Flex } from "@/components/ui/flex";
 import Rating, { ERatingType } from "@/components/ui/rating";
 import ReviewOverlay from "@/components/ui/reviewOverlay";
@@ -34,6 +22,7 @@ import { useLoginStore } from "@/store/loginStore";
 import { languageOptions } from "@/types/consts";
 import { EAccountType } from "@/types/enums";
 import { TReview, TTourGuide } from "@/types/global";
+
 
 export default function ItineraryDetails() {
 	const navigate = useNavigate();
@@ -57,6 +46,7 @@ export default function ItineraryDetails() {
 		language,
 		title,
 		tourists,
+		touristBookmarks,
 	} = data || {};
 	const { doBookItinerary } = useBookItinerary(() => {
 		refetch();
@@ -66,6 +56,9 @@ export default function ItineraryDetails() {
 		refetch();
 		refetchUserProfile();
 	});
+
+	const { doBookmarkItinerary } = useBookmarkItinerary(refetch);
+	const { doRemoveBookmarkItinerary } = useRemoveBookmarkItinerary(refetch);
 
 	const [canReviewItinerary, setCanReviewItinerary] = useState(false);
 	const [canReviewGuide, setCanReviewGuide] = useState(false);
@@ -160,28 +153,35 @@ export default function ItineraryDetails() {
 							/>
 							<Label.Big600>{title}</Label.Big600>
 						</Flex>
-						{user?.type === EAccountType.Tourist &&
-							(tourists?.includes(user?._id) ? (
-								<Button
-									size="lg"
-									onClick={() => {
-										if (data?._id)
-											doCancelItineraryBooking(data?._id);
-									}}
-								>
-									Cancel
-								</Button>
-							) : (
-								<Button
-									size="lg"
-									onClick={() => {
-										if (data?._id)
-											doBookItinerary(data?._id);
-									}}
-								>
-									Book
-								</Button>
-							))}
+						<Flex>
+							<Flex>
+								{user?.type === EAccountType.Tourist &&
+									(tourists?.includes(user?._id) ? (
+										<Button
+											size="lg"
+											onClick={() => {
+												if (data?._id)
+													doCancelItineraryBooking(
+														data?._id,
+													);
+											}}
+										>
+											Cancel
+										</Button>
+									) : (
+										<Button
+											size="lg"
+											onClick={() => {
+												if (data?._id)
+													doBookItinerary(data?._id);
+											}}
+										>
+											Book
+										</Button>
+									))}
+							</Flex>
+							
+						</Flex>
 					</Flex>
 				</CardHeader>
 				<CardContent className="grid grid-cols-2 w-full">
@@ -439,6 +439,31 @@ export default function ItineraryDetails() {
 								"No tags"
 							)}
 						</Flex>
+					</Flex>
+					<Flex>
+						{user?.type === EAccountType.Tourist &&
+							(touristBookmarks?.includes(user?._id) ? (
+								<Bookmark
+									fill="black"
+									onClick={() => {
+										if (data?._id) {
+											doRemoveBookmarkItinerary(
+												data?._id,
+											);
+										}
+									}}
+								/>
+							) : (
+								<Bookmark
+									onClick={() => {
+										if (data?._id) {
+											doBookmarkItinerary(
+												data?._id,
+											);
+										}
+									}}
+								/>
+							))}
 					</Flex>
 				</CardContent>
 			</Card>
