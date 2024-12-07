@@ -12,6 +12,7 @@ import {
 
 import ENDPOINTS, { baseURL } from "./ENDPOINTS";
 import {
+	TAdminProfileResponse,
 	TAdvertiserProfileResponse,
 	TGovernorProfileResponse,
 	TSellerProfileResponse,
@@ -50,6 +51,17 @@ export function apiChangePassword(username: string, data: TPassword) {
 		data: {
 			username: username,
 			password: data.password,
+		},
+		baseURL: baseURL,
+	});
+}
+
+export function apiForgetPassword(email: string) {
+	return axios({
+		method: "PUT",
+		url: ENDPOINTS.forgetPassword,
+		data: {
+			email: email,
 		},
 		baseURL: baseURL,
 	});
@@ -204,6 +216,18 @@ export function apiAdvertiserProfile(_id: string) {
 	return axios<TAdvertiserProfileResponse>({
 		method: "GET",
 		url: ENDPOINTS.advertiser.show(_id),
+		headers: {
+			"Content-Type": "application/json",
+			userid: _id,
+		},
+		baseURL: baseURL,
+	});
+}
+
+export function apiAdminProfile(_id: string) {
+	return axios<TAdminProfileResponse>({
+		method: "GET",
+		url: ENDPOINTS.admin.show(_id),
 		headers: {
 			"Content-Type": "application/json",
 			userid: _id,

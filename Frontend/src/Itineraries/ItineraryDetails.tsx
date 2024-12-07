@@ -36,6 +36,8 @@ import { languageOptions } from "@/types/consts";
 import { EAccountType } from "@/types/enums";
 import { TReview, TTourGuide } from "@/types/global";
 
+import { PaymentSheet } from "./PaymentSheet";
+
 export default function ItineraryDetails() {
 	const navigate = useNavigate();
 	const convertCurrency = useCurrency();
@@ -60,10 +62,6 @@ export default function ItineraryDetails() {
 		tourists,
 		touristBookmarks,
 	} = data || {};
-	const { doBookItinerary } = useBookItinerary(() => {
-		refetch();
-		refetchUserProfile();
-	});
 	const { doCancelItineraryBooking } = useCancelItineraryBooking(() => {
 		refetch();
 		refetchUserProfile();
@@ -190,34 +188,20 @@ export default function ItineraryDetails() {
 									))}
 							</Flex>
 						</Flex>
-						<Flex>
-							<Flex>
-								{user?.type === EAccountType.Tourist &&
-									(tourists?.includes(user?._id) ? (
-										<Button
-											size="lg"
-											onClick={() => {
-												if (data?._id)
-													doCancelItineraryBooking(
-														data?._id,
-													);
-											}}
-										>
-											Cancel
-										</Button>
-									) : (
-										<Button
-											size="lg"
-											onClick={() => {
-												if (data?._id)
-													doBookItinerary(data?._id);
-											}}
-										>
-											Book
-										</Button>
-									))}
-							</Flex>
-						</Flex>
+						{user?.type === EAccountType.Tourist &&
+							(tourists?.includes(user?._id) ? (
+								<Button
+									size="lg"
+									onClick={() => {
+										if (data?._id)
+											doCancelItineraryBooking(data?._id);
+									}}
+								>
+									Cancel
+								</Button>
+							) : (
+								<PaymentSheet amount={convertCurrency(price)} />
+							))}
 					</Flex>
 				</CardHeader>
 				<CardContent className="grid grid-cols-2 w-full">

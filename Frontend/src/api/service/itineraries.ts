@@ -92,13 +92,24 @@ export function apiDeleteItinerary(_id: string) {
 	});
 }
 
-export function apiBookItinerary(_id: string, _userId: string) {
+export function apiBookItinerary(
+	_id: string,
+	paymentType: string,
+	amount: number,
+	_userId: string,
+	paymentIntentId?: string,
+) {
 	return axios({
 		method: "POST",
 		url: ENDPOINTS.itinerary.book(_id),
 		headers: {
 			"Content-Type": "application/json",
 			userid: _userId,
+		},
+		data: {
+			paymentIntentId,
+			paymentType,
+			amount,
 		},
 		baseURL: baseURL,
 	});

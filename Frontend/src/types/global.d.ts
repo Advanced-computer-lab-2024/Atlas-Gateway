@@ -17,6 +17,10 @@ export type TPassword = {
 	confirmPassword: string;
 };
 
+export type TOtp = {
+	otp: string;
+};
+
 export type TPlace = {
 	_id: string;
 	name: string;
