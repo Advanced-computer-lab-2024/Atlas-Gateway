@@ -1,6 +1,5 @@
 import { EAccountType } from "@/types/enums";
 
-
 export type NavbarRoute = {
 	name: string;
 	to: string;

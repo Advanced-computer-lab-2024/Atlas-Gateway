@@ -5,10 +5,7 @@ import { TTransportation } from "@/types/global";
 import ENDPOINTS, { baseURL } from "./ENDPOINTS";
 import { TApiResponse } from "./types";
 
-export function apiTransportations(
-	id: string | undefined,
-	userType: string,
-) {
+export function apiTransportations(id: string | undefined, userType: string) {
 	return axios<TApiResponse<TTransportation[]>>({
 		method: "GET",
 		url: ENDPOINTS.transportation.list,

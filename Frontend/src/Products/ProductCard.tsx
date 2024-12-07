@@ -7,18 +7,20 @@ import {
 	EllipsisVertical,
 	Eye,
 	Package,
+	ShoppingCart,
 	Star,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
+	useAddProductToCart,
 	useAddWishlist,
 	useProducts,
 	useRemoveWishlist,
 	useUpdateProduct,
 } from "@/api/data/useProducts";
-import { useSellerProfile } from "@/api/data/useProfile";
+import { useSellerProfile, useTouristProfile } from "@/api/data/useProfile";
 import Label from "@/components/ui/Label";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import {
@@ -44,6 +46,8 @@ export default function ProductCard({
 	const { user } = useLoginStore();
 	const navigate = useNavigate();
 	const { refetch } = useProducts();
+	const { refetch: refetchTourist } = useTouristProfile();
+	const { doAddProductToCart } = useAddProductToCart(refetchTourist);
 	const [productPic, setProductPic] = useState("");
 	const { doUpdateProduct } = useUpdateProduct(() => {
 		refetch();
@@ -147,30 +151,43 @@ export default function ProductCard({
 							</DropdownMenuTrigger>
 							<DropdownMenuContent>
 								{isAdminOrCreator && (
-									<DropdownMenuItem
-										className="flex gap-2 cursor-pointer"
-										onClick={() =>
-											handleArchive(isArchived, _id)
-										}
-									>
-										{isArchived ? (
-											<>
-												<Archive /> Unarchive
-											</>
-										) : (
-											<>
-												<ArchiveRestore /> Archive
-											</>
-										)}
-									</DropdownMenuItem>
+									<>
+										<DropdownMenuItem
+											className="flex gap-2 cursor-pointer"
+											onClick={() =>
+												handleArchive(isArchived, _id)
+											}
+										>
+											{isArchived ? (
+												<>
+													<Archive /> Unarchive
+												</>
+											) : (
+												<>
+													<ArchiveRestore /> Archive
+												</>
+											)}
+										</DropdownMenuItem>
+										<DropdownMenuItem
+											className="flex gap-2 cursor-pointer"
+											onClick={() =>
+												openEditDrawer(product)
+											}
+										>
+											<Edit />
+											Edit
+										</DropdownMenuItem>
+									</>
 								)}
-								{isAdminOrCreator && (
+								{user?.type === EAccountType.Tourist && (
 									<DropdownMenuItem
 										className="flex gap-2 cursor-pointer"
-										onClick={() => openEditDrawer(product)}
+										onClick={() => {
+											doAddProductToCart(_id);
+										}}
 									>
-										<Edit />
-										Edit
+										<ShoppingCart />
+										Add to Cart
 									</DropdownMenuItem>
 								)}
 								<DropdownMenuItem

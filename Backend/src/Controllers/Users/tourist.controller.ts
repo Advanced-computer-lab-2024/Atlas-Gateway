@@ -75,6 +75,7 @@ export const updateTourist = async (
 		next(error);
 	}
 };
+
 export const deleteTourist = async (
 	req: Request,
 	res: Response,
@@ -201,5 +202,60 @@ export const requestItineraryNotification = async (
 		);
 	} catch (error) {
 		res.status(500).send(error);
+	}
+};
+
+export const addProductToCart = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	try {
+		const id = req.params.id;
+		if (!id) {
+			throw new HttpError(400, "Tourist id is required");
+		}
+		const productId = req.body.productId;
+		await touristService.addProductToCart(id, productId);
+		res.status(200).send("Product added to cart successfully");
+	} catch (error) {
+		next(error);
+	}
+};
+
+export const removeProductFromCart = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	try {
+		const id = req.params.id;
+		if (!id) {
+			throw new HttpError(400, "Tourist id is required");
+		}
+		const productId = req.body.productId;
+		await touristService.removeProductFromCart(id, productId);
+		res.status(200).send("Product removed from cart successfully");
+	} catch (error) {
+		next(error);
+	}
+};
+
+export const updateProductQuantity = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	try {
+		const id = req.params.id;
+		if (!id) {
+			throw new HttpError(400, "Tourist id is required");
+		}
+		const productId = req.body.productId;
+		const quantity = req.body.quantity;
+		await touristService.updateProductQuantity(id, productId, quantity);
+		res.status(200).send("Product quantity updated successfully");
+	} catch (error) {
+		next(error);
 	}
 };

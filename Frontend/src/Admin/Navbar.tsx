@@ -1,8 +1,8 @@
 import { LogOut } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { onLogout } from "@/store/loginStore";
 import { useUserStatistics } from "@/api/data/useUserStatistics";
+import { onLogout } from "@/store/loginStore";
 
 const Navbar = () => {
 	const navigate = useNavigate();
@@ -11,7 +11,7 @@ const Navbar = () => {
 	const activeItem = location.pathname.split("/")[3];
 	//Using the custom hook to get user statistics
 	const { data, isLoading, isError } = useUserStatistics();
-	// Testing the numbers 
+	// Testing the numbers
 	// const isLoading = false;
 	// const isError = false;
 	// const data = {total : 50, newTotal :15};
@@ -54,20 +54,20 @@ const Navbar = () => {
 	};
 
 	return (
-	<div className="bg-[#fefefe] w-full min-h-20 max-h-20 flex items-center">
-		{/* Show total and new total if the data is available */}
-		{activeCategory === "accounts" && (
-        <div className="flex items-center gap-4 ml-4">
-          {isLoading && <p>Loading...</p>}
-          {isError && <p>Error fetching users statistics.</p>}
-          {data && (
-            <>
-              <span>Total Users: {data.total}</span>
-              <span>New Users: {data.newTotal}</span>
-            </>
-          )}
-        </div>
-      )}
+		<div className="bg-[#fefefe] w-full min-h-20 max-h-20 flex items-center">
+			{/* Show total and new total if the data is available */}
+			{activeCategory === "accounts" && (
+				<div className="flex items-center gap-4 ml-4">
+					{isLoading && <p>Loading...</p>}
+					{isError && <p>Error fetching users statistics.</p>}
+					{data && (
+						<>
+							<span>Total Users: {data.total}</span>
+							<span>New Users: {data.newTotal}</span>
+						</>
+					)}
+				</div>
+			)}
 			{renderOptions()}
 			<div>
 				<LogOut
