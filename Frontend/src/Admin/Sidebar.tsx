@@ -56,7 +56,7 @@ const Sidebar = () => {
 				</button>
 			</div>
 
-			<div className="flex flex-col gap-4">
+			<div className="flex flex-col gap-4 overflow-y-auto">
 				{[
 					"Accounts",
 					"Products",
