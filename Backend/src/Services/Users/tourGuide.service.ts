@@ -156,13 +156,16 @@ export const report = async (
 	let totalBookings = 0;
 
 	let sales: IItineraryDTO[] = itineraries.map((itinerary: IItinerary) => {
-		totalSales += itinerary.numberOfBookings * itinerary.price;
+		const adminProfit = itinerary.numberOfBookings * itinerary.price * 0.1;
+		totalSales +=
+			itinerary.numberOfBookings * itinerary.price - adminProfit;
 		totalBookings += itinerary.numberOfBookings;
 		return {
 			itineraryId: itinerary.id,
 			itineraryName: itinerary.title,
 			numberOfBookings: itinerary.numberOfBookings,
-			totalSales: itinerary.numberOfBookings * itinerary.price,
+			totalSales:
+				itinerary.numberOfBookings * itinerary.price - adminProfit,
 		} as IItineraryDTO;
 	});
 

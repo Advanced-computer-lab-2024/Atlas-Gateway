@@ -173,18 +173,20 @@ export const report = async (
 	let totalBookings = 0;
 
 	let sales = activities.map((activity: IActivity) => {
-		totalSales +=
+		const sales =
 			activity.numberOfBookings *
 			((activity.minPrice + activity.maxPrice) / 2);
+
+		const adminProfit = sales * 0.1;
+
+		totalSales += sales - adminProfit;
 
 		totalBookings += activity.numberOfBookings;
 		return {
 			ActivityId: activity.id,
 			ActivityName: activity.name,
 			numberOfBookings: activity.numberOfBookings,
-			totalSales:
-				activity.numberOfBookings *
-				((activity.minPrice + activity.maxPrice) / 2),
+			totalSales: sales - adminProfit,
 		} as IActivityDTO;
 	});
 

@@ -13,7 +13,10 @@ export default function AdminReport() {
 	console.log(data, meta);
 
 	return (
-		<Flex className="w-full" isColumn isWrapped>
+		<Flex
+			className="w-full h-full items-center overflow-y-scroll "
+			isColumn
+		>
 			<Flex>
 				<Label>Admin Report</Label>
 				<Label>Total Sales:{meta?.totalSales}</Label>

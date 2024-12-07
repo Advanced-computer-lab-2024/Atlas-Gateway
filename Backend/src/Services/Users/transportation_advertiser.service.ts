@@ -249,14 +249,15 @@ export const report = async (
 	let totalBookings = 0;
 
 	let sales = transportations.map((transportation: ITransportation) => {
-		totalSales += transportation.numberOfBookings * transportation.price;
-
+		const sales = transportation.numberOfBookings * transportation.price;
+		const adminProfit = sales * 0.1;
+		totalSales += sales - adminProfit;
 		totalBookings += transportation.numberOfBookings;
 		return {
 			TransportationId: transportation.id,
 			TransportationName: transportation.name,
 			numberOfBookings: transportation.numberOfBookings,
-			totalSales: transportation.numberOfBookings * transportation.price,
+			totalSales: sales - adminProfit,
 		};
 	});
 
