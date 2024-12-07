@@ -1,4 +1,3 @@
-import { request } from "axios";
 import { NextFunction, Request, Response } from "express";
 
 import HttpError from "../../Errors/HttpError";
