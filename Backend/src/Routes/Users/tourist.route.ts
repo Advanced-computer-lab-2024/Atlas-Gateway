@@ -1,6 +1,7 @@
-import { Express, Router } from "express";
+import { Router } from "express";
 
 import {
+	addProductToCart,
 	createTourist,
 	deleteTourist,
 	getTourist,
@@ -8,7 +9,9 @@ import {
 	redeemPoints,
 	requestActivityNotification,
 	requestItineraryNotification,
+	removeProductFromCart,
 	softDeleteTourist,
+	updateProductQuantity,
 	updateTourist,
 	viewUpcomingActivities,
 	viewUpcomingItineraries,
@@ -32,5 +35,8 @@ touristRouter.get("/pastActivities", viewpastActivities);
 touristRouter.get("/pastIitneraries", viewpastItineraries);
 touristRouter.get("/ItineraryNotification", requestItineraryNotification);
 touristRouter.get("/ActivityNotification", requestActivityNotification);
+touristRouter.post("/cart/add/:id", addProductToCart);
+touristRouter.delete("/cart/remove/:id", removeProductFromCart);
+touristRouter.put("/cart/update/:id", updateProductQuantity);
+
 export default touristRouter;
-Router;

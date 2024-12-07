@@ -14,7 +14,6 @@ interface RatingProps {
 }
 
 const Rating: React.FC<RatingProps> = ({
-
 	value = 0,
 	ratingType = ERatingType.CARDS,
 

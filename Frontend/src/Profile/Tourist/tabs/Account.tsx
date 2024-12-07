@@ -1,11 +1,12 @@
 import { useTouristProfile } from "@/api/data/useProfile";
 import Label from "@/components/ui/Label";
 import { Flex } from "@/components/ui/flex";
+
 import PreferredTags from "./PreferredTags/PreferredTags";
 
 export default function Account() {
-    const { data } = useTouristProfile();
-    
+	const { data } = useTouristProfile();
+
 	return (
 		<Flex className="grid grid-cols-2 gap-4">
 			<Flex isColumn gap="3">

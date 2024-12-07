@@ -1,8 +1,10 @@
+import { ShoppingCart } from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { usePagination } from "@/api/data/usePagination";
 import { useProducts } from "@/api/data/useProducts";
-import { useSellerProfile } from "@/api/data/useProfile";
+import { useSellerProfile, useTouristProfile } from "@/api/data/useProfile";
 import { useQueryString } from "@/api/data/useQueryString";
 import Filters from "@/components/Filters/Filters";
 import Label from "@/components/ui/Label";
@@ -33,7 +35,9 @@ import ProductForm from "./ProductForm";
 
 export default function Products() {
 	const { user } = useLoginStore();
+	const navigate = useNavigate();
 	const { data: seller } = useSellerProfile();
+	const { data: tourist } = useTouristProfile();
 	const { data, meta } = useProducts();
 	const [query, setQuery] = useQueryString();
 	const { page, onPageChange, pagesCount } = usePagination({
@@ -53,7 +57,26 @@ export default function Products() {
 
 	return (
 		<Flex isColumn gap="4" className="w-full h-full p-4 overflow-y-scroll">
-			<Label.Big600>View a list of products you can buy!</Label.Big600>
+			<Flex justify="between" gap="2">
+				<Label.Big600>Products</Label.Big600>
+				<Flex
+					className="relative w-14 h-14 cursor-pointer"
+					align="center"
+					justify="center"
+					onClick={() => navigate("cart")}
+				>
+					<ShoppingCart width={48} height={48} />
+					{tourist?.cart && tourist.cart.length > 0 && (
+						<Flex
+							align="center"
+							justify="center"
+							className="absolute top-0 right-0 w-6 h-6 rounded-full bg-surface-primary"
+						>
+							<Label.Thin400>{tourist.cart.length}</Label.Thin400>
+						</Flex>
+					)}
+				</Flex>
+			</Flex>
 			<Flex
 				justify="between"
 				gap="2"

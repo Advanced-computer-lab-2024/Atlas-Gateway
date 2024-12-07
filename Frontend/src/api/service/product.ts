@@ -62,7 +62,7 @@ export function apiCreateProduct(payload: Partial<TProduct>, id: string) {
 	});
 }
 
-export function apiUpdateProduct(payload: Partial<TProduct>, _id: string) {
+export function apiUpdateProduct(payload: string, _id: string) {
 	// needs to be modified later
 	return axios({
 		method: "PUT",
@@ -88,6 +88,19 @@ export function apiAddWishlistProduct(_id: string, userId: string) {
 	});
 }
 
+export function apiAddProductToCart(productId: string, _id: string) {
+	return axios({
+		method: "POST",
+		url: ENDPOINTS.products.addToCart(_id),
+		headers: {
+			"Content-Type": "application/json",
+			userid: _id,
+		},
+		data: { productId },
+		baseURL: baseURL,
+	});
+}
+
 export function apiRemoveWishlistProduct(_id: string, userId: string) {
 	return axios({
 		method: "POST",
@@ -96,6 +109,38 @@ export function apiRemoveWishlistProduct(_id: string, userId: string) {
 			"Content-Type": "application/json",
 			userid: userId,
 		},
+		baseURL: baseURL,
+	});
+}
+
+export function apiRemoveProductFromCart(productId: string, _id: string) {
+	return axios({
+		method: "DELETE",
+		url: ENDPOINTS.products.removeFromCart(_id),
+		headers: {
+			"Content-Type": "application/json",
+			userid: _id,
+		},
+		data: { productId },
+		baseURL: baseURL,
+	});
+}
+
+export function apiUpdateProductQuantity(
+	payload: {
+		productId: string;
+		quantity: number;
+	},
+	_id: string,
+) {
+	return axios({
+		method: "PUT",
+		url: ENDPOINTS.products.updateProductQuantity(_id),
+		headers: {
+			"Content-Type": "application/json",
+			userid: _id,
+		},
+		data: payload,
 		baseURL: baseURL,
 	});
 }

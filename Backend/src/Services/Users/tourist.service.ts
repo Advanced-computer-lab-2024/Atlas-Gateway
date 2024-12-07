@@ -52,6 +52,7 @@ export const getTouristById = async (id: string) => {
 		"preferredTags",
 		"bookedFlights",
 		"bookedHotelOffers",
+		"cart.product",
 	]);
 
 	return tourist;
@@ -600,4 +601,86 @@ export const requestItineraryNotification = async (
 	itinerary.notificationRequested.push(tourist?.id);
 	await itinerary.save();
 	return;
+};
+
+export const addProductToCart = async (
+	touristId: string,
+	productId: string,
+) => {
+	if (!Types.ObjectId.isValid(productId)) {
+		throw new HttpError(400, "Product id is not valid");
+	}
+
+	const tourist = await getTouristById(touristId);
+	if (!tourist) {
+		throw new HttpError(404, "Tourist not found");
+	}
+
+	const productIndex = tourist.cart.findIndex((item) =>
+		item.product.equals(productId),
+	);
+	if (productIndex !== -1 && tourist.cart[productIndex]) {
+		tourist.cart[productIndex].quantity++;
+	} else {
+		tourist.cart.push({ product: new Types.ObjectId(productId), quantity: 1 });
+	}
+
+	await tourist.save();
+
+	return tourist;
+};
+
+export const removeProductFromCart = async (
+	touristId: string,
+	productId: string,
+) => {
+	if (!Types.ObjectId.isValid(productId)) {
+		throw new HttpError(400, "Product id is not valid");
+	}
+
+	const tourist = await getTouristById(touristId);
+	if (!tourist) {
+		throw new HttpError(404, "Tourist not found");
+	}
+
+	const productIndex = tourist.cart.findIndex((item) =>
+		item.product.equals(productId),
+	);
+	if (productIndex === -1) {
+		throw new HttpError(404, "Product not found in the cart");
+	}
+
+	tourist.cart.splice(productIndex, 1);
+
+	await tourist.save();
+
+	return tourist;
+};
+
+export const updateProductQuantity = async (
+	touristId: string,
+	productId: string,
+	quantity: number,
+) => {
+	if (!Types.ObjectId.isValid(productId)) {
+		throw new HttpError(400, "Product id is not valid");
+	}
+
+	const tourist = await getTouristById(touristId);
+	if (!tourist) {
+		throw new HttpError(404, "Tourist not found");
+	}
+
+	const product = tourist.cart.find((item) =>
+		item.product.equals(productId),
+	);
+	if (!product) {
+		throw new HttpError(404, "Product not found in the cart");
+	}
+
+	product.quantity = quantity;
+
+	await tourist.save();
+
+	return tourist;
 };

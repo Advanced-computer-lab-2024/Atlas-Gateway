@@ -1,16 +1,21 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 
-
-
 import { useLoginStore } from "@/store/loginStore";
 import { TProduct } from "@/types/global";
 
-
-
-import { apiAddWishlistProduct, apiCreateProduct, apiProduct, apiProducts, apiRemoveWishlistProduct, apiUpdateProduct } from "../service/product";
+import {
+	apiAddProductToCart,
+	apiAddWishlistProduct,
+	apiCreateProduct,
+	apiProduct,
+	apiProducts,
+	apiRemoveProductFromCart,
+	apiRemoveWishlistProduct,
+	apiUpdateProduct,
+	apiUpdateProductQuantity,
+} from "../service/product";
 import { useQueryString } from "./useQueryString";
-
 
 export function useProducts() {
 	const { user } = useLoginStore();
@@ -105,4 +110,55 @@ export function useRemoveWishlist(onSuccess: () => void) {
 	const { mutate } = mutation;
 
 	return { doRemoveWishlist: mutate, ...mutation };
+}
+
+export function useAddProductToCart(onSuccess: () => void) {
+	const { user } = useLoginStore();
+	const mutation = useMutation({
+		mutationFn: (productId: string) => {
+			if (!user) {
+				throw new Error("User is not defined");
+			}
+			return apiAddProductToCart(productId, user._id);
+		},
+		onSuccess,
+	});
+
+	const { mutate } = mutation;
+
+	return { doAddProductToCart: mutate, ...mutation };
+}
+
+export function useRemoveProductFromCart(onSuccess: () => void) {
+	const { user } = useLoginStore();
+	const mutation = useMutation({
+		mutationFn: (productId: string) => {
+			if (!user) {
+				throw new Error("User is not defined");
+			}
+			return apiRemoveProductFromCart(productId, user._id);
+		},
+		onSuccess,
+	});
+
+	const { mutate } = mutation;
+
+	return { doRemoveProductFromCart: mutate, ...mutation };
+}
+
+export function useUpdateProductQuantity(onSuccess: () => void) {
+	const { user } = useLoginStore();
+	const mutation = useMutation({
+		mutationFn: (payload: { productId: string; quantity: number }) => {
+			if (!user) {
+				throw new Error("User is not defined");
+			}
+			return apiUpdateProductQuantity(payload, user._id);
+		},
+		onSuccess,
+	});
+
+	const { mutate } = mutation;
+
+	return { doUpdateProductQuantity: mutate, ...mutation };
 }

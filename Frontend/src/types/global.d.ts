@@ -2,7 +2,6 @@ import { IFlight } from "../../../Backend/src/Models/Flight/flight.model";
 import { Currency } from "./consts";
 import { EAccountType } from "./enums";
 
-
 export type TUser = {
 	_id: string;
 	username: string;
@@ -114,6 +113,10 @@ export interface TTourist extends TUser {
 	bookedFlights: IFlight[]; // will be changed later
 	preferredTags: TTag[];
 	bookedHotelOffers: IHotelBooking[];
+	cart: {
+		product: TProduct;
+		quantity: number;
+	}[];
 }
 
 export interface TTouristApi extends TUser {

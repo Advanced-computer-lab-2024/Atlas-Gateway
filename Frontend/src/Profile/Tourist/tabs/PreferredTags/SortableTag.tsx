@@ -34,8 +34,8 @@ export default function SortableTag({
 			style={style}
 			{...attributes}
 			{...listeners}
-            className="bg-surface-primary p-2 border border-black rounded-lg"
-            justify="between"
+			className="bg-surface-primary p-2 border border-black rounded-lg"
+			justify="between"
 		>
 			{tag.name}
 			<Trash onClick={() => onRemoveTag(tag._id!)} />
