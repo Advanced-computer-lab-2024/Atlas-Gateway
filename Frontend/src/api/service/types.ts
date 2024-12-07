@@ -41,6 +41,10 @@ export type TAdvertiserProfileResponse = TAdvetisor & {
 	isDeleted?: boolean;
 };
 
+export type TAdminProfileResponse = TAdmin & {
+	_id: string;
+};
+
 export type TTransportationAdvertiserProfileResponse =
 	TTransportationAdvertiser & {
 		_id: string;

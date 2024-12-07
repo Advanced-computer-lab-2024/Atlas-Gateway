@@ -9,6 +9,8 @@ import {
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
+import ForgetPasswordSheet from "@/Profile/ForgetPasswordSheet";
+import { useAdminProfile, useForgetPassword } from "@/api/data/useProfile";
 import { useLoginStore } from "@/store/loginStore";
 
 import ChangePasswordSheet from "../Profile/ChangePasswordSheet";
@@ -17,11 +19,15 @@ const Sidebar = () => {
 	const { user } = useLoginStore();
 	const navigate = useNavigate();
 	const location = useLocation();
-
+	const { data } = useAdminProfile();
 	const activeCategory = location.pathname.split("/")[2];
 
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
+	const [isDrawerOpen5, setIsDrawerOpen5] = useState(false);
+	const [otp, setOtp] = useState("");
+	const { doForgetPassword } = useForgetPassword((response) => {
+		setOtp(response.data);
+	});
 	const handleClick = (item: string) => {
 		navigate(`/admin/${item.toLowerCase().replace(" ", "-")}`);
 	};
@@ -52,6 +58,16 @@ const Sidebar = () => {
 					className="bg-[#2b58ad] text-white py-2 px-4 rounded-lg border-white"
 				>
 					Change Password
+				</button>
+
+				<button
+					onClick={() => {
+						setIsDrawerOpen5(true);
+						doForgetPassword(data?.email || "");
+					}}
+					className="bg-[#2b58ad] text-white py-2 px-4 rounded-lg border-white"
+				>
+					Forget Password?
 				</button>
 			</div>
 
@@ -115,6 +131,11 @@ const Sidebar = () => {
 			<ChangePasswordSheet
 				isDrawerOpen={isDrawerOpen}
 				setIsDrawerOpen={setIsDrawerOpen}
+			/>
+			<ForgetPasswordSheet
+				isDrawerOpen={isDrawerOpen5}
+				setIsDrawerOpen={setIsDrawerOpen5}
+				otp={otp}
 			/>
 		</div>
 	);

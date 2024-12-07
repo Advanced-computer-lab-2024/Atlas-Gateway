@@ -2,6 +2,7 @@ import { Camera, Settings, TicketCheck } from "lucide-react";
 import { useState } from "react";
 
 import {
+	useForgetPassword,
 	useRedeemTouristLoyaltyPoints,
 	useRequestDeleteTouristProfile,
 	useTouristProfile,
@@ -19,23 +20,29 @@ import useCurrency from "@/hooks/useCurrency";
 
 import profile_background from "../../assets/profile_background.jpg";
 import ChangePasswordSheet from "../ChangePasswordSheet";
+import ForgetPasswordSheet from "../ForgetPasswordSheet";
 import TouristBadge from "./TouristBadge";
 import TouristSheet from "./TouristSheet";
 import Account from "./tabs/Account";
 import TouristActivities from "./tabs/Activities/TouristActivities";
 import Complaints from "./tabs/Complaints";
 import TouristFlights from "./tabs/Flights/TouristFlights";
+import TouristHotels from "./tabs/Hotels/TouristHotels";
 import TouristItineraries from "./tabs/Itineraries/TouristItineraries";
 import TouristTransportations from "./tabs/Transporations/TouristTransporations";
-import TouristHotels from "./tabs/Hotels/TouristHotels";
 
 export default function TouristProfile() {
 	const { data, refetch } = useTouristProfile();
 	const convertCurrency = useCurrency();
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+	const [isDrawerOpen2, setIsDrawerOpen2] = useState(false);
+	const [otp, setOtp] = useState("");
 	const { doRequestDeleteTouristProfile } = useRequestDeleteTouristProfile(
 		() => {},
 	);
+	const { doForgetPassword } = useForgetPassword((response) => {
+		setOtp(response.data);
+	});
 	const { doRedeemTouristLoyaltyPoints } =
 		useRedeemTouristLoyaltyPoints(refetch);
 
@@ -118,6 +125,16 @@ export default function TouristProfile() {
 							>
 								Delete Account
 							</DropdownMenuItem>
+
+							<DropdownMenuItem
+								onClick={() => {
+									setIsDrawerOpen2(true);
+									doForgetPassword(data?.email || "");
+								}}
+								className="cursor-pointer"
+							>
+								forget password?
+							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
 				</Flex>
@@ -131,11 +148,14 @@ export default function TouristProfile() {
 							Itineraries
 						</TabsTrigger>
 						<TabsTrigger value="flights">Flights</TabsTrigger>
-						<TabsTrigger value="hotel-bookings">Hotel bookings</TabsTrigger>
-						<TabsTrigger value="transporations">
-							Transporations
+						<TabsTrigger value="hotel-bookings">
+							Hotel bookings
+						</TabsTrigger>
+						<TabsTrigger value="transportation">
+							Transportation
 						</TabsTrigger>
 						<TabsTrigger value="complaints">Complaints</TabsTrigger>
+						<TabsTrigger value="pay_test">pay_test</TabsTrigger>
 					</TabsList>
 					<TabsContent value="account">
 						<Account />
@@ -149,7 +169,7 @@ export default function TouristProfile() {
 					<TabsContent value="flights">
 						<TouristFlights />
 					</TabsContent>
-					<TabsContent value="transporations">
+					<TabsContent value="transportation">
 						<TouristTransportations />
 					</TabsContent>
 					<TabsContent value="hotel-bookings">
@@ -165,6 +185,11 @@ export default function TouristProfile() {
 			<ChangePasswordSheet
 				isDrawerOpen={isDrawerOpen}
 				setIsDrawerOpen={setIsDrawerOpen}
+			/>
+			<ForgetPasswordSheet
+				isDrawerOpen={isDrawerOpen2}
+				setIsDrawerOpen={setIsDrawerOpen2}
+				otp={otp}
 			/>
 		</div>
 	);

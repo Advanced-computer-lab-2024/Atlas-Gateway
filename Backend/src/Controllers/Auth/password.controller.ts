@@ -23,3 +23,20 @@ export const changePassword = async (
 		next(err);
 	}
 };
+
+export const forgetPassword = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	try {
+		const { email } = req.body;
+		if (!email) {
+			throw new HttpError(400, "Email is required in the body");
+		}
+		const otp = await passwordService.forgetPassword(email);
+		res.status(200).send(otp);
+	} catch (error) {
+		next(error);
+	}
+};

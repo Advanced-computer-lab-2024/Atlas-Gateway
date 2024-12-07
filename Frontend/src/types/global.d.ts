@@ -2,7 +2,6 @@ import { IFlight } from "../../../Backend/src/Models/Flight/flight.model";
 import { Currency } from "./consts";
 import { EAccountType } from "./enums";
 
-
 export type TUser = {
 	_id: string;
 	username: string;
@@ -16,6 +15,10 @@ export type TUser = {
 export type TPassword = {
 	password: string;
 	confirmPassword: string;
+};
+
+export type TOtp = {
+	otp: string;
 };
 
 export type TPlace = {

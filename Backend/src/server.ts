@@ -4,14 +4,15 @@ import express, { NextFunction, Request, Response } from "express";
 import { SERVER } from "./Config/config";
 import connectDB from "./Config/db";
 import HttpError from "./Errors/HttpError";
-import passwordRouter from "./Routes/Auth/changePassword.route";
 import loginRouter from "./Routes/Auth/login.route";
+import passwordRouter from "./Routes/Auth/password.route";
 import registerRouter from "./Routes/Auth/register.route";
 import flightRouter from "./Routes/Flight/flight.route";
 import hotelRouter from "./Routes/Hotel/hotel.route";
 import complaintRouter from "./Routes/Interactions/complaint.route";
 import reviewRouter from "./Routes/Interactions/review.route";
 import mediaRouter from "./Routes/Media/media.route";
+import paymentRouter from "./Routes/Payment/payment.route";
 import productRouter from "./Routes/Purchases/product.route";
 import itineraryRouter from "./Routes/Travel/Itinerary.route";
 import activityRouter from "./Routes/Travel/activity.route";
@@ -56,13 +57,14 @@ async function startServer() {
 	app.use("/api/transportation", transportationRouter);
 	app.use("/api/places", placesRouter);
 	app.use("/api/login", loginRouter);
-	app.use("/api/change-password", passwordRouter);
+	app.use("/api/password", passwordRouter);
 	app.use("/api/media", mediaRouter);
 	app.use("/api/complaint", complaintRouter);
 	app.use("/api/transportation_advertiser", transportation_advertiserRouter);
 	app.use("/api/flights", flightRouter);
 	app.use("/api/hotels", hotelRouter);
 	app.use("/api/reviews", reviewRouter);
+	app.use("/api/payment", paymentRouter);
 	// Error handling middleware
 	app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 		console.error(err.stack);

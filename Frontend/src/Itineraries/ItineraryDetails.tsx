@@ -6,7 +6,6 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
-	useBookItinerary,
 	useCancelItineraryBooking,
 	useItinerary,
 } from "@/api/data/useItineraries";
@@ -35,6 +34,8 @@ import { languageOptions } from "@/types/consts";
 import { EAccountType } from "@/types/enums";
 import { TReview, TTourGuide } from "@/types/global";
 
+import { PaymentSheet } from "./PaymentSheet";
+
 export default function ItineraryDetails() {
 	const navigate = useNavigate();
 	const convertCurrency = useCurrency();
@@ -58,10 +59,6 @@ export default function ItineraryDetails() {
 		title,
 		tourists,
 	} = data || {};
-	const { doBookItinerary } = useBookItinerary(() => {
-		refetch();
-		refetchUserProfile();
-	});
 	const { doCancelItineraryBooking } = useCancelItineraryBooking(() => {
 		refetch();
 		refetchUserProfile();
@@ -195,15 +192,7 @@ export default function ItineraryDetails() {
 									Cancel
 								</Button>
 							) : (
-								<Button
-									size="lg"
-									onClick={() => {
-										if (data?._id)
-											doBookItinerary(data?._id);
-									}}
-								>
-									Book
-								</Button>
+								<PaymentSheet amount={convertCurrency(price)} />
 							))}
 					</Flex>
 				</CardHeader>

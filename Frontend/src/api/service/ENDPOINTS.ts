@@ -1,5 +1,3 @@
-import { citycodes } from "@/types/consts";
-
 export const baseURL = "http://localhost:5000";
 
 const ENDPOINTS = {
@@ -28,15 +26,18 @@ const ENDPOINTS = {
 		book: (id: string) => `api/activity/book/${id}`,
 		cancelBooking: (id: string) => `api/activity/cancelBooking/${id}`,
 	},
-	changePassword: "/api/change-password",
+	changePassword: "/api/password/change",
+	forgetPassword: "/api/password/forget",
 	login: "api/login",
 	register: "api/register/create",
 	media: {
 		upload: "api/media/upload",
 		download: "api/media/download",
 	},
+	payment: "/api/payment/createPaymentIntent",
 	admin: {
 		list: "api/admin/list",
+		show: (id: string) => `api/admin/show/${id}`,
 		create: "api/admin/create",
 		delete: (id: string) => `api/admin/delete/${id}`,
 	},

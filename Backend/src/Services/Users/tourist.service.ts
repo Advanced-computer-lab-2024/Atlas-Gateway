@@ -138,7 +138,8 @@ export function isOlderThan18(dob: Date): boolean {
 export const addBookedItinerary = async (
 	touristId: string,
 	itineraryId: string,
-	itenraryPrice: number,
+	paymentType: string,
+	itineraryPrice: number,
 ) => {
 	if (!Types.ObjectId.isValid(itineraryId)) {
 		throw new HttpError(400, "Itinerary id is not valid");
@@ -152,8 +153,20 @@ export const addBookedItinerary = async (
 		throw new HttpError(400, "Tourist must be older than 18");
 	}
 
+	if (itineraryPrice > tourist.walletBalance && paymentType === "wallet") {
+		throw new HttpError(
+			400,
+			"You do not have enough balance in your wallet",
+		);
+	}
+
+	let newWalletBalance = tourist.walletBalance;
+	if (tourist.walletBalance >= itineraryPrice && paymentType === "wallet") {
+		newWalletBalance = tourist.walletBalance - itineraryPrice;
+	}
+
 	const newLoyaltyPoints =
-		tourist.loyaltyPoints + (tourist.level / 2) * itenraryPrice;
+		tourist.loyaltyPoints + (tourist.level / 2) * itineraryPrice;
 	const newMaxCollectedLoyaltyPoints =
 		tourist.maxCollectedLoyaltyPoints + newLoyaltyPoints;
 	const newLevel =
@@ -168,6 +181,7 @@ export const addBookedItinerary = async (
 			loyaltyPoints: newLoyaltyPoints,
 			maxCollectedLoyaltyPoints: newMaxCollectedLoyaltyPoints,
 			level: newLevel,
+			walletBalance: newWalletBalance,
 		},
 		{ new: true },
 	);

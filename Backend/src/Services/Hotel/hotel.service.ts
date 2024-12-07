@@ -1,9 +1,9 @@
-import { Tourist } from "../../Models/Users/tourist.model";
 import mongoose, { Types } from "mongoose";
 
 import amadeus from "../../Config/amadeus.config";
 import HttpError from "../../Errors/HttpError";
 import { HotelBooking, IHotelBooking } from "../../Models/Hotel/hotel.model";
+import { Tourist } from "../../Models/Users/tourist.model";
 import { addBookedHotelOffer, getTouristById } from "../Users/tourist.service";
 
 interface HotelSearchParams {

@@ -4,6 +4,7 @@ import mongoose, { PipelineStage, Types } from "mongoose";
 import HttpError from "../../Errors/HttpError";
 import { IItinerary, Itinerary } from "../../Models/Travel/itinerary.model";
 import AggregateBuilder from "../Operations/aggregation.service";
+import { confirmPayment } from "../Payment/payment.service";
 import { cancelItinerary } from "../Users/tourist.service";
 import * as tourGuideService from "./../Users/tourGuide.service";
 import * as touristService from "./../Users/tourist.service";
@@ -206,7 +207,13 @@ export const deleteItinerary = async (id: string) => {
 	}
 };
 
-export const bookItinerary = async (itineraryId: string, touristId: string) => {
+export const bookItinerary = async (
+	itineraryId: string,
+	paymentType: string,
+	amount: number,
+	paymentIntentId: string,
+	touristId: string,
+) => {
 	const itinerary = await getItineraryById(itineraryId);
 	if (!itinerary) {
 		throw new HttpError(404, "Itinerary not found");
@@ -221,11 +228,16 @@ export const bookItinerary = async (itineraryId: string, touristId: string) => {
 	const tourist = await touristService.addBookedItinerary(
 		touristId,
 		itineraryId,
+		paymentType,
 		itinerary.price,
 	);
 
 	if (!tourist) {
 		throw new HttpError(404, "Couldn't book itinerary in Tourist");
+	}
+
+	if (paymentType === "online") {
+		await confirmPayment(paymentIntentId, tourist.email, amount / 100);
 	}
 
 	await itinerary.updateOne({
@@ -325,7 +337,7 @@ export const toggleStatus = async (itineraryId: string) => {
 		throw new HttpError(404, "Itinerary not found");
 	}
 
-	if (itinerary.numberOfBookings == 0) {
+	if (itinerary.numberOfBookings == 0 && !itinerary.isActive) {
 		throw new HttpError(400, "Itinerary has not bookings yet");
 	}
 	console.log(!itinerary.isActive);

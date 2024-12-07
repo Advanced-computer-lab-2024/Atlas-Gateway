@@ -12,6 +12,7 @@ import {
 } from "@/types/global";
 
 import {
+	apiAdminProfile,
 	apiAdvertiserProfile,
 	apiAdvertisers,
 	apiChangePassword,
@@ -27,6 +28,7 @@ import {
 	apiEditTourGuideProfile,
 	apiEditTouristProfile,
 	apiEditTransportationAdvertiserProfile,
+	apiForgetPassword,
 	apiGovernorProfile,
 	apiRedeemTouristLoyaltyPoints,
 	apiRequestDeleteAdvertiserProfile,
@@ -80,6 +82,17 @@ export function useUpdatePassword(onSuccess: () => void) {
 	});
 	const { mutate } = mutation;
 	return { doEditPassword: mutate, ...mutation };
+}
+
+export function useForgetPassword(onSuccess: (response: any) => void) {
+	const mutation = useMutation({
+		mutationFn: (email: string) => {
+			return apiForgetPassword(email);
+		},
+		onSuccess,
+	});
+	const { mutate } = mutation;
+	return { doForgetPassword: mutate, ...mutation };
 }
 
 export function useUpdateTouristProfile(onSuccess: () => void) {
@@ -246,6 +259,24 @@ export function useAdvertiserProfile() {
 				throw new Error("User ID is undefined");
 			}
 			return apiAdvertiserProfile(id);
+		},
+		queryKey: ["profile", id],
+	});
+
+	return { data: data?.data, refetch };
+}
+
+export function useAdminProfile() {
+	const { user } = useLoginStore();
+
+	const id = user?._id;
+
+	const { data, refetch } = useQuery({
+		queryFn: () => {
+			if (!id) {
+				throw new Error("User ID is undefined");
+			}
+			return apiAdminProfile(id);
 		},
 		queryKey: ["profile", id],
 	});

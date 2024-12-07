@@ -98,7 +98,18 @@ export function useBookItinerary(onSuccess: () => void) {
 	const { user } = useLoginStore();
 	const userId = user?._id ?? "";
 	const mutation = useMutation({
-		mutationFn: (id: string) => apiBookItinerary(id, userId),
+		mutationFn: ({
+			id,
+			paymentType,
+			amount,
+			paymentIntentId,
+		}: {
+			id: string;
+			paymentType: string;
+			amount: number;
+			paymentIntentId?: string;
+		}) =>
+			apiBookItinerary(id, paymentType, amount, userId, paymentIntentId),
 		onSuccess,
 	});
 
