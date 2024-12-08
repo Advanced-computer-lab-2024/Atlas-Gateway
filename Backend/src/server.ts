@@ -72,6 +72,9 @@ async function startServer() {
 	app.use("/api/orders", orderRouter);
 	app.use("/api/promo", promoRouter);
 	app.use("/api/notification", notificationRouter);
+	app.use("/api/payment", paymentRouter);
+	app.use("/api/orders", orderRouter);
+	app.use("/api/promo", promoRouter);
 	// Error handling middleware
 	app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 		console.error(err.stack);

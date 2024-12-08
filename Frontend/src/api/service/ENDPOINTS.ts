@@ -183,6 +183,9 @@ const ENDPOINTS = {
 		read: (id: string) => `api/notification/read/${id}`,
 		delete: (id: string) => `api/notification/delete/${id}`,
 	},
+	userStatistics: {
+		list: "api/admin/userStats",
+	},
 };
 
 export default ENDPOINTS;

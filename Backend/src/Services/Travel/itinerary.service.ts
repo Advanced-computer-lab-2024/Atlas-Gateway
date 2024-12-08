@@ -444,7 +444,12 @@ export const flagItinerary = async (itineraryId: string) => {
 
 	if (!tourGuide) throw new HttpError(404, "TourGuide not found");
 
-	const notify = await notificationService.notifyOfFlaggedItinerary(tourGuide.id.toString(), "TourGuide", tourGuide.email, itineraryFlagged.id.toString());
+	const notify = await notificationService.notifyOfFlaggedItinerary(
+		tourGuide.id.toString(),
+		"TourGuide",
+		tourGuide.email,
+		itineraryFlagged.id.toString(),
+	);
 
 	tourGuide.notifications.push(notify.id.toString());
 
