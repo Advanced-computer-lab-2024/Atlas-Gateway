@@ -1,6 +1,7 @@
 import crypto from "crypto";
 import { Types } from "mongoose";
 
+import HttpError from "../../Errors/HttpError";
 import { promo } from "../../Models/Promo/promo.model";
 import { findUserByUsername } from "../../Services/Auth/username.service";
 
@@ -79,4 +80,51 @@ export const createBirthdayPromo = async (username: string) => {
 	);
 
 	return newPromo;
+};
+
+export const deletePromoByCodeService = async (promoCode: string) => {
+	if (!promoCode) {
+		throw new HttpError(400, "Promo code is required");
+	}
+
+	const promoDoc = await promo.findOneAndDelete({ promoCode });
+
+	if (!promoDoc) {
+		throw new HttpError(400, "Promo code not found");
+	}
+	return promoDoc;
+};
+
+export const checkPromoService = async (promoCode: string, userid: any) => {
+	const promoDoc = await promo.findOne({ promoCode });
+
+	if (!promoDoc) {
+		throw new HttpError(400, "Promo code not found");
+	}
+
+	const currentDate = new Date();
+	if (promoDoc.expiryDate < currentDate) {
+		throw new HttpError(400, "Promo code has expired");
+	}
+
+	if (!promoDoc.allUsers) {
+		if (!userid) {
+			throw new HttpError(400, "User ID is required");
+		}
+
+		const userObjectId = new Types.ObjectId(
+			Array.isArray(userid) ? userid[0] : userid,
+		);
+		const isUserAuthorized = promoDoc.users.some((user) =>
+			user.equals(userObjectId),
+		);
+
+		if (!isUserAuthorized) {
+			throw new HttpError(
+				400,
+				"You are not authorized to use this promo code",
+			);
+		}
+		return promoDoc;
+	}
 };
