@@ -20,7 +20,7 @@ interface IProductTuple {
     product: IProduct;
 }
 
-const productTupleSchema = new Schema<IProductTuple>(
+export const productTupleSchema = new Schema<IProductTuple>(
 
     {
         productId: {
@@ -35,8 +35,6 @@ const productTupleSchema = new Schema<IProductTuple>(
     schemaConfig,
 
 );
-
-export const productTuple = model<IProductTuple>("ProductTuple", productTupleSchema);
 export interface IOrder extends Document {
     touristId: Types.ObjectId;
     products: IProductTuple[];
