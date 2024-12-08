@@ -13,6 +13,7 @@ import complaintRouter from "./Routes/Interactions/complaint.route";
 import reviewRouter from "./Routes/Interactions/review.route";
 import mediaRouter from "./Routes/Media/media.route";
 import paymentRouter from "./Routes/Payment/payment.route";
+import orderRouter from "./Routes/Purchases/order.route";
 import productRouter from "./Routes/Purchases/product.route";
 import itineraryRouter from "./Routes/Travel/Itinerary.route";
 import activityRouter from "./Routes/Travel/activity.route";
@@ -27,7 +28,6 @@ import sellerRouter from "./Routes/Users/seller.route";
 import tourGuideRouter from "./Routes/Users/tourGuide.route";
 import touristRouter from "./Routes/Users/tourist.route";
 import transportation_advertiserRouter from "./Routes/Users/transportation_advertiser.route";
-import orderRouter from "./Routes/Purchases/order.route";
 
 const app = express();
 

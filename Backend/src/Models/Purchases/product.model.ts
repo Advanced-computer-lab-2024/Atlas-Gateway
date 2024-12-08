@@ -1,11 +1,8 @@
 import { Document, Schema, Types, model } from "mongoose";
 
-
-
 import { schemaConfig } from "../../Config/schemaConfig";
 import { IAdmin } from "../Users/admin.model";
 import { ISeller } from "../Users/seller.model";
-
 
 export interface IProduct extends Document {
 	sellerId: Types.ObjectId | ISeller;

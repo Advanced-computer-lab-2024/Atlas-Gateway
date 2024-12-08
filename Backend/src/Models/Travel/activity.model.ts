@@ -1,12 +1,9 @@
 import { Document, Schema, Types, model } from "mongoose";
 
-
-
 import { schemaConfig } from "../../Config/schemaConfig";
 import { ITourist } from "../Users/tourist.model";
 import { ICategory } from "./category.model";
 import { ITag } from "./tag.model";
-
 
 export interface IActivity extends Document {
 	name: string;

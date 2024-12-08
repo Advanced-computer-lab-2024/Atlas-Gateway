@@ -1,10 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
-
-
 import HttpError from "../../Errors/HttpError";
 import * as productService from "../../Services/Purchases/product.service";
-
 
 //Create a new product entry
 export const createProduct = async (
@@ -126,7 +123,7 @@ export const updateProduct = async (
 	}
 };
 
-export const addwishlistProduct = async(
+export const addwishlistProduct = async (
 	req: Request,
 	res: Response,
 	next: NextFunction,
@@ -151,9 +148,9 @@ export const addwishlistProduct = async(
 	} catch (error) {
 		next(error);
 	}
-}
+};
 
-export const removeWishlistProduct = async(
+export const removeWishlistProduct = async (
 	req: Request,
 	res: Response,
 	next: NextFunction,
@@ -175,4 +172,4 @@ export const removeWishlistProduct = async(
 	} catch (error) {
 		next(error);
 	}
-}
+};
