@@ -38,8 +38,6 @@ import { TReview, TTourGuide } from "@/types/global";
 
 import { PaymentSheet } from "./PaymentSheet";
 
-import { PaymentSheet } from "./PaymentSheet";
-
 export default function ItineraryDetails() {
 	const navigate = useNavigate();
 	const convertCurrency = useCurrency();
@@ -202,7 +200,6 @@ export default function ItineraryDetails() {
 									Cancel
 								</Button>
 							) : (
-								<PaymentSheet amount={convertCurrency(price)} />
 								<PaymentSheet amount={convertCurrency(price)} />
 							))}
 					</Flex>

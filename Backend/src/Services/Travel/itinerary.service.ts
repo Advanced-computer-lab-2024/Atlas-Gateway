@@ -323,10 +323,10 @@ export const cancelBookingItinerary = async (
 		throw new HttpError(404, "Tourist not found in itinerary's list");
 	}
 
-	itinerary.populate("bookings");
+	await itinerary.populate("bookings");
 
 	const booking = (itinerary.bookings as IBooking[]).find(
-		(booking: IBooking) => booking.touristId.toString() === touristId,
+		(booking: IBooking) => booking.touristId?.toString() === touristId,
 	);
 
 	if (!booking) {

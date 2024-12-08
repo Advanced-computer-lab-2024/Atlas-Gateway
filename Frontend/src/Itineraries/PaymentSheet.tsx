@@ -71,7 +71,8 @@ export function PaymentSheet({ amount }: props) {
 								mode: "payment",
 								amount: parseFloat(amount) * 100,
 								currency:
-									data?.currency.toLocaleLowerCase() || "egp",
+									data?.currency?.toLocaleLowerCase() ||
+									"egp",
 								locale: "en",
 								loader: "auto",
 							}}

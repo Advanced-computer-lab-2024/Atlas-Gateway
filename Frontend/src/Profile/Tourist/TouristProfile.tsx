@@ -3,7 +3,6 @@ import { useState } from "react";
 
 import {
 	useForgetPassword,
-	useForgetPassword,
 	useRedeemTouristLoyaltyPoints,
 	useRequestDeleteTouristProfile,
 	useTouristProfile,
@@ -22,7 +21,6 @@ import useCurrency from "@/hooks/useCurrency";
 import profile_background from "../../assets/profile_background.jpg";
 import ChangePasswordSheet from "../ChangePasswordSheet";
 import ForgetPasswordSheet from "../ForgetPasswordSheet";
-import ForgetPasswordSheet from "../ForgetPasswordSheet";
 import TouristBadge from "./TouristBadge";
 import TouristSheet from "./TouristSheet";
 import Account from "./tabs/Account";
@@ -31,11 +29,10 @@ import BookmarkedEvents from "./tabs/Bookmarked/BookmarkedEvents";
 import Complaints from "./tabs/Complaints";
 import TouristFlights from "./tabs/Flights/TouristFlights";
 import TouristHotels from "./tabs/Hotels/TouristHotels";
-import TouristHotels from "./tabs/Hotels/TouristHotels";
 import TouristItineraries from "./tabs/Itineraries/TouristItineraries";
+import History from "./tabs/Past/History";
 import TouristTransportations from "./tabs/Transporations/TouristTransporations";
 import Upcoming from "./tabs/Upcoming/Upcoming";
-import History from "./tabs/Past/History";
 
 export default function TouristProfile() {
 	const { data, refetch } = useTouristProfile();
@@ -43,14 +40,9 @@ export default function TouristProfile() {
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 	const [isDrawerOpen2, setIsDrawerOpen2] = useState(false);
 	const [otp, setOtp] = useState("");
-	const [isDrawerOpen2, setIsDrawerOpen2] = useState(false);
-	const [otp, setOtp] = useState("");
 	const { doRequestDeleteTouristProfile } = useRequestDeleteTouristProfile(
 		() => {},
 	);
-	const { doForgetPassword } = useForgetPassword((response) => {
-		setOtp(response.data);
-	});
 	const { doForgetPassword } = useForgetPassword((response) => {
 		setOtp(response.data);
 	});
@@ -192,18 +184,17 @@ export default function TouristProfile() {
 					<TabsContent value="flights">
 						<TouristFlights />
 					</TabsContent>
-					<TabsContent value="transportation">
-					<TabsContent value="transportation">
+					<TabsContent value="transportations">
 						<TouristTransportations />
 					</TabsContent>
 					<TabsContent value="hotel-bookings">
 						<TouristHotels />
 					</TabsContent>
 					<TabsContent value="upcoming">
-						<Upcoming/>
+						<Upcoming />
 					</TabsContent>
 					<TabsContent value="history">
-						<History/> 
+						<History />
 					</TabsContent>
 					<TabsContent value="complaints">
 						<Complaints />
@@ -216,11 +207,6 @@ export default function TouristProfile() {
 			<ChangePasswordSheet
 				isDrawerOpen={isDrawerOpen}
 				setIsDrawerOpen={setIsDrawerOpen}
-			/>
-			<ForgetPasswordSheet
-				isDrawerOpen={isDrawerOpen2}
-				setIsDrawerOpen={setIsDrawerOpen2}
-				otp={otp}
 			/>
 			<ForgetPasswordSheet
 				isDrawerOpen={isDrawerOpen2}

@@ -102,13 +102,6 @@ export function apiBookActivity(
 	userid: string,
 	paymentIntentId?: string,
 ) {
-export function apiBookActivity(
-	_id: string,
-	paymentType: string,
-	amount: number,
-	userid: string,
-	paymentIntentId?: string,
-) {
 	return axios({
 		method: "POST",
 		url: ENDPOINTS.activity.book(_id),
@@ -132,11 +125,6 @@ export function apiBookmarkActivity(_id: string, userid: string) {
 		headers: {
 			"Content-Type": "application/json",
 			userid: userid,
-		},
-		data: {
-			paymentIntentId,
-			paymentType,
-			amount,
 		},
 		baseURL: baseURL,
 	});
@@ -189,4 +177,3 @@ export function apiPastActivities(touristId: string) {
 		data: { touristId }, // Send touristId in the body
 	});
 }
-

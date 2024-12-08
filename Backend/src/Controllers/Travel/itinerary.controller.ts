@@ -202,7 +202,7 @@ export const bookItinerary = async (
 	}
 };
 
-export const bookmarkItinerary = async(
+export const bookmarkItinerary = async (
 	req: Request,
 	res: Response,
 	next: NextFunction,
@@ -215,21 +215,26 @@ export const bookmarkItinerary = async(
 			return res.status(400).json({ message: "User ID is required" });
 		}
 		if (!itineraryId) {
-			return res.status(400).json({ message: "Itinerary ID is required" });
+			return res
+				.status(400)
+				.json({ message: "Itinerary ID is required" });
 		}
 		const bookmarkResult = await itineraryService.bookmarkItinerary(
 			itineraryId,
 			touristId.toString(),
-			
 		);
 		if (!bookmarkResult) {
-			return res.status(400).json({ message: "Cannot bookmark Itinerary" });
+			return res
+				.status(400)
+				.json({ message: "Cannot bookmark Itinerary" });
 		}
-		return res.status(201).json({ message: "Itinerary bookmarked successfully" });
+		return res
+			.status(201)
+			.json({ message: "Itinerary bookmarked successfully" });
 	} catch (error) {
 		next(error);
 	}
-}
+};
 
 export const cancelBookingItinerary = async (
 	req: Request,
@@ -249,7 +254,7 @@ export const cancelBookingItinerary = async (
 				.status(400)
 				.json({ message: "Itinerary ID is required" });
 		}
-
+		console.log(touristId.toString());
 		const cancelBookingResult =
 			await itineraryService.cancelBookingItinerary(
 				itineraryId,
@@ -302,7 +307,6 @@ export const removeBookmarkItinerary = async (
 		next(error);
 	}
 };
-
 
 export const flagItinerary = async (
 	req: Request,

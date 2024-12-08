@@ -26,16 +26,6 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-	Dialog,
-	DialogClose,
-	DialogContent,
-	DialogDescription,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
-} from "@/components/ui/dialog";
 import { Flex } from "@/components/ui/flex";
 import Rating, { ERatingType } from "@/components/ui/rating";
 import ReviewOverlay from "@/components/ui/reviewOverlay";
@@ -44,7 +34,6 @@ import { useLoginStore } from "@/store/loginStore";
 import { EAccountType } from "@/types/enums";
 import { TReview } from "@/types/global";
 
-import { PaymentSheet } from "./PaymentSheet";
 import { PaymentSheet } from "./PaymentSheet";
 
 export default function ActivityDetails() {
@@ -188,9 +177,6 @@ export default function ActivityDetails() {
 									Cancel
 								</Button>
 							) : (
-								<PaymentSheet
-									amount={convertCurrency(maxPrice)}
-								/>
 								<PaymentSheet
 									amount={convertCurrency(maxPrice)}
 								/>
@@ -367,4 +353,3 @@ export default function ActivityDetails() {
 		</Flex>
 	);
 }
-
