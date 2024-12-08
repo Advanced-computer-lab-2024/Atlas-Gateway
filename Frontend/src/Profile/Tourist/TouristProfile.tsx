@@ -11,6 +11,8 @@ import Account from "./tabs/Account";
 import TouristActivities from "./tabs/Activities/TouristActivities";
 import BookmarkedEvents from "./tabs/Bookmarked/BookmarkedEvents";
 import Complaints from "./tabs/Complaints";
+import TouristItineraries from "./tabs/Itineraries/TouristItineraries";
+import TouristOrders from "./tabs/Orders/touristOrders";
 import History from "./tabs/Past/History";
 import TouristFlights from "./tabs/Transporations/TouristFlights";
 import TouristHotels from "./tabs/Transporations/TouristHotels";
@@ -94,7 +96,10 @@ export default function TouristProfile() {
 						</TabsContent>
 					</Flex>
 				</Flex>
+
+
 			</Tabs>
 		</Flex>
+
 	);
 }

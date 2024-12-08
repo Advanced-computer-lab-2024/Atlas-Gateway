@@ -35,8 +35,10 @@ export function useMarkNotificationAsRead(onSuccess: () => void) {
 }
 
 export function useDeleteNotification(onSuccess: () => void) {
+	const { user } = useLoginStore();
+	const { type, _id } = user || {};
 	const mutation = useMutation({
-		mutationFn: (id: string) => apiDeleteNotification(id),
+		mutationFn: (id: string) => apiDeleteNotification(id, type, _id),
 		onSuccess,
 	});
 
