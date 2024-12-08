@@ -144,3 +144,27 @@ export function apiUpdateProductQuantity(
 		baseURL: baseURL,
 	});
 }
+
+export function apiCheckoutCart(
+	payload: {
+		products: {
+			productId: string;
+			product: TProduct;
+			quantity: number;
+		}[];
+		address: string;
+		paymentMethod: string;
+	},
+	_id: string,
+) {
+	return axios({
+		method: "POST",
+		url: ENDPOINTS.orders.create,
+		headers: {
+			"Content-Type": "application/json",
+			userid: _id,
+		},
+		data: payload,
+		baseURL: baseURL,
+	});
+}
