@@ -39,7 +39,7 @@ export default function NotificationCard({ notification }: { notification: TNoti
             </CardHeader>
             <CardContent className="relative">
                 <Flex className="center between gap-2">
-                    <Label.Mid300 className={notification?.isRead ? "bg-gray-100" : "bg-blue-100 font-bold"}>
+                    <Label.Mid300 className={notification?.isRead ? "" : "font-bold"}>
                         {notification?.message}
                     </Label.Mid300>
                 </Flex>
@@ -50,8 +50,14 @@ export default function NotificationCard({ notification }: { notification: TNoti
                     </Label.Mid300>
                 </Flex>
                 <Flex className="absolute right-2 bottom-2">
-                    <MailOpen onClick={() => handleMarkAsRead(notification?._id)} className="cursor-pointer text-blue-500" />
+                    {!notification.isRead && (
+                        <MailOpen
+                            onClick={() => handleMarkAsRead(notification?._id)}
+                            className="cursor-pointer text-blue-500"
+                        />
+                    )}
                 </Flex>
+
             </CardContent>
         </Card>
     );

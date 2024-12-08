@@ -379,7 +379,7 @@ export interface IHotelBooking {
 
 export interface TNotification {
 	_id: string;
-	type: 'reminder' | 'info' | 'warning' | 'error';
+	type: 'Reminder' | 'Info' | 'Warning' | 'Error';
 	message: string;
     isRead: boolean;
 	createdAt: Date;
