@@ -97,6 +97,7 @@ export function apiBookItinerary(
 	paymentType: string,
 	amount: number,
 	_userId: string,
+	promoCode: string,
 	paymentIntentId?: string,
 ) {
 	return axios({
@@ -110,6 +111,7 @@ export function apiBookItinerary(
 			paymentIntentId,
 			paymentType,
 			amount,
+			promoCode,
 		},
 		baseURL: baseURL,
 	});

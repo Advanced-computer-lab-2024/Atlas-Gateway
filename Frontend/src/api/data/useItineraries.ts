@@ -106,14 +106,23 @@ export function useBookItinerary(onSuccess: () => void) {
 			id,
 			paymentType,
 			amount,
+			promoCode,
 			paymentIntentId,
 		}: {
 			id: string;
 			paymentType: string;
 			amount: number;
+			promoCode: string;
 			paymentIntentId?: string;
 		}) =>
-			apiBookItinerary(id, paymentType, amount, userId, paymentIntentId),
+			apiBookItinerary(
+				id,
+				paymentType,
+				amount,
+				userId,
+				promoCode,
+				paymentIntentId,
+			),
 		onSuccess,
 	});
 

@@ -42,6 +42,7 @@ export function PaymentSheet({ amount }: props) {
 			id: itinerary?._id!,
 			paymentType: "wallet",
 			amount: itinerary?.price!,
+			promoCode: promo,
 		});
 	};
 	return (

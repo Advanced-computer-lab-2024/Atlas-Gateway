@@ -1,6 +1,5 @@
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -9,6 +8,7 @@ import { useTouristProfile } from "@/api/data/useProfile";
 import Label from "@/components/ui/Label";
 import { Button } from "@/components/ui/button";
 import { Flex } from "@/components/ui/flex";
+import { Input } from "@/components/ui/input";
 import {
 	Select,
 	SelectContent,
@@ -29,6 +29,7 @@ interface props {
 const Payment = ({ amount }: props) => {
 	const { data, refetch } = useTouristProfile();
 	const [selectedAddress, setSelectedAddress] = useState<string>("");
+	const [promo, setPromo] = useState("");
 	const formatCurrency = useCurrency();
 	const stripePromise = loadStripe(
 		import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY!,
@@ -109,13 +110,23 @@ const Payment = ({ amount }: props) => {
 					<TabsTrigger value="cash">Cash on delivery</TabsTrigger>
 				</TabsList>
 				<TabsContent value="wallet" className="mt-4">
-					<Flex>
-						<Label.Thin300>
-							Your Wallet Balance:{" "}
-							<Label.Thin400>
-								{formatCurrency(data?.walletBalance)}
-							</Label.Thin400>
-						</Label.Thin300>
+					<Flex justify="between" align="center">
+						<Flex>
+							<Label.Thin300>
+								Your Wallet Balance:{" "}
+								<Label.Thin400>
+									{formatCurrency(data?.walletBalance)}
+								</Label.Thin400>
+							</Label.Thin300>
+						</Flex>
+						<Flex>
+							<Input
+								type="text"
+								placeholder="Enter Promo Code (if any)"
+								value={promo}
+								onChange={(e) => setPromo(e.target.value)}
+							/>
+						</Flex>
 					</Flex>
 					<Button
 						onClick={() => handleWalletPayment()}
@@ -144,6 +155,14 @@ const Payment = ({ amount }: props) => {
 					</Elements>
 				</TabsContent>
 				<TabsContent value="cash" className="mt-4">
+					<Flex className="m-4">
+						<Input
+							type="text"
+							placeholder="Enter Promo Code (if any)"
+							value={promo}
+							onChange={(e) => setPromo(e.target.value)}
+						/>
+					</Flex>
 					<Button
 						onClick={() => handleCashPayment()}
 						className="w-full"

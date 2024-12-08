@@ -1,8 +1,11 @@
-import { LogOut } from "lucide-react";
+import { Bell, LogOut } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { useUserStatistics } from "@/api/data/useUserStatistics";
 import { onLogout } from "@/store/loginStore";
+import { Flex } from "@/components/ui/flex";
+import Notifications from "@/Notifications/Notifications";
+import { useEffect, useRef, useState } from "react";
 
 const Navbar = () => {
 	const navigate = useNavigate();
@@ -54,6 +57,32 @@ const Navbar = () => {
 		}
 	};
 
+	const [isNotificationsVisible, setIsNotificationsVisible] = useState(false);
+	const notificationsRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			const target = event.target as HTMLElement;
+
+			if (
+				notificationsRef.current &&
+				!notificationsRef.current.contains(event.target as Node) &&
+				!target.closest(".bell-button")
+			) {
+				setIsNotificationsVisible(false);
+			}
+		};
+
+		document.addEventListener("click", handleClickOutside);
+		return () => {
+			document.removeEventListener("click", handleClickOutside);
+		};
+	}, []);
+
+	const handleBellClick = () => {
+		setIsNotificationsVisible((prev) => !prev);
+	};
+
 	return (
 		<div className="bg-[#fefefe] w-full min-h-20 max-h-20 flex items-center">
 			{/* Show total and new total if the data is available */}
@@ -70,12 +99,26 @@ const Navbar = () => {
 				</div>
 			)}
 			{renderOptions()}
-			<div>
+			<Flex gap="2" align="center">
+				<Bell
+						className="cursor-pointer mr-5 hover:text-[#2b58ed]"
+						onClick={handleBellClick}
+					/>
+
+					{isNotificationsVisible && (
+						<div
+							className="absolute right-20 top-24 z-10"
+							ref={notificationsRef}
+						>
+							<Notifications />
+						</div>
+				)}
+				
 				<LogOut
 					className="cursor-pointer mr-5 hover:text-[#2b58ed]"
 					onClick={logOut}
 				/>
-			</div>
+			</Flex>
 		</div>
 	);
 };

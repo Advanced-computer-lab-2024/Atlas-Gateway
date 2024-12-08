@@ -70,7 +70,7 @@ const OnlinePayment = ({ amount, currency }: props) => {
 			<Flex className="m-4">
 				<Input
 					type="text"
-					placeholder="Enter Promo Code"
+					placeholder="Enter Promo Code (if any)"
 					value={promo}
 					onChange={(e) => setPromo(e.target.value)}
 				/>

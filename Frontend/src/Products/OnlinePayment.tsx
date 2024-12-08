@@ -1,14 +1,17 @@
-import { PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js";
+import {
+	PaymentElement,
+	useElements,
+	useStripe,
+} from "@stripe/react-stripe-js";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-
 
 import { useCreatePaymentIntent } from "@/api/data/usePayment";
 import { useCheckoutCart } from "@/api/data/useProducts";
 import { useTouristProfile } from "@/api/data/useProfile";
 import { Button } from "@/components/ui/button";
-
+import { Flex } from "@/components/ui/flex";
+import { Input } from "@/components/ui/input";
 
 interface props {
 	amount: number;
@@ -25,13 +28,13 @@ const OnlinePayment = ({ amount, currency, address }: props) => {
 	const stripe = useStripe();
 	const elements = useElements();
 	const { data } = useTouristProfile();
+	const [promo, setPromo] = useState("");
 	const [paymentIntent, setPaymentIntent] = useState<PaymentIntent>({
 		id: "",
 		amount: 0,
 		clientSecret: "",
 	});
 	useEffect(() => {
-		
 		doCreatePaymentIntent({ amount, currency });
 	}, [amount]);
 	const { doCreatePaymentIntent } = useCreatePaymentIntent((response) => {
@@ -73,6 +76,14 @@ const OnlinePayment = ({ amount, currency, address }: props) => {
 	return (
 		<div className="flex flex-col">
 			{paymentIntent.clientSecret && <PaymentElement />}
+			<Flex className="m-4">
+				<Input
+					type="text"
+					placeholder="Enter Promo Code (if any)"
+					value={promo}
+					onChange={(e) => setPromo(e.target.value)}
+				/>
+			</Flex>
 			<Button className="mt-4" onClick={() => handleOnlinePayment()}>
 				Checkout
 			</Button>

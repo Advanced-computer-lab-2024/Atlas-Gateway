@@ -60,6 +60,7 @@ const OnlinePayment = ({ amount, currency }: props) => {
 				paymentType: "online",
 				amount: paymentIntent.amount,
 				paymentIntentId: paymentIntent.id,
+				promoCode: promo,
 			});
 		}
 	};
