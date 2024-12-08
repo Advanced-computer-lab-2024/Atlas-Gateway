@@ -99,6 +99,13 @@ export function apiBookItinerary(
 	_userId: string,
 	paymentIntentId?: string,
 ) {
+export function apiBookItinerary(
+	_id: string,
+	paymentType: string,
+	amount: number,
+	_userId: string,
+	paymentIntentId?: string,
+) {
 	return axios({
 		method: "POST",
 		url: ENDPOINTS.itinerary.book(_id),
@@ -122,6 +129,11 @@ export function apiBookmarkItinerary(_id: string, _userId: string) {
 		headers: {
 			"Content-Type": "application/json",
 			userid: _userId,
+		},
+		data: {
+			paymentIntentId,
+			paymentType,
+			amount,
 		},
 		baseURL: baseURL,
 	});

@@ -3,6 +3,7 @@ import { useState } from "react";
 
 import {
 	useForgetPassword,
+	useForgetPassword,
 	useRedeemTouristLoyaltyPoints,
 	useRequestDeleteTouristProfile,
 	useTouristProfile,
@@ -20,6 +21,7 @@ import useCurrency from "@/hooks/useCurrency";
 
 import profile_background from "../../assets/profile_background.jpg";
 import ChangePasswordSheet from "../ChangePasswordSheet";
+import ForgetPasswordSheet from "../ForgetPasswordSheet";
 import ForgetPasswordSheet from "../ForgetPasswordSheet";
 import TouristBadge from "./TouristBadge";
 import TouristSheet from "./TouristSheet";
@@ -39,9 +41,14 @@ export default function TouristProfile() {
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 	const [isDrawerOpen2, setIsDrawerOpen2] = useState(false);
 	const [otp, setOtp] = useState("");
+	const [isDrawerOpen2, setIsDrawerOpen2] = useState(false);
+	const [otp, setOtp] = useState("");
 	const { doRequestDeleteTouristProfile } = useRequestDeleteTouristProfile(
 		() => {},
 	);
+	const { doForgetPassword } = useForgetPassword((response) => {
+		setOtp(response.data);
+	});
 	const { doForgetPassword } = useForgetPassword((response) => {
 		setOtp(response.data);
 	});
@@ -137,6 +144,16 @@ export default function TouristProfile() {
 							>
 								forget password?
 							</DropdownMenuItem>
+
+							<DropdownMenuItem
+								onClick={() => {
+									setIsDrawerOpen2(true);
+									doForgetPassword(data?.email || "");
+								}}
+								className="cursor-pointer"
+							>
+								forget password?
+							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
 				</Flex>
@@ -172,6 +189,7 @@ export default function TouristProfile() {
 						<TouristFlights />
 					</TabsContent>
 					<TabsContent value="transportation">
+					<TabsContent value="transportation">
 						<TouristTransportations />
 					</TabsContent>
 					<TabsContent value="hotel-bookings">
@@ -190,6 +208,11 @@ export default function TouristProfile() {
 			<ChangePasswordSheet
 				isDrawerOpen={isDrawerOpen}
 				setIsDrawerOpen={setIsDrawerOpen}
+			/>
+			<ForgetPasswordSheet
+				isDrawerOpen={isDrawerOpen2}
+				setIsDrawerOpen={setIsDrawerOpen2}
+				otp={otp}
 			/>
 			<ForgetPasswordSheet
 				isDrawerOpen={isDrawerOpen2}

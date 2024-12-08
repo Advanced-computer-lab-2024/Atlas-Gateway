@@ -45,6 +45,7 @@ import { EAccountType } from "@/types/enums";
 import { TReview } from "@/types/global";
 
 import { PaymentSheet } from "./PaymentSheet";
+import { PaymentSheet } from "./PaymentSheet";
 
 export default function ActivityDetails() {
 	const navigate = useNavigate();
@@ -187,6 +188,9 @@ export default function ActivityDetails() {
 									Cancel
 								</Button>
 							) : (
+								<PaymentSheet
+									amount={convertCurrency(maxPrice)}
+								/>
 								<PaymentSheet
 									amount={convertCurrency(maxPrice)}
 								/>
