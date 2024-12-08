@@ -9,6 +9,7 @@ interface ReviewOverlayProps {
 	reviewType: string;
 	reviewedItemId?: string;
 	userId?: string;
+	refetchFunction: () => void;
 }
 
 export interface ReviewOverlayHandle {
@@ -18,7 +19,7 @@ export interface ReviewOverlayHandle {
 export const ReviewOverlay: React.FC<ReviewOverlayProps> = forwardRef<
 	ReviewOverlayHandle,
 	ReviewOverlayProps
->(({ reviewType, reviewedItemId, userId }, ref) => {
+>(({ reviewType, reviewedItemId, userId, refetchFunction }, ref) => {
 	const [rating, setRating] = React.useState<number>(0);
 
 	// useEffect(() => {
@@ -121,6 +122,7 @@ export const ReviewOverlay: React.FC<ReviewOverlayProps> = forwardRef<
 					}, 1500);
 				});
 
+			refetchFunction();
 			//Show "Review Saved" Prompt in frontend
 		} catch (error) {
 			console.error(error);

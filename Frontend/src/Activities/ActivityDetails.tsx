@@ -233,6 +233,9 @@ export default function ActivityDetails() {
 														reviewedItemId={
 															data?._id
 														}
+														refetchFunction={
+															refetch
+														}
 														userId={user?._id}
 														ref={childRef}
 													/>
