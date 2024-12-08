@@ -12,9 +12,10 @@ Want to shop for souvenirs and gifts on the go? Our marketplace connects you wit
 
 To enhance user satisfaction, the platform also provides features for reviews and complaints, ensuring continuous improvement and a better experience for all.
 
+---
 ## Badges
 
-![Github Actions badge](https://img.shields.io/badge/Github-Actions-%232088FF?style=for-the-badge&logo=GithubActions)
+
 ![Git badge](https://img.shields.io/badge/Git--%23F05032?style=for-the-badge&logo=Git)
 ![Express badge](https://img.shields.io/badge/Express-%23000000?style=for-the-badge&logo=Express&logoColor=white)
 ![Node badge](https://img.shields.io/badge/Node.js-%2343853D?style=for-the-badge&logo=Node.js&logoColor=white)
@@ -22,11 +23,14 @@ To enhance user satisfaction, the platform also provides features for reviews an
 ![Mongo badge](https://img.shields.io/badge/MongoDB-%2347A248?style=for-the-badge&logo=MongoDB&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-%23F7DF1E?style=for-the-badge&logo=TypeScript&logoColor=black)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-%2338B2AC?style=for-the-badge&logo=Tailwind-CSS&logoColor=white)
+![Postman](https://img.shields.io/badge/Postman-%23FF6C37?style=for-the-badge&logo=Postman&logoColor=white)
 ---
 
 ## Build Status
 
-The project is currently under development. The frontend and backend are being built simultaneously, with the goal of integrating them into a fully functional application.
+idk yet
+
+---
 
 ## Code Style
 
@@ -36,6 +40,8 @@ The code adheres to clean and modular practices, ensuring readability and mainta
 - **Backend:** Node.js with Prettier formatting rules
 - **Database:** MongoDB with Mongoose
 - **Testing:** No idea
+
+---
 
 ## Screenshots
 
@@ -53,56 +59,76 @@ The code adheres to clean and modular practices, ensuring readability and mainta
 
 
 <details>
-<summary>Appointments Page</summary>  
-![appointments]()
+<summary>Itineraries List Page</summary>  
+![itineraries_list_page]()
 </details>
 
 <details>
 
-<summary> Health Package Page</summary>  
-	
- ![health-package](https://github.com/advanced-computer-lab-2023/poly-medica-Clinic/assets/102627389/ef6c952f-107a-4438-8462-f74652dc8ffa)
- 
+<summary>Activities List Page</summary>  
+
+![activities_list_page]()
+
 </details>
 
 <details>
-<summary>Apply Filter on doctors</summary>  
+<summary>Hotels and Flights Page</summary>  
 	
-![apply-filter](https://github.com/advanced-computer-lab-2023/poly-medica-Clinic/assets/102627389/a8b3508f-52dd-4e17-8292-48c788667916)
- 
-</details>
-
-<details>
-
-<summary>Patient Adding family members</summary>  
-	
-![add-member](https://github.com/advanced-computer-lab-2023/poly-medica-Clinic/assets/102627389/e11252e9-487b-4b4f-b33e-efa325a854fb)
+![apply-filter]()
  
 </details>
 
 <details>
 
-<summary>Doctor Receiving Notification</summary>  
-	
-![notification](https://github.com/advanced-computer-lab-2023/poly-medica-Clinic/assets/102627389/f2a8d218-3002-4d7e-9129-25b537392adb)
+<summary>Profile Page</summary>  
+
+![profile]()
  
 </details>
 
 <details>
 
-<summary>Admin Viewing Requests</summary>  
-	
-![requests](https://github.com/advanced-computer-lab-2023/poly-medica-Clinic/assets/102627389/b7643d4d-ac7b-4d18-b2e8-8f5b0fb9e84b)
+<summary>Admin Page</summary>  
+
+![admin]()
+ 
+</details>
+
+<details>
+
+<summary>Admin Reports</summary>  
+
+![admin_reports]()
 
 </details>
 
+---
 
-## Tech/Framework Used
+## Tech/Framework used
 
-- **Frontend:** React, Tailwind CSS, DaisyUI
-- **Backend:** Node.js, Express.js
-- **Database:** MongoDB
-- **APIs:** Stripe API for payment handling
+[Node.js](https://nodejs.org/en/)
+
+[Express.js](https://expressjs.com/)
+
+[React](https://reactjs.org/)
+
+[TypeScript](https://www.typescriptlang.org/)
+
+[Tailwind CSS](https://tailwindcss.com/)
+
+[MongoDB](https://www.mongodb.com/)
+
+[Mongoose](https://mongoosejs.com/)
+
+[Git](https://git-scm.com/)
+
+[MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
+
+[Postman](https://www.postman.com/)
+
+[VSCode](https://code.visualstudio.com/)
+
+---
 
 ## Features
 
@@ -115,18 +141,80 @@ The code adheres to clean and modular practices, ensuring readability and mainta
 
 ### Backend: Sample API Endpoint
 
-```javascript
-app.post('/api/checkout', async (req, res) => {
+```typescript
+const router = express.Router();
+
+router.post("/create", createActivities);
+
+export const createActivities = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+) => {
     try {
-        const session = await stripe.checkout.sessions.create({
-            payment_method_types: ['card'],
-            line_items: req.body.items,
-            mode: 'payment',
-            success_url: `${process.env.CLIENT_URL}/success`,
-            cancel_url: `${process.env.CLIENT_URL}/cancel`,
-        });
-        res.json({ id: session.id });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
+        const advertisorId = req.headers.userid;
+        
+        if (!advertisorId) {
+        
+        throw new HttpError(400, "Tour Guide ID is required");
+        }
+
+        const activity = await activityService.createActivity(
+			req.body,
+			advertisorId.toString(),
+		);
+		res.status(201).json(activity);
+	} catch (error) {
+		next(error);
+	}
+};
+
+export const createActivity = async (
+	activity: IActivity,
+	createdBy: string,
+) => {
+	if (!Types.ObjectId.isValid(createdBy)) {
+		throw new HttpError(400, "Invalid Advertiser ID");
+	}
+
+	// Start a session for transaction management
+	const session = await mongoose.startSession();
+
+	try {
+		session.startTransaction();
+
+		// Create the new activity
+		const newActivity = new Activity({
+			...activity,
+			createdBy: new Types.ObjectId(createdBy),
+		});
+
+		await newActivity.save({ session }); // Save to generate the ID
+
+		// Link activity ID to the advertiser's activities array
+		const advertiser = await advertiserService.getAdvertiserById(createdBy);
+
+		if (!advertiser) {
+			throw new HttpError(404, "Advertiser not found");
+		}
+
+		// Push the new activity ID to the advertiser's activities array
+		await advertiser.updateOne(
+			{ $push: { activities: newActivity._id } }, // Update data
+			{ session }, // Pass session here
+		);
+
+		await session.commitTransaction();
+
+		return newActivity;
+	} catch (error) {
+		await session.abortTransaction();
+		throw error;
+	} finally {
+		session.endSession();
+	}
+};
+```
+---
+
+
