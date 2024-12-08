@@ -172,9 +172,9 @@ export const viewpastItineraries = async (req: Request, res: Response) => {
 	}
 };
 export const requestActivityNotification = async (
-	next: NextFunction,
 	req: Request,
 	res: Response,
+	next: NextFunction,
 ) => {
 	try {
 		const { touristId, activityId } = req.body;
@@ -184,23 +184,23 @@ export const requestActivityNotification = async (
 		);
 		res.status(200).send(request);
 	} catch (error) {
-		res.status(500).send(error);
+		next(error);
 	}
 };
 export const requestItineraryNotification = async (
-	next: NextFunction,
 	req: Request,
 	res: Response,
+	next: NextFunction,
 ) => {
 	try {
-		const { touristId, itinerary } = req.body;
+		const { touristId, itineraryId } = req.body;
 		res.status(200).send(
 			await touristService.requestItineraryNotification(
-				itinerary,
+				itineraryId,
 				touristId,
 			),
 		);
 	} catch (error) {
-		res.status(500).send(error);
+		next(error);
 	}
 };
