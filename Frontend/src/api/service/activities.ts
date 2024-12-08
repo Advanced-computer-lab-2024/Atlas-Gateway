@@ -95,13 +95,31 @@ export function apiDeleteActivity(_id: string) {
 	});
 }
 
-export function apiBookActivity(_id: string, userid: string) {
+export function apiBookActivity(
+	_id: string,
+	paymentType: string,
+	amount: number,
+	userid: string,
+	paymentIntentId?: string,
+) {
+export function apiBookActivity(
+	_id: string,
+	paymentType: string,
+	amount: number,
+	userid: string,
+	paymentIntentId?: string,
+) {
 	return axios({
 		method: "POST",
 		url: ENDPOINTS.activity.book(_id),
 		headers: {
 			"Content-Type": "application/json",
 			userid: userid,
+		},
+		data: {
+			paymentIntentId,
+			paymentType,
+			amount,
 		},
 		baseURL: baseURL,
 	});
@@ -114,6 +132,11 @@ export function apiBookmarkActivity(_id: string, userid: string) {
 		headers: {
 			"Content-Type": "application/json",
 			userid: userid,
+		},
+		data: {
+			paymentIntentId,
+			paymentType,
+			amount,
 		},
 		baseURL: baseURL,
 	});

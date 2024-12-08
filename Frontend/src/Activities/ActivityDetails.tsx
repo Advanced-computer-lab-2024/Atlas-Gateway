@@ -26,6 +26,16 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from "@/components/ui/dialog";
 import { Flex } from "@/components/ui/flex";
 import Rating, { ERatingType } from "@/components/ui/rating";
 import ReviewOverlay from "@/components/ui/reviewOverlay";
@@ -33,6 +43,9 @@ import useCurrency from "@/hooks/useCurrency";
 import { useLoginStore } from "@/store/loginStore";
 import { EAccountType } from "@/types/enums";
 import { TReview } from "@/types/global";
+
+import { PaymentSheet } from "./PaymentSheet";
+import { PaymentSheet } from "./PaymentSheet";
 
 export default function ActivityDetails() {
 	const navigate = useNavigate();
@@ -162,34 +175,26 @@ export default function ActivityDetails() {
 									))}
 							</Flex>
 						</Flex>
-						<Flex>
-							{user?.type === EAccountType.Tourist &&
-								(tourists?.includes(user?._id) ? (
-									<Button
-										size="lg"
-										onClick={() => {
-											if (data?._id) {
-												doCancelActivityBooking(
-													data?._id,
-												);
-											}
-										}}
-									>
-										Cancel
-									</Button>
-								) : (
-									<Button
-										size="lg"
-										onClick={() => {
-											if (data?._id) {
-												doBookActivity(data?._id);
-											}
-										}}
-									>
-										Book
-									</Button>
-								))}
-						</Flex>
+						{user?.type === EAccountType.Tourist &&
+							(tourists?.includes(user?._id) ? (
+								<Button
+									size="lg"
+									onClick={() => {
+										if (data?._id) {
+											doCancelActivityBooking(data?._id);
+										}
+									}}
+								>
+									Cancel
+								</Button>
+							) : (
+								<PaymentSheet
+									amount={convertCurrency(maxPrice)}
+								/>
+								<PaymentSheet
+									amount={convertCurrency(maxPrice)}
+								/>
+							))}
 					</Flex>
 				</CardHeader>
 				<CardContent className="grid grid-cols-2 w-full">
@@ -362,3 +367,4 @@ export default function ActivityDetails() {
 		</Flex>
 	);
 }
+
