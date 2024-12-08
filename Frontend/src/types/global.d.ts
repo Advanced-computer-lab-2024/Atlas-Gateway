@@ -86,6 +86,7 @@ export type TActivity = {
 	avgRating: number;
 	tourists: string[];
 	touristBookmarks: string[];
+	notificationRequested: string[];
 	numberOfBookings: number;
 };
 

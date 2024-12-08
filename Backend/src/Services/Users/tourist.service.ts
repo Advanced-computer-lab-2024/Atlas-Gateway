@@ -656,8 +656,8 @@ export const requestActivityNotification = async (
 	if (!tourist) {
 		throw new HttpError(404, "no tourist found with this id");
 	}
-	activity.updateOne({
-		$push: { notificationRequested: tourist?.id },
+	await activity.updateOne({
+		$push: { notificationRequested: touristId },
 	});
 	return activity;
 };
@@ -674,7 +674,7 @@ export const requestItineraryNotification = async (
 	if (!tourist) {
 		throw new HttpError(404, "no tourist found with this id");
 	}
-	itinerary.updateOne({
+	await itinerary.updateOne({
 		$push: { notificationRequested: tourist?.id },
 	});
 	return itinerary;

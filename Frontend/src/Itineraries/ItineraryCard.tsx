@@ -1,5 +1,6 @@
 import { formatDate } from "date-fns";
 import {
+	Bell,
 	Bookmark,
 	Copy,
 	DollarSign,
@@ -19,6 +20,7 @@ import {
 	useDeleteItinerary,
 	useFlagItinerary,
 	useItineraries,
+	useItineraryNotification,
 	useRemoveBookmarkItinerary,
 	useToggleItineraryStatus,
 } from "@/api/data/useItineraries";
@@ -61,6 +63,8 @@ export default function ItineraryCard({
 	const { doDeleteItinerary } = useDeleteItinerary(refetch);
 	const { doFlagItinerary } = useFlagItinerary(refetch);
 	const { doToggleItineraryStatus } = useToggleItineraryStatus(refetch);
+	const { doNotifyItinerary } = useItineraryNotification(refetch); 
+
 	// Function to copy the itinerary link to the clipboard
 	const handleCopyLink = () => {
 		const itineraryLink = `${window.location.origin}/itineraries/${itinerary?._id}`;
@@ -84,6 +88,12 @@ export default function ItineraryCard({
 			`Hey, I found this itinerary and thought you might like it!\n\n${itineraryLink}`,
 		);
 		window.location.href = `mailto:?subject=${subject}&body=${body}`;
+	};
+
+	const handleNotificationClick = () => {
+		if (itinerary?._id) {
+			doNotifyItinerary(itinerary._id); // Send the notification request
+		}
 	};
 
 	return (
@@ -121,6 +131,10 @@ export default function ItineraryCard({
 								}}
 							/>
 						))}
+						<Bell
+                            className="absolute left-8 cursor-pointer"
+                            onClick={handleNotificationClick}
+                        />
 					<Label.Mid500>{itinerary?.title ?? "Title"}</Label.Mid500>
 					<DropdownMenu modal={false}>
 						<DropdownMenuTrigger className="absolute right-0">
