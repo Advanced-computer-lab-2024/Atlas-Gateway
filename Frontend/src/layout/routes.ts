@@ -55,18 +55,6 @@ const sellerRoutes: NavbarRoute[] = [productsRoute];
 const adminRoutes: NavbarRoute[] = [
 	productsRoute,
 	activitiesRoute,
-	{
-		name: "Dashboard",
-		to: "/admin/dashboard",
-	},
-	{
-		name: "Users",
-		to: "/admin/users",
-	},
-	{
-		name: "Settings",
-		to: "/admin/settings",
-	},
 ];
 
 const tourGuideRoutes: NavbarRoute[] = [

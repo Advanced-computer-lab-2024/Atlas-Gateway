@@ -75,7 +75,8 @@ export default function Navbar() {
 						justify="center"
 						onClick={() => {
 							onLogout();
-							navigate("/register");
+							navigate("/");
+							window.location.reload();
 						}}
 					>
 						<LogOut
