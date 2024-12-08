@@ -183,6 +183,7 @@ export interface TTourGuide extends TUser {
 	idPath: string;
 	certificatePath: string;
 	imagePath: string;
+	avgRating: number;
 }
 
 export interface TTag {
