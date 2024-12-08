@@ -1,21 +1,16 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 
+
+
 import { useLoginStore } from "@/store/loginStore";
 import { TProduct } from "@/types/global";
 
-import {
-	apiAddProductToCart,
-	apiAddWishlistProduct,
-	apiCreateProduct,
-	apiProduct,
-	apiProducts,
-	apiRemoveProductFromCart,
-	apiRemoveWishlistProduct,
-	apiUpdateProduct,
-	apiUpdateProductQuantity,
-} from "../service/product";
+
+
+import { apiAddProductToCart, apiAddWishlistProduct, apiCheckoutCart, apiCreateProduct, apiProduct, apiProducts, apiRemoveProductFromCart, apiRemoveWishlistProduct, apiUpdateProduct, apiUpdateProductQuantity } from "../service/product";
 import { useQueryString } from "./useQueryString";
+
 
 export function useProducts() {
 	const { user } = useLoginStore();
@@ -161,4 +156,30 @@ export function useUpdateProductQuantity(onSuccess: () => void) {
 	const { mutate } = mutation;
 
 	return { doUpdateProductQuantity: mutate, ...mutation };
+}
+
+export function useCheckoutCart(onSuccess: () => void) {
+	const { user } = useLoginStore();
+	const mutation = useMutation({
+		mutationFn: (payload: {
+			products: {
+				productId: string;
+				product: TProduct;
+				quantity: number;
+				totalPrice: number;
+			}[];
+			address: string;
+			paymentMethod: string;
+		}) => {
+			if (!user) {
+				throw new Error("User is not defined");
+			}
+			return apiCheckoutCart(payload, user._id);
+		},
+		onSuccess,
+	});
+
+	const { mutate } = mutation;
+
+	return { doCheckoutCart: mutate, ...mutation };
 }

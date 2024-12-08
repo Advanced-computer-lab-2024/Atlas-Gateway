@@ -17,10 +17,15 @@ const ENDPOINTS = {
 		delete: (id: string) => `api/products/delete/${id}`,
 		addWishlist: (id: string) => `api/products/wishlist/${id}`,
 		removeWishlist: (id: string) => `api/products/removewishlist/${id}`,
-		removeWishlist: (id: string) => `api/products/removewishlist/${id}`,
 		addToCart: (id: string) => `api/tourist/cart/add/${id}`,
 		removeFromCart: (id: string) => `api/tourist/cart/remove/${id}`,
 		updateProductQuantity: (id: string) => `api/tourist/cart/update/${id}`,
+	},
+	orders: {
+		create: "api/orders/create",
+		list: "api/orders/list",
+		show: (id: string) => `api/orders/show/${id}`,
+		cancel: (id: string) => `api/orders/cancel/${id}`,
 	},
 	activity: {
 		list: "api/activity/list",

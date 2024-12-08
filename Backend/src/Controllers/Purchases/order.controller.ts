@@ -50,6 +50,9 @@ export const createOrder = async (req: Request, res: Response) => {
 
 		await Promise.all(stockUpdateList);
 
+		if (tourist) {
+			tourist.cart = [];
+		}
 		await tourist?.save();
 
 		res.status(201).send(order);
