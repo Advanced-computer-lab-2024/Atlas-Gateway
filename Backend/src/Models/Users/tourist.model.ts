@@ -53,17 +53,6 @@ export interface ITourist extends Document {
 		},
 	];
 	notifications: Types.ObjectId[];
-	preferredTags?: Types.ObjectId[] | ITag[];
-	cart: {
-		product: Types.ObjectId;
-		quantity: number;
-	}[];
-	payment: [
-		{
-			type: string;
-			event: Types.ObjectId;
-		},
-	];
 }
 
 const touristSchema = new Schema<ITourist>(
@@ -151,18 +140,6 @@ const touristSchema = new Schema<ITourist>(
 			},
 		],
 		notifications: [{ type: Schema.Types.ObjectId, ref: "Notification" }],
-		payment: [
-			{
-				type: { type: String },
-				event: { type: Schema.Types.ObjectId },
-			},
-		],
-		cart: [
-			{
-				product: { type: Schema.Types.ObjectId, ref: "Product" },
-				quantity: { type: Number, required: true },
-			},
-		],
 	},
 	schemaConfig,
 );

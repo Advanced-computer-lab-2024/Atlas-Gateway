@@ -17,7 +17,6 @@ export interface ISeller extends Document {
 	acceptedTerms: { type: Boolean; default: false };
 	Products: Types.ObjectId[] | IProduct[];
 	notifications: Types.ObjectId[];
-	Products: Types.ObjectId[] | IProduct[];
 }
 
 const sellerSchema = new Schema<ISeller>(
@@ -35,7 +34,6 @@ const sellerSchema = new Schema<ISeller>(
 		isDeleted: { type: Boolean, default: false },
 		Products: [{ type: Schema.Types.ObjectId, ref: "Product" }],
 		notifications: [{ type: Schema.Types.ObjectId, ref: "Notification" }],
-		Products: [{ type: Schema.Types.ObjectId, ref: "Product" }],
 	},
 	schemaConfig,
 );
