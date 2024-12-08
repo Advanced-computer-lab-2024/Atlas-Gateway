@@ -14,9 +14,11 @@ import {
 	apiFlagItinerary,
 	apiItineraries,
 	apiItinerary,
+	apiPastItineraries,
 	apiRemoveBookmarkItinerary,
 	apiToggleItineraryStatus,
 	apiTourGuideItineraries,
+	apiUpcomingItineraries,
 	apiUpdateItinerary,
 } from "../service/itineraries";
 import { useQueryString } from "./useQueryString";
@@ -168,3 +170,55 @@ export function useToggleItineraryStatus(onSuccess: () => void) {
 
 	return { doToggleItineraryStatus: mutate, ...mutation };
 }
+
+// Fetch upcoming itineraries for Tourist
+export function useUpcomingItineraries() {
+	const { user } = useLoginStore();
+	const { _id, type } = user || {};
+  
+	const query = useQuery({
+	  queryFn: () => {
+		if (type !== EAccountType.Tourist) {
+		  throw new Error("Only tourists can fetch upcoming itineraries");
+		}
+		if (!_id) {
+		  throw new Error("Tourist ID is required for upcoming itineraries");
+		}
+		console.log("Sending touristId:", _id);
+
+		return apiUpcomingItineraries(_id);
+	  },
+	  queryKey: ["upcomingItineraries", _id],
+	  enabled: type === EAccountType.Tourist && !!_id, // Enable only for valid Tourist user
+	});
+  
+	const { data } = query;
+  
+	return { ...query, data: data?.data?.data, meta: data?.data?.metaData };
+  }
+  
+  // Fetch past itineraries for Tourist
+  export function usePastItineraries() {
+	const { user } = useLoginStore();
+	const { _id, type } = user || {};
+
+	const query = useQuery({
+	  queryFn: () => {
+		if (type !== EAccountType.Tourist) {
+		  throw new Error("Only tourists can fetch past itineraries");
+		}
+		if (!_id) {
+		  throw new Error("Tourist ID is required for past itineraries");
+		}
+		return apiPastItineraries(_id);
+	  },
+	  queryKey: ["pastItineraries", _id],
+	  enabled: type === EAccountType.Tourist && !!_id, // Enable only for valid Tourist user
+	});
+  
+	const { data } = query;
+  
+	return { ...query, data: data?.data?.data, meta: data?.data?.metaData };
+  }
+  
+

@@ -61,6 +61,10 @@ const ENDPOINTS = {
 		redeem: (id: string) => `api/tourist/redeem/${id}`,
 		delete: (id: string) => `api/tourist/delete/${id}`,
 		requestDelete: (id: string) => `api/tourist/requestDelete/${id}`,
+		upcomingActivities: `api/tourist/upcomingActivities`,  
+    	upcomingItineraries: "api/tourist/upcomingItineraries",  
+    	pastActivities: "api/tourist/pastActivities",  
+    	pastItineraries: "api/tourist/pastItineraries",  
 	},
 	seller: {
 		list: "api/seller/list",
@@ -151,7 +155,7 @@ const ENDPOINTS = {
 		cancelBooking: (id: string) => `api/transportation/cancelBooking/${id}`,
 	},
 	userStatistics: {
-		list: "api/user-statistics/list",
+		list: "api/admin/userStats",
 	},
 };
 

@@ -161,3 +161,30 @@ export function apiToggleItineraryStatus(_id: string) {
 		baseURL: baseURL,
 	});
 }
+
+// Function to fetch upcoming itineraries for a tourist
+export function apiUpcomingItineraries(touristId: string) {
+	return axios<TApiResponse<TItinerary[]>>({
+		method: "POST",
+		url: ENDPOINTS.tourist.upcomingItineraries,
+		headers: {
+			"Content-Type": "application/json",
+
+		},	
+		baseURL: baseURL,
+		data: { touristId }, // Send touristId in the body
+	});
+}
+
+// Function to fetch past itineraries for a tourist
+export function apiPastItineraries(touristId: string) {
+	return axios<TApiResponse<TItinerary[]>>({
+		method: "POST",
+		url: ENDPOINTS.tourist.pastItineraries,
+		headers: {
+			"Content-Type": "application/json",
+		},
+		baseURL: baseURL,
+		data: { touristId }, // Send touristId in the body
+	});
+}
