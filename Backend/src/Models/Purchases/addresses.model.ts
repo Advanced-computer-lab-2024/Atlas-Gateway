@@ -8,8 +8,8 @@ export interface IAddressStructure {
     city: string;
     street: string;
     houseNumber?: string; //Hours Number or building number
-    appartmentNumber?: string; //Appartment number, if any
-    zipVode: string;
+    apartmentNumber?: string; //Apartment number, if any
+    zipCode: string;
 
 }
 
@@ -18,8 +18,8 @@ const addressStructureSchema = new Schema<IAddressStructure>({
     city: { type: String, required: true },
     street: { type: String, required: true },
     houseNumber: { type: String },
-    appartmentNumber: { type: String },
-    zipVode: { type: String, required: true },
+    apartmentNumber: { type: String },
+    zipCode: { type: String, required: true },
 }, schemaConfig);
 
 ////////////////////////////////////////

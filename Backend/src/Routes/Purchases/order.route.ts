@@ -9,4 +9,8 @@ orderRouter.get("/list", orderController.listUserOrders);
 orderRouter.get("/show/:id", orderController.showOrder);
 orderRouter.post("/cancel/:id", orderController.cancelOrder);
 
+orderRouter.post("/addAddress", orderController.addAddress);
+orderRouter.post("/updateAddress", orderController.updateAddress);
+orderRouter.get("/listAddresses", orderController.listAddresses);
+
 export default orderRouter;

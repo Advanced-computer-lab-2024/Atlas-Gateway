@@ -4,7 +4,7 @@ import { Types } from "mongoose";
 import { Tourist } from "../../Models/Users/tourist.model";
 import { Order, IProductTuple } from "../../Models/Purchases/order.model";
 import { Product } from "../../Models/Purchases/product.model";
-import { CANCELLED } from "dns";
+import { Address, IAddress } from "../../Models/Purchases/addresses.model";
 
 export const createOrder = async (req: Request, res: Response) => { //Called When clicking checkout
     try {
@@ -170,6 +170,138 @@ export const cancelOrder = async (req: Request, res: Response) => {
 
         res.status(200).send("Order Canceled");
     } catch (error) {
+        res.status(500).send("Internal Server Error");
+        console.error(error);
+    }
+}
+
+export const addAddress = async (req: Request, res: Response) => {
+    try{
+        const userId = req.headers.userid;
+        const { country, city, street, houseNumber, apartmentNumber, zipCode } = req.body;
+        const tourist = await Tourist.findById(userId);
+        if(!userId){
+            res.status(400).send("Logged in User id is required");
+            return;
+        }
+
+        if(!country || !city || !street || !zipCode){
+            res.status(400).send("All fields are required");
+            return;
+        }
+
+        if(!tourist){
+            res.status(404).send("Tourist account not found");
+            return;
+        }
+
+        let addressEntry = await Address.findOne({touristId: userId});
+
+        if(!addressEntry){
+            addressEntry = new Address({
+                touristId: userId,
+                addresses: [{
+                    country,
+                    city,
+                    street,
+                    houseNumber,
+                    apartmentNumber,
+                    zipCode
+                }]
+            });
+        }
+        else{
+            addressEntry.addresses.push({
+                country,
+                city,
+                street,
+                houseNumber,
+                apartmentNumber,
+                zipCode
+            });
+        }
+
+        await addressEntry.save();
+        res.status(201).send("Address Added Successfully");
+    }
+    catch(error){
+        res.status(500).send("Internal Server Error");
+        console.error(error);
+    }
+}
+
+export const updateAddress = async (req: Request, res: Response) => {
+    try{
+        const userId = req.headers.userid;
+        const { index, country, city, street, houseNumber, apartmentNumber, zipCode } = req.body;
+        const tourist = await Tourist.findById(userId);
+        if(!userId){
+            res.status(400).send("Logged in User id is required");
+            return;
+        }
+
+        if(!index){
+            throw new Error("Index is not passed for some reason");
+        }
+
+        if(!tourist){
+            res.status(404).send("Tourist account not found");
+            return;
+        }
+
+        let addressEntry = await Address.findOne({touristId: userId});
+
+        if(!addressEntry){
+            throw new Error("No Address Entry found for this user");
+        }
+
+        if(index >= addressEntry.addresses.length || index < 0){
+            res.status(400).send("Invalid Index");
+            return;
+        }
+
+        addressEntry.addresses[index] = {
+            country,
+            city,
+            street,
+            houseNumber,
+            apartmentNumber,
+            zipCode
+        };
+
+        await addressEntry.save();
+        res.status(200).send("Address Updated Successfully");
+    }
+    catch(error){
+        res.status(500).send("Internal Server Error");
+        console.error(error);
+    }
+}
+
+export const listAddresses = async (req: Request, res: Response) => {
+    try{
+        const userId = req.headers.userid;
+        const tourist = await Tourist.findById(userId);
+        if(!userId){
+            res.status(400).send("Logged in User id is required");
+            return;
+        }
+
+        if(!tourist){
+            res.status(404).send("Tourist account not found");
+            return;
+        }
+
+        let addressEntry = await Address.findOne({touristId: userId});
+
+        if(!addressEntry){
+            res.status(404).send("No Address Entry found for this user");
+            return;
+        }
+
+        res.status(200).send(addressEntry.addresses);
+    }
+    catch(error){
         res.status(500).send("Internal Server Error");
         console.error(error);
     }
