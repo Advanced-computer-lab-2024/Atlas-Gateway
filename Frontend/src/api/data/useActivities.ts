@@ -103,7 +103,24 @@ export function useBookActivity(onSuccess: () => void) {
 	const { _id } = user || {};
 
 	const mutation = useMutation({
-		mutationFn: (id: string) => apiBookActivity(id, _id ?? ""),
+		mutationFn: ({
+			id,
+			paymentType,
+			amount,
+			paymentIntentId,
+		}: {
+			id: string;
+			paymentType: string;
+			amount: number;
+			paymentIntentId?: string;
+		}) =>
+			apiBookActivity(
+				id,
+				paymentType,
+				amount,
+				_id ?? "",
+				paymentIntentId,
+			),
 		onSuccess,
 	});
 

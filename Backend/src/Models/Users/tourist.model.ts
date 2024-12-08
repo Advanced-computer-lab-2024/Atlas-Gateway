@@ -49,6 +49,12 @@ export interface ITourist extends Document {
 		product: Types.ObjectId;
 		quantity: number;
 	}[];
+	payment: [
+		{
+			type: string;
+			event: Types.ObjectId;
+		},
+	];
 }
 
 const touristSchema = new Schema<ITourist>(
@@ -127,6 +133,12 @@ const touristSchema = new Schema<ITourist>(
 		isDeleted: { type: Boolean, default: false },
 		preferredTags: [
 			{ type: Schema.Types.ObjectId, ref: "Tag", required: true },
+		],
+		payment: [
+			{
+				type: { type: String },
+				event: { type: Schema.Types.ObjectId },
+			},
 		],
 		cart: [
 			{
