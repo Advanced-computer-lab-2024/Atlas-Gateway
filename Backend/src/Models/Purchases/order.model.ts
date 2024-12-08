@@ -35,6 +35,8 @@ const productTupleSchema = new Schema<IProductTuple>(
     schemaConfig,
 
 );
+
+export const productTuple = model<IProductTuple>("ProductTuple", productTupleSchema);
 export interface IOrder extends Document {
     touristId: Types.ObjectId;
     products: IProductTuple[];
@@ -53,8 +55,7 @@ const orderSchema = new Schema<IOrder>(
             required: true,
         },
         products: {
-            type: [productSchema],
-            ref: "Product",
+            type: [productTupleSchema],
             required: true,
         },
         totalPrice: {
