@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import { Types } from "mongoose";
+import { PipelineStage, Types } from "mongoose";
 
 import {
 	IActivityDTO,
@@ -15,12 +15,11 @@ import {
 	IProductReportResponse,
 } from "../../DTOS/Report/ProductReportResponse";
 import HttpError from "../../Errors/HttpError";
-import { IProduct } from "../../Models/Purchases/product.model";
+import { EOrderStatus, Order } from "../../Models/Purchases/order.model";
 import { IActivity } from "../../Models/Travel/activity.model";
 import { IItinerary } from "../../Models/Travel/itinerary.model";
 import { Admin, IAdmin } from "../../Models/Users/admin.model";
 import uniqueUsername from "../Auth/username.service";
-import * as productService from "../Purchases/product.service";
 import * as activityService from "../Travel/activity.service";
 import * as itineraryService from "../Travel/itinerary.service";
 
@@ -106,33 +105,24 @@ export const report = async (
 
 // TODO: Implement the report function waiting on the orders of the products
 export const productsReport = async (
-	options: { date?: string; ProductId?: string } = {},
+	options: {
+		date?: string;
+		ProductId?: string;
+	} = {},
 ): Promise<IProductReportResponse> => {
 	const admins = await getAllAdmins();
 
-	if (!admins) {
-		throw new HttpError(404, "No Admins Found");
-	}
+	const pipeline: PipelineStage[] = [];
 
-	// populate the products of the seller and the orders of the products
+	pipeline.push({
+		$match: {
+			"products.product.sellerId": {
+				$in: admins.map((admin) => new Types.ObjectId(admin.id)),
+			},
 
-	const data = await productService.getAllProducts();
-	let products: IProduct[] = data as IProduct[];
-
-	// filter the products by the admins
-
-	products = products.filter((product: IProduct) => {
-		return admins.some((admin: IAdmin) => {
-			return admin.id == product.sellerId;
-		});
+			status: EOrderStatus.COMPLETED,
+		},
 	});
-
-	// if itineraryId is provided, filter the bookings by itineraryId
-	if (options.ProductId) {
-		products = products.filter(
-			(product: IProduct) => product.id == options.ProductId,
-		);
-	}
 
 	// if date is provided, filter the bookings by date
 	if (options.date) {
@@ -153,26 +143,50 @@ export const productsReport = async (
 
 		// TODO: Filter on the orders of the products by date
 
-		// products = products.filter((product: IProduct) => {
-		// 	const start = new Date(product);
-		// 	console.log(start, startDate, endDate);
-		// 	return start >= startDate && start <= endDate;
-		// });
+		pipeline.push({
+			$match: {
+				date: {
+					$gte: startDate,
+					$lte: endDate,
+				},
+			},
+		});
 	}
 
-	let totalSales = 0;
+	// if ProductId is provided, filter the bookings by ProductId
+	if (options.ProductId) {
+		if (!Types.ObjectId.isValid(options.ProductId)) {
+			throw new HttpError(400, "ProductId is Invalid");
+		}
+		const productId = new Types.ObjectId(options.ProductId);
 
-	let sales = products.map((product: IProduct) => {
-		// totalSales +=
-		// 	product.numberOfBookings *
-		// 	((product.minPrice + product.maxPrice) / 2);
+		pipeline.push({
+			$match: {
+				"products.productId": productId,
+			},
+		});
+	}
+
+	const orders = await Order.aggregate(pipeline);
+
+	console.log(orders);
+	let totalSales = 0;
+	let totalBookings = 0;
+
+	const sales: IProductDTO[] = orders.map((order) => {
+		const sales =
+			order.products[0].quantity * order.products[0].product.price;
+
+		const adminProfit = sales * 0.1;
+
+		totalSales += sales - adminProfit;
+		totalBookings += order.products[0].quantity;
 
 		return {
-			ProductId: product.id,
-			ProductName: product.name,
-			// totalSales:
-			// 	product.numberOfBookings *
-			// 	((product.minPrice + product.maxPrice) / 2),
+			ProductId: order.products[0].productId,
+			ProductName: order.products[0].product.name,
+			quantity: order.products[0].quantity,
+			sales: sales,
 		} as IProductDTO;
 	});
 
@@ -180,6 +194,7 @@ export const productsReport = async (
 		data: sales,
 		metaData: {
 			totalSales: totalSales,
+			totalBookings: totalBookings,
 		},
 	} as IProductReportResponse;
 };
