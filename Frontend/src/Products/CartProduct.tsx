@@ -87,7 +87,7 @@ export default function CartProduct({
 								onClick={() =>
 									doUpdateProductQuantity({
 										productId: product._id,
-										quantity: product.quantity - 1,
+										quantity: quantity - 1,
 									})
 								}
 								className="cursor-pointer"
@@ -95,12 +95,16 @@ export default function CartProduct({
 						)}
 						<Label.Mid400>{quantity}</Label.Mid400>
 						<Plus
-							onClick={() =>
-								doUpdateProductQuantity({
-									productId: product._id,
-									quantity: product.quantity + 1,
-								})
-							}
+							onClick={() => {
+								if (quantity < product.quantity) {
+									doUpdateProductQuantity({
+										productId: product._id,
+										quantity: quantity + 1,
+									});
+								} else {
+									alert("Out of stock");
+								}
+							}}
 							className="cursor-pointer"
 						/>
 					</Flex>
