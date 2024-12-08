@@ -177,9 +177,7 @@ export const productsReport = async (
 		const sales =
 			order.products[0].quantity * order.products[0].product.price;
 
-		const adminProfit = sales * 0.1;
-
-		totalSales += sales - adminProfit;
+		totalSales += sales;
 		totalBookings += order.products[0].quantity;
 
 		return {

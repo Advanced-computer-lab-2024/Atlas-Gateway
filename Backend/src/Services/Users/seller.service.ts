@@ -185,7 +185,7 @@ export const report = async (
 			ProductId: order.products[0].productId,
 			ProductName: order.products[0].product.name,
 			quantity: order.products[0].quantity,
-			sales: sales,
+			sales: sales - adminProfit,
 		} as IProductDTO;
 	});
 
