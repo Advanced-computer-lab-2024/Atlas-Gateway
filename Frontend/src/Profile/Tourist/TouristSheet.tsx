@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -35,7 +35,6 @@ import {
 	SheetFooter,
 	SheetHeader,
 	SheetTitle,
-	SheetTrigger,
 } from "../../components/ui/sheet";
 
 // Ensure all necessary components are imported
@@ -53,8 +52,13 @@ const formSchema = z.object({
 	currency: z.string(), // Add currency to the schema
 });
 
-export default function TouristSheet() {
-	const [open, setOpen] = useState(false);
+export default function TouristSheet({
+	open,
+	setOpen,
+}: {
+	open: boolean;
+	setOpen: (open: boolean) => void;
+}) {
 	const { data, refetch } = useTouristProfile();
 	const form = useForm<TTourist>({
 		resolver: zodResolver(formSchema),
@@ -81,11 +85,6 @@ export default function TouristSheet() {
 
 	return (
 		<Sheet open={open} onOpenChange={setOpen}>
-			<SheetTrigger asChild>
-				<Button className="align p-4 justify-center">
-					<Label.Mid400>Update Profile</Label.Mid400>
-				</Button>
-			</SheetTrigger>
 			<SheetContent>
 				<Form {...form}>
 					<form
