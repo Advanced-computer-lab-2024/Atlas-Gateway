@@ -57,25 +57,29 @@ export default function Products() {
 
 	return (
 		<Flex isColumn gap="4" className="w-full h-full p-4 overflow-y-scroll">
-			<Flex justify="between" gap="2">
+			<Flex justify="between" gap="2" align="center">
 				<Label.Big600>Products</Label.Big600>
-				<Flex
-					className="relative w-14 h-14 cursor-pointer"
-					align="center"
-					justify="center"
-					onClick={() => navigate("cart")}
-				>
-					<ShoppingCart width={48} height={48} />
-					{tourist?.cart && tourist.cart.length > 0 && (
-						<Flex
-							align="center"
-							justify="center"
-							className="absolute top-0 right-0 w-6 h-6 rounded-full bg-surface-primary"
-						>
-							<Label.Thin400>{tourist.cart.length}</Label.Thin400>
-						</Flex>
-					)}
-				</Flex>
+				{user?.type === EAccountType.Tourist && (
+					<Flex
+						className="relative w-14 h-14 cursor-pointer"
+						align="center"
+						justify="center"
+						onClick={() => navigate("cart")}
+					>
+						<ShoppingCart width={48} height={48} />
+						{tourist?.cart && tourist.cart.length > 0 && (
+							<Flex
+								align="center"
+								justify="center"
+								className="absolute top-0 right-0 w-5 h-5 rounded-full bg-surface-primary"
+							>
+								<Label.Thin300>
+									{tourist.cart.length}
+								</Label.Thin300>
+							</Flex>
+						)}
+					</Flex>
+				)}
 			</Flex>
 			<Flex
 				justify="between"
@@ -136,7 +140,6 @@ export default function Products() {
 								{wishlist ? "View All" : "My Wishlist"}
 							</Button>
 						)}
-						
 					</Flex>
 				</Flex>
 
@@ -159,7 +162,8 @@ export default function Products() {
 								openEditDrawer={openEditDrawer}
 							/>
 						))
-					: data?.filter((product) => {
+					: data
+							?.filter((product) => {
 								return product.touristWishlist.includes(
 									user?._id ?? "",
 								);
