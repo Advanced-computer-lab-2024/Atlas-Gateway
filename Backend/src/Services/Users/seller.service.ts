@@ -1,11 +1,11 @@
-import { IProduct } from "@/Models/Purchases/product.model";
-import { Types } from "mongoose";
+import { PipelineStage, Types } from "mongoose";
 
 import {
 	IProductDTO,
 	IProductReportResponse,
 } from "../../DTOS/Report/ProductReportResponse";
 import HttpError from "../../Errors/HttpError";
+import { Order } from "../../Models/Purchases/order.model";
 import { ISeller, Seller } from "../../Models/Users/seller.model";
 import { hashPassword } from "../Auth/password.service";
 import uniqueUsername from "../Auth/username.service";
@@ -115,24 +115,17 @@ export const report = async (
 	id: string,
 	options: { date?: string; ProductId?: string } = {},
 ): Promise<IProductReportResponse> => {
-	const seller = await getSellerById(id);
-
-	if (!seller) {
-		throw new HttpError(404, "Tour Guide not Found");
+	if (!Types.ObjectId.isValid(id)) {
+		throw new HttpError(400, "Id is Invalid");
 	}
 
-	// populate the products of the seller and the orders of the products
-
-	await seller.populate("Products");
-
-	let products: IProduct[] = seller.Products as IProduct[];
-
-	// if itineraryId is provided, filter the bookings by itineraryId
-	if (options.ProductId) {
-		products = products.filter(
-			(activity: IProduct) => activity.id == options.ProductId,
-		);
-	}
+	const pipeline: PipelineStage[] = [
+		{
+			$match: {
+				"products.product.sellerId": new Types.ObjectId(id),
+			},
+		},
+	];
 
 	// if date is provided, filter the bookings by date
 	if (options.date) {
@@ -153,28 +146,46 @@ export const report = async (
 
 		// TODO: Filter on the orders of the products by date
 
-		// products = products.filter((product: IProduct) => {
-		// 	const start = new Date(product);
-		// 	console.log(start, startDate, endDate);
-		// 	return start >= startDate && start <= endDate;
-		// });
+		pipeline.push({
+			$match: {
+				date: {
+					$gte: startDate,
+					$lte: endDate,
+				},
+			},
+		});
 	}
 
-	console.log(products);
+	// if ProductId is provided, filter the bookings by ProductId
+	if (options.ProductId) {
+		if (!Types.ObjectId.isValid(options.ProductId)) {
+			throw new HttpError(400, "ProductId is Invalid");
+		}
+		const productId = new Types.ObjectId(options.ProductId);
 
+		pipeline.push({
+			$match: {
+				"products.productId": productId,
+			},
+		});
+	}
+
+	const orders = await Order.aggregate(pipeline);
 	let totalSales = 0;
 
-	let sales = products.map((product: IProduct) => {
-		// totalSales +=
-		// 	product.numberOfBookings *
-		// 	((product.minPrice + product.maxPrice) / 2);
+	const sales: IProductDTO[] = orders.map((order) => {
+		const sales =
+			order.products[0].quantity * order.products[0].product.price;
+
+		const adminProfit = sales * 0.1;
+
+		totalSales += sales - adminProfit;
 
 		return {
-			ProductId: product.id,
-			ProductName: product.name,
-			// totalSales:
-			// 	product.numberOfBookings *
-			// 	((product.minPrice + product.maxPrice) / 2),
+			ProductId: order.products[0].productId,
+			ProductName: order.products[0].product.name,
+			quantity: order.products[0].quantity,
+			sales: sales - adminProfit,
 		} as IProductDTO;
 	});
 

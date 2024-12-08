@@ -1,6 +1,8 @@
 export interface IProductDTO {
 	ProductId: string;
 	ProductName: string;
+	quantity: number;
+	sales: number;
 }
 
 export interface IProductReportResponse {

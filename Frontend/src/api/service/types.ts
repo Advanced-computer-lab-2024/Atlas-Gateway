@@ -92,6 +92,8 @@ export type TItineraryReportResponse = {
 export type TProductReportResponse = {
 	ProductId: string;
 	ProductName: string;
+	quantity: number;
+	sales: number;
 };
 
 export type TReportRespone<T> = {

@@ -41,7 +41,7 @@ export default function ProductsChart(
 			},
 		},
 		legend: {
-			data: ["Sales"],
+			data: ["Sales", "Quantity"], // Hide Quantity for now
 			top: "5%",
 			right: "5%",
 			textStyle: {
@@ -88,11 +88,28 @@ export default function ProductsChart(
 			{
 				name: "Sales",
 				type: "bar",
-				data: filteredData?.map(
-					(d: TProductReportResponse) => d.ProductId,
-				), // Assuming ProductId holds sales data
+				data: filteredData?.map((d: TProductReportResponse) => d.sales), // Assuming ProductId holds sales data
 				itemStyle: {
 					color: "#1abc9c", // Custom green color for Sales
+				},
+				barWidth: "35%",
+				label: {
+					show: true,
+					position: "top",
+					formatter: "{c}",
+					fontSize: 12,
+					fontWeight: "bold",
+					color: "#2c3e50",
+				},
+			},
+			{
+				name: "Quantity",
+				type: "bar",
+				data: filteredData?.map(
+					(d: TProductReportResponse) => d.quantity,
+				), // Assuming ProductId holds quantity data
+				itemStyle: {
+					color: "#3498db", // Custom blue color for Bookings
 				},
 				barWidth: "35%",
 				label: {
