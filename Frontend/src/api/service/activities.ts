@@ -99,6 +99,7 @@ export function apiBookActivity(
 	_id: string,
 	paymentType: string,
 	amount: number,
+	promoCode: string,
 	userid: string,
 	paymentIntentId?: string,
 ) {
@@ -113,6 +114,7 @@ export function apiBookActivity(
 			paymentIntentId,
 			paymentType,
 			amount,
+			promoCode,
 		},
 		baseURL: baseURL,
 	});

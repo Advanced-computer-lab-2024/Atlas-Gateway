@@ -220,6 +220,7 @@ export const bookItinerary = async (
 	paymentType: string,
 	amount: number,
 	paymentIntentId: string,
+	promoCode: string,
 	touristId: string,
 ) => {
 	const itinerary = await getItineraryById(itineraryId);
@@ -243,6 +244,7 @@ export const bookItinerary = async (
 		touristId,
 		itineraryId,
 		paymentType,
+		promoCode,
 		itinerary.price,
 	);
 

@@ -7,6 +7,10 @@ import { ITransportation } from "../../Models/Travel/transportation.model";
 import { ITourist, Tourist } from "../../Models/Users/tourist.model";
 import { hashPassword } from "../Auth/password.service";
 import uniqueUsername from "../Auth/username.service";
+import {
+	checkPromoService,
+	deletePromoByCodeService,
+} from "../Promo/promo.service";
 
 export const createTourist = async (
 	username: string,
@@ -87,6 +91,7 @@ export const addBookedActivity = async (
 	touristId: string,
 	paymentType: string,
 	activityId: string,
+	promoCode: string,
 	minPrice: number,
 	maxPrice: number,
 ) => {
@@ -108,6 +113,11 @@ export const addBookedActivity = async (
 			"You do not have enough balance in your wallet",
 		);
 	}
+	const promo = await checkPromoService(promoCode, touristId); // this will cause error if the promo code is not entered or invalid
+	await deletePromoByCodeService(promoCode);
+	if (promoCode != "") {
+		maxPrice = maxPrice - maxPrice * (promo?.discountPercentage! / 100);
+	}
 
 	let newWalletBalance = tourist.walletBalance;
 	if (tourist.walletBalance >= maxPrice && paymentType === "wallet") {
@@ -128,7 +138,7 @@ export const addBookedActivity = async (
 	await tourist.updateOne({
 		$push: {
 			bookedActivities: activityId,
-			payment: { type: paymentType, event: activityId },
+			payment: { type: paymentType, event: activityId, amount: maxPrice },
 		},
 		loyaltyPoints: newLoyaltyPoints,
 		maxCollectedLoyaltyPoints: newMaxCollectedLoyaltyPoints,
@@ -199,6 +209,7 @@ export const addBookedItinerary = async (
 	touristId: string,
 	itineraryId: string,
 	paymentType: string,
+	promoCode: string,
 	itineraryPrice: number,
 ) => {
 	if (!Types.ObjectId.isValid(itineraryId)) {
@@ -220,6 +231,14 @@ export const addBookedItinerary = async (
 		);
 	}
 
+	const promo = await checkPromoService(promoCode, touristId); // this will cause error if the promo code is not entered or invalid
+	await deletePromoByCodeService(promoCode);
+	if (promoCode != "") {
+		itineraryPrice =
+			itineraryPrice -
+			itineraryPrice * (promo?.discountPercentage! / 100);
+	}
+
 	let newWalletBalance = tourist.walletBalance;
 	if (tourist.walletBalance >= itineraryPrice && paymentType === "wallet") {
 		newWalletBalance = tourist.walletBalance - itineraryPrice;
@@ -239,7 +258,11 @@ export const addBookedItinerary = async (
 		{
 			$push: {
 				bookedItineraries: itineraryId,
-				payment: { type: paymentType, event: itineraryId },
+				payment: {
+					type: paymentType,
+					event: itineraryId,
+					amount: itineraryPrice,
+				},
 			},
 			loyaltyPoints: newLoyaltyPoints,
 			maxCollectedLoyaltyPoints: newMaxCollectedLoyaltyPoints,
@@ -369,7 +392,7 @@ export const cancelItinerary = async (
 	);
 	let newWalletBalance = tourist.walletBalance;
 	if (payment[0].type === "wallet") {
-		newWalletBalance += itineraryPrice;
+		newWalletBalance += payment[0].amount;
 	}
 	const newLoyaltyPoints =
 		tourist.loyaltyPoints - (tourist.level / 2) * itineraryPrice;
@@ -425,7 +448,7 @@ export const cancelActivity = async (
 	);
 	let newWalletBalance = tourist.walletBalance;
 	if (payment[0].type === "wallet") {
-		newWalletBalance += maxPrice;
+		newWalletBalance += payment[0].amount;
 	}
 
 	const newLoyaltyPoints =
