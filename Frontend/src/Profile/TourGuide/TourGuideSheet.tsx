@@ -79,11 +79,6 @@ export default function TourGuideSheet({
 
 	return (
 		<Sheet open={open} onOpenChange={setOpen}>
-			<SheetTrigger asChild>
-				{data?.isVerified && (
-					<button className="font-bold">Edit profile</button>
-				)}
-			</SheetTrigger>
 			<SheetContent>
 				<Form {...form}>
 					<form

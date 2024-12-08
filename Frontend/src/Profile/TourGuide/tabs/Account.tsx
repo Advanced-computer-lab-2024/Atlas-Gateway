@@ -4,8 +4,8 @@ import { useState } from "react";
 import ChangePasswordSheet from "@/Profile/ChangePasswordSheet";
 import UploadForm from "@/Profile/UploadForm";
 import {
-	useAdvertiserProfile,
-	useRequestDeleteAdvertiserProfile,
+	useRequestDeleteTourGuideProfile,
+	useTourGuideProfile,
 } from "@/api/data/useProfile";
 import Label from "@/components/ui/Label";
 import { Button } from "@/components/ui/button";
@@ -16,13 +16,13 @@ import TourGuideSheet from "../TourGuideSheet";
 
 export default function Account() {
 	const { user } = useLoginStore();
-	const { data } = useAdvertiserProfile();
+	const { data } = useTourGuideProfile();
 	const [isEditDrawerOpen, setIsEditDrawerOpen] = useState(false);
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 	const [isDrawerOpen2, setIsDrawerOpen2] = useState(false);
 	const [isDrawerOpen3, setIsDrawerOpen3] = useState(false);
-	const { doRequestDeleteAdvertiserProfile } =
-		useRequestDeleteAdvertiserProfile(() => {});
+	const { doRequestDeleteTourGuideProfile } =
+		useRequestDeleteTourGuideProfile(() => {});
 
 	return (
 		<Flex className="grid grid-cols-2 gap-4">
@@ -46,16 +46,14 @@ export default function Account() {
 						<Label.Mid500>{data?.email}</Label.Mid500>
 					</Flex>
 					<Flex gap="2" isColumn>
-						<Label.Thin300>Hotline</Label.Thin300>
+						<Label.Thin300>Mobile</Label.Thin300>
 						<Label.Mid500>
-							{data?.hotline ?? "No hotline added"}
+							{data?.mobile ?? "No mobile number added"}
 						</Label.Mid500>
 					</Flex>
 					<Flex gap="2" isColumn>
-						<Label.Thin300>Website</Label.Thin300>
-						<Label.Mid500>
-							{data?.website ?? "No website added"}
-						</Label.Mid500>
+						<Label.Thin300>Average rating</Label.Thin300>
+						<Label.Mid500>{data?.avgRating ?? "N/A"}</Label.Mid500>
 					</Flex>
 				</Flex>
 			</Flex>
@@ -87,10 +85,10 @@ export default function Account() {
 							className="gap-2"
 							size="default"
 							onClick={() => {
-								setIsDrawerOpen2(true);
+								setIsDrawerOpen3(true);
 							}}
 						>
-							<CreditCard /> Upload Taxation Card
+							<CreditCard /> Upload Certificate
 						</Button>
 						<Button
 							variant="default"
@@ -122,7 +120,7 @@ export default function Account() {
 							size="default"
 							onClick={() => {
 								if (data?._id)
-									doRequestDeleteAdvertiserProfile(data._id);
+									doRequestDeleteTourGuideProfile(data._id);
 							}}
 						>
 							<X />
@@ -145,7 +143,7 @@ export default function Account() {
 			<UploadForm
 				userType={user?.type}
 				userId={user?._id}
-				fileType={"taxCard"}
+				fileType={"certificate"}
 				isDrawerOpen={isDrawerOpen3}
 				setIsDrawerOpen={setIsDrawerOpen3}
 			/>
