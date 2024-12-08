@@ -188,6 +188,7 @@ export const cancelOrder = async (req: Request, res: Response) => {
 export const addAddress = async (req: Request, res: Response) => {
 	try {
 		const userId = req.headers.userid;
+		console.log(userId);
 		const { country, city, street, houseNumber, apartmentNumber } =
 			req.body;
 		const tourist = await Tourist.findById(userId);
@@ -206,12 +207,16 @@ export const addAddress = async (req: Request, res: Response) => {
 			return;
 		}
 
-		const addressString = country +", "+ city +","+ street + (houseNumber? ","+ houseNumber : "") + (apartmentNumber? ","+ apartmentNumber : "");
+		const addressString = country +", "+ city +", "+ street + (houseNumber? ", "+ houseNumber : "") + (apartmentNumber? ", "+ apartmentNumber : "");
 
 		if(tourist.address?.includes(addressString)){
 			res.status(200).send("Address already exists");
 			return;
 		}
+
+		tourist.address?.push(addressString);
+
+		await tourist.save();
 
 		res.status(201).send("Address Added Successfully");
 	} catch (error) {

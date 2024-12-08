@@ -73,9 +73,6 @@ export default function Cart() {
 											</Label.Mid400>
 										</Flex>
 										<Flex isColumn={true} gap="3">
-											<Label.Thin300>
-												Payment Method
-											</Label.Thin300>
 											<Payment
 												amount={formatCurrency(
 													product.price * quantity,

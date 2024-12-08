@@ -1,5 +1,6 @@
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -13,10 +14,12 @@ import {
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
+	SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import useCurrency from "@/hooks/useCurrency";
 
+import AddressDialogue from "./AddAddressPopup";
 import OnlinePayment from "./OnlinePayment";
 
 interface props {
@@ -24,7 +27,7 @@ interface props {
 }
 
 const Payment = ({ amount }: props) => {
-	const { data } = useTouristProfile();
+	const { data, refetch } = useTouristProfile();
 	const [selectedAddress, setSelectedAddress] = useState<string>("");
 	const formatCurrency = useCurrency();
 	const stripePromise = loadStripe(
@@ -77,17 +80,28 @@ const Payment = ({ amount }: props) => {
 
 	return (
 		<>
-			<Select
-				onValueChange={(value) => setSelectedAddress(value as string)}
-				value={selectedAddress}
-			>
-				<SelectTrigger>Choose Address</SelectTrigger>
-				<SelectContent>
-					{data?.address?.map((address) => (
-						<SelectItem value={address}>{address}</SelectItem>
-					))}
-				</SelectContent>
-			</Select>
+			<hr className="border-gray-600 border-solid border-1" />
+			<Label.Thin400>Delivery Address</Label.Thin400>
+
+			<Flex className="w-full" justify="between">
+				<Select
+					onValueChange={(value) =>
+						setSelectedAddress(value as string)
+					}
+					value={selectedAddress}
+				>
+					<SelectTrigger>
+						<SelectValue placeholder="Choose Address" />
+					</SelectTrigger>
+					<SelectContent>
+						{data?.address?.map((address) => (
+							<SelectItem value={address}>{address}</SelectItem>
+						))}
+					</SelectContent>
+				</Select>
+				<AddressDialogue userId={data?._id} refetchFunction={refetch} />
+			</Flex>
+			<Label.Thin300>Payment Method</Label.Thin300>
 			<Tabs defaultValue="wallet" className="w-full">
 				<TabsList className="grid w-full grid-cols-3 border-2 border-black">
 					<TabsTrigger value="wallet">Wallet</TabsTrigger>
