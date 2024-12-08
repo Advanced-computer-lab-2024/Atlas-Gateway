@@ -109,6 +109,8 @@ export interface TTourist extends TUser {
 	level: 1 | 2 | 3;
 	purchaseProducts: TProduct[];
 	wishlistproducts: TProduct[];
+	nationality: string;
+	occupation: string;
 	bookedActivities: TActivity[];
 	bookmarkedActivities: TActivity[];
 	bookedItineraries: TItinerary[];

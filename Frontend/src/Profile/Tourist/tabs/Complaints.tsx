@@ -32,8 +32,8 @@ export default function Complaints() {
 		useState(false);
 
 	return (
-		<Flex isColumn gap="4">
-			<Flex align="center" justify="end">
+		<>
+			<Flex align="center" justify="end" className="p-2">
 				<Button
 					className="flex gap-2"
 					onClick={() => setIsNewComplaintSheetOpen(true)}
@@ -101,6 +101,6 @@ export default function Complaints() {
 				open={isNewComplaintSheetOpen}
 				setOpen={setIsNewComplaintSheetOpen}
 			/>
-		</Flex>
+		</>
 	);
 }
