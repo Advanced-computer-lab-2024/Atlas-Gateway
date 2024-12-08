@@ -1,6 +1,6 @@
-import { formatDate } from "date-fns";
 import { Eye, EyeOff, RotateCw } from "lucide-react";
 
+import { usePastActivities } from "@/api/data/useActivities";
 import {
 	Table,
 	TableBody,
@@ -10,61 +10,54 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import useCurrency from "@/hooks/useCurrency";
-import { usePastActivities } from "@/api/data/useActivities";
-function PastActivities() {
-     // Fetch past activities
-	  const {data: pastActivities,refetch: refetchPast} = usePastActivities();
-      const convertCurrency = useCurrency();
+import { TActivity } from "@/types/global";
 
-  return (
-    <Table className="shadow-lg h-full">
-					<TableHeader>
-						<TableRow>
-							<TableHead className="p-3">Description</TableHead>
-							<TableHead className="p-3">Price</TableHead>
-							<TableHead className="p-3">Date & Time</TableHead>
-							<TableHead className="p-3">Location</TableHead>
-							<TableHead className="cursor-pointer hover:text-[#2b58ed] w-1">
-								<RotateCw onClick={() => refetchPast()} />
-							</TableHead>
-						</TableRow>
-					</TableHeader>
-					<TableBody>
-						{pastActivities?.map((activity) => (
-							<TableRow key={activity._id} className="cursor-pointer">
-								<TableCell>
-									{activity.description
-										? activity.description.substring(0, 100)
-										: "N/A"}
-								</TableCell>
-								<TableCell>
-									{convertCurrency(activity?.minPrice)}-
-									{convertCurrency(activity?.maxPrice)}
-								</TableCell>
-								<TableCell>
-									{formatDate(
-										new Date(activity?.dateTime || "0"),
-										"dd/MM/yyyy HH:mm:ss a",
-									)}
-								</TableCell>
-								<TableCell>{activity?.location}</TableCell>
-								<TableCell>
-									{activity._id ? (
-										<Eye
-											onClick={() => {
-												window.location.href = `/activities/${activity._id}`;
-											}}
-											className="cursor-pointer hover:text-[#2b58ed]"
-										/>
-									) : (
-										<EyeOff />
-									)}
-								</TableCell>
-							</TableRow>
-						))}
-					</TableBody>
-				</Table>
-  )
+function PastActivities() {
+	const { data, refetch: refetchPast } = usePastActivities();
+	const convertCurrency = useCurrency();
+	return (
+		<Table className="shadow-lg h-full">
+			<TableHeader>
+				<TableRow>
+					<TableHead className="p-3">Description</TableHead>
+					<TableHead className="p-3">Date & Time</TableHead>
+					<TableHead className="p-3">Location</TableHead>
+					<TableHead className="p-3">min price</TableHead>
+					<TableHead className="p-3">max price</TableHead>
+					<TableHead className="cursor-pointer hover:text-[#2b58ed] w-1">
+						<RotateCw onClick={() => refetchPast()} />
+					</TableHead>
+				</TableRow>
+			</TableHeader>
+			<TableBody>
+				{data?.map((activity: TActivity) => (
+					<TableRow key={activity._id} className="cursor-pointer">
+						<TableCell>{activity.description}</TableCell>
+						<TableCell>{activity.dateTime}</TableCell>
+						<TableCell>{activity.location}</TableCell>
+						<TableCell>
+							{convertCurrency(activity.minPrice)}
+						</TableCell>
+						<TableCell>
+							{convertCurrency(activity.maxPrice)}
+						</TableCell>
+						<TableCell>
+							{activity._id ? (
+								<Eye
+									onClick={() => {
+										window.location.href = `/activities/${activity._id}`;
+									}}
+									className="cursor-pointer hover:text-[#2b58ed]"
+								/>
+							) : (
+								<EyeOff />
+							)}
+						</TableCell>
+					</TableRow>
+				))}
+			</TableBody>
+		</Table>
+	);
 }
 
-export default PastActivities
+export default PastActivities;

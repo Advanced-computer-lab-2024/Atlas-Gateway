@@ -7,17 +7,17 @@ import {
 	getTourist,
 	getTourists,
 	redeemPoints,
+	removeProductFromCart,
 	requestActivityNotification,
 	requestItineraryNotification,
-	removeProductFromCart,
 	softDeleteTourist,
 	updateProductQuantity,
 	updateTourist,
+	viewPastActivities,
+	viewPastItineraries,
 	viewUpcomingActivities,
 	viewUpcomingItineraries,
 	viewWallet,
-	viewpastActivities,
-	viewpastItineraries,
 } from "../../Controllers/Users/tourist.controller";
 
 const touristRouter = Router();
@@ -29,10 +29,10 @@ touristRouter.put("/redeem/:id", redeemPoints);
 touristRouter.delete("/delete/:id", deleteTourist);
 touristRouter.delete("/requestDelete/:id", softDeleteTourist);
 touristRouter.get("/wallet", viewWallet);
-touristRouter.get("/upcomingActivities", viewUpcomingActivities);
-touristRouter.get("/upcomingIitneraries", viewUpcomingItineraries);
-touristRouter.get("/pastActivities", viewpastActivities);
-touristRouter.get("/pastIitneraries", viewpastItineraries);
+touristRouter.get("/upcomingActivities/:id", viewUpcomingActivities);
+touristRouter.get("/upcomingItineraries/:id", viewUpcomingItineraries);
+touristRouter.get("/pastActivities/:id", viewPastActivities);
+touristRouter.get("/pastItineraries/:id", viewPastItineraries);
 touristRouter.get("/ItineraryNotification", requestItineraryNotification);
 touristRouter.get("/ActivityNotification", requestActivityNotification);
 touristRouter.post("/cart/add/:id", addProductToCart);

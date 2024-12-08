@@ -134,43 +134,53 @@ export const viewWallet = async (req: Request, res: Response) => {
 		res.status(500).send(error);
 	}
 };
+
 export const viewUpcomingActivities = async (req: Request, res: Response) => {
 	try {
-		const { touristId } = req.body;
-		const activity = await touristService.viewUpcomingActivities(touristId);
-		res.status(200).send(activity);
+		const touristId = req.params.id;
+		const activities =
+			await touristService.viewUpcomingActivities(touristId);
+		res.status(200).send(activities);
 	} catch (error) {
 		res.status(500).send(error);
 	}
 };
-export const viewpastActivities = async (req: Request, res: Response) => {
+
+export const viewPastActivities = async (req: Request, res: Response) => {
 	try {
-		const { touristId } = req.body;
-		const activity = await touristService.viewPastActivities(touristId);
-		res.status(200).send(activity);
+		const touristId = req.params.id;
+		const activities = await touristService.viewPastActivities(touristId);
+		res.status(200).send(activities);
 	} catch (error) {
 		res.status(500).send(error);
 	}
 };
-export const viewUpcomingItineraries = async (req: Request, res: Response) => {
+
+export const viewUpcomingItineraries = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
-		const { touristId } = req.body;
-		const activity =
-			await touristService.viewUpcomingIitneraries(touristId);
-		res.status(200).send(activity);
+		const touristId = req.params.id;
+		const itineraries =
+			await touristService.viewUpcomingItineraries(touristId);
+		res.status(200).send(itineraries);
 	} catch (error) {
-		res.status(500).send(error);
+		next(error);
 	}
 };
-export const viewpastItineraries = async (req: Request, res: Response) => {
+
+export const viewPastItineraries = async (req: Request, res: Response) => {
 	try {
-		const { touristId } = req.body;
-		const activity = await touristService.viewPastIitneraries(touristId);
-		res.status(200).send(activity);
+		const touristId = req.params.id;
+		const itineraries = await touristService.viewPastItineraries(touristId);
+		res.status(200).send(itineraries);
 	} catch (error) {
 		res.status(500).send(error);
 	}
 };
+
 export const requestActivityNotification = async (
 	next: NextFunction,
 	req: Request,

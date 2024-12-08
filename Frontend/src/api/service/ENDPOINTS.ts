@@ -16,8 +16,7 @@ const ENDPOINTS = {
 		update: (id: string) => `api/products/update/${id}`,
 		delete: (id: string) => `api/products/delete/${id}`,
 		addWishlist: (id: string) => `api/products/wishlist/${id}`,
-		removeWishlist: (id: string) =>
-			`api/products/removewishlist/${id}`,
+		removeWishlist: (id: string) => `api/products/removewishlist/${id}`,
 		addToCart: (id: string) => `api/tourist/cart/add/${id}`,
 		removeFromCart: (id: string) => `api/tourist/cart/remove/${id}`,
 		updateProductQuantity: (id: string) => `api/tourist/cart/update/${id}`,
@@ -64,10 +63,12 @@ const ENDPOINTS = {
 		redeem: (id: string) => `api/tourist/redeem/${id}`,
 		delete: (id: string) => `api/tourist/delete/${id}`,
 		requestDelete: (id: string) => `api/tourist/requestDelete/${id}`,
-		upcomingActivities: `api/tourist/upcomingActivities`,  
-    	upcomingItineraries: "api/tourist/upcomingItineraries",  
-    	pastActivities: "api/tourist/pastActivities",  
-    	pastItineraries: "api/tourist/pastItineraries",  
+		upcomingActivities: (id: string) =>
+			`api/tourist/upcomingActivities/${id}`,
+		upcomingItineraries: (id: string) =>
+			`api/tourist/upcomingItineraries/${id}`,
+		pastActivities: (id: string) => `api/tourist/pastActivities/${id}`,
+		pastItineraries: (id: string) => `api/tourist/pastItineraries/${id}`,
 	},
 	seller: {
 		list: "api/seller/list",

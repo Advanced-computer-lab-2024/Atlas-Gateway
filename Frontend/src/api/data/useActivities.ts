@@ -135,7 +135,7 @@ export function useBookmarkActivity(onSuccess: () => void) {
 	const { user } = useLoginStore();
 
 	const { _id } = user || {};
-	
+
 	const mutation = useMutation({
 		mutationFn: (id: string) => apiBookmarkActivity(id, _id ?? ""),
 		onSuccess,
@@ -183,10 +183,10 @@ export function useUpcomingActivities() {
 			return apiUpcomingActivities(_id);
 		},
 		queryKey: ["upcomingActivities", _id],
-		enabled: !!_id, // Ensure the query runs only when _id exists
+		enabled: !!_id,
 	});
 
-	return { data: data?.data?.data, meta: data?.data?.metaData, refetch };
+	return { data: data?.data, meta: data?.data?.metaData, refetch };
 }
 
 export function usePastActivities() {
@@ -201,8 +201,8 @@ export function usePastActivities() {
 			return apiPastActivities(_id);
 		},
 		queryKey: ["pastActivities", _id],
-		enabled: !!_id, // Ensure the query runs only when _id exists
+		enabled: !!_id,
 	});
 
-	return { data: data?.data?.data, meta: data?.data?.metaData, refetch };
+	return { data: data?.data, meta: data?.data?.metaData, refetch };
 }

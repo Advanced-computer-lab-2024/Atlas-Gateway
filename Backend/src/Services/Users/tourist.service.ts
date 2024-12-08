@@ -505,7 +505,7 @@ export const addwishlistProduct = async (
 		throw new HttpError(404, "Tourist not found");
 	}
 	await tourist.updateOne({
-		$push: { wishlistproducts: productId }
+		$push: { wishlistproducts: productId },
 	});
 	return tourist;
 };
@@ -582,8 +582,6 @@ export const viewUpcomingActivities = async (touristId: String) => {
 	if (!tourist) {
 		throw new HttpError(404, "tourist not found");
 	}
-
-	console.log(tourist.bookedActivities);
 	return tourist.bookedActivities;
 };
 
@@ -596,11 +594,10 @@ export const viewPastActivities = async (touristId: String) => {
 	if (!tourist) {
 		throw new HttpError(404, "tourist not found");
 	}
-
-	console.log(tourist.bookedActivities);
 	return tourist.bookedActivities;
 };
-export const viewUpcomingIitneraries = async (touristId: String) => {
+
+export const viewUpcomingItineraries = async (touristId: String) => {
 	const now = new Date();
 	const tourist = await Tourist.findById(touristId).populate({
 		path: "bookedItineraries",
@@ -609,11 +606,10 @@ export const viewUpcomingIitneraries = async (touristId: String) => {
 	if (!tourist) {
 		throw new HttpError(404, "tourist not found");
 	}
-
-	console.log(tourist.bookedItineraries);
 	return tourist.bookedItineraries;
 };
-export const viewPastIitneraries = async (touristId: String) => {
+
+export const viewPastItineraries = async (touristId: String) => {
 	const now = new Date();
 	const tourist = await Tourist.findById(touristId).populate({
 		path: "bookedItineraries",
@@ -622,10 +618,9 @@ export const viewPastIitneraries = async (touristId: String) => {
 	if (!tourist) {
 		throw new HttpError(404, "tourist not found");
 	}
-
-	console.log(tourist.bookedItineraries);
 	return tourist.bookedItineraries;
 };
+
 export const requestActivityNotification = async (
 	activityId: String,
 	touristId: String,
@@ -643,6 +638,7 @@ export const requestActivityNotification = async (
 	await activity.save();
 	return "saved";
 };
+
 export const requestItineraryNotification = async (
 	itineraryId: String,
 	touristId: String,
@@ -679,7 +675,10 @@ export const addProductToCart = async (
 	if (productIndex !== -1 && tourist.cart[productIndex]) {
 		tourist.cart[productIndex].quantity++;
 	} else {
-		tourist.cart.push({ product: new Types.ObjectId(productId), quantity: 1 });
+		tourist.cart.push({
+			product: new Types.ObjectId(productId),
+			quantity: 1,
+		});
 	}
 
 	await tourist.save();
@@ -728,9 +727,7 @@ export const updateProductQuantity = async (
 		throw new HttpError(404, "Tourist not found");
 	}
 
-	const product = tourist.cart.find((item) =>
-		item.product.equals(productId),
-	);
+	const product = tourist.cart.find((item) => item.product.equals(productId));
 	if (!product) {
 		throw new HttpError(404, "Product not found in the cart");
 	}

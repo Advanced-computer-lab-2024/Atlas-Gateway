@@ -1,6 +1,9 @@
+import axios from "axios";
 import { formatDate } from "date-fns";
 import { Eye, EyeOff, RotateCw } from "lucide-react";
+import { useEffect } from "react";
 
+import { useUpcomingItineraries } from "@/api/data/useItineraries";
 import {
 	Table,
 	TableBody,
@@ -10,61 +13,54 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import useCurrency from "@/hooks/useCurrency";
-import { useUpcomingItineraries } from "@/api/data/useItineraries";
+import { TItinerary } from "@/types/global";
 
 function UpcomingItineraries() {
-    const convertCurrency = useCurrency();
-        // Fetch upcoming activities
-	const {data: upcomingItineraries,refetch: refetchUpcoming} = useUpcomingItineraries();
-  return (
-    <Table className="shadow-lg h-full">
-					<TableHeader>
-						<TableRow>
-							<TableHead className="p-3">Description</TableHead>
-							<TableHead className="p-3">Price</TableHead>
-							<TableHead className="p-3">Date & Time</TableHead>
-							<TableHead className="p-3">Location</TableHead>
-							<TableHead className="cursor-pointer hover:text-[#2b58ed] w-1">
-								<RotateCw onClick={() => refetchUpcoming()} />
-							</TableHead>
-						</TableRow>
-					</TableHeader>
-					<TableBody>
-						{upcomingItineraries?.map((activity) => (
-							<TableRow key={activity._id} className="cursor-pointer">
-								<TableCell>
-									{activity.description
-										? activity.description.substring(0, 100)
-										: "N/A"}
-								</TableCell>
-								<TableCell>
-									{convertCurrency(activity?.minPrice)}-
-									{convertCurrency(activity?.maxPrice)}
-								</TableCell>
-								<TableCell>
-									{formatDate(
-										new Date(activity?.dateTime || "0"),
-										"dd/MM/yyyy HH:mm:ss a",
-									)}
-								</TableCell>
-								<TableCell>{activity?.location}</TableCell>
-								<TableCell>
-									{activity._id ? (
-										<Eye
-											onClick={() => {
-												window.location.href = `/activities/${activity._id}`;
-											}}
-											className="cursor-pointer hover:text-[#2b58ed]"
-										/>
-									) : (
-										<EyeOff />
-									)}
-								</TableCell>
-							</TableRow>
-						))}
-					</TableBody>
-				</Table>
-  )
+	const convertCurrency = useCurrency();
+	const { data, refetch: refetchUpcoming } = useUpcomingItineraries();
+	return (
+		<Table className="shadow-lg h-full">
+			<TableHeader>
+				<TableRow>
+					<TableHead className="p-3">Title</TableHead>
+					<TableHead className="p-3">start Date Time</TableHead>
+					<TableHead className="p-3">end Date Time</TableHead>
+					<TableHead className="p-3">pick Up Location</TableHead>
+					<TableHead className="p-3">drop Off Location</TableHead>
+					<TableHead className="p-3">price</TableHead>
+					<TableHead className="cursor-pointer hover:text-[#2b58ed] w-1">
+						<RotateCw onClick={() => refetchUpcoming()} />
+					</TableHead>
+				</TableRow>
+			</TableHeader>
+			<TableBody>
+				{data?.map((itinerary: TItinerary) => (
+					<TableRow key={itinerary._id} className="cursor-pointer">
+						<TableCell>{itinerary.title}</TableCell>
+						<TableCell>{itinerary.startDateTime}</TableCell>
+						<TableCell>{itinerary.endDateTime}</TableCell>
+						<TableCell>{itinerary.pickUpLocation}</TableCell>
+						<TableCell>{itinerary.dropOffLocation}</TableCell>
+						<TableCell>
+							{convertCurrency(itinerary.price)}
+						</TableCell>
+						<TableCell>
+							{itinerary._id ? (
+								<Eye
+									onClick={() => {
+										window.location.href = `/itineraries/${itinerary._id}`;
+									}}
+									className="cursor-pointer hover:text-[#2b58ed]"
+								/>
+							) : (
+								<EyeOff />
+							)}
+						</TableCell>
+					</TableRow>
+				))}
+			</TableBody>
+		</Table>
+	);
 }
 
-export default UpcomingItineraries
+export default UpcomingItineraries;

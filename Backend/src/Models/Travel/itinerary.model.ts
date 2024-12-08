@@ -33,7 +33,6 @@ export interface IItinerary extends Document {
 	touristBookmarks: Types.ObjectId[];
 	isDeleted: boolean;
 	notificationRequested: Types.ObjectId[];
-
 	bookings?: Types.ObjectId[] | IBooking[];
 }
 
