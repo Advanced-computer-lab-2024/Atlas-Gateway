@@ -9,6 +9,8 @@ import { useActivity, useBookActivity } from "@/api/data/useActivities";
 import { useCreatePaymentIntent } from "@/api/data/usePayment";
 import { useTouristProfile } from "@/api/data/useProfile";
 import { Button } from "@/components/ui/button";
+import { Flex } from "@/components/ui/flex";
+import { Input } from "@/components/ui/input";
 
 interface props {
 	amount: number;
@@ -23,6 +25,7 @@ interface PaymentIntent {
 const OnlinePayment = ({ amount, currency }: props) => {
 	const stripe = useStripe();
 	const elements = useElements();
+	const [promo, setPromo] = useState("");
 	const [paymentIntent, setPaymentIntent] = useState<PaymentIntent>({
 		id: "",
 		amount: 0,
@@ -56,6 +59,7 @@ const OnlinePayment = ({ amount, currency }: props) => {
 				id: data?._id!,
 				paymentType: "online",
 				amount: paymentIntent.amount,
+				promoCode: promo,
 				paymentIntentId: paymentIntent.id,
 			});
 		}
@@ -63,6 +67,14 @@ const OnlinePayment = ({ amount, currency }: props) => {
 	return (
 		<div className="flex flex-col">
 			{paymentIntent.clientSecret && <PaymentElement />}
+			<Flex className="m-4">
+				<Input
+					type="text"
+					placeholder="Enter Promo Code"
+					value={promo}
+					onChange={(e) => setPromo(e.target.value)}
+				/>
+			</Flex>
 			<Button onClick={() => handlePayment()}>Book Activity</Button>
 		</div>
 	);

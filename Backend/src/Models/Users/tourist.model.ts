@@ -50,8 +50,10 @@ export interface ITourist extends Document {
 		{
 			type: string;
 			event: Types.ObjectId;
+			amount: number;
 		},
 	];
+	notifications: Types.ObjectId[];
 }
 
 const touristSchema = new Schema<ITourist>(
@@ -130,6 +132,7 @@ const touristSchema = new Schema<ITourist>(
 			{
 				type: { type: String },
 				event: { type: Schema.Types.ObjectId },
+				amount: { type: Number },
 			},
 		],
 		cart: [
@@ -138,6 +141,7 @@ const touristSchema = new Schema<ITourist>(
 				quantity: { type: Number, required: true },
 			},
 		],
+		notifications: [{ type: Schema.Types.ObjectId, ref: "Notification" }],
 	},
 	schemaConfig,
 );

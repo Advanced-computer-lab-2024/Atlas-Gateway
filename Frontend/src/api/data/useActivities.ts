@@ -110,17 +110,20 @@ export function useBookActivity(onSuccess: () => void) {
 			id,
 			paymentType,
 			amount,
+			promoCode,
 			paymentIntentId,
 		}: {
 			id: string;
 			paymentType: string;
 			amount: number;
+			promoCode: string;
 			paymentIntentId?: string;
 		}) =>
 			apiBookActivity(
 				id,
 				paymentType,
 				amount,
+				promoCode,
 				_id ?? "",
 				paymentIntentId,
 			),

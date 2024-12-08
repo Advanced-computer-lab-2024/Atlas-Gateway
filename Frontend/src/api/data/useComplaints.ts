@@ -1,16 +1,16 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 
+
+
 import { useLoginStore } from "@/store/loginStore";
 import { TComplaint } from "@/types/global";
 
-import {
-	apiAddComplaint,
-	apiComplaint,
-	apiComplaints,
-	apiUpdateComplaint,
-} from "../service/complaints";
+
+
+import { apiAddComplaint, apiComplaint, apiComplaints, apiProfileComplaints, apiUpdateComplaint } from "../service/complaints";
 import { useQueryString } from "./useQueryString";
+
 
 export function useComplaints() {
 	const { user } = useLoginStore();
@@ -31,7 +31,7 @@ export function useProfileComplaints() {
 	const [query] = useQueryString();
 
 	const { data, refetch } = useQuery({
-		queryFn: () => apiComplaints(_id, query),
+		queryFn: () => apiProfileComplaints(_id, query),
 		queryKey: ["profile-complaints", _id, query],
 	});
 

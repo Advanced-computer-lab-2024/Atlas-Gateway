@@ -84,7 +84,7 @@ export default function ComplaintDetails() {
 									<Label.Mid500 className="overflow-ellipsis">
 										{capitalize(status)}
 									</Label.Mid500>
-									{status === "pending" && (
+									{/* {status === "pending" && (
 										<Button
 											variant="default"
 											onClick={() => {
@@ -95,7 +95,7 @@ export default function ComplaintDetails() {
 										>
 											Mark as resolved
 										</Button>
-									)}
+									)} */}
 								</Flex>
 							</Flex>
 							<Flex gap="2" isColumn>
@@ -109,18 +109,19 @@ export default function ComplaintDetails() {
 									onChange={(e) =>
 										setReplyInput(e.target.value)
 									}
-									disabled={reply !== ""}
-									value={replyInput}
+									disabled={status === "resolved"}
+									value={replyInput ?? reply}
 								/>
-								{reply !== "" ? (
+								{status === "pending"  ? (
 									<Button
 										onClick={() => {
 											doUpdateComplaintByAdmin({
 												reply: replyInput,
+												status: "resolved",
 											});
 										}}
 									>
-										Send Reply
+										Send Reply and Mark as resolved
 									</Button>
 								) : (
 									<Label.Thin200>

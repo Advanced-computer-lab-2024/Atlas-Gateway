@@ -394,6 +394,14 @@ export interface IHotelBooking {
 	offer: THotelOffer;
 }
 
+export interface TNotification {
+	_id: string;
+	type: "Reminder" | "Info" | "Warning" | "Error";
+	message: string;
+	isRead: boolean;
+	createdAt: Date;
+}
+
 export interface TPromo {
 	_id: string;
 	promoCode: string;
@@ -412,7 +420,7 @@ export interface TOrder {
 	}[];
 	totalPrice: number;
 	status: string;
-	date: string;
+	date: Date;
 	address: string;
 	paymentMethod: string;
 }

@@ -36,3 +36,7 @@ export const activitySchema = z
 		path: ["minPrice"],
 		message: "min price cannot be greater than max price",
 	});
+
+export const promoSchema = z.object({
+	promo: z.string(),
+});
