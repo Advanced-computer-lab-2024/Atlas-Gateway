@@ -14,7 +14,9 @@ import {
 	apiCancelActivityBooking,
 	apiCreateActivity,
 	apiDeleteActivity,
+	apiPastActivities,
 	apiRemoveBookmarkActivity,
+	apiUpcomingActivities,
 	apiUpdateActivity,
 } from "../service/activities";
 import { useQueryString } from "./useQueryString";
@@ -150,4 +152,40 @@ export function useRemoveBookmarkActivity(onSuccess: () => void) {
 	const { mutate } = mutation;
 
 	return { doRemoveBookmarkActivity: mutate, ...mutation };
+}
+
+export function useUpcomingActivities() {
+	const { user } = useLoginStore();
+	const { _id } = user || {};
+
+	const { data, refetch } = useQuery({
+		queryFn: () => {
+			if (!_id) {
+				throw new Error("User ID is required for upcoming activities");
+			}
+			return apiUpcomingActivities(_id);
+		},
+		queryKey: ["upcomingActivities", _id],
+		enabled: !!_id, // Ensure the query runs only when _id exists
+	});
+
+	return { data: data?.data?.data, meta: data?.data?.metaData, refetch };
+}
+
+export function usePastActivities() {
+	const { user } = useLoginStore();
+	const { _id } = user || {};
+
+	const { data, refetch } = useQuery({
+		queryFn: () => {
+			if (!_id) {
+				throw new Error("User ID is required for past activities");
+			}
+			return apiPastActivities(_id);
+		},
+		queryKey: ["pastActivities", _id],
+		enabled: !!_id, // Ensure the query runs only when _id exists
+	});
+
+	return { data: data?.data?.data, meta: data?.data?.metaData, refetch };
 }

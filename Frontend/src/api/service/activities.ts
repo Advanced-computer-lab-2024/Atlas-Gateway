@@ -142,3 +142,28 @@ export function apiRemoveBookmarkActivity(_id: string, userid: string) {
 		baseURL: baseURL,
 	});
 }
+
+export function apiUpcomingActivities(touristId: string) {
+	return axios<TApiResponse<TActivity[]>>({
+		method: "POST", // Use POST instead of GET to send data in the body
+		url: ENDPOINTS.tourist.upcomingActivities,
+		headers: {
+			"Content-Type": "application/json",
+		},
+		baseURL: baseURL,
+		data: { touristId }, // Send touristId in the body
+	});
+}
+
+export function apiPastActivities(touristId: string) {
+	return axios<TApiResponse<TActivity[]>>({
+		method: "POST", // Use POST instead of GET to send data in the body
+		url: ENDPOINTS.tourist.pastActivities,
+		headers: {
+			"Content-Type": "application/json",
+		},
+		baseURL: baseURL,
+		data: { touristId }, // Send touristId in the body
+	});
+}
+
