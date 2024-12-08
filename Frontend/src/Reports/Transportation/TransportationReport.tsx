@@ -3,7 +3,7 @@ import Filters from "@/components/Filters/Filters";
 import { Flex } from "@/components/ui/flex";
 import { Label } from "@/components/ui/shadcnlabel";
 
-import ActivitiesChart from "../ActivitiesChart";
+import TransportationChart from "../TransportationChart";
 
 export default function TransportationAdvertiserReport() {
 	const { data, meta } = useTransportationAdvertiserReport();
@@ -30,7 +30,7 @@ export default function TransportationAdvertiserReport() {
 				}}
 			/>
 
-			<ActivitiesChart
+			<TransportationChart
 				data={data ?? []}
 				metaData={
 					meta ?? {

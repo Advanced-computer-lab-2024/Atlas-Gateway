@@ -7,6 +7,7 @@ import {
 	TItineraryReportResponse,
 	TProductReportResponse,
 	TReportRespone,
+	TTransportationReportResponse,
 } from "./types";
 
 export function apiAdminReport(filter: Record<string, string>) {
@@ -61,7 +62,7 @@ export function apiTransportationAdvertiserReport(
 	_id: string,
 	filters: Record<string, string>,
 ) {
-	return axios({
+	return axios<TReportRespone<TTransportationReportResponse>>({
 		method: "GET",
 		url: ENDPOINTS.transportation_advertiser.report(_id),
 		headers: {

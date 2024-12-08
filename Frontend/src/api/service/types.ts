@@ -82,6 +82,13 @@ export type TActivityReportResponse = {
 	totalSales: number;
 };
 
+export type TTransportationReportResponse = {
+	TransportationId: string;
+	TransportationName: string;
+	numberOfBookings: number;
+	totalSales: number;
+};
+
 export type TItineraryReportResponse = {
 	itineraryId: string;
 	itineraryName: string;
