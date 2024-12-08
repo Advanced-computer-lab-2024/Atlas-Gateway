@@ -92,10 +92,11 @@ export default function Cart() {
 				</>
 			) : (
 				<Flex className="w-full justify-center items-center " isColumn>
-					<Label.Mid400>Your cart is empty</Label.Mid400>
+					<Label.Big700>Your Shopping Cart is Empty</Label.Big700>
 					<Button
 						variant="default"
-						className="mt-4"
+							className="mt-4"
+							size="lg"
 						onClick={() => navigate("/products")}
 					>
 						Continue Shopping
