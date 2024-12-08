@@ -1,4 +1,3 @@
-import { request } from "axios";
 import { NextFunction, Request, Response } from "express";
 
 import HttpError from "../../Errors/HttpError";
@@ -162,6 +161,7 @@ export const viewUpcomingItineraries = async (req: Request, res: Response) => {
 		res.status(500).send(error);
 	}
 };
+
 export const viewpastItineraries = async (req: Request, res: Response) => {
 	try {
 		const { touristId } = req.body;
@@ -171,6 +171,7 @@ export const viewpastItineraries = async (req: Request, res: Response) => {
 		res.status(500).send(error);
 	}
 };
+
 export const requestActivityNotification = async (
 	req: Request,
 	res: Response,
@@ -178,15 +179,16 @@ export const requestActivityNotification = async (
 ) => {
 	try {
 		const { touristId, activityId } = req.body;
-		const request = await touristService.requestActivityNotification(
+		const activity = await touristService.requestActivityNotification(
 			activityId,
 			touristId,
 		);
-		res.status(200).send(request);
+		res.status(200).send(activity);
 	} catch (error) {
 		next(error);
 	}
 };
+
 export const requestItineraryNotification = async (
 	req: Request,
 	res: Response,
@@ -194,12 +196,11 @@ export const requestItineraryNotification = async (
 ) => {
 	try {
 		const { touristId, itineraryId } = req.body;
-		res.status(200).send(
-			await touristService.requestItineraryNotification(
-				itineraryId,
-				touristId,
-			),
+		const itinerary = await touristService.requestItineraryNotification(
+			itineraryId,
+			touristId,
 		);
+		res.status(200).send(itinerary);
 	} catch (error) {
 		next(error);
 	}

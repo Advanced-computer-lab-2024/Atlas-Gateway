@@ -459,10 +459,10 @@ export const requestActivityNotification = async (
 	if (!tourist) {
 		throw new HttpError(404, "no tourist found with this id");
 	}
-	activity.notificationRequested.push(tourist?.id);
-	console.log(activity.notificationRequested);
-	await activity.save();
-	return "Request Saved";
+	activity.updateOne({
+		$push: { notificationRequested: tourist?.id },
+	});
+	return activity;
 };
 export const requestItineraryNotification = async (
 	itineraryId: String,
@@ -476,7 +476,8 @@ export const requestItineraryNotification = async (
 	if (!tourist) {
 		throw new HttpError(404, "no tourist found with this id");
 	}
-	itinerary.notificationRequested.push(tourist?.id);
-	await itinerary.save();
-	return "Request Saved";
+	itinerary.updateOne({
+		$push: { notificationRequested: tourist?.id },
+	});
+	return itinerary;
 };
