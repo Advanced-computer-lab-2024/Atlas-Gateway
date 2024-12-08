@@ -196,3 +196,18 @@ export function apiPastItineraries(touristId: string) {
 		baseURL: baseURL,
 	});
 }
+
+export function apiItineraryNotification(touristId: string, itineraryId: string) {
+	return axios({
+		method: "GET",
+		url: ENDPOINTS.tourist.itineraryNotification,
+		headers: {
+			"Content-Type": "application/json",
+		},
+		data: {
+			touristId,
+			itineraryId,
+		},
+		baseURL: baseURL,
+	});
+}
