@@ -11,8 +11,10 @@ export default function Layout() {
 			<Flex
 				className="overflow-y-scroll"
 				style={{
-					width: "90%",
-					marginInline: "5%",
+					width: "100%",
+					height: "100%",
+					paddingRight: "5%",
+					paddingLeft: "5%",
 				}}
 			>
 				<Outlet />

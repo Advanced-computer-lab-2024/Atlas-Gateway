@@ -3,10 +3,7 @@ import { Image } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { useDownload } from "@/api/data/useMedia";
-import {
-	useRequestDeleteTourGuideProfile,
-	useTourGuideProfile,
-} from "@/api/data/useProfile";
+import { useTourGuideProfile } from "@/api/data/useProfile";
 import { CommentsContainer } from "@/components/ui/comments";
 import { Flex } from "@/components/ui/flex";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -23,8 +20,6 @@ export default function TourGuideProfile() {
 	const { data, refetch } = useTourGuideProfile();
 	const [isDrawerOpen4, setIsDrawerOpen4] = useState(false);
 	const [profilePic, setProfilePic] = useState("");
-	const { doRequestDeleteTourGuideProfile } =
-		useRequestDeleteTourGuideProfile(() => {});
 	const { doDownload } = useDownload((response) => {
 		setProfilePic(response.data);
 	});
@@ -122,7 +117,7 @@ export default function TourGuideProfile() {
 						</TabsContent>
 					</Flex>
 				</Flex>
-			</Tabs>	
+			</Tabs>
 			<UploadForm
 				userType={user?.type}
 				userId={user?._id}

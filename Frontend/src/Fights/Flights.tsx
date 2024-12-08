@@ -16,7 +16,7 @@ const Flights = () => {
 		setFlights([]);
 	};
 	return (
-		<Flex isColumn gap="4" className="w-full h-full p-4 overflow-y-scroll">
+		<Flex isColumn gap="4" className="w-full h-full">
 			<div className="self-center">
 				<SearchForm
 					addFlight={addFlight}

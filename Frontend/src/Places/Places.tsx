@@ -45,10 +45,8 @@ export default function Places() {
 	const { data: tags } = useTags();
 
 	return (
-		<Flex isColumn gap="4" className="w-full h-full p-4 overflow-y-scroll">
-			<Label.Big600>
-				View a list of museums and historical locations you can visit!
-			</Label.Big600>
+		<Flex isColumn gap="4" className="w-full h-full">
+			<Label.Big600>Museums and historical places</Label.Big600>
 			<Flex
 				justify="between"
 				gap="2"

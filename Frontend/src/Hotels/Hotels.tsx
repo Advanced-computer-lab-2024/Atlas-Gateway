@@ -52,11 +52,7 @@ const Hotels = () => {
 
 	return (
 		<AmadeusTokenProvider>
-			<Flex
-				isColumn
-				gap="4"
-				className="w-full h-full p-4 overflow-y-scroll"
-			>
+			<Flex isColumn gap="4" className="w-full h-full">
 				<Flex
 					className="bg-surface-secondary p-2"
 					gap="5"

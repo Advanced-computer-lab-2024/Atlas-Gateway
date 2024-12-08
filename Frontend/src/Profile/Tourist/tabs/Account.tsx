@@ -1,4 +1,4 @@
-import { Edit, Lock, Settings, TicketCheck, X } from "lucide-react";
+import { Edit, Lock, TicketCheck, X } from "lucide-react";
 import { useState } from "react";
 
 import ChangePasswordSheet from "@/Profile/ChangePasswordSheet";
@@ -9,12 +9,6 @@ import {
 } from "@/api/data/useProfile";
 import Label from "@/components/ui/Label";
 import { Button } from "@/components/ui/button";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Flex } from "@/components/ui/flex";
 import useCurrency from "@/hooks/useCurrency";
 

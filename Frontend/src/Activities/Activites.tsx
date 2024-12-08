@@ -61,7 +61,7 @@ export default function Activites() {
 	return (
 		<Flex isColumn gap="4" className="w-full h-full p-4 overflow-y-scroll">
 			<Label.Big600>
-				View a list of all the activities you can experience!
+				Activities
 			</Label.Big600>
 			<Flex
 				justify="between"

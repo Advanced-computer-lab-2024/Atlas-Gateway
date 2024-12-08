@@ -44,7 +44,7 @@ export default function Transportations() {
 	});
 
 	return (
-		<Flex isColumn gap="4" className="w-full h-full p-4 overflow-y-scroll">
+		<Flex isColumn gap="4" className="w-full h-full">
 			<Label.Big600>
 				View a list of transportations you can take!
 			</Label.Big600>

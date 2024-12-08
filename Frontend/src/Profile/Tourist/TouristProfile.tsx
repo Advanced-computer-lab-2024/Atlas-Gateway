@@ -10,6 +10,7 @@ import Complaints from "./tabs/Complaints";
 import History from "./tabs/Past/History";
 import Transportations from "./tabs/Transporations/Transportations";
 import Upcoming from "./tabs/Upcoming/Upcoming";
+import TouristOrders from "./tabs/Orders/touristOrders";
 
 export default function TouristProfile() {
 	const { data } = useTouristProfile();
@@ -37,7 +38,7 @@ export default function TouristProfile() {
 			<Tabs defaultValue="account" className="w-full">
 				<Flex isColumn gap="5">
 					<Flex className="ml-96 mt-2">
-						<TabsList className="grid w-full grid-cols-6 border-2 border-black">
+						<TabsList className="grid w-full grid-cols-7 border-2 border-black">
 							<TabsTrigger value="account">
 								Account Details
 							</TabsTrigger>
@@ -55,6 +56,9 @@ export default function TouristProfile() {
 							</TabsTrigger>
 							<TabsTrigger value="bookmarked">
 								Bookmarked
+							</TabsTrigger>
+							<TabsTrigger value="Orders">
+								Orders
 							</TabsTrigger>
 						</TabsList>
 					</Flex>
@@ -79,6 +83,9 @@ export default function TouristProfile() {
 						</TabsContent>
 						<TabsContent value="bookmarked">
 							<BookmarkedEvents />
+						</TabsContent>
+						<TabsContent value="Orders">
+							<TouristOrders />
 						</TabsContent>
 					</Flex>
 				</Flex>

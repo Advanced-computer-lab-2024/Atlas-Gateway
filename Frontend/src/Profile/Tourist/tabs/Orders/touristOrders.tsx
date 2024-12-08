@@ -16,7 +16,7 @@ import { TOrder } from "@/types/global";
 export default function TouristOrders() {
 	//const { data, refetch } = useTouristProfile();
 	const { data, refetch } = useOrders();
-	console.log(data);
+
 	return (
 		<Table className="shadow-lg h-full">
 			<TableHeader>

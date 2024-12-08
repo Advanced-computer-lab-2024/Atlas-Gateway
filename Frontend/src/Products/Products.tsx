@@ -56,7 +56,7 @@ export default function Products() {
 	};
 
 	return (
-		<Flex isColumn gap="4" className="w-full h-full p-4 overflow-y-scroll">
+		<Flex isColumn gap="4" className="w-full h-full">
 			<Flex justify="between" gap="2" align="center">
 				<Label.Big600>Products</Label.Big600>
 				{user?.type === EAccountType.Tourist && (
