@@ -27,6 +27,11 @@ const ENDPOINTS = {
 		show: (id: string) => `api/orders/show/${id}`,
 		cancel: (id: string) => `api/orders/cancel/${id}`,
 	},
+	addres: {
+		addAddress: "api/orders/addAddress",
+		//updateAddress: "api/orders/updateAddress",
+		//listAddresses: "api/orders/listAddresses",
+	},
 	activity: {
 		list: "api/activity/list",
 		listAdvertisor: "api/activity/listAdvertisor",

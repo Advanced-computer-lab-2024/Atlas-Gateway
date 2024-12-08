@@ -391,3 +391,18 @@ export interface IHotelBooking {
 	};
 	offer: THotelOffer;
 }
+
+export interface TOrder {
+	_id: string;
+	touristId: string;
+	products: {
+		productId: string;
+		product: TProduct;
+		quantity: number;
+	}[];
+	totalPrice: number;
+	status: string;
+	date: string;
+	address: string;
+	paymentMethod: string;
+}
