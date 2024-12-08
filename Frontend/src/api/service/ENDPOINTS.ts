@@ -27,6 +27,11 @@ const ENDPOINTS = {
 		show: (id: string) => `api/orders/show/${id}`,
 		cancel: (id: string) => `api/orders/cancel/${id}`,
 	},
+	addres: {
+		addAddress: "api/orders/addAddress",
+		//updateAddress: "api/orders/updateAddress",
+		//listAddresses: "api/orders/listAddresses",
+	},
 	activity: {
 		list: "api/activity/list",
 		listAdvertisor: "api/activity/listAdvertisor",
@@ -38,6 +43,12 @@ const ENDPOINTS = {
 		cancelBooking: (id: string) => `api/activity/cancelBooking/${id}`,
 		bookmark: (id: string) => `api/activity/bookmark/${id}`,
 		removeBookmark: (id: string) => `api/activity/removeBookmark/${id}`,
+	},
+	promo: {
+		list: "api/promo/list",
+		create: "api/promo/create",
+		check: (id: string) => `api/promo/check/${id}`,
+		delete: (id: string) => `api/promo/delete/${id}`,
 	},
 	changePassword: "/api/password/change",
 	forgetPassword: "/api/password/forget",

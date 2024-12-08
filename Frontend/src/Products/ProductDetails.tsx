@@ -34,7 +34,7 @@ import { TReview } from "@/types/global";
 
 export default function ProductDetails() {
 	const navigate = useNavigate();
-	const { data } = useProduct();
+	const { data, refetch: dataRefetch } = useProduct();
 	const { refetch } = useProducts();
 	const convertCurrency = useCurrency();
 	const {
@@ -226,6 +226,9 @@ export default function ProductDetails() {
 															reviewType="Product"
 															reviewedItemId={
 																data?._id
+															}
+															refetchFunction={
+																dataRefetch
 															}
 															userId={user?._id}
 															ref={childRef}

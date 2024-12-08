@@ -2,7 +2,11 @@ import { Request, Response } from "express";
 import { Types } from "mongoose";
 
 import { promo } from "../../Models/Promo/promo.model";
-import { createPromoService } from "../../Services/Promo/promo.service";
+import {
+	checkPromoService,
+	createPromoService,
+	deletePromoByCodeService,
+} from "../../Services/Promo/promo.service";
 
 export const createPromo = async (req: Request, res: Response) => {
 	try {
@@ -35,42 +39,14 @@ export const createPromo = async (req: Request, res: Response) => {
 
 export const checkPromo = async (req: Request, res: Response) => {
 	try {
-		const { id } = req.params;
+		const promoCode = req.params.promoCode;
 		const userid = req.headers.userid;
 
-		if (!id) {
+		if (!promoCode) {
 			return res.status(400).json({ message: "Promo code is required" });
 		}
 
-		const promoDoc = await promo.findOne({ promoCode: id });
-
-		if (!promoDoc) {
-			return res.status(404).json({ message: "Promo code not found" });
-		}
-
-		const currentDate = new Date();
-		if (promoDoc.expiryDate < currentDate) {
-			return res.status(400).json({ message: "Promo code has expired" });
-		}
-
-		if (!promoDoc.allUsers) {
-			if (!userid) {
-				return res.status(400).json({ message: "User ID is required" });
-			}
-
-			const userObjectId = new Types.ObjectId(
-				Array.isArray(userid) ? userid[0] : userid,
-			);
-			const isUserAuthorized = promoDoc.users.some((user) =>
-				user.equals(userObjectId),
-			);
-
-			if (!isUserAuthorized) {
-				return res.status(403).json({
-					message: "You are not authorized to use this promo code",
-				});
-			}
-		}
+		const promoDoc = await checkPromoService(promoCode, userid);
 
 		res.status(200).json({
 			message: "Promo code is valid",
@@ -83,19 +59,9 @@ export const checkPromo = async (req: Request, res: Response) => {
 
 export const deletePromoByCode = async (req: Request, res: Response) => {
 	try {
-		const { id } = req.params;
+		const { PromoCode } = req.params;
 
-		if (!id) {
-			return res.status(400).json({ message: "Promo code is required" });
-		}
-
-		const promoDoc = await promo.findOneAndDelete({ promoCode: id });
-
-		if (!promoDoc) {
-			return res.status(404).json({ message: "Promo code not found" });
-		}
-
-		res.status(200).json({ message: "Promo code deleted successfully" });
+		res.status(200).json(await deletePromoByCodeService(PromoCode));
 	} catch (error) {
 		res.status(500).json({ message: (error as any).message });
 	}

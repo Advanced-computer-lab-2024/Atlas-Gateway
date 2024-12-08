@@ -3,44 +3,52 @@ import { EAccountType } from "@/types/enums";
 export type NavbarRoute = {
 	name: string;
 	to: string;
+	description: string;
 };
 
-const productsRoute: NavbarRoute = {
+export const productsRoute: NavbarRoute = {
 	name: "Products",
 	to: "/products",
+	description: "Find the best products for your trip!",
 };
 
-const activitiesRoute: NavbarRoute = {
+export const activitiesRoute: NavbarRoute = {
 	name: "Activities",
 	to: "/activities",
+	description: "Find the best activities for your trip!",
 };
 
-const placesRoute: NavbarRoute = {
+export const placesRoute: NavbarRoute = {
 	name: "Museums & Historical locations",
 	to: "/places",
+	description: "Find the best museums and historical places to visit!",
 };
 
-const intinerariesRoute: NavbarRoute = {
+export const intinerariesRoute: NavbarRoute = {
 	name: "Intineraries",
 	to: "/itineraries",
+	description: "Find the best intineraries for your trip",
 };
 
-const flightsRoute: NavbarRoute = {
+export const flightsRoute: NavbarRoute = {
 	name: "Flights",
 	to: "/flights",
+	description: "Find the best flights for your trip",
 };
 
-const transportationRoute: NavbarRoute = {
+export const transportationRoute: NavbarRoute = {
 	name: "Transportation",
 	to: "/transportations",
+	description: "Find the best transportation for your trip",
 };
 
-const hotelsRoute: NavbarRoute = {
+export const hotelsRoute: NavbarRoute = {
 	name: "Hotels",
 	to: "/hotels",
+	description: "Find the best hotels for your stay",
 };
 
-const touristRoutes: NavbarRoute[] = [
+export const touristRoutes: NavbarRoute[] = [
 	placesRoute,
 	productsRoute,
 	activitiesRoute,
@@ -55,18 +63,6 @@ const sellerRoutes: NavbarRoute[] = [productsRoute];
 const adminRoutes: NavbarRoute[] = [
 	productsRoute,
 	activitiesRoute,
-	{
-		name: "Dashboard",
-		to: "/admin/dashboard",
-	},
-	{
-		name: "Users",
-		to: "/admin/users",
-	},
-	{
-		name: "Settings",
-		to: "/admin/settings",
-	},
 ];
 
 const tourGuideRoutes: NavbarRoute[] = [

@@ -1,16 +1,22 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 
-
-
 import { useLoginStore } from "@/store/loginStore";
 import { TProduct } from "@/types/global";
 
-
-
-import { apiAddProductToCart, apiAddWishlistProduct, apiCheckoutCart, apiCreateProduct, apiProduct, apiProducts, apiRemoveProductFromCart, apiRemoveWishlistProduct, apiUpdateProduct, apiUpdateProductQuantity } from "../service/product";
+import {
+	apiAddProductToCart,
+	apiAddWishlistProduct,
+	apiCheckoutCart,
+	apiCreateProduct,
+	apiProduct,
+	apiProducts,
+	apiRemoveProductFromCart,
+	apiRemoveWishlistProduct,
+	apiUpdateProduct,
+	apiUpdateProductQuantity,
+} from "../service/product";
 import { useQueryString } from "./useQueryString";
-
 
 export function useProducts() {
 	const { user } = useLoginStore();
@@ -30,12 +36,12 @@ export function useProduct() {
 		id: string;
 	}>();
 
-	const { data } = useQuery({
+	const { data, refetch } = useQuery({
 		queryFn: () => apiProduct(id),
 		queryKey: ["product", id],
 	});
 
-	return { data: data?.data };
+	return { data: data?.data, refetch };
 }
 
 export function useCreateProduct(onSuccess: () => void) {

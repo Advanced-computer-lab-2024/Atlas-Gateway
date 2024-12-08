@@ -72,28 +72,31 @@ export default function Cart() {
 												)}
 											</Label.Mid400>
 										</Flex>
-										<Flex isColumn={true} gap="3">
-											<Label.Thin300>
-												Payment Method
-											</Label.Thin300>
-											<Payment
-												amount={formatCurrency(
-													product.price * quantity,
-												)}
-											/>
-										</Flex>
 									</Flex>
 								))}
+								<Flex isColumn={true} gap="3">
+									<Payment
+										amount={formatCurrency(
+											tourist?.cart.reduce(
+												(acc, { product, quantity }) =>
+													acc +
+													product.price * quantity,
+												0,
+											),
+										)}
+									/>
+								</Flex>
 							</Flex>
 						)}
 					</Flex>
 				</>
 			) : (
 				<Flex className="w-full justify-center items-center " isColumn>
-					<Label.Mid400>Your cart is empty</Label.Mid400>
+					<Label.Big700>Your Shopping Cart is Empty</Label.Big700>
 					<Button
 						variant="default"
-						className="mt-4"
+							className="mt-4"
+							size="lg"
 						onClick={() => navigate("/products")}
 					>
 						Continue Shopping

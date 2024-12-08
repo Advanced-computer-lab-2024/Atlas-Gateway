@@ -31,7 +31,7 @@ const OnlinePayment = ({ amount, currency, address }: props) => {
 		clientSecret: "",
 	});
 	useEffect(() => {
-		amount = amount * 100;
+		
 		doCreatePaymentIntent({ amount, currency });
 	}, [amount]);
 	const { doCreatePaymentIntent } = useCreatePaymentIntent((response) => {

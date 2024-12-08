@@ -138,7 +138,7 @@ export const receiptTemplate = (amount: Number) => {
             Payment Receipt
         </div>
         <div class="content">
-            <p>Hi [Customer Name],</p>
+            <p>Hi,</p>
             <p>Thank you for your payment! Here are the details of your transaction:</p>
             <div class="receipt">
                 <p><strong>Amount:</strong> ${amount}</p>
@@ -148,6 +148,96 @@ export const receiptTemplate = (amount: Number) => {
             <p>Thank you for choosing AtlasGateway.</p>
             <p>Best regards,</p>
             <p>AtlasGateway</p>
+        </div>
+        <div class="footer">
+            &copy; 2024 AtlasGateway. All rights reserved. <br>
+            <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
+        </div>
+    </div>
+</body>
+</html>
+`;
+};
+
+export const promoCodeTemplate = (
+	promoCode: string,
+	discount: number,
+	expirationDate: Date,
+) => {
+	return `<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .header {
+            background-color: #FF5722;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+        }
+        .content {
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .content h2 {
+            color: #FF5722;
+            font-size: 20px;
+        }
+        .promo {
+            border: 1px dashed #FF5722;
+            margin-top: 20px;
+            padding: 15px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #FF5722;
+            background-color: #FFF3E0;
+            border-radius: 5px;
+        }
+        .footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #f1f1f1;
+            color: #555;
+            font-size: 12px;
+        }
+        .footer a {
+            color: #FF5722;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            Exclusive Promo Code Just for You!
+        </div>
+        <div class="content">
+            <p>Hi,</p>
+            <p>We have a special offer just for you! Use the promo code below to enjoy a discount on your next purchase:</p>
+            <div class="promo">
+                ${promoCode}
+            </div>
+            <p><strong>Discount:</strong> ${discount}%</p>
+            <p><strong>Expires on:</strong> ${expirationDate}</p>
+            <p>Don't wait too long—this offer won't last forever!</p>
+            <p>Happy shopping,</p>
+            <p>The AtlasGateway Team</p>
         </div>
         <div class="footer">
             &copy; 2024 AtlasGateway. All rights reserved. <br>

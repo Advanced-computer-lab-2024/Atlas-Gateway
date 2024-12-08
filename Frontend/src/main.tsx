@@ -22,6 +22,7 @@ import AdminLayout from "./Admin/AdminLayout";
 import ComplaintDetails from "./Admin/Complaint/ComplaintDetails";
 import Complaints from "./Admin/Complaint/Complaints";
 import AdminProducts from "./Admin/Product/Product";
+import PromoCode from "./Admin/PromoCode/PromoCode";
 import Flights from "./Fights/Flights";
 import Home from "./Home/Home";
 import Hotels from "./Hotels/Hotels";
@@ -129,11 +130,11 @@ const router = createBrowserRouter([
 						path: "/admin/reports",
 						element: <AdminReport />,
 					},
+					{ path: "/admin/promo-codes", element: <PromoCode /> },
 				],
 			},
 		],
 	},
-
 	{
 		path: "/register",
 		element: <Register />,

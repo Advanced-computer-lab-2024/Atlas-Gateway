@@ -112,36 +112,32 @@ export const productsReport = async (
 ): Promise<IProductReportResponse> => {
 	const admins = await getAllAdmins();
 
-	const pipeline: PipelineStage[] = [];
-
-	pipeline.push({
-		$match: {
-			"products.product.sellerId": {
-				$in: admins.map((admin) => new Types.ObjectId(admin.id)),
+	// Build the initial aggregation pipeline
+	const pipeline: PipelineStage[] = [
+		{
+			$match: {
+				"products.product.sellerId": {
+					$in: admins.map((admin) => new Types.ObjectId(admin.id)),
+				},
+				status: EOrderStatus.COMPLETED,
 			},
-
-			status: EOrderStatus.COMPLETED,
 		},
-	});
+	];
 
-	// if date is provided, filter the bookings by date
+	// Filter by date if provided
 	if (options.date) {
 		const [startDateStr, endDateStr] = options.date.split(",");
-
-		// if no date is provided, set the start date the lowest possible date and the end date to today
-		let startDate =
-			new Date(`${startDateStr}T00:00:00.000+00:00`) ||
-			new Date("1970-01-01T00:00:00.000+00:00");
-		let endDate =
-			endDateStr !== "null"
-				? new Date(`${endDateStr}T23:59:59.000+00:00`)
+		const startDate = startDateStr
+			? new Date(`${startDateStr}T00:00:00.000Z`)
+			: new Date("1970-01-01T00:00:00.000Z");
+		const endDate =
+			endDateStr && endDateStr !== "null"
+				? new Date(`${endDateStr}T23:59:59.999Z`)
 				: new Date();
 
 		if (startDate > endDate) {
 			throw new HttpError(400, "Invalid Date Range");
 		}
-
-		// TODO: Filter on the orders of the products by date
 
 		pipeline.push({
 			$match: {
@@ -153,7 +149,7 @@ export const productsReport = async (
 		});
 	}
 
-	// if ProductId is provided, filter the bookings by ProductId
+	// Filter by ProductId if provided
 	if (options.ProductId) {
 		if (!Types.ObjectId.isValid(options.ProductId)) {
 			throw new HttpError(400, "ProductId is Invalid");
@@ -167,34 +163,51 @@ export const productsReport = async (
 		});
 	}
 
-	const orders = await Order.aggregate(pipeline);
+	// Unwind the products array to process each product separately
+	pipeline.push({ $unwind: "$products" });
 
-	console.log(orders);
-	let totalSales = 0;
-	let totalBookings = 0;
-
-	const sales: IProductDTO[] = orders.map((order) => {
-		const sales =
-			order.products[0].quantity * order.products[0].product.price;
-
-		totalSales += sales;
-		totalBookings += order.products[0].quantity;
-
-		return {
-			ProductId: order.products[0].productId,
-			ProductName: order.products[0].product.name,
-			quantity: order.products[0].quantity,
-			sales: sales,
-		} as IProductDTO;
+	// Group by ProductId to aggregate sales and quantities
+	pipeline.push({
+		$group: {
+			_id: "$products.productId",
+			ProductName: { $first: "$products.product.name" }, // Adapt to your schema
+			totalQuantity: { $sum: "$products.quantity" },
+			totalSales: {
+				$sum: {
+					$multiply: [
+						"$products.quantity",
+						"$products.product.price",
+					],
+				},
+			},
+		},
 	});
 
-	return {
-		data: sales,
+	// Fetch the aggregated data
+	const productAggregates = await Order.aggregate(pipeline);
+
+	// Transform the aggregated data into IProductDTO format
+	const data: IProductDTO[] = productAggregates.map((product) => ({
+		ProductId: product._id.toString(),
+		ProductName: product.ProductName,
+		quantity: product.totalQuantity,
+		sales: product.totalSales,
+	}));
+
+	// Calculate total sales and total bookings
+	const totalSales = data.reduce((acc, item) => acc + item.sales, 0);
+	const totalBookings = data.reduce((acc, item) => acc + item.quantity, 0);
+
+	// Construct the response object
+	const response: IProductReportResponse = {
+		data,
 		metaData: {
-			totalSales: totalSales,
-			totalBookings: totalBookings,
+			totalSales,
+			totalBookings,
 		},
-	} as IProductReportResponse;
+	};
+
+	return response;
 };
 
 export const activityReport = async (

@@ -3,7 +3,9 @@ import { loadStripe } from "@stripe/stripe-js";
 
 import { useActivity, useBookActivity } from "@/api/data/useActivities";
 import { useTouristProfile } from "@/api/data/useProfile";
+import Label from "@/components/ui/Label";
 import { Button } from "@/components/ui/button";
+import { Flex } from "@/components/ui/flex";
 import {
 	Sheet,
 	SheetContent,
@@ -13,6 +15,7 @@ import {
 	SheetTrigger,
 } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import useCurrency from "@/hooks/useCurrency";
 
 import OnlinePayment from "./OnlinePayment";
 
@@ -23,6 +26,7 @@ interface props {
 export function PaymentSheet({ amount }: props) {
 	const { data: activity, refetch } = useActivity();
 	const { data, refetch: refetchUserProfile } = useTouristProfile();
+	const formatCurrency = useCurrency();
 	const stripePromise = loadStripe(
 		import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY!,
 	);
@@ -57,6 +61,14 @@ export function PaymentSheet({ amount }: props) {
 						</TabsTrigger>
 					</TabsList>
 					<TabsContent value="wallet" className="flex flex-col mt-4">
+						<Flex>
+							<Label.Thin300>
+								Your Wallet Balance:{" "}
+								<Label.Thin400>
+									{formatCurrency(data?.walletBalance)}
+								</Label.Thin400>
+							</Label.Thin300>
+						</Flex>
 						<Button
 							onClick={() => handlePayment()}
 							className="mt-4"
