@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
+import { Types } from "mongoose";
 
 import { Tourist } from "../../Models/Users/tourist.model";
-import { Order } from "../../Models/Purchases/order.model";
+import { Order, IProductTuple } from "../../Models/Purchases/order.model";
+import { Product } from "../../Models/Purchases/product.model";
 import { CANCELLED } from "dns";
 
 export const createOrder = async (req: Request, res: Response) => { //Called When clicking checkout
@@ -33,12 +35,29 @@ export const createOrder = async (req: Request, res: Response) => { //Called Whe
 
         await order.save();
 
+        let stockUpdateList: Promise<void>[] = [];
+
+        products.forEach((productTuple: IProductTuple)  => {
+            stockUpdateList.push(updateStock(productTuple.productId, productTuple.quantity));
+        });
+
+        await Promise.all(stockUpdateList);
+
         res.status(201).send(order);
     } catch (error) {
         res.status(500).send("Internal Server Error");
         console.error(error);
     }
 };
+
+async function updateStock(productId: Types.ObjectId, quantity: number) {
+    const product = await Product.findById(productId);
+    if(!product){
+        throw new Error("Product not found /This is the update stock method/");
+    }
+    product.set({quantity: product.quantity - quantity});
+    await product.save();
+}
 
 export const listUserOrders = async (req: Request, res: Response) => {
     try {

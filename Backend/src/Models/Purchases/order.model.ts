@@ -15,9 +15,10 @@ export enum EPaymentMethod {
     WALLET = "Wallet",
 }
 
-interface IProductTuple {
+export interface IProductTuple {
     productId: Types.ObjectId;
     product: IProduct;
+    quantity: number;
 }
 
 export const productTupleSchema = new Schema<IProductTuple>(
@@ -31,6 +32,10 @@ export const productTupleSchema = new Schema<IProductTuple>(
             type: productSchema,
             required: true,
         },
+        quantity: {
+            type: Number,
+            required: true,
+        }
     },
     schemaConfig,
 
