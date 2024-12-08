@@ -21,6 +21,17 @@ const ENDPOINTS = {
 		removeFromCart: (id: string) => `api/tourist/cart/remove/${id}`,
 		updateProductQuantity: (id: string) => `api/tourist/cart/update/${id}`,
 	},
+	orders: {
+		create: "api/orders/create",
+		list: "api/orders/list",
+		show: (id: string) => `api/orders/show/${id}`,
+		cancel: (id: string) => `api/orders/cancel/${id}`,
+	},
+	addres: {
+		addAddress: "api/orders/addAddress",
+		//updateAddress: "api/orders/updateAddress",
+		//listAddresses: "api/orders/listAddresses",
+	},
 	activity: {
 		list: "api/activity/list",
 		listAdvertisor: "api/activity/listAdvertisor",

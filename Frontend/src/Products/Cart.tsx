@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 import { useTouristProfile } from "@/api/data/useProfile";
 import Label from "@/components/ui/Label";
 import { Button } from "@/components/ui/button";
@@ -10,7 +12,8 @@ import Payment from "./Payment";
 export default function Cart() {
 	const { data: tourist } = useTouristProfile();
 	const formatCurrency = useCurrency();
-	//the error is gone beautify plz
+	const navigate = useNavigate();
+
 	return (
 		<Flex className="w-full h-full">
 			{tourist?.cart && tourist?.cart?.length > 0 ? (
@@ -69,7 +72,6 @@ export default function Cart() {
 												)}
 											</Label.Mid400>
 										</Flex>
-
 										<Flex isColumn={true} gap="3">
 											<Label.Thin300>
 												Payment Method
@@ -92,7 +94,7 @@ export default function Cart() {
 					<Button
 						variant="default"
 						className="mt-4"
-						onClick={() => (window.location.href = "/products")}
+						onClick={() => navigate("/products")}
 					>
 						Continue Shopping
 					</Button>

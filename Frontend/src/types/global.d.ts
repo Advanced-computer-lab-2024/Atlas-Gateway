@@ -102,7 +102,7 @@ export interface TGovernor extends TUser {
 export interface TTourist extends TUser {
 	email: string;
 	mobile: string;
-	address: string;
+	address: string[];
 	currency: Currency;
 	loyaltyPoints: number;
 	walletBalance: number;
@@ -398,4 +398,19 @@ export interface TPromo {
 	discountPercentage: number;
 	expiryDate: string;
 	allUsers: boolean;
+}
+
+export interface TOrder {
+	_id: string;
+	touristId: string;
+	products: {
+		productId: string;
+		product: TProduct;
+		quantity: number;
+	}[];
+	totalPrice: number;
+	status: string;
+	date: string;
+	address: string;
+	paymentMethod: string;
 }

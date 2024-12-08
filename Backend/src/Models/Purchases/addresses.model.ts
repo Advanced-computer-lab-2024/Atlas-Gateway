@@ -1,3 +1,4 @@
+//DEPRECATED CODE
 //One document is goint to hold all the addresses of a user
 import { Document, Schema, model } from "mongoose";
 
@@ -46,4 +47,4 @@ const addressSchema = new Schema<IAddress>(
 	schemaConfig,
 );
 
-export const Address = model<IAddress>("Address", addressSchema);
+//export const Address = model<IAddress>("Address", addressSchema);

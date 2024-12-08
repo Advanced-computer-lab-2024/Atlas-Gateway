@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { Types } from "mongoose";
 
-import { Address, IAddress } from "../../Models/Purchases/addresses.model";
 import { IProductTuple, Order } from "../../Models/Purchases/order.model";
 import { Product } from "../../Models/Purchases/product.model";
 import { Tourist } from "../../Models/Users/tourist.model";
@@ -50,6 +49,9 @@ export const createOrder = async (req: Request, res: Response) => {
 
 		await Promise.all(stockUpdateList);
 
+		if (tourist) {
+			tourist.cart = [];
+		}
 		await tourist?.save();
 
 		res.status(201).send(order);
@@ -186,7 +188,7 @@ export const cancelOrder = async (req: Request, res: Response) => {
 export const addAddress = async (req: Request, res: Response) => {
 	try {
 		const userId = req.headers.userid;
-		const { country, city, street, houseNumber, apartmentNumber, zipCode } =
+		const { country, city, street, houseNumber, apartmentNumber } =
 			req.body;
 		const tourist = await Tourist.findById(userId);
 		if (!userId) {
@@ -194,7 +196,7 @@ export const addAddress = async (req: Request, res: Response) => {
 			return;
 		}
 
-		if (!country || !city || !street || !zipCode) {
+		if (!country || !city || !street) {
 			res.status(400).send("All fields are required");
 			return;
 		}
@@ -204,34 +206,13 @@ export const addAddress = async (req: Request, res: Response) => {
 			return;
 		}
 
-		let addressEntry = await Address.findOne({ touristId: userId });
+		const addressString = country +", "+ city +","+ street + (houseNumber? ","+ houseNumber : "") + (apartmentNumber? ","+ apartmentNumber : "");
 
-		if (!addressEntry) {
-			addressEntry = new Address({
-				touristId: userId,
-				addresses: [
-					{
-						country,
-						city,
-						street,
-						houseNumber,
-						apartmentNumber,
-						zipCode,
-					},
-				],
-			});
-		} else {
-			addressEntry.addresses.push({
-				country,
-				city,
-				street,
-				houseNumber,
-				apartmentNumber,
-				zipCode,
-			});
+		if(tourist.address?.includes(addressString)){
+			res.status(200).send("Address already exists");
+			return;
 		}
 
-		await addressEntry.save();
 		res.status(201).send("Address Added Successfully");
 	} catch (error) {
 		res.status(500).send("Internal Server Error");
@@ -239,85 +220,4 @@ export const addAddress = async (req: Request, res: Response) => {
 	}
 };
 
-export const updateAddress = async (req: Request, res: Response) => {
-	try {
-		const userId = req.headers.userid;
-		const {
-			index,
-			country,
-			city,
-			street,
-			houseNumber,
-			apartmentNumber,
-			zipCode,
-		} = req.body;
-		const tourist = await Tourist.findById(userId);
-		if (!userId) {
-			res.status(400).send("Logged in User id is required");
-			return;
-		}
 
-		if (!index) {
-			throw new Error("Index is not passed for some reason");
-		}
-
-		if (!tourist) {
-			res.status(404).send("Tourist account not found");
-			return;
-		}
-
-		let addressEntry = await Address.findOne({ touristId: userId });
-
-		if (!addressEntry) {
-			throw new Error("No Address Entry found for this user");
-		}
-
-		if (index >= addressEntry.addresses.length || index < 0) {
-			res.status(400).send("Invalid Index");
-			return;
-		}
-
-		addressEntry.addresses[index] = {
-			country,
-			city,
-			street,
-			houseNumber,
-			apartmentNumber,
-			zipCode,
-		};
-
-		await addressEntry.save();
-		res.status(200).send("Address Updated Successfully");
-	} catch (error) {
-		res.status(500).send("Internal Server Error");
-		console.error(error);
-	}
-};
-
-export const listAddresses = async (req: Request, res: Response) => {
-	try {
-		const userId = req.headers.userid;
-		const tourist = await Tourist.findById(userId);
-		if (!userId) {
-			res.status(400).send("Logged in User id is required");
-			return;
-		}
-
-		if (!tourist) {
-			res.status(404).send("Tourist account not found");
-			return;
-		}
-
-		let addressEntry = await Address.findOne({ touristId: userId });
-
-		if (!addressEntry) {
-			res.status(404).send("No Address Entry found for this user");
-			return;
-		}
-
-		res.status(200).send(addressEntry.addresses);
-	} catch (error) {
-		res.status(500).send("Internal Server Error");
-		console.error(error);
-	}
-};
