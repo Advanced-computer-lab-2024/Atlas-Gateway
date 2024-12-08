@@ -248,3 +248,253 @@ export const promoCodeTemplate = (
 </html>
 `;
 };
+
+export const itineraryFlaggedTemplate = (itineraryTitle: string) => {
+	return `<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .header {
+            background-color: #FF5722;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+        }
+        .content {
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .content h2 {
+            color: #FF5722;
+            font-size: 20px;
+        }
+        .footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #f1f1f1;
+            color: #555;
+            font-size: 12px;
+        }
+        .footer a {
+            color: #FF5722;
+            text-decoration: none;
+        }
+        .flagged-box {
+            background-color: #FFF3E0;
+            border: 1px solid #FF5722;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+            color: #FF5722;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            Itinerary Flagged
+        </div>
+        <div class="content">
+            <p>Hi [User Name],</p>
+            <p>We wanted to inform you that your itinerary titled <strong>"${itineraryTitle}"</strong> has been flagged by our admin team for being inappropriate:</p>
+            <p>Please review your itinerary and make the necessary updates. If you believe this flagging was a mistake or have questions, you can contact our admin team at <a href="mailto:atlasGateway9@gmail.com"></a>.</p>
+            <p>We value your contributions and aim to ensure all itineraries meet our community standards.</p>
+            <p>Thank you for your understanding,</p>
+            <p>The AtlasGateway Team</p>
+        </div>
+        <div class="footer">
+            &copy; 2024 AtlasGateway. All rights reserved. <br>
+            <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
+        </div>
+    </div>
+</body>
+</html>
+`;
+};
+
+export const productOutOfStockTemplate = (productName: string) => {
+	return `<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .header {
+            background-color: #E53935;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+        }
+        .content {
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .content h2 {
+            color: #E53935;
+            font-size: 20px;
+        }
+        .footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #f1f1f1;
+            color: #555;
+            font-size: 12px;
+        }
+        .footer a {
+            color: #E53935;
+            text-decoration: none;
+        }
+        .product-box {
+            background-color: #FFEBEE;
+            border: 1px solid #E53935;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+            color: #E53935;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            Product Out of Stock
+        </div>
+        <div class="content">
+            <p>Hi [Customer Name],</p>
+            <p>We regret to inform you that the product <strong>"${productName}"</strong> is currently out of stock.</p>
+            <p>If you'd like to be notified when the product is back in stock, please let us know. You can also reach out to our support team for assistance at <a href="mailto:atlasGateway9@gmail.com"></a>.</p>
+            <p>We appreciate your understanding and apologize for the inconvenience caused.</p>
+            <p>Thank you,</p>
+            <p>The AtlasGateway Team</p>
+        </div>
+        <div class="footer">
+            &copy; 2024 AtlasGateway. All rights reserved. <br>
+            <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
+        </div>
+    </div>
+</body>
+</html>
+`;
+};
+
+export const itineraryBookingsTemplate = (
+	title: string,
+	pickUpLocation: string,
+	dropOffLocation: string,
+	startDateTime: Date,
+) => {
+	return `<!DOCTYPE html>
+<html>
+<head>
+		<style>
+				body {
+						font-family: Arial, sans-serif;
+						margin: 0;
+						padding: 0;
+						background-color: #f9f9f9;
+				}
+				.email-container {
+						max-width: 600px;
+						margin: 20px auto;
+						background-color: #ffffff;
+						border: 1px solid #ddd;
+						border-radius: 5px;
+						overflow: hidden;
+				}
+				.header {
+						background-color: #4CAF50;
+						color: white;
+						padding: 20px;
+						text-align: center;
+						font-size: 24px;
+				}
+				.content {
+						padding: 20px;
+						line-height: 1.6;
+						color: #333;
+				}
+				.content h2 {
+						color: #4CAF50;
+						font-size: 20px;
+				}
+				.footer {
+						text-align: center;
+						padding: 10px;
+						background-color: #f1f1f1;
+						color: #555;
+						font-size: 12px;
+				}
+				.footer a {
+						color: #4CAF50;
+						text-decoration: none;
+				}
+				.itinerary-box {
+						background-color: #f8f8f8;
+						border: 1px solid #ddd;
+						padding: 15px;
+						margin-top: 20px;
+						border-radius: 5px;
+						color: #333;
+				}
+		</style>
+</head>
+<body>
+		<div class="email-container">
+				<div class="header">
+						Book Your Spot: ${title}
+				</div>
+				<div class="content">
+						<p>Hi [Customer Name],</p>
+						<p>We're excited to announce that the following itinerary has started taking bookings:</p>
+						<div class="itinerary-box">
+								<p><strong>Title:</strong> ${title}</p>
+								<p><strong>Pick-Up Location:</strong> ${pickUpLocation}</p>
+								<p><strong>Drop-Off Location:</strong> ${dropOffLocation}</p>
+								<p><strong>Start Date & Time:</strong> ${startDateTime}</p>
+						</div>
+						<p>Don't miss your chance to secure your spot. Book now and be part of an incredible journey!</p>
+						<p>For more information or to make your booking, visit our website or contact our support team.</p>
+						<p>Thank you for choosing AtlasGateway,</p>
+						<p>The AtlasGateway Team</p>
+				</div>
+				<div class="footer">
+						&copy; 2024 AtlasGateway. All rights reserved. <br>
+						<a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
+				</div>
+		</div>
+</body>
+</html>
+`;
+};
