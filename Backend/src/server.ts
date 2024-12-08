@@ -27,6 +27,7 @@ import sellerRouter from "./Routes/Users/seller.route";
 import tourGuideRouter from "./Routes/Users/tourGuide.route";
 import touristRouter from "./Routes/Users/tourist.route";
 import transportation_advertiserRouter from "./Routes/Users/transportation_advertiser.route";
+import orderRouter from "./Routes/Purchases/order.route";
 
 const app = express();
 
@@ -65,6 +66,7 @@ async function startServer() {
 	app.use("/api/hotels", hotelRouter);
 	app.use("/api/reviews", reviewRouter);
 	app.use("/api/payment", paymentRouter);
+	app.use("/api/orders", orderRouter);
 	// Error handling middleware
 	app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 		console.error(err.stack);
