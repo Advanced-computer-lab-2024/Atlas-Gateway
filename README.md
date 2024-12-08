@@ -28,7 +28,7 @@ To enhance user satisfaction, the platform also provides features for reviews an
 
 ## Build Status
 
-idk yet
+The project is currently under development. The backend is complete, and the frontend is in progress. The project is expected to be completed by the end of the month.
 
 ---
 
@@ -39,7 +39,7 @@ The code adheres to clean and modular practices, ensuring readability and mainta
 - **Frontend:** React,js using TypeScript and Tailwind CSS
 - **Backend:** Node.js with Prettier formatting rules
 - **Database:** MongoDB with Mongoose
-- **Testing:** No idea
+- **Testing:** End-to-end testing and Postman
 
 ---
 
