@@ -206,3 +206,22 @@ export function usePastActivities() {
 
 	return { data: data?.data, meta: data?.data?.metaData, refetch };
 }
+
+// export function useNotification(onSuccess: () => void) {
+//     const { user } = useLoginStore();
+//     const { _id } = user || {};
+
+//     const mutation = useMutation({
+//         mutationFn: (activityId: string) => {
+//             if (!_id) {
+//                 throw new Error("User ID is undefined");
+//             }
+//             return apiRequestNotification(activityId, _id);
+//         },
+//         onSuccess,
+//     });
+
+//     const { mutate } = mutation;
+
+//     return { doRequestNotification: mutate, ...mutation };
+// }

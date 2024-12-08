@@ -1,5 +1,6 @@
 import { formatDate } from "date-fns";
 import {
+	Bell,
 	Bookmark,
 	Copy,
 	DollarSign,
@@ -85,6 +86,11 @@ export default function ActivityCard({
 		window.location.href = `mailto:?subject=${subject}&body=${body}`;
 	};
 
+    // const handleRequestNotification = () => {
+		
+    //     alert("You will be notified when bookings for this activity open!");
+    // };
+
 	return (
 		<Card
 			key={activity?._id}
@@ -118,6 +124,10 @@ export default function ActivityCard({
 								}}
 							/>
 						))}
+						<Bell
+                            className="absolute left-8 cursor-pointer"
+                            
+                        />
 					<Label.Mid500 className="justify-self-center">
 						{activity?.name ?? "-"}
 					</Label.Mid500>
