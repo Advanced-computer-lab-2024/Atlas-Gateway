@@ -46,8 +46,13 @@ const formSchema = z.object({
 	}),
 });
 
-export default function TourGuideSheet() {
-	const [open, setOpen] = useState(false);
+export default function TourGuideSheet({
+	open,
+	setOpen,
+}: {
+	open: boolean;
+	setOpen: (open: boolean) => void;
+}) {
 	const { data, refetch } = useTourGuideProfile();
 
 	const form = useForm<TTourGuide>({

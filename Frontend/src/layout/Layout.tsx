@@ -9,6 +9,7 @@ export default function Layout() {
 		<>
 			<Navbar />
 			<Flex
+				className="overflow-y-scroll"
 				style={{
 					width: "90%",
 					marginInline: "5%",

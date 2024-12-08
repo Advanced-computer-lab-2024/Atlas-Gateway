@@ -1,7 +1,7 @@
 import { useAdvertiserReport } from "@/api/data/useReport";
 import Filters from "@/components/Filters/Filters";
+import Label from "@/components/ui/Label";
 import { Flex } from "@/components/ui/flex";
-import { Label } from "@/components/ui/shadcnlabel";
 
 import ActivitiesChart from "../ActivitiesChart";
 
@@ -9,16 +9,14 @@ export default function AdvertiserReport() {
 	const { data, meta } = useAdvertiserReport();
 
 	return (
-		<Flex
-			className="w-full h-full items-center overflow-y-scroll "
-			isColumn
-		>
-			<Flex>
-				<Label>Advertiser Report</Label>
-				<Label>Total Sales:{meta?.totalSales}</Label>
-				<Label>Total Bookings:{meta?.totalBookings}</Label>
+		<Flex className="w-full h-fit items-center overflow-y-scroll" isColumn gap="2">
+			<Flex gap="4">
+				<Label.Mid300>Advertiser Report</Label.Mid300>
+				<Label.Mid300>Total Sales:{meta?.totalSales}</Label.Mid300>
+				<Label.Mid300>
+					Total Bookings:{meta?.totalBookings}
+				</Label.Mid300>
 			</Flex>
-
 			<Filters
 				filters={{
 					date: {
@@ -29,7 +27,6 @@ export default function AdvertiserReport() {
 					},
 				}}
 			/>
-
 			<ActivitiesChart
 				data={data ?? []}
 				metaData={

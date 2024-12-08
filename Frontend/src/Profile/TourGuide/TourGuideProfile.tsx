@@ -70,17 +70,11 @@ export default function TourGuideProfile() {
 		<div className="overflow-y-auto">
 			<div className="relative w-full">
 				<div
-					className="w-full h-48 md:h-64 bg-cover bg-center"
+					className="w-full h-64 bg-cover bg-center rounded-lg"
 					style={{
 						backgroundImage: `url(${profile_background})`,
 					}}
-				>
-					<button className="flex absolute bottom-4 right-4 mr-7 bg-orange-500 text-white px-4 py-1 rounded-lg hover:bg-orange-600">
-						<Camera />
-						<h2 className="ml-2">Upload Cover Photo</h2>
-					</button>
-				</div>
-
+				/>
 				<button
 					onClick={() => setIsDrawerOpen4(true)}
 					className="absolute left-36 -bottom-16 w-48 h-48 rounded-full overflow-hidden border-4 border-white focus:outline-none group"

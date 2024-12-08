@@ -1,22 +1,13 @@
-import { Camera } from "lucide-react";
-
 import { useTouristProfile } from "@/api/data/useProfile";
-import { Button } from "@/components/ui/button";
 import { Flex } from "@/components/ui/flex";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import profile_background from "../../assets/profile_background.jpg";
 import TouristBadge from "./TouristBadge";
 import Account from "./tabs/Account";
-import TouristActivities from "./tabs/Activities/TouristActivities";
 import BookmarkedEvents from "./tabs/Bookmarked/BookmarkedEvents";
 import Complaints from "./tabs/Complaints";
-import TouristItineraries from "./tabs/Itineraries/TouristItineraries";
-import TouristOrders from "./tabs/Orders/touristOrders";
 import History from "./tabs/Past/History";
-import TouristFlights from "./tabs/Transporations/TouristFlights";
-import TouristHotels from "./tabs/Transporations/TouristHotels";
-import TouristTransportations from "./tabs/Transporations/TouristTransporations";
 import Transportations from "./tabs/Transporations/Transportations";
 import Upcoming from "./tabs/Upcoming/Upcoming";
 
@@ -31,12 +22,7 @@ export default function TouristProfile() {
 					style={{
 						backgroundImage: `url(${profile_background})`,
 					}}
-				>
-					<Button className="flex absolute bottom-4 right-4 mr-7 bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600">
-						<Camera />
-						<h2 className="ml-2">Upload Cover Photo</h2>
-					</Button>
-				</div>
+				/>
 				<div className="absolute left-36 -bottom-16 w-48 h-48 rounded-full overflow-hidden border-4 border-white">
 					<img
 						src={profile_background}
@@ -96,10 +82,7 @@ export default function TouristProfile() {
 						</TabsContent>
 					</Flex>
 				</Flex>
-
-
 			</Tabs>
 		</Flex>
-
 	);
 }

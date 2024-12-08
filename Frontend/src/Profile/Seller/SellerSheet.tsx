@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -28,7 +28,6 @@ import {
 	SheetFooter,
 	SheetHeader,
 	SheetTitle,
-	SheetTrigger,
 } from "../../components/ui/sheet";
 
 const formSchema = z.object({
@@ -43,8 +42,13 @@ const formSchema = z.object({
 	}),
 });
 
-export default function SellerSheet() {
-	const [open, setOpen] = useState(false);
+export default function SellerSheet({
+	open,
+	setOpen,
+}: {
+	open: boolean;
+	setOpen: (open: boolean) => void;
+}) {
 	const form = useForm<TSeller>({
 		resolver: zodResolver(formSchema),
 	});
@@ -70,13 +74,6 @@ export default function SellerSheet() {
 
 	return (
 		<Sheet open={open} onOpenChange={setOpen}>
-			<SheetTrigger asChild>
-				{data?.isVerified && (
-					<Button className="align p-6 justify-center">
-						<Label.Big400>Update Profile</Label.Big400>
-					</Button>
-				)}
-			</SheetTrigger>
 			<SheetContent>
 				<Form {...form}>
 					<form

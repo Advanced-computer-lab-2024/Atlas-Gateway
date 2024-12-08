@@ -1,10 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import {
-	useTransportationAdvertiserProfile,
+	useAdvertiserProfile,
 	useUpdateTransportationAdvertiserProfile,
 } from "@/api/data/useProfile";
 import {
@@ -16,7 +16,7 @@ import {
 	FormLabel,
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
-import { TTransportationAdvertiser } from "@/types/global";
+import { TAdvetisor } from "@/types/global";
 
 import Label from "../../components/ui/Label";
 import { Button } from "../../components/ui/button";
@@ -28,7 +28,6 @@ import {
 	SheetFooter,
 	SheetHeader,
 	SheetTitle,
-	SheetTrigger,
 } from "../../components/ui/sheet";
 
 const formSchema = z.object({
@@ -49,15 +48,20 @@ const formSchema = z.object({
 	}),
 });
 
-export default function AdvertiserSheet() {
-	const [open, setOpen] = useState(false);
-	const form = useForm<TTransportationAdvertiser>({
+export default function TransportationAdvertiserSheet({
+	open,
+	setOpen,
+}: {
+	open: boolean;
+	setOpen: (open: boolean) => void;
+}) {
+	const form = useForm<TAdvetisor>({
 		resolver: zodResolver(formSchema),
 		mode: "onChange",
 	});
 
 	const { reset, getValues, formState } = form;
-	const { data, refetch } = useTransportationAdvertiserProfile();
+	const { data, refetch } = useAdvertiserProfile();
 
 	useEffect(() => {
 		if (data) {
@@ -78,11 +82,6 @@ export default function AdvertiserSheet() {
 
 	return (
 		<Sheet open={open} onOpenChange={setOpen}>
-			<SheetTrigger asChild>
-				{data?.isVerified && (
-					<button className="font-bold">Edit profile</button>
-				)}
-			</SheetTrigger>
 			<SheetContent>
 				<Form {...form}>
 					<form

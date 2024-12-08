@@ -49,8 +49,13 @@ const formSchema = z.object({
 	}),
 });
 
-export default function AdvertiserSheet() {
-	const [open, setOpen] = useState(false);
+export default function AdvertiserSheet({
+	open,
+	setOpen,
+}: {
+	open: boolean;
+	setOpen: (open: boolean) => void;
+}) {
 	const form = useForm<TAdvetisor>({
 		resolver: zodResolver(formSchema),
 		mode: "onChange",
@@ -77,11 +82,6 @@ export default function AdvertiserSheet() {
 
 	return (
 		<Sheet open={open} onOpenChange={setOpen}>
-			<SheetTrigger asChild>
-				{data?.isVerified && (
-					<button className="font-bold">Edit profile</button>
-				)}
-			</SheetTrigger>
 			<SheetContent>
 				<Form {...form}>
 					<form

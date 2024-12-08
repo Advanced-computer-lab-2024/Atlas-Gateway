@@ -27,7 +27,6 @@ import {
 	SheetFooter,
 	SheetHeader,
 	SheetTitle,
-	SheetTrigger,
 } from "../../components/ui/sheet";
 
 const formSchema = z.object({
@@ -36,8 +35,13 @@ const formSchema = z.object({
 	}),
 });
 
-export default function GovernorSheet() {
-	const [open, setOpen] = useState(false);
+export default function GovernorSheet({
+	open,
+	setOpen,
+}: {
+	open: boolean;
+	setOpen: (open: boolean) => void;
+}) {
 	const form = useForm<TGovernor>({
 		resolver: zodResolver(formSchema),
 	});
@@ -63,9 +67,6 @@ export default function GovernorSheet() {
 
 	return (
 		<Sheet open={open} onOpenChange={setOpen}>
-			<SheetTrigger asChild>
-				{<button className="font-bold">Edit profile</button>}
-			</SheetTrigger>
 			<SheetContent>
 				<Form {...form}>
 					<form

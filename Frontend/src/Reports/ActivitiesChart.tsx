@@ -167,13 +167,7 @@ export default function ActivitiesChart(
 	};
 
 	return (
-		<div
-			className="w-full h-full 
-			flex flex-col items-center
-			shadow-md rounded-lg bg-white p-20
-			mt-10 mb-20 ms-10 me-10"
-
-		>
+		<div className="w-full h-full flex flex-col items-center shadow-md rounded-lg bg-white p-20">
 			{zoomedActivity && (
 				<Button
 					onClick={handleZoomOut}

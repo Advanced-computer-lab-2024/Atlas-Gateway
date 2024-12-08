@@ -14,7 +14,7 @@ export default function HomeCard({
 }) {
 	return (
 		<Link to={href}>
-			<Card className="w-72 h-44 shadow-2xl opacity-80 hover:outline hover:outline-2 hover:opacity-90">
+			<Card className="w-72 h-44 shadow-md opacity-80 hover:outline hover:outline-2 hover:opacity-90">
 				<CardHeader>
 					<Label.Mid600>{title}</Label.Mid600>
 				</CardHeader>
