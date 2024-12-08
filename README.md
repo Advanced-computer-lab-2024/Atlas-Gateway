@@ -106,6 +106,8 @@ The code adheres to clean and modular practices, ensuring readability and mainta
 
 ## Tech/Framework used
 
+[Git](https://git-scm.com/)
+
 [Node.js](https://nodejs.org/en/)
 
 [Express.js](https://expressjs.com/)
@@ -119,8 +121,6 @@ The code adheres to clean and modular practices, ensuring readability and mainta
 [MongoDB](https://www.mongodb.com/)
 
 [Mongoose](https://mongoosejs.com/)
-
-[Git](https://git-scm.com/)
 
 [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
 

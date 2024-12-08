@@ -66,7 +66,7 @@ const Product = () => {
 	}, [products]);
 	const [query, setQuery] = useQueryString();
 	return (
-		<div className="flex flex-col p-3 h-screen overflow-y-auto pb-32">
+		<div className="flex flex-col p-3 overflow-y-auto pb-32">
 			<div className="flex gap-3 self-end pb-3 items-center">
 				<div className="cursor-pointer hover:text-[#2b58ed]">
 					<RotateCw onClick={() => refetch()} />
@@ -104,7 +104,6 @@ const Product = () => {
 				</Flex>
 				<ProductForm type="Add" />
 			</div>
-
 			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
 				{products?.map((prod) => (
 					<div

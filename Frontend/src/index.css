@@ -19,7 +19,7 @@
 
 a {
 	font-weight: 500;
-	color: #646cff;
+	color: #000000;
 	text-decoration: inherit;
 }
 a:hover {
@@ -41,7 +41,7 @@ body {
 
 body {
 	margin: 0;
-	background: linear-gradient(180deg, rgb(83, 181, 179), #5e92db);
+	background: linear-gradient(180deg, rgb(83, 181, 179), #ffffff);
 }
 
 @media (prefers-color-scheme: light) {

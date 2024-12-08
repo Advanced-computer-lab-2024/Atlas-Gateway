@@ -23,7 +23,9 @@ export function useLogin() {
 				acceptedTerms,
 				isVerified,
 			});
-			navigate("/");
+			if (data.data.type === "admin") navigate("/admin");
+			else navigate("/");
+			
 		},
 	});
 

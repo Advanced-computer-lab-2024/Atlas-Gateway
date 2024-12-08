@@ -8,7 +8,7 @@ import { Flex } from "@/components/ui/flex";
 import { onLogout, useLoginStore } from "@/store/loginStore";
 import { EAccountType } from "@/types/enums";
 
-import { accountRoutes } from "./routes";
+import { accountNavItems } from "./NavItems";
 
 export default function Navbar() {
 	const { user } = useLoginStore();
@@ -18,8 +18,7 @@ export default function Navbar() {
 	const closeTermsDialog = () => setIsTermsDialogOpen(false);
 
 	const isLoggedIn = user?._id;
-	const routes =
-		accountRoutes[(user?.type ?? EAccountType.Guest) as EAccountType];
+	const navItems = accountNavItems[user?.type ?? EAccountType.Guest];
 
 	useEffect(() => {
 		if (
@@ -35,7 +34,7 @@ export default function Navbar() {
 	}, [user]);
 
 	return (
-		<nav className="bg-surface-secondary h-20 flex justify-between items-center px-4 drop-shadow-2xl border-b-2 border-black">
+		<nav className="bg-surface-secondary h-20 z-10 flex justify-between items-center px-4 drop-shadow-2xl border-b-2 border-black">
 			<Flex>
 				<Link
 					to="/"
@@ -44,19 +43,7 @@ export default function Navbar() {
 					<Label.Big700 variant="primary">Atlas Gateway</Label.Big700>
 				</Link>
 			</Flex>
-			<Flex gap="4">
-				{routes.map((route) => (
-					<Link
-						to={route.to}
-						key={route.to}
-						className="text-primary p-2 hover:text-primary border-b-2 border-transparent hover:border-black hover:border-solid"
-					>
-						<Label.Mid500 variant="primary">
-							{route.name}
-						</Label.Mid500>
-					</Link>
-				))}
-			</Flex>
+			<Flex gap="4">{navItems}</Flex>
 			{isLoggedIn ? (
 				<Flex gap="2" align="center">
 					<Link
@@ -75,7 +62,8 @@ export default function Navbar() {
 						justify="center"
 						onClick={() => {
 							onLogout();
-							navigate("/register");
+							navigate("/");
+							window.location.reload();
 						}}
 					>
 						<LogOut
