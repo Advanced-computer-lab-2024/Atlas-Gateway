@@ -30,6 +30,7 @@ import sellerRouter from "./Routes/Users/seller.route";
 import tourGuideRouter from "./Routes/Users/tourGuide.route";
 import touristRouter from "./Routes/Users/tourist.route";
 import transportation_advertiserRouter from "./Routes/Users/transportation_advertiser.route";
+import * as notificationService from "./Services/Interactions/notification.service";
 
 const app = express();
 
@@ -82,6 +83,10 @@ async function startServer() {
 		}
 		res.status(status).json(err.message);
 	});
+
+	const cron = require('node-cron');
+	// Schedule the cron job to run every day at midnight
+	cron.schedule('0 0 * * *', () => notificationService.notifyOfBookedItineraries());
 
 	app.listen(SERVER.port, () => {
 		console.log(

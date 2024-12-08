@@ -13,7 +13,7 @@ export interface INotification extends Document {
 
 const notificationSchema = new Schema<INotification>(
 	{
-        type: { type: String, enum: ['reminder', 'info', 'warning', 'error'], required: true },
+        type: { type: String, enum: ['Reminder', 'Info', 'Warning', 'Error'], required: true },
         message: { type: String, required: true },
         notifiedTo: { type: Schema.Types.ObjectId, refPath: 'userType', required: true },
         userType: { type: String, enum: ['Admin', 'Tourist', 'Advertiser', 'Seller', 'TourGuide'], required: true },

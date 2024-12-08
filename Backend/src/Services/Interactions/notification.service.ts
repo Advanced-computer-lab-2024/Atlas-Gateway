@@ -100,7 +100,6 @@ export const sendEmailNotification = async (userEmail: string, emailSubject: str
     }
 };
 
-//TODO: Need to push this notification in list of notifications of user
 export const notifyOfFlaggedItinerary = async (userId: string, userType: string, userEmail: string, itineraryId: string) => {
     if (!Types.ObjectId.isValid(userId)) {
         throw new HttpError(400, "Invalid User ID");
@@ -122,7 +121,7 @@ export const notifyOfFlaggedItinerary = async (userId: string, userType: string,
     await sendEmailNotification(userEmail, emailSubject, emailBody);
 
     const newNotifi = new Notification({
-        type: "warning",
+        type: "Warning",
         message: `Itinerary "${itinerary.title}" has been flagged as inapproriate by the admin`,
         notifiedTo: userId,
         userType: userType,
@@ -135,47 +134,7 @@ export const notifyOfFlaggedItinerary = async (userId: string, userType: string,
     if (!notifi)
         throw new HttpError(400, "Error creating Notification");
 
-    await notifi.save();
-
-    return notifi;
-};
-
-//TODO: Need to push this notification in list of notifications of user
-export const notifyOfFlaggedActivity = async (userId: string, userType: string, userEmail: string, activityId: string) => {
-    if (!Types.ObjectId.isValid(userId)) {
-        throw new HttpError(400, "Invalid User ID");
-    }
-
-    const activity = await activityService.getActivityById(activityId);
-
-    if (!activity)
-        throw new HttpError(404, "Activity not found");
-
-    const emailSubject = `Reminder: Your upcoming activity "${activity.name}"`;
-
-    const emailBody = `<h1>Reminder: Your booked activity "${activity.name}" is coming up soon!</h1>
-        <p><strong>Event:</strong> ${activity.name}</p>
-        <p><strong>Location:</strong> ${activity.location}</p>
-        <p><strong>Start Time:</strong> ${activity.dateTime}</p>
-        <p>We hope you enjoy your trip!<br>Safe travels!</p>`;
-
-    await sendEmailNotification(userEmail, emailSubject, emailBody);
-
-    const newNotifi = new Notification({
-        type: "warning",
-        message: `Activity "${activity.name}" has been flagged as inapproriate by the admin`,
-        notifiedTo: userId,
-        userType: userType,
-        isRead: false,
-        createdAt: new Date(),
-    });
-
-    const notifi = await createNotification(newNotifi);
-
-    if (!notifi)
-        throw new HttpError(400, "Error creating Notification");
-
-    await notifi.save();
+    //await notifi.save();
 
     return notifi;
 };
@@ -202,7 +161,7 @@ export const notifyOfProductOutOfStock = async (userId: string, userType: string
     await sendEmailNotification(userEmail, emailSubject, emailBody);
 
     const newNotifi = new Notification({
-        type: "reminder",
+        type: "Reminder",
         message: `Product "${product.name}" is out of stock`,
         notifiedTo: userId,
         userType: userType,
@@ -215,149 +174,74 @@ export const notifyOfProductOutOfStock = async (userId: string, userType: string
     if (!notifi)
         throw new HttpError(400, "Error creating Notification");
 
-    await notifi.save();
+    //await notifi.save();
 
     return notifi;
 };
 
-const cron = require('node-cron');
+export const notifyOfUpComingBookedItineraries = async (userId: string, itineraryId: string) => {
+    try {
+        const itinerary = await itineraryService.getItineraryById(itineraryId);
+
+        const message = `Reminder: Your booked event "${itinerary.title}" is coming up tomorrow!`;
+
+        const notification = new Notification({
+            type: 'Reminder',
+            message: message,
+            notifiedTo: userId,
+            UserType: "Tourist",
+            isRead: false,
+            createdAt: new Date(),
+        });
+
+        const newNotifi = await createNotification(notification);
+
+        if (!newNotifi)
+            throw new HttpError(400, "Couldn't create notification");
+
+        const tourist = await touristService.getTouristById(userId);
+
+        if (!tourist)
+            throw new HttpError(404, "Couldn't find Tourist");
+
+        const emailSubject = `Reminder: Your upcoming event "${itinerary.title}"`;
+
+        const emailBody = `
+                <h1>Reminder: Your booked event "${itinerary.title}" is coming up soon!</h1>
+                <p><strong>Event:</strong> ${itinerary.title}</p>
+                <p><strong>Location:</strong> ${itinerary.pickUpLocation} - ${itinerary.dropOffLocation}</p>
+                <p><strong>Start Time:</strong> ${itinerary.startDateTime}</p>
+                <p>We hope you enjoy your trip!<br>Safe travels!</p>`;
+
+        await sendEmailNotification(tourist.email, emailSubject, emailBody);
+
+        tourist.notifications.push(newNotifi.id);
+
+        await tourist.save();
+
+        return newNotifi;
+    } catch (error) {
+        console.error("Error in notifyOfUpComingBookedItineraries:", error);
+    }
+};
+
 const moment = require('moment');
-//Notify of upcoming Booked Itineraries
-export const notifyOfUpComingBookedItineraries = async (userId: string, userType: string) => {
-    if (userType == 'tourist') {
-        if (!Types.ObjectId.isValid(userId)) {
-            throw new HttpError(400, "Invalid User ID");
+export const notifyOfBookedItineraries = async () => {
+    const now = moment();
+    const upcomingItineraries = await Itinerary.find({
+        startDateTime: { $lte: now.add(2, 'days').toDate() }, // Itinerarys within the next 48 hours
+        isDeleted: false,
+        isAppropriate: true,
+        isActive: true,
+    });
+
+    for (const itinerary of upcomingItineraries) {
+        for (const touristId of itinerary.tourists) {
+            const tourist = await touristService.getTouristById(touristId.toString());
+            const notification = await notifyOfUpComingBookedItineraries(tourist?.id.toString(), itinerary.id);
         }
-        const now = moment();
-        const upcomingBookedItineraries = await Itinerary.find({
-            startDateTime: { $lte: now.add(1, 'days').toDate() }, // Itinerarys within the next 24 hours
-            isDeleted: false,
-            isAppropriate: true,
-            isActive: true,
-            tourists: new Types.ObjectId(userId), //tourist booked it
-        });
-
-        let sentNotifications = [];
-
-        for (const event of upcomingBookedItineraries) {
-            const message = `Reminder: Your booked event "${event.title}" is coming up tomorrow!`;
-
-            const notification = new Notification({
-                type: 'reminder',
-                message: message,
-                notifiedTo: userId,
-                UserType: userType,
-                isRead: false,
-                createdAt: new Date(),
-            });
-
-            const newNotifi = await createNotification(notification);
-
-            if (!newNotifi)
-                throw new HttpError(400, "Couldn't create notification");
-
-            await newNotifi.save();
-
-            const tourist = await touristService.getTouristById(userId);
-
-            if (!tourist)
-                throw new HttpError(404, "Couldn't find Tourist");
-
-            const emailSubject = `Reminder: Your upcoming event "${event.title}"`;
-
-            const emailBody = `
-                <h1>Reminder: Your booked event "${event.title}" is coming up soon!</h1>
-                <p><strong>Event:</strong> ${event.title}</p>
-                <p><strong>Location:</strong> ${event.pickUpLocation} - ${event.dropOffLocation}</p>
-                <p><strong>Start Time:</strong> ${event.startDateTime}</p>
-                <p>We hope you enjoy your trip!<br>Safe travels!</p>`;
-
-            await sendEmailNotification(tourist.email, emailSubject, emailBody);
-
-            tourist.notifications.push(newNotifi.id);
-
-            await tourist.save();
-
-            sentNotifications.push(newNotifi);
-        }
-
-        return sentNotifications;
     }
-    else {
-        throw new HttpError(400, "Can't notify Users other than Tourist");
-    }
-};
-// Schedule the cron job to run every day at midnight
-//cron.schedule('0 0 * * *', () => notifyOfUpComingBookedItineraries(userId, userType));
-
-//TODO: check if Itinerary is paid by tourist
-//Notify of upcoming Paid Itineraries
-export const notifyOfUpComingPaidItineraries = async (userId: string, userType: string) => {
-    if (userType == 'Tourist') {
-        if (!Types.ObjectId.isValid(userId)) {
-            throw new HttpError(400, "Invalid User ID");
-        }
-        const now = moment();
-        const upcomingPaidItineraries = await Itinerary.find({
-            startDateTime: { $lte: now.add(1, 'days').toDate() }, // Itinerarys within the next 24 hours
-            isDeleted: false,
-            isAppropriate: true,
-            isActive: true,
-            //isPaid: true,
-            tourists: new Types.ObjectId(userId), //tourist booked it
-        });
-
-        let sentNotifications = [];
-
-        for (const event of upcomingPaidItineraries) {
-            const message = `Reminder: Your booked event "${event.title}" is coming up tomorrow!`;
-
-            const notification = new Notification({
-                type: 'reminder',
-                message: message,
-                notifiedTo: userId,
-                UserType: userType,
-                isRead: false,
-                createdAt: new Date(),
-            });
-
-            const newNotifi = await createNotification(notification);
-
-            if (!newNotifi)
-                throw new HttpError(400, "Couldn't create notification");
-
-            await newNotifi.save();
-
-            const tourist = await touristService.getTouristById(userId);
-
-            if (!tourist)
-                throw new HttpError(404, "Couldn't find Tourist");
-
-            const emailSubject = `Reminder: Your upcoming event "${event.title}"`;
-
-            const emailBody = `<h1>Reminder: Your paid event "${event.title}" is coming up soon!</h1>
-                <p><strong>Event:</strong> ${event.title}</p>
-                <p><strong>Location:</strong> ${event.pickUpLocation} - ${event.dropOffLocation}</p>
-                <p><strong>Start Time:</strong> ${event.startDateTime}</p>
-                <p>We hope you enjoy your trip!<br>Safe travels!</p>`;
-
-            await sendEmailNotification(tourist.email, emailSubject, emailBody);
-
-            tourist.notifications.push(newNotifi.id);
-
-            await tourist.save();
-
-            sentNotifications.push(newNotifi);
-        }
-
-        return sentNotifications;
-    }
-    else {
-        throw new HttpError(400, "Can't notify Users other than Tourist");
-    }
-};
-// Schedule the cron job to run every day at midnight
-//cron.schedule('0 0 * * *', () => notifyOfUpComingPaidItineraries(userId, userType));
+}
 
 export const markNotificationAsRead = async (id: string) => {
     if (!Types.ObjectId.isValid(id)) {
