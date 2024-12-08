@@ -10,6 +10,7 @@ import registerRouter from "./Routes/Auth/register.route";
 import flightRouter from "./Routes/Flight/flight.route";
 import hotelRouter from "./Routes/Hotel/hotel.route";
 import complaintRouter from "./Routes/Interactions/complaint.route";
+import notificationRouter from "./Routes/Interactions/notification.route";
 import reviewRouter from "./Routes/Interactions/review.route";
 import mediaRouter from "./Routes/Media/media.route";
 import paymentRouter from "./Routes/Payment/payment.route";
@@ -29,6 +30,7 @@ import sellerRouter from "./Routes/Users/seller.route";
 import tourGuideRouter from "./Routes/Users/tourGuide.route";
 import touristRouter from "./Routes/Users/tourist.route";
 import transportation_advertiserRouter from "./Routes/Users/transportation_advertiser.route";
+import * as notificationService from "./Services/Interactions/notification.service";
 
 const app = express();
 
@@ -69,6 +71,7 @@ async function startServer() {
 	app.use("/api/payment", paymentRouter);
 	app.use("/api/orders", orderRouter);
 	app.use("/api/promo", promoRouter);
+	app.use("/api/notification", notificationRouter);
 	// Error handling middleware
 	app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 		console.error(err.stack);
@@ -80,6 +83,10 @@ async function startServer() {
 		}
 		res.status(status).json(err.message);
 	});
+
+	const cron = require('node-cron');
+	// Schedule the cron job to run every day at midnight
+	cron.schedule('0 0 * * *', () => notificationService.notifyOfBookedItineraries());
 
 	app.listen(SERVER.port, () => {
 		console.log(
