@@ -22,7 +22,7 @@ export interface IProduct extends Document {
 	isDeleted?: boolean;
 }
 
-const productSchema = new Schema<IProduct>(
+export const productSchema = new Schema<IProduct>(
 	{
 		sellerId: {
 			type: Schema.Types.ObjectId,
