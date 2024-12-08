@@ -2,8 +2,6 @@ import { format, formatDate } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useState } from "react";
 
-
-
 import { useHotels } from "@/api/data/useHotels";
 import { useQueryString } from "@/api/data/useQueryString";
 import { Searchbar } from "@/components/ui/Searchbar";
@@ -11,18 +9,25 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Flex } from "@/components/ui/flex";
 import { Input } from "@/components/ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { citycodes } from "@/types/consts";
 import { THotel } from "@/types/global";
 
-
-
 import { AmadeusTokenProvider } from "./AmadeusContext";
 import HotelDetailsSheet from "./HotelDetailsSheet";
 import HotelsCard from "./HotelsCard";
-
 
 const Hotels = () => {
 	const [cityCode, setCityCode] = useState("");
@@ -111,7 +116,10 @@ const Hotels = () => {
 									setCheckInDate(date);
 									setQuery({
 										...query,
-										checkInDate: formatDate(date, "yyyy-MM-dd"),
+										checkInDate: formatDate(
+											date,
+											"yyyy-MM-dd",
+										),
 									});
 								}}
 								captionLayout="dropdown-buttons"

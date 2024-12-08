@@ -17,22 +17,23 @@ export default function AdminReport() {
 			className="w-full h-full items-center overflow-y-scroll "
 			isColumn
 		>
-			<Flex>
-				<Label>Admin Report</Label>
-				<Label>Total Sales:{meta?.totalSales}</Label>
-				<Label>Total Bookings:{meta?.totalBookings}</Label>
+			<Flex className="w-full justify-between">
+				<Filters
+					filters={{
+						date: {
+							// TODO: WIP
+							filterName: "date",
+							label: "Date",
+							type: "date",
+						},
+					}}
+				/>
+				<Flex className="w-full justify-center items-center" isColumn>
+					<Label>Admin Report</Label>
+					<Label>Total Sales:{meta?.totalSales}</Label>
+					<Label>Total Bookings:{meta?.totalBookings}</Label>
+				</Flex>
 			</Flex>
-
-			<Filters
-				filters={{
-					date: {
-						// TODO: WIP
-						filterName: "date",
-						label: "Date",
-						type: "date",
-					},
-				}}
-			/>
 
 			<ItinerariesChart
 				data={data?.itineraries.data ?? []}

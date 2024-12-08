@@ -23,12 +23,12 @@ import TouristBadge from "./TouristBadge";
 import TouristSheet from "./TouristSheet";
 import Account from "./tabs/Account";
 import TouristActivities from "./tabs/Activities/TouristActivities";
+import BookmarkedEvents from "./tabs/Bookmarked/BookmarkedEvents";
 import Complaints from "./tabs/Complaints";
 import TouristFlights from "./tabs/Flights/TouristFlights";
+import TouristHotels from "./tabs/Hotels/TouristHotels";
 import TouristItineraries from "./tabs/Itineraries/TouristItineraries";
 import TouristTransportations from "./tabs/Transporations/TouristTransporations";
-import TouristHotels from "./tabs/Hotels/TouristHotels";
-import BookmarkedEvents from "./tabs/Bookmarked/BookmarkedEvents";
 import Upcoming from "./tabs/Upcoming/Upcoming";
 import History from "./tabs/Past/History";
 
@@ -134,7 +134,9 @@ export default function TouristProfile() {
 							Itineraries
 						</TabsTrigger>
 						<TabsTrigger value="flights">Flights</TabsTrigger>
-						<TabsTrigger value="hotel-bookings">Hotel bookings</TabsTrigger>
+						<TabsTrigger value="hotel-bookings">
+							Hotel bookings
+						</TabsTrigger>
 						<TabsTrigger value="transporations">
 							Transporations
 						</TabsTrigger>
@@ -171,7 +173,7 @@ export default function TouristProfile() {
 						<Complaints />
 					</TabsContent>
 					<TabsContent value="bookmarked">
-						<BookmarkedEvents/>
+						<BookmarkedEvents />
 					</TabsContent>
 				</Tabs>
 			</div>
