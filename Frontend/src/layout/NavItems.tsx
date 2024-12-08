@@ -77,7 +77,8 @@ export const TourguideNavItems = () => (
 				<NavigationMenuLink asChild>
 					<a
 						className={cn(
-							"block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+							navigationMenuTriggerStyle(),
+							"block select-none text-black rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
 						)}
 						href={placesRoute.to}
 					>
@@ -91,7 +92,8 @@ export const TourguideNavItems = () => (
 				<NavigationMenuLink asChild>
 					<a
 						className={cn(
-							"block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+							navigationMenuTriggerStyle(),
+							"block select-none text-black rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
 						)}
 						href={activitiesRoute.to}
 					>
@@ -105,7 +107,8 @@ export const TourguideNavItems = () => (
 				<NavigationMenuLink asChild>
 					<a
 						className={cn(
-							"block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+							navigationMenuTriggerStyle(),
+							"block select-none text-black rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
 						)}
 						href={intinerariesRoute.to}
 					>
@@ -126,7 +129,8 @@ export const AdvertiserNavItems = () => (
 				<NavigationMenuLink asChild>
 					<a
 						className={cn(
-							"block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+							navigationMenuTriggerStyle(),
+							"block select-none text-black rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
 						)}
 						href={intinerariesRoute.to}
 					>
@@ -140,7 +144,8 @@ export const AdvertiserNavItems = () => (
 				<NavigationMenuLink asChild>
 					<a
 						className={cn(
-							"block select-none text-black space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+							navigationMenuTriggerStyle(),
+							"block select-none text-black rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
 						)}
 						href={activitiesRoute.to}
 					>
@@ -154,7 +159,8 @@ export const AdvertiserNavItems = () => (
 				<NavigationMenuLink asChild>
 					<a
 						className={cn(
-							"block select-none text-black space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+							navigationMenuTriggerStyle(),
+							"block select-none text-black rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
 						)}
 						href={placesRoute.to}
 					>
@@ -175,7 +181,8 @@ export const TransporationAdvertisterNavItems = () => (
 				<NavigationMenuLink asChild>
 					<a
 						className={cn(
-							"block select-none text-black space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+							navigationMenuTriggerStyle(),
+							"block select-none text-black rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
 						)}
 						href={transportationRoute.to}
 					>
@@ -196,7 +203,8 @@ export const GuestNavItems = () => (
 				<NavigationMenuLink asChild>
 					<a
 						className={cn(
-							"block select-none text-black space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+							navigationMenuTriggerStyle(),
+							"block select-none text-black rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
 						)}
 						href={placesRoute.to}
 					>
@@ -210,7 +218,8 @@ export const GuestNavItems = () => (
 				<NavigationMenuLink asChild>
 					<a
 						className={cn(
-							"block select-none text-black space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+							navigationMenuTriggerStyle(),
+							"block select-none text-black rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
 						)}
 						href={activitiesRoute.to}
 					>
@@ -224,7 +233,8 @@ export const GuestNavItems = () => (
 				<NavigationMenuLink asChild>
 					<a
 						className={cn(
-							"block select-none text-black space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+							navigationMenuTriggerStyle(),
+							"block select-none text-black rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
 						)}
 						href={intinerariesRoute.to}
 					>
@@ -245,7 +255,8 @@ export const TourismGovernerNavItems = () => (
 				<NavigationMenuLink asChild>
 					<a
 						className={cn(
-							"block select-none text-black space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+							navigationMenuTriggerStyle(),
+							"block select-none text-black rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
 						)}
 						href={placesRoute.to}
 					>
@@ -266,7 +277,8 @@ export const SellerNavItems = () => (
 				<NavigationMenuLink asChild>
 					<a
 						className={cn(
-							"block select-none text-black space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+							navigationMenuTriggerStyle(),
+							"block select-none text-black rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
 						)}
 						href={productsRoute.to}
 					>
