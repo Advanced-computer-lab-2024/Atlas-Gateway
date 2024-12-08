@@ -127,13 +127,16 @@ export default function Products() {
 						/>
 					</Flex>
 					<Flex>
-						<Button
-							onClick={() => {
-								setWishlist(!wishlist);
-							}}
-						>
-							{wishlist ? "View All" : "My Wishlist"}
-						</Button>
+						{user?.type === EAccountType.Tourist && (
+							<Button
+								onClick={() => {
+									setWishlist(!wishlist);
+								}}
+							>
+								{wishlist ? "View All" : "My Wishlist"}
+							</Button>
+						)}
+						
 					</Flex>
 				</Flex>
 
