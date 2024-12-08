@@ -43,7 +43,7 @@ export const TouristNavItems = () => (
 				<NavigationMenuTrigger>Transport</NavigationMenuTrigger>
 				<NavigationMenuContent>
 					<ul className="grid gap-3 p-3 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-						{[flightsRoute, hotelsRoute].map((route) => (
+						{[flightsRoute, hotelsRoute, transportationRoute].map((route) => (
 							<ListItem href={route.to} title={route.name}>
 								{route.description}
 							</ListItem>
