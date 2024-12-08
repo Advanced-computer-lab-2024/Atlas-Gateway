@@ -72,15 +72,20 @@ export default function Cart() {
 												)}
 											</Label.Mid400>
 										</Flex>
-										<Flex isColumn={true} gap="3">
-											<Payment
-												amount={formatCurrency(
-													product.price * quantity,
-												)}
-											/>
-										</Flex>
 									</Flex>
 								))}
+								<Flex isColumn={true} gap="3">
+									<Payment
+										amount={formatCurrency(
+											tourist?.cart.reduce(
+												(acc, { product, quantity }) =>
+													acc +
+													product.price * quantity,
+												0,
+											),
+										)}
+									/>
+								</Flex>
 							</Flex>
 						)}
 					</Flex>
