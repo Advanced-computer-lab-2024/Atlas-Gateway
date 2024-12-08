@@ -23,7 +23,7 @@ const Payment = ({ amount }: props) => {
 	const handleWalletPayment = async () => {};
 	const handleCashPayment = async () => {};
 	return (
-		<Tabs defaultValue="cash" className="w-full">
+		<Tabs defaultValue="wallet" className="w-full">
 			<TabsList className="grid w-full grid-cols-3 border-2 border-black">
 				<TabsTrigger value="wallet">Wallet</TabsTrigger>
 				<TabsTrigger value="credit_card">Credit Card</TabsTrigger>
