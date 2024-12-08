@@ -65,7 +65,7 @@ export function PaymentSheet({ amount }: props) {
 						</TabsTrigger>
 					</TabsList>
 					<TabsContent value="wallet" className="flex flex-col mt-4">
-						<Flex>
+						<Flex justify="between" align="center">
 							<Flex>
 								<Label.Thin300>
 									Wallet Balance:{" "}
@@ -77,7 +77,7 @@ export function PaymentSheet({ amount }: props) {
 							<Flex>
 								<Input
 									type="text"
-									placeholder="Enter Promo Code"
+									placeholder="Enter Promo Code (if any)"
 									value={promo}
 									onChange={(e) => setPromo(e.target.value)}
 								/>

@@ -113,9 +113,10 @@ export const addBookedActivity = async (
 			"You do not have enough balance in your wallet",
 		);
 	}
-	const promo = await checkPromoService(promoCode, touristId); // this will cause error if the promo code is not entered or invalid
-	await deletePromoByCodeService(promoCode);
+
 	if (promoCode != "") {
+		const promo = await checkPromoService(promoCode, touristId);
+		await deletePromoByCodeService(promoCode);
 		maxPrice = maxPrice - maxPrice * (promo?.discountPercentage! / 100);
 	}
 
@@ -230,10 +231,9 @@ export const addBookedItinerary = async (
 			"You do not have enough balance in your wallet",
 		);
 	}
-
-	const promo = await checkPromoService(promoCode, touristId); // this will cause error if the promo code is not entered or invalid
-	await deletePromoByCodeService(promoCode);
 	if (promoCode != "") {
+		const promo = await checkPromoService(promoCode, touristId);
+		await deletePromoByCodeService(promoCode);
 		itineraryPrice =
 			itineraryPrice -
 			itineraryPrice * (promo?.discountPercentage! / 100);
