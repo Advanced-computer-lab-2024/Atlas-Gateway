@@ -17,7 +17,8 @@ const Navbar = () => {
 	// const data = {total : 50, newTotal :15};
 	const logOut = () => {
 		onLogout();
-		navigate("/register");
+		navigate("/");
+		window.location.reload();
 	};
 
 	const handleClick = (item: string) => {

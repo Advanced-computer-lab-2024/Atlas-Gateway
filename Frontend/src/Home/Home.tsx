@@ -3,7 +3,6 @@ import { Flex } from "@/components/ui/flex";
 import { useLoginStore } from "@/store/loginStore";
 import { EAccountType } from "@/types/enums";
 
-import background from "../assets/background.png";
 import HomeCard from "./HomeCard";
 import { cardsMap } from "./cardData";
 
@@ -13,17 +12,7 @@ export default function Home() {
 	const cards = cardsMap[(user?.type ?? EAccountType.Guest) as EAccountType];
 
 	return (
-		<Flex
-			className="w-screen h-screen p-4"
-			style={{
-				backgroundImage: `url(${background})`,
-				backgroundSize: "cover",
-				backgroundPosition: "center",
-			}}
-			isColumn
-			align="center"
-			gap="16"
-		>
+		<Flex className="w-full h-full p-4" isColumn align="center" gap="16">
 			<Flex isColumn gap="8">
 				<Label.Big700 className="font-[pacifico] select-none">
 					Atlas Gateway
@@ -44,7 +33,7 @@ export default function Home() {
 					Where would you like to go today?
 				</Label.Mid700>
 			</Flex>
-			<Flex gap="4" isWrapped>
+			<Flex gap="4" align="center" justify="center" isWrapped>
 				{cards.map((card) => (
 					<HomeCard key={card.title} {...card} />
 				))}

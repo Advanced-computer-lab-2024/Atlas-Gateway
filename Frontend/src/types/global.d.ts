@@ -109,6 +109,8 @@ export interface TTourist extends TUser {
 	level: 1 | 2 | 3;
 	purchaseProducts: TProduct[];
 	wishlistproducts: TProduct[];
+	nationality: string;
+	occupation: string;
 	bookedActivities: TActivity[];
 	bookmarkedActivities: TActivity[];
 	bookedItineraries: TItinerary[];
@@ -390,6 +392,14 @@ export interface IHotelBooking {
 		cityCode: string;
 	};
 	offer: THotelOffer;
+}
+
+export interface TNotification {
+	_id: string;
+	type: "Reminder" | "Info" | "Warning" | "Error";
+	message: string;
+	isRead: boolean;
+	createdAt: Date;
 }
 
 export interface TPromo {

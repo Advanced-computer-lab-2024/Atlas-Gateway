@@ -178,6 +178,11 @@ const ENDPOINTS = {
 	userStatistics: {
 		list: "api/admin/userStats",
 	},
+	notification: {
+		get: "api/notification/get",
+		read: (id: string) => `api/notification/read/${id}`,
+		delete: (id: string) => `api/notification/delete/${id}`,
+	},
 };
 
 export default ENDPOINTS;

@@ -2,7 +2,7 @@ import { Camera, Image, Settings } from "lucide-react";
 import { useState } from "react";
 
 import { useDownload } from "@/api/data/useMedia";
-import { useForgetPassword, useGovernorProfile } from "@/api/data/useProfile";
+import { useGovernorProfile } from "@/api/data/useProfile";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -14,7 +14,6 @@ import { useLoginStore } from "@/store/loginStore";
 
 import profile_background from "../../assets/profile_background.jpg";
 import ChangePasswordSheet from "../ChangePasswordSheet";
-import ForgetPasswordSheet from "../ForgetPasswordSheet";
 import UploadForm from "../UploadForm";
 import GovernorSheet from "./GovernorSheet";
 
@@ -25,11 +24,6 @@ const General = () => {
 	const [isDrawerOpen2, setIsDrawerOpen2] = useState(false);
 	const [isDrawerOpen3, setIsDrawerOpen3] = useState(false);
 	const [isDrawerOpen4, setIsDrawerOpen4] = useState(false);
-	const [isDrawerOpen5, setIsDrawerOpen5] = useState(false);
-	const [otp, setOtp] = useState("");
-	const { doForgetPassword } = useForgetPassword((response) => {
-		setOtp(response.data);
-	});
 	const [profilePic, setProfilePic] = useState("");
 	const { doDownload } = useDownload((response) => {
 		setProfilePic(response.data);
@@ -176,11 +170,6 @@ const General = () => {
 				fileType={"taxCard"}
 				isDrawerOpen={isDrawerOpen3}
 				setIsDrawerOpen={setIsDrawerOpen3}
-			/>
-			<ForgetPasswordSheet
-				isDrawerOpen={isDrawerOpen5}
-				setIsDrawerOpen={setIsDrawerOpen5}
-				otp={otp}
 			/>
 		</div>
 	);

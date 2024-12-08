@@ -278,6 +278,9 @@ export default function ItineraryDetails() {
 														reviewedItemId={
 															data?._id
 														}
+														refetchFunction={
+															refetch
+														}
 														userId={user?._id}
 														ref={childRef}
 													/>
@@ -416,6 +419,9 @@ export default function ItineraryDetails() {
 																(
 																	data?.createdBy as unknown as TTourGuide
 																)?._id
+															}
+															refetchFunction={
+																refetch
 															}
 															userId={user?._id}
 															ref={childRef}

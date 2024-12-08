@@ -1,11 +1,13 @@
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+import { useState } from "react";
 
 import { useBookItinerary, useItinerary } from "@/api/data/useItineraries";
 import { useTouristProfile } from "@/api/data/useProfile";
 import Label from "@/components/ui/Label";
 import { Button } from "@/components/ui/button";
 import { Flex } from "@/components/ui/flex";
+import { Input } from "@/components/ui/input";
 import {
 	Sheet,
 	SheetContent,
@@ -26,6 +28,7 @@ interface props {
 export function PaymentSheet({ amount }: props) {
 	const { data: itinerary, refetch } = useItinerary();
 	const formatCurrency = useCurrency();
+	const [promo, setPromo] = useState("");
 	const { data, refetch: refetchUserProfile } = useTouristProfile();
 	const stripePromise = loadStripe(
 		import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY!,
@@ -68,6 +71,14 @@ export function PaymentSheet({ amount }: props) {
 									{formatCurrency(data?.walletBalance)}
 								</Label.Thin400>
 							</Label.Thin300>
+							<Flex>
+								<Input
+									type="text"
+									placeholder="Enter Promo Code"
+									value={promo}
+									onChange={(e) => setPromo(e.target.value)}
+								/>
+							</Flex>
 						</Flex>
 						<Button
 							onClick={() => handlePayment()}

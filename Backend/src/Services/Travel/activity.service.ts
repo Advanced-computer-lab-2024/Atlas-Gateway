@@ -277,6 +277,7 @@ export const bookActivity = async (
 	paymentType: string,
 	amount: number,
 	paymentIntentId: string,
+	promoCode: string,
 	touristId: string,
 ) => {
 	const activity = await getActivityById(activityId);
@@ -288,6 +289,7 @@ export const bookActivity = async (
 		touristId,
 		paymentType,
 		activityId,
+		promoCode,
 		activity.minPrice,
 		activity.maxPrice,
 	);

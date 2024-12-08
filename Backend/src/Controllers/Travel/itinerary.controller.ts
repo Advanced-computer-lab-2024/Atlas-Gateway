@@ -171,7 +171,7 @@ export const bookItinerary = async (
 	try {
 		const itineraryId = req.params.id;
 		const touristId = req.headers.userid;
-		const { paymentIntentId, paymentType, amount } = req.body;
+		const { paymentIntentId, paymentType, amount, promoCode } = req.body;
 		if (!touristId) {
 			return res.status(400).json({ message: "User ID is required" });
 		}
@@ -187,6 +187,7 @@ export const bookItinerary = async (
 			paymentType,
 			amount,
 			paymentIntentId,
+			promoCode,
 			touristId.toString(),
 		);
 
@@ -254,7 +255,6 @@ export const cancelBookingItinerary = async (
 				.status(400)
 				.json({ message: "Itinerary ID is required" });
 		}
-		console.log(touristId.toString());
 		const cancelBookingResult =
 			await itineraryService.cancelBookingItinerary(
 				itineraryId,

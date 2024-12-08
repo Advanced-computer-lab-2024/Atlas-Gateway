@@ -5,7 +5,8 @@ import {
 	IProductReportResponse,
 } from "../../DTOS/Report/ProductReportResponse";
 import HttpError from "../../Errors/HttpError";
-import { Order } from "../../Models/Purchases/order.model";
+import { EOrderStatus, Order } from "../../Models/Purchases/order.model";
+import { IProduct } from "../../Models/Purchases/product.model";
 import { ISeller, Seller } from "../../Models/Users/seller.model";
 import { hashPassword } from "../Auth/password.service";
 import uniqueUsername from "../Auth/username.service";
@@ -110,7 +111,6 @@ export const softDeleteSeller = async (id: string) => {
 	return seller;
 };
 
-// TODO: Implement the report function waiting on the orders of the products
 export const report = async (
 	id: string,
 	options: { date?: string; ProductId?: string } = {},
@@ -123,28 +123,25 @@ export const report = async (
 		{
 			$match: {
 				"products.product.sellerId": new Types.ObjectId(id),
+				status: EOrderStatus.COMPLETED,
 			},
 		},
 	];
 
-	// if date is provided, filter the bookings by date
+	// Filter by date if provided
 	if (options.date) {
 		const [startDateStr, endDateStr] = options.date.split(",");
-
-		// if no date is provided, set the start date the lowest possible date and the end date to today
-		let startDate =
-			new Date(`${startDateStr}T00:00:00.000+00:00`) ||
-			new Date("1970-01-01T00:00:00.000+00:00");
-		let endDate =
-			endDateStr !== "null"
-				? new Date(`${endDateStr}T23:59:59.000+00:00`)
+		const startDate = startDateStr
+			? new Date(`${startDateStr}T00:00:00.000Z`)
+			: new Date("1970-01-01T00:00:00.000Z");
+		const endDate =
+			endDateStr && endDateStr !== "null"
+				? new Date(`${endDateStr}T23:59:59.999Z`)
 				: new Date();
 
 		if (startDate > endDate) {
 			throw new HttpError(400, "Invalid Date Range");
 		}
-
-		// TODO: Filter on the orders of the products by date
 
 		pipeline.push({
 			$match: {
@@ -156,7 +153,7 @@ export const report = async (
 		});
 	}
 
-	// if ProductId is provided, filter the bookings by ProductId
+	// Filter by ProductId if provided
 	if (options.ProductId) {
 		if (!Types.ObjectId.isValid(options.ProductId)) {
 			throw new HttpError(400, "ProductId is Invalid");
@@ -170,29 +167,56 @@ export const report = async (
 		});
 	}
 
-	const orders = await Order.aggregate(pipeline);
-	let totalSales = 0;
+	// Unwind products array to process each product in the orders individually
+	pipeline.push({ $unwind: "$products" });
 
-	const sales: IProductDTO[] = orders.map((order) => {
-		const sales =
-			order.products[0].quantity * order.products[0].product.price;
-
-		const adminProfit = sales * 0.1;
-
-		totalSales += sales - adminProfit;
-
-		return {
-			ProductId: order.products[0].productId,
-			ProductName: order.products[0].product.name,
-			quantity: order.products[0].quantity,
-			sales: sales - adminProfit,
-		} as IProductDTO;
+	// Match the sellerId again for unwound products to ensure relevance
+	pipeline.push({
+		$match: {
+			"products.product.sellerId": new Types.ObjectId(id),
+		},
 	});
 
-	return {
-		data: sales,
-		metaData: {
-			totalSales: totalSales,
+	// Group by ProductId to aggregate sales and quantities
+	pipeline.push({
+		$group: {
+			_id: "$products.productId",
+			name: { $first: "$products.product.name" }, // Adapt this to your schema
+			totalQuantity: { $sum: "$products.quantity" },
+			totalSales: {
+				$sum: {
+					$multiply: [
+						"$products.quantity",
+						"$products.product.price",
+					],
+				},
+			},
 		},
-	} as IProductReportResponse;
+	});
+
+	// Fetch the aggregated data
+	const productAggregates = await Order.aggregate(pipeline);
+
+	// Transform the aggregated data to match IProductDTO structure
+	const data: IProductDTO[] = productAggregates.map((product) => ({
+		ProductId: product._id.toString(),
+		ProductName: product.name,
+		quantity: product.totalQuantity,
+		sales: product.totalSales,
+	}));
+
+	// Calculate total sales and total bookings
+	const totalSales = data.reduce((acc, item) => acc + item.sales, 0);
+	const totalBookings = data.reduce((acc, item) => acc + item.quantity, 0);
+
+	// Construct the response object
+	const response: IProductReportResponse = {
+		data,
+		metaData: {
+			totalSales,
+			totalBookings,
+		},
+	};
+
+	return response;
 };

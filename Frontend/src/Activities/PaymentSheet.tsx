@@ -1,11 +1,13 @@
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+import { useState } from "react";
 
 import { useActivity, useBookActivity } from "@/api/data/useActivities";
 import { useTouristProfile } from "@/api/data/useProfile";
 import Label from "@/components/ui/Label";
 import { Button } from "@/components/ui/button";
 import { Flex } from "@/components/ui/flex";
+import { Input } from "@/components/ui/input";
 import {
 	Sheet,
 	SheetContent,
@@ -26,6 +28,7 @@ interface props {
 export function PaymentSheet({ amount }: props) {
 	const { data: activity, refetch } = useActivity();
 	const { data, refetch: refetchUserProfile } = useTouristProfile();
+	const [promo, setPromo] = useState("");
 	const formatCurrency = useCurrency();
 	const stripePromise = loadStripe(
 		import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY!,
@@ -34,11 +37,12 @@ export function PaymentSheet({ amount }: props) {
 		refetch();
 		refetchUserProfile();
 	});
-	const handlePayment = async () => {
+	const handleWalletPayment = async () => {
 		doBookActivity({
 			id: activity?._id!,
 			paymentType: "wallet",
 			amount: activity?.maxPrice || 0,
+			promoCode: promo,
 		});
 	};
 	return (
@@ -62,15 +66,26 @@ export function PaymentSheet({ amount }: props) {
 					</TabsList>
 					<TabsContent value="wallet" className="flex flex-col mt-4">
 						<Flex>
-							<Label.Thin300>
-								Your Wallet Balance:{" "}
-								<Label.Thin400>
-									{formatCurrency(data?.walletBalance)}
-								</Label.Thin400>
-							</Label.Thin300>
+							<Flex>
+								<Label.Thin300>
+									Wallet Balance:{" "}
+									<Label.Thin400>
+										{formatCurrency(data?.walletBalance)}
+									</Label.Thin400>
+								</Label.Thin300>
+							</Flex>
+							<Flex>
+								<Input
+									type="text"
+									placeholder="Enter Promo Code"
+									value={promo}
+									onChange={(e) => setPromo(e.target.value)}
+								/>
+							</Flex>
 						</Flex>
+
 						<Button
-							onClick={() => handlePayment()}
+							onClick={() => handleWalletPayment()}
 							className="mt-4"
 						>
 							Book Activity

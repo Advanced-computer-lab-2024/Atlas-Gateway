@@ -168,18 +168,11 @@ export default function ActivitiesChart(
 
 	return (
 		<div
-			style={{
-				display: "flex",
-				flexDirection: "column",
-				alignItems: "center",
-				margin: "0 auto",
-				boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-				borderRadius: "8px",
-				background: "#ffffff",
-				padding: "10px",
-				width: "100%",
-				height: "100%",
-			}}
+			className="w-full h-full 
+			flex flex-col items-center
+			shadow-md rounded-lg bg-white p-20
+			mt-10 mb-20 ms-10 me-10"
+
 		>
 			{zoomedActivity && (
 				<Button
