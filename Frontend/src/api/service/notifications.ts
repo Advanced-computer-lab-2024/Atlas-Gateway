@@ -28,12 +28,18 @@ export function apiMarkNotificationAsRead(_id: string) {
 	});
 }
 
-export function apiDeleteNotification(_id: string) {
+export function apiDeleteNotification(
+	_id: string,
+	usertype: string,
+	userId: string,
+) {
 	return axios({
 		method: "DELETE",
 		url: ENDPOINTS.notification.delete(_id),
 		headers: {
 			"Content-Type": "application/json",
+			usertype: usertype,
+			userid: userId,
 		},
 		baseURL: baseURL,
 	});
