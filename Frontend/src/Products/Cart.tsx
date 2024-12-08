@@ -1,10 +1,10 @@
 import { useTouristProfile } from "@/api/data/useProfile";
 import Label from "@/components/ui/Label";
-import { Button } from "@/components/ui/button";
 import { Flex } from "@/components/ui/flex";
 import useCurrency from "@/hooks/useCurrency";
 
 import CartProduct from "./CartProduct";
+import Payment from "./Payment";
 
 export default function Cart() {
 	const { data: tourist } = useTouristProfile();
@@ -42,17 +42,33 @@ export default function Cart() {
 								key={product._id}
 								className="w-full"
 								justify="between"
+								gap="3"
+								isColumn={true}
 							>
-								<Label.Mid400>{product.name}</Label.Mid400>
-								<Label.Mid400>
-									{quantity} x {formatCurrency(product.price)}{" "}
-									= {formatCurrency(product.price * quantity)}
-								</Label.Mid400>
+								<Flex justify="between">
+									{" "}
+									<Label.Mid400>{product.name}</Label.Mid400>
+									<Label.Mid400>
+										{quantity} x{" "}
+										{formatCurrency(product.price)} ={" "}
+										{formatCurrency(
+											product.price * quantity,
+										)}
+									</Label.Mid400>
+								</Flex>
+
+								<Flex isColumn={true} gap="3">
+									<Label.Thin300>
+										Payment Method
+									</Label.Thin300>
+									<Payment
+										amount={formatCurrency(
+											product.price * quantity,
+										)}
+									/>
+								</Flex>
 							</Flex>
 						))}
-						<Button variant="default" className="w-full">
-							Checkout
-						</Button>
 					</Flex>
 				)}
 			</Flex>

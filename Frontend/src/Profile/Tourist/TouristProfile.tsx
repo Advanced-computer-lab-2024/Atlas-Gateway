@@ -164,7 +164,7 @@ export default function TouristProfile() {
 						<TabsTrigger value="hotel-bookings">
 							Hotel bookings
 						</TabsTrigger>
-						<TabsTrigger value="transporations">
+						<TabsTrigger value="transportations">
 							Transporations
 						</TabsTrigger>
 						<TabsTrigger value="upcoming">Upcoming</TabsTrigger>
