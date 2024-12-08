@@ -61,7 +61,7 @@ export default function ActivityCard({
 	const { doRemoveBookmarkActivity } = useRemoveBookmarkActivity(() => {
 		refetch();
 	});
-	const { doNotifyActivity } = useActivityNotification(refetch); 
+	const { doNotifyActivity } = useActivityNotification(refetch);
 
 	// Function to copy the activity link to the clipboard
 	const handleCopyLink = () => {
@@ -93,7 +93,6 @@ export default function ActivityCard({
 			doNotifyActivity(activity._id); // Send the notification request
 		}
 	};
-
 
 	return (
 		<Card
@@ -128,10 +127,21 @@ export default function ActivityCard({
 								}}
 							/>
 						))}
-						<Bell
-                            className="absolute left-8 cursor-pointer"
-                            onClick={handleNotificationClick}
-                        />
+					{user?.type === EAccountType.Tourist &&
+						(activity?.notificationRequested?.includes(
+							user?._id,
+						) ? (
+							<Bell
+								fill="black"
+								className="absolute left-8 cursor-pointer"
+								onClick={handleNotificationClick}
+							/>
+						) : (
+							<Bell
+								className="absolute left-8 cursor-pointer"
+								onClick={handleNotificationClick}
+							/>
+						))}
 					<Label.Mid500 className="justify-self-center">
 						{activity?.name ?? "-"}
 					</Label.Mid500>
