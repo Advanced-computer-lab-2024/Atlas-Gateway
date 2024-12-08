@@ -410,7 +410,7 @@ export interface TOrder {
 	}[];
 	totalPrice: number;
 	status: string;
-	date: string;
+	date: Date;
 	address: string;
 	paymentMethod: string;
 }

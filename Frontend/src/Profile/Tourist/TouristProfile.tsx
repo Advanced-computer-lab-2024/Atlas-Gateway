@@ -30,6 +30,7 @@ import Complaints from "./tabs/Complaints";
 import TouristFlights from "./tabs/Flights/TouristFlights";
 import TouristHotels from "./tabs/Hotels/TouristHotels";
 import TouristItineraries from "./tabs/Itineraries/TouristItineraries";
+import TouristOrders from "./tabs/Orders/touristOrders";
 import History from "./tabs/Past/History";
 import TouristTransportations from "./tabs/Transporations/TouristTransporations";
 import Upcoming from "./tabs/Upcoming/Upcoming";
@@ -144,7 +145,7 @@ export default function TouristProfile() {
 			</div>
 			<div className="flex ml-10 mr-10 mt-10">
 				<Tabs defaultValue="account" className="w-full">
-					<TabsList className="grid w-full grid-cols-10 border-2 border-black">
+					<TabsList className="grid w-full grid-cols-11 border-2 border-black">
 						<TabsTrigger value="account">Account</TabsTrigger>
 						<TabsTrigger value="activities">Activities</TabsTrigger>
 						<TabsTrigger value="itineraries">
@@ -161,6 +162,7 @@ export default function TouristProfile() {
 						<TabsTrigger value="history">History</TabsTrigger>
 						<TabsTrigger value="complaints">Complaints</TabsTrigger>
 						<TabsTrigger value="bookmarked">Bookmarked</TabsTrigger>
+						<TabsTrigger value="orders">Orders</TabsTrigger>
 					</TabsList>
 					<TabsContent value="account">
 						<Account />
@@ -191,6 +193,9 @@ export default function TouristProfile() {
 					</TabsContent>
 					<TabsContent value="bookmarked">
 						<BookmarkedEvents />
+					</TabsContent>
+					<TabsContent value="orders">
+						<TouristOrders />
 					</TabsContent>
 				</Tabs>
 			</div>
