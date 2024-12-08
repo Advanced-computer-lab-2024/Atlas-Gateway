@@ -155,7 +155,6 @@ export default function TouristProfile() {
 							Transportation
 						</TabsTrigger>
 						<TabsTrigger value="complaints">Complaints</TabsTrigger>
-						<TabsTrigger value="pay_test">pay_test</TabsTrigger>
 					</TabsList>
 					<TabsContent value="account">
 						<Account />

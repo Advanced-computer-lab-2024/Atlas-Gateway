@@ -1,7 +1,7 @@
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 
-import { useBookItinerary, useItinerary } from "@/api/data/useItineraries";
+import { useActivity, useBookActivity } from "@/api/data/useActivities";
 import { useTouristProfile } from "@/api/data/useProfile";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,32 +21,32 @@ interface props {
 }
 
 export function PaymentSheet({ amount }: props) {
-	const { data: itinerary, refetch } = useItinerary();
+	const { data: activity, refetch } = useActivity();
 	const { data, refetch: refetchUserProfile } = useTouristProfile();
 	const stripePromise = loadStripe(
 		import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY!,
 	);
-	const { doBookItinerary } = useBookItinerary(async () => {
+	const { doBookActivity } = useBookActivity(async () => {
 		refetch();
 		refetchUserProfile();
 	});
 	const handlePayment = async () => {
-		doBookItinerary({
-			id: itinerary?._id!,
+		doBookActivity({
+			id: activity?._id!,
 			paymentType: "wallet",
-			amount: itinerary?.price!,
+			amount: activity?.maxPrice || 0,
 		});
 	};
 	return (
 		<Sheet>
 			<SheetTrigger asChild>
-				<Button variant="outline">Book Itinerary</Button>
+				<Button variant="outline">Book Activity</Button>
 			</SheetTrigger>
 			<SheetContent>
 				<SheetHeader>
 					<SheetTitle>Payment Form</SheetTitle>
 					<SheetDescription>
-						Please select a payment method to book this Itinerary.
+						Please select a payment method to book this Activity.
 					</SheetDescription>
 				</SheetHeader>
 				<Tabs defaultValue="cash" className="w-full">
@@ -61,7 +61,7 @@ export function PaymentSheet({ amount }: props) {
 							onClick={() => handlePayment()}
 							className="mt-4"
 						>
-							Book Itinerary
+							Book Activity
 						</Button>
 					</TabsContent>
 					<TabsContent value="credit_card" className="mt-4">

@@ -5,15 +5,26 @@ import { ArrowLeft, DollarSign, MapPin } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-
-
-import { useActivity, useBookActivity, useCancelActivityBooking } from "@/api/data/useActivities";
+import {
+	useActivity,
+	useBookActivity,
+	useCancelActivityBooking,
+} from "@/api/data/useActivities";
 import Label from "@/components/ui/Label";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { CommentsContainer } from "@/components/ui/comments";
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from "@/components/ui/dialog";
 import { Flex } from "@/components/ui/flex";
 import Rating, { ERatingType } from "@/components/ui/rating";
 import ReviewOverlay from "@/components/ui/reviewOverlay";
@@ -22,6 +33,7 @@ import { useLoginStore } from "@/store/loginStore";
 import { EAccountType } from "@/types/enums";
 import { TReview } from "@/types/global";
 
+import { PaymentSheet } from "./PaymentSheet";
 
 export default function ActivityDetails() {
 	const navigate = useNavigate();
@@ -152,16 +164,9 @@ export default function ActivityDetails() {
 									Cancel
 								</Button>
 							) : (
-								<Button
-									size="lg"
-									onClick={() => {
-										if (data?._id) {
-											doBookActivity(data?._id);
-										}
-									}}
-								>
-									Book
-								</Button>
+								<PaymentSheet
+									amount={convertCurrency(maxPrice)}
+								/>
 							))}
 					</Flex>
 				</CardHeader>

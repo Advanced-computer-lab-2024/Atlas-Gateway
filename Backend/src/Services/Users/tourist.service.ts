@@ -82,6 +82,7 @@ export const deleteTourist = async (id: string) => {
 
 export const addBookedActivity = async (
 	touristId: string,
+	paymentType: string,
 	activityId: string,
 	minPrice: number,
 	maxPrice: number,
@@ -98,6 +99,18 @@ export const addBookedActivity = async (
 		throw new HttpError(400, "Tourist must be older than 18");
 	}
 
+	if (maxPrice > tourist.walletBalance && paymentType === "wallet") {
+		throw new HttpError(
+			400,
+			"You do not have enough balance in your wallet",
+		);
+	}
+
+	let newWalletBalance = tourist.walletBalance;
+	if (tourist.walletBalance >= maxPrice && paymentType === "wallet") {
+		newWalletBalance = tourist.walletBalance - maxPrice;
+	}
+
 	const newLoyaltyPoints =
 		tourist.loyaltyPoints +
 		((tourist.level / 2) * (minPrice + maxPrice)) / 2;
@@ -110,10 +123,14 @@ export const addBookedActivity = async (
 				? 2
 				: 3;
 	await tourist.updateOne({
-		$push: { bookedActivities: activityId },
+		$push: {
+			bookedActivities: activityId,
+			payment: { type: paymentType, event: activityId },
+		},
 		loyaltyPoints: newLoyaltyPoints,
 		maxCollectedLoyaltyPoints: newMaxCollectedLoyaltyPoints,
 		level: newLevel,
+		walletBalance: newWalletBalance,
 	});
 
 	await tourist.validate();
@@ -177,7 +194,10 @@ export const addBookedItinerary = async (
 				: 3;
 	await tourist.updateOne(
 		{
-			$push: { bookedItineraries: itineraryId },
+			$push: {
+				bookedItineraries: itineraryId,
+				payment: { type: paymentType, event: itineraryId },
+			},
 			loyaltyPoints: newLoyaltyPoints,
 			maxCollectedLoyaltyPoints: newMaxCollectedLoyaltyPoints,
 			level: newLevel,
@@ -244,7 +264,7 @@ export const addBookedHotelOffer = async (
 export const cancelItinerary = async (
 	touristId: string,
 	itineraryId: string,
-	itenraryPrice: number,
+	itineraryPrice: number,
 ) => {
 	if (!Types.ObjectId.isValid(itineraryId)) {
 		throw new HttpError(400, "Itinerary id is not valid");
@@ -264,8 +284,15 @@ export const cancelItinerary = async (
 	) {
 		throw new HttpError(404, "Itinerary not found in the tourist's list");
 	}
+	const payment = tourist.payment.filter((payment: any) =>
+		payment.event.equals(itineraryId),
+	);
+	let newWalletBalance = tourist.walletBalance;
+	if (payment[0].type === "wallet") {
+		newWalletBalance += itineraryPrice;
+	}
 	const newLoyaltyPoints =
-		tourist.loyaltyPoints - (tourist.level / 2) * itenraryPrice;
+		tourist.loyaltyPoints - (tourist.level / 2) * itineraryPrice;
 	const newMaxCollectedLoyaltyPoints =
 		tourist.maxCollectedLoyaltyPoints - newLoyaltyPoints;
 	const newLevel =
@@ -275,10 +302,14 @@ export const cancelItinerary = async (
 				? 2
 				: 3;
 	const removed = await tourist.updateOne({
-		$pull: { bookedItineraries: itineraryId },
+		$pull: {
+			bookedItineraries: itineraryId,
+			payment: { event: itineraryId },
+		},
 		loyaltyPoints: newLoyaltyPoints,
 		maxCollectedLoyaltyPoints: newMaxCollectedLoyaltyPoints,
 		level: newLevel,
+		walletBalance: newWalletBalance,
 	});
 
 	if (removed.modifiedCount === 0) {
@@ -305,6 +336,14 @@ export const cancelActivity = async (
 	if (!tourist.bookedActivities.includes(new Types.ObjectId(activityId))) {
 		throw new HttpError(404, "Activity not found in the tourist's list");
 	}
+	const payment = tourist.payment.filter((payment: any) =>
+		payment.event.equals(activityId),
+	);
+	let newWalletBalance = tourist.walletBalance;
+	if (payment[0].type === "wallet") {
+		newWalletBalance += maxPrice;
+	}
+
 	const newLoyaltyPoints =
 		tourist.loyaltyPoints -
 		((tourist.level / 2) * (minPrice + maxPrice)) / 2;
@@ -317,10 +356,14 @@ export const cancelActivity = async (
 				? 2
 				: 3;
 	const removed = await tourist.updateOne({
-		$pull: { bookedActivities: activityId },
+		$pull: {
+			bookedActivities: activityId,
+			payment: { event: activityId },
+		},
 		loyaltyPoints: newLoyaltyPoints,
 		maxCollectedLoyaltyPoints: newMaxCollectedLoyaltyPoints,
 		level: newLevel,
+		walletBalance: newWalletBalance,
 	});
 
 	if (removed.modifiedCount === 0) {

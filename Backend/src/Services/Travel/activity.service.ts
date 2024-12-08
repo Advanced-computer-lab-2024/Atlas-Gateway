@@ -264,7 +264,13 @@ export const getActivitybyUserId = async (id: string, query: any) => {
 	return result;
 };
 
-export const bookActivity = async (activityId: string, touristId: string) => {
+export const bookActivity = async (
+	activityId: string,
+	paymentType: string,
+	amount: number,
+	paymentIntentId: string,
+	touristId: string,
+) => {
 	const activity = await getActivityById(activityId);
 	if (!activity) {
 		throw new HttpError(404, "Activity not found");
@@ -272,6 +278,7 @@ export const bookActivity = async (activityId: string, touristId: string) => {
 
 	const tourist = await touristService.addBookedActivity(
 		touristId,
+		paymentType,
 		activityId,
 		activity.minPrice,
 		activity.maxPrice,
