@@ -138,16 +138,6 @@ export default function TouristProfile() {
 							>
 								forget password?
 							</DropdownMenuItem>
-
-							<DropdownMenuItem
-								onClick={() => {
-									setIsDrawerOpen2(true);
-									doForgetPassword(data?.email || "");
-								}}
-								className="cursor-pointer"
-							>
-								forget password?
-							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
 				</Flex>

@@ -13,6 +13,7 @@ import complaintRouter from "./Routes/Interactions/complaint.route";
 import reviewRouter from "./Routes/Interactions/review.route";
 import mediaRouter from "./Routes/Media/media.route";
 import paymentRouter from "./Routes/Payment/payment.route";
+import promoRouter from "./Routes/Promo/promo.route";
 import orderRouter from "./Routes/Purchases/order.route";
 import productRouter from "./Routes/Purchases/product.route";
 import itineraryRouter from "./Routes/Travel/Itinerary.route";
@@ -67,6 +68,7 @@ async function startServer() {
 	app.use("/api/reviews", reviewRouter);
 	app.use("/api/payment", paymentRouter);
 	app.use("/api/orders", orderRouter);
+	app.use("/api/promo", promoRouter);
 	// Error handling middleware
 	app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 		console.error(err.stack);

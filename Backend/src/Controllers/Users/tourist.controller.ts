@@ -182,36 +182,36 @@ export const viewPastItineraries = async (req: Request, res: Response) => {
 };
 
 export const requestActivityNotification = async (
-	next: NextFunction,
 	req: Request,
 	res: Response,
+	next: NextFunction,
 ) => {
 	try {
 		const { touristId, activityId } = req.body;
-		const request = await touristService.requestActivityNotification(
+		const activity = await touristService.requestActivityNotification(
 			activityId,
 			touristId,
 		);
-		res.status(200).send(request);
+		res.status(200).send(activity);
 	} catch (error) {
-		res.status(500).send(error);
+		next(error);
 	}
 };
+
 export const requestItineraryNotification = async (
-	next: NextFunction,
 	req: Request,
 	res: Response,
+	next: NextFunction,
 ) => {
 	try {
-		const { touristId, itinerary } = req.body;
-		res.status(200).send(
-			await touristService.requestItineraryNotification(
-				itinerary,
-				touristId,
-			),
+		const { touristId, itineraryId } = req.body;
+		const itinerary = await touristService.requestItineraryNotification(
+			itineraryId,
+			touristId,
 		);
+		res.status(200).send(itinerary);
 	} catch (error) {
-		res.status(500).send(error);
+		next(error);
 	}
 };
 
@@ -257,14 +257,14 @@ export const updateProductQuantity = async (
 	next: NextFunction,
 ) => {
 	try {
-		const id = req.params.id;
-		if (!id) {
-			throw new HttpError(400, "Tourist id is required");
-		}
-		const productId = req.body.productId;
-		const quantity = req.body.quantity;
-		await touristService.updateProductQuantity(id, productId, quantity);
-		res.status(200).send("Product quantity updated successfully");
+		const { touristId, itinerary } = req.body;
+		res.status(200).send(
+			await touristService.requestItineraryNotification(
+				itinerary,
+				touristId,
+			),
+		);
+		res.status(200).send(itinerary);
 	} catch (error) {
 		next(error);
 	}

@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 
 import { comparePassword } from "../../Services/Auth/password.service";
 import { findUserByUsername } from "../../Services/Auth/username.service";
+import { createBirthdayPromo } from "../../Services/Promo/promo.service";
 
 export const login = async (
 	req: Request,
@@ -27,8 +28,8 @@ export const login = async (
 		if (!isMatch) {
 			return res.status(400).send("Invalid credentials");
 		}
-
-		res.status(200).send({ user, type });
+		const BirthdayPromo = await createBirthdayPromo(username);
+		res.status(200).send({ user, type, BirthdayPromo });
 	} catch (error) {
 		next(error);
 	}
