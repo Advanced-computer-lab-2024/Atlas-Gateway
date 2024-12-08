@@ -25,6 +25,8 @@ export const createOrder = async (req: Request, res: Response) => { //Called Whe
             return;
         }
 
+        let tourist = await Tourist.findById(userId);
+
         const order = new Order({
             touristId: userId,
             products,
@@ -39,9 +41,13 @@ export const createOrder = async (req: Request, res: Response) => { //Called Whe
 
         products.forEach((productTuple: IProductTuple)  => {
             stockUpdateList.push(updateStock(productTuple.productId, productTuple.quantity));
+            if(!tourist?.purchaseProducts.includes(productTuple.productId))
+                tourist?.purchaseProducts.push(productTuple.productId);
         });
 
         await Promise.all(stockUpdateList);
+
+        await tourist?.save();
 
         res.status(201).send(order);
     } catch (error) {
@@ -66,7 +72,15 @@ export const listUserOrders = async (req: Request, res: Response) => {
             res.status(400).send("Logged in User id is required");
             return;
         }
-        res.status(200).send("User Orders");
+
+        const orders = await Order.find({ touristId: userId });
+
+        if(orders.length === 0){
+            res.status(404).send("No Orders found");
+            return;
+        }
+
+        res.status(200).send(orders);
     } catch (error) {
         res.status(500).send("Internal Server Error");
         console.error(error);
@@ -115,6 +129,8 @@ export const cancelOrder = async (req: Request, res: Response) => {
             return;
         }
         
+        let tourist = await Tourist.findById(userId);
+
         if (!orderId) {
             res.status(400).send("Order id is required");
             return;
@@ -126,9 +142,31 @@ export const cancelOrder = async (req: Request, res: Response) => {
             return;
         }
 
-        order.set({status: CANCELLED});
+        if(order.touristId.toString() !== userId){
+            res.status(403).send("Unauthorized User (Cannon Cancel Someone else's order)");
+            return;
+        }
+
+
+        if(order.status === "Cancelled" || order.status === "Completed"){
+            res.status(400).send("Order already Cancelled or Completed");
+            return;
+        }
+
+        let stockUpdateList: Promise<void>[] = [];
+
+        order.products.forEach((productTuple: IProductTuple)  => {
+            stockUpdateList.push(updateStock(productTuple.productId, -(productTuple.quantity))); //using the same updateStock method, -ve quantity to add back the stock
+        });
+
+        await Promise.all(stockUpdateList);
+
+        order.set({status: "Cancelled"});
 
         await order.save();
+
+        tourist?.set({ walletBalance: tourist.walletBalance + order.totalPrice });
+        await tourist?.save();
 
         res.status(200).send("Order Canceled");
     } catch (error) {
