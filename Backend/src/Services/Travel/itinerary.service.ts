@@ -1,4 +1,6 @@
 import { Tourist } from "../../Models/Users/tourist.model";
+import { IBooking } from "@/Models/Purchases/booking.model";
+
 import mongoose, { PipelineStage, Types } from "mongoose";
 
 import HttpError from "../../Errors/HttpError";

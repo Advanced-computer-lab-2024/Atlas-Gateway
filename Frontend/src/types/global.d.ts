@@ -384,3 +384,26 @@ export interface TNotification {
     isRead: boolean;
 	createdAt: Date;
 }
+
+export interface TPromo {
+	_id: string;
+	promoCode: string;
+	discountPercentage: number;
+	expiryDate: string;
+	allUsers: boolean;
+}
+
+export interface TOrder {
+	_id: string;
+	touristId: string;
+	products: {
+		productId: string;
+		product: TProduct;
+		quantity: number;
+	}[];
+	totalPrice: number;
+	status: string;
+	date: string;
+	address: string;
+	paymentMethod: string;
+}

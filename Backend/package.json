@@ -27,7 +27,8 @@
 		"mongoose": "^8.8.1",
 		"multer": "1.4.5-lts.1",
 		"node-cron": "^3.0.3",
-		"nodemailer": "^6.9.16"
+		"nodemailer": "^6.9.16",
+		"stripe": "^17.4.0"
 	},
 	"devDependencies": {
 		"@types/bcryptjs": "^2.4.6",
@@ -36,6 +37,7 @@
 		"@types/multer": "^1.4.12",
 		"@types/node": "^22.5.5",
 		"@types/nodemailer": "^6.4.17",
+		"nodemailer": "^6.9.16",
 		"nodemon": "^3.1.7",
 		"prettier": "^3.3.3",
 		"ts-node": "^10.9.2",

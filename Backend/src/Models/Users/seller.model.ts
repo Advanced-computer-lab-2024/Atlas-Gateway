@@ -15,6 +15,7 @@ export interface ISeller extends Document {
 	isVerified: { type: Boolean; default: false };
 	acceptedTerms: { type: Boolean; default: false };
 	notifications: Types.ObjectId[];
+	Products: Types.ObjectId[] | IProduct[];
 }
 
 const sellerSchema = new Schema<ISeller>(
@@ -31,6 +32,7 @@ const sellerSchema = new Schema<ISeller>(
 		acceptedTerms: { type: Boolean, default: false },
 		isDeleted: { type: Boolean, default: false },
 		notifications: [{ type: Schema.Types.ObjectId, ref: "Notification" }],
+		Products: [{ type: Schema.Types.ObjectId, ref: "Product" }],
 	},
 	schemaConfig,
 );
