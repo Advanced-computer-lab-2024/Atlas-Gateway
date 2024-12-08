@@ -1,8 +1,8 @@
-import crypto from "crypto";
 import { Request, Response } from "express";
 import { Types } from "mongoose";
 
 import { promo } from "../../Models/Promo/promo.model";
+import { createPromoService } from "../../Services/Promo/promo.service";
 
 export const createPromo = async (req: Request, res: Response) => {
 	try {
@@ -20,20 +20,12 @@ export const createPromo = async (req: Request, res: Response) => {
 				message: "User IDs are required for specific user promo",
 			});
 		}
-
-		const promoCode = crypto.randomBytes(4).toString("hex").toUpperCase();
-
-		const userObjectIds = Array.isArray(users)
-			? users.map((userId: string) => new Types.ObjectId(userId))
-			: [];
-
-		const newPromo = await promo.create({
-			promoCode,
-			discountPercentage,
+		const newPromo = await createPromoService(
 			expiryDate,
+			discountPercentage,
 			allUsers,
-			users: allUsers ? [] : userObjectIds,
-		});
+			users,
+		);
 
 		res.status(201).json(newPromo);
 	} catch (error) {
