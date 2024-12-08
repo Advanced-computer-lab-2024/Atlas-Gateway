@@ -1,6 +1,7 @@
 import { Image } from "lucide-react";
 import { useEffect, useState } from "react";
 
+import TransportationAdvertiserReport from "@/Reports/Transportation/TransportationReport";
 import { useDownload } from "@/api/data/useMedia";
 import { useTransportationAdvertiserProfile } from "@/api/data/useProfile";
 import { Flex } from "@/components/ui/flex";
@@ -10,7 +11,6 @@ import { useLoginStore } from "@/store/loginStore";
 import profile_background from "../../assets/profile_background.jpg";
 import UploadForm from "../UploadForm";
 import Account from "./tabs/Account";
-import Reports from "./tabs/Reports";
 
 export default function TransporationAdvertiserProfile() {
 	const { user } = useLoginStore();
@@ -80,7 +80,7 @@ export default function TransporationAdvertiserProfile() {
 							<Account />
 						</TabsContent>
 						<TabsContent value="reports">
-							<Reports />
+							<TransportationAdvertiserReport />
 						</TabsContent>
 					</Flex>
 				</Flex>

@@ -201,7 +201,7 @@ export const report = async (
 	const advertiser = await getTransportationAdvertiserById(id);
 
 	if (!advertiser) {
-		throw new HttpError(404, "Advertiser not Found");
+		throw new HttpError(404, "Transportation Advertiser not Found");
 	}
 
 	await advertiser.populate("transportations");
