@@ -14,6 +14,7 @@ import {
 	apiFlagItinerary,
 	apiItineraries,
 	apiItinerary,
+	apiItineraryNotification,
 	apiPastItineraries,
 	apiRemoveBookmarkItinerary,
 	apiToggleItineraryStatus,
@@ -229,3 +230,23 @@ export function usePastItineraries() {
 
 	return { ...query, data: data?.data, meta: data?.data?.metaData };
 }
+
+export function useItineraryNotification(onSuccess: () => void) {
+	const { user } = useLoginStore();
+	const { _id } = user || {};
+
+	const mutation = useMutation({
+		mutationFn: (itineraryId: string) => {
+			if (!_id) {
+				throw new Error("User ID is undefined");
+			}
+			return apiItineraryNotification(_id,itineraryId);
+		},
+		onSuccess,
+	});
+
+	const { mutate } = mutation;
+
+	return { doNotifyItinerary: mutate, ...mutation };
+}
+

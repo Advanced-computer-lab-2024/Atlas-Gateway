@@ -175,3 +175,18 @@ export function apiPastActivities(touristId: string) {
 		baseURL: baseURL,
 	});
 }
+
+export function apiActivityNotification(touristId: string, activityId: string) {
+	return axios({
+		method: "POST",
+		url: ENDPOINTS.tourist.activityNotification,
+		headers: {
+			"Content-Type": "application/json",
+		},
+		data: {
+			touristId,
+			activityId,
+		},
+		baseURL: baseURL,
+	});
+}

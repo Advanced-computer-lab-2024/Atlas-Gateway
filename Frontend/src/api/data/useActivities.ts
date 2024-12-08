@@ -8,6 +8,7 @@ import { TActivity } from "@/types/global";
 import {
 	apiActivities,
 	apiActivity,
+	apiActivityNotification,
 	apiAdvertisorActivities,
 	apiBookActivity,
 	apiBookmarkActivity,
@@ -207,21 +208,22 @@ export function usePastActivities() {
 	return { data: data?.data, meta: data?.data?.metaData, refetch };
 }
 
-// export function useNotification(onSuccess: () => void) {
-//     const { user } = useLoginStore();
-//     const { _id } = user || {};
 
-//     const mutation = useMutation({
-//         mutationFn: (activityId: string) => {
-//             if (!_id) {
-//                 throw new Error("User ID is undefined");
-//             }
-//             return apiRequestNotification(activityId, _id);
-//         },
-//         onSuccess,
-//     });
+export function useActivityNotification(onSuccess: () => void) {
+	const { user } = useLoginStore();
+	const { _id } = user || {};
 
-//     const { mutate } = mutation;
+	const mutation = useMutation({
+		mutationFn: (activityId: string) => {
+			if (!_id) {
+				throw new Error("User ID is undefined");
+			}
+			return apiActivityNotification(_id,activityId);
+		},
+		onSuccess,
+	});
 
-//     return { doRequestNotification: mutate, ...mutation };
-// }
+	const { mutate } = mutation;
+
+	return { doNotifyActivity: mutate, ...mutation };
+}

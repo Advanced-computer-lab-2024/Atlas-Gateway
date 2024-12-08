@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 
 import {
 	useActivities,
+	useActivityNotification,
 	useBookmarkActivity,
 	useDeleteActivity,
 	useRemoveBookmarkActivity,
@@ -60,6 +61,7 @@ export default function ActivityCard({
 	const { doRemoveBookmarkActivity } = useRemoveBookmarkActivity(() => {
 		refetch();
 	});
+	const { doNotifyActivity } = useActivityNotification(refetch); 
 
 	// Function to copy the activity link to the clipboard
 	const handleCopyLink = () => {
@@ -86,10 +88,12 @@ export default function ActivityCard({
 		window.location.href = `mailto:?subject=${subject}&body=${body}`;
 	};
 
-    // const handleRequestNotification = () => {
-		
-    //     alert("You will be notified when bookings for this activity open!");
-    // };
+	const handleNotificationClick = () => {
+		if (activity?._id) {
+			doNotifyActivity(activity._id); // Send the notification request
+		}
+	};
+
 
 	return (
 		<Card
@@ -126,7 +130,7 @@ export default function ActivityCard({
 						))}
 						<Bell
                             className="absolute left-8 cursor-pointer"
-                            
+                            onClick={handleNotificationClick}
                         />
 					<Label.Mid500 className="justify-self-center">
 						{activity?.name ?? "-"}

@@ -86,6 +86,8 @@ const ENDPOINTS = {
 			`api/tourist/upcomingItineraries/${id}`,
 		pastActivities: (id: string) => `api/tourist/pastActivities/${id}`,
 		pastItineraries: (id: string) => `api/tourist/pastItineraries/${id}`,
+		activityNotification: "api/tourist/ActivityNotification", 
+        itineraryNotification: "api/tourist/ItineraryNotification", 
 	},
 	seller: {
 		list: "api/seller/list",
