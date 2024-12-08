@@ -1,10 +1,10 @@
 import crypto from "crypto";
 import { Types } from "mongoose";
 
+import transporter from "../../Config/mail";
+import * as mailTemplate from "../../Config/mailTemplate";
 import { promo } from "../../Models/Promo/promo.model";
 import { findUserByUsername } from "../../Services/Auth/username.service";
-
-// Assuming you have a Tourist model
 
 export const createPromoService = async (
 	expiryDate: string,
@@ -46,7 +46,7 @@ export const isBirthdayToday = (data: { user: any; type: string }): boolean => {
 	return todayMonth === dobMonth && todayDay === dobDay;
 };
 
-export const createBirthdayPromo = async (username: string) => {
+export const createBirthdayPromo = async (username: string, email: string) => {
 	const userResult = await findUserByUsername(username);
 
 	if (!userResult || !userResult.user) {
@@ -77,6 +77,17 @@ export const createBirthdayPromo = async (username: string) => {
 		false,
 		[user._id],
 	);
+
+	await transporter.sendMail({
+		from: `${process.env.SYSTEM_EMAIL}`,
+		to: `${email}`,
+		subject: "Happy Birthday Promo",
+		html: mailTemplate.promoCodeTemplate(
+			newPromo.promoCode,
+			newPromo.discountPercentage,
+			newPromo.expiryDate,
+		),
+	});
 
 	return newPromo;
 };

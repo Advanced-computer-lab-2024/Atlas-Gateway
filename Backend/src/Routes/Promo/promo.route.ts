@@ -10,8 +10,8 @@ import {
 const productRouter = Router();
 
 productRouter.post("/create", createPromo);
+productRouter.get("/list", listPromos);
 productRouter.get("/check/:id", checkPromo);
 productRouter.delete("/delete/:id", deletePromoByCode);
-productRouter.get("/list", listPromos);
 
 export default productRouter;

@@ -28,7 +28,7 @@ export const login = async (
 		if (!isMatch) {
 			return res.status(400).send("Invalid credentials");
 		}
-		const BirthdayPromo = await createBirthdayPromo(username);
+		const BirthdayPromo = await createBirthdayPromo(username, user.email);
 		res.status(200).send({ user, type, BirthdayPromo });
 	} catch (error) {
 		next(error);

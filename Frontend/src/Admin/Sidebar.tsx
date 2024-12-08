@@ -3,6 +3,7 @@ import {
 	ChartNoAxesCombined,
 	MessageCircleWarning,
 	Package,
+	Percent,
 	TagIcon,
 	UserCircleIcon,
 	Users,
@@ -80,6 +81,7 @@ const Sidebar = () => {
 					"Tags",
 					"Complaints",
 					"Reports",
+					"Promo Codes",
 				].map((category) => (
 					<div
 						key={category}
@@ -128,6 +130,13 @@ const Sidebar = () => {
 						)}
 						{category === "Reports" && (
 							<ChartNoAxesCombined
+								className="text-white p-1 rounded-full"
+								width={50}
+								height={50}
+							/>
+						)}
+						{category === "Promo Codes" && (
+							<Percent
 								className="text-white p-1 rounded-full"
 								width={50}
 								height={50}

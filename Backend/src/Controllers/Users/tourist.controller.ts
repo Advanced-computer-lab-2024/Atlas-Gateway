@@ -257,14 +257,14 @@ export const updateProductQuantity = async (
 	next: NextFunction,
 ) => {
 	try {
-		const { touristId, itinerary } = req.body;
-		res.status(200).send(
-			await touristService.requestItineraryNotification(
-				itinerary,
-				touristId,
-			),
-		);
-		res.status(200).send(itinerary);
+		const id = req.params.id;
+		if (!id) {
+			throw new HttpError(400, "Tourist id is required");
+		}
+		const productId = req.body.productId;
+		const quantity = req.body.quantity;
+		await touristService.updateProductQuantity(id, productId, quantity);
+		res.status(200).send("Product quantity updated successfully");
 	} catch (error) {
 		next(error);
 	}

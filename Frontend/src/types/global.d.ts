@@ -391,3 +391,11 @@ export interface IHotelBooking {
 	};
 	offer: THotelOffer;
 }
+
+export interface TPromo {
+	_id: string;
+	promoCode: string;
+	discountPercentage: number;
+	expiryDate: string;
+	allUsers: boolean;
+}
