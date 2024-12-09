@@ -83,7 +83,6 @@ async function startServer() {
 	});
 
 	const cron = require("node-cron");
-	// Schedule the cron job to run every day at midnight
 	cron.schedule("0 0 * * *", () =>
 		notificationService.notifyOfBookedItineraries(),
 	);
