@@ -59,7 +59,6 @@ export const createOrder = async (req: Request, res: Response) => {
 					totalPrice -
 					totalPrice * (promo?.discountPercentage! / 100);
 			}
-			console.log(totalPrice);
 			tourist.walletBalance -= totalPrice;
 		}
 

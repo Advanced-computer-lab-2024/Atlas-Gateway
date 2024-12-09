@@ -40,9 +40,10 @@ export function PaymentSheet({ amount }: props) {
 	const handleWalletPayment = async () => {
 		doBookActivity({
 			id: activity?._id!,
-			paymentType: "wallet",
+			paymentType: "Wallet",
 			amount: activity?.maxPrice || 0,
 			promoCode: promo,
+			stripeAmount: parseFloat(amount) * 100,
 		});
 	};
 	return (

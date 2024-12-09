@@ -274,10 +274,10 @@ export const getActivitybyUserId = async (id: string, query: any) => {
 
 export const bookActivity = async (
 	activityId: string,
-	paymentType: string,
-	amount: number,
 	paymentIntentId: string,
+	paymentType: string,
 	promoCode: string,
+	stripeAmount: number,
 	touristId: string,
 ) => {
 	const activity = await getActivityById(activityId);
@@ -290,6 +290,8 @@ export const bookActivity = async (
 		paymentType,
 		activityId,
 		promoCode,
+		stripeAmount,
+		paymentIntentId,
 		activity.minPrice,
 		activity.maxPrice,
 	);

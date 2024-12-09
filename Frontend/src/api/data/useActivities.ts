@@ -132,12 +132,14 @@ export function useBookActivity(onSuccess: () => void) {
 			paymentType,
 			amount,
 			promoCode,
+			stripeAmount,
 			paymentIntentId,
 		}: {
 			id: string;
 			paymentType: string;
 			amount: number;
 			promoCode: string;
+			stripeAmount: number;
 			paymentIntentId?: string;
 		}) =>
 			apiBookActivity(
@@ -146,6 +148,7 @@ export function useBookActivity(onSuccess: () => void) {
 				amount,
 				promoCode,
 				_id ?? "",
+				stripeAmount,
 				paymentIntentId,
 			),
 		onError,
@@ -257,7 +260,6 @@ export function usePastActivities() {
 	return { data: data?.data, meta: data?.data?.metaData, refetch };
 }
 
-
 export function useActivityNotification(onSuccess: () => void) {
 	const { user } = useLoginStore();
 	const { _id } = user || {};
@@ -267,7 +269,7 @@ export function useActivityNotification(onSuccess: () => void) {
 			if (!_id) {
 				throw new Error("User ID is undefined");
 			}
-			return apiActivityNotification(_id,activityId);
+			return apiActivityNotification(_id, activityId);
 		},
 		onSuccess,
 	});
@@ -286,7 +288,7 @@ export function useRemoveActivityNotification(onSuccess: () => void) {
 			if (!_id) {
 				throw new Error("User ID is undefined");
 			}
-			return apiRemoveActivityNotification(_id,activityId);
+			return apiRemoveActivityNotification(_id, activityId);
 		},
 		onSuccess,
 	});
