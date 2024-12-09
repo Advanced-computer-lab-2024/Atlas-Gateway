@@ -17,12 +17,16 @@ export function apiOrders(_id: string | undefined) {
 	});
 }
 
-export async function apiOrder(_id: string | undefined) {
+export async function apiOrder(
+	orderId: string | undefined,
+	userid: string | undefined,
+) {
 	return await axios<TOrder>({
 		method: "GET",
-		url: ENDPOINTS.orders.show(_id ?? ""),
+		url: ENDPOINTS.orders.show(orderId ?? ""),
 		headers: {
 			"Content-Type": "application/json",
+			userid: userid,
 		},
 		baseURL: baseURL,
 	});
