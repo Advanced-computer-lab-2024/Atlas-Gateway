@@ -32,8 +32,6 @@ import touristRouter from "./Routes/Users/tourist.route";
 import transportation_advertiserRouter from "./Routes/Users/transportation_advertiser.route";
 import * as notificationService from "./Services/Interactions/notification.service";
 
-const app = express();
-
 async function startServer() {
 	const app = express();
 	app.use(express.json());
@@ -96,7 +94,6 @@ async function startServer() {
 		);
 	});
 }
-export default app;
-startServer();
 
+startServer();
 connectDB();
