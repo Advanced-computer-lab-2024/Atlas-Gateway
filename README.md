@@ -881,7 +881,93 @@ export default function Itineraries() {
 ## Api Refrences 
 
 Our API is available online as a public postman workspace that you can see and fork.
+<details>
+<summary>All Api Refrences Here</summary>
 
+- `/api/admin/create`
+- `/api/admin/list`
+- `/api/admin/report`
+- `/api/admin/userStats`
+- `/api/advertiser/create`
+- `/api/advertiser/list`
+- `/api/advertiser/report/:id`
+- `/api/advertiser/list/:id`
+- `/api/activity/create`
+- `/api/activity/list`
+- `/api/activity/listAdvertisor`
+- `/api/activity/book/:id`
+- `/api/activity/cancelBooking/:id`
+- `/api/activity/bookmark/:id`
+- `/api/activity/removeBookmark/:id`
+- `/api/category/create`
+- `/api/category/list`
+- `/api/complaint/create`
+- `/api/complaint/list`
+- `/api/complaint/list-profile`
+- `/api/flight/book`
+- `/api/flight/search`
+- `/api/governor/create`
+- `/api/governor/list`
+- `/api/hotel/bookRoom`
+- `/api/hotel/list/:cityCode`
+- `/api/hotel/myBookings`
+- `/api/itinerary/create`
+- `/api/itinerary/list`
+- `/api/itinerary/listTourGuide`
+- `/api/itinerary/book/:id`
+- `/api/itinerary/cancelBooking/:id`
+- `/api/itinerary/bookmark/:id`
+- `/api/itinerary/removeBookmark/:id`
+- `/api/login`
+- `/api/media/upload`
+- `/api/media/download`
+- `/api/notification/create`
+- `/api/notification/list`
+- `/api/order/create`
+- `/api/order/list`
+- `/api/order/addAddress`
+- `/api/payment/createPaymentIntent`
+- `/api/places/create`
+- `/api/places/list`
+- `/api/places/listGoverner`
+- `/api/product/create`
+- `/api/product/list`
+- `/api/promo/create`
+- `/api/promo/list`
+- `/api/register/create`
+- `/api/review/add`
+- `/api/review/list`
+- `/api/seller/create`
+- `/api/seller/list`
+- `/api/seller/report/:id`
+- `/api/tag/historical/create`
+- `/api/tag/historical/list`
+- `/api/tag/preference/create`
+- `/api/tag/preference/list`
+- `/api/tag/list`
+- `/api/tourGuide/create`
+- `/api/tourGuide/list`
+- `/api/tourGuide/report/:id`
+- `/api/tourist/create`
+- `/api/tourist/list`
+- `/api/tourist/wallet`
+- `/api/tourist/upcomingActivities/:id`
+- `/api/tourist/upcomingItineraries/:id`
+- `/api/tourist/pastActivities/:id`
+- `/api/tourist/pastItineraries/:id`
+- `/api/tourist/ItineraryNotification`
+- `/api/tourist/removeItineraryNotification`
+- `/api/tourist/ActivityNotification`
+- `/api/tourist/removeActivityNotification`
+- `/api/tourist/cart/add/:id`
+- `/api/tourist/cart/remove/:id`
+- `/api/transportation/create`
+- `/api/transportation/list`
+- `/api/transportation/listAdvertisor`
+- `/api/transportation_advertiser/create`
+- `/api/transportation_advertiser/list`
+- `/api/transportation_advertiser/report/:id`
+</details>
 
 ## Tests 
 
