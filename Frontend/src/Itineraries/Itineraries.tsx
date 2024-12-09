@@ -61,9 +61,7 @@ export default function Itineraries() {
 
 	return (
 		<Flex isColumn gap="4" className="w-full h-full">
-			<Label.Big600>
-				View a list of itineraries you can follow!
-			</Label.Big600>
+			<Label.Big600>Itineraries ({meta?.total || 0})</Label.Big600>
 			<Flex
 				justify="between"
 				gap="2"

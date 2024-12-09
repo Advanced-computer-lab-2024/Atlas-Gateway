@@ -45,15 +45,13 @@ export default function Transportations() {
 
 	return (
 		<Flex isColumn gap="4" className="w-full h-full">
-			<Label.Big600>
-				View a list of transportations you can take!
-			</Label.Big600>
-			<Flex
-				justify="between"
-				gap="2"
-				className="bg-surface-secondary p-2 rounded-lg border-2 border-solid border-black"
-			>
-				{user?.type === EAccountType.TransportationAdvertiser && (
+			<Label.Big600>Transportations ({meta?.total || 0})</Label.Big600>
+			{user?.type === EAccountType.TransportationAdvertiser && (
+				<Flex
+					justify="between"
+					gap="2"
+					className="bg-surface-secondary p-2 rounded-lg border-2 border-solid border-black"
+				>
 					<Button
 						onClick={() => setOpen(true)}
 						variant="default"
@@ -61,8 +59,8 @@ export default function Transportations() {
 					>
 						Add Transportation <Plus />
 					</Button>
-				)}
-			</Flex>
+				</Flex>
+			)}
 			<Flex
 				className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2"
 				gap="4"
