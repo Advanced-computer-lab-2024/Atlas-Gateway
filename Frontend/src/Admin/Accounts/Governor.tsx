@@ -2,6 +2,8 @@ import { Trash } from "lucide-react";
 import { RotateCw } from "lucide-react";
 
 import { useDeleteGovernor, useGovernors } from "@/api/data/useGovernor";
+import AreYouSure from "@/components/ui/AreYouSure";
+import { Button } from "@/components/ui/button";
 import {
 	Table,
 	TableBody,
@@ -51,14 +53,20 @@ const Governor = () => {
 								</TableCell>
 								<TableCell>{governor.email}</TableCell>
 								<TableCell className="cursor-pointer hover:text-red-600 w-1">
-									<button className="bg-red-500 text-white rounded-full p-2 shadow-lg hover:bg-red-600">
-										<Trash
-											className="w-4 h-4"
-											onClick={() => {
-												doDeleteGovernor(governor._id);
-											}}
-										/>
-									</button>
+									<AreYouSure
+										title="Are you sure you want to delete this governer?"
+										description="This action is irreversible"
+										onConfirm={() => {
+											doDeleteGovernor(governor._id);
+										}}
+									>
+										<Button
+											size="icon"
+											variant="destructive"
+										>
+											<Trash className="w-4 h-4" />
+										</Button>
+									</AreYouSure>
 								</TableCell>
 							</TableRow>
 						))}

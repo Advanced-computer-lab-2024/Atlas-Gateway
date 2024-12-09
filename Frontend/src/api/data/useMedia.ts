@@ -1,15 +1,23 @@
 import { useMutation } from "@tanstack/react-query";
 
 import { TUploadForm } from "@/Register/types";
+import { toast } from "@/hooks/use-toast";
 
 import { apiDownload, apiUpload } from "../service/media";
+import { onError } from "./onError";
 
 export function useUpload(onSuccess: () => void) {
 	const mutation = useMutation({
 		mutationFn: (data: TUploadForm) => {
 			return apiUpload(data);
 		},
-		onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "File uploaded successfully!",
+			});
+		},
 	});
 	const { mutate } = mutation;
 	return { doUpload: mutate, ...mutation };

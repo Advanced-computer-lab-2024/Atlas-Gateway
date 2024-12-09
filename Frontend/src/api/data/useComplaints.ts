@@ -1,16 +1,19 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 
-
-
+import { toast } from "@/hooks/use-toast";
 import { useLoginStore } from "@/store/loginStore";
 import { TComplaint } from "@/types/global";
 
-
-
-import { apiAddComplaint, apiComplaint, apiComplaints, apiProfileComplaints, apiUpdateComplaint } from "../service/complaints";
+import {
+	apiAddComplaint,
+	apiComplaint,
+	apiComplaints,
+	apiProfileComplaints,
+	apiUpdateComplaint,
+} from "../service/complaints";
+import { onError } from "./onError";
 import { useQueryString } from "./useQueryString";
-
 
 export function useComplaints() {
 	const { user } = useLoginStore();
@@ -44,7 +47,13 @@ export function useAddComplaint(onSuccess: () => void) {
 
 	const mutation = useMutation({
 		mutationFn: (data: TComplaint) => apiAddComplaint(_id, data),
-		onSuccess: onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Complaint created successfully!",
+			});
+		},
 	});
 
 	const { mutate } = mutation;
@@ -74,7 +83,13 @@ export function useUpdateComplaint(onSuccess: () => void) {
 			const userid = user?._id;
 			return apiUpdateComplaint({ _id: id, ...data }, userid!);
 		},
-		onSuccess: onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Complaint updated successfully!",
+			});
+		},
 	});
 
 	const { mutate } = mutation;

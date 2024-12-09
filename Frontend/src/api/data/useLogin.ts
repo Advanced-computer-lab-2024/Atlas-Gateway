@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
+import { toast } from "@/hooks/use-toast";
 import { useLoginStore } from "@/store/loginStore";
 
 import apiLogin from "../service/login";
@@ -11,6 +12,12 @@ export function useLogin() {
 
 	const mutation = useMutation({
 		mutationFn: apiLogin,
+		onError: () => {
+			toast({
+				title: "Wrong credentials!",
+				description: "Please try again"
+			});
+		},
 		onSuccess: (data) => {
 			const { _id, username, currency, acceptedTerms, isVerified } =
 				data.data.user;
@@ -25,7 +32,6 @@ export function useLogin() {
 			});
 			if (data.data.type === "admin") navigate("/admin");
 			else navigate("/");
-			
 		},
 	});
 

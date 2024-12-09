@@ -129,6 +129,7 @@ export default function ProductCard({
 							(touristWishlist?.includes(user?._id) ? (
 								<Star
 									fill="yellow"
+									className="cursor-pointer"
 									onClick={() => {
 										if (product?._id) {
 											doRemoveWishlist(product?._id);
@@ -137,6 +138,7 @@ export default function ProductCard({
 								/>
 							) : (
 								<Star
+									className="cursor-pointer"
 									onClick={() => {
 										if (product?._id) {
 											doAddWishlist(product?._id);

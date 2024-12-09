@@ -7,16 +7,16 @@ import TouristBadge from "./TouristBadge";
 import Account from "./tabs/Account";
 import BookmarkedEvents from "./tabs/Bookmarked/BookmarkedEvents";
 import Complaints from "./tabs/Complaints";
+import TouristOrders from "./tabs/Orders/touristOrders";
 import History from "./tabs/Past/History";
 import Transportations from "./tabs/Transporations/Transportations";
 import Upcoming from "./tabs/Upcoming/Upcoming";
-import TouristOrders from "./tabs/Orders/touristOrders";
 
 export default function TouristProfile() {
 	const { data } = useTouristProfile();
 
 	return (
-		<Flex isColumn className="w-full">
+		<Flex isColumn className="w-full pt-6">
 			<div className="relative w-full">
 				<div
 					className="w-full h-64 bg-cover bg-center rounded-lg"
@@ -43,7 +43,7 @@ export default function TouristProfile() {
 								Account Details
 							</TabsTrigger>
 							<TabsTrigger value="transportations">
-								Transporations & Hotels
+								Transportations & Hotels
 							</TabsTrigger>
 							<TabsTrigger value="upcoming">
 								Upcoming Bookings
@@ -57,9 +57,7 @@ export default function TouristProfile() {
 							<TabsTrigger value="bookmarked">
 								Bookmarked
 							</TabsTrigger>
-							<TabsTrigger value="Orders">
-								Orders
-							</TabsTrigger>
+							<TabsTrigger value="Orders">Orders</TabsTrigger>
 						</TabsList>
 					</Flex>
 					<Flex

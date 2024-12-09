@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 
+import { toast } from "@/hooks/use-toast";
 import { useLoginStore } from "@/store/loginStore";
 import { TGovernor } from "@/types/global";
 
@@ -8,13 +9,20 @@ import {
 	apiDeleteGovernor,
 	apiGovernors,
 } from "../service/governor";
+import { onError } from "./onError";
 
 export function useCreateGovernor(onSuccess: () => void) {
 	const mutation = useMutation({
 		mutationFn: (data: TGovernor) => {
 			return apiCreateGovernor(data);
 		},
-		onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Tourism governer added successfully!",
+			});
+		},
 	});
 	const { mutate } = mutation;
 	return { doCreateGovernor: mutate, ...mutation };
@@ -35,7 +43,13 @@ export function useGovernors() {
 export function useDeleteGovernor(onSuccess: () => void) {
 	const mutation = useMutation({
 		mutationFn: (_id: string) => apiDeleteGovernor(_id),
-		onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Tourism governer deleted successfully!",
+			});
+		},
 	});
 	const { mutate } = mutation;
 

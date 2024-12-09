@@ -217,4 +217,42 @@ export const createActivity = async (
 ```
 ---
 
+## Installation
+
+1. Clone the Project
+```console
+> git clone https://github.com/Advanced-computer-lab-2024/Atlas-Gateway/tree/main
+```
+2. Change directory to Frontend
+```console
+> cd Frontend
+> npm i
+> npm run dev
+```
+3. Create new window and change directory to Backend
+```console
+> cd backend
+> npm i
+> npm run dev
+```
+
+## Api Refrences 
+
+Our API is available online as a public postman workspace that you can see and fork.
+
+
+## Tests 
+
+
+## How To Use
+
+
+## Contribute
+
+## Credits
+
+
+## License
+
+The Project is following [MIT License](https://opensource.org/license/mit)
 

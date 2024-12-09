@@ -155,6 +155,8 @@ export function apiCheckoutCart(
 		}[];
 		address: string;
 		paymentMethod: string;
+		promoCode?: string;
+		paymentIntentId?: string;
 	},
 	_id: string,
 ) {
