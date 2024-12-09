@@ -14,6 +14,8 @@ import {
 	useDeleteAdvertiserProfile,
 } from "@/api/data/useProfile";
 import { TAdvertiserProfileResponse } from "@/api/service/types";
+import AreYouSure from "@/components/ui/AreYouSure";
+import { Button } from "@/components/ui/button";
 import {
 	Table,
 	TableBody,
@@ -136,16 +138,19 @@ const Advertisers = () => {
 									: "Request Not Sent"}
 							</TableCell>
 							<TableCell className="cursor-pointer hover:text-[#2b58ed] w-1">
-								<button className="bg-red-500 text-white rounded-full p-2 shadow-lg hover:bg-red-600">
-									<Trash
-										className="w-4 h-4"
-										onClick={() =>
-											doDeleteAdvertiserProfile(
-												advertiser._id,
-											)
-										}
-									/>
-								</button>
+								<AreYouSure
+									title="Are you sure you want to delete this advertiser?"
+									description="This action is irreversible"
+									onConfirm={() => {
+										doDeleteAdvertiserProfile(
+											advertiser._id,
+										);
+									}}
+								>
+									<Button size="icon" variant="destructive">
+										<Trash className="w-4 h-4" />
+									</Button>
+								</AreYouSure>
 							</TableCell>
 						</TableRow>
 					))}

@@ -8,6 +8,7 @@ import {
 	useRequestDeleteAdvertiserProfile,
 	useTransportationAdvertiserProfile,
 } from "@/api/data/useProfile";
+import AreYouSure from "@/components/ui/AreYouSure";
 import Label from "@/components/ui/Label";
 import { Button } from "@/components/ui/button";
 import { Flex } from "@/components/ui/flex";
@@ -114,18 +115,23 @@ export default function Account() {
 								Edit account
 							</Button>
 						)}
-						<Button
-							variant="destructive"
-							className="gap-2"
-							size="default"
-							onClick={() => {
+						<AreYouSure
+							title="Are you sure you want to sent a request to delete your account?"
+							description="This action is irreversible"
+							onConfirm={() => {
 								if (data?._id)
 									doRequestDeleteAdvertiserProfile(data._id);
 							}}
 						>
-							<X />
-							Delete Account
-						</Button>
+							<Button
+								variant="destructive"
+								className="gap-2"
+								size="default"
+							>
+								<X />
+								Delete Account
+							</Button>
+						</AreYouSure>
 					</Flex>
 				</Flex>
 			</Flex>

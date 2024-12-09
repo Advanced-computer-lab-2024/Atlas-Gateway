@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import Slideshow from "@/Places/Form/Slideshow";
 import { useDownload } from "@/api/data/useMedia";
 import { useDeletePlace, usePlaces } from "@/api/data/usePlaces";
+import AreYouSure from "@/components/ui/AreYouSure";
 import Label from "@/components/ui/Label";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -120,14 +121,18 @@ export default function PlaceCard({
 											<Edit />
 											Edit
 										</DropdownMenuItem>
-										<DropdownMenuItem
-											onClick={() => {
+										<AreYouSure
+											title="Are you sure you want to delete this place?"
+											description="This action is irreversible"
+											onConfirm={() => {
 												doDeletePlace(place?._id);
 											}}
 										>
-											<Trash />
-											Delete
-										</DropdownMenuItem>
+											<DropdownMenuItem>
+												<Trash />
+												Delete
+											</DropdownMenuItem>
+										</AreYouSure>
 									</>
 								)}
 							</DropdownMenuContent>

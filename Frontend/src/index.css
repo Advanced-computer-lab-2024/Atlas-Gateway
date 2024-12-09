@@ -41,13 +41,13 @@ body {
 
 body {
 	margin: 0;
-	background: linear-gradient(180deg, rgb(83, 181, 179), #ffffff);
+	background: #758d8a
 }
 
 @media (prefers-color-scheme: light) {
 	:root {
 		color: #213547;
-		background-color: #ffffff;
+		background-color: #606060;
 	}
 	a:hover {
 		color: #747bff;

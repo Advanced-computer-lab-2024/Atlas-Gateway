@@ -8,6 +8,7 @@ import { z } from "zod";
 import { useSearchFlights } from "@/api/data/useFlights";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
+import { Flex } from "@/components/ui/flex";
 import {
 	FormControl,
 	FormField,
@@ -63,8 +64,16 @@ const SearchForm = ({ addFlight, removeFlights }: props) => {
 
 	return (
 		<FormProvider {...form}>
-			<form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
-				<div className="flex gap-5 w-[1000px]">
+			<form
+				onSubmit={handleSubmit(onSubmit)}
+				className="flex flex-col pt-6"
+			>
+				<Flex
+					className="bg-surface-secondary p-2 px-6 rounded-lg"
+					gap="5"
+					align="center"
+					justify="center"
+				>
 					<FormField
 						control={control}
 						name="originLocationCode"
@@ -259,9 +268,9 @@ const SearchForm = ({ addFlight, removeFlights }: props) => {
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel>Adults</FormLabel>
-								<FormControl className="rounded-3xl h-[48px]">
+								<FormControl className="rounded-3xl h-[48px] w-48 bg-white">
 									<Input
-										placeholder="Enter the Adults"
+										placeholder="Enter number of Adults"
 										type="number"
 										{...field}
 										onChange={(e) =>
@@ -304,7 +313,7 @@ const SearchForm = ({ addFlight, removeFlights }: props) => {
 							</FormItem>
 						)}
 					/>
-				</div>
+				</Flex>
 				<Button
 					className="text-black w-28 self-center rounded-2xl mt-5 bg-green-600 hover:bg-green-700 hover:text-white"
 					type="submit"
