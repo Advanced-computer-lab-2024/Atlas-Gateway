@@ -1,6 +1,8 @@
 import { RotateCw, Trash } from "lucide-react";
 
 import { useCategories, useDeleteCategory } from "@/api/data/useCategories";
+import AreYouSure from "@/components/ui/AreYouSure";
+import { Button } from "@/components/ui/button";
 import {
 	Table,
 	TableBody,
@@ -47,14 +49,22 @@ const ActivityCategory = () => {
 									/>
 								</TableCell>
 								<TableCell className="cursor-pointer hover:text-red-600 w-1">
-									<button className="bg-red-500 text-white rounded-full p-2 shadow-lg hover:bg-red-600">
-										<Trash
-											className="w-4 h-4"
-											onClick={() => {
+									<AreYouSure
+										title="Are you sure you want to delete this category?"
+										description="This action is irreversible"
+										onConfirm={() => {
+											if (category._id) {
 												doDeleteCategory(category._id);
-											}}
-										/>
-									</button>
+											}
+										}}
+									>
+										<Button
+											size="icon"
+											variant="destructive"
+										>
+											<Trash className="w-4 h-4" />
+										</Button>
+									</AreYouSure>
 								</TableCell>
 							</TableRow>
 						))}
