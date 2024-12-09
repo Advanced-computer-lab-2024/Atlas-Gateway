@@ -27,9 +27,8 @@ import Home from "./Home/Home";
 import Hotels from "./Hotels/Hotels";
 import Itineraries from "./Itineraries/Itineraries";
 import ItineraryDetails from "./Itineraries/ItineraryDetails";
+import ForgetPassword from "./Login/ForgetPassword";
 import Login from "./Login/Login";
-import NotificationCard from "./Notifications/NotificationCard";
-import NotificationCardCopy from "./Notifications/NotificationCard copy";
 import Notifications from "./Notifications/Notifications";
 import OrderDetails from "./Orders/OrderDetails";
 import PlaceDetails from "./Places/PlaceDetails";
@@ -147,7 +146,10 @@ const router = createBrowserRouter([
 		path: "/login",
 		element: <Login />,
 	},
-
+	{
+		path: "/forget-password",
+		element: <ForgetPassword />,
+	},
 	{
 		path: "/",
 		element: (

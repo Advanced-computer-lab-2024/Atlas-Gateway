@@ -58,6 +58,13 @@ export default function Login() {
 								Don't have an account{" "}
 								<Link to="/register" className="text-primary">
 									Register
+								</Link>{" "}
+								or{" "}
+								<Link
+									to="/forget-password"
+									className="text-primary"
+								>
+									forgot password?
 								</Link>
 							</Flex>
 							<FormField
