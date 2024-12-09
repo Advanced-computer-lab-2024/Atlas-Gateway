@@ -881,10 +881,430 @@ export default function Itineraries() {
 ## Api Refrences 
 
 Our API is available online as a public postman workspace that you can see and fork.
+<details>
+<summary>All Api Refrences Here</summary>
 
+- Endpoint: `/api/admin/create`
+  - Method: POST
+  - Description: Create a new admin
+
+- Endpoint: `/api/admin/list`
+  - Method: GET
+  - Description: List all admins
+
+- Endpoint: `/api/admin/report`
+  - Method: GET
+  - Description: Get admin report
+
+- Endpoint: `/api/admin/userStats`
+  - Method: GET
+  - Description: View number of users
+
+- Endpoint: `/api/admin/delete/:id`
+  - Method: DELETE
+  - Description: Delete admin by ID
+
+- Endpoint: `/api/advertiser/create`
+  - Method: POST
+  - Description: Create a new advertiser
+
+- Endpoint: `/api/advertiser/list`
+  - Method: GET
+  - Description: List all advertisers
+
+- Endpoint: `/api/advertiser/show/:id`
+  - Method: GET
+  - Description: Get advertiser by ID
+
+- Endpoint: `/api/advertiser/update/:id`
+  - Method: PUT
+  - Description: Update advertiser by ID
+
+- Endpoint: `/api/advertiser/delete/:id`
+  - Method: DELETE
+  - Description: Delete advertiser by ID
+
+- Endpoint: `/api/activity/create`
+  - Method: POST
+  - Description: Create a new activity
+
+- Endpoint: `/api/activity/list`
+  - Method: GET
+  - Description: List all activities
+
+- Endpoint: `/api/activity/show/:id`
+  - Method: GET
+  - Description: Get activity by ID
+
+- Endpoint: `/api/activity/update/:id`
+  - Method: PUT
+  - Description: Update activity by ID
+
+- Endpoint: `/api/activity/delete/:id`
+  - Method: DELETE
+  - Description: Delete activity by ID
+
+- Endpoint: `/api/category/create`
+  - Method: POST
+  - Description: Create a new category
+
+- Endpoint: `/api/category/list`
+  - Method: GET
+  - Description: List all categories
+
+- Endpoint: `/api/category/show/:id`
+  - Method: GET
+  - Description: Get category by ID
+
+- Endpoint: `/api/category/update/:id`
+  - Method: PUT
+  - Description: Update category by ID
+
+- Endpoint: `/api/category/delete/:id`
+  - Method: DELETE
+  - Description: Delete category by ID
+
+- Endpoint: `/api/complaint/create`
+  - Method: POST
+  - Description: Create a new complaint
+
+- Endpoint: `/api/complaint/list`
+  - Method: GET
+  - Description: List all complaints
+
+- Endpoint: `/api/complaint/list-profile`
+  - Method: GET
+  - Description: List complaints by creator profile
+
+- Endpoint: `/api/complaint/delete/:id`
+  - Method: DELETE
+  - Description: Delete complaint by ID
+
+- Endpoint: `/api/flight/book`
+  - Method: POST
+  - Description: Book a flight
+
+- Endpoint: `/api/flight/search`
+  - Method: POST
+  - Description: Search for flights
+
+- Endpoint: `/api/flight/delete/:id`
+  - Method: DELETE
+  - Description: Delete flight by ID
+
+- Endpoint: `/api/governor/create`
+  - Method: POST
+  - Description: Create a new governor
+
+- Endpoint: `/api/governor/list`
+  - Method: GET
+  - Description: List all governors
+
+- Endpoint: `/api/governor/showGoverner/:id`
+  - Method: GET
+  - Description: Get governor by ID
+
+- Endpoint: `/api/governor/update/:id`
+  - Method: PUT
+  - Description: Update governor by ID
+
+- Endpoint: `/api/governor/show/:id`
+  - Method: GET
+  - Description: Get historical locations by governor ID
+
+- Endpoint: `/api/governor/delete/:id`
+  - Method: DELETE
+  - Description: Delete governor by ID
+
+- Endpoint: `/api/hotel/bookRoom`
+  - Method: POST
+  - Description: Book a hotel room
+
+- Endpoint: `/api/hotel/list/:cityCode`
+  - Method: GET
+  - Description: List hotels by city code
+
+- Endpoint: `/api/hotel/myBookings`
+  - Method: GET
+  - Description: Get my hotel bookings
+
+- Endpoint: `/api/hotel/show/:id`
+  - Method: GET
+  - Description: Show hotel details by ID
+
+- Endpoint: `/api/hotel/delete/:id`
+  - Method: DELETE
+  - Description: Delete hotel booking by ID
+
+- Endpoint: `/api/itinerary/create`
+  - Method: POST
+  - Description: Create a new itinerary
+
+- Endpoint: `/api/itinerary/list`
+  - Method: GET
+  - Description: List all itineraries
+
+- Endpoint: `/api/itinerary/listTourGuide`
+  - Method: GET
+  - Description: List itineraries by tour guide
+
+- Endpoint: `/api/itinerary/show/:id`
+  - Method: GET
+  - Description: Get itinerary by ID
+
+- Endpoint: `/api/itinerary/update/:id`
+  - Method: PUT
+  - Description: Update itinerary by ID
+
+- Endpoint: `/api/itinerary/flag/:id`
+  - Method: PUT
+  - Description: Flag itinerary by ID
+
+- Endpoint: `/api/itinerary/delete/:id`
+  - Method: DELETE
+  - Description: Delete itinerary by ID
+
+- Endpoint: `/api/login`
+  - Method: POST
+  - Description: User login
+
+- Endpoint: `/api/media/upload`
+  - Method: POST
+  - Description: Upload media file
+
+- Endpoint: `/api/media/download`
+  - Method: POST
+  - Description: Download media file
+
+- Endpoint: `/api/notification/create`
+  - Method: POST
+  - Description: Create a new notification
+
+- Endpoint: `/api/notification/list`
+  - Method: GET
+  - Description: List all notifications
+
+- Endpoint: `/api/notification/get`
+  - Method: GET
+  - Description: Get notifications by user ID
+
+- Endpoint: `/api/order/create`
+  - Method: POST
+  - Description: Create a new order
+
+- Endpoint: `/api/order/list`
+  - Method: GET
+  - Description: List all orders
+
+- Endpoint: `/api/order/show/:id`
+  - Method: GET
+  - Description: Show order by ID
+
+- Endpoint: `/api/order/cancel/:id`
+  - Method: POST
+  - Description: Cancel order by ID
+
+- Endpoint: `/api/payment/createPaymentIntent`
+  - Method: POST
+  - Description: Create a payment intent
+
+- Endpoint: `/api/places/create`
+  - Method: POST
+  - Description: Create a new place
+
+- Endpoint: `/api/places/list`
+  - Method: GET
+  - Description: List all places
+
+- Endpoint: `/api/places/listGoverner`
+  - Method: GET
+  - Description: List places by governor
+
+- Endpoint: `/api/places/show/:id`
+  - Method: GET
+  - Description: Get place by ID
+
+- Endpoint: `/api/places/update/:id`
+  - Method: PUT
+  - Description: Update place by ID
+
+- Endpoint: `/api/places/delete/:id`
+  - Method: DELETE
+  - Description: Delete place by ID
+
+- Endpoint: `/api/product/create`
+  - Method: POST
+  - Description: Create a new product
+
+- Endpoint: `/api/product/list`
+  - Method: GET
+  - Description: List all products
+
+- Endpoint: `/api/product/show/:id`
+  - Method: GET
+  - Description: Get product by ID
+
+- Endpoint: `/api/product/update/:id`
+  - Method: PUT
+  - Description: Update product by ID
+
+- Endpoint: `/api/product/delete/:id`
+  - Method: DELETE
+  - Description: Delete product by ID
+
+- Endpoint: `/api/promo/create`
+  - Method: POST
+  - Description: Create a new promo
+
+- Endpoint: `/api/promo/list`
+  - Method: GET
+  - Description: List all promos
+
+- Endpoint: `/api/promo/delete/:id`
+  - Method: DELETE
+  - Description: Delete promo by ID
+
+- Endpoint: `/api/register/create`
+  - Method: POST
+  - Description: User registration
+
+- Endpoint: `/api/review/add`
+  - Method: POST
+  - Description: Add a review
+
+- Endpoint: `/api/review/list`
+  - Method: GET
+  - Description: List all reviews
+
+- Endpoint: `/api/seller/create`
+  - Method: POST
+  - Description: Create a new seller
+
+- Endpoint: `/api/seller/list`
+  - Method: GET
+  - Description: List all sellers
+
+- Endpoint: `/api/seller/show/:id`
+  - Method: GET
+  - Description: Get seller by ID
+
+- Endpoint: `/api/seller/update/:id`
+  - Method: PUT
+  - Description: Update seller by ID
+
+- Endpoint: `/api/seller/delete/:id`
+  - Method: DELETE
+  - Description: Delete seller by ID
+
+- Endpoint: `/api/tag/historical/create`
+  - Method: POST
+  - Description: Create a historical tag
+
+- Endpoint: `/api/tag/historical/list`
+  - Method: GET
+  - Description: List all historical tags
+
+- Endpoint: `/api/tag/preference/create`
+  - Method: POST
+  - Description: Create a preference tag
+
+- Endpoint: `/api/tag/preference/list`
+  - Method: GET
+  - Description: List all preference tags
+
+- Endpoint: `/api/tourGuide/create`
+  - Method: POST
+  - Description: Create a new tour guide
+
+- Endpoint: `/api/tourGuide/list`
+  - Method: GET
+  - Description: List all tour guides
+
+- Endpoint: `/api/tourGuide/show/:id`
+  - Method: GET
+  - Description: Get tour guide by ID
+
+- Endpoint: `/api/tourGuide/update/:id`
+  - Method: PUT
+  - Description: Update tour guide by ID
+
+- Endpoint: `/api/tourGuide/delete/:id`
+  - Method: DELETE
+  - Description: Delete tour guide by ID
+
+- Endpoint: `/api/tourist/create`
+  - Method: POST
+  - Description: Create a new tourist
+
+- Endpoint: `/api/tourist/list`
+  - Method: GET
+  - Description: List all tourists
+
+- Endpoint: `/api/tourist/show/:id`
+  - Method: GET
+  - Description: Get tourist by ID
+
+- Endpoint: `/api/tourist/update/:id`
+  - Method: PUT
+  - Description: Update tourist by ID
+
+- Endpoint: `/api/tourist/redeem/:id`
+  - Method: PUT
+  - Description: Redeem points by tourist ID
+
+- Endpoint: `/api/tourist/delete/:id`
+  - Method: DELETE
+  - Description: Delete tourist by ID
+
+- Endpoint: `/api/transportation/create`
+  - Method: POST
+  - Description: Create a new transportation
+
+- Endpoint: `/api/transportation/list`
+  - Method: GET
+  - Description: List all transportations
+
+- Endpoint: `/api/transportation/get/:id`
+  - Method: GET
+  - Description: Get transportation by ID
+
+- Endpoint: `/api/transportation/listAdvertisor`
+  - Method: GET
+  - Description: List transportations by advertiser
+
+- Endpoint: `/api/transportation/update/:id`
+  - Method: PUT
+  - Description: Update transportation by ID
+
+- Endpoint: `/api/transportation/delete/:id`
+  - Method: DELETE
+  - Description: Delete transportation by ID
+
+- Endpoint: `/api/transportation_advertiser/create`
+  - Method: POST
+  - Description: Create a new transportation advertiser
+
+- Endpoint: `/api/transportation_advertiser/list`
+  - Method: GET
+  - Description: List all transportation advertisers
+
+- Endpoint: `/api/transportation_advertiser/delete/:id`
+  - Method: DELETE
+  - Description: Delete transportation advertiser by ID
+</details>
 
 ## Tests 
+All of our tests were done using Postman 
 
+![Example Image](./readme_photos/postman1.png)
+
+![Example Image](./readme_photos/postman2.png)
+
+![Example Image](./readme_photos/postman3.png)
+
+![Example Image](./readme_photos/postman4.png)
+
+![Example Image](./readme_photos/postman5.png)
 
 ## How To Use
 Before running the project, ensure you have the required environment variables set up. You'll need to create two .env files—one for the backend and one for the frontend. These files store sensitive configuration values.

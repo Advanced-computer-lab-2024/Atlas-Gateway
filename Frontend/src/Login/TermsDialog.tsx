@@ -1,24 +1,18 @@
 import { useCallback } from "react";
 
-import {
-	useUpdateAdvertiserProfile,
-	useUpdateSellerProfile,
-	useUpdateTourGuideProfile,
-} from "@/api/data/useProfile";
+
+
+import { useUpdateAdvertiserProfile, useUpdateSellerProfile, useUpdateTourGuideProfile, useUpdateTransportationAdvertiserProfile } from "@/api/data/useProfile";
 import { Button } from "@/components/ui/button";
-import {
-	Dialog,
-	DialogContent,
-	DialogDescription,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Flex } from "@/components/ui/flex";
 import { useLoginStore } from "@/store/loginStore";
 import { EAccountType } from "@/types/enums";
 
+
+
 import { termsText } from "./termsText";
+
 
 export function TermsDialog({
 	isOpen,
@@ -37,6 +31,8 @@ export function TermsDialog({
 	const { doEditAdvertiserProfile } = useUpdateAdvertiserProfile(onSuccess);
 	const { doEditSellerProfile } = useUpdateSellerProfile(onSuccess);
 	const { doEditTourGuideProfile } = useUpdateTourGuideProfile(onSuccess);
+	const { doEditTransportationAdvertiserProfile } =
+		useUpdateTransportationAdvertiserProfile(onSuccess);
 
 	const onAcceptClick = useCallback(() => {
 		if (user?.type === EAccountType.Advertiser) {
@@ -48,11 +44,15 @@ export function TermsDialog({
 		if (user?.type === EAccountType.Guide) {
 			doEditTourGuideProfile({ acceptedTerms: true });
 		}
+		if (user?.type === EAccountType.TransportationAdvertiser) {
+			doEditTransportationAdvertiserProfile({ acceptedTerms: true });
+		}
 	}, [
 		user,
 		doEditAdvertiserProfile,
 		doEditSellerProfile,
 		doEditTourGuideProfile,
+		doEditTransportationAdvertiserProfile,
 	]);
 
 	return (
