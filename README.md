@@ -49,32 +49,44 @@ The code adheres to clean and modular practices, ensuring readability and mainta
 
 <details>
 <summary> Login Page</summary>  
-![login]()
+
+![Login](./readme_photos/Login.png)
 </details>
 
 <details>
 <summary>Home Page</summary>  
-![home]()
+
+![home](./readme_photos/Home.png)
 </details>
 
 
 <details>
 <summary>Itineraries List Page</summary>  
-![itineraries_list_page]()
+
+![itineraries_list_page](./readme_photos/Itineraries.png)
 </details>
 
 <details>
 
 <summary>Activities List Page</summary>  
 
-![activities_list_page]()
+![activities_list_page](./readme_photos/Activities.png)
 
 </details>
 
 <details>
-<summary>Hotels and Flights Page</summary>  
+
+<summary>Flights Page</summary>  
 	
-![apply-filter]()
+![apply-filter](./readme_photos/flights.png)
+ 
+</details>
+
+<details>
+
+<summary>Hotels Page</summary>  
+	
+![apply-filter](./readme_photos/hotels.png)
  
 </details>
 
@@ -82,7 +94,7 @@ The code adheres to clean and modular practices, ensuring readability and mainta
 
 <summary>Profile Page</summary>  
 
-![profile]()
+![profile](./readme_photos/profile.png)
  
 </details>
 
@@ -90,7 +102,7 @@ The code adheres to clean and modular practices, ensuring readability and mainta
 
 <summary>Admin Page</summary>  
 
-![admin]()
+![admin](./readme_photos/admin_page.png)
  
 </details>
 
@@ -98,7 +110,7 @@ The code adheres to clean and modular practices, ensuring readability and mainta
 
 <summary>Admin Reports</summary>  
 
-![admin_reports]()
+![admin_reports](./readme_photos/admin_reports.png)
 
 </details>
 
