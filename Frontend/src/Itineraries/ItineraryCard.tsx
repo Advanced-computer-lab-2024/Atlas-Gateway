@@ -112,7 +112,7 @@ export default function ItineraryCard({
 						(itinerary?.touristBookmarks?.includes(user?._id) ? (
 							<Bookmark
 								fill="black"
-								className="absolute left-0"
+								className="absolute left-0 cursor-pointer"
 								onClick={() => {
 									if (itinerary?._id) {
 										doRemoveBookmarkItinerary(
@@ -123,7 +123,7 @@ export default function ItineraryCard({
 							/>
 						) : (
 							<Bookmark
-								className="absolute left-0"
+								className="absolute left-0 cursor-pointer"
 								onClick={() => {
 									if (itinerary?._id) {
 										doBookmarkItinerary(itinerary?._id);

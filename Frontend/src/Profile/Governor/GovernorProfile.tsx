@@ -6,7 +6,7 @@ import Account from "./Tabs/Account";
 
 const General = () => {
 	return (
-		<Flex isColumn className="w-full" gap="20">
+		<Flex isColumn className="w-full pt-6" gap="20">
 			<div className="relative w-full">
 				<div
 					className="w-full h-64 bg-cover bg-center rounded-lg"

@@ -44,6 +44,7 @@ import AdminReport from "./Reports/Admin/AdminReport";
 import TransportationDetails from "./Transportations/TransportationDetails";
 import Transportations from "./Transportations/Transportations";
 import { QueryStateProvider } from "./api/data/useQueryString";
+import { Toaster } from "./components/ui/toaster";
 import "./index.css";
 import Layout from "./layout/Layout";
 
@@ -271,9 +272,8 @@ const router = createBrowserRouter([
 ]);
 
 createRoot(document.getElementById("root")!).render(
-	<StrictMode>
-		<QueryClientProvider client={queryClient}>
-			<RouterProvider router={router} />
-		</QueryClientProvider>
-	</StrictMode>,
+	<QueryClientProvider client={queryClient}>
+		<Toaster />
+		<RouterProvider router={router} />
+	</QueryClientProvider>,
 );
