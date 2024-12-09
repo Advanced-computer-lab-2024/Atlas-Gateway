@@ -43,7 +43,7 @@ export default function TouristProfile() {
 								Account Details
 							</TabsTrigger>
 							<TabsTrigger value="transportations">
-								Transporations & Hotels
+								Transportations & Hotels
 							</TabsTrigger>
 							<TabsTrigger value="upcoming">
 								Upcoming Bookings
