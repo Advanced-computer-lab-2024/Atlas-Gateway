@@ -192,3 +192,18 @@ export function apiActivityNotification(touristId: string, activityId: string) {
 		baseURL: baseURL,
 	});
 }
+
+export function apiRemoveActivityNotification(touristId: string, activityId: string) {
+	return axios({
+		method: "POST",
+		url: ENDPOINTS.tourist.removeActivityNotification,
+		headers: {
+			"Content-Type": "application/json",
+		},
+		data: {
+			touristId,
+			activityId,
+		},
+		baseURL: baseURL,
+	});
+}
