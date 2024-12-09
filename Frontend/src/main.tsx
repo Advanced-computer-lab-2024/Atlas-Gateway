@@ -1,5 +1,4 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import {
 	Navigate,
@@ -29,8 +28,6 @@ import Hotels from "./Hotels/Hotels";
 import Itineraries from "./Itineraries/Itineraries";
 import ItineraryDetails from "./Itineraries/ItineraryDetails";
 import Login from "./Login/Login";
-import NotificationCard from "./Notifications/NotificationCard";
-import NotificationCardCopy from "./Notifications/NotificationCard copy";
 import Notifications from "./Notifications/Notifications";
 import PlaceDetails from "./Places/PlaceDetails";
 import Places from "./Places/Places";
