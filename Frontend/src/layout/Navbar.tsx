@@ -27,7 +27,7 @@ export default function Navbar() {
 				user?.type == EAccountType.Guide ||
 				user?.type == EAccountType.Seller ||
 				user?.type == EAccountType.TransportationAdvertiser) &&
-			!user.acceptedTerms 
+			!user.acceptedTerms
 		) {
 			setIsTermsDialogOpen(true);
 		}
@@ -69,7 +69,7 @@ export default function Navbar() {
 					<Label.Big700 variant="primary">Atlas Gateway</Label.Big700>
 				</Link>
 			</Flex>
-			<Flex gap="4">{navItems}</Flex>
+			{(!user || user?.isVerified) && <Flex gap="4">{navItems}</Flex>}
 			{isLoggedIn ? (
 				<Flex gap="2" align="center">
 					<Flex
