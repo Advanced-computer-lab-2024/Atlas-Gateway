@@ -277,4 +277,5 @@ createRoot(document.getElementById("root")!).render(
 		<Toaster />
 		<RouterProvider router={router} />
 	</QueryClientProvider>,
+	// Alone In Discord Channel
 );
