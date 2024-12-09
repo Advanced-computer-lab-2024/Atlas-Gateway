@@ -68,7 +68,9 @@ export const updateTransportationAdvertiser = async (
 			!transportation_advertiser ||
 			(!transportation_advertiser.isVerified && !overRide)
 		) {
-			throw new HttpError(401, "User is not Verified");
+			if (!newTransportationAdvertiser?.acceptedTerms) {
+				throw new HttpError(401, "User is not Verified");
+				}
 		}
 	}
 	const transportation_advertiser =

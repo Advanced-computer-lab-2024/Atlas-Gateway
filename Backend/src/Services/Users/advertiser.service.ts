@@ -63,7 +63,9 @@ export const updateAdvertiser = async (
 				Object.keys(newAdvertiser)[0] == "imagePath"
 			: false;
 		if (!advertiser || (!advertiser.isVerified && !overRide)) {
-			throw new HttpError(401, "User is not Verified");
+			if (newAdvertiser.acceptedTerms) {
+				throw new HttpError(401, "User is not Verified");
+			}
 		}
 	}
 	const advertiser = await Advertiser.findByIdAndUpdate(id, newAdvertiser, {
