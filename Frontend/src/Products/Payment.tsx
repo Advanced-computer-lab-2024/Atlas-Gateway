@@ -22,14 +22,11 @@ import useCurrency from "@/hooks/useCurrency";
 import AddressDialogue from "./AddAddressPopup";
 import OnlinePayment from "./OnlinePayment";
 
-interface props {
-	amount: string;
-}
-
-const Payment = ({ amount }: props) => {
+const Payment = () => {
 	const { data, refetch } = useTouristProfile();
 	const [selectedAddress, setSelectedAddress] = useState<string>("");
 	const [promo, setPromo] = useState("");
+	const convertCurrency = useCurrency();
 	const formatCurrency = useCurrency();
 	const stripePromise = loadStripe(
 		import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY!,
@@ -55,6 +52,16 @@ const Payment = ({ amount }: props) => {
 				0,
 			),
 			promoCode: promo,
+			stripeAmount:
+				parseFloat(
+					convertCurrency(
+						data?.cart.reduce(
+							(acc, product) =>
+								acc + product.product.price * product.quantity,
+							0,
+						),
+					),
+				) * 100,
 		});
 	};
 
@@ -74,6 +81,16 @@ const Payment = ({ amount }: props) => {
 				0,
 			),
 			promoCode: promo,
+			stripeAmount:
+				parseFloat(
+					convertCurrency(
+						data?.cart.reduce(
+							(acc, product) =>
+								acc + product.product.price * product.quantity,
+							0,
+						),
+					),
+				) * 100,
 		});
 	};
 
@@ -142,7 +159,14 @@ const Payment = ({ amount }: props) => {
 						stripe={stripePromise}
 						options={{
 							mode: "payment",
-							amount: parseFloat(amount) * 100,
+							amount:
+								(data?.cart.reduce(
+									(acc, product) =>
+										acc +
+										product.product.price *
+											product.quantity,
+									0,
+								) || 0) * 100,
 							currency:
 								data?.currency.toLocaleLowerCase() || "egp",
 							locale: "en",
@@ -150,7 +174,15 @@ const Payment = ({ amount }: props) => {
 						}}
 					>
 						<OnlinePayment
-							amount={parseFloat(amount) * 100}
+							amount={
+								(data?.cart.reduce(
+									(acc, product) =>
+										acc +
+										product.product.price *
+											product.quantity,
+									0,
+								) || 0) * 100
+							}
 							currency={data?.currency || ""}
 							address={selectedAddress}
 						/>

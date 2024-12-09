@@ -157,6 +157,7 @@ export function apiCheckoutCart(
 		paymentMethod: string;
 		promoCode?: string;
 		paymentIntentId?: string;
+		stripeAmount: number;
 	},
 	_id: string,
 ) {

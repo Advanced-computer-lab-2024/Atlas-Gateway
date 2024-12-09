@@ -77,7 +77,7 @@ export const otpTemplate = (otp: string) => {
 		`;
 };
 
-export const receiptTemplate = (amount: Number) => {
+export const receiptTemplate = (amount: Number, paymentMethod: String) => {
 	return `<!DOCTYPE html>
 <html>
 <head>
@@ -142,7 +142,7 @@ export const receiptTemplate = (amount: Number) => {
             <p>Thank you for your payment! Here are the details of your transaction:</p>
             <div class="receipt">
                 <p><strong>Amount:</strong> ${amount}</p>
-                <p><strong>Payment Method:</strong> Credit Card (**** **** **** 4242)</p>
+                <p><strong>Payment Method:</strong> ${paymentMethod}</p>
             </div>
             <p>If you have any questions about this receipt, feel free to contact our support team.</p>
             <p>Thank you for choosing AtlasGateway.</p>
