@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 
+import { toast } from "@/hooks/use-toast";
 import { useLoginStore } from "@/store/loginStore";
 import { EAccountType } from "@/types/enums";
 import { TItinerary } from "@/types/global";
@@ -22,6 +23,7 @@ import {
 	apiUpcomingItineraries,
 	apiUpdateItinerary,
 } from "../service/itineraries";
+import { onError } from "./onError";
 import { useQueryString } from "./useQueryString";
 
 export function useItineraries() {
@@ -69,7 +71,13 @@ export function useCreateItinerary(onSuccess: () => void) {
 
 			return apiCreateItinerary(data, _id);
 		},
-		onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Itinerary created successfully!",
+			});
+		},
 	});
 
 	const { mutate } = mutation;
@@ -80,7 +88,13 @@ export function useCreateItinerary(onSuccess: () => void) {
 export function useUpdateItinerary(onSuccess: () => void) {
 	const mutation = useMutation({
 		mutationFn: apiUpdateItinerary,
-		onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Itinerary updated successfully!",
+			});
+		},
 	});
 
 	const { mutate } = mutation;
@@ -91,7 +105,13 @@ export function useUpdateItinerary(onSuccess: () => void) {
 export function useDeleteItinerary(onSuccess: () => void) {
 	const mutation = useMutation({
 		mutationFn: (_id: string) => apiDeleteItinerary(_id),
-		onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Itinerary deleted successfully!",
+			});
+		},
 	});
 
 	const { mutate } = mutation;
@@ -124,7 +144,13 @@ export function useBookItinerary(onSuccess: () => void) {
 				promoCode,
 				paymentIntentId,
 			),
-		onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Itinerary booked successfully!",
+			});
+		},
 	});
 
 	const { mutate } = mutation;
@@ -137,7 +163,13 @@ export function useBookmarkItinerary(onSuccess: () => void) {
 	const userId = user?._id ?? "";
 	const mutation = useMutation({
 		mutationFn: (id: string) => apiBookmarkItinerary(id, userId),
-		onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Itinerary added to bookmarks!",
+			});
+		},
 	});
 	const { mutate } = mutation;
 	return { doBookmarkItinerary: mutate, ...mutation };
@@ -149,7 +181,13 @@ export function useCancelItineraryBooking(onSuccess: () => void) {
 
 	const mutation = useMutation({
 		mutationFn: (id: string) => apiCancelItineraryBooking(id, userId),
-		onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Itinerary booking cancelled successfully!",
+			});
+		},
 	});
 
 	const { mutate } = mutation;
@@ -162,7 +200,13 @@ export function useRemoveBookmarkItinerary(onSuccess: () => void) {
 	const { _id } = user || {};
 	const mutation = useMutation({
 		mutationFn: (id: string) => apiRemoveBookmarkItinerary(id, _id ?? ""),
-		onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Itinerary removed from bookmarks!",
+			});
+		},
 	});
 
 	const { mutate } = mutation;
@@ -173,7 +217,13 @@ export function useRemoveBookmarkItinerary(onSuccess: () => void) {
 export function useFlagItinerary(onSuccess: () => void) {
 	const mutation = useMutation({
 		mutationFn: (id: string) => apiFlagItinerary(id),
-		onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Itinerary flagged successfully!",
+			});
+		},
 	});
 
 	const { mutate } = mutation;
@@ -184,7 +234,13 @@ export function useFlagItinerary(onSuccess: () => void) {
 export function useToggleItineraryStatus(onSuccess: () => void) {
 	const mutation = useMutation({
 		mutationFn: (id: string) => apiToggleItineraryStatus(id),
-		onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Itinerary status updated successfully!",
+			});
+		},
 	});
 
 	const { mutate } = mutation;

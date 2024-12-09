@@ -20,6 +20,7 @@ import {
 	useDeleteActivity,
 	useRemoveBookmarkActivity,
 } from "@/api/data/useActivities";
+import AreYouSure from "@/components/ui/AreYouSure";
 import Label from "@/components/ui/Label";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -110,7 +111,7 @@ export default function ActivityCard({
 						(activity?.touristBookmarks?.includes(user?._id) ? (
 							<Bookmark
 								fill="black"
-								className="absolute left-0"
+								className="absolute left-0 cursor-pointer"
 								onClick={() => {
 									if (activity?._id) {
 										doRemoveBookmarkActivity(activity?._id);
@@ -119,7 +120,7 @@ export default function ActivityCard({
 							/>
 						) : (
 							<Bookmark
-								className="absolute left-0"
+								className="absolute left-0 cursor-pointer"
 								onClick={() => {
 									if (activity?._id) {
 										doBookmarkActivity(activity?._id);
@@ -184,15 +185,18 @@ export default function ActivityCard({
 										<Edit />
 										Edit
 									</DropdownMenuItem>
-									<DropdownMenuItem
-										className="flex gap-2 cursor-pointer"
-										onClick={() => {
+									<AreYouSure
+										title="Are you sure you want to delete this activity?"
+										description="This action is irreversible"
+										onConfirm={() => {
 											doDeleteActivity(activity?._id);
 										}}
 									>
-										<Trash />
-										Delete
-									</DropdownMenuItem>
+										<DropdownMenuItem className="flex gap-2 cursor-pointer">
+											<Trash />
+											Delete
+										</DropdownMenuItem>
+									</AreYouSure>
 								</>
 							)}
 						</DropdownMenuContent>

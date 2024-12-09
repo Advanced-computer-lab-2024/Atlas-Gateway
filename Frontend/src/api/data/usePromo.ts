@@ -1,14 +1,27 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 
+
+
 import { useLoginStore } from "@/store/loginStore";
 import { TPromo } from "@/types/global";
 
+
+
 import { apiCreatePromo, apiPromoCodes } from "../service/promo";
+import { onError } from "./onError";
+import { toast } from "@/hooks/use-toast";
+
 
 export function useCreatePromoCode(onSuccess: (data: any) => void) {
 	const mutation = useMutation({
 		mutationFn: (data: Partial<TPromo>) => apiCreatePromo(data),
-		onSuccess,
+		onError,
+		onSuccess: (data) => {
+			onSuccess(data);
+			toast({
+				title: "Promocode created successfully!",
+			});
+		},
 	});
 
 	const { mutate } = mutation;

@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 
+import { toast } from "@/hooks/use-toast";
 import { useLoginStore } from "@/store/loginStore";
 import {
 	TAdvetisor,
@@ -44,6 +45,7 @@ import {
 	apiTransportationAdvertiserProfile,
 	apiTransportationAdvertisers,
 } from "../service/profile";
+import { onError } from "./onError";
 
 export function useTourists() {
 	const { data, refetch } = useQuery({
@@ -78,7 +80,13 @@ export function useUpdatePassword(onSuccess: () => void) {
 		mutationFn: (data: TPassword) => {
 			return apiChangePassword(user?.username ?? "", data);
 		},
-		onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Password updated successfully!",
+			});
+		},
 	});
 	const { mutate } = mutation;
 	return { doEditPassword: mutate, ...mutation };
@@ -108,7 +116,13 @@ export function useUpdateTouristProfile(onSuccess: () => void) {
 			}
 			return apiEditTouristProfile(user._id, data);
 		},
-		onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Profile updated successfully!",
+			});
+		},
 	});
 
 	const { mutate } = mutation;
@@ -119,7 +133,12 @@ export function useUpdateTouristProfile(onSuccess: () => void) {
 export function useDeleteTouristProfile(onSuccess: () => void) {
 	const mutation = useMutation({
 		mutationFn: (_id: string) => apiDeleteTouristProfile(_id),
-		onSuccess,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Profile deleted successfully!",
+			});
+		},
 	});
 	const { mutate } = mutation;
 	return { doDeleteTouristProfile: mutate, ...mutation };
@@ -128,7 +147,12 @@ export function useDeleteTouristProfile(onSuccess: () => void) {
 export function useRequestDeleteTouristProfile(onSuccess: () => void) {
 	const mutation = useMutation({
 		mutationFn: (_id: string) => apiRequestDeleteTouristProfile(_id),
-		onSuccess,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Deletion request sent successfully!",
+			});
+		},
 	});
 	const { mutate } = mutation;
 	return { doRequestDeleteTouristProfile: mutate, ...mutation };
@@ -170,7 +194,13 @@ export function useUpdateSellerProfile(onSuccess: () => void) {
 			}
 			return apiEditSellerProfile(user?._id, data);
 		},
-		onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Profile updated successfully!",
+			});
+		},
 	});
 
 	const { mutate } = mutation;
@@ -180,7 +210,12 @@ export function useUpdateSellerProfile(onSuccess: () => void) {
 export function useDeleteSeller(onSuccess: () => void) {
 	const mutation = useMutation({
 		mutationFn: (_id: string) => apiDeleteSeller(_id),
-		onSuccess,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Profile deleted successfully!",
+			});
+		},
 	});
 	const { mutate } = mutation;
 	return { doDeleteSeller: mutate, ...mutation };
@@ -189,7 +224,12 @@ export function useDeleteSeller(onSuccess: () => void) {
 export function useRequestDeleteSellerProfile(onSuccess: () => void) {
 	const mutation = useMutation({
 		mutationFn: (_id: string) => apiRequestDeleteSellerProfile(_id),
-		onSuccess,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Deletion request sent successfully!",
+			});
+		},
 	});
 	const { mutate } = mutation;
 	return { doRequestDeleteSellerProfile: mutate, ...mutation };
@@ -223,7 +263,12 @@ export function useUpdateGovernorProfile(onSuccess: () => void) {
 			}
 			return apiEditGovernorProfile(user?._id, data);
 		},
-		onSuccess,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Profile updated successfully!",
+			});
+		},
 	});
 
 	const { mutate } = mutation;
@@ -233,7 +278,12 @@ export function useUpdateGovernorProfile(onSuccess: () => void) {
 export function useDeleteGovernor(onSuccess: () => void) {
 	const mutation = useMutation({
 		mutationFn: (_id: string) => apiDeleteGovernor(_id),
-		onSuccess,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Profile deleted successfully!",
+			});
+		},
 	});
 	const { mutate } = mutation;
 	return { doDeleteGoverner: mutate, ...mutation };
@@ -294,7 +344,13 @@ export function useUpdateAdvertiserProfile(onSuccess: () => void) {
 			}
 			return apiEditAdvertiserProfile(user?._id, data);
 		},
-		onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Profile updated successfully!",
+			});
+		},
 	});
 
 	const { mutate } = mutation;
@@ -305,7 +361,13 @@ export function useUpdateAdvertiserProfile(onSuccess: () => void) {
 export function useDeleteAdvertiserProfile(onSuccess: () => void) {
 	const mutation = useMutation({
 		mutationFn: (_id: string) => apiDeleteAdvertiserProfile(_id),
-		onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Profile deleted successfully!",
+			});
+		},
 	});
 	const { mutate } = mutation;
 	return { doDeleteAdvertiserProfile: mutate, ...mutation };
@@ -314,7 +376,12 @@ export function useDeleteAdvertiserProfile(onSuccess: () => void) {
 export function useRequestDeleteAdvertiserProfile(onSuccess: () => void) {
 	const mutation = useMutation({
 		mutationFn: (_id: string) => apiRequestDeleteAdvertiserProfile(_id),
-		onSuccess,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Deletion request sent successfully!",
+			});
+		},
 	});
 	const { mutate } = mutation;
 	return { doRequestDeleteAdvertiserProfile: mutate, ...mutation };
@@ -359,7 +426,13 @@ export function useUpdateTransportationAdvertiserProfile(
 			}
 			return apiEditTransportationAdvertiserProfile(user?._id, data);
 		},
-		onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Profile updated successfully!",
+			});
+		},
 	});
 
 	const { mutate } = mutation;
@@ -373,7 +446,12 @@ export function useDeleteTransportationAdvertiserProfile(
 	const mutation = useMutation({
 		mutationFn: (_id: string) =>
 			apiDeleteTransportationAdvertiserProfile(_id),
-		onSuccess,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Profile deleted successfully!",
+			});
+		},
 	});
 	const { mutate } = mutation;
 	return { doDeleteTransportationAdvertiserProfile: mutate, ...mutation };
@@ -416,7 +494,13 @@ export function useUpdateTourGuideProfile(onSuccess: () => void) {
 			}
 			return apiEditTourGuideProfile(user?._id, data);
 		},
-		onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Profile updated successfully!",
+			});
+		},
 	});
 
 	const { mutate } = mutation;
@@ -427,7 +511,12 @@ export function useUpdateTourGuideProfile(onSuccess: () => void) {
 export function useDeleteTourGuideProfile(onSuccess: () => void) {
 	const mutation = useMutation({
 		mutationFn: (_id: string) => apiDeleteTourGuideProfile(_id),
-		onSuccess,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Profile deleted successfully!",
+			});
+		},
 	});
 	const { mutate } = mutation;
 	return { doDeleteTourGuideProfile: mutate, ...mutation };
@@ -436,7 +525,12 @@ export function useDeleteTourGuideProfile(onSuccess: () => void) {
 export function useRequestDeleteTourGuideProfile(onSuccess: () => void) {
 	const mutation = useMutation({
 		mutationFn: (_id: string) => apiRequestDeleteTourGuideProfile(_id),
-		onSuccess,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Deletion request sent successfully!",
+			});
+		},
 	});
 	const { mutate } = mutation;
 	return { doRequestDeleteTourGuideProfile: mutate, ...mutation };
@@ -445,7 +539,12 @@ export function useRequestDeleteTourGuideProfile(onSuccess: () => void) {
 export function useRedeemTouristLoyaltyPoints(onSuccess: () => void) {
 	const mutation = useMutation({
 		mutationFn: (_id: string) => apiRedeemTouristLoyaltyPoints(_id),
-		onSuccess,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Loyalty points redeemed successfully!",
+			});
+		},
 	});
 	const { mutate } = mutation;
 	return { doRedeemTouristLoyaltyPoints: mutate, ...mutation };

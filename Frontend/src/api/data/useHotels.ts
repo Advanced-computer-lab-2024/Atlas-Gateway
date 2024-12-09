@@ -11,6 +11,8 @@ import {
 	apiShowHotelRatings,
 } from "../service/hotels";
 import { useQueryString } from "./useQueryString";
+import { toast } from "@/hooks/use-toast";
+import { onError } from "./onError";
 
 export function useHotels(cityCode: string) {
 	const [query] = useQueryString();
@@ -53,7 +55,13 @@ export function useBookhotel(onSuccess: () => void) {
 			}
 			return apiBookHotels(hotel, user._id);
 		},
-		onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Hotel booked successfully!",
+			});
+		},
 	});
 
 	const { mutate, isPending } = mutation;

@@ -1,19 +1,19 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 
+
+
+import { toast } from "@/hooks/use-toast";
 import { useLoginStore } from "@/store/loginStore";
 import { EAccountType } from "@/types/enums";
 import { TPlace } from "@/types/global";
 
-import {
-	apiCreatePlace,
-	apiDeletePlace,
-	apiGovernerPlaces,
-	apiPlace,
-	apiPlaces,
-	apiUpdatePlace,
-} from "../service/places";
+
+
+import { apiCreatePlace, apiDeletePlace, apiGovernerPlaces, apiPlace, apiPlaces, apiUpdatePlace } from "../service/places";
+import { onError } from "./onError";
 import { useQueryString } from "./useQueryString";
+
 
 export function usePlaces() {
 	const { user } = useLoginStore();
@@ -56,7 +56,13 @@ export function useCreatePlace(onSuccess: (response: any) => void) {
 			}
 			return apiCreatePlace(place, user._id);
 		},
-		onSuccess,
+		onError,
+		onSuccess: (response) => {
+			onSuccess(response);
+			toast({
+				title: "Place created successfully!",
+			});
+		},
 	});
 
 	const { mutate } = mutation;
@@ -67,7 +73,13 @@ export function useCreatePlace(onSuccess: (response: any) => void) {
 export function useUpdatePlace(onSuccess: () => void) {
 	const mutation = useMutation({
 		mutationFn: apiUpdatePlace,
-		onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Place updated successfully!",
+			});
+		},
 	});
 
 	const { mutate } = mutation;
@@ -78,7 +90,13 @@ export function useUpdatePlace(onSuccess: () => void) {
 export function useDeletePlace(onSuccess: () => void) {
 	const mutation = useMutation({
 		mutationFn: (_id: string) => apiDeletePlace(_id),
-		onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Place deleted successfully!",
+			});
+		},
 	});
 
 	const { mutate } = mutation;

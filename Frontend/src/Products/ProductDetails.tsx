@@ -153,6 +153,7 @@ export default function ProductDetails() {
 							(touristWishlist?.includes(user?._id) ? (
 								<Star
 									fill="yellow"
+									className="cursor-pointer"
 									onClick={() => {
 										if (data?._id) {
 											doRemoveWishlist(data?._id);
@@ -161,6 +162,7 @@ export default function ProductDetails() {
 								/>
 							) : (
 								<Star
+									className="cursor-pointer"
 									onClick={() => {
 										if (data?._id) {
 											doAddWishlist(data?._id);

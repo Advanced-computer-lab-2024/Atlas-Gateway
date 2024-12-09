@@ -7,6 +7,7 @@ import {
 	useRequestDeleteTouristProfile,
 	useTouristProfile,
 } from "@/api/data/useProfile";
+import AreYouSure from "@/components/ui/AreYouSure";
 import Label from "@/components/ui/Label";
 import { Button } from "@/components/ui/button";
 import { Flex } from "@/components/ui/flex";
@@ -146,18 +147,23 @@ export default function Account() {
 								<Edit />
 								Edit account
 							</Button>
-							<Button
-								variant="destructive"
-								className="gap-2"
-								size="default"
-								onClick={() => {
+							<AreYouSure
+								title="Are you sure you want to sent a request to delete your account?"
+								description="This action is irreversible"
+								onConfirm={() => {
 									if (data?._id)
 										doRequestDeleteTouristProfile(data._id);
 								}}
 							>
-								<X />
-								Delete Account
-							</Button>
+								<Button
+									variant="destructive"
+									className="gap-2"
+									size="default"
+								>
+									<X />
+									Delete Account
+								</Button>
+							</AreYouSure>
 						</Flex>
 					</Flex>
 					<Flex isColumn gap="2" className="w-full" align="center">

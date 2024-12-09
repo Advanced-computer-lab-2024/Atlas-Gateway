@@ -7,6 +7,7 @@ import {
 	useDeleteTransportation,
 	useTransportations,
 } from "@/api/data/useTransportations";
+import AreYouSure from "@/components/ui/AreYouSure";
 import Label from "@/components/ui/Label";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
@@ -98,17 +99,20 @@ export default function TransportationCard({
 										<Edit />
 										Edit
 									</DropdownMenuItem>
-									<DropdownMenuItem
-										className="flex gap-2 cursor-pointer"
-										onClick={() => {
+									<AreYouSure
+										title="Are you sure you want to delete this transporation?"
+										description="This action is irreversible"
+										onConfirm={() => {
 											doDeleteTransportation(
 												transportation?._id,
 											);
 										}}
 									>
-										<Trash />
-										Delete
-									</DropdownMenuItem>
+										<DropdownMenuItem className="flex gap-2 cursor-pointer">
+											<Trash />
+											Delete
+										</DropdownMenuItem>
+									</AreYouSure>
 								</>
 							)}
 							<DropdownMenuItem

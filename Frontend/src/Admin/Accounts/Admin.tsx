@@ -1,6 +1,8 @@
 import { RotateCw, Trash } from "lucide-react";
 
 import { useAdmins, useDeleteAdmin } from "@/api/data/useAdmins";
+import AreYouSure from "@/components/ui/AreYouSure";
+import { Button } from "@/components/ui/button";
 import {
 	Table,
 	TableBody,
@@ -47,14 +49,20 @@ const Admins = () => {
 									<TableCell>{admin.email}</TableCell>
 									{/* <TableCell>{admin.password}</TableCell> */}
 									<TableCell className="cursor-pointer hover:text-red-600 w-1">
-										<button
-											className="bg-red-500 text-white rounded-full p-2 shadow-lg hover:bg-red-600"
-											onClick={() => {
+										<AreYouSure
+											title="Are you sure you want to delete this admin?"
+											description="This action is irreversible"
+											onConfirm={() => {
 												doDeleteAdmin(admin._id);
 											}}
 										>
-											<Trash className="w-4 h-4" />
-										</button>
+											<Button
+												size="icon"
+												variant="destructive"
+											>
+												<Trash className="w-4 h-4" />
+											</Button>
+										</AreYouSure>
 									</TableCell>
 								</TableRow>
 							))}

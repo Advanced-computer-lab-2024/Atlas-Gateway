@@ -24,6 +24,7 @@ import {
 	useRemoveBookmarkItinerary,
 	useToggleItineraryStatus,
 } from "@/api/data/useItineraries";
+import AreYouSure from "@/components/ui/AreYouSure";
 import Label from "@/components/ui/Label";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -63,7 +64,7 @@ export default function ItineraryCard({
 	const { doDeleteItinerary } = useDeleteItinerary(refetch);
 	const { doFlagItinerary } = useFlagItinerary(refetch);
 	const { doToggleItineraryStatus } = useToggleItineraryStatus(refetch);
-	const { doNotifyItinerary } = useItineraryNotification(refetch); 
+	const { doNotifyItinerary } = useItineraryNotification(refetch);
 
 	// Function to copy the itinerary link to the clipboard
 	const handleCopyLink = () => {
@@ -112,7 +113,7 @@ export default function ItineraryCard({
 						(itinerary?.touristBookmarks?.includes(user?._id) ? (
 							<Bookmark
 								fill="black"
-								className="absolute left-0"
+								className="absolute left-0 cursor-pointer"
 								onClick={() => {
 									if (itinerary?._id) {
 										doRemoveBookmarkItinerary(
@@ -123,7 +124,7 @@ export default function ItineraryCard({
 							/>
 						) : (
 							<Bookmark
-								className="absolute left-0"
+								className="absolute left-0 cursor-pointer"
 								onClick={() => {
 									if (itinerary?._id) {
 										doBookmarkItinerary(itinerary?._id);
@@ -131,10 +132,10 @@ export default function ItineraryCard({
 								}}
 							/>
 						))}
-						<Bell
-                            className="absolute left-8 cursor-pointer"
-                            onClick={handleNotificationClick}
-                        />
+					<Bell
+						className="absolute left-8 cursor-pointer"
+						onClick={handleNotificationClick}
+					/>
 					<Label.Mid500>{itinerary?.title ?? "Title"}</Label.Mid500>
 					<DropdownMenu modal={false}>
 						<DropdownMenuTrigger className="absolute right-0">
@@ -167,14 +168,18 @@ export default function ItineraryCard({
 										<Edit />
 										Edit
 									</DropdownMenuItem>
-									<DropdownMenuItem
-										onClick={() => {
+									<AreYouSure
+										title="Are you sure you want to delete this itinerary?"
+										description="This action is irreversible"
+										onConfirm={() => {
 											doDeleteItinerary(itinerary?._id);
 										}}
 									>
-										<Trash />
-										Delete
-									</DropdownMenuItem>
+										<DropdownMenuItem>
+											<Trash />
+											Delete
+										</DropdownMenuItem>
+									</AreYouSure>
 								</>
 							)}
 							{user?.type === EAccountType.Admin && (
