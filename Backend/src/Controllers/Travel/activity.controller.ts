@@ -170,7 +170,8 @@ export const bookActivity = async (
 	try {
 		const activityId = req.params.id;
 		const touristId = req.headers.userid;
-		const { paymentIntentId, paymentType, amount, promoCode } = req.body;
+		const { paymentIntentId, paymentType, promoCode, stripeAmount } =
+			req.body;
 
 		if (!touristId) {
 			throw new HttpError(400, "User ID is required");
@@ -182,10 +183,10 @@ export const bookActivity = async (
 
 		const bookingResult = await activityService.bookActivity(
 			activityId,
-			paymentType,
-			amount,
 			paymentIntentId,
+			paymentType,
 			promoCode,
+			stripeAmount,
 			touristId.toString(),
 		);
 

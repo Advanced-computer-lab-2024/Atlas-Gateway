@@ -129,12 +129,14 @@ export function useBookItinerary(onSuccess: () => void) {
 			paymentType,
 			amount,
 			promoCode,
+			stripeAmount,
 			paymentIntentId,
 		}: {
 			id: string;
 			paymentType: string;
 			amount: number;
 			promoCode: string;
+			stripeAmount: number;
 			paymentIntentId?: string;
 		}) =>
 			apiBookItinerary(
@@ -143,6 +145,7 @@ export function useBookItinerary(onSuccess: () => void) {
 				amount,
 				userId,
 				promoCode,
+				stripeAmount,
 				paymentIntentId,
 			),
 		onError,
@@ -306,7 +309,7 @@ export function useItineraryNotification(onSuccess: () => void) {
 			if (!_id) {
 				throw new Error("User ID is undefined");
 			}
-			return apiItineraryNotification(_id,itineraryId);
+			return apiItineraryNotification(_id, itineraryId);
 		},
 		onSuccess,
 	});
@@ -327,6 +330,4 @@ export function useRemoveItineraryNotification(onSuccess: () => void) {
 	});
 	const { mutate } = mutation;
 	return { doRemoveNotifyItinerary: mutate, ...mutation };
-	}
-
-
+}

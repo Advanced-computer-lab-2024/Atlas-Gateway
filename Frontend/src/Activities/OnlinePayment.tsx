@@ -57,10 +57,11 @@ const OnlinePayment = ({ amount, currency }: props) => {
 		if (error === undefined) {
 			doBookActivity({
 				id: data?._id!,
-				paymentType: "online",
+				paymentType: "Card",
 				amount: paymentIntent.amount,
 				promoCode: promo,
 				paymentIntentId: paymentIntent.id,
+				stripeAmount: paymentIntent.amount,
 			});
 		}
 	};

@@ -1,51 +1,16 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 
+
+
 import { toast } from "@/hooks/use-toast";
 import { useLoginStore } from "@/store/loginStore";
-import {
-	TAdvetisor,
-	TGovernor,
-	TPassword,
-	TSeller,
-	TTourGuide,
-	TTouristApi,
-	TTransportationAdvertiser,
-} from "@/types/global";
+import { TAdvetisor, TGovernor, TPassword, TSeller, TTourGuide, TTouristApi, TTransportationAdvertiser } from "@/types/global";
 
-import {
-	apiAdminProfile,
-	apiAdvertiserProfile,
-	apiAdvertisers,
-	apiChangePassword,
-	apiDeleteAdvertiserProfile,
-	apiDeleteGovernor,
-	apiDeleteSeller,
-	apiDeleteTourGuideProfile,
-	apiDeleteTouristProfile,
-	apiDeleteTransportationAdvertiserProfile,
-	apiEditAdvertiserProfile,
-	apiEditGovernorProfile,
-	apiEditSellerProfile,
-	apiEditTourGuideProfile,
-	apiEditTouristProfile,
-	apiEditTransportationAdvertiserProfile,
-	apiForgetPassword,
-	apiGovernorProfile,
-	apiRedeemTouristLoyaltyPoints,
-	apiRequestDeleteAdvertiserProfile,
-	apiRequestDeleteSellerProfile,
-	apiRequestDeleteTourGuideProfile,
-	apiRequestDeleteTouristProfile,
-	apiSellerProfile,
-	apiSellers,
-	apiTourGuideProfile,
-	apiTourGuides,
-	apiTouristProfile,
-	apiTourists,
-	apiTransportationAdvertiserProfile,
-	apiTransportationAdvertisers,
-} from "../service/profile";
+
+
+import { apiAdminProfile, apiAdvertiserProfile, apiAdvertisers, apiChangePassword, apiDeleteAdvertiserProfile, apiDeleteGovernor, apiDeleteSeller, apiDeleteTourGuideProfile, apiDeleteTouristProfile, apiDeleteTransportationAdvertiserProfile, apiEditAdvertiserProfile, apiEditGovernorProfile, apiEditSellerProfile, apiEditTourGuideProfile, apiEditTouristProfile, apiEditTransportationAdvertiserProfile, apiForgetPassword, apiGovernorProfile, apiRedeemTouristLoyaltyPoints, apiRequestDeleteAdvertiserProfile, apiRequestDeleteSellerProfile, apiRequestDeleteTourGuideProfile, apiRequestDeleteTouristProfile, apiSellerProfile, apiSellers, apiTourGuideProfile, apiTourGuides, apiTouristProfile, apiTourists, apiTransportationAdvertiserProfile, apiTransportationAdvertisers } from "../service/profile";
 import { onError } from "./onError";
+
 
 export function useTourists() {
 	const { data, refetch } = useQuery({
@@ -78,7 +43,7 @@ export function useUpdatePassword(onSuccess: () => void) {
 
 	const mutation = useMutation({
 		mutationFn: (data: TPassword) => {
-			return apiChangePassword(user?.username ?? "", data);
+			return apiChangePassword(user?.username ?? data?.username ?? "", data);
 		},
 		onError,
 		onSuccess: () => {
