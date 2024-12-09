@@ -36,7 +36,7 @@ The project is currently under development. The backend is complete, and the fro
 
 The code adheres to clean and modular practices, ensuring readability and maintainability. Following conventions were applied:
 
-- **Frontend:** React,js using TypeScript and Tailwind CSS
+- **Frontend:** React.js using TypeScript and Tailwind CSS
 - **Backend:** Node.js with Prettier formatting rules
 - **Database:** MongoDB with Mongoose
 - **Testing:** End-to-end testing and Postman
@@ -136,10 +136,284 @@ The code adheres to clean and modular practices, ensuring readability and mainta
 - Dynamic trip planning with customizable options
 - Payment integration using Stripe
 - Mobile-responsive design with Tailwind CSS
+- The Site serves Variety of features to each user :
+
+
+<details>
+<summary>As a Tourist</summary>
+
+- **User Account**
+  - Login using username and password.
+  - Change password.
+  - View profiles of others.
+
+- **Search and Filter**
+  - **General Search:**
+    - Search for specific museums, historical places, activities, or itineraries by name, category, or tag.
+    - Search for products based on product name.
+  - **Filter Options:**
+    - **Activities/Itineraries:**
+      - Filter by budget, date, category, ratings, preferences (e.g., historic areas, beaches, family-friendly, shopping), and language.
+    - **Historical Places/Museums:**
+      - Filter by tag.
+    - **Products:**
+      - Filter by price.
+  - **Sort Options:**
+    - **Activities/Itineraries:**
+      - Sort by price or ratings.
+    - **Products:**
+      - Sort by ratings.
+
+- **Activities and Itineraries**
+  - View all upcoming activities, itineraries, historical places, and museums.
+  - Bookmark (save) events to view later.
+  - View a list of all saved events.
+  - View all upcoming or past activities/itineraries paid for.
+  - Book an event/activity or itinerary.
+  - Cancel a booking 48 hours before the start of the event/activity or itinerary.
+  - Rate events/activities attended.
+  - Receive loyalty points upon payment for events/itineraries.
+  - Redeem loyalty points for cash in the wallet.
+  - Choose currency to view prices in.
+
+- **Historical Places and Museums**
+  - Filter historical places/museums by tag.
+
+- **Products**
+  - View all available products, including:
+    - Picture, price, description, seller, ratings, and reviews.
+  - Save products to a wishlist.
+  - View wishlist of products.
+  - Remove items from the wishlist.
+  - Add items to the cart from the wishlist.
+  - Add/remove/change item quantity in the cart.
+  - Pay for products using credit card (via Stripe), wallet, or cash on delivery.
+  - Review purchased products.
+
+- **Transportation and Booking**
+  - Book a flight or hotel using a third-party application (not a link).
+  - Book transportation through transportation advertisers.
+
+- **Complaints**
+  - File a complaint with a title, body (problem), and date.
+  - View a list of all issued complaints and their status (pending/resolved).
+
+- **Payments and Wallet**
+  - Pay online for events/activities, itineraries, or products using:
+    - Credit/debit cards (via Stripe), wallet, or cash on delivery.
+  - Use promo codes for discounts.
+  - Receive a payment receipt via email upon successful payment.
+  - View an updated wallet balance after making a payment.
+
+- **Ratings and Reviews**
+  - Rate tour guides after completing a tour.
+  - Rate events/activities attended.
+  - Review purchased products.
+
+- **Notifications**
+  - Receive notifications.
+
+- **Rewards and Badges**
+  - Receive loyalty points for payments.
+  - Redeem points for wallet cash.
+  - Earn badges based on user level.
+
+</details>
+
+<details>
+<summary>As an Admin</summary>
+
+- **User Management**
+  - Login using username and password.
+  - Delete any account from the system.
+  - View accounts marked for deletion.
+  - Add another admin.
+  - Add a tourism governor.
+  - View the total number of users and new users per month.
+  - Forget password using an OTP sent to email.
+
+- **Activity and Tag Management**
+  - CRUD (Create, Read, Update, Delete) an activity category.
+  - CRUD a preference tag.
+
+- **Product Management**
+  - Search for a product by name.
+  - Search for a product by price.
+  - Sort products by ratings.
+  - Add a new product to the system.
+  - Edit product details.
+  - View available quantity and sales of each product.
+  - Upload product images.
+  - Archive/Unarchive a product.
+
+- **Complaint Management**
+  - View a list of all complaints and their statuses.
+  - View details of a selected complaint.
+  - Reply to any complaint.
+  - Mark complaints as pending/resolved.
+  - Sort complaints by date.
+  - Filter complaints by status.
+
+- **Event/Itinerary Management**
+  - Flag an event or itinerary deemed inappropriate (flagged events become invisible to tourists/guests).
+
+- **Sales and Revenue**
+  - View a sales report with revenues from:
+    - Events, itineraries, and gift shop sales.
+  - Filter the sales report by product, date, or month.
+
+- **Promo Codes**
+  - Create promo codes.
+
+</details>
+
+<details>
+<summary>As an Advertiser</summary>
+
+- **User Account**
+  - Login using username and password.
+  - Change password.
+  - Forget password using an OTP sent to email.
+  - Accept the terms and conditions if approved as an advertiser on the system.
+
+- **Profile Management**
+  - Create, read, update profile information as a company, including:
+    - Link to website.
+    - Hotline.
+    - Company profile.
+
+- **Activity/Itinerary Management**
+  - Create, read, update, delete activities or itineraries, including:
+    - Date, time, location (using Google Maps).
+    - Price (or price range).
+    - Category and tags.
+    - Special discounts.
+    - Booking status (open/closed).
+  - View a list of all created activities, itineraries, museums, and historical places.
+  - Upload pictures for activities or itineraries.
+
+- **Reports and Analytics**
+  - View a sales report containing total revenue.
+  - Filter sales report by:
+    - Activity, itinerary, date, or month.
+  - View a report on the total number of tourists who:
+    - Used the advertiser's itineraries.
+    - Attended their activities.
+  - Filter the tourist report by month.
+
+- **Notifications**
+  - Receive notifications when an event or itinerary is flagged as inappropriate:
+    - On the system.
+    - By email.
+
+</details>
+
+<details>
+<summary>As a Guest</summary>
+
+- **Registration**
+  - Register (sign up) as a tourist with:
+    - Email, username, password, mobile number, nationality, date of birth, and job/student status.
+  - Register (sign up) as a tour guide, advertiser, or seller with:
+    - Username, email, and password.
+
+- **Explore Activities and Places**
+  - View all upcoming activities, itineraries, historical places, and museums.
+  - Choose a category of activities.
+
+- **Search and Filter**
+  - **Activities/Itineraries:**
+    - Filter by:
+      - Budget, date, category, ratings, preferences (e.g., historic areas, beaches, family-friendly, shopping), and language.
+    - Sort by:
+      - Price or ratings.
+  - **Historical Places/Museums:**
+    - Filter by tag.
+
+</details>
+
+<details>
+<summary>As a Seller</summary>
+
+- **Profile Management**
+  - Create, read, and update profile information as a seller, including:
+    - Name and description.
+  - Accessible only if approved as a seller on the system.
+  - Accept the terms and conditions if approved on the system.
+  
+- **Product Management**
+  - Search for products by name.
+  - Filter products by price.
+  - Sort products by ratings.
+  - Add a product with:
+    - Details, price, and available quantity.
+  - Edit product details and price.
+  - Upload product image and other pictures.
+  - View available quantity and sales of each product.
+  - Archive or unarchive a product.
+
+- **Sales and Revenue**
+  - View a sales report containing total revenue.
+  - Filter the sales report by:
+    - Product, date, or month.
+
+- **Account Management**
+  - Change password.
+
+</details>
+
+<details>
+<summary>As a Tour Guide</summary>
+
+- **User Account**
+  - Login using username and password.
+  - Change password.
+  - Forget password using an OTP sent to email.
+  - Request account deletion from the system.
+  - Accept the terms and conditions if approved as a tour guide.
+
+- **Profile Management**
+  - Create, read, and update profile information as a tour guide, including:
+    - Mobile number, years of experience, previous work (if applicable).
+  - Accessible only if accepted as a tour guide on the system.
+
+- **Itinerary Management**
+  - Create, read, update, and delete itineraries, including:
+    - Activities, locations to be visited, timeline, duration of each activity, language of the tour, price, available dates and times, accessibility, and pick-up/drop-off location.
+  - View a list of all created activities, itineraries, museums, and historical places.
+  - Activate or deactivate itineraries with bookings.
+
+- **Sales and Revenue**
+  - View a sales report containing total revenue.
+  - Filter the sales report by:
+    - Activity, itinerary, date, or month.
+  - View a report on the total number of tourists who used your itinerary or attended your activity.
+  - Filter the tourist report by month.
+
+</details>
+
+<details>
+<summary>As a Tourism Governor</summary>
+
+- **User Account**
+  - Login using username and password.
+  - Change password.
+  - Forget password using an OTP sent to email.
+
+- **Museum and Historical Place Management**
+  - Create, read, update, and delete museums and historical places, including:
+    - Description, pictures, location, opening hours, ticket prices.
+
+- **Tag Management**
+  - Create tags for different historical locations (e.g., type, historical period).
+
+</details>
 
 ## Code Examples
 
-### Backend: Sample API Endpoint
+
+<details>
+<summary> Backend: Sample API Endpoint</summary>  
 
 ```typescript
 const router = express.Router();
@@ -215,7 +489,375 @@ export const createActivity = async (
 	}
 };
 ```
----
+</details>
+
+<details>
+<summary> Backend: Tourist Model</summary>  
+
+```typescript
+export interface ITourist extends Document {
+	name: string;
+	username: string;
+	email: string;
+	password: string;
+	walletBalance: number;
+	mobile: string;
+	nationality: string;
+	dob: Date;
+	occupation: string;
+	address?: string[];
+	currency?: string;
+	loyaltyPoints: number;
+	maxCollectedLoyaltyPoints: number;
+	level: number;
+	profile?: {
+		bio?: string;
+		location?: string;
+		image?: string;
+	};
+	bookedItineraries: Types.ObjectId[];
+	bookmarkedItineraries: Types.ObjectId[];
+
+	bookedActivities: Types.ObjectId[];
+	bookmarkedActivities: Types.ObjectId[];
+
+	bookedTransportations: Types.ObjectId[] | ITransportation[];
+	bookedFlights: Types.ObjectId[] | IFlight[];
+	bookedHotelOffers: Types.ObjectId[];
+	purchaseProducts: Types.ObjectId[];
+	wishlistproducts: Types.ObjectId[];
+	isDeleted?: boolean;
+	preferredTags?: Types.ObjectId[] | ITag[];
+	cart: {
+		product: Types.ObjectId;
+		quantity: number;
+	}[];
+	payment: [
+		{
+			type: string;
+			event: Types.ObjectId;
+			amount: number;
+		},
+	];
+	notifications: Types.ObjectId[];
+}
+
+const touristSchema = new Schema<ITourist>(
+	{
+		name: { type: String },
+		username: { type: String, required: true },
+		email: { type: String, required: true },
+		password: { type: String, required: true },
+		walletBalance: { type: Number, required: true, default: 0 },
+		mobile: { type: String, required: true },
+		nationality: { type: String, required: true },
+		dob: { type: Date, required: true },
+		occupation: { type: String, required: true },
+		address: [{ type: String }],
+		currency: { type: String, default: "EGP" },
+		loyaltyPoints: {
+			type: Number,
+			default: 0,
+			validate: {
+				validator: function (value) {
+					if (value < 0) {
+						this.loyaltyPoints = 0;
+						return false;
+					}
+					return value >= 0;
+				},
+				message: "Loyalty Points can't be negative",
+			},
+		},
+		maxCollectedLoyaltyPoints: {
+			type: Number,
+			default: 0,
+			validate: {
+				validator: function (value) {
+					if (value < 0) {
+						this.maxCollectedLoyaltyPoints = 0;
+						return false;
+					}
+					return value >= this.loyaltyPoints;
+				},
+				message:
+					"Max Collected Loyalty Points can't be negative or smaller than Loyalty Points",
+			},
+		},
+		level: { type: Number, enum: [1, 2, 3], default: 1 },
+		profile: {
+			bio: { type: String },
+			location: { type: String },
+			image: { type: String },
+		},
+		bookedItineraries: [{ type: Schema.Types.ObjectId, ref: "Itinerary" }],
+		bookmarkedItineraries: [
+			{ type: Schema.Types.ObjectId, ref: "Itinerary" },
+		],
+
+		bookedActivities: [{ type: Schema.Types.ObjectId, ref: "Activity" }],
+		bookmarkedActivities: [
+			{ type: Schema.Types.ObjectId, ref: "Activity" },
+		],
+
+		bookedTransportations: [
+			{ type: Schema.Types.ObjectId, ref: "Transportation" },
+		],
+		bookedFlights: [{ type: Schema.Types.ObjectId, ref: "Flight" }],
+		purchaseProducts: [{ type: Schema.Types.ObjectId, ref: "Product" }],
+		wishlistproducts: [{ type: Schema.Types.ObjectId, ref: "Product" }],
+
+		bookedHotelOffers: [
+			{ type: Schema.Types.ObjectId, ref: "HotelBooking" },
+		],
+		isDeleted: { type: Boolean, default: false },
+		preferredTags: [
+			{ type: Schema.Types.ObjectId, ref: "Tag", required: true },
+		],
+		payment: [
+			{
+				type: { type: String },
+				event: { type: Schema.Types.ObjectId },
+				amount: { type: Number },
+			},
+		],
+		cart: [
+			{
+				product: { type: Schema.Types.ObjectId, ref: "Product" },
+				quantity: { type: Number, required: true },
+			},
+		],
+		notifications: [{ type: Schema.Types.ObjectId, ref: "Notification" }],
+	},
+	schemaConfig,
+);
+
+export const Tourist = model<ITourist>("Tourist", touristSchema);
+
+
+```
+</details>
+
+<details>
+<summary> Frontend: Flight Booking </summary>  
+
+```typescript
+
+const Flights = () => {
+	const [flights, setFlights] = useState<IFlight[]>([]);
+
+	const addFlight = (newFlight: IFlight) => {
+		setFlights((prevFlights) => [...prevFlights, newFlight]);
+	};
+	const removeFlights = () => {
+		setFlights([]);
+	};
+	return (
+		<Flex isColumn gap="4" className="w-full h-full">
+			<div className="self-center">
+				<SearchForm
+					addFlight={addFlight}
+					removeFlights={removeFlights}
+				/>
+			</div>
+			<Flex
+				className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2"
+				gap="4"
+			>
+				{flights.map((flight, index) => (
+					<FlightsCard key={index} {...flight} />
+				))}
+			</Flex>
+		</Flex>
+	);
+};
+
+```
+</details>
+
+<details>
+<summary> Frontend: Itineraries </summary>  
+
+```typescript
+export default function Itineraries() {
+	const { user } = useLoginStore();
+	const { data, meta } = useItineraries();
+	const [open, setOpen] = useState(false);
+	const [itinerary, setItinerary] = useState<TItinerary>();
+	const { data: tags } = useTags();
+	const { data: guide } = useTourGuideProfile();
+
+	const openEditDrawer = (itinerary: TItinerary) => {
+		setOpen(true);
+		setItinerary(itinerary);
+	};
+
+	const closeEditDrawer = (open: boolean) => {
+		setOpen(open);
+		if (!open) setItinerary(undefined);
+	};
+
+	const { page, onPageChange, pagesCount } = usePagination({
+		pageNum: meta?.pages || 1,
+		pagesCount: meta?.pages || 1,
+	});
+
+	const [query, setQuery] = useQueryString();
+
+	return (
+		<Flex isColumn gap="4" className="w-full h-full">
+			<Label.Big600>
+				View a list of itineraries you can follow!
+			</Label.Big600>
+			<Flex
+				justify="between"
+				gap="2"
+				className="bg-surface-secondary p-2 rounded-lg border-2 border-solid border-black"
+			>
+				<Flex gap="1" align="center">
+					<Label.Mid400>Sort:</Label.Mid400>
+					<Select
+						onValueChange={(value) => {
+							if (value === "0") {
+								setQuery({
+									...query,
+									sort: undefined,
+								});
+							} else {
+								setQuery({
+									...query,
+									sort: value,
+								});
+							}
+						}}
+					>
+						<SelectTrigger className="bg-white">
+							<SelectValue placeholder="Sort" />
+						</SelectTrigger>
+						<SelectContent>
+							<SelectItem value="0">None</SelectItem>
+							<SelectItem value="avgRating,1">
+								Ascending rating
+							</SelectItem>
+							<SelectItem value="avgRating,-1">
+								Descending rating
+							</SelectItem>
+							<SelectItem value="price,1">
+								Ascending price
+							</SelectItem>
+							<SelectItem value="price,-1">
+								Descending price
+							</SelectItem>
+						</SelectContent>
+					</Select>
+					<Searchbar />
+					<Filters
+						filters={{
+							tags: {
+								filterName: "tags",
+								label: "Tags",
+								type: "checkbox",
+								options:
+									tags?.map((tag) => ({
+										label: tag.name,
+										value: tag._id!,
+									})) || [],
+							},
+							date: {
+								// TODO: WIP
+								filterName: "date",
+								label: "Date",
+								type: "date",
+							},
+							price: {
+								filterName: "price",
+								label: "Price",
+								type: "range",
+							},
+							language: {
+								filterName: "language",
+								label: "Language",
+								type: "checkbox",
+								options: languageOptions,
+							},
+						}}
+					/>
+				</Flex>
+				{user?.type === EAccountType.Guide &&
+					guide?.isVerified &&
+					guide?.acceptedTerms && (
+						<Button
+							onClick={() => setOpen(true)}
+							variant="default"
+							className="flex gap-2"
+						>
+							Add Itinerary <Plus />
+						</Button>
+					)}
+			</Flex>
+			<Flex
+				className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2"
+				gap="4"
+			>
+				{data
+					?.filter((itinarary: TItinerary) => {
+						if (user?.type === EAccountType.Tourist) {
+							const currentDate = new Date();
+
+							if (itinarary.startDateTime) {
+								const activityDate = new Date(
+									itinarary.startDateTime,
+								);
+								return activityDate > currentDate;
+							}
+						}
+						return true;
+					})
+					.map((itinerary) => (
+						<ItineraryCard
+							itinerary={itinerary}
+							openEditDrawer={openEditDrawer}
+						/>
+					))}
+			</Flex>
+			{pagesCount > 1 && (
+				<Pagination>
+					{page !== 1 && (
+						<PaginationPrevious
+							onClick={() => onPageChange(page - 1)}
+						/>
+					)}
+					<PaginationContent>
+						{[...Array(pagesCount).keys()].map((num) => (
+							<PaginationItem
+								key={num}
+								onClick={() => onPageChange(num + 1)}
+							>
+								<PaginationLink isActive={page === num + 1}>
+									{num + 1}
+								</PaginationLink>
+							</PaginationItem>
+						))}
+					</PaginationContent>
+					{page !== pagesCount && (
+						<PaginationNext
+							onClick={() => onPageChange(page + 1)}
+						/>
+					)}
+				</Pagination>
+			)}
+			<ItineraryForm
+				itinerary={itinerary}
+				open={open}
+				setOpen={closeEditDrawer}
+			/>
+		</Flex>
+	);
+}
+
+```
+</details>
+
 
 ## Installation
 
@@ -245,9 +887,53 @@ Our API is available online as a public postman workspace that you can see and f
 
 
 ## How To Use
+Before running the project, ensure you have the required environment variables set up. You'll need to create two .env files—one for the backend and one for the frontend. These files store sensitive configuration values.
+<details>
+<summary>Backend env</summary>
 
+`MONGO_DB_URI`
+
+`AWS_ACCESS_KEY_ID`
+
+`AWS_SECRET_ACCESS_KEY`
+
+`AWS_REGION`
+
+`AWS_BUCKET_NAME`
+
+`AMADEUS_CLIENT_ID`
+
+`AMADEUS_CLIENT_SECRET`
+
+`AMADEUS_TOKEN`
+
+`STRIPE_SECRET_KEY`
+
+`SYSTEM_EMAIL`
+
+`SYSTEM_EMAIL_APP_PASSWORD`
+</li>
+</details>
+
+<details>
+<summary>Frontend env</summary>
+
+`VITE_STRIPE_PUBLISHABLE_KEY`
+</details>
 
 ## Contribute
+We welcome contributions to improve our project!
+
+ Want to get started ?!
+ 
+- Fork the repository
+- Clone the repository
+- Install dependencies
+- Create a new branch
+- Make your changes
+- Commit and push your changes
+- Create a pull request
+- Wait for your pull request to be reviewed and merged
 
 ## Credits
 
