@@ -247,6 +247,7 @@ export const cancelOrder = async (req: Request, res: Response) => {
 		tourist?.set({
 			walletBalance: tourist.walletBalance + order.totalPrice,
 		});
+		setTimeout(() => {}, 1000);
 		await tourist?.save();
 
 		res.status(200).send("Order Canceled");
