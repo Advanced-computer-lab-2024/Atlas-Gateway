@@ -58,7 +58,7 @@ export type TTourGuideProfileResponse = TTourGuide & {
 };
 
 export type TApiResponse<T> = {
-	data: [T];
+	data: T[];
 	metaData: {
 		page: number;
 		total: number;

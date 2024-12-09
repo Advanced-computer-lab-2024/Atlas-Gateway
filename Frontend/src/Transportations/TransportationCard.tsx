@@ -70,7 +70,7 @@ export default function TransportationCard({
 	return (
 		<Card
 			key={transportation?._id}
-			className="w-full h-[350px] flex gap-1 flex-col border-black border-2"
+			className="w-full h-[370px] flex gap-1 flex-col border-black border-2"
 		>
 			<CardHeader>
 				<Flex
@@ -194,6 +194,14 @@ export default function TransportationCard({
 							<Label.Thin300>Number of bookings:</Label.Thin300>
 							<Label.Mid300>
 								{transportation?.numberOfBookings}
+							</Label.Mid300>
+						</Flex>
+					</Flex>
+					<Flex className="w-full" align="center" justify="between">
+						<Flex gap="2" align="center">
+							<Label.Thin300>Availability:</Label.Thin300>
+							<Label.Mid300>
+								{transportation?.availability}
 							</Label.Mid300>
 						</Flex>
 					</Flex>
