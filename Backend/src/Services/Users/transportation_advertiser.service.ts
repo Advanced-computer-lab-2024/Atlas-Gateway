@@ -1,17 +1,14 @@
 import { Types } from "mongoose";
 
+
+
 import HttpError from "../../Errors/HttpError";
-import {
-	ITransportation,
-	Transportation,
-} from "../../Models/Travel/transportation.model";
-import {
-	ITransportationAdvertiser,
-	TransportationAdvertiser,
-} from "../../Models/Users/transportation_advertiser.model";
+import { ITransportation, Transportation } from "../../Models/Travel/transportation.model";
+import { ITransportationAdvertiser, TransportationAdvertiser } from "../../Models/Users/transportation_advertiser.model";
 import { hashPassword } from "../Auth/password.service";
 import uniqueUsername from "../Auth/username.service";
 import * as adminService from "./admin.service";
+
 
 export const createTransportationAdvertiser = async (
 	username: string,
@@ -64,11 +61,14 @@ export const updateTransportationAdvertiser = async (
 				Object.keys(newTransportationAdvertiser)[0] == "taxCardPath" ||
 				Object.keys(newTransportationAdvertiser)[0] == "imagePath"
 			: false;
+		
 		if (
 			!transportation_advertiser ||
 			(!transportation_advertiser.isVerified && !overRide)
 		) {
-			throw new HttpError(401, "User is not Verified");
+			if (!newTransportationAdvertiser.acceptedTerms) {
+				throw new HttpError(401, "User is not Verified");
+			}
 		}
 	}
 	const transportation_advertiser =

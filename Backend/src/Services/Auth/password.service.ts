@@ -1,7 +1,6 @@
 import bcrypt from "bcryptjs";
 
-import transporter from "../../Config/mail";
-import * as mailTemplate from "../../Config/mailTemplate";
+import { sendPasswordResetMail } from "../../Config/mail";
 import HttpError from "../../Errors/HttpError";
 import generateOtp from "./otp";
 import { findUserByUsername } from "./username.service";
@@ -32,11 +31,6 @@ export const changePassword = async (username: string, password: string) => {
 
 export const forgetPassword = async (email: string) => {
 	const otp = generateOtp();
-	await transporter.sendMail({
-		from: `${process.env.SYSTEM_EMAIL}`,
-		to: `${email}`,
-		subject: "Reset Your Password",
-		html: mailTemplate.otpTemplate(otp),
-	});
+	await sendPasswordResetMail(email, otp);
 	return otp;
 };

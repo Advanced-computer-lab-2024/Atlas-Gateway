@@ -102,7 +102,7 @@ export function PaymentSheet({ amount }: props) {
 							}}
 						>
 							<OnlinePayment
-								amount={parseFloat(amount)}
+								amount={parseFloat(amount) * 100}
 								currency={data?.currency || ""}
 							/>
 						</Elements>

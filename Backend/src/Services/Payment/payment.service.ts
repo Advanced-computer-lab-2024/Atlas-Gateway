@@ -1,7 +1,6 @@
 import { Stripe } from "stripe";
 
-import transporter from "../../Config/mail";
-import * as mailTemplate from "../../Config/mailTemplate";
+import { sendPaymentMail } from "../../Config/mail";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -23,11 +22,6 @@ export const confirmPayment = async (
 		return_url: "http://localhost:3000",
 		payment_method: "pm_card_visa",
 	});
-	await transporter.sendMail({
-		from: `${process.env.SYSTEM_EMAIL}`,
-		to: `${email}`,
-		subject: "Payment Receipt",
-		html: mailTemplate.receiptTemplate(amount),
-	});
+	await sendPaymentMail(email, amount, "Card");
 	return paymentIntent;
 };

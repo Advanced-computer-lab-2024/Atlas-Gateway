@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Types } from "mongoose";
 
+import { sendPaymentMail } from "../../Config/mail";
 import { IProductTuple, Order } from "../../Models/Purchases/order.model";
 import { Product } from "../../Models/Purchases/product.model";
 import { Tourist } from "../../Models/Users/tourist.model";
@@ -22,6 +23,7 @@ export const createOrder = async (req: Request, res: Response) => {
 			paymentMethod,
 			promoCode,
 			paymentIntentId,
+			stripeAmount,
 		} = req.body;
 		if (!userId) {
 			res.status(400).send("Logged in User id is required");
@@ -57,6 +59,7 @@ export const createOrder = async (req: Request, res: Response) => {
 					totalPrice -
 					totalPrice * (promo?.discountPercentage! / 100);
 			}
+			console.log(totalPrice);
 			tourist.walletBalance -= totalPrice;
 		}
 
@@ -64,15 +67,11 @@ export const createOrder = async (req: Request, res: Response) => {
 			if (promoCode) {
 				const promo = await checkPromoService(promoCode, userId);
 				await deletePromoByCodeService(promoCode);
-				totalPrice =
-					totalPrice -
-					totalPrice * (promo?.discountPercentage! / 100);
+				stripeAmount =
+					stripeAmount -
+					stripeAmount * (promo?.discountPercentage! / 100);
 			}
-			await confirmPayment(
-				paymentIntentId,
-				tourist.email,
-				totalPrice / 100,
-			);
+			await confirmPayment(paymentIntentId, tourist.email, stripeAmount);
 		}
 
 		if (paymentMethod === "Cash" && promoCode) {
@@ -81,6 +80,8 @@ export const createOrder = async (req: Request, res: Response) => {
 			totalPrice =
 				totalPrice - totalPrice * (promo?.discountPercentage! / 100);
 		}
+
+		await sendPaymentMail(tourist.email, stripeAmount, paymentMethod);
 
 		const order = new Order({
 			touristId: userId,
@@ -104,11 +105,10 @@ export const createOrder = async (req: Request, res: Response) => {
 
 		await Promise.all(stockUpdateList);
 
-		tourist.walletBalance -= totalPrice;
-
 		if (tourist) {
 			tourist.cart = [];
 		}
+
 		await tourist?.save();
 
 

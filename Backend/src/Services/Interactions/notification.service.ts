@@ -1,7 +1,6 @@
 import mongoose, { PipelineStage, Types } from "mongoose";
 
-import transporter from "../../Config/mail";
-import * as mailTemplate from "../../Config/mailTemplate";
+import * as sendMail from "../../Config/mail";
 import HttpError from "../../Errors/HttpError";
 import {
 	INotification,
@@ -94,12 +93,7 @@ export const notifyOfFlaggedItinerary = async (
 
 	if (!itinerary) throw new HttpError(404, "Itinerary not found");
 
-	await transporter.sendMail({
-		from: `${process.env.SYSTEM_EMAIL}`,
-		to: `${userEmail}`,
-		subject: "Itinerary Flagged",
-		html: mailTemplate.itineraryFlaggedTemplate(itinerary.title),
-	});
+	await sendMail.sendItineraryFlaggedMail(itinerary.title, userEmail);
 
 	const newNotifi = new Notification({
 		type: "Warning",
@@ -189,17 +183,13 @@ export const notifyOfUpComingBookedItineraries = async (
 
 		if (!tourist) throw new HttpError(404, "Couldn't find Tourist");
 
-		await transporter.sendMail({
-			from: `${process.env.SYSTEM_EMAIL}`,
-			to: `${userEmail}`,
-			subject: "Upcoming Booked Event",
-			html: mailTemplate.itineraryBookingsTemplate(
-				itinerary.title,
-				itinerary.pickUpLocation,
-				itinerary.dropOffLocation,
-				itinerary.startDateTime,
-			),
-		});
+		await sendMail.sendItineraryStartedBookingsMail(
+			itinerary.title,
+			itinerary.pickUpLocation,
+			itinerary.dropOffLocation,
+			itinerary.startDateTime,
+			userEmail,
+		);
 
 		tourist.notifications.push(newNotifi.id);
 
