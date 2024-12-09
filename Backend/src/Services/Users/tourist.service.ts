@@ -662,7 +662,7 @@ export const requestActivityNotification = async (
 	return activity;
 };
 
-export const unrequestActivityNotification = async(
+export const unrequestActivityNotification = async (
 	activityId: String,
 	touristId: String,
 ) => {
@@ -678,7 +678,7 @@ export const unrequestActivityNotification = async(
 		$pull: { notificationRequested: touristId },
 	});
 	return activity;
-	};
+};
 
 export const requestItineraryNotification = async (
 	itineraryId: String,
@@ -705,18 +705,17 @@ export const unrequestItineraryNotification = async (
 	const itinerary = await Itinerary.findById(itineraryId);
 
 	const tourist = await Tourist.findById(touristId);
-if (!itinerary) {
-	throw new HttpError(404, "no Itinerary found with this id");
-}
-if (!tourist) {
-	throw new HttpError(404, "no tourist found with this id");
-}
-await itinerary.updateOne({
-	$pull: { notificationRequested: touristId },
-});
-return itinerary;
+	if (!itinerary) {
+		throw new HttpError(404, "no Itinerary found with this id");
+	}
+	if (!tourist) {
+		throw new HttpError(404, "no tourist found with this id");
+	}
+	await itinerary.updateOne({
+		$pull: { notificationRequested: touristId },
+	});
+	return itinerary;
 };
-
 
 export const addProductToCart = async (
 	touristId: string,
