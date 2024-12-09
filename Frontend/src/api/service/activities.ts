@@ -101,6 +101,7 @@ export function apiBookActivity(
 	amount: number,
 	promoCode: string,
 	userid: string,
+	stripeAmount: number,
 	paymentIntentId?: string,
 ) {
 	return axios({
@@ -115,6 +116,7 @@ export function apiBookActivity(
 			paymentType,
 			amount,
 			promoCode,
+			stripeAmount,
 		},
 		baseURL: baseURL,
 	});
@@ -193,7 +195,10 @@ export function apiActivityNotification(touristId: string, activityId: string) {
 	});
 }
 
-export function apiRemoveActivityNotification(touristId: string, activityId: string) {
+export function apiRemoveActivityNotification(
+	touristId: string,
+	activityId: string,
+) {
 	return axios({
 		method: "POST",
 		url: ENDPOINTS.tourist.removeActivityNotification,

@@ -220,9 +220,9 @@ export const deleteItinerary = async (id: string) => {
 export const bookItinerary = async (
 	itineraryId: string,
 	paymentType: string,
-	amount: number,
 	paymentIntentId: string,
 	promoCode: string,
+	stripeAmount: number,
 	touristId: string,
 ) => {
 	const itinerary = await getItineraryById(itineraryId);
@@ -247,15 +247,13 @@ export const bookItinerary = async (
 		itineraryId,
 		paymentType,
 		promoCode,
+		stripeAmount,
+		paymentIntentId,
 		itinerary.price,
 	);
 
 	if (!tourist) {
 		throw new HttpError(404, "Couldn't book itinerary in Tourist");
-	}
-
-	if (paymentType === "online") {
-		await confirmPayment(paymentIntentId, tourist.email, amount / 100);
 	}
 
 	await itinerary.updateOne({
@@ -453,7 +451,9 @@ export const flagItinerary = async (itineraryId: string) => {
 		itinerary.id.toString(),
 	);
 
-	const newNotify = await notificationService.getNotificationById(notify.id.toString());
+	const newNotify = await notificationService.getNotificationById(
+		notify.id.toString(),
+	);
 
 	tourGuide.notifications.push(newNotify.id.toString());
 

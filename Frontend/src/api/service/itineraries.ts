@@ -98,6 +98,7 @@ export function apiBookItinerary(
 	amount: number,
 	_userId: string,
 	promoCode: string,
+	stripeAmount: number,
 	paymentIntentId?: string,
 ) {
 	return axios({
@@ -112,6 +113,7 @@ export function apiBookItinerary(
 			paymentType,
 			amount,
 			promoCode,
+			stripeAmount,
 		},
 		baseURL: baseURL,
 	});
@@ -197,7 +199,10 @@ export function apiPastItineraries(touristId: string) {
 	});
 }
 
-export function apiItineraryNotification(touristId: string, itineraryId: string) {
+export function apiItineraryNotification(
+	touristId: string,
+	itineraryId: string,
+) {
 	return axios({
 		method: "POST",
 		url: ENDPOINTS.tourist.itineraryNotification,
@@ -212,7 +217,10 @@ export function apiItineraryNotification(touristId: string, itineraryId: string)
 	});
 }
 
-export function apiRemoveItineraryNotification(touristId: string, itineraryId: string) {
+export function apiRemoveItineraryNotification(
+	touristId: string,
+	itineraryId: string,
+) {
 	return axios({
 		method: "POST",
 		url: ENDPOINTS.tourist.removeItineraryNotification,
