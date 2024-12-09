@@ -1,22 +1,18 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 
+
+
+import { toast, useToast } from "@/hooks/use-toast";
 import { useLoginStore } from "@/store/loginStore";
 import { TProduct } from "@/types/global";
 
-import {
-	apiAddProductToCart,
-	apiAddWishlistProduct,
-	apiCheckoutCart,
-	apiCreateProduct,
-	apiProduct,
-	apiProducts,
-	apiRemoveProductFromCart,
-	apiRemoveWishlistProduct,
-	apiUpdateProduct,
-	apiUpdateProductQuantity,
-} from "../service/product";
+
+
+import { apiAddProductToCart, apiAddWishlistProduct, apiCheckoutCart, apiCreateProduct, apiProduct, apiProducts, apiRemoveProductFromCart, apiRemoveWishlistProduct, apiUpdateProduct, apiUpdateProductQuantity } from "../service/product";
+import { onError } from "./onError";
 import { useQueryString } from "./useQueryString";
+
 
 export function useProducts() {
 	const { user } = useLoginStore();
@@ -54,6 +50,7 @@ export function useCreateProduct(onSuccess: () => void) {
 			}
 			return apiCreateProduct(product, user._id);
 		},
+		onError,
 		onSuccess,
 	});
 
@@ -71,6 +68,7 @@ export function useUpdateProduct(onSuccess: () => void) {
 			}
 			return apiUpdateProduct(product, user._id);
 		},
+		onError,
 		onSuccess,
 	});
 
@@ -88,7 +86,15 @@ export function useAddWishlist(onSuccess: () => void) {
 			}
 			return apiAddWishlistProduct(productId, user._id);
 		},
-		onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Product added to wishlist!",
+				description:
+					"To view wishlist click on My wishlist at the top of the page.",
+			});
+		},
 	});
 
 	const { mutate } = mutation;
@@ -105,7 +111,13 @@ export function useRemoveWishlist(onSuccess: () => void) {
 			}
 			return apiRemoveWishlistProduct(productId, user._id);
 		},
-		onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Product removed from wishlist!",
+			});
+		},
 	});
 
 	const { mutate } = mutation;
@@ -122,7 +134,15 @@ export function useAddProductToCart(onSuccess: () => void) {
 			}
 			return apiAddProductToCart(productId, user._id);
 		},
-		onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Product added to cart!",
+				description:
+					"To view cart, click on the cart icon on the top right.",
+			});
+		},
 	});
 
 	const { mutate } = mutation;
@@ -132,6 +152,7 @@ export function useAddProductToCart(onSuccess: () => void) {
 
 export function useRemoveProductFromCart(onSuccess: () => void) {
 	const { user } = useLoginStore();
+	const { toast } = useToast();
 	const mutation = useMutation({
 		mutationFn: (productId: string) => {
 			if (!user) {
@@ -139,7 +160,13 @@ export function useRemoveProductFromCart(onSuccess: () => void) {
 			}
 			return apiRemoveProductFromCart(productId, user._id);
 		},
-		onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Product removed from cart!",
+			});
+		},
 	});
 
 	const { mutate } = mutation;
@@ -156,6 +183,7 @@ export function useUpdateProductQuantity(onSuccess: () => void) {
 			}
 			return apiUpdateProductQuantity(payload, user._id);
 		},
+		onError,
 		onSuccess,
 	});
 
@@ -166,6 +194,7 @@ export function useUpdateProductQuantity(onSuccess: () => void) {
 
 export function useCheckoutCart(onSuccess: () => void) {
 	const { user } = useLoginStore();
+	const { toast } = useToast();
 	const mutation = useMutation({
 		mutationFn: (payload: {
 			products: {
@@ -182,7 +211,13 @@ export function useCheckoutCart(onSuccess: () => void) {
 			}
 			return apiCheckoutCart(payload, user._id);
 		},
-		onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Checkout successful!",
+			});
+		},
 	});
 
 	const { mutate } = mutation;

@@ -143,6 +143,7 @@ export default function ActivityDetails() {
 									(touristBookmarks?.includes(user?._id) ? (
 										<Bookmark
 											fill="black"
+											className="cursor-pointer"
 											onClick={() => {
 												if (data?._id) {
 													doRemoveBookmarkActivity(
@@ -153,6 +154,7 @@ export default function ActivityDetails() {
 										/>
 									) : (
 										<Bookmark
+											className="cursor-pointer"
 											onClick={() => {
 												if (data?._id) {
 													doBookmarkActivity(

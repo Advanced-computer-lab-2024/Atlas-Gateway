@@ -29,6 +29,9 @@ import Hotels from "./Hotels/Hotels";
 import Itineraries from "./Itineraries/Itineraries";
 import ItineraryDetails from "./Itineraries/ItineraryDetails";
 import Login from "./Login/Login";
+import NotificationCard from "./Notifications/NotificationCard";
+import NotificationCardCopy from "./Notifications/NotificationCard copy";
+import Notifications from "./Notifications/Notifications";
 import PlaceDetails from "./Places/PlaceDetails";
 import Places from "./Places/Places";
 import Cart from "./Products/Cart";
@@ -39,12 +42,10 @@ import Register from "./Register/Register";
 import AdminReport from "./Reports/Admin/AdminReport";
 import TransportationDetails from "./Transportations/TransportationDetails";
 import Transportations from "./Transportations/Transportations";
-import Notifications from "./Notifications/Notifications";
 import { QueryStateProvider } from "./api/data/useQueryString";
+import { Toaster } from "./components/ui/toaster";
 import "./index.css";
 import Layout from "./layout/Layout";
-import NotificationCard from "./Notifications/NotificationCard";
-import NotificationCardCopy from "./Notifications/NotificationCard copy";
 
 const queryClient = new QueryClient();
 
@@ -265,9 +266,8 @@ const router = createBrowserRouter([
 ]);
 
 createRoot(document.getElementById("root")!).render(
-	<StrictMode>
-		<QueryClientProvider client={queryClient}>
-			<RouterProvider router={router} />
-		</QueryClientProvider>
-	</StrictMode>,
+	<QueryClientProvider client={queryClient}>
+		<Toaster />
+		<RouterProvider router={router} />
+	</QueryClientProvider>,
 );

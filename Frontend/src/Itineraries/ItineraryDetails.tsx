@@ -166,6 +166,7 @@ export default function ItineraryDetails() {
 								{user?.type === EAccountType.Tourist &&
 									(touristBookmarks?.includes(user?._id) ? (
 										<Bookmark
+											className="cursor-pointer"
 											fill="black"
 											onClick={() => {
 												if (data?._id) {
@@ -177,6 +178,7 @@ export default function ItineraryDetails() {
 										/>
 									) : (
 										<Bookmark
+											className="cursor-pointer"
 											onClick={() => {
 												if (data?._id) {
 													doBookmarkItinerary(

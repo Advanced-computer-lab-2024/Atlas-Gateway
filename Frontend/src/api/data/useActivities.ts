@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 
+import { toast } from "@/hooks/use-toast";
 import { useLoginStore } from "@/store/loginStore";
 import { EAccountType } from "@/types/enums";
 import { TActivity } from "@/types/global";
@@ -20,6 +21,7 @@ import {
 	apiUpcomingActivities,
 	apiUpdateActivity,
 } from "../service/activities";
+import { onError } from "./onError";
 import { useQueryString } from "./useQueryString";
 
 export function useActivities() {
@@ -70,7 +72,13 @@ export function useCreateActivity(onSuccess: () => void) {
 
 			return apiCreateActivity(data, _id);
 		},
-		onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Activity created successfully!",
+			});
+		},
 	});
 
 	const { mutate } = mutation;
@@ -81,7 +89,13 @@ export function useCreateActivity(onSuccess: () => void) {
 export function useUpdateActivity(onSuccess: () => void) {
 	const mutation = useMutation({
 		mutationFn: apiUpdateActivity,
-		onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Activity updated successfully!",
+			});
+		},
 	});
 
 	const { mutate } = mutation;
@@ -92,7 +106,13 @@ export function useUpdateActivity(onSuccess: () => void) {
 export function useDeleteActivity(onSuccess: () => void) {
 	const mutation = useMutation({
 		mutationFn: (_id: string) => apiDeleteActivity(_id),
-		onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Activity deleted successfully!",
+			});
+		},
 	});
 
 	const { mutate } = mutation;
@@ -127,7 +147,13 @@ export function useBookActivity(onSuccess: () => void) {
 				_id ?? "",
 				paymentIntentId,
 			),
-		onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Activity booked successfully!",
+			});
+		},
 	});
 
 	const { mutate } = mutation;
@@ -142,7 +168,14 @@ export function useBookmarkActivity(onSuccess: () => void) {
 
 	const mutation = useMutation({
 		mutationFn: (id: string) => apiBookmarkActivity(id, _id ?? ""),
-		onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Activity added to bookmarks!",
+				description: "To view bookmarks, go to your profile page.",
+			});
+		},
 	});
 	const { mutate } = mutation;
 
@@ -154,7 +187,13 @@ export function useCancelActivityBooking(onSuccess: () => void) {
 	const { _id } = user || {};
 	const mutation = useMutation({
 		mutationFn: (id: string) => apiCancelActivityBooking(id, _id ?? ""),
-		onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Activity booking cancelled!",
+			});
+		},
 	});
 
 	const { mutate } = mutation;
@@ -167,7 +206,13 @@ export function useRemoveBookmarkActivity(onSuccess: () => void) {
 	const { _id } = user || {};
 	const mutation = useMutation({
 		mutationFn: (id: string) => apiRemoveBookmarkActivity(id, _id ?? ""),
-		onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Activity removed from bookmarks!",
+			});
+		},
 	});
 
 	const { mutate } = mutation;

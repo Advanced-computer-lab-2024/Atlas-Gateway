@@ -1,9 +1,11 @@
 import { useMutation } from "@tanstack/react-query";
 
+import { toast } from "@/hooks/use-toast";
 import { useLoginStore } from "@/store/loginStore";
 
 import { IFlight } from "../../../../Backend/src/Models/Flight/flight.model";
 import { apiBookFlight, apiSearchFlights } from "../service/flights";
+import { onError } from "./onError";
 
 export function useSearchFlights(onSuccess: (response: any) => void) {
 	const mutation = useMutation({
@@ -20,7 +22,13 @@ export function useBookFlight(onSuccess: () => void) {
 	const { user } = useLoginStore();
 	const mutation = useMutation({
 		mutationFn: (flight: IFlight) => apiBookFlight(flight, user?._id!),
-		onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Flight booked successfully!",
+			});
+		},
 	});
 
 	const { mutate, isPending } = mutation;

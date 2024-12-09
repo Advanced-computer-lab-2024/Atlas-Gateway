@@ -110,7 +110,7 @@ export default function ActivityCard({
 						(activity?.touristBookmarks?.includes(user?._id) ? (
 							<Bookmark
 								fill="black"
-								className="absolute left-0"
+								className="absolute left-0 cursor-pointer"
 								onClick={() => {
 									if (activity?._id) {
 										doRemoveBookmarkActivity(activity?._id);
@@ -119,7 +119,7 @@ export default function ActivityCard({
 							/>
 						) : (
 							<Bookmark
-								className="absolute left-0"
+								className="absolute left-0 cursor-pointer"
 								onClick={() => {
 									if (activity?._id) {
 										doBookmarkActivity(activity?._id);

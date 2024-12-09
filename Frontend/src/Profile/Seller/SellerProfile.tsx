@@ -28,7 +28,7 @@ export default function SellerProfile() {
 	}, [data?.imagePath, doDownload]);
 
 	return (
-		<Flex isColumn className="w-full">
+		<Flex isColumn className="w-full pt-6">
 			<div className="relative w-full">
 				<div
 					className="w-full h-64 bg-cover bg-center rounded-lg"
