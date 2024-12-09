@@ -34,7 +34,6 @@ const OnlinePayment = ({ amount, currency }: props) => {
 	const { data, refetch } = useItinerary();
 	const { refetch: refetchUserProfile } = useTouristProfile();
 	useEffect(() => {
-		amount = amount * 100;
 		doCreatePaymentIntent({ amount, currency });
 	}, [amount]);
 	const { doCreatePaymentIntent } = useCreatePaymentIntent((response) => {

@@ -1,8 +1,8 @@
+import { Tourist } from "@/Models/Users/tourist.model";
 import crypto from "crypto";
 import { Types } from "mongoose";
 
-import transporter from "../../Config/mail";
-import * as mailTemplate from "../../Config/mailTemplate";
+import { sendPromoCode } from "../../Config/mail";
 import HttpError from "../../Errors/HttpError";
 import { promo } from "../../Models/Promo/promo.model";
 import { findUserByUsername } from "../../Services/Auth/username.service";
@@ -79,16 +79,12 @@ export const createBirthdayPromo = async (username: string, email: string) => {
 		[user._id],
 	);
 
-	await transporter.sendMail({
-		from: `${process.env.SYSTEM_EMAIL}`,
-		to: `${email}`,
-		subject: "Happy Birthday Promo",
-		html: mailTemplate.promoCodeTemplate(
-			newPromo.promoCode,
-			newPromo.discountPercentage,
-			newPromo.expiryDate,
-		),
-	});
+	await sendPromoCode(
+		email,
+		newPromo.promoCode,
+		newPromo.discountPercentage,
+		newPromo.expiryDate,
+	);
 
 	return newPromo;
 };

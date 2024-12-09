@@ -1,18 +1,24 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 
-
-
 import { toast, useToast } from "@/hooks/use-toast";
 import { useLoginStore } from "@/store/loginStore";
 import { TProduct } from "@/types/global";
 
-
-
-import { apiAddProductToCart, apiAddWishlistProduct, apiCheckoutCart, apiCreateProduct, apiProduct, apiProducts, apiRemoveProductFromCart, apiRemoveWishlistProduct, apiUpdateProduct, apiUpdateProductQuantity } from "../service/product";
+import {
+	apiAddProductToCart,
+	apiAddWishlistProduct,
+	apiCheckoutCart,
+	apiCreateProduct,
+	apiProduct,
+	apiProducts,
+	apiRemoveProductFromCart,
+	apiRemoveWishlistProduct,
+	apiUpdateProduct,
+	apiUpdateProductQuantity,
+} from "../service/product";
 import { onError } from "./onError";
 import { useQueryString } from "./useQueryString";
-
 
 export function useProducts() {
 	const { user } = useLoginStore();
@@ -207,6 +213,7 @@ export function useCheckoutCart(onSuccess: () => void) {
 			paymentMethod: string;
 			promoCode?: string;
 			paymentIntentId?: string;
+			stripeAmount?: number;
 		}) => {
 			if (!user) {
 				throw new Error("User is not defined");

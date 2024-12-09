@@ -12,6 +12,7 @@ import { useTouristProfile } from "@/api/data/useProfile";
 import { Button } from "@/components/ui/button";
 import { Flex } from "@/components/ui/flex";
 import { Input } from "@/components/ui/input";
+import useCurrency from "@/hooks/useCurrency";
 
 interface props {
 	amount: number;
@@ -26,6 +27,7 @@ interface PaymentIntent {
 }
 const OnlinePayment = ({ amount, currency, address }: props) => {
 	const stripe = useStripe();
+	const convertCurrency = useCurrency();
 	const elements = useElements();
 	const { data } = useTouristProfile();
 	const [promo, setPromo] = useState("");
@@ -72,6 +74,7 @@ const OnlinePayment = ({ amount, currency, address }: props) => {
 				),
 				promoCode: promo,
 				paymentIntentId: paymentIntent.id,
+				stripeAmount: parseFloat(convertCurrency(amount)),
 			});
 		}
 	};

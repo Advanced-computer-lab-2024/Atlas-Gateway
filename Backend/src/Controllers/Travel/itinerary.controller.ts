@@ -94,9 +94,9 @@ export const getItineraries = async (
 		if (!usertype) {
 			throw new HttpError(400, "User type is required");
 		}
-		if (!userId) {
-			throw new HttpError(400, "User ID is required");
-		}
+		// if (!userId) {
+		// 	throw new HttpError(400, "User ID is required");
+		// }
 		const result = await itineraryService.getItineraries(
 			usertype,
 			userId,
