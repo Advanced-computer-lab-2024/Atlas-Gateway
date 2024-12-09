@@ -1,6 +1,6 @@
 import mongoose, { PipelineStage, Types } from "mongoose";
 
-import * as sendMail from "../../Config/mail";
+import * as mailTemplate from "../../Config/mailTemplate";
 import HttpError from "../../Errors/HttpError";
 import {
 	INotification,
@@ -14,6 +14,7 @@ import * as adminService from "../../Services/Users/admin.service";
 import * as guideService from "../../Services/Users/tourGuide.service";
 import * as sellerService from "../../Services/Users/seller.service";
 import * as advertiserService from "../../Services/Users/advertiser.service";
+import { transporter } from "../../Config/mail";
 
 export const createNotification = async (notification: INotification) => {
 	const session = await mongoose.startSession();
@@ -93,7 +94,12 @@ export const notifyOfFlaggedItinerary = async (
 
 	if (!itinerary) throw new HttpError(404, "Itinerary not found");
 
-	await sendMail.sendItineraryFlaggedMail(itinerary.title, userEmail);
+	await transporter.sendMail({
+		from: `${process.env.SYSTEM_EMAIL}`,
+		to: `${userEmail}`,
+		subject: "Itinerary Flagged",
+		html: mailTemplate.itineraryFlaggedTemplate(itinerary.title),
+	});
 
 	const newNotifi = new Notification({
 		type: "Warning",
@@ -183,13 +189,17 @@ export const notifyOfUpComingBookedItineraries = async (
 
 		if (!tourist) throw new HttpError(404, "Couldn't find Tourist");
 
-		await sendMail.sendItineraryStartedBookingsMail(
-			itinerary.title,
-			itinerary.pickUpLocation,
-			itinerary.dropOffLocation,
-			itinerary.startDateTime,
-			userEmail,
-		);
+		await transporter.sendMail({
+			from: `${process.env.SYSTEM_EMAIL}`,
+			to: `${userEmail}`,
+			subject: "Upcoming Booked Event",
+			html: mailTemplate.itineraryBookingsTemplate(
+				itinerary.title,
+				itinerary.pickUpLocation,
+				itinerary.dropOffLocation,
+				itinerary.startDateTime,
+			),
+		});
 
 		tourist.notifications.push(newNotifi.id);
 
