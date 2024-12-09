@@ -9,9 +9,10 @@ import {
 	checkPromoService,
 	deletePromoByCodeService,
 } from "../../Services/Promo/promo.service";
+import { notifyOfProductOutOfStock } from "../../Services/Interactions/notification.service";
+import { Seller } from "../../Models/Users/seller.model";
 
 export const createOrder = async (req: Request, res: Response) => {
-	//Called When clicking checkout
 	try {
 		const userId = req.headers.userid;
 		let {
@@ -110,6 +111,7 @@ export const createOrder = async (req: Request, res: Response) => {
 		}
 		await tourist?.save();
 
+
 		res.status(201).send(order);
 	} catch (error) {
 		res.status(500).send("Internal Server Error");
@@ -118,12 +120,25 @@ export const createOrder = async (req: Request, res: Response) => {
 };
 
 async function updateStock(productId: Types.ObjectId, quantity: number) {
-	const product = await Product.findById(productId);
+	let product = await Product.findById(productId);
 	if (!product) {
 		throw new Error("Product not found /This is the update stock method/");
 	}
 	product.set({ quantity: product.quantity - quantity });
 	await product.save();
+
+	if (product.quantity <= 0) {
+		const seller = await Seller.findById(product.sellerId);
+		if(!!seller){
+			await notifyOfProductOutOfStock(
+				seller._id as string,
+				"Seller",
+				seller.email,
+				product._id as string,
+			)
+		}
+		
+	}
 }
 
 export const listUserOrders = async (req: Request, res: Response) => {

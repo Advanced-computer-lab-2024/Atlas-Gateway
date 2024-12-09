@@ -126,35 +126,39 @@ export const notifyOfProductOutOfStock = async (
 	userEmail: string,
 	productId: string,
 ) => {
-	if (!Types.ObjectId.isValid(userId)) {
-		throw new HttpError(400, "Invalid User ID");
+	try {
+		if (!Types.ObjectId.isValid(userId)) {
+			throw new HttpError(400, "Invalid User ID");
+		}
+
+		const product = await productService.getProductById(productId);
+
+		if (!product) throw new HttpError(404, "Product not found");
+
+		await transporter.sendMail({
+			from: `${process.env.SYSTEM_EMAIL}`,
+			to: `${userEmail}`,
+			subject: "Product Out of Stock",
+			html: mailTemplate.productOutOfStockTemplate(product.name),
+		});
+
+		const newNotifi = new Notification({
+			type: "Reminder",
+			message: `Product "${product.name}" is out of stock`,
+			notifiedTo: userId,
+			userType: userType,
+			isRead: false,
+			createdAt: new Date(),
+		});
+
+		const notifi = await newNotifi.save();
+
+		if (!notifi) throw new HttpError(400, "Error creating Notification");
+
+		return notifi;
+	} catch (error) {
+		console.error("Error in notifyOfProductOutOfStock:", error);
 	}
-
-	const product = await productService.getProductById(productId);
-
-	if (!product) throw new HttpError(404, "Product not found");
-
-	await transporter.sendMail({
-		from: `${process.env.SYSTEM_EMAIL}`,
-		to: `${userEmail}`,
-		subject: "Product Out of Stock",
-		html: mailTemplate.productOutOfStockTemplate(product.name),
-	});
-
-	const newNotifi = new Notification({
-		type: "Reminder",
-		message: `Product "${product.name}" is out of stock`,
-		notifiedTo: userId,
-		userType: userType,
-		isRead: false,
-		createdAt: new Date(),
-	});
-
-	const notifi = await newNotifi.save();
-
-	if (!notifi) throw new HttpError(400, "Error creating Notification");
-
-	return notifi;
 };
 
 export const notifyOfUpComingBookedItineraries = async (
