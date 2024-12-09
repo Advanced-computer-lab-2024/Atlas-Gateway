@@ -89,6 +89,7 @@ export function apiAddWishlistProduct(_id: string, userId: string) {
 }
 
 export function apiAddProductToCart(productId: string, _id: string) {
+	console.log("apiAddProductToCart", productId, _id);
 	return axios({
 		method: "POST",
 		url: ENDPOINTS.products.addToCart(_id),
