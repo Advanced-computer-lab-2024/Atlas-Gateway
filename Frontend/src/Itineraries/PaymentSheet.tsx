@@ -40,9 +40,10 @@ export function PaymentSheet({ amount }: props) {
 	const handlePayment = async () => {
 		doBookItinerary({
 			id: itinerary?._id!,
-			paymentType: "wallet",
+			paymentType: "Wallet",
 			amount: itinerary?.price!,
 			promoCode: promo,
+			stripeAmount: parseFloat(amount) * 100,
 		});
 	};
 	return (

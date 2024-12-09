@@ -1,5 +1,6 @@
 import { Types, now } from "mongoose";
 
+import { sendPaymentMail } from "../../Config/mail";
 import HttpError from "../../Errors/HttpError";
 import { Activity } from "../../Models/Travel/activity.model";
 import { IItinerary, Itinerary } from "../../Models/Travel/itinerary.model";
@@ -7,6 +8,7 @@ import { ITransportation } from "../../Models/Travel/transportation.model";
 import { ITourist, Tourist } from "../../Models/Users/tourist.model";
 import { hashPassword } from "../Auth/password.service";
 import uniqueUsername from "../Auth/username.service";
+import { confirmPayment } from "../Payment/payment.service";
 import {
 	checkPromoService,
 	deletePromoByCodeService,
@@ -92,6 +94,8 @@ export const addBookedActivity = async (
 	paymentType: string,
 	activityId: string,
 	promoCode: string,
+	stripeAmount: number,
+	paymentIntentId: string,
 	minPrice: number,
 	maxPrice: number,
 ) => {
@@ -113,17 +117,31 @@ export const addBookedActivity = async (
 			"You do not have enough balance in your wallet",
 		);
 	}
-
-	if (promoCode != "") {
-		const promo = await checkPromoService(promoCode, touristId);
-		await deletePromoByCodeService(promoCode);
-		maxPrice = maxPrice - maxPrice * (promo?.discountPercentage! / 100);
-	}
-
 	let newWalletBalance = tourist.walletBalance;
-	if (tourist.walletBalance >= maxPrice && paymentType === "wallet") {
-		newWalletBalance = tourist.walletBalance - maxPrice;
+	if (paymentType === "Wallet") {
+		if (maxPrice > tourist.walletBalance) {
+			throw new HttpError(400, "Insufficient Balance");
+		}
+		if (promoCode) {
+			const promo = await checkPromoService(promoCode, touristId);
+			await deletePromoByCodeService(promoCode);
+			maxPrice = maxPrice - maxPrice * (promo?.discountPercentage! / 100);
+		}
+		newWalletBalance -= maxPrice;
 	}
+
+	if (paymentType === "Card") {
+		if (promoCode) {
+			const promo = await checkPromoService(promoCode, touristId);
+			await deletePromoByCodeService(promoCode);
+			stripeAmount =
+				stripeAmount -
+				stripeAmount * (promo?.discountPercentage! / 100);
+		}
+		await confirmPayment(paymentIntentId, tourist.email, stripeAmount);
+	}
+
+	await sendPaymentMail(tourist.email, stripeAmount, paymentType);
 
 	const newLoyaltyPoints =
 		tourist.loyaltyPoints +
@@ -211,6 +229,8 @@ export const addBookedItinerary = async (
 	itineraryId: string,
 	paymentType: string,
 	promoCode: string,
+	stripeAmount: number,
+	paymentIntentId: string,
 	itineraryPrice: number,
 ) => {
 	if (!Types.ObjectId.isValid(itineraryId)) {
@@ -225,24 +245,33 @@ export const addBookedItinerary = async (
 		throw new HttpError(400, "Tourist must be older than 18");
 	}
 
-	if (itineraryPrice > tourist.walletBalance && paymentType === "wallet") {
-		throw new HttpError(
-			400,
-			"You do not have enough balance in your wallet",
-		);
-	}
-	if (promoCode != "") {
-		const promo = await checkPromoService(promoCode, touristId);
-		await deletePromoByCodeService(promoCode);
-		itineraryPrice =
-			itineraryPrice -
-			itineraryPrice * (promo?.discountPercentage! / 100);
+	let newWalletBalance = tourist.walletBalance;
+	if (paymentType === "Wallet") {
+		if (newWalletBalance > tourist.walletBalance) {
+			throw new HttpError(400, "Insufficient Balance");
+		}
+		if (promoCode) {
+			const promo = await checkPromoService(promoCode, touristId);
+			await deletePromoByCodeService(promoCode);
+			itineraryPrice =
+				itineraryPrice -
+				itineraryPrice * (promo?.discountPercentage! / 100);
+		}
+		newWalletBalance -= itineraryPrice;
 	}
 
-	let newWalletBalance = tourist.walletBalance;
-	if (tourist.walletBalance >= itineraryPrice && paymentType === "wallet") {
-		newWalletBalance = tourist.walletBalance - itineraryPrice;
+	if (paymentType === "Card") {
+		if (promoCode) {
+			const promo = await checkPromoService(promoCode, touristId);
+			await deletePromoByCodeService(promoCode);
+			stripeAmount =
+				stripeAmount -
+				stripeAmount * (promo?.discountPercentage! / 100);
+		}
+		await confirmPayment(paymentIntentId, tourist.email, stripeAmount);
 	}
+
+	await sendPaymentMail(tourist.email, stripeAmount, paymentType);
 
 	const newLoyaltyPoints =
 		tourist.loyaltyPoints + (tourist.level / 2) * itineraryPrice;
@@ -391,9 +420,11 @@ export const cancelItinerary = async (
 		payment.event.equals(itineraryId),
 	);
 	let newWalletBalance = tourist.walletBalance;
-	if (payment[0].type === "wallet") {
+	console.log(newWalletBalance);
+	if (payment[0].type === "Wallet") {
 		newWalletBalance += payment[0].amount;
 	}
+	console.log(newWalletBalance);
 	const newLoyaltyPoints =
 		tourist.loyaltyPoints - (tourist.level / 2) * itineraryPrice;
 	const newMaxCollectedLoyaltyPoints =
@@ -447,7 +478,7 @@ export const cancelActivity = async (
 		payment.event.equals(activityId),
 	);
 	let newWalletBalance = tourist.walletBalance;
-	if (payment[0].type === "wallet") {
+	if (payment[0].type === "Wallet") {
 		newWalletBalance += payment[0].amount;
 	}
 
@@ -662,7 +693,7 @@ export const requestActivityNotification = async (
 	return activity;
 };
 
-export const unrequestActivityNotification = async(
+export const unrequestActivityNotification = async (
 	activityId: String,
 	touristId: String,
 ) => {
@@ -678,7 +709,7 @@ export const unrequestActivityNotification = async(
 		$pull: { notificationRequested: touristId },
 	});
 	return activity;
-	};
+};
 
 export const requestItineraryNotification = async (
 	itineraryId: String,
@@ -705,18 +736,17 @@ export const unrequestItineraryNotification = async (
 	const itinerary = await Itinerary.findById(itineraryId);
 
 	const tourist = await Tourist.findById(touristId);
-if (!itinerary) {
-	throw new HttpError(404, "no Itinerary found with this id");
-}
-if (!tourist) {
-	throw new HttpError(404, "no tourist found with this id");
-}
-await itinerary.updateOne({
-	$pull: { notificationRequested: touristId },
-});
-return itinerary;
+	if (!itinerary) {
+		throw new HttpError(404, "no Itinerary found with this id");
+	}
+	if (!tourist) {
+		throw new HttpError(404, "no tourist found with this id");
+	}
+	await itinerary.updateOne({
+		$pull: { notificationRequested: touristId },
+	});
+	return itinerary;
 };
-
 
 export const addProductToCart = async (
 	touristId: string,
