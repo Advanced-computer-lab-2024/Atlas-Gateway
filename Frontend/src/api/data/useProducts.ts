@@ -176,6 +176,8 @@ export function useCheckoutCart(onSuccess: () => void) {
 			}[];
 			address: string;
 			paymentMethod: string;
+			promoCode?: string;
+			paymentIntentId?: string;
 		}) => {
 			if (!user) {
 				throw new Error("User is not defined");
