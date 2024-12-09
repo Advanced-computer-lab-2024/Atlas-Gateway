@@ -58,11 +58,11 @@ export default function Activites() {
 
 	const [query, setQuery] = useQueryString();
 
+	console.log(data);
+
 	return (
 		<Flex isColumn gap="4" className="w-full h-full p-4 overflow-y-scroll">
-			<Label.Big600>
-				Activities
-			</Label.Big600>
+			<Label.Big600>Activities</Label.Big600>
 			<Flex
 				justify="between"
 				gap="2"
@@ -165,7 +165,11 @@ export default function Activites() {
 			>
 				{data
 					?.filter((activity: TActivity) => {
-						if (user?.type === EAccountType.Tourist) {
+						if (
+							user?.type === EAccountType.Tourist ||
+							user?.type === EAccountType.Guest ||
+							!user
+						) {
 							const currentDate = new Date();
 
 							if (activity.dateTime) {

@@ -116,6 +116,8 @@ export const getActivities = async (
 				),
 			},
 		};
+
+		console.log(response);
 		res.status(200).send(response);
 	} catch (error) {
 		next(error);

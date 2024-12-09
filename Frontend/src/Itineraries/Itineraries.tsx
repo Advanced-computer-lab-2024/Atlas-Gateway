@@ -156,7 +156,11 @@ export default function Itineraries() {
 			>
 				{data
 					?.filter((itinarary: TItinerary) => {
-						if (user?.type === EAccountType.Tourist) {
+						if (
+							user?.type === EAccountType.Tourist ||
+							!user ||
+							user?.type === EAccountType.Guest
+						) {
 							const currentDate = new Date();
 
 							if (itinarary.startDateTime) {
