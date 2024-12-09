@@ -49,7 +49,7 @@ export default function TouristActivities() {
 						</TableCell>
 						<TableCell>{activity?.location}</TableCell>
 						<TableCell>
-							{activity._id ? ( //TODO: Adjust conditions
+							{activity._id ? (
 								<Eye
 									onClick={() => {
 										window.location.href = `/activities/${activity._id}`;

@@ -11,6 +11,10 @@ import { Itinerary } from "../../Models/Travel/itinerary.model";
 import * as productService from "../../Services/Purchases/product.service";
 import * as itineraryService from "../../Services/Travel/itinerary.service";
 import * as touristService from "../../Services/Users/tourist.service";
+import * as adminService from "../../Services/Users/admin.service";
+import * as guideService from "../../Services/Users/tourGuide.service";
+import * as sellerService from "../../Services/Users/seller.service";
+import * as advertiserService from "../../Services/Users/advertiser.service";
 
 export const createNotification = async (notification: INotification) => {
 	const session = await mongoose.startSession();
@@ -99,14 +103,14 @@ export const notifyOfFlaggedItinerary = async (
 
 	const newNotifi = new Notification({
 		type: "Warning",
-		message: `Itinerary "${itinerary.title}" has been flagged as inapproriate by the admin`,
+		message: `Itinerary "${itinerary.title}" has been flagged as inappropriate by the admin`,
 		notifiedTo: userId,
 		userType: userType,
 		isRead: false,
 		createdAt: new Date(),
 	});
 
-	const notifi = await createNotification(newNotifi);
+	const notifi = await newNotifi.save();
 
 	if (!notifi) throw new HttpError(400, "Error creating Notification");
 
@@ -146,11 +150,9 @@ export const notifyOfProductOutOfStock = async (
 		createdAt: new Date(),
 	});
 
-	const notifi = await createNotification(newNotifi);
+	const notifi = await newNotifi.save();
 
 	if (!notifi) throw new HttpError(400, "Error creating Notification");
-
-	//await notifi.save();
 
 	return notifi;
 };
@@ -174,7 +176,7 @@ export const notifyOfUpComingBookedItineraries = async (
 			createdAt: new Date(),
 		});
 
-		const newNotifi = await createNotification(notification);
+		const newNotifi = await notification.save();
 
 		if (!newNotifi)
 			throw new HttpError(400, "Couldn't create notification");
@@ -265,3 +267,109 @@ export const updateNotification = async (
 
 	return notification;
 };
+
+export const deleteNotification = async (id: string, userid: string, usertype: string) => {
+	if (!Types.ObjectId.isValid(userid)) {
+		throw new HttpError(400, "userid is invalid");
+	}
+
+	if (!Types.ObjectId.isValid(id)) {
+		throw new HttpError(400, "id is invalid");
+	}
+
+	const session = await mongoose.startSession();
+	try {
+		session.startTransaction();
+
+		const notification = await Notification.findById(id).session(session);
+		if (!notification) {
+			throw new HttpError(404, "Notification not found");
+		}
+
+		if (usertype === "Tourist") {
+			const tourist = await touristService.getTouristById(userid);
+
+			if (!tourist) {
+				throw new HttpError(404, "Tourist not found");
+			}
+
+			await tourist.updateOne(
+				{
+					$pull: { notifications: id },
+				},
+				{ session },
+			);
+		}
+
+		if (usertype === "Admin") {
+			const admin = await adminService.getAdminById(userid);
+
+			if (!admin) {
+				throw new HttpError(404, "Admin not found");
+			}
+
+			await admin.updateOne(
+				{
+					$pull: { notifications: id },
+				},
+				{ session },
+			);
+		}
+
+		if (usertype === "TourGuide") {
+			const guide = await guideService.getTourGuideById(userid);
+
+			if (!guide) {
+				throw new HttpError(404, "Guide not found");
+			}
+
+			await guide.updateOne(
+				{
+					$pull: { notifications: id },
+				},
+				{ session },
+			);
+		}
+
+		if (usertype === "Seller") {
+			const seller = await sellerService.getSellerById(userid);
+
+			if (!seller) {
+				throw new HttpError(404, "Seller not found");
+			}
+
+			await seller.updateOne(
+				{
+					$pull: { notifications: id },
+				},
+				{ session },
+			);
+		}
+
+		if (usertype === "Advertiser") {
+			const advertiser = await advertiserService.getAdvertiserById(userid);
+
+			if (!advertiser) {
+				throw new HttpError(404, "Advertiser not found");
+			}
+
+			await advertiser.updateOne(
+				{
+					$pull: { notifications: id },
+				},
+				{ session },
+			);
+		}
+
+		await notification.deleteOne({ session });
+
+		await session.commitTransaction();
+
+		return notification;
+	} catch (error) {
+		await session.abortTransaction();
+		throw error;
+	} finally {
+		session.endSession();
+	}
+}

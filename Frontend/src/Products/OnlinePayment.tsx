@@ -70,6 +70,8 @@ const OnlinePayment = ({ amount, currency, address }: props) => {
 						acc + product.product.price * product.quantity,
 					0,
 				),
+				promoCode: promo,
+				paymentIntentId: paymentIntent.id,
 			});
 		}
 	};

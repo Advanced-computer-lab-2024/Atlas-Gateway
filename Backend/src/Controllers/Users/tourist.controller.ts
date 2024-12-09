@@ -198,6 +198,24 @@ export const requestActivityNotification = async (
 	}
 };
 
+export const unRequestActivityNotification = async(
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	try {
+		const { touristId, activityId } = req.body;
+		const activity = await touristService.unrequestActivityNotification(
+			activityId,
+			touristId,
+		);
+		res.status(200).send(activity);
+	} catch (error) {
+		next(error);
+	}
+};
+	
+
 export const requestItineraryNotification = async (
 	req: Request,
 	res: Response,
@@ -214,6 +232,24 @@ export const requestItineraryNotification = async (
 		next(error);
 	}
 };
+
+export const unRequestItineraryNotification = async(
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	try {
+		const { touristId, itineraryId } = req.body;
+		const itinerary = await touristService.unrequestItineraryNotification(
+			itineraryId,
+			touristId,
+		);
+		res.status(200).send(itinerary);
+	} catch (error) {
+		next(error);
+	}
+}
+
 
 export const addProductToCart = async (
 	req: Request,

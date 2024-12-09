@@ -95,8 +95,8 @@ export default function Cart() {
 					<Label.Big700>Your Shopping Cart is Empty</Label.Big700>
 					<Button
 						variant="default"
-							className="mt-4"
-							size="lg"
+						className="mt-4"
+						size="lg"
 						onClick={() => navigate("/products")}
 					>
 						Continue Shopping

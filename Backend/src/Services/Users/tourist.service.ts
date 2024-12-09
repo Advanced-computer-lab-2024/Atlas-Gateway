@@ -656,11 +656,29 @@ export const requestActivityNotification = async (
 	if (!tourist) {
 		throw new HttpError(404, "no tourist found with this id");
 	}
-	activity.updateOne({
-		$push: { notificationRequested: tourist?.id },
+	await activity.updateOne({
+		$push: { notificationRequested: touristId },
 	});
 	return activity;
 };
+
+export const unrequestActivityNotification = async(
+	activityId: String,
+	touristId: String,
+) => {
+	const activity = await Activity.findById(activityId);
+	const tourist = await Tourist.findById(touristId);
+	if (!activity) {
+		throw new HttpError(404, "no activity found with this id");
+	}
+	if (!tourist) {
+		throw new HttpError(404, "no tourist found with this id");
+	}
+	await activity.updateOne({
+		$pull: { notificationRequested: touristId },
+	});
+	return activity;
+	};
 
 export const requestItineraryNotification = async (
 	itineraryId: String,
@@ -674,11 +692,31 @@ export const requestItineraryNotification = async (
 	if (!tourist) {
 		throw new HttpError(404, "no tourist found with this id");
 	}
-	itinerary.updateOne({
+	await itinerary.updateOne({
 		$push: { notificationRequested: tourist?.id },
 	});
 	return itinerary;
 };
+
+export const unrequestItineraryNotification = async (
+	itineraryId: String,
+	touristId: String,
+) => {
+	const itinerary = await Itinerary.findById(itineraryId);
+
+	const tourist = await Tourist.findById(touristId);
+if (!itinerary) {
+	throw new HttpError(404, "no Itinerary found with this id");
+}
+if (!tourist) {
+	throw new HttpError(404, "no tourist found with this id");
+}
+await itinerary.updateOne({
+	$pull: { notificationRequested: touristId },
+});
+return itinerary;
+};
+
 
 export const addProductToCart = async (
 	touristId: string,

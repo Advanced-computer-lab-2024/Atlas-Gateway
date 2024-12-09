@@ -4,12 +4,24 @@ import { Types } from "mongoose";
 import { IProductTuple, Order } from "../../Models/Purchases/order.model";
 import { Product } from "../../Models/Purchases/product.model";
 import { Tourist } from "../../Models/Users/tourist.model";
+import { confirmPayment } from "../../Services/Payment/payment.service";
+import {
+	checkPromoService,
+	deletePromoByCodeService,
+} from "../../Services/Promo/promo.service";
 
 export const createOrder = async (req: Request, res: Response) => {
 	//Called When clicking checkout
 	try {
 		const userId = req.headers.userid;
-		const { products, totalPrice, address, paymentMethod } = req.body;
+		let {
+			products,
+			totalPrice,
+			address,
+			paymentMethod,
+			promoCode,
+			paymentIntentId,
+		} = req.body;
 		if (!userId) {
 			res.status(400).send("Logged in User id is required");
 			return;
@@ -26,6 +38,48 @@ export const createOrder = async (req: Request, res: Response) => {
 		}
 
 		let tourist = await Tourist.findById(userId);
+
+		if (!tourist) {
+			res.status(404).send("Tourist not found");
+			return;
+		}
+
+		if (paymentMethod === "Wallet") {
+			if (tourist?.walletBalance < totalPrice) {
+				res.status(400).send("Insufficient Balance");
+				return;
+			}
+			if (promoCode) {
+				const promo = await checkPromoService(promoCode, userId);
+				await deletePromoByCodeService(promoCode);
+				totalPrice =
+					totalPrice -
+					totalPrice * (promo?.discountPercentage! / 100);
+			}
+			tourist.walletBalance -= totalPrice;
+		}
+
+		if (paymentMethod === "Card") {
+			if (promoCode) {
+				const promo = await checkPromoService(promoCode, userId);
+				await deletePromoByCodeService(promoCode);
+				totalPrice =
+					totalPrice -
+					totalPrice * (promo?.discountPercentage! / 100);
+			}
+			await confirmPayment(
+				paymentIntentId,
+				tourist.email,
+				totalPrice / 100,
+			);
+		}
+
+		if (paymentMethod === "Cash" && promoCode) {
+			const promo = await checkPromoService(promoCode, userId);
+			await deletePromoByCodeService(promoCode);
+			totalPrice =
+				totalPrice - totalPrice * (promo?.discountPercentage! / 100);
+		}
 
 		const order = new Order({
 			touristId: userId,
@@ -48,6 +102,8 @@ export const createOrder = async (req: Request, res: Response) => {
 		});
 
 		await Promise.all(stockUpdateList);
+
+		tourist.walletBalance -= totalPrice;
 
 		if (tourist) {
 			tourist.cart = [];
@@ -207,9 +263,16 @@ export const addAddress = async (req: Request, res: Response) => {
 			return;
 		}
 
-		const addressString = country +", "+ city +", "+ street + (houseNumber? ", "+ houseNumber : "") + (apartmentNumber? ", "+ apartmentNumber : "");
+		const addressString =
+			country +
+			", " +
+			city +
+			", " +
+			street +
+			(houseNumber ? ", " + houseNumber : "") +
+			(apartmentNumber ? ", " + apartmentNumber : "");
 
-		if(tourist.address?.includes(addressString)){
+		if (tourist.address?.includes(addressString)) {
 			res.status(200).send("Address already exists");
 			return;
 		}
@@ -224,5 +287,3 @@ export const addAddress = async (req: Request, res: Response) => {
 		console.error(error);
 	}
 };
-
-

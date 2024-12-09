@@ -11,7 +11,6 @@ import {
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
-import { useAdminProfile } from "@/api/data/useProfile";
 import { useLoginStore } from "@/store/loginStore";
 
 import ChangePasswordSheet from "../Profile/ChangePasswordSheet";
@@ -20,7 +19,6 @@ const Sidebar = () => {
 	const { user } = useLoginStore();
 	const navigate = useNavigate();
 	const location = useLocation();
-	const { data } = useAdminProfile();
 	const activeCategory = location.pathname.split("/")[2];
 
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -54,16 +52,6 @@ const Sidebar = () => {
 					className="bg-[#2b58ad] text-white py-2 px-4 rounded-lg border-white"
 				>
 					Change Password
-				</button>
-
-				<button
-					onClick={() => {
-						setIsDrawerOpen5(true);
-						doForgetPassword(data?.email || "");
-					}}
-					className="bg-[#2b58ad] text-white py-2 px-4 rounded-lg border-white"
-				>
-					Forget Password?
 				</button>
 			</div>
 

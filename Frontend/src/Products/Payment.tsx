@@ -54,6 +54,7 @@ const Payment = ({ amount }: props) => {
 					acc + product.product.price * product.quantity,
 				0,
 			),
+			promoCode: promo,
 		});
 	};
 
@@ -72,6 +73,7 @@ const Payment = ({ amount }: props) => {
 					acc + product.product.price * product.quantity,
 				0,
 			),
+			promoCode: promo,
 		});
 	};
 

@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 
+import { toast } from "@/hooks/use-toast";
 import { useLoginStore } from "@/store/loginStore";
 import { EAccountType } from "@/types/enums";
 
@@ -15,6 +16,7 @@ import {
 	apiTransportations,
 	apiUpdateTransportation,
 } from "../service/transportations";
+import { onError } from "./onError";
 import { useQueryString } from "./useQueryString";
 
 export function useTransportations() {
@@ -64,7 +66,13 @@ export function useCreateTransportation(onSuccess: () => void) {
 
 			return apiCreateTransportation(data, _id);
 		},
-		onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Transportation created successfully!",
+			});
+		},
 	});
 
 	const { mutate } = mutation;
@@ -75,7 +83,13 @@ export function useCreateTransportation(onSuccess: () => void) {
 export function useUpdateTransportation(onSuccess: () => void) {
 	const mutation = useMutation({
 		mutationFn: apiUpdateTransportation,
-		onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Transportation updated successfully!",
+			});
+		},
 	});
 
 	const { mutate } = mutation;
@@ -86,7 +100,13 @@ export function useUpdateTransportation(onSuccess: () => void) {
 export function useDeleteTransportation(onSuccess: () => void) {
 	const mutation = useMutation({
 		mutationFn: (_id: string) => apiDeleteTransportation(_id),
-		onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Transportation deleted successfully!",
+			});
+		},
 	});
 
 	const { mutate } = mutation;
@@ -101,7 +121,13 @@ export function useBookTransportation(onSuccess: () => void) {
 	}
 	const mutation = useMutation({
 		mutationFn: (_id: string) => apiBookTransportation(_id, user?._id),
-		onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Transportation booked successfully!",
+			});
+		},
 	});
 
 	const { mutate } = mutation;
@@ -117,7 +143,13 @@ export function useCancelTransportationBooking(onSuccess: () => void) {
 	const mutation = useMutation({
 		mutationFn: (_id: string) =>
 			apiCancelTransportationBooking(_id, user?._id),
-		onSuccess,
+		onError,
+		onSuccess: () => {
+			onSuccess();
+			toast({
+				title: "Transportation booking cancelled successfully!",
+			});
+		},
 	});
 
 	const { mutate } = mutation;

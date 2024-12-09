@@ -196,3 +196,33 @@ export function apiPastItineraries(touristId: string) {
 		baseURL: baseURL,
 	});
 }
+
+export function apiItineraryNotification(touristId: string, itineraryId: string) {
+	return axios({
+		method: "POST",
+		url: ENDPOINTS.tourist.itineraryNotification,
+		headers: {
+			"Content-Type": "application/json",
+		},
+		data: {
+			touristId,
+			itineraryId,
+		},
+		baseURL: baseURL,
+	});
+}
+
+export function apiRemoveItineraryNotification(touristId: string, itineraryId: string) {
+	return axios({
+		method: "POST",
+		url: ENDPOINTS.tourist.removeItineraryNotification,
+		headers: {
+			"Content-Type": "application/json",
+		},
+		data: {
+			touristId,
+			itineraryId,
+		},
+		baseURL: baseURL,
+	});
+}
