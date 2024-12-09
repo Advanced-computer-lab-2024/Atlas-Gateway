@@ -6,7 +6,7 @@ import ENDPOINTS, { baseURL } from "./ENDPOINTS";
 import { TApiResponse } from "./types";
 
 export function apiTransportations(id: string | undefined, userType: string) {
-	return axios<TApiResponse<TTransportation[]>>({
+	return axios<TApiResponse<TTransportation>>({
 		method: "GET",
 		url: ENDPOINTS.transportation.list,
 		headers: {
@@ -33,7 +33,7 @@ export function apiAdvertisorTransportations(
 	_id: string | undefined,
 	userType: string,
 ) {
-	return axios<TApiResponse<TTransportation[]>>({
+	return axios<TApiResponse<TTransportation>>({
 		method: "GET",
 		url: ENDPOINTS.transportation.listAdvertisor,
 		headers: {

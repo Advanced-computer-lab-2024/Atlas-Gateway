@@ -38,6 +38,7 @@ export default function TransportationDetails() {
 		dropOffTime,
 		price,
 		tourists,
+		availability,
 	} = data || {};
 
 	return (
@@ -58,6 +59,8 @@ export default function TransportationDetails() {
 							<Label.Big600>{name}</Label.Big600>
 						</Flex>
 						{user?.type === EAccountType.Tourist &&
+							availability &&
+							availability > 0 &&
 							(tourists?.includes(user?._id) ? (
 								<Button
 									size="lg"
@@ -143,6 +146,13 @@ export default function TransportationDetails() {
 								<Label.Mid500>
 									{convertCurrency(price)}
 								</Label.Mid500>
+							</Flex>
+						</Flex>
+						<Flex gap="2" isColumn>
+							<Label.Thin300>Availability:</Label.Thin300>
+							<Flex gap="2" align="center">
+								<DollarSign size={20} />
+								<Label.Mid500>{availability}</Label.Mid500>
 							</Flex>
 						</Flex>
 					</Flex>

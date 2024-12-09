@@ -1,4 +1,4 @@
-import { Plus } from "lucide-react";
+import { Plus, Search, X } from "lucide-react";
 import { useState } from "react";
 
 import { usePagination } from "@/api/data/usePagination";
@@ -6,6 +6,7 @@ import { useTransportations } from "@/api/data/useTransportations";
 import Label from "@/components/ui/Label";
 import { Button } from "@/components/ui/button";
 import { Flex } from "@/components/ui/flex";
+import { Input } from "@/components/ui/input";
 import {
 	Pagination,
 	PaginationContent,
@@ -20,6 +21,7 @@ import { TTransportation } from "@/types/global";
 
 import TransportationForm from "./Form/TransportationForm";
 import TransportationCard from "./TransportationCard";
+import { hardCodedTransportations } from "./const";
 
 export default function Transportations() {
 	const { user } = useLoginStore();
@@ -27,6 +29,15 @@ export default function Transportations() {
 	const [open, setOpen] = useState(false);
 	const [selectedTransportation, setTransportation] =
 		useState<TTransportation>();
+
+	const [search, setSearch] = useState("");
+	const onSearchChange = (e: { target: { value: string } }) => {
+		setSearch(e.target.value);
+	};
+
+	const onSearchClear = () => {
+		setSearch("");
+	};
 
 	const openEditDrawer = (transportation: TTransportation) => {
 		setOpen(true);
@@ -46,12 +57,28 @@ export default function Transportations() {
 	return (
 		<Flex isColumn gap="4" className="w-full h-full">
 			<Label.Big600>Transportations ({meta?.total || 0})</Label.Big600>
-			{user?.type === EAccountType.TransportationAdvertiser && (
-				<Flex
-					justify="between"
-					gap="2"
-					className="bg-surface-secondary p-2 rounded-lg border-2 border-solid border-black"
-				>
+
+			<Flex
+				justify="between"
+				gap="2"
+				className="bg-surface-secondary p-2 rounded-lg border-2 border-solid border-black"
+			>
+				<Flex gap="1" align="center" className="relative">
+					<Search className="absolute left-1" />
+					{search && (
+						<X
+							className="absolute right-1 cursor-pointer"
+							onClick={onSearchClear}
+						/>
+					)}
+					<Input
+						placeholder="Search..."
+						className="w-56 bg-white pl-8 pr-8"
+						onChange={onSearchChange}
+						value={search}
+					/>
+				</Flex>
+				{user?.type === EAccountType.TransportationAdvertiser && (
 					<Button
 						onClick={() => setOpen(true)}
 						variant="default"
@@ -59,18 +86,25 @@ export default function Transportations() {
 					>
 						Add Transportation <Plus />
 					</Button>
-				</Flex>
-			)}
+				)}
+			</Flex>
+
 			<Flex
 				className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2"
 				gap="4"
 			>
-				{data?.map((transportation) => (
-					<TransportationCard
-						transportation={transportation}
-						openEditDrawer={openEditDrawer}
-					/>
-				))}
+				{[...(data ?? []), ...hardCodedTransportations]
+					?.filter((transport) =>
+						transport.name
+							.toLowerCase()
+							.includes(search.toLowerCase()),
+					)
+					.map((transportation) => (
+						<TransportationCard
+							transportation={transportation}
+							openEditDrawer={openEditDrawer}
+						/>
+					))}
 			</Flex>
 			{pagesCount > 1 && (
 				<Pagination>
