@@ -1,44 +1,15 @@
 import { formatDate } from "date-fns";
-import {
-	Bell,
-	Bookmark,
-	Copy,
-	DollarSign,
-	Edit,
-	EllipsisVertical,
-	Eye,
-	Flag,
-	Mail,
-	ToggleLeft,
-	ToggleRight,
-	Trash,
-} from "lucide-react";
+import { Bell, Bookmark, Copy, DollarSign, Edit, EllipsisVertical, Eye, Flag, Mail, ToggleLeft, ToggleRight, Trash } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-import {
-	useBookmarkItinerary,
-	useDeleteItinerary,
-	useFlagItinerary,
-	useItineraries,
-	useItineraryNotification,
-	useRemoveBookmarkItinerary,
-	useToggleItineraryStatus,
-} from "@/api/data/useItineraries";
+
+
+import { useBookmarkItinerary, useDeleteItinerary, useFlagItinerary, useItineraries, useItineraryNotification, useRemoveBookmarkItinerary, useRemoveItineraryNotification, useToggleItineraryStatus } from "@/api/data/useItineraries";
 import AreYouSure from "@/components/ui/AreYouSure";
 import Label from "@/components/ui/Label";
 import { Badge } from "@/components/ui/badge";
-import {
-	Card,
-	CardContent,
-	CardFooter,
-	CardHeader,
-} from "@/components/ui/card";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Flex } from "@/components/ui/flex";
 import Rating, { ERatingType } from "@/components/ui/rating";
 import useCurrency from "@/hooks/useCurrency";
@@ -46,6 +17,7 @@ import { useLoginStore } from "@/store/loginStore";
 import { languageOptions } from "@/types/consts";
 import { EAccountType } from "@/types/enums";
 import { TItinerary } from "@/types/global";
+
 
 export default function ItineraryCard({
 	openEditDrawer,
@@ -65,6 +37,7 @@ export default function ItineraryCard({
 	const { doFlagItinerary } = useFlagItinerary(refetch);
 	const { doToggleItineraryStatus } = useToggleItineraryStatus(refetch);
 	const { doNotifyItinerary } = useItineraryNotification(refetch);
+	const { doRemoveNotifyItinerary } = useRemoveItineraryNotification(refetch);
 
 	// Function to copy the itinerary link to the clipboard
 	const handleCopyLink = () => {
@@ -91,11 +64,11 @@ export default function ItineraryCard({
 		window.location.href = `mailto:?subject=${subject}&body=${body}`;
 	};
 
-	const handleNotificationClick = () => {
-		if (itinerary?._id) {
-			doNotifyItinerary(itinerary._id); // Send the notification request
-		}
-	};
+	// const handleNotificationClick = () => {
+	// 	if (itinerary?._id) {
+	// 		doNotifyItinerary(itinerary._id); // Send the notification request
+	// 	}
+	// };
 
 	return (
 		<Card
@@ -132,10 +105,23 @@ export default function ItineraryCard({
 								}}
 							/>
 						))}
-					<Bell
-						className="absolute left-8 cursor-pointer"
-						onClick={handleNotificationClick}
-					/>
+					{user?.type === EAccountType.Tourist &&
+						(itinerary?.notificationRequested?.includes(
+							user?._id,
+						) ? (
+							<Bell
+								fill="black"
+								className="absolute left-8 cursor-pointer"
+								onClick={() =>
+									doRemoveNotifyItinerary(itinerary?._id)
+								}
+							/>
+						) : (
+							<Bell
+								className="absolute left-8 cursor-pointer"
+								onClick={() => doNotifyItinerary(itinerary?._id)}
+							/>
+						))}
 					<Label.Mid500>{itinerary?.title ?? "Title"}</Label.Mid500>
 					<DropdownMenu modal={false}>
 						<DropdownMenuTrigger className="absolute right-0">

@@ -67,7 +67,9 @@ export const updateSeller = async (
 				Object.keys(newSeller)[0] == "imagePath"
 			: false;
 		if (!seller?.isVerified && !overRide) {
-			throw new HttpError(401, "Seller is not Verified");
+			if (!newSeller?.acceptedTerms) {
+				throw new HttpError(401, "Seller is not Verified");
+			}
 		}
 	}
 	const seller = await Seller.findByIdAndUpdate(id, newSeller, {

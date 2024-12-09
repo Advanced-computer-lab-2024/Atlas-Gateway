@@ -56,7 +56,7 @@ export const getNotificationsByUserId = async (
 
 		const notifications =
 			await notificationService.getNotificationsByUserId(
-				userId.toString(),
+				userId.toString()
 			);
 
 		if (!notifications)
@@ -146,19 +146,17 @@ export const deleteNotification = async (
 ) => {
 	try {
 		const { id } = req.params;
-		const userid = req.headers.userid;
+		const userid = req.headers.userid as string;
 		const usertype = req.headers.usertype as string;
 
-		if (!usertype) res.status(400).json({ error: "User type is required" });
+		if (!usertype) res.status(400).json({ error: "Usertype is required" });
 
-		if (!userid) res.status(400).json({ error: "User id is required" });
+		if (!userid) res.status(400).json({ error: "Userid is required" });
 
 		if (!id) res.status(400).json({ error: "Notification id is required" });
 
-		const notificationData = await Notification.findByIdAndDelete(id);
-		if (!notificationData) {
-			return res.status(404).json({ message: "Notification not found" });
-		}
+		await notificationService.deleteNotification(id, userid, usertype);
+
 		res.status(200).json({ message: "Notification deleted successfully" });
 	} catch (error) {
 		next(error);

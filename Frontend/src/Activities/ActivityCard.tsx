@@ -18,6 +18,7 @@ import {
 	useActivityNotification,
 	useBookmarkActivity,
 	useDeleteActivity,
+	useRemoveActivityNotification,
 	useRemoveBookmarkActivity,
 } from "@/api/data/useActivities";
 import AreYouSure from "@/components/ui/AreYouSure";
@@ -62,7 +63,14 @@ export default function ActivityCard({
 	const { doRemoveBookmarkActivity } = useRemoveBookmarkActivity(() => {
 		refetch();
 	});
-	const { doNotifyActivity } = useActivityNotification(refetch);
+	const { doNotifyActivity } = useActivityNotification(() => {
+		refetch();
+	});
+	const { doRemoveNotificationActivity } = useRemoveActivityNotification(
+		() => {
+			refetch();
+		},
+	);
 
 	// Function to copy the activity link to the clipboard
 	const handleCopyLink = () => {
@@ -89,11 +97,13 @@ export default function ActivityCard({
 		window.location.href = `mailto:?subject=${subject}&body=${body}`;
 	};
 
-	const handleNotificationClick = () => {
-		if (activity?._id) {
-			doNotifyActivity(activity._id); // Send the notification request
-		}
-	};
+	// const handleNotificationClick = () => {
+	// 	if (activity?._id) {
+	// 		doNotifyActivity(activity._id); // Send the notification request
+	// 	} else {
+	// 		doRemoveNotificationActivity(activity?._id); // Remove the notification request
+	// 	}
+	// };
 
 	return (
 		<Card
@@ -133,14 +143,16 @@ export default function ActivityCard({
 							user?._id,
 						) ? (
 							<Bell
-								fill="black"
 								className="absolute left-8 cursor-pointer"
-								onClick={handleNotificationClick}
+								onClick={() =>
+									doRemoveNotificationActivity(activity?._id)
+								}
 							/>
 						) : (
 							<Bell
+								fill="black"
 								className="absolute left-8 cursor-pointer"
-								onClick={handleNotificationClick}
+								onClick={() => doNotifyActivity(activity?._id)}
 							/>
 						))}
 					<Label.Mid500 className="justify-self-center">

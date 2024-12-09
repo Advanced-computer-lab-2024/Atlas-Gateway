@@ -17,6 +17,7 @@ import {
 	apiCreateActivity,
 	apiDeleteActivity,
 	apiPastActivities,
+	apiRemoveActivityNotification,
 	apiRemoveBookmarkActivity,
 	apiUpcomingActivities,
 	apiUpdateActivity,
@@ -274,4 +275,23 @@ export function useActivityNotification(onSuccess: () => void) {
 	const { mutate } = mutation;
 
 	return { doNotifyActivity: mutate, ...mutation };
+}
+
+export function useRemoveActivityNotification(onSuccess: () => void) {
+	const { user } = useLoginStore();
+	const { _id } = user || {};
+
+	const mutation = useMutation({
+		mutationFn: (activityId: string) => {
+			if (!_id) {
+				throw new Error("User ID is undefined");
+			}
+			return apiRemoveActivityNotification(_id,activityId);
+		},
+		onSuccess,
+	});
+
+	const { mutate } = mutation;
+
+	return { doRemoveNotificationActivity: mutate, ...mutation };
 }

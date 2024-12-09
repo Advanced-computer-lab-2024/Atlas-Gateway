@@ -18,6 +18,7 @@ import {
 	apiItineraryNotification,
 	apiPastItineraries,
 	apiRemoveBookmarkItinerary,
+	apiRemoveItineraryNotification,
 	apiToggleItineraryStatus,
 	apiTourGuideItineraries,
 	apiUpcomingItineraries,
@@ -314,4 +315,18 @@ export function useItineraryNotification(onSuccess: () => void) {
 
 	return { doNotifyItinerary: mutate, ...mutation };
 }
+
+export function useRemoveItineraryNotification(onSuccess: () => void) {
+	const { user } = useLoginStore();
+	const { _id } = user || {};
+
+	const mutation = useMutation({
+		mutationFn: (itineraryId: string) =>
+			apiRemoveItineraryNotification(_id, itineraryId),
+		onSuccess,
+	});
+	const { mutate } = mutation;
+	return { doRemoveNotifyItinerary: mutate, ...mutation };
+	}
+
 

@@ -27,8 +27,7 @@ export default function Navbar() {
 				user?.type == EAccountType.Guide ||
 				user?.type == EAccountType.Seller ||
 				user?.type == EAccountType.TransportationAdvertiser) &&
-			!user.acceptedTerms &&
-			user.isVerified
+			!user.acceptedTerms 
 		) {
 			setIsTermsDialogOpen(true);
 		}

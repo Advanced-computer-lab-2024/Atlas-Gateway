@@ -70,7 +70,9 @@ export const updateTourGuide = async (
 				Object.keys(newGuide)[0] == "imagePath"
 			: false;
 		if (!tourGuide?.isVerified && !overRide) {
-			throw new HttpError(401, "Tour Guide is Not verified");
+			if (!newGuide?.acceptedTerms) {
+				throw new HttpError(401, "Tour Guide is Not verified");
+			}
 		}
 	}
 	const tourGuide = await TourGuide.findByIdAndUpdate(id, newGuide, {

@@ -2,6 +2,7 @@ import { IFlight } from "../../../Backend/src/Models/Flight/flight.model";
 import { Currency } from "./consts";
 import { EAccountType } from "./enums";
 
+
 export type TUser = {
 	_id: string;
 	username: string;
@@ -244,6 +245,7 @@ export interface TItinerary {
 	timeline: string;
 	tourists: string[];
 	touristBookmarks: string[];
+	notificationRequested: string[];
 }
 
 export interface TFlights {

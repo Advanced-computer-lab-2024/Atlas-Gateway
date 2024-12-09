@@ -84,9 +84,11 @@ async function startServer() {
 		res.status(status).json(err.message);
 	});
 
-	const cron = require('node-cron');
+	const cron = require("node-cron");
 	// Schedule the cron job to run every day at midnight
-	cron.schedule('0 0 * * *', () => notificationService.notifyOfBookedItineraries());
+	cron.schedule("0 0 * * *", () =>
+		notificationService.notifyOfBookedItineraries(),
+	);
 
 	app.listen(SERVER.port, () => {
 		console.log(
@@ -94,7 +96,7 @@ async function startServer() {
 		);
 	});
 }
-
+export default app;
 startServer();
 
 connectDB();

@@ -11,6 +11,8 @@ import {
 	requestActivityNotification,
 	requestItineraryNotification,
 	softDeleteTourist,
+	unRequestActivityNotification,
+	unRequestItineraryNotification,
 	updateProductQuantity,
 	updateTourist,
 	viewPastActivities,
@@ -34,7 +36,15 @@ touristRouter.get("/upcomingItineraries/:id", viewUpcomingItineraries);
 touristRouter.get("/pastActivities/:id", viewPastActivities);
 touristRouter.get("/pastItineraries/:id", viewPastItineraries);
 touristRouter.post("/ItineraryNotification", requestItineraryNotification);
+touristRouter.post(
+	"/removeItineraryNotification",
+	unRequestItineraryNotification,
+);
 touristRouter.post("/ActivityNotification", requestActivityNotification);
+touristRouter.post(
+	"/removeActivityNotification",
+	unRequestActivityNotification,
+);
 touristRouter.post("/cart/add/:id", addProductToCart);
 touristRouter.delete("/cart/remove/:id", removeProductFromCart);
 touristRouter.put("/cart/update/:id", updateProductQuantity);

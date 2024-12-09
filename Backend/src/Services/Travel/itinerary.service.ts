@@ -450,10 +450,12 @@ export const flagItinerary = async (itineraryId: string) => {
 		tourGuide.id.toString(),
 		"TourGuide",
 		tourGuide.email,
-		itineraryFlagged.id.toString(),
+		itinerary.id.toString(),
 	);
 
-	tourGuide.notifications.push(notify.id.toString());
+	const newNotify = await notificationService.getNotificationById(notify.id.toString());
+
+	tourGuide.notifications.push(newNotify.id.toString());
 
 	await tourGuide.save();
 
