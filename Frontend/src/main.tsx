@@ -32,8 +32,6 @@ import NotificationCard from "./Notifications/NotificationCard";
 import NotificationCardCopy from "./Notifications/NotificationCard copy";
 import Notifications from "./Notifications/Notifications";
 import OrderDetails from "./Orders/OrderDetails";
-import Notifications from "./Notifications/Notifications";
-import OrderDetails from "./Orders/OrderDetails";
 import PlaceDetails from "./Places/PlaceDetails";
 import Places from "./Places/Places";
 import Cart from "./Products/Cart";
