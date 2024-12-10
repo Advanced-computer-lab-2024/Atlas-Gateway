@@ -21,7 +21,7 @@ To enhance user satisfaction, the platform also provides features for reviews an
 ![Node badge](https://img.shields.io/badge/Node.js-%2343853D?style=for-the-badge&logo=Node.js&logoColor=white)
 ![React badge](https://img.shields.io/badge/React.js-%2361DAFB?style=for-the-badge&logo=React&logoColor=black)
 ![Mongo badge](https://img.shields.io/badge/MongoDB-%2347A248?style=for-the-badge&logo=MongoDB&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-%377cc8?style=for-the-badge&logo=TypeScript&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-%233178C6?style=for-the-badge&logo=TypeScript&logoColor=black)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-%2338B2AC?style=for-the-badge&logo=Tailwind-CSS&logoColor=white)
 ![Postman](https://img.shields.io/badge/Postman-%23FF6C37?style=for-the-badge&logo=Postman&logoColor=white)
 ---
