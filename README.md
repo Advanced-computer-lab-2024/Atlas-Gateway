@@ -114,6 +114,39 @@ The code adheres to clean and modular practices, ensuring readability and mainta
 
 </details>
 
+<details>
+
+<summary>Payment Process</summary>  
+
+![Payment Process](./readme_photos/Payment.png)
+
+</details>
+
+<details>
+
+<summary>Admin Complaints list</summary>  
+
+![admin_complaints_list](./readme_photos/Admin_Complaints.png)
+
+</details>
+
+<details>
+
+<summary>Products Page</summary>  
+
+![products_page](./readme_photos/Products.png)
+
+</details>
+
+<details>
+
+<summary>Transportation Page</summary>  
+
+![transportation_page](./readme_photos/Transportation.png)
+
+</details>
+
+
 ---
 
 ## Tech/Framework used
