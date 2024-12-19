@@ -1377,6 +1377,294 @@ All of our tests were done using Postman
 ![Example Image](./readme_photos/postman5.png)
 
 ## How To Use
+
+Our Website Serves multiple types of users: 
+
+
+<details>
+<summary>As a Tourist</summary>
+
+- **User Account**
+  - Sign up by clicking Sign up button from our main page and filling required information.
+  - Login using username and password.
+  - Navigate to profile Page.
+    - Update profile image.
+    - Change profile Information. 
+    - Change password.
+
+- **Search and Filter**
+  - **General Search:**
+    - Search for specific museums, historical places, activities, or itineraries by name, category, or tag.
+    - Search for products based on product name.
+  - **Filter Options:**
+    - **Activities/Itineraries:**
+      - Filter by budget, date, category, ratings, preferences (e.g., historic areas, beaches, family-friendly, shopping), and language.
+    - **Historical Places/Museums:**
+      - Filter by tag.
+    - **Products:**
+      - Filter by price.
+  - **Sort Options:**
+    - **Activities/Itineraries:**
+      - Sort by price or ratings.
+    - **Products:**
+      - Sort by ratings.
+
+- **Activities and Itineraries**
+  - View all upcoming activities, itineraries, historical places, and museums.
+  - Bookmark (save) events to view later.
+  - View a list of all saved events.
+  - View all upcoming or past activities/itineraries paid for.
+  - Book an event/activity or itinerary.
+  - Cancel a booking 48 hours before the start of the event/activity or itinerary.
+  - Rate events/activities attended.
+  - Receive loyalty points upon payment for events/itineraries.
+  - Redeem loyalty points for cash in the wallet.
+  - Choose currency to view prices in.
+
+- **Historical Places and Museums**
+  - View Historical Places.
+  - Filter historical places/museums by tag.
+
+- **Products**
+  - View all available products, including:
+    - Picture, price, description, seller, ratings, and reviews.
+  - Save products to a wishlist.
+  - View wishlist of products.
+  - Remove items from the wishlist.
+  - Add items to the cart from the wishlist.
+  - Add/remove/change item quantity in the cart.
+  - Pay for products using credit card (via Stripe), wallet, or cash on delivery.
+  - Review purchased products.
+
+- **Transportation and Booking**
+  - Book a flight or hotel using a third-party application.
+  - Book transportation through transportation advertisers.
+
+- **Complaints**
+  - File a complaint with a title, body (problem), and date.
+  - View a list of all issued complaints and their status (pending/resolved).
+
+- **Payments and Wallet**
+  - Pay online for events/activities, itineraries, or products using:
+    - Credit/debit cards (via Stripe), wallet, or cash on delivery.
+  - Use promo codes for discounts.
+  - Receive a payment receipt via email upon successful payment.
+  - View an updated wallet balance after making a payment.
+
+- **Ratings and Reviews**
+  - Rate tour guides after completing a tour.
+  - Rate events/activities attended.
+  - Review purchased products.
+
+- **Notifications**
+  - Receive notifications.
+
+- **Rewards and Badges**
+  - Receive loyalty points for payments.
+  - Redeem points for wallet cash.
+  - Earn badges based on user level.
+
+</details>
+
+<details>
+<summary>As an Admin</summary>
+
+- **User Management**
+  - Navigate to Admin Dashboard.
+    - Update profile image.
+    - Change profile Information. 
+    - Change password.
+  - Login using username and password.
+  - Delete any account from the system.
+  - View accounts marked for deletion.
+  - Add another admin.
+  - Add a tourism governor.
+  - View the total number of users and new users per month.
+  - Forget password using an OTP sent to email.
+  - View all promo codes
+
+- **Activity and Tag Management**
+  - CRUD (Create, Read, Update, Delete) an activity category.
+  - CRUD a preference tag.
+
+- **Product Management**
+  - Search for a product by name.
+  - Search for a product by price.
+  - Sort products by ratings.
+  - Add a new product to the system.
+  - Edit product details.
+  - View available quantity and sales of each product.
+  - Upload product images.
+  - Archive/Unarchive a product.
+
+- **Complaint Management**
+  - View a list of all complaints and their statuses.
+  - View details of a selected complaint.
+  - Reply to any complaint.
+  - Mark complaints as pending/resolved.
+  - Sort complaints by date.
+  - Filter complaints by status.
+
+- **Event/Itinerary Management**
+  - Flag an event or itinerary deemed inappropriate (flagged events become invisible to tourists/guests).
+
+- **Sales and Revenue**
+  - View a sales report with revenues from:
+    - Events, itineraries, and gift shop sales.
+  - Filter the sales report by product, date, or month.
+
+- **Promo Codes**
+  - Create promo codes from Dashboard
+
+</details>
+
+<details>
+<summary>As an Advertiser</summary>
+
+- **User Account**
+  - Sign up by clicking Sign up button from our main page and filling required information.
+  - Login using username and password.
+  - Navigate to profile Page.
+    - Update profile image.
+    - Change profile Information. 
+    - Change password.
+  - Forget password using an OTP sent to email.
+  - Accept the terms and conditions if approved as an advertiser on the system.
+
+- **Profile Management**
+  - Create, read, update profile information as a company, including:
+    - Link to website.
+    - Hotline.
+    - Company profile.
+
+- **Activity/Itinerary Management**
+  - Create, read, update, delete activities or itineraries, including:
+    - Date, time, location (using Google Maps).
+    - Price (or price range).
+    - Category and tags.
+    - Special discounts.
+    - Booking status (open/closed).
+  - View a list of all created activities, itineraries, museums, and historical places.
+  - Upload pictures for activities or itineraries.
+
+- **Reports and Analytics**
+  - View a sales report containing total revenue.
+  - Filter sales report by:
+    - Activity, itinerary, date, or month.
+  - View a report on the total number of tourists who:
+    - Used the advertiser's itineraries.
+    - Attended their activities.
+  - Filter the tourist report by month.
+
+- **Notifications**
+  - Receive notifications when an event or itinerary is flagged as inappropriate:
+    - On the system.
+    - By email.
+
+</details>
+
+<details>
+<summary>As a Guest</summary>
+
+- **Registration**
+  - Register (sign up) as a tourist with:
+    - Email, username, password, mobile number, nationality, date of birth, and job/student status.
+  - Register (sign up) as a tour guide, advertiser, or seller with:
+    - Username, email, and password.
+
+- **Explore Activities and Places**
+  - View all upcoming activities, itineraries, historical places, and museums.
+  - Choose a category of activities.
+
+- **Search and Filter**
+  - **Activities/Itineraries:**
+    - Filter by:
+      - Budget, date, category, ratings, preferences (e.g., historic areas, beaches, family-friendly, shopping), and language.
+    - Sort by:
+      - Price or ratings.
+  - **Historical Places/Museums:**
+    - Filter by tag.
+
+</details>
+
+<details>
+<summary>As a Seller</summary>
+
+- **Profile Management**
+  - Create, read, and update profile information as a seller, including:
+    - Name and description.
+  - Accessible only if approved as a seller on the system.
+  - Accept the terms and conditions if approved on the system.
+  
+- **Product Management**
+  - Search for products by name.
+  - Filter products by price.
+  - Sort products by ratings.
+  - Add a product with:
+    - Details, price, and available quantity.
+  - Edit product details and price.
+  - Upload product image and other pictures.
+  - View available quantity and sales of each product.
+  - Archive or unarchive a product.
+
+- **Sales and Revenue**
+  - View a sales report containing total revenue.
+  - Filter the sales report by:
+    - Product, date, or month.
+
+- **Account Management**
+  - Change password.
+
+</details>
+
+<details>
+<summary>As a Tour Guide</summary>
+
+- **User Account**
+  - Login using username and password.
+  - Change password.
+  - Forget password using an OTP sent to email.
+  - Request account deletion from the system.
+  - Accept the terms and conditions if approved as a tour guide.
+
+- **Profile Management**
+  - Create, read, and update profile information as a tour guide, including:
+    - Mobile number, years of experience, previous work (if applicable).
+  - Accessible only if accepted as a tour guide on the system.
+
+- **Itinerary Management**
+  - Create, read, update, and delete itineraries, including:
+    - Activities, locations to be visited, timeline, duration of each activity, language of the tour, price, available dates and times, accessibility, and pick-up/drop-off location.
+  - View a list of all created activities, itineraries, museums, and historical places.
+  - Activate or deactivate itineraries with bookings.
+
+- **Sales and Revenue**
+  - View a sales report containing total revenue.
+  - Filter the sales report by:
+    - Activity, itinerary, date, or month.
+  - View a report on the total number of tourists who used your itinerary or attended your activity.
+  - Filter the tourist report by month.
+
+</details>
+
+<details>
+<summary>As a Tourism Governor</summary>
+
+- **User Account**
+  - Login using username and password.
+  - Change password.
+  - Forget password using an OTP sent to email.
+
+- **Museum and Historical Place Management**
+  - Create, read, update, and delete museums and historical places, including:
+    - Description, pictures, location, opening hours, ticket prices.
+
+- **Tag Management**
+  - Create tags for different historical locations (e.g., type, historical period).
+
+</details>
+
+
 Before running the project, ensure you have the required environment variables set up. You'll need to create two .env files—one for the backend and one for the frontend. These files store sensitive configuration values.
 <details>
 <summary>Backend env</summary>
@@ -1402,6 +1690,7 @@ Before running the project, ensure you have the required environment variables s
 `SYSTEM_EMAIL`
 
 `SYSTEM_EMAIL_APP_PASSWORD`
+
 </li>
 </details>
 
