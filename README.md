@@ -146,6 +146,31 @@ The code adheres to clean and modular practices, ensuring readability and mainta
 
 </details>
 
+<details>
+
+<summary>Create Itinerary</summary>  
+
+![Create_Itinerary](./readme_photos/Create_Itinerary.png)
+
+</details>
+
+<details>
+
+<summary>Guide Reports</summary>  
+
+![Guide_Reports](./readme_photos/guide_reports.png)
+
+</details>
+
+
+<details>
+
+<summary>Historical Location Page</summary>  
+
+![Historical_Location_Page](./readme_photos/Historical_Location_Page.png)
+
+</details>
+
 
 ---
 
