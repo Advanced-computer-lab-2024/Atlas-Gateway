@@ -892,7 +892,7 @@ export default function Itineraries() {
 
 ## Api Refrences 
 
-Our API is available online as a public postman workspace that you can see and fork.
+Our API is available online as a public postman workspace that you can see and fork [here](https://www.postman.com/supply-geoscientist-41304441/atlas-gateway).
 <details>
 <summary>All Api Refrences Here</summary>
 
