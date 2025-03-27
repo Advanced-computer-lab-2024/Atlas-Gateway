@@ -63,7 +63,7 @@ export function apiBookHotels(data: IHotelBooking, userId: string) {
 			"Content-Type": "application/json",
 			userid: userId,
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 		data: data,
 	});
 }

@@ -2,7 +2,7 @@ import axios from "axios";
 
 import { TRegisterForm } from "@/Register/types";
 
-import ENDPOINTS from "./ENDPOINTS";
+import ENDPOINTS, { baseURL } from "./ENDPOINTS";
 import { TRegisterationResponse } from "./types";
 
 export function apiRegister(payload: TRegisterForm) {
@@ -12,7 +12,7 @@ export function apiRegister(payload: TRegisterForm) {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 		data: payload,
 	});
 }

@@ -2,7 +2,7 @@ import axios from "axios";
 
 import { TComplaint } from "@/types/global";
 
-import ENDPOINTS from "./ENDPOINTS";
+import ENDPOINTS, { baseURL } from "./ENDPOINTS";
 
 export function apiComplaints(
 	_id: string | undefined,
@@ -20,7 +20,7 @@ export function apiComplaints(
 			limit: 12,
 			...filters,
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 
@@ -40,7 +40,7 @@ export function apiProfileComplaints(
 			limit: 12,
 			...filters,
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 
@@ -51,7 +51,7 @@ export function apiComplaint(id: string | undefined) {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 
@@ -63,7 +63,7 @@ export function apiUpdateComplaint(payload: Partial<TComplaint>, _id: string) {
 			"Content-Type": "application/json",
 			userid: _id,
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 		data: payload,
 	});
 }
@@ -76,7 +76,7 @@ export function apiAddComplaint(_id: string, data: TComplaint) {
 			"Content-Type": "application/json",
 			userid: _id,
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 		data: data,
 	});
 }

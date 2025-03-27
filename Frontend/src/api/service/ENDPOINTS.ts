@@ -1,4 +1,4 @@
-export const baseURL = "http://localhost:5000";
+export const baseURL = import.meta.env.VITE_API_URL ?? "http://localhost:5000";
 
 const ENDPOINTS = {
 	places: {
@@ -86,9 +86,9 @@ const ENDPOINTS = {
 			`api/tourist/upcomingItineraries/${id}`,
 		pastActivities: (id: string) => `api/tourist/pastActivities/${id}`,
 		pastItineraries: (id: string) => `api/tourist/pastItineraries/${id}`,
-		activityNotification: "api/tourist/ActivityNotification", 
+		activityNotification: "api/tourist/ActivityNotification",
 		removeActivityNotification: "api/tourist/removeActivityNotification",
-		itineraryNotification: "api/tourist/ItineraryNotification", 
+		itineraryNotification: "api/tourist/ItineraryNotification",
 		removeItineraryNotification: "api/tourist/removeItineraryNotification",
 	},
 	seller: {

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import ENDPOINTS from "./ENDPOINTS";
+import ENDPOINTS, { baseURL } from "./ENDPOINTS";
 import { TUserStatisticsResponse } from "./types.ts";
 
 // Fetch total users and new total users statistics.
@@ -12,6 +12,6 @@ export function apiFetchUserStatistics() {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }

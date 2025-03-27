@@ -1,9 +1,14 @@
 import axios from "axios";
 
+
+
 import { TFlights } from "@/types/global";
 
+
+
 import { IFlight } from "../../../../Backend/src/Models/Flight/flight.model";
-import ENDPOINTS from "./ENDPOINTS";
+import ENDPOINTS, { baseURL } from "./ENDPOINTS";
+
 
 export function apiSearchFlights(data: TFlights) {
 	return axios<string>({
@@ -12,7 +17,7 @@ export function apiSearchFlights(data: TFlights) {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 		data: data,
 	});
 }
@@ -25,7 +30,7 @@ export function apiBookFlight(data: IFlight, userId: string) {
 			"Content-Type": "application/json",
 			userid: userId,
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 		data: data,
 	});
 }

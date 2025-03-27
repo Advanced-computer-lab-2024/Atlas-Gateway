@@ -2,7 +2,7 @@ import axios from "axios";
 
 import { TLoginForm } from "@/Login/types";
 
-import ENDPOINTS from "./ENDPOINTS";
+import ENDPOINTS, { baseURL } from "./ENDPOINTS";
 import { TLoginResponse } from "./types";
 
 export default function apiLogin(payload: TLoginForm) {
@@ -12,7 +12,7 @@ export default function apiLogin(payload: TLoginForm) {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 		data: payload,
 	});
 }

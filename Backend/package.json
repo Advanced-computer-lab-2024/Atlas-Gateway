@@ -5,6 +5,7 @@
 	"scripts": {
 		"test": "jest",
 		"dev": "nodemon",
+		"start": "node",
 		"pretty": "prettier --write \"./**/*.{js,jsx,mjs,cjs,ts,tsx,json}\""
 	},
 	"imports": {

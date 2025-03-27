@@ -2,7 +2,7 @@ import axios from "axios";
 
 import { TAdmin } from "@/types/global";
 
-import ENDPOINTS from "./ENDPOINTS";
+import ENDPOINTS, { baseURL } from "./ENDPOINTS";
 import { TGovernorResponse } from "./types";
 
 export function apiCreateGovernor(payload: TAdmin) {
@@ -12,7 +12,7 @@ export function apiCreateGovernor(payload: TAdmin) {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 		data: payload,
 	});
 }
@@ -24,7 +24,7 @@ export function apiGovernors() {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 
@@ -33,8 +33,8 @@ export function apiDeleteGovernor(_id: string) {
 		method: "DELETE",
 		url: ENDPOINTS.governor.delete(_id),
 		headers: {
-			"content-type": "application/json",
+			"Content-Type": "application/json",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }

@@ -2,7 +2,7 @@ import axios from "axios";
 
 import { TUploadForm } from "@/Register/types";
 
-import ENDPOINTS from "./ENDPOINTS";
+import ENDPOINTS, { baseURL } from "./ENDPOINTS";
 
 export function apiUpload(payload: TUploadForm) {
 	return axios<string>({
@@ -11,7 +11,7 @@ export function apiUpload(payload: TUploadForm) {
 		headers: {
 			"Content-Type": "multipart/form-data",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 		data: payload,
 	});
 }
@@ -20,7 +20,7 @@ export function apiDownload(filePath: string) {
 	return axios<string>({
 		method: "POST",
 		url: ENDPOINTS.media.download,
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 		data: { filePath },
 	});
 }

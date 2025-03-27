@@ -2,7 +2,7 @@ import axios from "axios";
 
 import { TPlace } from "@/types/global";
 
-import ENDPOINTS from "./ENDPOINTS";
+import ENDPOINTS, { baseURL } from "./ENDPOINTS";
 import { TApiResponse } from "./types";
 
 export function apiPlaces(
@@ -21,7 +21,7 @@ export function apiPlaces(
 			limit: 12,
 			...filters,
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 
@@ -32,7 +32,7 @@ export function apiPlace(_id: string | undefined) {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 
@@ -44,7 +44,7 @@ export function apiCreatePlace(payload: TPlace, _id: string) {
 			"Content-Type": "application/json",
 			userid: _id,
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 		data: payload,
 	});
 }
@@ -62,7 +62,7 @@ export function apiGovernerPlaces(
 		params: {
 			...filters,
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 
@@ -73,7 +73,7 @@ export function apiUpdatePlace(payload: TPlace) {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 		data: payload,
 	});
 }
@@ -85,6 +85,6 @@ export function apiDeletePlace(_id: string) {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }

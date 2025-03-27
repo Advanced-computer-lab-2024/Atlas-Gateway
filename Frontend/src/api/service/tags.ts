@@ -2,7 +2,7 @@ import axios from "axios";
 
 import { TTag } from "@/types/global";
 
-import ENDPOINTS from "./ENDPOINTS";
+import ENDPOINTS, { baseURL } from "./ENDPOINTS";
 
 export function apiCreateTag(payload: TTag) {
 	return axios({
@@ -11,7 +11,7 @@ export function apiCreateTag(payload: TTag) {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 		data: payload,
 	});
 }
@@ -24,7 +24,7 @@ export function apiTags(_id: string | undefined) {
 			"Content-Type": "application/json",
 			userid: _id,
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 
@@ -35,6 +35,6 @@ export function apiDeleteTag(_id: string) {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }

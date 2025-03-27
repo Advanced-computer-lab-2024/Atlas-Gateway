@@ -2,7 +2,7 @@ import axios from "axios";
 
 import { TPromo } from "@/types/global";
 
-import ENDPOINTS from "./ENDPOINTS";
+import ENDPOINTS, { baseURL } from "./ENDPOINTS";
 import { TApiResponse } from "./types";
 
 export function apiCreatePromo(data: Partial<TPromo>) {
@@ -13,7 +13,7 @@ export function apiCreatePromo(data: Partial<TPromo>) {
 			"Content-Type": "application/json",
 		},
 		data: data,
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
 
@@ -24,6 +24,6 @@ export function apiPromoCodes() {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		baseURL: "http://localhost:5000",
+		baseURL: baseURL,
 	});
 }
