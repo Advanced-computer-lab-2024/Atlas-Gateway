@@ -87,7 +87,7 @@ async function startServer() {
 		notificationService.notifyOfBookedItineraries(),
 	);
 
-	app.listen(SERVER.port, () => {
+	app.listen(Number(SERVER.port), SERVER.host as string, () => {
 		console.log(
 			`Server is running on http://${SERVER.host}:${SERVER.port}`,
 		);
