@@ -38,6 +38,23 @@ export default function Activites() {
 	const { user } = useLoginStore();
 	const { data, meta } = useActivities();
 
+	const filteredActivities =
+		data?.filter((activity: TActivity) => {
+			if (
+				user?.type === EAccountType.Tourist ||
+				user?.type === EAccountType.Guest ||
+				!user
+			) {
+				const currentDate = new Date();
+
+				if (activity.dateTime) {
+					const activityDate = new Date(activity.dateTime);
+					return activityDate > currentDate;
+				}
+			}
+			return true;
+		}) || [];
+
 	const { page, onPageChange, pagesCount } = usePagination({
 		pageNum: meta?.pages || 1,
 		pagesCount: meta?.pages || 1,
@@ -163,32 +180,14 @@ export default function Activites() {
 				className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2"
 				gap="4"
 			>
-				{data
-					?.filter((activity: TActivity) => {
-						if (
-							user?.type === EAccountType.Tourist ||
-							user?.type === EAccountType.Guest ||
-							!user
-						) {
-							const currentDate = new Date();
-
-							if (activity.dateTime) {
-								const activityDate = new Date(
-									activity.dateTime,
-								);
-								return activityDate > currentDate;
-							}
-						}
-						return true;
-					})
-					.map((activity) => (
-						<ActivityCard
-							activity={activity}
-							openEditDrawer={openEditDrawer}
-						/>
-					))}
+				{filteredActivities.map((activity) => (
+					<ActivityCard
+						activity={activity}
+						openEditDrawer={openEditDrawer}
+					/>
+				))}
 			</Flex>
-			{pagesCount > 1 && (
+			{pagesCount > 1 && filteredActivities.length > 0 && (
 				<Pagination>
 					{page !== 1 && (
 						<PaginationPrevious

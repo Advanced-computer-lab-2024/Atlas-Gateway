@@ -37,6 +37,24 @@ import ItineraryCard from "./ItineraryCard";
 export default function Itineraries() {
 	const { user } = useLoginStore();
 	const { data, meta } = useItineraries();
+
+	const filteredItineraries =
+		data?.filter((itinerary: TItinerary) => {
+			if (
+				user?.type === EAccountType.Tourist ||
+				user?.type === EAccountType.Guest ||
+				!user
+			) {
+				const currentDate = new Date();
+
+				if (itinerary.startDateTime) {
+					const activityDate = new Date(itinerary.startDateTime);
+					return activityDate > currentDate;
+				}
+			}
+			return true;
+		}) || [];
+
 	const [open, setOpen] = useState(false);
 	const [itinerary, setItinerary] = useState<TItinerary>();
 	const { data: tags } = useTags();
@@ -61,7 +79,13 @@ export default function Itineraries() {
 
 	return (
 		<Flex isColumn gap="4" className="w-full h-full">
-			<Label.Big600>Itineraries ({meta?.total || 0})</Label.Big600>
+			<Label.Big600>
+				Itineraries (
+				{filteredItineraries.length > 0
+					? filteredItineraries.length
+					: 0}
+				)
+			</Label.Big600>
 			<Flex
 				justify="between"
 				gap="2"
@@ -152,32 +176,14 @@ export default function Itineraries() {
 				className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2"
 				gap="4"
 			>
-				{data
-					?.filter((itinarary: TItinerary) => {
-						if (
-							user?.type === EAccountType.Tourist ||
-							!user ||
-							user?.type === EAccountType.Guest
-						) {
-							const currentDate = new Date();
-
-							if (itinarary.startDateTime) {
-								const activityDate = new Date(
-									itinarary.startDateTime,
-								);
-								return activityDate > currentDate;
-							}
-						}
-						return true;
-					})
-					.map((itinerary) => (
-						<ItineraryCard
-							itinerary={itinerary}
-							openEditDrawer={openEditDrawer}
-						/>
-					))}
+				{filteredItineraries.map((itinerary) => (
+					<ItineraryCard
+						itinerary={itinerary}
+						openEditDrawer={openEditDrawer}
+					/>
+				))}
 			</Flex>
-			{pagesCount > 1 && (
+			{pagesCount > 1 && filteredItineraries.length > 0 && (
 				<Pagination>
 					{page !== 1 && (
 						<PaginationPrevious
